@@ -11,6 +11,9 @@ It should document:
 
 Current spec work lives in `bundle-docs/sections/` (`01-vision.md` through `04-reports.md`).
 
+Additional migration guidance:
+- `meta-folder-migration.md` for deprecating project-level `meta/`
+
 ## Governance posture
 
 Northstar intentionally favors lean governance over heavy operational overhead.

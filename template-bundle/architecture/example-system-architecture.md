@@ -39,4 +39,4 @@ Vision refs: docs/vision/001-example-project-vision.md
 
 ## Next Task
 
-Create the first contract doc under `docs/architecture/contracts/` for the highest-risk boundary.
+Create the first contract doc under `docs/contracts/` for the highest-risk boundary.

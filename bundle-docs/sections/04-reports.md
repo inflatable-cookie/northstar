@@ -19,6 +19,7 @@ Reports must trace directly back to roadmap keys and batches.
 - `docs/reports/YYYY-MM/DD-HHMMSS-<slug>.md`
 - `docs/reports/templates/roadmap-contract-delta-template.md`
 - `docs/reports/templates/phase-gate-report-template.md`
+- `docs/reports/templates/decision-report-template.md`
 - `docs/reports/templates/automation-adoption-note-template.md` (optional)
 - `docs/reports/templates/roadmap-currentness-triage-template.md` (optional)
 
@@ -38,6 +39,11 @@ Reports must trace directly back to roadmap keys and batches.
 - Reports should capture what was actually run in the batch.
 - Prefer a short list of manual checks plus commands executed.
 - Do not add a checker script unless roadmap lean-governance criteria are met.
+
+## Decisions policy
+
+- Use decision reports for major decisions.
+- Do not maintain a dedicated `decisions/` folder by default.
 
 ## Consolidation rule
 
