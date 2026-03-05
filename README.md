@@ -42,3 +42,4 @@ Northstar is intentionally lean by default:
 - prefer manual evidence before introducing automation/checker scripts
 - keep one active roadmap queue and move deferred work into backlog
 - treat `meta/` as deprecated and extract useful content into core/support docs
+- perform clean migrations only: no compatibility shim docs in deprecated folders; update references and remove legacy files in the same batch

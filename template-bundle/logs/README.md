@@ -22,6 +22,7 @@ Logs capture dated evidence and assessments.
 
 - Do not maintain a separate `decisions/` folder by default.
 - Capture major decisions as dedicated decision logs in this folder.
+- For legacy migrations, rewrite references and remove old `decisions/` files in the same batch (no compatibility shim files).
 
 ## Seed file
 
