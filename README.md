@@ -1,0 +1,2 @@
+# northstar
+Consolidated documentation template
