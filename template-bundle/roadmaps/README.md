@@ -12,8 +12,20 @@ Roadmaps are executable milestone plans derived from vision and architecture.
 
 - `g01/` first generation milestones
 - `generation-index.md` active generation and rollover history
+- `backlog/` deferred items with promotion criteria
 - `templates/roadmap-milestone-template.md` milestone starter contract
+
+## Batch and reporting rule
+
+- Execute milestones in meaningful batches.
+- Create reports per completed batch/update cycle, not per individual task.
+
+## Lean governance rule
+
+- Keep one active queue and use backlog for deferred scope.
+- Run currentness triage only when queue clarity degrades.
+- Prefer manual evidence over new checker scripts unless repetition clearly justifies automation.
 
 ## Next task
 
-Create `generation-index.md` and the first milestone in `g01/`.
+Create the first milestone in `g01/` and define its first executable batch.

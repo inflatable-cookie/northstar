@@ -6,7 +6,7 @@ Purpose: <long-horizon intent>
 
 ## Long-Term Outcome
 
-Describe what success looks like over the long term.
+Describe what long-term success looks like.
 
 ## Strategic Constraints
 
@@ -14,12 +14,12 @@ List the hard constraints this project must respect.
 
 ## Target Envelopes
 
-Define measurable target envelopes (performance, reliability, UX, maintainability, or domain-specific equivalents).
+Define measurable target envelopes (for example performance, reliability, UX, maintainability, or domain-specific equivalents).
 
 ## Alignment Signals
 
-State what signals indicate the project is aligned or drifting.
+State which signals show the project is aligned or drifting.
 
 ## Next Task
 
-State the next architecture or roadmap artifact to produce from this vision.
+State the architecture artifact or roadmap milestone this vision should unlock next.

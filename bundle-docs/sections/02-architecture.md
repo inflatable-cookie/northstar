@@ -1,47 +1,61 @@
 # 02 Architecture
 
-Status: draft
+Status: active
 Updated: 2026-03-05
 
 ## Why this section matters now
 
 Architecture translates vision into a concrete system shape and invariants.
-It provides technical boundaries that roadmaps must implement against.
+It provides technical boundaries that roadmap batches must implement against.
 
 ## Scope
 
-Define system layers, authority boundaries, and non-negotiable contracts.
-Keep milestone-level execution detail out of architecture docs.
+Define system layers, authority boundaries, core invariants, and contract surfaces.
+Keep milestone task sequencing out of architecture docs.
 
 ## Template layout
 
-- `docs/architecture/README.md` (index and architecture writing rules)
-- `docs/architecture/system-architecture.md` (top-level stack and invariants)
-- `docs/architecture/contracts/` (placeholder for explicit contract docs)
+- `docs/architecture/README.md`
+- `docs/architecture/system-architecture.md`
+- `docs/architecture/contracts/001-<slug>.md`
+- `docs/architecture/contracts/00n-<slug>.md`
 
 ## Naming and ordering
 
 - Top-level architecture docs use descriptive names.
-- Contract docs should use 3-digit prefixes only when the project chooses sequential contract numbering.
+- Contract docs use 3-digit prefixes when maintained as a sequence.
+- Contract file pattern: `NNN-<kebab-slug>.md`.
 
 ## Content contract (`system-architecture.md`)
 
-1. `## Top-Level Stack`
-2. `## Data and Authority Flow`
-3. `## Invariants`
-4. `## Performance and Reliability Constraints`
-5. `## Interfaces With Roadmaps`
-6. `## Next Task`
+1. `Status`, `Owner`, `Updated`, `Vision refs`
+2. `## Top-Level Stack`
+3. `## Data and Authority Flow`
+4. `## Invariants`
+5. `## Performance and Reliability Constraints`
+6. `## Interfaces With Roadmaps`
+7. `## Next Task`
+
+## Content contract (contract docs)
+
+1. `Status`, `Owner`, `Updated`, `Depends on`
+2. `## Problem`
+3. `## Contract`
+4. `## Validation`
+5. `## Migration Notes`
+6. `## Roadmap Impact`
+7. `## Next Task`
 
 ## Dependencies
 
-- Must reference current vision constraints directly.
-- Should expose clear handoff points for roadmap milestones.
+- Must link directly to current vision artifact(s).
+- Must expose clear handoff points for roadmap milestones.
 
-## Open decisions
+## Glossary decision
 
-- Should architecture docs enforce a required glossary file for shared terms?
+A dedicated glossary file is optional, not required in v1.
+Teams can add `docs/architecture/glossary.md` when term drift appears.
 
 ## Next task
 
-Draft `docs/architecture/system-architecture.md` with fixed section headers and short example content.
+Align architecture starter templates so metadata and section headers match this contract exactly.

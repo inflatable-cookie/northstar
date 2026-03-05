@@ -3,10 +3,17 @@
 Status: draft
 Created: YYYY-MM-DD
 Roadmap: gNN.NNN
+Batch window: <covered batches>
 
 ## Gate Summary
 
 - Result: pass / conditional / fail
+
+## Validation Performed
+
+- Manual checks completed:
+- Commands executed:
+- Automation used (if any):
 
 ## Evidence
 
