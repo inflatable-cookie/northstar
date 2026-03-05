@@ -23,6 +23,11 @@ Logs must trace directly back to roadmap keys and batches.
 - `docs/logs/templates/automation-adoption-note-template.md` (optional)
 - `docs/logs/templates/roadmap-currentness-triage-template.md` (optional)
 
+## Default vs optional
+
+- `logs/` and `logs/templates/` are default core sections.
+- Top-level add-ons (`docs/templates/`, `docs/schemas/`, `docs/diagrams/`, `docs/specs/`) are optional and should be added only when needed.
+
 ## Naming and ordering
 
 - Directory pattern: `docs/logs/YYYY-MM/`

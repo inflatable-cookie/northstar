@@ -11,6 +11,13 @@ It should document:
 
 Current spec work lives in `bundle-docs/sections/` (`01-vision.md` through `04-logs.md`).
 
+Default bundle policy:
+- include only core folders by default
+- add `schemas/`, `templates/`, `diagrams/`, and `specs/` only when project needs justify them
+
+Agent sweep pack for drift detection and repair:
+- `bundle-docs/sweeps/README.md`
+
 Additional migration guidance:
 - `meta-folder-migration.md` for deprecating project-level `meta/`
 

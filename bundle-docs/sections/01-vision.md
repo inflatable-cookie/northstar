@@ -22,6 +22,11 @@ Do not include milestone task lists or delivery sequencing detail.
 - `docs/vision/vision-scorecard-template.md` (periodic posture review)
 - `docs/vision/risk-checkpoint-ledger-template.md` (dated strategic risk tracking)
 
+## Default vs optional
+
+- `vision/` is a default core section in every Northstar implementation.
+- No additional top-level optional folders are required to start vision work.
+
 ## Naming and ordering
 
 - Use 3-digit prefixes: `001`, `002`, `003`.
