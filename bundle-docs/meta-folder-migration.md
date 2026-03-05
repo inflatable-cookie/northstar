@@ -13,6 +13,13 @@ Migrate legacy per-project `meta/` folders into Northstar-aligned docs without l
 - Extract useful patterns into project docs under core/support folders.
 - Link back to Northstar docs for shared workflow guidance.
 
+## Hard migration rule (clean cutover)
+
+- Do not leave compatibility shim/stub files in deprecated folders (`meta/`, `decisions/`).
+- Rewrite references in active docs to canonical target paths in the same migration batch.
+- Remove deprecated folder files once reference rewrites are complete.
+- Keep migration context in a dated log entry, not in compatibility shim documents.
+
 ## Keep vs deprecate
 
 Keep as supported docs folders:
@@ -41,7 +48,7 @@ Map common `meta` content into Northstar-aligned locations:
 3. Move extracted content into target folder with updated links.
 4. Replace `meta/` references in active docs with new paths.
 5. Add one migration log documenting what moved and why.
-6. Remove or archive `meta/` once references are clean.
+6. Remove deprecated folder files once references are clean; do not leave shim docs behind.
 
 ## Notes from current scans
 

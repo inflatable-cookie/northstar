@@ -44,6 +44,7 @@ Logs must trace directly back to roadmap keys and batches.
 
 - Use decision logs for major decisions.
 - Do not maintain a dedicated `decisions/` folder by default.
+- During migration from legacy `decisions/`, move files to `logs/`, rewrite references, and delete legacy files in the same batch (no shim docs).
 
 ## Consolidation rule
 
