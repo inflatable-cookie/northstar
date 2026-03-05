@@ -38,7 +38,7 @@ Record explicit Northstar deviations to avoid accidental drift.
 
 ## Open decisions
 
-- Confirm exact generation rollover threshold (current starter: 120 files).
+- Confirm manual generation rollover trigger ownership/criteria wording for project templates.
 - Confirm whether all roadmap/log templates should include mandatory Vision delta sections from day one.
 
 ## Next task

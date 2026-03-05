@@ -7,6 +7,7 @@ Roadmaps are executable milestone plans derived from vision and architecture.
 - Use generation folders: `g01`, `g02`, `g03`.
 - Use milestone files inside each generation: `001-<slug>.md`.
 - Reference milestones as `gNN.NNN` (example: `g01.001`).
+- Trigger generation rollover manually; do not use automatic file-count limits.
 
 ## Layout
 
