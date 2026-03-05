@@ -5,15 +5,15 @@ Updated: 2026-03-05
 
 ## Purpose
 
-Track which template sections are pending definition.
+Track template sections and their definition state.
 
 ## Candidate sections
 
-- [01-vision.md](./01-vision.md) - draft
-- [02-architecture.md](./02-architecture.md) - draft
-- [03-roadmaps.md](./03-roadmaps.md) - draft
-- [04-reports.md](./04-reports.md) - draft
+- [01-vision.md](./01-vision.md) - active
+- [02-architecture.md](./02-architecture.md) - active
+- [03-roadmaps.md](./03-roadmaps.md) - active
+- [04-reports.md](./04-reports.md) - active
 
 ## Next task
 
-Finalize section 01 and 03 first so initial project bootstraps have vision-first flow and roadmap generation rules.
+Create first canonical content docs in `template-bundle/` from these active section contracts (vision 001, architecture system doc, roadmap g01/001, first monthly report).

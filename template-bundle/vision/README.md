@@ -1,7 +1,7 @@
 # Vision
 
 Vision docs define long-term direction and constraints.
-They should guide architecture and roadmap decisions without turning into implementation plans.
+They guide architecture and roadmap decisions without becoming delivery plans.
 
 ## Naming
 
@@ -11,12 +11,22 @@ They should guide architecture and roadmap decisions without turning into implem
 
 ## Writing rule
 
-Create at least one vision artifact (`001`) before creating roadmap milestones.
+- Create `001` before creating the first roadmap milestone.
+- Keep roadmap task sequencing out of vision docs.
 
-## Starter template
+## Governance artifacts (lean and periodic)
+
+- `vision-tag-rubric-template.md`
+- `vision-scorecard-template.md`
+- `risk-checkpoint-ledger-template.md`
+
+Use these at periodic checkpoints (for example monthly/quarterly), not per task.
+
+## Starter files
 
 - `001-project-vision-blueprint-template.md`
+- `001-example-project-vision.md`
 
 ## Next task
 
-Add `001-<project-blueprint>.md` with target envelopes and strategic constraints.
+Create `001-<project-blueprint>.md` with long-term outcomes, constraints, and target envelopes.

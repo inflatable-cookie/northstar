@@ -4,6 +4,7 @@ Status: draft
 Created: YYYY-MM-DD
 Roadmap: gNN.NNN
 Batch: <n.m> - <batch title>
+Cycle scope: <what this update cycle covered>
 
 ## Summary
 
@@ -15,10 +16,21 @@ Batch: <n.m> - <batch title>
 2. <change 2>
 3. <change 3>
 
+## Validation Performed
+
+1. Manual checks:
+- <check and outcome>
+
+2. Commands executed:
+- `<command>`
+- Result: pass / fail / blocked
+
+3. Automation changes (optional):
+- <none, or link to automation adoption note>
+
 ## Evidence
 
-1. `<command or artifact>`
-- Result: pass / fail / blocked
+- <artifact/report link>
 
 ## Risks
 

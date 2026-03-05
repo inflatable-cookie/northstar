@@ -26,3 +26,10 @@ The initial template pass is anchored on four core sections:
 - `reports` (month-segmented)
 
 See `bundle-docs/jetstream-baseline.md` for source-pattern notes from Jetstream and Northstar-specific changes.
+
+## Default posture
+
+Northstar is intentionally lean by default:
+- report by batch/update cycle, not by individual task
+- prefer manual evidence before introducing automation/checker scripts
+- keep one active roadmap queue and move deferred work into backlog

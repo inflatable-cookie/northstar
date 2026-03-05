@@ -3,6 +3,7 @@
 Status: draft
 Owner: <owner>
 Updated: YYYY-MM-DD
+Vision refs: <docs/vision/001-...>
 
 ## Top-Level Stack
 
@@ -14,7 +15,7 @@ Describe how data moves and where authoritative decisions are made.
 
 ## Invariants
 
-List non-negotiable rules that implementation must preserve.
+List non-negotiable rules implementation must preserve.
 
 ## Performance and Reliability Constraints
 
@@ -22,8 +23,8 @@ Document key constraints and budgets.
 
 ## Interfaces With Roadmaps
 
-Describe how milestones should consume this architecture.
+List the roadmap milestones/batches this architecture currently unlocks or constrains.
 
 ## Next Task
 
-State the next contract, brief, or milestone this architecture unlocks.
+State the next contract, brief, or roadmap milestone this architecture unlocks.
