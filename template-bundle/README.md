@@ -9,7 +9,7 @@ The folders here are intended to be copied into a target project's `docs/` direc
 - `vision/`
 - `architecture/`
 - `roadmaps/`
-- `reports/`
+- `logs/`
 
 ## Supported optional folders
 
@@ -22,7 +22,7 @@ The folders here are intended to be copied into a target project's `docs/` direc
 ## Folder policy
 
 - Keep `roadmaps/backlog/` as the only backlog pattern.
-- Prefer decision reports over a separate `decisions/` folder.
+- Prefer decision logs over a separate `decisions/` folder.
 - Treat per-project `meta/` docs as deprecated; extract useful content and link to Northstar docs.
 
 Examples should be seeded inside the relevant section content rather than in a separate top-level examples directory.
@@ -30,6 +30,6 @@ Examples should be seeded inside the relevant section content rather than in a s
 ## Operating posture
 
 Northstar defaults to lean governance:
-- batch-based reporting, not per-task reporting
+- batch-based logging, not per-task logging
 - manual-first evidence, automation only when recurring pain justifies it
 - clear active queue + backlog separation to prevent roadmap sprawl

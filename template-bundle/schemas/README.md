@@ -4,7 +4,7 @@ Use this folder for formal schemas (JSON schema, payload schema, shape contracts
 
 ## Rule
 
-Schema updates should be traceable to roadmap and report entries.
+Schema updates should be traceable to roadmap and log entries.
 
 ## Next task
 

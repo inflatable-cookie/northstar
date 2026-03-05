@@ -1,4 +1,4 @@
-# Phase Gate Report <gNN.NNN>
+# Phase Gate Log <gNN.NNN>
 
 Status: draft
 Created: YYYY-MM-DD

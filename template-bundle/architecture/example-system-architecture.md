@@ -24,7 +24,7 @@ Vision refs: docs/vision/001-example-project-vision.md
 
 - Domain rules are enforced server-side, not only in UI layers.
 - Roadmap changes must reference affected architecture boundaries.
-- Reports must reflect real validation activity from completed batches.
+- Logs must reflect real validation activity from completed batches.
 
 ## Performance and Reliability Constraints
 
@@ -34,7 +34,7 @@ Vision refs: docs/vision/001-example-project-vision.md
 
 ## Interfaces With Roadmaps
 
-- `g01.001` establishes core delivery and reporting foundation.
+- `g01.001` establishes core delivery and logging foundation.
 - Follow-on milestones may expand architecture depth only after foundational acceptance criteria pass.
 
 ## Next Task

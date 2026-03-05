@@ -12,7 +12,7 @@ Template:
 
 ## Rule
 
-Contracts should be stable reference artifacts and link to relevant roadmap/report evidence.
+Contracts should be stable reference artifacts and link to relevant roadmap/log evidence.
 
 ## Next task
 

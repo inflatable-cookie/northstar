@@ -30,7 +30,7 @@ Cycle scope: <what this update cycle covered>
 
 ## Evidence
 
-- <artifact/report link>
+- <artifact/log link>
 
 ## Risks
 
@@ -38,4 +38,4 @@ Cycle scope: <what this update cycle covered>
 
 ## Next Task
 
-State the next roadmap batch or remediation task unlocked by this report.
+State the next roadmap batch or remediation task unlocked by this log.

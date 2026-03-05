@@ -1,4 +1,4 @@
-# Decision Report: <Decision Title>
+# Decision Log: <Decision Title>
 
 Status: draft
 Created: YYYY-MM-DD
@@ -18,7 +18,7 @@ List expected impacts, tradeoffs, and constraints.
 
 ## Evidence
 
-- <supporting report/artifact links>
+- <supporting log/artifact links>
 
 ## Next Task
 

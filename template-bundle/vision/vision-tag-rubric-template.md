@@ -25,7 +25,7 @@ Updated: YYYY-MM-DD
 | `regressed` | explicit issue and containment status |
 | `at_risk` | unresolved dependency and named owner |
 
-## Reporting rule
+## Logging rule
 
 Use the same marker vocabulary in roadmap closures and scorecards.
 

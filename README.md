@@ -12,7 +12,7 @@ Section examples should live inside `template-bundle/` alongside the section the
 
 ## Start here
 
-1. Define template scope section-by-section in `bundle-docs/sections/` (`01-vision.md` through `04-reports.md`).
+1. Define template scope section-by-section in `bundle-docs/sections/` (`01-vision.md` through `04-logs.md`).
 2. Implement approved sections inside `template-bundle/`.
 3. Keep `bundle-docs/` in sync with any template changes.
 
@@ -23,7 +23,7 @@ The initial template pass is anchored on four core sections:
 - `vision`
 - `architecture`
 - `roadmaps` (generation-keyed with `roadmaps/backlog/`)
-- `reports` (month-segmented)
+- `logs` (month-segmented)
 
 Plus supported optional folders for implementation depth:
 
@@ -38,7 +38,7 @@ See `bundle-docs/jetstream-baseline.md` for source-pattern notes from Jetstream 
 ## Default posture
 
 Northstar is intentionally lean by default:
-- report by batch/update cycle, not by individual task
+- log work by batch/update cycle, not by individual task
 - prefer manual evidence before introducing automation/checker scripts
 - keep one active roadmap queue and move deferred work into backlog
 - treat `meta/` as deprecated and extract useful content into core/support docs
