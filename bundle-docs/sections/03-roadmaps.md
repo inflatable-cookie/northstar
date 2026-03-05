@@ -40,9 +40,11 @@ Rationale:
 
 ## Generation rollover rule
 
-Start a new generation (`g02`) when either is true:
-- current generation reaches 120 roadmap files, or
-- a major vision/architecture shift requires a fresh sequencing baseline.
+Start a new generation (`g02`) only when manually triggered.
+
+Typical manual triggers:
+- a major vision/architecture shift requires a fresh sequencing baseline
+- roadmap scope volume makes a new sequence boundary clearer for execution
 
 Record rollover reason in `docs/roadmaps/generation-index.md`.
 

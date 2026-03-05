@@ -16,9 +16,9 @@ Updated: 2026-03-05
 ## Rollover policy
 
 Create a new generation when:
-- milestone count reaches 120 in the current generation, or
-- a major vision/architecture shift requires a new sequence baseline.
+- manually triggered by maintainers based on sequencing needs.
+- typically after a major vision/architecture shift or when roadmap scale warrants a new boundary.
 
 ## Next task
 
-When opening `g02`, add a generation log row and record the rollover trigger.
+When opening `g02`, add a generation log row and record the manual rollover trigger.
