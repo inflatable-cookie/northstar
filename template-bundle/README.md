@@ -8,16 +8,21 @@ The folders here are intended to be copied into a target project's `docs/` direc
 
 - `vision/`
 - `architecture/`
+- `contracts/`
 - `roadmaps/`
 - `logs/`
 
-## Supported optional folders
+## Optional add-on folders (not included by default)
+
+Create these only if the project actually needs them:
 
 - `schemas/`
 - `templates/`
-- `contracts/`
 - `diagrams/`
 - `specs/`
+
+`templates/` here means top-level `docs/templates/`.
+Section-local template folders such as `docs/roadmaps/templates/` and `docs/logs/templates/` remain part of the core bundle.
 
 ## Folder policy
 

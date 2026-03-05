@@ -32,6 +32,12 @@ Rationale:
 - `docs/roadmaps/backlog/backlog-item-template.md`
 - `docs/logs/templates/roadmap-currentness-triage-template.md` (optional)
 
+## Default vs optional
+
+- `roadmaps/` and `roadmaps/backlog/` are default core sections.
+- `docs/roadmaps/templates/` is core for roadmap authoring.
+- Top-level `docs/templates/` remains optional and should not be seeded by default.
+
 ## Naming and ordering
 
 - File pattern: `docs/roadmaps/gNN/NNN-<slug>.md`

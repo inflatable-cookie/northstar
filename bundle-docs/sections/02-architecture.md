@@ -20,6 +20,11 @@ Keep milestone task sequencing out of architecture docs.
 - `docs/contracts/001-<slug>.md`
 - `docs/contracts/00n-<slug>.md`
 
+## Default vs optional
+
+- `architecture/` and `contracts/` are default core sections.
+- Add `docs/specs/` or `docs/schemas/` only when formal modeling or schema contracts are needed.
+
 ## Naming and ordering
 
 - Top-level architecture docs use descriptive names.

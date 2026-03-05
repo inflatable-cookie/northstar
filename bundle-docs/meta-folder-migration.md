@@ -22,9 +22,11 @@ Migrate legacy per-project `meta/` folders into Northstar-aligned docs without l
 
 ## Keep vs deprecate
 
-Keep as supported docs folders:
-- `vision`, `architecture`, `roadmaps`, `logs`
-- `schemas`, `templates`, `contracts`, `diagrams`, `specs`
+Keep as default core docs folders:
+- `vision`, `architecture`, `contracts`, `roadmaps`, `logs`
+
+Keep as optional add-on folders (create only when needed):
+- `schemas`, `templates`, `diagrams`, `specs`
 
 Deprecate as default folders:
 - `meta`
@@ -36,10 +38,10 @@ Map common `meta` content into Northstar-aligned locations:
 
 - workflow guides -> `logs/` (dated updates) or `roadmaps/` (execution rules)
 - guardrails/checklists -> `roadmaps/` milestone acceptance/evidence sections
-- glossary/terminology -> `architecture/` or `specs/` where term ownership is explicit
+- glossary/terminology -> `architecture/` or optional `specs/` where term ownership is explicit
 - architecture inbox/backlog notes -> `roadmaps/backlog/`
 - one-off audits -> dated `logs/YYYY-MM/`
-- long-lived contracts/policies -> `contracts/` or `schemas/`
+- long-lived contracts/policies -> `contracts/` or optional `schemas/`
 
 ## Migration steps
 

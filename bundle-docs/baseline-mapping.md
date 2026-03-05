@@ -1,11 +1,11 @@
-# Jetstream Baseline Mapping
+# Baseline Mapping
 
 Status: draft
 Updated: 2026-03-05
 
 ## Purpose
 
-Capture the Jetstream documentation patterns used as Northstar starting points.
+Capture the documentation patterns used as Northstar starting points.
 Record explicit Northstar deviations to avoid accidental drift.
 
 ## Source scan focus
@@ -25,12 +25,12 @@ Record explicit Northstar deviations to avoid accidental drift.
 ## Northstar changes
 
 1. Roadmap segmentation by generation key.
-- Jetstream uses one flat `docs/roadmap/` sequence.
+- Legacy pattern uses one flat `docs/roadmap/` sequence.
 - Northstar uses `docs/roadmaps/gNN/NNN-<slug>.md`.
 - Cross-reference format is `gNN.NNN` (example: `g01.105`).
 
 2. Log segmentation by month.
-- Jetstream stores logs in a single `docs/logs/` folder.
+- Legacy pattern stores logs in a single `docs/logs/` folder.
 - Northstar uses `docs/logs/YYYY-MM/DD-HHMMSS-<slug>.md`.
 
 3. Bundle-first packaging.
