@@ -4,12 +4,26 @@ This directory is the product artifact.
 
 The folders here are intended to be copied into a target project's `docs/` directory.
 
-## Structure
+## Core structure
 
 - `vision/`
 - `architecture/`
 - `roadmaps/`
 - `reports/`
+
+## Supported optional folders
+
+- `schemas/`
+- `templates/`
+- `contracts/`
+- `diagrams/`
+- `specs/`
+
+## Folder policy
+
+- Keep `roadmaps/backlog/` as the only backlog pattern.
+- Prefer decision reports over a separate `decisions/` folder.
+- Treat per-project `meta/` docs as deprecated; extract useful content and link to Northstar docs.
 
 Examples should be seeded inside the relevant section content rather than in a separate top-level examples directory.
 

@@ -7,7 +7,7 @@ They set constraints roadmap batches must honor.
 
 - `system-architecture.md`
 - `example-system-architecture.md`
-- `contracts/001-<slug>.md` and `contracts/00n-<slug>.md`
+- `docs/contracts/001-<slug>.md` and `docs/contracts/00n-<slug>.md`
 
 ## Writing rules
 
@@ -17,4 +17,4 @@ They set constraints roadmap batches must honor.
 
 ## Next task
 
-Fill `system-architecture.md` and add the first contract doc in `contracts/` for the highest-risk boundary.
+Fill `system-architecture.md` and add the first contract doc in `docs/contracts/` for the highest-risk boundary.

@@ -17,8 +17,8 @@ Keep milestone task sequencing out of architecture docs.
 
 - `docs/architecture/README.md`
 - `docs/architecture/system-architecture.md`
-- `docs/architecture/contracts/001-<slug>.md`
-- `docs/architecture/contracts/00n-<slug>.md`
+- `docs/contracts/001-<slug>.md`
+- `docs/contracts/00n-<slug>.md`
 
 ## Naming and ordering
 
