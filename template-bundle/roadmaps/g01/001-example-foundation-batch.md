@@ -13,7 +13,7 @@ Teams need a repeatable execution model that keeps roadmap work focused, traceab
 ## Goals
 
 - [ ] Establish first active roadmap milestone with batch structure.
-- [ ] Produce one batch-level closure report with explicit validation evidence.
+- [ ] Produce one batch-level closure log with explicit validation evidence.
 - [ ] Confirm backlog and currentness rules are understood by maintainers.
 
 ## Non-Goals
@@ -27,25 +27,25 @@ Teams need a repeatable execution model that keeps roadmap work focused, traceab
 
 - [ ] Define acceptance criteria and risk notes for the first active queue.
 - [ ] Execute a small but meaningful change against the defined criteria.
-- [ ] Publish a batch closure report in `docs/reports/YYYY-MM/`.
+- [ ] Publish a batch closure log in `docs/logs/YYYY-MM/`.
 
 ## Acceptance Criteria
 
 - [ ] First milestone file is traceable from vision and architecture.
-- [ ] One batch-level report exists with `Validation Performed` completed.
+- [ ] One batch-level log exists with `Validation Performed` completed.
 - [ ] Next action is explicit and execution-ready.
 
 ## Risks and Mitigations
 
-- Risk: reporting overhead grows faster than delivery value.
-- Mitigation: enforce batch-only reporting cadence and lean evidence rules.
+- Risk: logging overhead grows faster than delivery value.
+- Mitigation: enforce batch-only logging cadence and lean evidence rules.
 
 ## Evidence Requirements
 
-- [ ] one contract-delta report for Batch 1.1
-- [ ] manual validation checks and executed commands listed in report
+- [ ] one contract-delta log for Batch 1.1
+- [ ] manual validation checks and executed commands listed in log
 - [ ] no new checker scripts unless automation criteria are explicitly met
 
 ## Next Task
 
-Execute Batch 1.1 and publish the first report for `g01.001`.
+Execute Batch 1.1 and publish the first log for `g01.001`.

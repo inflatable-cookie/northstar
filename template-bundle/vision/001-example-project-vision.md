@@ -19,13 +19,13 @@ Deliver a reliable, fast-moving product platform where roadmap execution stays a
 
 - Delivery cadence: complete at least one meaningful roadmap batch each cycle.
 - Reliability posture: no unresolved critical regressions at batch closure.
-- Documentation quality: roadmap/report references stay traceable (`gNN.NNN`).
-- Governance overhead: reporting and checks stay proportional to delivery value.
+- Documentation quality: roadmap/log references stay traceable (`gNN.NNN`).
+- Governance overhead: logging and checks stay proportional to delivery value.
 
 ## Alignment Signals
 
 - Roadmap milestones map directly to vision constraints.
-- Batch reports show concrete movement and clear next actions.
+- Batch logs show concrete movement and clear next actions.
 - Deferred work moves into backlog rather than bloating active queues.
 
 ## Next Task

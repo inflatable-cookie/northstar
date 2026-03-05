@@ -1,6 +1,6 @@
 # Templates
 
-Use this folder for reusable document templates that are not specific to roadmaps/reports.
+Use this folder for reusable document templates that are not specific to roadmaps/logs.
 
 ## Rule
 

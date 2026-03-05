@@ -16,22 +16,22 @@ Migrate legacy per-project `meta/` folders into Northstar-aligned docs without l
 ## Keep vs deprecate
 
 Keep as supported docs folders:
-- `vision`, `architecture`, `roadmaps`, `reports`
+- `vision`, `architecture`, `roadmaps`, `logs`
 - `schemas`, `templates`, `contracts`, `diagrams`, `specs`
 
 Deprecate as default folders:
 - `meta`
-- `decisions` (replace with decision reports)
+- `decisions` (replace with decision logs)
 
 ## Extraction mapping
 
 Map common `meta` content into Northstar-aligned locations:
 
-- workflow guides -> `reports/` (dated updates) or `roadmaps/` (execution rules)
+- workflow guides -> `logs/` (dated updates) or `roadmaps/` (execution rules)
 - guardrails/checklists -> `roadmaps/` milestone acceptance/evidence sections
 - glossary/terminology -> `architecture/` or `specs/` where term ownership is explicit
 - architecture inbox/backlog notes -> `roadmaps/backlog/`
-- one-off audits -> dated `reports/YYYY-MM/`
+- one-off audits -> dated `logs/YYYY-MM/`
 - long-lived contracts/policies -> `contracts/` or `schemas/`
 
 ## Migration steps
@@ -40,14 +40,14 @@ Map common `meta` content into Northstar-aligned locations:
 2. Classify each file as keep/extract/archive.
 3. Move extracted content into target folder with updated links.
 4. Replace `meta/` references in active docs with new paths.
-5. Add one migration report documenting what moved and why.
+5. Add one migration log documenting what moved and why.
 6. Remove or archive `meta/` once references are clean.
 
 ## Notes from current scans
 
 Observed reusable `meta` patterns worth keeping (from Chorus/Ledger/Underlay scans):
 - collaboration role clarity and workflow boundaries
-- reporting generation/naming policies
+- logging generation/naming policies
 - guardrails for large-file decomposition and architectural hygiene
 - runbook-style operational checklists
 
@@ -57,4 +57,4 @@ Observed patterns to avoid carrying forward verbatim:
 
 ## Next task
 
-Run this playbook on one existing project and publish a migration report listing extracted docs and removed `meta` files.
+Run this playbook on one existing project and publish a migration log listing extracted docs and removed `meta` files.

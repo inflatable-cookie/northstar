@@ -38,8 +38,8 @@ Describe the specific short-term problem this milestone solves.
 
 ## Evidence Requirements
 
-- [ ] <report or artifact for batch closure>
-- [ ] <report cadence: one report per completed batch/update cycle>
+- [ ] <log or artifact for batch closure>
+- [ ] <log cadence: one log per completed batch/update cycle>
 - [ ] <manual validation checks and commands actually run>
 - [ ] <if new checker script is proposed, record owner + cadence + sunset trigger>
 

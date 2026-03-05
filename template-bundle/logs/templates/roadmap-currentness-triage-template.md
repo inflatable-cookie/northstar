@@ -1,4 +1,4 @@
-# Roadmap Currentness Report
+# Roadmap Currentness Log
 
 Status: draft
 Created: YYYY-MM-DD
@@ -17,7 +17,7 @@ Scope: <roadmap generation / project scope>
 
 ## Source Items Reviewed
 
-- <roadmap/report/backlog refs>
+- <roadmap/log/backlog refs>
 
 ## Validation
 

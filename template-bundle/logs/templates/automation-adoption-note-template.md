@@ -2,7 +2,7 @@
 
 Status: draft
 Created: YYYY-MM-DD
-Scope: <roadmap/report scope>
+Scope: <roadmap/log scope>
 Owner: <owner>
 
 ## Problem Repetition Evidence
@@ -25,4 +25,4 @@ Owner: <owner>
 
 ## Next Task
 
-Create the implementation task or report link that introduces this automation.
+Create the implementation task or log link that introduces this automation.

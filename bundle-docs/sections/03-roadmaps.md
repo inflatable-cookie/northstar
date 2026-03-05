@@ -30,7 +30,7 @@ Rationale:
 - `docs/roadmaps/generation-index.md`
 - `docs/roadmaps/backlog/README.md`
 - `docs/roadmaps/backlog/backlog-item-template.md`
-- `docs/reports/templates/roadmap-currentness-triage-template.md` (optional)
+- `docs/logs/templates/roadmap-currentness-triage-template.md` (optional)
 
 ## Naming and ordering
 
@@ -61,13 +61,13 @@ Record rollover reason in `docs/roadmaps/generation-index.md`.
 ## Batch rule
 
 - Plan and execute in meaningful batches (not micro-tasks).
-- Reports must be created per completed batch/update cycle, not per individual task.
+- Logs must be created per completed batch/update cycle, not per individual task.
 
 ## Currentness rule
 
 - Keep one clearly identified active queue.
 - Move deferred items into backlog with promotion criteria.
-- Use lightweight currentness triage reports only when queue clarity degrades.
+- Use lightweight currentness triage logs only when queue clarity degrades.
 
 ## Lean governance rule
 
@@ -79,7 +79,7 @@ Only add a new script/checker when all are true:
 - an owner and expected run cadence are explicitly assigned
 - a removal/sunset trigger is recorded
 
-If these conditions are not met, keep validation in batch reports as human-run checks.
+If these conditions are not met, keep validation in batch logs as human-run checks.
 
 ## Next task
 

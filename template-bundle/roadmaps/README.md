@@ -15,10 +15,10 @@ Roadmaps are executable milestone plans derived from vision and architecture.
 - `backlog/` deferred items with promotion criteria
 - `templates/roadmap-milestone-template.md` milestone starter contract
 
-## Batch and reporting rule
+## Batch and logging rule
 
 - Execute milestones in meaningful batches.
-- Create reports per completed batch/update cycle, not per individual task.
+- Create logs per completed batch/update cycle, not per individual task.
 
 ## Lean governance rule
 

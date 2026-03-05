@@ -1,16 +1,16 @@
-# Reports
+# Logs
 
-Reports capture dated evidence and assessments.
+Logs capture dated evidence and assessments.
 
 ## Segmentation model
 
-- Group reports by month directory: `YYYY-MM/`
-- Name each report: `DD-HHMMSS-<slug>.md`
+- Group logs by month directory: `YYYY-MM/`
+- Name each log: `DD-HHMMSS-<slug>.md`
 
 ## Cadence rule
 
-- Create reports per completed batch or update cycle.
-- Do not create a separate report for every task.
+- Create logs per completed batch or update cycle.
+- Do not create a separate log for every task.
 
 ## Lean evidence rule
 
@@ -21,7 +21,7 @@ Reports capture dated evidence and assessments.
 ## Decision policy
 
 - Do not maintain a separate `decisions/` folder by default.
-- Capture major decisions as dedicated decision reports in this folder.
+- Capture major decisions as dedicated decision logs in this folder.
 
 ## Seed file
 
@@ -30,11 +30,11 @@ Reports capture dated evidence and assessments.
 ## Templates
 
 - `templates/roadmap-contract-delta-template.md`
-- `templates/phase-gate-report-template.md`
-- `templates/decision-report-template.md`
+- `templates/phase-gate-log-template.md`
+- `templates/decision-log-template.md`
 - `templates/automation-adoption-note-template.md` (optional)
 - `templates/roadmap-currentness-triage-template.md` (optional)
 
 ## Next task
 
-Create the current month directory and add the first batch-level report for a completed roadmap batch.
+Create the current month directory and add the first batch-level log for a completed roadmap batch.

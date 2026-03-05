@@ -9,7 +9,7 @@ It should document:
 - maintenance and upgrade policy
 - contributor guidance for changing the bundle safely
 
-Current spec work lives in `bundle-docs/sections/` (`01-vision.md` through `04-reports.md`).
+Current spec work lives in `bundle-docs/sections/` (`01-vision.md` through `04-logs.md`).
 
 Additional migration guidance:
 - `meta-folder-migration.md` for deprecating project-level `meta/`
@@ -17,4 +17,4 @@ Additional migration guidance:
 ## Governance posture
 
 Northstar intentionally favors lean governance over heavy operational overhead.
-Use scripts/checkers selectively, and default to concise batch-level reports with concrete evidence.
+Use scripts/checkers selectively, and default to concise batch-level logs with concrete evidence.
