@@ -21,6 +21,23 @@ Core flow:
 
 Section examples live in the relevant folders inside the template bundle.
 
+## Effigy-First Loop
+
+Use Effigy as the default repo command surface:
+
+```bash
+effigy tasks --repo .
+effigy doctor --repo .
+effigy health --repo .
+effigy validate --repo .
+```
+
+The current repo baseline is bundle integrity and documentation structure validation:
+
+```bash
+effigy check:bundle --repo .
+```
+
 ## Quick Start (New Project)
 
 1. Copy the bundle into your target project docs folder.
@@ -74,3 +91,7 @@ Northstar is intentionally lean:
 - keep one active roadmap queue and move deferred work into backlog
 - treat `meta/` as deprecated and extract useful content into canonical docs
 - enforce clean migrations: move, update refs, remove legacy artifacts in one batch
+
+## Next task
+
+Decide whether Northstar should publish first-class Effigy tasks for template installation and upgrade workflows, or keep those flows intentionally manual until the helper scripts become stable enough to own as productized commands.

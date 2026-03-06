@@ -1,0 +1,8 @@
+[catalog]
+alias = "northstar"
+
+[tasks]
+"check:bundle" = "bash ./scripts/check-northstar-bundle.sh"
+health = [{ task = "check:bundle" }]
+validate = [{ task = "check:bundle" }]
+qa = [{ task = "validate" }]
