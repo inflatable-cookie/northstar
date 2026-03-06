@@ -1,11 +1,11 @@
-# Phase Gate Log <gNN.NNN>
+# Roadmap Gate Log <gNN.NNN>
 
 Status: draft
 Created: YYYY-MM-DD
 Roadmap: gNN.NNN
 Batch window: <covered batches>
 
-## Gate Summary
+## Roadmap Gate Summary
 
 - Result: pass / conditional / fail
 
@@ -26,4 +26,4 @@ Batch window: <covered batches>
 
 ## Next Task
 
-State the next gate action or roadmap continuation step.
+State the next roadmap gate action or continuation step.
