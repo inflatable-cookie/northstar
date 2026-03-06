@@ -11,6 +11,18 @@ It should document:
 
 Current spec work lives in `bundle-docs/sections/` (`01-vision.md` through `04-logs.md`).
 
+## Effigy-First Loop
+
+From the repo root:
+
+```bash
+effigy tasks --repo .
+effigy health --repo .
+effigy validate --repo .
+```
+
+Northstar is a docs/template repo, so the default Effigy surface is bundle-integrity validation rather than runtime build orchestration.
+
 Default bundle policy:
 - include only core folders by default
 - add `schemas/`, `templates/`, `diagrams/`, and `specs/` only when project needs justify them
