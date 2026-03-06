@@ -18,7 +18,7 @@ Logs must trace directly back to roadmap keys and batches.
 - `docs/logs/README.md`
 - `docs/logs/YYYY-MM/DD-HHMMSS-<slug>.md`
 - `docs/logs/templates/roadmap-contract-delta-template.md`
-- `docs/logs/templates/phase-gate-log-template.md`
+- `docs/logs/templates/roadmap-gate-log-template.md`
 - `docs/logs/templates/decision-log-template.md`
 - `docs/logs/templates/automation-adoption-note-template.md` (optional)
 - `docs/logs/templates/roadmap-currentness-triage-template.md` (optional)
