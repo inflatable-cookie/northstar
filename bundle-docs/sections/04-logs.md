@@ -12,6 +12,7 @@ Month segmentation keeps historical logging navigable at scale.
 
 Define log naming, placement, cadence, and minimum sections.
 Logs must trace directly back to roadmap keys and batches.
+When a batch produces or promotes research, cite the relevant research artifacts in evidence.
 
 ## Template layout
 
@@ -68,8 +69,8 @@ Logs must trace directly back to roadmap keys and batches.
 
 ## Traceability rule
 
-Each log must include roadmap references in `gNN.NNN` format.
+Each log must include roadmap references in `gNN.NNN` format and can include research artifact links when those artifacts materially changed in the batch.
 
 ## Next task
 
-Align log templates so the metadata/body describe batch scope and outcomes, and keep automation/currentness artifacts optional by default.
+Pilot whether research-heavy projects need a dedicated research batch log template, or whether the existing roadmap/log templates stay sufficient.

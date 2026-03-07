@@ -1,7 +1,7 @@
 # Baseline Mapping
 
-Status: draft
-Updated: 2026-03-05
+Status: active
+Updated: 2026-03-07
 
 ## Purpose
 
@@ -12,6 +12,7 @@ Record explicit Northstar deviations to avoid accidental drift.
 
 - `docs/vision/`
 - `docs/architecture/`
+- `docs/research/` (when comparative/source-backed work is a durable need)
 - `docs/roadmap/`
 - `docs/logs/`
 
@@ -19,6 +20,7 @@ Record explicit Northstar deviations to avoid accidental drift.
 
 - Vision as long-horizon constraints and directional blueprint.
 - Architecture as system shape + invariants.
+- Research as an optional synthesis layer for comparative/source-backed learning before architecture or roadmap commitments.
 - Roadmaps as milestone files with executable task lists and acceptance criteria.
 - Logs as dated evidence artifacts tied to roadmap batches.
 
@@ -36,11 +38,19 @@ Record explicit Northstar deviations to avoid accidental drift.
 3. Bundle-first packaging.
 - Northstar separates template artifact (`template-bundle/`) from docs-about-the-bundle (`bundle-docs/`).
 
+4. Research promotion contract.
+- Jetstream and Loophole both proved the value of separating raw comparative research from project-facing recommendations.
+- Northstar standardizes that as `specimen-dossiers/`, `value-tracks/`, `source-hubs/`, and `translation-memos/` inside optional `docs/research/`.
+
+5. Research-to-implementation bridge.
+- Chorus showed that large research corpora also need navigation and implementation-traceability support.
+- Northstar now treats `master-index.md`, `research-to-implementation-playbook.md`, `research-to-architecture-crossref.md`, `gaps-found-during-implementation.md`, and implementation decision records as optional research support artifacts when the corpus becomes delivery-critical.
+
 ## Open decisions
 
-- Confirm manual generation rollover trigger ownership/criteria wording for project templates.
-- Confirm whether all roadmap/log templates should include mandatory Vision delta sections from day one.
+- Confirm whether Northstar should eventually ship an Effigy check that validates research contracts only when `docs/research/` exists.
+- Confirm whether project-specific research domains should keep the canonical `specimen-dossiers/` name or allow alias folders with a documented mapping.
 
 ## Next task
 
-Finalize `03-roadmaps.md` and `04-logs.md` spec rules, then create first concrete milestone and log templates directly in `template-bundle/roadmaps/` and `template-bundle/logs/`.
+Pilot the new research add-on in a live project and decide whether the sweep pack needs stronger checks for discovery intake and research-to-architecture promotion hygiene.
