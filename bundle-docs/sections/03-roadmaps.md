@@ -11,7 +11,7 @@ Generation segmentation keeps long-running programs manageable.
 ## Scope
 
 Define milestone files, batch-oriented execution lists, acceptance criteria, and sequencing rules.
-Roadmaps must derive from vision and architecture unless a documented exception exists.
+Roadmaps must derive from vision and architecture, and from research translation memos when comparative work materially shaped the bet, unless a documented exception exists.
 
 ## Key format decision
 

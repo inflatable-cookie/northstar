@@ -1,7 +1,7 @@
 # Section Backlog
 
 Status: active
-Updated: 2026-03-05
+Updated: 2026-03-07
 
 ## Purpose
 
@@ -13,7 +13,8 @@ Track template sections and their definition state.
 - [02-architecture.md](./02-architecture.md) - active
 - [03-roadmaps.md](./03-roadmaps.md) - active
 - [04-logs.md](./04-logs.md) - active
+- [05-research.md](./05-research.md) - active
 
 ## Next task
 
-Create first canonical content docs in `template-bundle/` from these active section contracts (vision 001, architecture system doc, roadmap g01/001, first monthly log).
+Decide whether concepts/guides should become first-class Northstar sections, or remain project-specific add-ons linked from research and architecture.

@@ -26,7 +26,7 @@ Keep as default core docs folders:
 - `vision`, `architecture`, `contracts`, `roadmaps`, `logs`
 
 Keep as optional add-on folders (create only when needed):
-- `schemas`, `templates`, `diagrams`, `specs`
+- `research`, `schemas`, `templates`, `diagrams`, `specs`
 
 Deprecate as default folders:
 - `meta`
@@ -42,6 +42,7 @@ Map common `meta` content into Northstar-aligned locations:
 - architecture inbox/backlog notes -> `roadmaps/backlog/`
 - one-off audits -> dated `logs/YYYY-MM/`
 - long-lived contracts/policies -> `contracts/` or optional `schemas/`
+- comparative studies, source maps, and competitive teardowns -> `research/`
 
 ## Migration steps
 

@@ -18,7 +18,7 @@ For each sweep:
 3. Apply fixes in meaningful batches.
 4. Re-run audit checks and confirm closure.
 5. Add one batch log in `docs/logs/YYYY-MM/` summarizing changes.
-6. Keep optional add-on folders (`schemas`, `templates`, `diagrams`, `specs`) out of baseline unless needed.
+6. Keep optional add-on folders (`research`, `schemas`, `templates`, `diagrams`, `specs`) out of baseline unless needed, but enforce Northstar structure if `docs/research/` is canonical.
 
 If no drift is found, record a no-op audit log.
 
@@ -32,6 +32,7 @@ Use [Fresh Agent Sweep Prompt](./fresh-agent-sweep-prompt.md) to start a new age
 4. [04 Roadmap and Backlog Sweep](./04-roadmap-and-backlog-sweep.md)
 5. [05 Logs and Traceability Sweep](./05-logs-and-traceability-sweep.md)
 6. [06 Deprecation and Clean Migration Sweep](./06-deprecation-and-clean-migration-sweep.md)
+7. [07 Research Sweep](./07-research-sweep.md)
 
 ## Required Agent Output
 

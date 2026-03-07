@@ -57,6 +57,48 @@ Ensure canonical doc types include required metadata and section headers from No
 6. `## Risks`
 7. `## Next Task`
 
+### Research docs (when present)
+
+#### Specimen dossiers
+
+1. `Status`, `Owner`, `Last updated`, `Scope`
+2. `## Why this specimen matters`
+3. `## Product and era context`
+4. `## Defining bets`
+5. `## Standout strengths`
+6. `## Chronic weaknesses and recurring costs`
+7. `## Between-version corrections`
+8. `## Project-relevant lessons`
+9. `## Source inventory`
+10. `## Open questions`
+11. `## Next Task`
+
+#### Value-track syntheses
+
+1. `Status`, `Track`, `Owner`, `Last updated`
+2. `## Problem statement`
+3. `## Why this track matters`
+4. `## Cross-specimen comparison`
+5. `## Repeated patterns`
+6. `## Frontier signals`
+7. `## Project implications`
+8. `## Source inventory`
+9. `## Decision state`
+10. `## Next Task`
+
+#### Translation memos
+
+1. `Status`, `Memo`, `Owner`, `Last updated`, `Related track`
+2. `## Project problem statement`
+3. `## External evidence summary`
+4. `## Recommendation`
+5. `## Tradeoffs the project would accept`
+6. `## What must be true before adoption`
+7. `## Required prototype or validation work`
+8. `## Promotion target`
+9. `## Sources`
+10. `## Next Task`
+
 ## Drift Patterns
 
 - Missing section headers
@@ -72,7 +114,7 @@ Ensure canonical doc types include required metadata and section headers from No
 ## Fast Checks
 
 ```bash
-rg -n "^## (Long-Term Outcome|Problem|Execution Plan|Validation Performed|Next Task)$" docs
+rg -n "^## (Long-Term Outcome|Problem|Execution Plan|Validation Performed|Why this specimen matters|Problem statement|Project problem statement|Next Task)$" docs
 ```
 
 ## Completion Criteria

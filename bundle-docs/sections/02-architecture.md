@@ -11,6 +11,7 @@ It provides technical boundaries that roadmap batches must implement against.
 ## Scope
 
 Define system layers, authority boundaries, core invariants, and contract surfaces.
+Use research translation memos as inputs when external comparisons materially shaped the boundary.
 Keep milestone task sequencing out of architecture docs.
 
 ## Template layout
@@ -54,6 +55,7 @@ Keep milestone task sequencing out of architecture docs.
 ## Dependencies
 
 - Must link directly to current vision artifact(s).
+- Must link to research translation memos when a boundary depends on comparative findings.
 - Must expose clear handoff points for roadmap milestones.
 
 ## Glossary decision

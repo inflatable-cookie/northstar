@@ -20,9 +20,11 @@ Ensure required Northstar docs structure exists and deprecated top-level pattern
 - `docs/templates/`
 - `docs/diagrams/`
 - `docs/specs/`
+- `docs/research/`
 
 Note: this applies to top-level `docs/templates/` only.
 Section-local folders such as `docs/roadmaps/templates/` and `docs/logs/templates/` are part of the core structure.
+If `docs/research/` exists, it should also own its own internal templates and anchor files.
 
 ## Required Anchor Files
 
@@ -31,6 +33,7 @@ Section-local folders such as `docs/roadmaps/templates/` and `docs/logs/template
 - `docs/contracts/README.md`
 - `docs/roadmaps/README.md`
 - `docs/logs/README.md`
+- `docs/research/README.md` (when `docs/research/` exists)
 
 ## Drift Patterns
 
@@ -45,6 +48,7 @@ Section-local folders such as `docs/roadmaps/templates/` and `docs/logs/template
 - Move backlog content into `docs/roadmaps/backlog/`.
 - Do not create optional add-on folders unless project scope requires them.
 - Remove empty/unused optional add-on folders created by default scaffolding.
+- If `docs/research/` is a real project section, keep it and normalize it to the Northstar research layout.
 - Do clean moves only: update references and remove legacy folders in the same batch.
 - Do not leave compatibility shim docs in deprecated folders.
 
@@ -59,4 +63,5 @@ find docs -maxdepth 3 -type f | sort
 
 - All required core folders and anchor files exist.
 - Optional add-on folders are present only when justified by actual docs content.
+- Optional `docs/research/` includes its own anchor file when present.
 - No canonical content remains in deprecated structure.

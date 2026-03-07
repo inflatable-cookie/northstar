@@ -15,6 +15,7 @@ Northstar sweep source of truth:
 - bundle-docs/sweeps/04-roadmap-and-backlog-sweep.md
 - bundle-docs/sweeps/05-logs-and-traceability-sweep.md
 - bundle-docs/sweeps/06-deprecation-and-clean-migration-sweep.md
+- bundle-docs/sweeps/07-research-sweep.md
 
 Execution requirements:
 1. Audit first, then list drift findings with exact file paths.
@@ -23,7 +24,7 @@ Execution requirements:
 4. Enforce clean migrations only: no compatibility shim docs.
 5. Update references in the same batch as moves/renames.
 6. Keep canonical structure, naming, and content contracts compliant.
-7. Keep optional add-on folders (`schemas`, `templates`, `diagrams`, `specs`) absent unless explicitly needed by current project docs.
+7. Keep optional add-on folders (`research`, `schemas`, `templates`, `diagrams`, `specs`) absent unless explicitly needed by current project docs; if `docs/research/` is canonical, keep it Northstar-compliant instead of deleting it.
 8. Add one batch log in docs/logs/YYYY-MM/ summarizing the sweep work.
 
 Output requirements:
