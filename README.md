@@ -18,6 +18,7 @@ Core flow:
 
 - [`template-bundle/`](./template-bundle/) - the artifact to copy into a project's `docs/` directory, including the optional research starter pack
 - [`bundle-docs/`](./bundle-docs/) - doctrine, usage rules, migration guidance, and maintenance policy
+- [`skills/northstar-effigy/`](./skills/northstar-effigy/) - installable skill folder for repos that should adopt Northstar and Effigy together
 - [`scripts/`](./scripts/) - bootstrap and upgrade helpers (when needed)
 
 Section examples live in the relevant folders inside the template bundle.
@@ -27,17 +28,20 @@ Section examples live in the relevant folders inside the template bundle.
 Use Effigy as the default repo command surface:
 
 ```bash
-effigy tasks --repo .
-effigy doctor --repo .
-effigy health --repo .
-effigy validate --repo .
+effigy tasks
+effigy doctor
+effigy qa
 ```
 
 The current repo baseline is bundle integrity and documentation structure validation:
 
 ```bash
-effigy check:bundle --repo .
+effigy check:bundle
+effigy qa:docs
 ```
+
+Use `--repo <PATH>` only when you intentionally want to target a different
+repository.
 
 ## Quick Start (New Project)
 
@@ -78,6 +82,7 @@ rsync -a template-bundle/ /path/to/your-project/docs/
 
 - Template bundle guide: [`template-bundle/README.md`](./template-bundle/README.md)
 - Bundle docs guide: [`bundle-docs/README.md`](./bundle-docs/README.md)
+- Northstar + Effigy skill scaffold: [`skills/northstar-effigy/SKILL.md`](./skills/northstar-effigy/SKILL.md)
 - Vision spec: [`bundle-docs/sections/01-vision.md`](./bundle-docs/sections/01-vision.md)
 - Architecture spec: [`bundle-docs/sections/02-architecture.md`](./bundle-docs/sections/02-architecture.md)
 - Roadmaps spec: [`bundle-docs/sections/03-roadmaps.md`](./bundle-docs/sections/03-roadmaps.md)
@@ -96,7 +101,12 @@ Northstar is intentionally lean:
 - keep one active roadmap queue and move deferred work into backlog
 - treat `meta/` as deprecated and extract useful content into canonical docs
 - enforce clean migrations: move, update refs, remove legacy artifacts in one batch
+- keep installable skills portable as one folder; push doctrine back into
+  `template-bundle/`, `bundle-docs/`, or Effigy product docs instead of letting
+  skills sprawl
 
 ## Next task
 
-Pilot the research add-on in one existing project and tighten the optional-folder guidance based on how much starter scaffolding teams actually keep after adoption.
+Use the trimmed `northstar-effigy` skill bundle to migrate the next consumer
+repo with minimal hand-written repo-specific glue, then record what still feels
+too heavy for the portable skill folder.

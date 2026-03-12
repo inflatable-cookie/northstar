@@ -1,0 +1,32 @@
+# Apply this template to a single repo or to the repo that actually owns the
+# Northstar docs contract. For a thin workspace container, keep only the routing
+# tasks you need and do not copy this whole file blindly.
+
+[catalog]
+alias = "{{REPO_ALIAS}}"
+
+[docs_policy.indexes.vision]
+file = "docs/vision/README.md"
+dir = "docs/vision"
+
+[tasks]
+"qa:docs:links" = "effigy docs check-links"
+"qa:docs:index:vision" = "effigy docs check-index --policy-index vision"
+"qa:docs:agent-defaults" = "effigy docs check-forbidden AGENTS.md README.md docs/README.md --forbid '--repo .'"
+"qa:docs" = [
+  { task = "qa:docs:links" },
+  { task = "qa:docs:index:vision" },
+  { task = "qa:docs:agent-defaults" },
+]
+"qa:northstar" = []
+qa = [{ task = "qa:docs" }, { task = "qa:northstar" }]
+
+# Remove this block when the repo is docs-only or otherwise not a release target.
+[release]
+version-file = "Cargo.toml"
+changelog = "CHANGELOG.md"
+sync-files = ["Cargo.lock"]
+tag-format = "v{version}"
+
+[release.gates]
+qa = "effigy qa"

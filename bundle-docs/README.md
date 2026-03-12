@@ -16,12 +16,15 @@ Current spec work lives in `bundle-docs/sections/` (`01-vision.md` through `05-r
 From the repo root:
 
 ```bash
-effigy tasks --repo .
-effigy health --repo .
-effigy validate --repo .
+effigy tasks
+effigy doctor
+effigy qa
 ```
 
 Northstar is a docs/template repo, so the default Effigy surface is bundle-integrity validation rather than runtime build orchestration.
+
+Use `--repo <PATH>` only when you intentionally want to operate on another
+repository.
 
 Default bundle policy:
 - treat the core folders as the default baseline
@@ -31,6 +34,9 @@ Default bundle policy:
 
 Agent sweep pack for drift detection and repair:
 - `bundle-docs/sweeps/README.md`
+
+Agent adoption scaffold:
+- `skills/northstar-effigy/SKILL.md`
 
 Additional migration guidance:
 - `meta-folder-migration.md` for deprecating project-level `meta/`

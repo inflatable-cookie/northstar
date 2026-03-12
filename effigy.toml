@@ -3,6 +3,8 @@ alias = "northstar"
 
 [tasks]
 "check:bundle" = "bash ./scripts/check-northstar-bundle.sh"
+"check:repo-contract" = "bash ./scripts/check-northstar-repo-contract.sh"
+"qa:docs" = [{ task = "check:repo-contract" }]
 health = [{ task = "check:bundle" }]
 validate = [{ task = "check:bundle" }]
-qa = [{ task = "validate" }]
+qa = [{ task = "validate" }, { task = "qa:docs" }]
