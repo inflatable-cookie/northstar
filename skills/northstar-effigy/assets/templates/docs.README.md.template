@@ -1,0 +1,12 @@
+# Docs
+
+## Start Here
+
+- `vision/README.md`
+- `roadmaps/README.md`
+- `logs/README.md`
+
+## Working Rule
+
+Start in `vision/` for long-horizon direction, `roadmaps/` for active
+execution sequencing, and `logs/` for batch evidence and decisions.

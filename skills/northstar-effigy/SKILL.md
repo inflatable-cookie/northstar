@@ -1,6 +1,6 @@
 ---
 name: northstar-effigy
-description: Use when a repo should adopt or normalize the Northstar + Effigy contract: scaffold docs structure, AGENTS guidance, changelog and release posture, repo tasks, and validation so an agent can act on “use Northstar and Effigy.”
+description: Use when a repo should adopt or normalize the Northstar + Effigy contract: scaffold the repo shape, docs front doors, AGENTS guidance, changelog and release posture where needed, and Effigy validation so an agent can act on “use Northstar and Effigy.”
 ---
 
 # Northstar + Effigy
@@ -13,36 +13,38 @@ Use this skill when the user asks to:
 
 ## Quick Start
 
-Start with the repo root:
+Start by confirming the repo shape and the installed Effigy surface:
 
 ```sh
 effigy tasks
 effigy doctor
 effigy test --plan
-```
-
-Then confirm which Effigy surface is actually on `PATH`:
-
-```sh
 effigy docs --help
 effigy release --help
 ```
 
-Then choose native or compatibility mode from
-[`references/adoption-modes.md`](./references/adoption-modes.md).
+Then choose the adoption mode from
+[`references/adoption-modes.md`](./references/adoption-modes.md):
+
+- single repo
+- thin workspace root plus docs-authority repo
+- compatibility mode only if the installed `effigy` binary cannot support the
+  needed docs or release surface
 
 ## Workflow
 
-1. Inspect the repo state with Effigy plus `AGENTS.md`, `README.md`, and the
+1. Inspect the repo state with Effigy plus `README.md`, `AGENTS.md`, and the
    current docs front door.
 2. Apply the repo contract from
    [`references/repo-contract.md`](./references/repo-contract.md).
-   If the repo is a thin workspace container with a nested docs-authority repo,
-   keep the root lean, put the real Northstar spine in that nested repo, and
-   leave release posture only on repos that actually ship.
-3. Reuse Northstar's docs starter from [`../../template-bundle`](../../template-bundle)
-   instead of inventing a bespoke structure.
-4. Choose the right top-level templates from [`assets/templates`](./assets/templates).
+   Keep thin workspace roots lean, put the real Northstar spine in the repo
+   that actually owns it, and leave release posture only on repos that
+   actually ship.
+3. Reuse Northstar's docs starter from
+   [`../../template-bundle`](../../template-bundle) instead of inventing a
+   bespoke structure.
+4. Choose the right top-level templates from
+   [`assets/templates`](./assets/templates).
 5. Validate with the repo's `qa`, `qa:docs`, `qa:northstar`, and release
    surfaces where available.
 6. Leave one explicit next task in the active roadmap or log flow.
@@ -51,6 +53,7 @@ Then choose native or compatibility mode from
 
 The skill should leave these surfaces in a coherent state:
 
+- `README.md`
 - `AGENTS.md`
 - `effigy.toml`
 - `CHANGELOG.md`
@@ -60,18 +63,18 @@ The skill should leave these surfaces in a coherent state:
 - `docs/logs/README.md`
 
 Use the starter templates in [`assets/templates`](./assets/templates) for the
-top-level repo surfaces. Use the Northstar bundle itself for the docs skeleton.
+top-level repo surfaces and the Northstar bundle itself for the docs skeleton.
 In workspace-container mode, the full docs set may live in a nested
-docs-authority repo rather than at the workspace root, and `CHANGELOG.md` /
-release config may belong only to releasable repos instead of the authority or
-container root.
+docs-authority repo rather than at the workspace root, and `CHANGELOG.md` or
+release config may belong only to releasable repos instead of the container or
+authority root.
 
 ## References
 
 - [`references/repo-contract.md`](./references/repo-contract.md): minimum shared
   repo contract
 - [`references/adoption-modes.md`](./references/adoption-modes.md): choose
-  between native and compatibility modes
+  between single-repo, workspace-container, and compatibility behavior
 - [`references/monkey-example.md`](./references/monkey-example.md): first real
   consumer example across both modes
 
@@ -86,8 +89,10 @@ container root.
   container when a nested docs-authority repo already owns that contract.
 - Do not force a docs-only authority repo to carry fake release posture just to
   satisfy a template.
-- Do not assume native consumer-side docs or release config is available unless
-  the installed Effigy surface actually supports it.
+- Do not assume compatibility mode by default now that native consumer-side
+  docs and release config are available on the released surface; use
+  compatibility mode only when the installed binary still cannot support the
+  needed commands or manifest keys.
 - Do not assume `effigy` on `PATH` is the same binary you just built; verify
   with `effigy docs --help` and `effigy release --help` before choosing native
   mode.

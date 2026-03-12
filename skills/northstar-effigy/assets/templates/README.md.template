@@ -1,0 +1,20 @@
+# {{PROJECT_NAME}}
+
+## Start Here
+
+- `docs/README.md`
+- `AGENTS.md`
+
+## Default Effigy Loop
+
+```sh
+effigy tasks
+effigy doctor
+effigy test --plan
+effigy qa
+```
+
+## Current Focus
+
+See `docs/README.md` for the active vision, roadmap, and log
+surfaces.

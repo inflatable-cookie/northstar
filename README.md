@@ -19,6 +19,7 @@ Core flow:
 - [`template-bundle/`](./template-bundle/) - the artifact to copy into a project's `docs/` directory, including the optional research starter pack
 - [`bundle-docs/`](./bundle-docs/) - doctrine, usage rules, migration guidance, and maintenance policy
 - [`skills/northstar-effigy/`](./skills/northstar-effigy/) - installable skill folder for repos that should adopt Northstar and Effigy together
+- [`skills/northstar-handoff/`](./skills/northstar-handoff/) - installable skill folder for execution-ready handoff briefs that stay aligned with Northstar planning surfaces
 - [`scripts/`](./scripts/) - bootstrap and upgrade helpers (when needed)
 
 Section examples live in the relevant folders inside the template bundle.
@@ -83,6 +84,7 @@ rsync -a template-bundle/ /path/to/your-project/docs/
 - Template bundle guide: [`template-bundle/README.md`](./template-bundle/README.md)
 - Bundle docs guide: [`bundle-docs/README.md`](./bundle-docs/README.md)
 - Northstar + Effigy skill scaffold: [`skills/northstar-effigy/SKILL.md`](./skills/northstar-effigy/SKILL.md)
+- Northstar handoff skill scaffold: [`skills/northstar-handoff/SKILL.md`](./skills/northstar-handoff/SKILL.md)
 - Vision spec: [`bundle-docs/sections/01-vision.md`](./bundle-docs/sections/01-vision.md)
 - Architecture spec: [`bundle-docs/sections/02-architecture.md`](./bundle-docs/sections/02-architecture.md)
 - Roadmaps spec: [`bundle-docs/sections/03-roadmaps.md`](./bundle-docs/sections/03-roadmaps.md)
@@ -107,6 +109,7 @@ Northstar is intentionally lean:
 
 ## Next task
 
-Use the trimmed `northstar-effigy` skill bundle to migrate the next consumer
-repo with minimal hand-written repo-specific glue, then record what still feels
-too heavy for the portable skill folder.
+Keep the `northstar-effigy` skill lean and portable: use it to scaffold repo
+shape and starter files, then only add new Effigy product surface when repeated
+consumer adoption work shows a real gap the skill/templates cannot cover
+cleanly.

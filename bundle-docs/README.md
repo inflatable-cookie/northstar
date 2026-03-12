@@ -37,6 +37,7 @@ Agent sweep pack for drift detection and repair:
 
 Agent adoption scaffold:
 - `skills/northstar-effigy/SKILL.md`
+- `skills/northstar-handoff/SKILL.md`
 
 Additional migration guidance:
 - `meta-folder-migration.md` for deprecating project-level `meta/`

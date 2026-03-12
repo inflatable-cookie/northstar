@@ -33,6 +33,7 @@ Logs capture dated evidence and assessments.
 - `templates/roadmap-contract-delta-template.md`
 - `templates/roadmap-gate-log-template.md`
 - `templates/decision-log-template.md`
+- `templates/thread-handoff-template.md` (optional)
 - `templates/automation-adoption-note-template.md` (optional)
 - `templates/roadmap-currentness-triage-template.md` (optional)
 

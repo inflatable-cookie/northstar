@@ -1,8 +1,8 @@
 # Adoption Modes
 
-This skill supports three modes.
+This skill supports three modes, but only one fallback.
 
-## 1. Native Current-Effigy Surface
+## 1. Native Surface
 
 Use this mode when the installed Effigy supports consumer-side docs and release
 features such as:
@@ -17,10 +17,12 @@ In this mode:
 - prefer native release posture in `effigy.toml`
 - keep repo-owned scripts only for checks that are still genuinely repo-specific
 
+This is the default target for current adoption work.
+
 ## 2. Compatibility Mode
 
-Use this mode when the installed Effigy cannot yet support those consumer-side
-features.
+Use this mode only when the installed Effigy cannot yet support those
+consumer-side features or the wrong binary is first on `PATH`.
 
 In this mode:
 
@@ -51,6 +53,8 @@ First decide whether the repo is a single repo or a workspace container. Then
 pick native or compatibility behavior for the repo that actually owns the docs
 contract. If the installed Effigy rejects the manifest keys or command family
 you need, switch to compatibility mode rather than leaving a broken repo state.
+
+Native is preferred. Compatibility is a fallback, not a peer default.
 
 ## PATH Check
 
