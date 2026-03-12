@@ -1,0 +1,8 @@
+activation:
+  min_score: 0.74
+  samples:
+    - "Create a Northstar handoff for the next thread."
+    - "Write a continuation brief for this roadmap batch."
+    - "Turn this active roadmap/log state into a handoff prompt."
+instructions:
+  default_prompt: "Use $northstar-handoff to produce an execution-ready handoff brief aligned with the repo's Northstar planning surfaces."

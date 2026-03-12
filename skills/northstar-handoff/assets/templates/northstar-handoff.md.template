@@ -1,0 +1,51 @@
+---
+title: {{TOPIC}} handoff
+status: active
+owner: {{OWNER}}
+updated: {{YYYY-MM-DD}}
+tags: [coordination, handoff]
+---
+
+## Objective
+
+{{ONE_SENTENCE_OUTCOME}}
+
+## Scope
+
+- {{TASK_ONE}}
+- {{TASK_TWO}}
+- Do not {{EXPLICIT_OUT_OF_SCOPE_BOUNDARY}}
+
+## Inputs
+
+- {{ABSOLUTE_INPUT_PATH_ONE}}
+- {{ABSOLUTE_INPUT_PATH_TWO}}
+
+## Constraints
+
+- Follow the repo instructions in `AGENTS.md`.
+- Keep edits aligned with the active Northstar vision, roadmap, and log flow.
+- Do not widen scope beyond the listed tasks.
+
+## Deliverables
+
+- {{ABSOLUTE_OUTPUT_PATH_ONE}}
+- {{ABSOLUTE_OUTPUT_PATH_TWO}}
+
+## Acceptance Criteria
+
+- {{TESTABLE_CRITERION_ONE}}
+- {{TESTABLE_CRITERION_TWO}}
+
+## Notes
+
+- Current context: {{ACTIVE_VISION_ROADMAP_LOG_CONTEXT}}
+- Decisions: {{NON_OBVIOUS_DECISIONS_OR_USER_PREFERENCES}}
+- Watch-outs: {{KNOWN_RISKS_OR_AMBIGUITIES}}
+- Next move: {{CONCRETE_NEXT_EXPLORATORY_OR_EXECUTION_STEP}}
+
+## Completion Protocol
+
+1. Update the relevant roadmap/log surfaces with the outcome of this batch.
+2. Record unresolved risks or blockers explicitly.
+3. Leave one clear next task for the following thread.

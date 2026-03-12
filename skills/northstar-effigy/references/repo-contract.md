@@ -3,8 +3,17 @@
 Use this contract when a repo should mean the same thing when an agent is told
 "use Northstar and Effigy."
 
+The boundary is intentional:
+
+- Northstar owns repo shape, docs structure, and starter templates
+- Effigy owns generic validation, task/runtime surfaces, JSON contracts, and
+  release orchestration
+- compatibility mode exists only for older or mismatched installed binaries,
+  not as the preferred default
+
 ## Minimum Files
 
+- `README.md`
 - `AGENTS.md`
 - `effigy.toml`
 - `CHANGELOG.md`
@@ -30,6 +39,36 @@ Keep release posture on the repos that really ship code or packages.
 - `qa:docs`
 - `qa:northstar`
 
+## Starter Native Docs Policy
+
+Native mode is now the normal target. When the installed Effigy surface
+supports consumer-side `docs_policy`, the starter repo contract should include:
+
+- `[docs_policy.indexes.vision]`
+  - `file = "docs/vision/README.md"`
+  - `dir = "docs/vision"`
+  - `section = "Vision Artifacts"`
+  - `exclude = ["history/**"]`
+- `[docs_policy.next_actions.vision]`
+  - `index = "vision"`
+  - `heading = "## Next Task"`
+  - `allowlist_file = "docs/policy/vision-next-task-verbs.txt"`
+
+That config should pair with repo-owned tasks composed from native validators:
+
+- `effigy docs check-paths README.md AGENTS.md docs/README.md docs/vision/README.md docs/roadmaps/README.md docs/logs/README.md docs/policy/vision-next-task-verbs.txt`
+- `effigy docs check-contains AGENTS.md --require "effigy tasks" --require "effigy test --plan"`
+- `effigy docs check-contains README.md --require "docs/README.md"`
+- `effigy docs check-contains docs/README.md --require "vision/README.md" --require "roadmaps/README.md" --require "logs/README.md"`
+- `effigy docs check-index --policy-index vision`
+- `effigy docs check-next-action --policy vision`
+- `effigy docs check-headings docs/vision/README.md --require-heading "## Current Vision"`
+- `effigy docs check-forbidden ... --forbid '--repo .'`
+
+For a thin workspace root that delegates into a nested docs-authority repo, the
+same contract still applies. The root should only keep the orchestration tasks
+and links it actually owns.
+
 ## Minimum Docs Model
 
 - `vision` defines long-horizon outcome and strategic constraints
@@ -44,6 +83,8 @@ Do not collapse all three into a single generic planning note.
 - prefer built-in `effigy test` unless the repo intentionally overrides it
 - use `--repo <PATH>` only for a different repo
 - leave one explicit next task in the current planning surface
+- keep repo-facing examples free of current-directory `--repo .` usage even if
+  a nested authority repo needs internal delegation wiring in `effigy.toml`
 
 ## Minimum Release Posture
 
