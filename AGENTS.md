@@ -12,16 +12,16 @@ Scope: whole `northstar/` repository.
 
 ## Effigy-First Execution
 
-- Start with `effigy tasks --repo .`.
-- Run `effigy doctor --repo .` when task discovery or environment state is uncertain.
-- Prefer `effigy health --repo .` for the default baseline.
-- Prefer `effigy validate --repo .` before publishing bundle or doctrine changes.
+- Start with `effigy tasks`.
+- Run `effigy doctor` when task discovery or environment state is uncertain.
+- Prefer `effigy qa` for the default validation baseline.
+- Use `--repo <PATH>` only when intentionally targeting a different repo.
 - Fall back to raw shell commands only when Effigy does not yet cover the needed repo operation.
 
 ## Validate
 
-- `effigy health --repo .`
-- `effigy validate --repo .`
+- `effigy qa`
+- `effigy qa:docs`
 
 ## References
 
@@ -29,3 +29,4 @@ Scope: whole `northstar/` repository.
 - `bundle-docs/README.md`
 - `template-bundle/README.md`
 - `bundle-docs/sweeps/README.md`
+- `skills/northstar-effigy/SKILL.md`

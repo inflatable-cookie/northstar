@@ -1,0 +1,11 @@
+# Apply this template to a single repo or to the repo that owns the docs
+# contract. For a thin workspace container, keep only the routing tasks you
+# need and let the nested docs-authority repo carry the real QA surface.
+
+[catalog]
+alias = "{{REPO_ALIAS}}"
+
+[tasks]
+"qa:docs" = []
+"qa:northstar" = []
+qa = [{ task = "qa:docs" }, { task = "qa:northstar" }]
