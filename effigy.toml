@@ -1,6 +1,9 @@
 [catalog]
 alias = "northstar"
 
+[bootstrap]
+setup = ["health"]
+
 [tasks]
 "check:bundle" = "bash ./scripts/check-northstar-bundle.sh"
 "check:repo-contract" = "bash ./scripts/check-northstar-repo-contract.sh"
