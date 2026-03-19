@@ -18,6 +18,9 @@ Scope: whole `northstar/` repository.
 - Use `--repo <PATH>` only when intentionally targeting a different repo.
 - Fall back to raw shell commands only when Effigy does not yet cover the needed repo operation.
 
+For first-time local bring-up from outside this repo:
+- use `effigy bootstrap git@github.com:inflatable-cookie/northstar.git`
+
 ## Validate
 
 - `effigy qa`

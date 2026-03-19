@@ -41,6 +41,12 @@ effigy check:bundle
 effigy qa:docs
 ```
 
+First-time bring-up from another directory:
+
+```bash
+effigy bootstrap git@github.com:inflatable-cookie/northstar.git
+```
+
 Use `--repo <PATH>` only when you intentionally want to target a different
 repository.
 
