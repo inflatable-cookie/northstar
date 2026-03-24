@@ -34,9 +34,12 @@ Vision refs: docs/vision/001-example-project-vision.md
 
 ## Interfaces With Roadmaps
 
-- `g01.001` establishes core delivery and logging foundation.
-- Follow-on milestones may expand architecture depth only after foundational acceptance criteria pass.
+- `g01.001` establishes strict planning coverage and the first contract-backed
+  execution batch.
+- `g01.002` remains blocked until the unresolved analytics seam is either
+  contracted or removed from scope.
 
 ## Next Task
 
-Create the first contract doc under `docs/contracts/` for the highest-risk boundary.
+Create the contract index and the first cross-repo contract doc under
+`docs/contracts/` for the highest-risk boundary.

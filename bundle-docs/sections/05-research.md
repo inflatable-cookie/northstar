@@ -126,6 +126,8 @@ Keep tentative findings in `research/` until they can answer all of:
 
 - Research can feed architecture, contracts, roadmaps, and logs.
 - Architecture and roadmap docs should link back to the translation memo that justified a research-driven bet.
+- Research-backed roadmap work should flow through contracts first when the
+  finding defines an execution-relevant boundary or rule.
 - Implementation decision records and research-to-architecture crossrefs are optional support artifacts inside `research/`, not replacements for canonical architecture or roadmap docs.
 
 ## Next task

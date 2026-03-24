@@ -11,13 +11,14 @@ Updated: 2026-03-05
 
 | Generation | Started | Reason | Notes |
 | --- | --- | --- | --- |
-| `g01` | YYYY-MM-DD | Initial roadmap sequence | Baseline generation |
+| `g01` | YYYY-MM-DD | Initial roadmap sequence | Baseline generation after planning gates and first contract chain were established |
 
 ## Rollover policy
 
 Create a new generation when:
 - manually triggered by maintainers based on sequencing needs.
-- typically after a major vision/architecture shift or when roadmap scale warrants a new boundary.
+- typically after a major vision/architecture or contract shift, or when
+  roadmap scale warrants a new boundary.
 
 ## Next task
 

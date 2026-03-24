@@ -5,6 +5,8 @@ Owner: Core Team
 Created: YYYY-MM-DD
 Depends on: none
 Vision tags: `ALIGN`, `RELIABILITY`, `MAINT`
+Contract refs: `001-session-and-role-contract.md`, `002-job-dispatch-contract.md`
+Planning state: ready
 
 ## Problem
 
@@ -21,12 +23,20 @@ Teams need a repeatable execution model that keeps roadmap work focused, traceab
 - [ ] No full automation checker suite in this milestone.
 - [ ] No framework-specific tooling mandates.
 
+## Contract Coverage
+
+- [ ] Session and role behavior is governed by `001-session-and-role-contract.md`.
+- [ ] Async dispatch behavior is governed by `002-job-dispatch-contract.md`.
+- [ ] No work in this milestone depends on the unresolved analytics export seam.
+
 ## Execution Plan
 
 ### Batch 1.1 - Foundation setup and first closure loop
 
-- [ ] Define acceptance criteria and risk notes for the first active queue.
-- [ ] Execute a small but meaningful change against the defined criteria.
+- [ ] Finalize planning gate artifacts and confirm no active scope relies on
+      pending contracts.
+- [ ] Execute a small but meaningful contract-backed change against the defined
+      criteria.
 - [ ] Publish a batch closure log in `docs/logs/YYYY-MM/`.
 
 ## Acceptance Criteria
@@ -39,6 +49,10 @@ Teams need a repeatable execution model that keeps roadmap work focused, traceab
 
 - Risk: logging overhead grows faster than delivery value.
 - Mitigation: enforce batch-only logging cadence and lean evidence rules.
+
+## Planning Gaps
+
+- `none` for this milestone once analytics export work is kept out of scope
 
 ## Evidence Requirements
 

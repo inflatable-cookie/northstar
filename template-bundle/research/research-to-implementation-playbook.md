@@ -27,6 +27,9 @@ Before coding, record:
 - which recommendations were intentionally rejected or deferred
 - which risks still require prototype or validation work
 
+If the research implies a new execution-relevant boundary or rule, promote it
+into architecture and a contract before roadmap implementation starts.
+
 Use `templates/implementation-decision-record-template.md` when the decision should remain durable.
 
 ### Phase 3: Implementation
@@ -34,6 +37,8 @@ Use `templates/implementation-decision-record-template.md` when the decision sho
 - Reference the research artifact in code comments when the implementation encodes a research-driven behavior.
 - If research is missing, capture the gap in `gaps-found-during-implementation.md`.
 - If the implementation reveals a conflict with the research, document the deviation and rationale instead of silently drifting.
+- If the implementation reveals a missing contract, stop the batch and close the
+  planning gap before continuing.
 
 ### Phase 4: Validation
 
@@ -63,7 +68,11 @@ Reviewers should check:
 2. Record the gap if the answer is still missing.
 3. Make the provisional decision explicit.
 4. Queue deeper research or prototype work if the risk is material.
+5. Avoid roadmap execution against research-driven behavior until the resulting
+   decision is promoted into architecture/contracts.
 
 ## Next Task
 
-Adapt this playbook to the project's actual architecture doc names, review flow, and prototype naming scheme once research starts shaping active delivery.
+Adapt this playbook to the project's actual architecture doc names, review
+flow, and prototype naming scheme once research starts shaping active delivery,
+then verify contract promotion happens before roadmap execution.

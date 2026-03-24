@@ -4,6 +4,8 @@ Status: draft
 Owner: <owner>
 Updated: YYYY-MM-DD
 Depends on: <system-architecture.md or contract ids>
+Authority owners: <repo/team/system owners>
+Affects: <repos/services/clients>
 
 ## Problem
 
@@ -24,6 +26,11 @@ Document compatibility implications and required migrations.
 ## Roadmap Impact
 
 List affected roadmap keys (`gNN.NNN`) and batch implications.
+
+## Planning Notes
+
+State whether this contract closes a planning gap, introduces follow-on
+contracts, or blocks roadmap work until adjacent contracts exist.
 
 ## Next Task
 

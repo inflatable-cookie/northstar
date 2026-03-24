@@ -10,8 +10,10 @@ Generation segmentation keeps long-running programs manageable.
 
 ## Scope
 
-Define milestone files, batch-oriented execution lists, acceptance criteria, and sequencing rules.
+Define milestone files, batch-oriented execution lists, acceptance criteria, and
+sequencing rules.
 Roadmaps must derive from vision and architecture, and from research translation memos when comparative work materially shaped the bet, unless a documented exception exists.
+Roadmaps must not invent behavior for unplanned repos or boundaries.
 
 ## Key format decision
 
@@ -56,20 +58,25 @@ Record rollover reason in `docs/roadmaps/generation-index.md`.
 
 ## Content contract (per roadmap file)
 
-1. `Status`, `Owner`, `Created`, `Depends on`, `Vision tags`
+1. `Status`, `Owner`, `Created`, `Depends on`, `Vision tags`, `Contract refs`,
+   `Planning state`
 2. `## Problem`
 3. `## Goals`
 4. `## Non-Goals`
-5. `## Execution Plan` (batch-based executable task lists)
-6. `## Acceptance Criteria`
-7. `## Risks and Mitigations`
-8. `## Evidence Requirements`
-9. `## Next Task`
+5. `## Contract Coverage`
+6. `## Execution Plan` (batch-based executable task lists)
+7. `## Acceptance Criteria`
+8. `## Risks and Mitigations`
+9. `## Planning Gaps`
+10. `## Evidence Requirements`
+11. `## Next Task`
 
 ## Batch rule
 
 - Plan and execute in meaningful batches (not micro-tasks).
 - Logs must be created per completed batch/update cycle, not per individual task.
+- If a batch uncovers a missing contract or unplanned repo behavior, stop and
+  close the planning gap before continuing execution.
 
 ## Currentness rule
 
