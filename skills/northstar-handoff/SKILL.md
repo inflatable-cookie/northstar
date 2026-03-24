@@ -1,6 +1,6 @@
 ---
 name: northstar-handoff
-description: Use when a Northstar repo needs a fresh-thread handoff, continuation brief, spin-off prompt, or execution-ready coordination artifact. Produces a strict handoff brief that stays aligned with vision, roadmap, and log surfaces.
+description: Use when a Northstar repo needs a fresh-thread handoff, continuation brief, spin-off prompt, or execution-ready coordination artifact. Produces a continuation brief that preserves thread intent, planning lineage, and the important judgment behind the current work.
 ---
 
 # Northstar Handoff
@@ -15,8 +15,8 @@ Use this skill when the user asks to:
 
 ## Outcome
 
-Produce a handoff artifact that another agent can execute with minimal
-follow-up and without losing the repo's Northstar context.
+Produce a handoff artifact that another agent can pick up quickly without
+losing the thread's longer-running intent, reasoning, and Northstar context.
 
 ## Quick Start
 
@@ -47,7 +47,8 @@ writing the brief.
    [`references/handoff-contract.md`](./references/handoff-contract.md).
 3. Start from the template in
    [`assets/templates/northstar-handoff.md.template`](./assets/templates/northstar-handoff.md.template).
-4. Fill the handoff with concrete paths, boundaries, and validation criteria.
+4. Fill the handoff with the thread story first, then the concrete paths,
+   boundaries, and validation criteria needed to continue safely.
 5. Default the handoff location to the current month log directory unless the
    user asks for another explicit path.
 6. Leave one explicit next task in the handoff and make the completion
@@ -57,14 +58,13 @@ writing the brief.
 
 The handoff should include these sections in this order:
 
-1. `## Objective`
-2. `## Scope`
-3. `## Inputs`
-4. `## Constraints`
-5. `## Deliverables`
-6. `## Acceptance Criteria`
-7. `## Notes`
-8. `## Completion Protocol`
+1. `## What This Thread Was Doing`
+2. `## Why It Matters`
+3. `## Current State`
+4. `## Boundaries`
+5. `## Important Context`
+6. `## Suggested Next Move`
+7. `## Completion Protocol`
 
 ## References
 
@@ -76,11 +76,16 @@ The handoff should include these sections in this order:
 ## Guardrails
 
 - Do not widen scope beyond the current roadmap/log context.
-- Do not produce a vague “summary”; produce an executable brief.
+- Do not collapse the handoff into a sterile task list with no explanation of
+  why the work matters.
+- Do not produce a vague summary; the next thread should still know what to do
+  first.
 - Do not omit explicit out-of-scope boundaries.
 - Do not use relative file paths when the handoff depends on local files.
 - Do not lose the active roadmap/log linkage when handing work to another
   thread.
+- Carry forward the user's preferences, non-obvious judgments, and unresolved
+  tensions if they are shaping the work.
 
 ## Next Step
 
