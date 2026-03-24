@@ -1,0 +1,4 @@
+interface:
+  display_name: "Northstar Roadmap Compiler"
+  short_description: "Compile roadmaps from contracts."
+  default_prompt: "Use $northstar-roadmap-compiler to lay out, generate, sequence, or revise roadmap milestones from approved contracts only."

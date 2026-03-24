@@ -25,27 +25,59 @@ Ensure canonical doc types include required metadata and section headers from No
 6. `## Interfaces With Roadmaps`
 7. `## Next Task`
 
+### `system-inventory.md` (when present or required)
+
+1. `Status`, `Owner`, `Updated`, `Architecture refs`
+2. `## Coverage Summary`
+3. `## In-Scope System Elements`
+4. `## Interfaces and Dependencies`
+5. `## Validation Surfaces`
+6. `## Planning Gaps`
+7. `## Next Task`
+
+### `repo-authority-map.md` (required for multi-repo systems)
+
+1. `Status`, `Owner`, `Updated`, `Architecture refs`
+2. `## Topology`
+3. `## Repo Authorities`
+4. `## Cross-Repo Contracts`
+5. `## Conflict Resolution Rules`
+6. `## Planning Gaps`
+7. `## Next Task`
+
+### `contract-index.md` (when present or required)
+
+1. `Status`, `Owner`, `Updated`
+2. `## Coverage Rules`
+3. `## Contract Register`
+4. `## Missing or Pending Contracts`
+5. `## Roadmap Readiness`
+6. `## Next Task`
+
 ### Contract docs (when present)
 
-1. `Status`, `Owner`, `Updated`, `Depends on`
+1. `Status`, `Owner`, `Updated`, `Depends on`, `Authority owners`, `Affects`
 2. `## Problem`
 3. `## Contract`
 4. `## Validation`
 5. `## Migration Notes`
 6. `## Roadmap Impact`
-7. `## Next Task`
+7. `## Planning Notes`
+8. `## Next Task`
 
 ### Roadmap files
 
-1. `Status`, `Owner`, `Created`, `Depends on`, `Vision tags`
+1. `Status`, `Owner`, `Created`, `Depends on`, `Vision tags`, `Contract refs`, `Planning state`
 2. `## Problem`
 3. `## Goals`
 4. `## Non-Goals`
-5. `## Execution Plan`
-6. `## Acceptance Criteria`
-7. `## Risks and Mitigations`
-8. `## Evidence Requirements`
-9. `## Next Task`
+5. `## Contract Coverage`
+6. `## Execution Plan`
+7. `## Acceptance Criteria`
+8. `## Risks and Mitigations`
+9. `## Planning Gaps`
+10. `## Evidence Requirements`
+11. `## Next Task`
 
 ### Log files
 
@@ -104,6 +136,8 @@ Ensure canonical doc types include required metadata and section headers from No
 - Missing section headers
 - Missing metadata labels
 - Ad-hoc structure replacing required contract
+- Roadmap files implying execution readiness without contract coverage or planning state
+- Multi-repo docs missing explicit authority or planning gap sections
 
 ## Fix Rules
 
@@ -114,7 +148,7 @@ Ensure canonical doc types include required metadata and section headers from No
 ## Fast Checks
 
 ```bash
-rg -n "^## (Long-Term Outcome|Problem|Execution Plan|Validation Performed|Why this specimen matters|Problem statement|Project problem statement|Next Task)$" docs
+rg -n "^## (Long-Term Outcome|Coverage Summary|Repo Authorities|Contract Register|Problem|Contract Coverage|Execution Plan|Planning Gaps|Validation Performed|Why this specimen matters|Problem statement|Project problem statement|Next Task)$" docs
 ```
 
 ## Completion Criteria

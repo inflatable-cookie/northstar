@@ -9,20 +9,33 @@ Use Northstar to keep project docs consistent across repositories without adding
 
 Core flow:
 1. Define long-term intent in `vision`.
-2. Translate intent into system boundaries in `architecture`.
-3. When external comparison matters, synthesize it in `research` before locking new bets.
-4. Execute short-term work in generation-keyed `roadmaps`.
-5. Record outcomes in month-segmented `logs`.
+2. Translate intent into system boundaries and full system coverage in `architecture`.
+3. Lock execution-relevant behavior in explicit `contracts`.
+4. When external comparison matters, synthesize it in `research` before locking new bets.
+5. Execute short-term work in generation-keyed `roadmaps` only after planning gates are satisfied.
+6. Record outcomes in month-segmented `logs`.
 
 ## What You Get In This Repo
 
-- [`template-bundle/`](./template-bundle/) - the artifact to copy into a project's `docs/` directory, including the optional research starter pack
-- [`bundle-docs/`](./bundle-docs/) - doctrine, usage rules, migration guidance, and maintenance policy
-- [`skills/northstar-effigy/`](./skills/northstar-effigy/) - installable skill folder for repos that should adopt Northstar and Effigy together
-- [`skills/northstar-handoff/`](./skills/northstar-handoff/) - installable skill folder for execution-ready handoff briefs that stay aligned with Northstar planning surfaces
-- [`scripts/`](./scripts/) - bootstrap and upgrade helpers (when needed)
+- [`template-bundle/`](./template-bundle/) is the thing you copy into a
+  project's `docs/` directory.
+- [`bundle-docs/`](./bundle-docs/) explains how the system is meant to work.
+- [`skills/northstar-effigy/`](./skills/northstar-effigy/) helps adopt
+  Northstar and Effigy together.
+- [`skills/northstar-plan-product/`](./skills/northstar-plan-product/) is for
+  planning from scratch.
+- [`skills/northstar-roadmap-compiler/`](./skills/northstar-roadmap-compiler/)
+  is for laying out the next milestones from valid contracts.
+- [`skills/northstar-replan/`](./skills/northstar-replan/) and
+  [`skills/northstar-refocus/`](./skills/northstar-refocus/) cover plan
+  changes and messy recovery work.
+- [`skills/northstar-research-contracts/`](./skills/northstar-research-contracts/)
+  and [`skills/northstar-handoff/`](./skills/northstar-handoff/) cover research
+  promotion and execution handoff.
+- [`scripts/`](./scripts/) contains repo maintenance helpers when needed.
 
-Section examples live in the relevant folders inside the template bundle.
+If you're trying to understand the human workflow rather than the bundle
+structure, start with [`bundle-docs/operators/README.md`](./bundle-docs/operators/README.md).
 
 ## Effigy-First Loop
 
@@ -82,22 +95,24 @@ rsync -a template-bundle/ /path/to/your-project/docs/
 - Backlog lives only at `docs/roadmaps/backlog/`
 - Decision records live in logs by default, not a separate `decisions/` root
 - Research promotes through `specimen-dossiers` -> `value-tracks` -> `translation-memos` before architecture or roadmap commitments
+- Execution must stop when a required repo, interface, or contract surface is unplanned; record a planning gap instead of inferring missing behavior
 - Mature research areas should expose navigation and promotion artifacts such as a master index, research-to-architecture crossref, and implementation gap log
 - Optional folders (`research`, `schemas`, `templates`, `diagrams`, `specs`) are add-on only and should be kept only when actively used
+
+## Where To Start
+
+- New to Northstar: [`bundle-docs/README.md`](./bundle-docs/README.md)
+- Want the copy-ready docs bundle: [`template-bundle/README.md`](./template-bundle/README.md)
+- Want the operator workflow: [`bundle-docs/operators/README.md`](./bundle-docs/operators/README.md)
+- Migrating or auditing a repo: [`bundle-docs/sweeps/README.md`](./bundle-docs/sweeps/README.md)
+
+Deeper doctrine lives in [`bundle-docs/sections/`](./bundle-docs/sections/).
 
 ## Read Next
 
 - Template bundle guide: [`template-bundle/README.md`](./template-bundle/README.md)
 - Bundle docs guide: [`bundle-docs/README.md`](./bundle-docs/README.md)
-- Northstar + Effigy skill scaffold: [`skills/northstar-effigy/SKILL.md`](./skills/northstar-effigy/SKILL.md)
-- Northstar handoff skill scaffold: [`skills/northstar-handoff/SKILL.md`](./skills/northstar-handoff/SKILL.md)
-- Vision spec: [`bundle-docs/sections/01-vision.md`](./bundle-docs/sections/01-vision.md)
-- Architecture spec: [`bundle-docs/sections/02-architecture.md`](./bundle-docs/sections/02-architecture.md)
-- Roadmaps spec: [`bundle-docs/sections/03-roadmaps.md`](./bundle-docs/sections/03-roadmaps.md)
-- Logs spec: [`bundle-docs/sections/04-logs.md`](./bundle-docs/sections/04-logs.md)
-- Research spec: [`bundle-docs/sections/05-research.md`](./bundle-docs/sections/05-research.md)
-- Baseline mapping notes: [`bundle-docs/baseline-mapping.md`](./bundle-docs/baseline-mapping.md)
-- Meta migration guidance: [`bundle-docs/meta-folder-migration.md`](./bundle-docs/meta-folder-migration.md)
+- Operator docs: [`bundle-docs/operators/README.md`](./bundle-docs/operators/README.md)
 - Sweep pack: [`bundle-docs/sweeps/README.md`](./bundle-docs/sweeps/README.md)
 
 ## Operating Posture
@@ -105,6 +120,7 @@ rsync -a template-bundle/ /path/to/your-project/docs/
 Northstar is intentionally lean:
 - log by update cycle or batch, not every single task
 - keep research problem-led and source-backed; do not freeze raw findings directly into architecture or roadmaps
+- keep planning strict where execution risk is real: no inferred cross-repo behavior, no silent contract gaps, no roadmap work that outruns architecture or contracts
 - prefer manual evidence before adding checker scripts
 - keep one active roadmap queue and move deferred work into backlog
 - treat `meta/` as deprecated and extract useful content into canonical docs
@@ -115,7 +131,5 @@ Northstar is intentionally lean:
 
 ## Next task
 
-Keep the `northstar-effigy` skill lean and portable: use it to scaffold repo
-shape and starter files, then only add new Effigy product surface when repeated
-consumer adoption work shows a real gap the skill/templates cannot cover
-cleanly.
+Keep simplifying the front doors until a human can tell where to start without
+reading an inventory of files first.

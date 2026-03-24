@@ -27,4 +27,5 @@ List the roadmap milestones/batches this architecture currently unlocks or const
 
 ## Next Task
 
-State the next contract, brief, or roadmap milestone this architecture unlocks.
+State the next contract, inventory update, or roadmap milestone this
+architecture unlocks.

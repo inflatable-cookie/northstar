@@ -1,6 +1,6 @@
 ---
 name: northstar-handoff
-description: Use when a Northstar repo needs a fresh-thread handoff, continuation brief, or execution-ready coordination artifact. Produces a strict handoff brief that stays aligned with vision, roadmap, and log surfaces.
+description: Use when a Northstar repo needs a fresh-thread handoff, continuation brief, spin-off prompt, or execution-ready coordination artifact. Produces a strict handoff brief that stays aligned with vision, roadmap, and log surfaces.
 ---
 
 # Northstar Handoff
@@ -9,6 +9,8 @@ Use this skill when the user asks to:
 
 - create a handoff file for another agent thread
 - produce a continuation brief or spin-off prompt
+- create a Northstar handoff for the next thread
+- turn the current planning and log state into an execution-ready handoff
 - turn active Northstar planning state into an execution-ready brief
 
 ## Outcome

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Northstar Refocus"
+  short_description: "Reorganize drifting projects."
+  default_prompt: "Use $northstar-refocus when a project's planning or roadmap state is stale or untrustworthy and it needs drift audit, planning repair, and blocked, recompiled, or rolled-over roadmap recovery."

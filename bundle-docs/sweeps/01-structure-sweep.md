@@ -35,9 +35,21 @@ If `docs/research/` exists, it should also own its own internal templates and an
 - `docs/logs/README.md`
 - `docs/research/README.md` (when `docs/research/` exists)
 
+## Planning Gate Files
+
+Require these when the project is using strict planning or active multi-repo
+delivery:
+
+- `docs/architecture/system-architecture.md`
+- `docs/architecture/system-inventory.md`
+- `docs/contracts/contract-index.md`
+- `docs/architecture/repo-authority-map.md` when more than one repo or
+  authoritative deployable surface exists
+
 ## Drift Patterns
 
 - Missing core folders or anchor files
+- Strict-planning repos missing system inventory, contract index, or repo authority map
 - Backlog outside `docs/roadmaps/backlog/`
 - Optional add-on folders auto-seeded with no project-specific need
 - Canonical docs stored in deprecated areas (`docs/meta/`, root `backlog/`, root `decisions/`)
@@ -45,6 +57,8 @@ If `docs/research/` exists, it should also own its own internal templates and an
 ## Fix Rules
 
 - Create missing required folders/files.
+- Create missing planning gate files when the project claims strict planning or
+  multi-repo execution readiness.
 - Move backlog content into `docs/roadmaps/backlog/`.
 - Do not create optional add-on folders unless project scope requires them.
 - Remove empty/unused optional add-on folders created by default scaffolding.
@@ -62,6 +76,7 @@ find docs -maxdepth 3 -type f | sort
 ## Completion Criteria
 
 - All required core folders and anchor files exist.
+- Projects using strict planning have the minimum planning gate files in place.
 - Optional add-on folders are present only when justified by actual docs content.
 - Optional `docs/research/` includes its own anchor file when present.
 - No canonical content remains in deprecated structure.

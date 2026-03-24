@@ -1,0 +1,4 @@
+interface:
+  display_name: "Northstar Research To Contracts"
+  short_description: "Promote research into contracts."
+  default_prompt: "Use $northstar-research-contracts to turn research, memos, or findings into architecture and explicit contracts before roadmap execution."

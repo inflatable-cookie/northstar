@@ -65,6 +65,6 @@ rg -n "master-index|research-to-implementation|gaps-found-during-implementation|
 ## Completion Criteria
 
 - `docs/research/` exists only when justified and follows the Northstar layout.
-- Research recommendations promote cleanly into architecture/roadmaps/logs with explicit links.
+- Research recommendations promote cleanly into architecture/contracts/roadmaps/logs with explicit links.
 - Source hierarchy and promotion state are clear in every audited research thread.
 - Implementation-heavy research areas have enough navigation and gap-tracking to remain operationally useful.

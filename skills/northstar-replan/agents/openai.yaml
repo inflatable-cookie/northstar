@@ -1,0 +1,4 @@
+interface:
+  display_name: "Northstar Replan"
+  short_description: "Rewire plans after change."
+  default_prompt: "Use $northstar-replan when the old plan used to be valid but reality changed, and contracts, architecture, or roadmap generations now need controlled rewiring."

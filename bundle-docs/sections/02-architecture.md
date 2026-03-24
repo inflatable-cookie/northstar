@@ -10,7 +10,8 @@ It provides technical boundaries that roadmap batches must implement against.
 
 ## Scope
 
-Define system layers, authority boundaries, core invariants, and contract surfaces.
+Define system layers, authority boundaries, full system coverage, and contract
+surfaces.
 Use research translation memos as inputs when external comparisons materially shaped the boundary.
 Keep milestone task sequencing out of architecture docs.
 
@@ -18,6 +19,8 @@ Keep milestone task sequencing out of architecture docs.
 
 - `docs/architecture/README.md`
 - `docs/architecture/system-architecture.md`
+- `docs/architecture/system-inventory.md`
+- `docs/architecture/repo-authority-map.md` (required for multi-repo systems)
 - `docs/contracts/001-<slug>.md`
 - `docs/contracts/00n-<slug>.md`
 
@@ -55,6 +58,10 @@ Keep milestone task sequencing out of architecture docs.
 ## Dependencies
 
 - Must link directly to current vision artifact(s).
+- Must expose complete execution-relevant system coverage in `system-inventory.md`
+  before roadmap work starts.
+- Must define authority across repos in `repo-authority-map.md` when more than
+  one repo or deployable owner exists.
 - Must link to research translation memos when a boundary depends on comparative findings.
 - Must expose clear handoff points for roadmap milestones.
 
@@ -65,4 +72,6 @@ Teams can add `docs/architecture/glossary.md` when term drift appears.
 
 ## Next task
 
-Align architecture starter templates so metadata and section headers match this contract exactly.
+Align architecture starter templates so metadata and section headers match this
+contract exactly, then ensure system coverage and repo authority are explicit
+before roadmap work begins.

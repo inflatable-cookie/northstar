@@ -4,5 +4,6 @@ activation:
     - "Create a Northstar handoff for the next thread."
     - "Write a continuation brief for this roadmap batch."
     - "Turn this active roadmap/log state into a handoff prompt."
+    - "Turn the current planning and log state into an execution-ready handoff."
 instructions:
   default_prompt: "Use $northstar-handoff to produce an execution-ready handoff brief aligned with the repo's Northstar planning surfaces."

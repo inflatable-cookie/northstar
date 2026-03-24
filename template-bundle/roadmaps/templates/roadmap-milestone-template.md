@@ -5,6 +5,8 @@ Owner: <owner>
 Created: YYYY-MM-DD
 Depends on: <gNN.NNN or none>
 Vision tags: `<TAG1>`, `<TAG2>`
+Contract refs: `<001-contract>`, `<002-contract>`
+Planning state: <ready/blocked on planning>
 
 ## Problem
 
@@ -18,6 +20,14 @@ Describe the specific short-term problem this milestone solves.
 ## Non-Goals
 
 - [ ] <non-goal 1>
+
+## Contract Coverage
+
+- [ ] Every execution-relevant behavior in this milestone is covered by an
+      explicit contract.
+- [ ] Cross-repo dependencies are listed in `repo-authority-map.md` or this
+      milestone is single-repo only.
+- [ ] Required research translation memos are linked where relevant.
 
 ## Execution Plan
 
@@ -36,6 +46,10 @@ Describe the specific short-term problem this milestone solves.
 - Risk: <risk>
 - Mitigation: <mitigation>
 
+## Planning Gaps
+
+- <gap or `none`>
+
 ## Evidence Requirements
 
 - [ ] <log or artifact for batch closure>
@@ -45,4 +59,5 @@ Describe the specific short-term problem this milestone solves.
 
 ## Next Task
 
-State the next batch or dependent milestone unlocked by this file.
+State the next batch or dependent milestone unlocked by this file, or the next
+planning artifact needed before execution can resume.
