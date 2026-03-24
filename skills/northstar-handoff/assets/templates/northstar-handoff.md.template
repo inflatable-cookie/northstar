@@ -6,43 +6,37 @@ updated: {{YYYY-MM-DD}}
 tags: [coordination, handoff]
 ---
 
-## Objective
+## What This Thread Was Doing
 
-{{ONE_SENTENCE_OUTCOME}}
+{{PLAIN_LANGUAGE_THREAD_ARC}}
 
-## Scope
+## Why It Matters
 
-- {{TASK_ONE}}
-- {{TASK_TWO}}
+{{WHY_THIS_WORK_MATTERS_TO_THE_BIGGER_PICTURE}}
+
+## Current State
+
+- Done so far: {{WHAT_IS_ALREADY_TRUE_NOW}}
+- Still open: {{WHAT_THE_NEXT_THREAD_NEEDS_TO_CONTINUE}}
+- Key files:
+  - {{ABSOLUTE_PATH_ONE}}
+  - {{ABSOLUTE_PATH_TWO}}
+
+## Boundaries
+
+- Stay within {{ACTIVE_ROADMAP_OR_CONTRACT_SCOPE}}
 - Do not {{EXPLICIT_OUT_OF_SCOPE_BOUNDARY}}
+- Follow repo constraints from [AGENTS.md]({{ABSOLUTE_AGENTS_PATH}})
 
-## Inputs
+## Important Context
 
-- {{ABSOLUTE_INPUT_PATH_ONE}}
-- {{ABSOLUTE_INPUT_PATH_TWO}}
+- Planning lineage: {{ACTIVE_VISION_ROADMAP_LOG_CONTEXT}}
+- Decisions and preferences: {{NON_OBVIOUS_DECISIONS_OR_USER_PREFERENCES}}
+- Open tensions: {{KNOWN_RISKS_AMBIGUITIES_OR_JUDGMENT_CALLS}}
 
-## Constraints
+## Suggested Next Move
 
-- Follow the repo instructions in `AGENTS.md`.
-- Keep edits aligned with the active Northstar vision, roadmap, and log flow.
-- Do not widen scope beyond the listed tasks.
-
-## Deliverables
-
-- {{ABSOLUTE_OUTPUT_PATH_ONE}}
-- {{ABSOLUTE_OUTPUT_PATH_TWO}}
-
-## Acceptance Criteria
-
-- {{TESTABLE_CRITERION_ONE}}
-- {{TESTABLE_CRITERION_TWO}}
-
-## Notes
-
-- Current context: {{ACTIVE_VISION_ROADMAP_LOG_CONTEXT}}
-- Decisions: {{NON_OBVIOUS_DECISIONS_OR_USER_PREFERENCES}}
-- Watch-outs: {{KNOWN_RISKS_OR_AMBIGUITIES}}
-- Next move: {{CONCRETE_NEXT_EXPLORATORY_OR_EXECUTION_STEP}}
+{{FIRST_STEP_FOR_THE_NEXT_THREAD}}
 
 ## Completion Protocol
 
