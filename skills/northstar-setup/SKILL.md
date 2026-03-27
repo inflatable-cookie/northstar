@@ -1,19 +1,21 @@
 ---
-name: northstar-effigy
-description: Use when a repo should adopt or normalize the Northstar + Effigy contract: scaffold the repo shape, docs front doors, AGENTS guidance, changelog and release posture where needed, and Effigy validation so an agent can act on “use Northstar and Effigy.”
+name: northstar-setup
+description: Use when a repo needs to be set up or normalized for Northstar. Scaffolds the repo shape, docs front doors, AGENTS guidance, changelog and release posture where needed, and uses Effigy as part of the setup and validation layer.
 ---
 
-# Northstar + Effigy
+# Northstar Setup
 
 Use this skill when the user asks to:
 
+- set this repo or project up under Northstar
+- scaffold or normalize a repo around Northstar docs and working conventions
 - “use Northstar and Effigy”
-- scaffold or normalize a repo around Northstar docs and Effigy workflows
 - create the docs skeleton, changelog, release posture, and repo QA loop
 
 ## Quick Start
 
-Start by confirming the repo shape and the installed Effigy surface:
+Start by confirming the repo shape, current docs posture, and the installed
+tooling surface. Use Effigy where it is available and appropriate:
 
 ```sh
 effigy tasks
@@ -33,8 +35,8 @@ Then choose the adoption mode from
 
 ## Workflow
 
-1. Inspect the repo state with Effigy plus `README.md`, `AGENTS.md`, and the
-   current docs front door.
+1. Inspect the repo state with `README.md`, `AGENTS.md`, the current docs front
+   door, and Effigy when available.
 2. Apply the repo contract from
    [`references/repo-contract.md`](./references/repo-contract.md).
    Keep thin workspace roots lean, put the real Northstar spine in the repo
@@ -45,8 +47,8 @@ Then choose the adoption mode from
    bespoke structure.
 4. Choose the right top-level templates from
    [`assets/templates`](./assets/templates).
-5. Validate with the repo's `qa`, `qa:docs`, `qa:northstar`, and release
-   surfaces where available.
+5. Validate with the repo's `qa`, `qa:docs`, `qa:northstar`, release surfaces,
+   and any other existing setup checks where available.
 6. Leave one explicit next task in the active roadmap or log flow.
 
 ## Required Outputs
@@ -67,7 +69,8 @@ top-level repo surfaces and the Northstar bundle itself for the docs skeleton.
 In workspace-container mode, the full docs set may live in a nested
 docs-authority repo rather than at the workspace root, and `CHANGELOG.md` or
 release config may belong only to releasable repos instead of the container or
-authority root.
+authority root. If Effigy is not yet the right layer for a repo, the setup work
+should still leave the Northstar structure and repo front doors coherent.
 
 ## References
 
