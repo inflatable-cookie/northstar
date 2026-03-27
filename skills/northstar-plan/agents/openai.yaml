@@ -1,0 +1,4 @@
+interface:
+  display_name: "Northstar Plan"
+  short_description: "Plan, contract, and compile work."
+  default_prompt: "Use $northstar-plan for Northstar planning work: plan from scratch, repair contract surfaces, or compile roadmap milestones from approved contracts."

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Northstar Plan Product"
-  short_description: "Exhaustive planning before execution."
-  default_prompt: "Use $northstar-plan-product when planning coverage is still missing or incomplete and the project needs full system coverage, repo authority mapping, and contract-first execution gates before roadmap work starts."

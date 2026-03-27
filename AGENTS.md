@@ -32,4 +32,4 @@ For first-time local bring-up from outside this repo:
 - `bundle-docs/README.md`
 - `template-bundle/README.md`
 - `bundle-docs/sweeps/README.md`
-- `skills/northstar-effigy/SKILL.md`
+- `skills/northstar-setup/SKILL.md`

@@ -32,12 +32,14 @@ repository.
 - `sections/` defines the doctrine
 - `sweeps/` defines audit and cleanup passes
 - `operators/` holds the human-facing operator workflow docs
+- `skills/` explains how the public skill surface should stay small and stable
 - the remaining files at this level are migration or maintenance guidance
 
 ## Useful Entry Points
 
 - Audit or migration work: [`sweeps/README.md`](./sweeps/README.md)
 - Operator workflow: [`operators/README.md`](./operators/README.md)
+- Skill architecture: [`skills/README.md`](./skills/README.md)
 - Deprecated `meta/` migration: [`meta-folder-migration.md`](./meta-folder-migration.md)
 
 ## Governance posture

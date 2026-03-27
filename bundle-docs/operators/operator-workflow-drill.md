@@ -55,7 +55,7 @@ Task:
 
 Expected result:
 
-- `northstar-refocus` or `project-refocus-starter-prompt.md`
+- `northstar-recover` or `project-refocus-starter-prompt.md`
 
 If you needed more than the quick start plus one support page, note that.
 
@@ -80,7 +80,7 @@ Expected result:
 
 Use:
 
-- [skills/northstar-roadmap-compiler/SKILL.md](/Users/betterthanclay/Dev/projects/northstar/skills/northstar-roadmap-compiler/SKILL.md)
+- [skills/northstar-plan/SKILL.md](/Users/betterthanclay/Dev/projects/northstar/skills/northstar-plan/SKILL.md)
 
 Task:
 

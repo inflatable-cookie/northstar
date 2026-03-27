@@ -20,18 +20,19 @@ Core flow:
 - [`template-bundle/`](./template-bundle/) is the thing you copy into a
   project's `docs/` directory.
 - [`bundle-docs/`](./bundle-docs/) explains how the system is meant to work.
-- [`skills/northstar-effigy/`](./skills/northstar-effigy/) helps adopt
-  Northstar and Effigy together.
-- [`skills/northstar-plan-product/`](./skills/northstar-plan-product/) is for
-  planning from scratch.
-- [`skills/northstar-roadmap-compiler/`](./skills/northstar-roadmap-compiler/)
-  is for laying out the next milestones from valid contracts.
-- [`skills/northstar-replan/`](./skills/northstar-replan/) and
-  [`skills/northstar-refocus/`](./skills/northstar-refocus/) cover plan
-  changes and messy recovery work.
-- [`skills/northstar-research-contracts/`](./skills/northstar-research-contracts/)
-  and [`skills/northstar-handoff/`](./skills/northstar-handoff/) cover research
-  promotion and execution handoff.
+- [`skills/northstar-setup/`](./skills/northstar-setup/) sets a repo or
+  project up under Northstar and uses Effigy as one setup layer where helpful.
+- [`skills/northstar-plan/`](./skills/northstar-plan/) covers planning from
+  scratch, contract authoring, and roadmap compilation as one planning surface.
+- [`skills/northstar-recover/`](./skills/northstar-recover/) covers bounded
+  replanning, broad refocus, and sweep-led recovery work as one recovery
+  surface.
+- [`skills/northstar-research/`](./skills/northstar-research/) and
+  [`skills/northstar-handoff/`](./skills/northstar-handoff/) cover research
+  synthesis/promotion and execution handoff.
+- [`bundle-docs/skills/README.md`](./bundle-docs/skills/README.md) describes
+  the planned consolidation from the current skill set into a smaller public
+  surface.
 - [`scripts/`](./scripts/) contains repo maintenance helpers when needed.
 
 If you're trying to understand the human workflow rather than the bundle

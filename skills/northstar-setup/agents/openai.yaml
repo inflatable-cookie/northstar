@@ -1,0 +1,4 @@
+interface:
+  display_name: "Northstar Setup"
+  short_description: "Set up repo docs and workflows."
+  default_prompt: "Use $northstar-setup to scaffold or normalize this repo around Northstar docs, workflow conventions, and Effigy-backed validation where appropriate."

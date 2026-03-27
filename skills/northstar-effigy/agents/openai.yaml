@@ -1,4 +1,0 @@
-interface:
-  display_name: "Northstar + Effigy"
-  short_description: "Scaffold repo docs and workflows."
-  default_prompt: "Use $northstar-effigy to scaffold or normalize this repo around Northstar docs and Effigy workflows."

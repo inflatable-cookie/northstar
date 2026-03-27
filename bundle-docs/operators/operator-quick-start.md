@@ -17,20 +17,20 @@ What state is the project in?
 
 ## Then Choose The Right Kind Of Work
 
-- No real planning yet -> `northstar-plan-product`
-- Planning is sound and you want the next milestones -> `northstar-roadmap-compiler`
-- The plan used to be right but changed -> `northstar-replan`
-- The project has drifted and the current state is messy -> `northstar-refocus`
-- Research needs to become architecture or contracts -> `northstar-research-contracts`
+- No real planning yet -> `northstar-plan`
+- Planning is sound and you want the next milestones -> `northstar-plan`
+- The plan used to be right but changed -> `northstar-recover`
+- The project has drifted and the current state is messy -> `northstar-recover`
+- Research needs to become architecture or contracts -> `northstar-research`
 - Another thread needs a clear continuation brief -> `northstar-handoff`
 
 ## If You Want Clear Prompting, Say It Plainly
 
-- “Plan this system before we build” -> `northstar-plan-product`
-- “Lay out the next few roadmaps from the current contracts” -> `northstar-roadmap-compiler`
-- “Replan this after the contract change” -> `northstar-replan`
-- “Refocus this project under Northstar” -> `northstar-refocus`
-- “Turn this memo into contracts” -> `northstar-research-contracts`
+- “Plan this system before we build” -> `northstar-plan`
+- “Lay out the next few roadmaps from the current contracts” -> `northstar-plan`
+- “Replan this after the contract change” -> `northstar-recover`
+- “Refocus this project under Northstar” -> `northstar-recover`
+- “Turn this memo into contracts” -> `northstar-research`
 - “Create a handoff for the next thread” -> `northstar-handoff`
 
 If humans are going to reuse the same opener across multiple threads, use:
