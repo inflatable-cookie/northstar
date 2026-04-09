@@ -28,6 +28,6 @@ open `g03` just because `g02.001` closed or because one pilot lane completed.
 
 ## Next Task
 
-Start `g02.013` batch `13.3` by re-proving the strict-compliance audit and
-rollout surface after the guidance update while `g02` remains the active
-long-running generation.
+Open a Signal-owned migration lane that installs the first strict tranche
+around the active `g09` queue while `g02` remains the active long-running
+generation.

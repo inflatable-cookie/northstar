@@ -1,6 +1,6 @@
 # 016 - Strict Compliance Audit And Rollout
 
-Status: active
+Status: retired-in-place
 Owner: repo maintainers
 Updated: 2026-04-10
 Vision refs: docs/vision/001-northstar-delivery-vision.md
@@ -80,5 +80,5 @@ The rollout view should make these questions explicit:
 
 ## Next Task
 
-Start `g02.013` batch `13.3` by re-proving the strict-compliance audit and
-rollout surface after the guidance update.
+Use the re-proved audit and rollout model as the basis for the first real
+consumer-repo strict-compliance migration proof lane.

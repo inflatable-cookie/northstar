@@ -13,8 +13,8 @@ to adopt.
 - [architecture/system-architecture.md](./architecture/system-architecture.md)
 - [architecture/product-guardrails.md](./architecture/product-guardrails.md)
 - [contracts/001-working-rules.md](./contracts/001-working-rules.md)
-- [specs/016-strict-compliance-audit-and-rollout.md](./specs/016-strict-compliance-audit-and-rollout.md)
-- [roadmaps/g02/013-define-strict-compliance-audit-and-rollout-surface.md](./roadmaps/g02/013-define-strict-compliance-audit-and-rollout-surface.md)
+- [specs/017-signal-strict-compliance-migration-proof.md](./specs/017-signal-strict-compliance-migration-proof.md)
+- [roadmaps/g02/014-prove-strict-compliance-migration-in-signal.md](./roadmaps/g02/014-prove-strict-compliance-migration-in-signal.md)
 
 ## Sections
 
@@ -40,5 +40,5 @@ Northstar system:
 
 ## Next Task
 
-Start `g02.013` batch `13.3` by re-proving the strict-compliance audit and
-rollout surface after the guidance update.
+Open a Signal-owned migration lane that installs the first strict tranche
+around the active `g09` queue.

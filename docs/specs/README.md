@@ -47,5 +47,5 @@ Mirror only the minimum grouping needed to preserve traceability.
 
 ## Next Task
 
-Start `g02.013` batch `13.3` by re-proving the strict-compliance audit and
-rollout surface after the guidance update.
+Open a Signal-owned migration lane that installs the first strict tranche
+around the active `g09` queue.
