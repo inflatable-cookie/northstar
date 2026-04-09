@@ -69,7 +69,9 @@ Then read:
 9. Archive, remove, or rewrite stale specs when they no longer help and are
    only acting as shadow authority, while keeping still-useful history
    traceable.
-10. Leave one explicit next task pointing to the next valid planning artifact
+10. If recovery reveals multiple plausible next directions, stop and ask the
+    user for intent instead of choosing one by inertia.
+11. Leave one explicit next task pointing to the next valid planning artifact
     or the first newly valid execution batch.
 
 ## Required Outputs
@@ -100,6 +102,8 @@ advanced:
   planning from preserved history.
 - Do not collapse recovery work into cosmetic cleanup; it must change planning
   authority or execution readiness.
+- Do not silently choose between competing recovery directions when that choice
+  depends on operator intent or prioritization.
 
 ## Next Step
 

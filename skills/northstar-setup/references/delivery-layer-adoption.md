@@ -176,6 +176,9 @@ Then make sure the docs front doors and the active planning lane explain:
   stays focused on active planning rather than turning into a stale archive
 - the execution guardrail pack rejects fake completion, unnecessary complexity,
   and shallow follow-through by default
+- when planning is needed and the way forward is still materially ambiguous,
+  the thread should ask for operator intent instead of inventing the next lane
+  or batch
 
 The consumer-repo autonomy proof showed why this matters:
 

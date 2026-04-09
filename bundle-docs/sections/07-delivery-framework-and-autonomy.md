@@ -119,6 +119,46 @@ Work should not be marked done unless:
 - a batch log or equivalent evidence exists
 - the next task is clear
 
+## Continue semantics
+
+In a strict repo, the operator should not need a giant reminder prompt just to
+keep a lane moving.
+
+The intended default is:
+
+- the operator says `continue`
+- the thread resolves that through the previous closeout's `Next Task`
+- that `Next Task` normally points at the current ready batch card
+- the ready batch card defines the bounded work, stop conditions, validation,
+  and closeout requirements
+
+That means a bare `continue` is valid only when the file state already makes
+the next move explicit.
+
+If the previous `Next Task` does not point at a real ready card or explicit
+stop/reassessment step, the lane is not continuation-ready.
+
+## Intent checkpoint rule
+
+Planning should not pretend to know the user's preference when the path is
+still materially ambiguous.
+
+When planning is needed and the next direction is not clearly determined by
+the existing authority surfaces, the thread should:
+
+- stop before inventing the next lane or batch
+- name the main plausible directions briefly
+- ask the operator for intent or priority
+
+Use this intent checkpoint especially when:
+
+- more than one reasonable next lane or batch exists
+- a milestone may close, continue, or hand off
+- the choice depends on product tradeoffs or prioritization rather than missing
+  file updates
+
+Do not hide this ambiguity behind overconfident planning churn.
+
 ## Closeout pattern
 
 Closeout should be an ordered sequence, not a loose reminder to "update the
@@ -131,11 +171,13 @@ is:
    truth
 2. update the active roadmap milestone if the batch changed milestone progress,
    readiness, or the next batch
-3. write the batch log with the evidence, validation actually run, and any
+3. refresh any front-door or currentness surfaces that still name the active
+   lane, current ready card, or recent evidence chain
+4. write the batch log with the evidence, validation actually run, and any
    unresolved blockers or limits
-4. update or create a handoff only when another thread really needs to take
+5. update or create a handoff only when another thread really needs to take
    over
-5. leave one explicit next task in the highest-authority active surface that
+6. leave one explicit next task in the highest-authority active surface that
    still governs the lane
 
 If the lane is stopping because the next work is not ready, the closeout should
@@ -197,8 +239,11 @@ A single batch card is ready only when all of the following are true:
 - scope boundaries and stop conditions are explicit
 - acceptance criteria, validation, and evidence requirements are explicit
 - no unresolved planning gap still governs the card's scope
+- no unresolved intent checkpoint still governs the card's scope
 - the next task points either to the next ready card or to the correct stop or
   promotion step
+- the previous closeout leaves a `Next Task` that makes a bare `continue`
+  unambiguous
 
 A short autonomous chain is ready only when:
 
@@ -212,6 +257,17 @@ A short autonomous chain is ready only when:
 - the chain stays inside the project's autonomy envelope
 
 If any of these checks fail, the work is not ready for hands-off execution.
+
+In a strict lane, the normal operator shortcut should be:
+
+- `continue`
+
+not:
+
+- a long recap prompt that restates the card, closeout protocol, and boundaries
+
+If a lane still needs giant continuation prompts in ordinary use, the repo
+surfaces or local agent contract are under-specified and should be tightened.
 
 ## Autonomy support levels
 
@@ -324,6 +380,8 @@ Execution must stop and return to planning or operator review when:
 
 - a required contract is missing or contradictory
 - a batch reveals a planning gap
+- operator intent or prioritization is still unresolved across multiple
+  plausible planning directions
 - user-facing design ambiguity exceeds the product guardrails
 - validation fails in a way that changes the plan
 - required access, dependency, or repo authority is missing

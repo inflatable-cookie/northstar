@@ -18,12 +18,14 @@ Use logs as the third step in closeout, not the first:
 
 1. update the current batch card
 2. update the active roadmap milestone if its state changed
-3. write the batch log with evidence and validation actually run
-4. record whether the continuation envelope still holds or a stop signal
+3. update currentness surfaces that still name the active lane, ready card, or
+   recent evidence chain
+4. write the batch log with evidence and validation actually run
+5. record whether the continuation envelope still holds or a stop signal
    exhausted it
-5. record the lane budget state and pause signal when the run paused cleanly
-6. create or update a handoff only if another thread needs to continue
-7. leave one explicit next task in the governing active surface
+6. record the lane budget state and pause signal when the run paused cleanly
+7. create or update a handoff only if another thread needs to continue
+8. leave one explicit next task in the governing active surface
 
 ## Continuation note
 
@@ -69,6 +71,8 @@ Use logs as the third step in closeout, not the first:
 
 - keep `docs/logs/README.md` aligned with the recent evidence chain for the
   active lane
+- keep any surface that names the current ready card or active lane aligned
+  with closeout so a finished card is never still presented as the active one
 - keep a bounded evidence window there, usually the most recent 5 logs for the
   active lane plus any still-governing rollover or decision log needed to
   explain the current state

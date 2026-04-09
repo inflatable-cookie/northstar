@@ -67,6 +67,8 @@ Treat `ready` as a real state:
 - a card is ready only when it can execute without fresh planning decisions
 - a short auto-continuation chain is ready only when every transition is
   already represented in file state
+- the previous closeout should leave a `Next Task` that lets a later bare
+  `continue` resolve to the right ready card without a giant reminder prompt
 
 If a repo wants the full continuation-envelope, lane-budget, and pause-signal
 model, use this `specs/` layer with batch cards. A roadmap-only repo can still

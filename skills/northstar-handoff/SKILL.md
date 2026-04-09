@@ -57,8 +57,8 @@ writing the brief.
 5. Default the handoff location to the current month log directory unless the
    user asks for another explicit path.
 6. Treat handoff as the fourth closeout step, not the first: batch card,
-   roadmap, and log state should already reflect the stopping point unless the
-   user explicitly asks for a handoff-first artifact.
+   roadmap, currentness surfaces, and log state should already reflect the
+   stopping point unless the user explicitly asks for a handoff-first artifact.
 7. Leave one explicit next task in the handoff and make the completion
    protocol point back to the right roadmap/log surfaces.
 
@@ -93,6 +93,9 @@ The handoff should include these sections in this order:
 - Do not lose the active roadmap/log linkage when handing work to another
   thread.
 - Do not use a handoff as a substitute for the batch log or roadmap update.
+- Do not hand off from stale front-door state; if currentness surfaces still
+  advertise the wrong active card or lane state, fix that first unless the
+  user explicitly wants a temporary handoff before closeout.
 - Do not hand off only the provisional planning surface when canonical
   architecture/contracts already govern the work.
 - Do not imply that the next thread should keep auto-continuing unless the

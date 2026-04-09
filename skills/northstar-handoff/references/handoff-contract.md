@@ -43,7 +43,9 @@ Every handoff must include these sections in this order:
   without pretending the rest of the plan is already settled.
 - `Completion Protocol` should point back to the repo's Northstar surfaces:
   the batch card and roadmap state should already reflect the stopping point,
-  the relevant log should already exist or be part of the same closeout step,
+  any front-door currentness surfaces that name the active lane or ready card
+  should already reflect the stopping point, the relevant log should already
+  exist or be part of the same closeout step,
   any remaining continuation envelope should be named explicitly, any pause
   signal should be named explicitly, the next task should be clear, and
   unresolved risks should be called out.

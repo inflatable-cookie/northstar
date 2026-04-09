@@ -26,6 +26,12 @@ single-repo planning lane like this one.
 - A ready batch card must define scope, exact steps, governing refs, acceptance
   criteria, validation, evidence requirements, stop conditions, and whether
   auto-continuation is allowed.
+- In a strict lane, a bare `continue` should resolve through the previous
+  closeout's `Next Task`, which should normally point at the current ready card
+  or an explicit stop/reassessment step.
+- When planning is needed and the next direction is still materially
+  ambiguous, stop and ask for operator intent instead of inventing the next
+  lane or batch.
 - Specs are provisional. Before material implementation runs, durable
   structural outcomes should be promoted into architecture and durable
   behavioral or policy rules should be promoted into contracts.
@@ -65,6 +71,7 @@ single-repo planning lane like this one.
   - its scope boundaries, acceptance criteria, validation, evidence
     requirements, and stop conditions are explicit
   - no unresolved planning gap still governs the card's scope
+  - no unresolved intent checkpoint still governs the card's scope
 - A short auto-continuation chain is ready only when:
   - each card in the chain is individually ready
   - the cards belong to the same active roadmap/spec lane
@@ -116,6 +123,8 @@ Work in this repo is not done unless:
 - unresolved blockers or limits are named explicitly instead of hidden inside a
   completion claim
 - one clear next task remains unless the lane is genuinely complete
+- that next task is explicit enough that a later bare `continue` does not need
+  a recap prompt to find the correct next move
 
 ### Closeout pattern
 
@@ -124,6 +133,8 @@ Work in this repo is not done unless:
   - update the current batch card status and completion notes first
   - update the active roadmap milestone if progress, readiness, or the next
     batch changed
+  - refresh any front-door or currentness surfaces that still name the active
+    lane, current ready card, or recent evidence chain
   - write the batch log with evidence, validation actually run, and unresolved
     blockers or limits
   - record whether the continuation envelope still holds or whether a stop
@@ -152,6 +163,10 @@ Work in this repo is not done unless:
   - the prior card's evidence gate passed
   - the remaining continuation envelope is explicit in file state
   - no stop condition below has been triggered
+- In a strict lane, a later bare `continue` should normally be enough because
+  the prior closeout already named the next task and the current ready card.
+- If a thread still needs a giant continuation prompt in ordinary use, treat
+  that as a repo-surface or local-agent-contract failure worth tightening.
 - Default upper bound for one uninterrupted run:
   - up to 3 consecutive ready batch cards
   - or roughly 90 minutes of focused work
@@ -225,6 +240,8 @@ Work in this repo is not done unless:
 Execution must stop when:
 
 - a planning gap or contradiction appears
+- operator intent or prioritization is still unresolved across multiple
+  plausible planning directions
 - user-facing design ambiguity exceeds the product guardrails
 - validation fails in a way that changes the plan
 - required access, dependency, or authority is missing
