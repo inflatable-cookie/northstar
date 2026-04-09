@@ -13,8 +13,8 @@ to adopt.
 - [architecture/system-architecture.md](./architecture/system-architecture.md)
 - [architecture/product-guardrails.md](./architecture/product-guardrails.md)
 - [contracts/001-working-rules.md](./contracts/001-working-rules.md)
-- [specs/017-signal-strict-compliance-migration-proof.md](./specs/017-signal-strict-compliance-migration-proof.md)
-- [roadmaps/g02/014-prove-strict-compliance-migration-in-signal.md](./roadmaps/g02/014-prove-strict-compliance-migration-in-signal.md)
+- [specs/018-consumer-repo-follow-up-queue-and-underlay-recovery.md](./specs/018-consumer-repo-follow-up-queue-and-underlay-recovery.md)
+- [roadmaps/g02/015-queue-deferred-strict-follow-ups-and-open-underlay-recovery.md](./roadmaps/g02/015-queue-deferred-strict-follow-ups-and-open-underlay-recovery.md)
 
 ## Sections
 
@@ -40,5 +40,6 @@ Northstar system:
 
 ## Next Task
 
-Open a Signal-owned migration lane that installs the first strict tranche
-around the active `g09` queue.
+Let Underlay execute `g01.098` Batch 98.2, then reassess from that audit
+whether the repo now needs only continued planning/currentness repair or a
+stricter execution lane too.

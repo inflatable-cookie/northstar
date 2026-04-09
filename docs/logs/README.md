@@ -31,14 +31,15 @@ Use logs as the third step in closeout:
 
 ## Recent active-lane evidence
 
-- `2026-04/10/10-181500-apply-full-strict-migration-program-guidance.md`
-- `2026-04/10/10-191500-reprove-full-strict-surface-and-open-audit-rollout-lane.md`
 - `2026-04/10/10-201500-apply-audit-and-rollout-guidance.md`
 - `2026-04/10/10-211500-reprove-audit-rollout-and-open-signal-migration-lane.md`
 - `2026-04/10/10-221500-compile-signal-migration-tranche-plan.md`
 - `2026-04/10/10-231500-apply-signal-migration-proof-findings.md`
+- `2026-04/09/09-220658-queue-consumer-follow-ups-and-open-underlay-recovery.md`
+- `2026-04/09/09-221359-apply-underlay-recovery-findings.md`
 
 ## Next Task
 
-Open a Signal-owned migration lane that installs the first strict tranche
-around the active `g09` queue.
+Let Underlay execute `g01.098` Batch 98.2, then use that audit evidence to
+decide whether the repo needs only continued planning/currentness repair or a
+stricter execution lane too.

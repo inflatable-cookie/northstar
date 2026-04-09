@@ -23,8 +23,10 @@ single-pilot bucket.
 - `012-define-full-strict-compliance-migration-program.md`
 - `013-define-strict-compliance-audit-and-rollout-surface.md`
 - `014-prove-strict-compliance-migration-in-signal.md`
+- `015-queue-deferred-strict-follow-ups-and-open-underlay-recovery.md`
 
 ## Next Task
 
-Open a Signal-owned migration lane that installs the first strict tranche
-around the active `g09` queue.
+Let Underlay execute `g01.098` Batch 98.2, then use the resulting audit to
+decide whether Northstar should stay at planning-layer recovery there or open a
+stricter execution-lane proof.
