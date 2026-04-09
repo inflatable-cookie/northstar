@@ -1,13 +1,14 @@
 # Architecture
 
 Architecture docs define the system shape and invariants derived from vision.
-They set constraints roadmap batches must honor.
+They set the realized constraints roadmap batches must honor.
 
 ## Files
 
 - `system-architecture.md`
 - `system-inventory.md`
 - `repo-authority-map.md`
+- `product-guardrails.md`
 - `example-system-architecture.md`
 - `example-system-inventory.md`
 - `example-repo-authority-map.md`
@@ -16,6 +17,8 @@ They set constraints roadmap batches must honor.
 ## Writing rules
 
 - Link architecture updates to current vision artifact(s).
+- Promote durable structural decisions out of specs into architecture before
+  roadmap execution relies on them.
 - Keep `system-inventory.md` current so roadmap work only starts against
   explicitly planned system elements.
 - Use `repo-authority-map.md` whenever more than one repo or authoritative

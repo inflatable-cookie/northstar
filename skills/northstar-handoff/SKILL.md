@@ -1,6 +1,6 @@
 ---
 name: northstar-handoff
-description: Use when a Northstar repo needs a fresh-thread handoff, continuation brief, spin-off prompt, or execution-ready coordination artifact. Produces a continuation brief that preserves thread intent, planning lineage, and the important judgment behind the current work.
+description: Use when a Northstar repo needs a fresh-thread handoff, continuation brief, spin-off prompt, or execution-ready coordination artifact. Produces a continuation brief that preserves thread intent, planning lineage, the active spec lane, and the canonical promoted refs behind the current work.
 ---
 
 # Northstar Handoff
@@ -33,6 +33,9 @@ Then read the relevant front doors and active planning surfaces:
 - `AGENTS.md`
 - `docs/README.md`
 - `docs/vision/README.md`
+- `docs/specs/README.md` when present
+- `docs/architecture/`
+- `docs/contracts/`
 - `docs/roadmaps/README.md`
 - `docs/logs/README.md`
 
@@ -41,17 +44,22 @@ writing the brief.
 
 ## Workflow
 
-1. Inspect the active Northstar context: current vision, active roadmap
-   milestone, latest relevant log, and repo instructions.
+1. Inspect the active Northstar context: current vision, active spec lane when
+   present, active roadmap milestone, canonical promoted refs, latest relevant
+   log, and repo instructions.
 2. Use the contract in
    [`references/handoff-contract.md`](./references/handoff-contract.md).
 3. Start from the template in
    [`assets/templates/northstar-handoff.md.template`](./assets/templates/northstar-handoff.md.template).
-4. Fill the handoff with the thread story first, then the concrete paths,
+4. Fill the handoff with the thread story first, then the concrete canonical
+   refs, active spec lane, continuation envelope, lane budget or pause signal,
    boundaries, and validation criteria needed to continue safely.
 5. Default the handoff location to the current month log directory unless the
    user asks for another explicit path.
-6. Leave one explicit next task in the handoff and make the completion
+6. Treat handoff as the fourth closeout step, not the first: batch card,
+   roadmap, and log state should already reflect the stopping point unless the
+   user explicitly asks for a handoff-first artifact.
+7. Leave one explicit next task in the handoff and make the completion
    protocol point back to the right roadmap/log surfaces.
 
 ## Required Output
@@ -84,6 +92,13 @@ The handoff should include these sections in this order:
 - Do not use relative file paths when the handoff depends on local files.
 - Do not lose the active roadmap/log linkage when handing work to another
   thread.
+- Do not use a handoff as a substitute for the batch log or roadmap update.
+- Do not hand off only the provisional planning surface when canonical
+  architecture/contracts already govern the work.
+- Do not imply that the next thread should keep auto-continuing unless the
+  remaining continuation envelope is explicit.
+- Do not hide whether the run paused because budget was exhausted, a stop
+  signal fired, the lane ended, or a handoff is genuinely required.
 - Carry forward the user's preferences, non-obvious judgments, and unresolved
   tensions if they are shaping the work.
 

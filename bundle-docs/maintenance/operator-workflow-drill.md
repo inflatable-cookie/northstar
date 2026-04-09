@@ -1,7 +1,8 @@
 # Operator Workflow Drill
 
-Use this drill to test the quick-start stack in a realistic sequence without
-waiting for a live incident.
+Use this drill when you need to test or maintain the Northstar operator stack
+itself. This is not part of the normal day-to-day operator path inside a
+healthy repo.
 
 ## Goal
 
@@ -23,7 +24,14 @@ Pick one of these:
 1. This Northstar repo using the seeded specimens
 2. A consumer repo with Northstar docs already installed
 
-For the cleanest first pass, use the seeded specimen set in this repo.
+For a real external pilot, prefer a repo that:
+
+- already has a live Northstar docs spine and active roadmap lane
+- uses Effigy as the normal operator front door
+- is complex enough that routing and closeout decisions are non-trivial
+- is stable enough that the pilot will expose Northstar friction rather than
+  repo chaos
+- has a real current task the operator can route toward a valid next batch
 
 ## Drill Steps
 
@@ -80,7 +88,7 @@ Expected result:
 
 Use:
 
-- [skills/northstar-plan/SKILL.md](/Users/betterthanclay/Dev/projects/northstar/skills/northstar-plan/SKILL.md)
+- [SKILL.md](/Users/betterthanclay/Dev/projects/northstar/skills/northstar-plan/SKILL.md)
 
 Task:
 
@@ -95,7 +103,7 @@ Expected result:
 
 Use:
 
-- [skills/northstar-handoff/SKILL.md](/Users/betterthanclay/Dev/projects/northstar/skills/northstar-handoff/SKILL.md)
+- [SKILL.md](/Users/betterthanclay/Dev/projects/northstar/skills/northstar-handoff/SKILL.md)
 
 Task:
 
@@ -111,15 +119,18 @@ Expected result:
 After the drill, note:
 
 - which page you actually started from
+- the order of pages opened before reaching the first valid next batch
 - which extra pages you needed before you could act confidently
 - which pages felt duplicative
 - where routing was still ambiguous
 - whether the quick start was enough on its own
+- whether any false start or wrong entry point had to be corrected
+- how long it took to reach a valid next batch rather than just a first guess
 
 Use:
 
-- [operator-pilot-record-template.md](/Users/betterthanclay/Dev/projects/northstar/bundle-docs/operators/operator-pilot-record-template.md)
-- [operator-doc-pruning-rubric.md](/Users/betterthanclay/Dev/projects/northstar/bundle-docs/operators/operator-doc-pruning-rubric.md)
+- [operator-pilot-record-template.md](/Users/betterthanclay/Dev/projects/northstar/bundle-docs/maintenance/operator-pilot-record-template.md)
+- [operator-doc-pruning-rubric.md](/Users/betterthanclay/Dev/projects/northstar/bundle-docs/maintenance/operator-doc-pruning-rubric.md)
 
 ## Success Criteria
 
@@ -131,5 +142,5 @@ Use:
 
 ## Next task
 
-Run this drill against a real consumer repo and trim or merge any operator docs
-that did not materially help the decision path.
+Run this drill only when maintaining the Northstar operator stack, then push
+the results back into the simpler operator front door.

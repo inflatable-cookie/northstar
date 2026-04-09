@@ -18,10 +18,12 @@ inventing missing system behavior.
    instead of guessing missing pieces.
 4. For multi-repo systems, write `repo-authority-map.md` so ownership and seam
    authority are unambiguous.
-5. Create or update `contract-index.md` and add contracts for every boundary
+5. Decide whether the change needs provisional specs before the durable
+   outcomes can be promoted.
+6. Create or update `contract-index.md` and add contracts for every boundary
    the active roadmap will depend on.
-6. Mark roadmap work blocked until the required contracts exist.
-7. Leave one explicit next task in the planning chain.
+7. Mark roadmap work blocked until the required contracts exist.
+8. Leave one explicit next task in the planning chain.
 
 ## Guardrails
 
@@ -29,3 +31,4 @@ inventing missing system behavior.
 - Do not treat unplanned repos or interfaces as implied by context.
 - Do not mark planning complete while unknown authorities still govern active
   roadmap scope.
+- Do not confuse provisional specs with canonical architecture/contracts.

@@ -5,13 +5,13 @@ Updated: 2026-03-05
 
 ## Why this section matters now
 
-Architecture translates vision into a concrete system shape and invariants.
-It provides technical boundaries that roadmap batches must implement against.
+Architecture translates vision into a durable system shape and invariants.
+It records the realized structure that roadmap batches must implement against.
 
 ## Scope
 
-Define system layers, authority boundaries, full system coverage, and contract
-surfaces.
+Define system layers, authority boundaries, full system coverage, and the
+realized structure that has been promoted out of specs and research.
 Use research translation memos as inputs when external comparisons materially shaped the boundary.
 Keep milestone task sequencing out of architecture docs.
 
@@ -27,7 +27,9 @@ Keep milestone task sequencing out of architecture docs.
 ## Default vs optional
 
 - `architecture/` and `contracts/` are default core sections.
-- Add `docs/specs/` or `docs/schemas/` only when formal modeling or schema contracts are needed.
+- Add `docs/specs/` when a change needs provisional planning before its durable
+  outcomes can be promoted into architecture/contracts.
+- Add `docs/schemas/` only when formal modeling or schema artifacts are needed.
 
 ## Naming and ordering
 
@@ -58,6 +60,8 @@ Keep milestone task sequencing out of architecture docs.
 ## Dependencies
 
 - Must link directly to current vision artifact(s).
+- Must absorb durable structural decisions from specs before roadmap execution
+  proceeds on a material change.
 - Must expose complete execution-relevant system coverage in `system-inventory.md`
   before roadmap work starts.
 - Must define authority across repos in `repo-authority-map.md` when more than
@@ -72,6 +76,5 @@ Teams can add `docs/architecture/glossary.md` when term drift appears.
 
 ## Next task
 
-Align architecture starter templates so metadata and section headers match this
-contract exactly, then ensure system coverage and repo authority are explicit
-before roadmap work begins.
+Keep architecture clearly distinct from specs: planning may happen in specs, but
+accepted structural outcomes must land here before roadmap work begins.

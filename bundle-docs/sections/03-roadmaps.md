@@ -1,7 +1,7 @@
 # 03 Roadmaps
 
 Status: active
-Updated: 2026-03-05
+Updated: 2026-04-09
 
 ## Why this section matters now
 
@@ -12,7 +12,9 @@ Generation segmentation keeps long-running programs manageable.
 
 Define milestone files, batch-oriented execution lists, acceptance criteria, and
 sequencing rules.
-Roadmaps must derive from vision and architecture, and from research translation memos when comparative work materially shaped the bet, unless a documented exception exists.
+Roadmaps must derive from vision, architecture, and contracts, plus research
+translation memos when comparative work materially shaped the bet, unless a
+documented exception exists.
 Roadmaps must not invent behavior for unplanned repos or boundaries.
 
 ## Key format decision
@@ -50,9 +52,20 @@ Rationale:
 
 Start a new generation (`g02`) only when manually triggered.
 
+Generations are meant to be substantial sequencing eras, not tiny buckets of
+one or two milestone files. In a long-running repo, a healthy generation will
+often cover tens of roadmap files before rollover becomes useful.
+
 Typical manual triggers:
-- a major vision/architecture shift requires a fresh sequencing baseline
-- roadmap scope volume makes a new sequence boundary clearer for execution
+- a major vision, architecture, or contract shift requires a fresh sequencing
+  baseline
+- the current generation has accumulated enough closed and deferred lanes that
+  a new boundary is genuinely clearer for execution
+- the existing generation would become misleading if new work kept landing
+  under its old sequencing assumptions
+
+Do not roll a generation just because one milestone closed quickly or because a
+single external proof lane completed.
 
 Record rollover reason in `docs/roadmaps/generation-index.md`.
 
@@ -77,12 +90,31 @@ Record rollover reason in `docs/roadmaps/generation-index.md`.
 - Logs must be created per completed batch/update cycle, not per individual task.
 - If a batch uncovers a missing contract or unplanned repo behavior, stop and
   close the planning gap before continuing execution.
+- Do not run roadmap execution directly from a raw spec once the spec's durable
+  outcomes should have been promoted into architecture/contracts.
 
 ## Currentness rule
 
 - Keep one clearly identified active queue.
 - Move deferred items into backlog with promotion criteria.
 - Use lightweight currentness triage logs only when queue clarity degrades.
+- Keep the roadmap currentness surfaces aligned to the active lane:
+  - `docs/roadmaps/README.md`
+  - `docs/roadmaps/generation-index.md`
+  - `docs/roadmaps/gNN/README.md` for the active generation
+- Refresh those surfaces whenever the active milestone or generation changes so
+  operators do not have to reconstruct the live lane from stale front doors.
+
+## Currentness curation rule
+
+- `docs/roadmaps/README.md`, `docs/roadmaps/generation-index.md`, and the
+  active `docs/roadmaps/gNN/README.md` should each name one active generation
+  and one active milestone, not a cluster of competing "current" lanes.
+- `docs/README.md` may surface one active spec alongside the active roadmap,
+  but only when that spec still materially governs the next planning or
+  execution decisions for the current lane.
+- Do not keep a completed or no-longer-governing spec on the main front door
+  just because it is recent; prefer no spec link over a misleading one.
 
 ## Lean governance rule
 
@@ -98,4 +130,6 @@ If these conditions are not met, keep validation in batch logs as human-run chec
 
 ## Next task
 
-Align roadmap templates with backlog/currentness artifacts and keep automation optional by default.
+Keep roadmap doctrine, templates, and currentness surfaces aligned around the
+active lane so rollover and milestone changes do not leave stale front doors
+behind.

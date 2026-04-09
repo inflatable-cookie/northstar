@@ -29,6 +29,15 @@ Describe the specific short-term problem this milestone solves.
       milestone is single-repo only.
 - [ ] Required research translation memos are linked where relevant.
 
+## Execution Readiness
+
+- [ ] Every batch intended for immediate execution has bounded scope and
+      current governing refs.
+- [ ] Every batch intended to be `ready` defines acceptance criteria,
+      validation, evidence requirements, and stop conditions.
+- [ ] Auto-continuation is allowed only where the next card is already defined
+      and ready or the transition condition is explicit.
+
 ## Execution Plan
 
 ### Batch <n.1> - <batch title>

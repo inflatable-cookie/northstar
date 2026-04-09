@@ -29,6 +29,7 @@ For first-time local bring-up from outside this repo:
 ## References
 
 - `README.md`
+- `docs/README.md`
 - `bundle-docs/README.md`
 - `template-bundle/README.md`
 - `bundle-docs/sweeps/README.md`

@@ -1,7 +1,7 @@
 # Operator Doc Pruning Rubric
 
 Use this rubric after an operator pilot to decide whether a page should stay,
-merge, or be removed.
+merge, or be removed. This is a maintenance tool for Northstar itself.
 
 ## Keep A Page When
 
@@ -45,5 +45,5 @@ For each reviewed page, record:
 
 ## Next task
 
-Run the first consumer-repo pilot and apply this rubric to the operator docs
-cluster as one pruning batch instead of piecemeal edits.
+Apply this rubric in one consolidation batch after a real pilot, not as
+piecemeal cleanup.

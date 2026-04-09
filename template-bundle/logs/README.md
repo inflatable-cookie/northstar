@@ -12,6 +12,28 @@ Logs capture dated evidence and assessments.
 - Create logs per completed batch or update cycle.
 - Do not create a separate log for every task.
 
+## Closeout rule
+
+Use logs as the third step in closeout, not the first:
+
+1. update the current batch card
+2. update the active roadmap milestone if its state changed
+3. write the batch log with evidence and validation actually run
+4. record whether the continuation envelope still holds or a stop signal
+   exhausted it
+5. record the lane budget state and pause signal when the run paused cleanly
+6. create or update a handoff only if another thread needs to continue
+7. leave one explicit next task in the governing active surface
+
+## Continuation note
+
+- When a batch ends inside a ready chain, say whether another in-bounds card
+  remains.
+- When continuation stops, name the stop signal instead of implying that the
+  next thread should simply keep going.
+- When the run paused cleanly, name the pause signal and whether more autonomy
+  budget remains for the lane.
+
 ## Lean evidence rule
 
 - Manual validation notes and commands run are the default evidence format.
@@ -42,6 +64,17 @@ Logs capture dated evidence and assessments.
 - `templates/thread-handoff-template.md` (optional)
 - `templates/automation-adoption-note-template.md` (optional)
 - `templates/roadmap-currentness-triage-template.md` (optional)
+
+## Currentness support
+
+- keep `docs/logs/README.md` aligned with the recent evidence chain for the
+  active lane
+- keep a bounded evidence window there, usually the most recent 5 logs for the
+  active lane plus any still-governing rollover or decision log needed to
+  explain the current state
+- use `templates/roadmap-currentness-triage-template.md` only when currentness
+  cleanup is itself the batch, or when multiple stale front-door/evidence
+  surfaces need a short explicit cleanup pass beyond ordinary closeout
 
 ## Next task
 

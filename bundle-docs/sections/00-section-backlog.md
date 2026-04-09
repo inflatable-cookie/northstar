@@ -15,9 +15,13 @@ Track template sections and their definition state.
 - [04-logs.md](./04-logs.md) - active
 - [05-research.md](./05-research.md) - active
 - [06-planning-and-contract-gates.md](./06-planning-and-contract-gates.md) - active
+- [07-delivery-framework-and-autonomy.md](./07-delivery-framework-and-autonomy.md) - active
+- [08-specs-and-promotion.md](./08-specs-and-promotion.md) - active
+- [09-standard-docs-spine.md](./09-standard-docs-spine.md) - active
+- [10-automation-runtime-policy.md](./10-automation-runtime-policy.md) - active
 
 ## Next task
 
-Decide whether strict planning should remain an operating doctrine layered onto
-existing sections or later graduate into its own first-class top-level bundle
-surface.
+Keep the standard docs spine, delivery layer, specs-promotion model, and
+automation runtime policy aligned so the bundle stays explicit without becoming
+noisy.

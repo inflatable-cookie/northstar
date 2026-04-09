@@ -1,0 +1,275 @@
+# 001 - Working Rules
+
+Status: active
+Owner: repo maintainers
+Updated: 2026-04-09
+Depends on: docs/architecture/system-architecture.md
+Authority owners: repo maintainers
+Affects: bundle-docs, template-bundle, skills, docs, scripts
+
+## Problem
+
+Northstar needs a tighter execution grammar, but splitting every standing rule
+into a separate contract makes the surface noisier than it needs to be for a
+single-repo planning lane like this one.
+
+## Contract
+
+### Delivery grammar
+
+- Material work should follow this chain:
+  `vision -> research/specs -> architecture + contracts -> roadmap milestone -> execution -> evidence -> closeout`.
+- Use a separate contract only when a stable seam, authority boundary, or
+  reusable rule surface genuinely needs one.
+- Use a master spec when a goal spans multiple meaningful batches, changes
+  user-facing behavior, or introduces non-trivial operational policy.
+- A ready batch card must define scope, exact steps, governing refs, acceptance
+  criteria, validation, evidence requirements, stop conditions, and whether
+  auto-continuation is allowed.
+- Specs are provisional. Before material implementation runs, durable
+  structural outcomes should be promoted into architecture and durable
+  behavioral or policy rules should be promoted into contracts.
+- Keep `docs/specs/` tidy over time: retain active or still-useful planning
+  history, but archive or remove stale specs once promoted canonical surfaces
+  already carry the truth and the lane is no longer active.
+- Treat specs and batch-card lanes as having explicit lifecycle states:
+  `active`, `retired-in-place`, and `archived`.
+- Use `retired-in-place` only as a short-lived holding state when a recently
+  closed planning artifact still needs to remain near active work for
+  traceability.
+- Move closed planning artifacts to `docs/specs/archive/` when they still merit
+  preservation but no longer belong in the active specs surface.
+- Keep the archive lean and traceable. Do not treat archived specs as canonical
+  execution authority once architecture and contracts carry the truth.
+
+### Execution guardrail pack
+
+- Prefer real integrated behavior over mockups, placeholders, or token
+  scaffolding.
+- Prefer simplicity over decorative or architectural complexity that the
+  governing refs do not require.
+- Prefer end-to-end follow-through over convenient partial closure when a batch
+  promised a working path.
+- Prefer explicit incompleteness over implied completion when a path is still
+  scaffolded or unproven.
+- Treat disconnected gesture work as incomplete unless the batch was explicitly
+  scoped as a bounded substrate-only step.
+
+### Ready-state rubric
+
+- Treat `ready` as a constrained execution state, not a placeholder label.
+- A card is ready only when:
+  - its objective is bounded enough to complete without fresh planning
+    decisions
+  - its governing refs point at current canonical surfaces
+  - its scope boundaries, acceptance criteria, validation, evidence
+    requirements, and stop conditions are explicit
+  - no unresolved planning gap still governs the card's scope
+- A short auto-continuation chain is ready only when:
+  - each card in the chain is individually ready
+  - the cards belong to the same active roadmap/spec lane
+  - the order is explicit and the next transition is already represented in
+    file state
+  - the chain stays inside the project's autonomy envelope
+
+### Continuation envelope
+
+- Treat auto-continuation as a bounded envelope, not an open-ended permission.
+- A continuation envelope must make explicit:
+  - which next card may auto-start
+  - how many already-defined ready cards remain in-bounds
+  - what proof must pass before each transition stays valid
+- The continuation envelope may stay active only while:
+  - the completed card's evidence gate passed
+  - the next card is already defined and still marked ready
+  - the governing refs still match the live lane
+  - no stop signal has been triggered
+- If any part of that envelope is no longer explicit in file state, treat
+  continuation as exhausted rather than implied.
+
+### Lane budget and pause signals
+
+- Treat lane budget as the lane-level answer to whether a run should keep
+  spending autonomy budget even when another card is technically in-bounds.
+- A lane-level budget should make explicit:
+  - whether the current card is the end of the budgeted run
+  - whether another operator decision is required before more autonomy is spent
+  - which compact pause signal explains a clean stop
+- Use these pause-signal categories when a run stops cleanly:
+  - `budget-exhausted`
+  - `stop-signal-fired`
+  - `lane-complete`
+  - `handoff-required`
+- Pause signals do not weaken hard stop conditions. They explain why a run
+  stopped once the stop or budget boundary has been reached.
+
+### Definition of done
+
+Work in this repo is not done unless:
+
+- the intended behavior or documentation change exists for real, not as a
+  placeholder, mockup, or token partial implementation
+- dependent references and planning surfaces are updated coherently
+- required validation commands were actually run
+- the relevant spec, batch card, roadmap milestone, and log state reflects the
+  current truth
+- unresolved blockers or limits are named explicitly instead of hidden inside a
+  completion claim
+- one clear next task remains unless the lane is genuinely complete
+
+### Closeout pattern
+
+- Closeout is an ordered sequence, not a generic reminder to update docs.
+- For a meaningful completed batch or stopping point:
+  - update the current batch card status and completion notes first
+  - update the active roadmap milestone if progress, readiness, or the next
+    batch changed
+  - write the batch log with evidence, validation actually run, and unresolved
+    blockers or limits
+  - record whether the continuation envelope still holds or whether a stop
+    signal exhausted it
+  - record the lane budget state and the pause signal when the run is not
+    simply continuing in-bounds
+  - update or create a handoff only when another thread truly needs to take
+    over
+  - leave one explicit next task in the highest-authority active surface that
+    still governs the lane
+- If the next work is not ready, say so explicitly in closeout rather than
+  implying continuation.
+
+### Execution autonomy
+
+- An agent may continue across consecutive ready batch cards without waiting
+  for a manual "continue" prompt.
+- Baseline roadmap-only repos can still support healthy routing and shorter
+  bounded runs, but the fuller continuation-envelope, lane-budget, and
+  pause-signal model should be treated as a stricter `specs/` plus batch-card
+  capability.
+- Auto-continuation is allowed only when:
+  - the next card is already defined and marked ready
+  - the cards belong to the same active roadmap/spec lane
+  - the governing refs still match the work
+  - the prior card's evidence gate passed
+  - the remaining continuation envelope is explicit in file state
+  - no stop condition below has been triggered
+- Default upper bound for one uninterrupted run:
+  - up to 3 consecutive ready batch cards
+  - or roughly 90 minutes of focused work
+  - whichever limit is hit first
+- When that upper bound is reached cleanly, use `budget-exhausted` instead of
+  implying that a hard stop condition fired.
+
+### Automation runtime policy
+
+- Prefer `effigy` when it already covers the repo operation.
+- When repo-owned script logic is still needed, default to `TypeScript` run
+  with `bun`.
+- Use `bash` only for thin glue or compatibility boundaries that Effigy or
+  Bun/TypeScript cannot own cleanly.
+- Use `python` or another runtime only when a concrete technical requirement
+  justifies it.
+
+### Generation posture
+
+- Treat roadmap generations as substantial sequencing eras, not tiny buckets of
+  one or two milestone files.
+- In long-running repos, expect one generation to hold many milestones before a
+  new generation is useful.
+- Roll to a new generation only when the sequencing baseline itself needs a
+  reset, not merely because one lane closed quickly.
+
+### Strict-compliance audit and rollout
+
+- When a mature repo is moving toward full strict compliance, keep that
+  migration inside the normal planning spine.
+- Use one active migration spec to record:
+  - current posture
+  - satisfied checkpoints
+  - blocking gaps
+  - whether mixed posture is still valid migration state or has become drift
+  - current tranche
+  - next tranche
+  - the evidence needed to close the current tranche
+- Use one active roadmap milestone to sequence the migration batches.
+- Use normal batch logs to prove completed migration tranches.
+- Do not invent a detached governance tracker for this.
+
+### Currentness surfaces
+
+- Keep the repo's front-door currentness surfaces aligned to the active lane:
+  - `docs/README.md`
+  - `docs/roadmaps/README.md`
+  - `docs/roadmaps/generation-index.md`
+  - `docs/roadmaps/gNN/README.md` for the active generation
+  - `docs/contracts/contract-index.md`
+  - `docs/logs/README.md`
+- Refresh those surfaces whenever the active milestone, generation, or recent
+  evidence chain changes materially.
+- When currentness drift repeats enough to become predictable, add lightweight
+  deterministic checks instead of relying only on manual cleanup.
+- `docs/README.md` may surface one active spec alongside the active roadmap,
+  but only when that spec still materially governs the next planning or
+  execution decisions for the current lane.
+- `docs/roadmaps/README.md`, `docs/roadmaps/generation-index.md`, and the
+  active `docs/roadmaps/gNN/README.md` should each point to one active
+  milestone, not a list of competing "current" lanes.
+- `docs/logs/README.md` should keep a bounded recent-evidence window, usually
+  the most recent 5 active-lane logs plus any still-governing rollover or
+  decision log needed to explain the current state.
+- Use a dedicated currentness-triage log only when currentness cleanup is
+  itself the batch, or when multiple stale front-door/evidence surfaces need a
+  short explicit cleanup record beyond ordinary batch closeout.
+
+### Stop conditions
+
+Execution must stop when:
+
+- a planning gap or contradiction appears
+- user-facing design ambiguity exceeds the product guardrails
+- validation fails in a way that changes the plan
+- required access, dependency, or authority is missing
+- the work no longer matches the current master spec or roadmap intent
+- the current batch card is exhausted and the next one is not already ready
+- the remaining continuation envelope is missing, contradicted, or no longer
+  justified in file state
+
+## Validation
+
+- `docs/specs/archive/001-northstar-delivery-layer.md` exists and matches these rules.
+- at least one live batch card exists and is tied to an active roadmap
+  milestone
+- `effigy qa`
+- `effigy qa:docs`
+
+## Migration Notes
+
+This repo is running in a compact contract mode. The live delivery layer is
+still strict, but the standing rules are intentionally consolidated into one
+working-rules contract until separate seam contracts become necessary.
+
+## Roadmap Impact
+
+- `g01.001`
+- later batches that promote the live repo pilot into the bundle and skills
+- `g02.001`
+- `g02.002`
+- `g02.003`
+- `g02.004`
+- `g02.005`
+- `g02.006`
+- `g02.007`
+- `g02.008`
+- `g02.009`
+- `g02.010`
+
+## Planning Notes
+
+This contract closes the repo's immediate planning gap around how material work
+should execute while keeping the active surface smaller and more focused than a
+split contract stack.
+
+## Next Task
+
+Use `g02.010` to test the stricter delivery-layer adoption threshold against a
+real active consumer-repo lane while continuing to rely on these working rules
+as the live execution grammar.

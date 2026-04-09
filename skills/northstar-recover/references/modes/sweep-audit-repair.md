@@ -14,8 +14,9 @@ after a sweep-led repair pass.
 2. Audit before editing.
 3. List concrete drift findings with file paths.
 4. Apply fixes in meaningful batches rather than one tiny patch at a time.
-5. Re-run the relevant sweep checks and close the findings explicitly.
-6. Add one batch log under `docs/logs/YYYY-MM/` summarizing what changed and
+5. Check whether the active spec lane and canonical promoted refs still agree.
+6. Re-run the relevant sweep checks and close the findings explicitly.
+7. Add one batch log under `docs/logs/YYYY-MM/` summarizing what changed and
    what remains unresolved.
 
 ## Guardrails
@@ -23,4 +24,5 @@ after a sweep-led repair pass.
 - Do not edit before the audit has named the drift.
 - Do not treat a planning gap as a cleanup detail; stop and repair planning
   first.
+- Do not leave stale spec refs or roadmap refs unresolved after the sweep.
 - Do not leave sweep findings implicit; write them down with paths.

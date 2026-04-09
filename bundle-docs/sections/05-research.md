@@ -11,7 +11,8 @@ Jetstream and Loophole both showed that durable research docs become much more u
 ## Scope
 
 Define where to keep specimen studies, cross-cutting syntheses, source hierarchies, and project-facing translation memos.
-Do not turn research docs into roadmap backlogs or architecture contracts before the promotion rule is satisfied.
+Do not turn research docs directly into roadmap backlogs, architecture, or
+contracts before the promotion rule is satisfied.
 
 ## Template layout
 
@@ -52,7 +53,8 @@ Do not turn research docs into roadmap backlogs or architecture contracts before
 2. Gather primary sources before secondary commentary.
 3. Record strengths, chronic failures, and between-version corrections together.
 4. Convert findings into project implications only after cross-specimen comparison.
-5. Promote stable conclusions into architecture or roadmaps only when the recommendation, tradeoffs, and validation needs are explicit.
+5. Promote stable conclusions into specs first when the path still needs
+   planning, then into architecture/contracts once the outcome is accepted.
 6. Once the corpus becomes implementation-critical, maintain explicit navigation, promotion, and gap-capture artifacts so the research remains usable under delivery pressure.
 
 ## Implementation bridge artifacts
@@ -124,7 +126,7 @@ Keep tentative findings in `research/` until they can answer all of:
 
 ## Dependencies
 
-- Research can feed architecture, contracts, roadmaps, and logs.
+- Research can feed specs, architecture, contracts, roadmaps, and logs.
 - Architecture and roadmap docs should link back to the translation memo that justified a research-driven bet.
 - Research-backed roadmap work should flow through contracts first when the
   finding defines an execution-relevant boundary or rule.

@@ -3,14 +3,30 @@
 Use this page when you want to decide what to do next without wading through
 the rest of the docs.
 
-## Start With One Question
+## Start With The Real First Question
 
-What state is the project in?
+Is this repo healthy and actively moving, or unclear and drifting?
 
-- If you are not sure, run the sweep pack first.
-- If contracts, authority, or system coverage are missing, the project still
-  needs planning.
-- If the roadmap exists but no longer feels trustworthy, it needs refocus.
+### Healthy And Active
+
+If the repo already has live docs and an active roadmap lane:
+
+1. open the repo docs front door
+2. open the generation index
+3. open the active milestone
+4. open the latest relevant log
+5. use the governing contracts only when the milestone or log points at them
+
+This is the shortest normal path to a valid next batch.
+
+### Unclear, Missing, Or Drifted
+
+If you cannot trust the current state:
+
+- if contracts, authority, or system coverage are missing, the project still
+  needs planning
+- if the roadmap exists but no longer feels trustworthy, it needs recovery
+- if you are not sure which of those is true, run the sweep pack first
 
 - [sweeps/README.md](/Users/betterthanclay/Dev/projects/northstar/bundle-docs/sweeps/README.md)
 - [08-planning-gate-sweep.md](/Users/betterthanclay/Dev/projects/northstar/bundle-docs/sweeps/08-planning-gate-sweep.md)
@@ -18,7 +34,7 @@ What state is the project in?
 ## Then Choose The Right Kind Of Work
 
 - No real planning yet -> `northstar-plan`
-- Planning is sound and you want the next milestones -> `northstar-plan`
+- Planning is sound and you want the next milestones or next valid batch -> `northstar-plan`
 - The plan used to be right but changed -> `northstar-recover`
 - The project has drifted and the current state is messy -> `northstar-recover`
 - Research needs to become architecture or contracts -> `northstar-research`
@@ -43,17 +59,23 @@ If humans are going to reuse the same opener across multiple threads, use:
 - Use [live-project-refocus-specimen.md](/Users/betterthanclay/Dev/projects/northstar/bundle-docs/operators/live-project-refocus-specimen.md)
   to see what recovery looks like in practice.
 
-## The Normal Loop
+## Normal Loops
+
+Healthy active repo:
+
+`repo docs -> generation index -> active milestone -> latest log -> next batch`
+
+Drifted or unclear repo:
 
 `sweep -> choose entry point -> repair/complete planning -> compile roadmap -> execute batch -> log -> handoff`
 
-## If You Need More Support
+## Maintenance-Only Support
 
-- [operator-workflow-drill.md](/Users/betterthanclay/Dev/projects/northstar/bundle-docs/operators/operator-workflow-drill.md)
-- [operator-pilot-record-template.md](/Users/betterthanclay/Dev/projects/northstar/bundle-docs/operators/operator-pilot-record-template.md)
-- [operator-doc-pruning-rubric.md](/Users/betterthanclay/Dev/projects/northstar/bundle-docs/operators/operator-doc-pruning-rubric.md)
+These are for maintaining Northstar itself, not for normal repo operation:
+
+- [maintenance/README.md](/Users/betterthanclay/Dev/projects/northstar/bundle-docs/maintenance/README.md)
 
 ## Next task
 
-Run the workflow drill and trim any pages that are no longer earning their
-place.
+Keep shortening the healthy active-repo path until a human can reach the next
+valid batch with minimal extra reading.
