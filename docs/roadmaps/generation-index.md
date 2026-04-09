@@ -28,6 +28,6 @@ open `g03` just because `g02.001` closed or because one pilot lane completed.
 
 ## Next Task
 
-Open a Signal-owned migration lane that installs the first strict tranche
-around the active `g09` queue while `g02` remains the active long-running
-generation.
+Use `g02.015` to keep the consumer-repo strict follow-up queue explicit while
+Underlay runs `g01.098` Batch 98.2 and Northstar evaluates whether a stricter
+execution-lane proof is warranted there.

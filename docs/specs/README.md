@@ -47,5 +47,7 @@ Mirror only the minimum grouping needed to preserve traceability.
 
 ## Next Task
 
-Open a Signal-owned migration lane that installs the first strict tranche
-around the active `g09` queue.
+Use `018-consumer-repo-follow-up-queue-and-underlay-recovery.md` to keep the
+consumer-repo strict-migration queue explicit, including deferred return
+targets and the active Underlay recovery target while `g01.098` proves the
+next honest Underlay-owned lane.
