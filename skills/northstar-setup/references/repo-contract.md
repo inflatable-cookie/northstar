@@ -17,6 +17,7 @@ The boundary is intentional:
 - `AGENTS.md`
 - `effigy.toml`
 - `CHANGELOG.md`
+- `scripts/README.md`
 - `docs/README.md`
 - `docs/vision/README.md`
 - `docs/roadmaps/README.md`
@@ -71,11 +72,36 @@ and links it actually owns.
 
 ## Minimum Docs Model
 
+Baseline docs spine:
+
 - `vision` defines long-horizon outcome and strategic constraints
+- `architecture` defines realized structure and guardrails once planning settles
+- `contracts` define durable behavioral rules and important boundaries
 - `roadmaps` define milestone queue and execution batches
 - `logs` record meaningful evidence and decisions
 
 Do not collapse all three into a single generic planning note.
+
+For stricter or more failure-prone projects, adopt the stricter spine:
+
+- `architecture/product-guardrails.md`
+- `contracts/001-working-rules.md`
+- `contracts/contract-index.md`
+- `specs` as a provisional planning surface
+- `specs/batch-cards/`
+
+In that mode, specs should be treated as a stepping stone to
+architecture/contracts rather than a second permanent authority.
+
+## Minimum Automation Runtime Policy
+
+- prefer `effigy` when it already covers the repo operation
+- when repo-owned script logic is still needed, default to `TypeScript` run
+  with `bun`
+- use `bash` only for thin glue or compatibility boundaries
+- use `python` or another runtime only with a concrete technical reason
+- keep the local reason visible when a repo intentionally deviates from the
+  default stack
 
 ## Minimum Agent Contract
 

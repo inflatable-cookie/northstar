@@ -1,6 +1,8 @@
 # Template Selection
 
 Use the Northstar `template-bundle/` for the docs skeleton.
+Choose explicitly between the baseline docs spine and the stricter docs spine;
+do not leave the repo in a half-installed middle state.
 
 Use native Effigy templates by default. Reach for the compatibility template
 only when the installed binary really cannot support the docs or release
@@ -11,9 +13,18 @@ Use these top-level repo templates from this skill for the non-docs surfaces:
 - `AGENTS.md`
 - `CHANGELOG.md`
 - `README.md.template`
+- `scripts.README.md.template`
 - `docs.README.md.template`
 - `effigy.native.toml.template`
 - `effigy.compat.toml.template`
+
+For stricter repos, also copy the bundle's working-rules and specs surfaces:
+
+- `docs/contracts/001-working-rules.md`
+- `docs/specs/README.md`
+- `docs/specs/batch-cards/README.md`
+- `docs/specs/templates/master-spec-template.md`
+- `docs/specs/templates/batch-card-template.md`
 
 Template rule:
 
@@ -46,6 +57,8 @@ Boundary rule:
 
 - this skill/template layer decides repo shape and starter files
 - Effigy provides the reusable validators and release/runtime surfaces
+- if a repo still needs custom scripts after that boundary, prefer
+  TypeScript+Bun rather than growing a mixed scripting surface
 
 Also confirm task-spawned subprocesses resolve the same `effigy` binary as the
 interactive shell before you rely on native nested `effigy ...` task commands.

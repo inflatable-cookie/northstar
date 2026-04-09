@@ -8,16 +8,17 @@ Updated: 2026-03-24
 Northstar already provides a strong documentation spine, but complex delivery
 programs fail when agents can infer missing boundaries and start building
 against imagined system behavior. This section defines the stricter operating
-mode: planning coverage must be explicit, contracts must exist before execution,
-and planning gaps are a stop condition rather than a prompt for improvisation.
+mode: planning coverage must be explicit, governing rules must exist before
+execution, and planning gaps are a stop condition rather than a prompt for
+improvisation.
 
 ## Scope
 
 Define the minimum planning artifacts and gate checks required before roadmap
 work can begin, especially for multi-repo or high-risk systems.
-This section governs planning completeness, contract-first execution, and
+This section governs planning completeness, execution authority, and
 controlled replanning.
-It does not replace vision, architecture, contracts, roadmaps, research, or
+It does not replace vision, architecture, specs, contracts, roadmaps, research, or
 logs; it tightens how they interact.
 
 ## Required planning artifacts
@@ -28,9 +29,10 @@ Use these artifacts before execution starts:
 - `docs/architecture/system-inventory.md`
 - `docs/architecture/repo-authority-map.md` when more than one repo or deployable
   authority exists
-- `docs/contracts/contract-index.md`
-- one or more `docs/contracts/NNN-<slug>.md` files for execution-relevant
-  boundaries
+- `docs/specs/NNN-<slug>.md` for material realization plans
+- `docs/contracts/contract-index.md` when separate contracts are warranted
+- one or more `docs/contracts/NNN-<slug>.md` files only for stable
+  execution-relevant boundaries that need to stand apart from architecture/specs
 - current research translation memos when a bet depends on external evidence
 - roadmap milestones whose work is fully backed by the above surfaces
 
@@ -42,23 +44,23 @@ execution-relevant surface:
 1. repos, packages, services, and deployable units
 2. authority owners for data, workflows, and decisions
 3. interfaces between internal components and external systems
-4. contracts required for those interfaces and behaviors
+4. governing rules required for those interfaces and behaviors
 5. validation surfaces needed to prove the contracts hold
 6. unresolved areas that block execution
 
 If any item is still unknown, record it explicitly as a planning gap.
 Do not treat an unplanned surface as implicitly owned or already solved.
 
-## Contract-first execution rule
+## Execution authority rule
 
 Roadmap work may start only when all of the following are true:
 
 - the relevant system area exists in `system-architecture.md`
 - the area is represented in `system-inventory.md`
 - ownership is clear in `repo-authority-map.md` when multiple authorities exist
-- the governing contract exists in `docs/contracts/`
-- the contract is indexed in `contract-index.md`
-- the roadmap milestone references the contract directly
+- the governing rule exists in architecture, specs, or `docs/contracts/`
+- when separate contracts are used, they are indexed in `contract-index.md`
+- the roadmap milestone references the governing artifact directly
 - required research translation memos are linked when the bet is evidence-driven
 
 If these conditions are not met, the valid action is to add or repair planning
@@ -81,7 +83,7 @@ When a planning gap appears:
 1. stop execution on the affected batch
 2. log the missing surface in the relevant planning artifact or a roadmap/log
    note
-3. create or update the needed architecture, contract, or research artifact
+3. create or update the needed architecture, spec, contract, or research artifact
 4. regenerate affected roadmap batches only after the planning gap is closed
 
 ## Multi-repo rule
@@ -92,7 +94,7 @@ states:
 - every participating repo
 - what each repo owns
 - what each repo consumes
-- which contracts govern each seam
+- which governing artifacts govern each seam
 - which repo is authoritative when state or behavior conflicts
 
 Agents must not fabricate missing repo behavior to keep a batch moving.
@@ -101,11 +103,26 @@ Agents must not fabricate missing repo behavior to keep a batch moving.
 
 When reality changes:
 
-1. update the affected contract or create a contract delta log
-2. propagate the change into architecture and the repo authority map
+1. update the affected governing artifact or create a delta log
+2. propagate the change into architecture, specs, and the repo authority map as needed
 3. review whether current roadmap generation still matches reality
 4. re-sequence or roll over to a new generation if the contract shift is large
 5. resume execution only after the planning surfaces are coherent again
+
+## Contract sparsity rule
+
+Contracts are a precision tool, not a mandatory dumping ground for every
+standing rule.
+
+Default posture:
+
+- keep architecture responsible for system shape and standing invariants
+- keep specs responsible for realization strategy
+- introduce separate contracts only when a boundary needs long-lived,
+  independently referenceable rules
+
+For many single-repo projects, a small contract surface is enough. For
+multi-repo or seam-heavy systems, contracts remain important.
 
 ## Content contract (system inventory)
 
@@ -141,7 +158,9 @@ When reality changes:
 - Vision defines what the product is trying to achieve.
 - Architecture defines the system shape and invariants.
 - Research validates non-obvious bets before they harden.
-- Contracts define the rules implementation must satisfy.
+- Contracts define seam-specific rules when a separate contract surface is
+  justified.
+- Specs define the realization path for material goals.
 - Roadmaps sequence only the work already authorized by those surfaces.
 - Logs prove what was changed and why.
 

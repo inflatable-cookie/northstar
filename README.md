@@ -20,6 +20,8 @@ Core flow:
 - [`template-bundle/`](./template-bundle/) is the thing you copy into a
   project's `docs/` directory.
 - [`bundle-docs/`](./bundle-docs/) explains how the system is meant to work.
+- [`docs/`](./docs/) is the live Northstar planning spine for building and
+  extending Northstar itself.
 - [`skills/northstar-setup/`](./skills/northstar-setup/) sets a repo or
   project up under Northstar and uses Effigy as one setup layer where helpful.
 - [`skills/northstar-plan/`](./skills/northstar-plan/) covers planning from
@@ -37,6 +39,8 @@ Core flow:
 
 If you're trying to understand the human workflow rather than the bundle
 structure, start with [`bundle-docs/operators/README.md`](./bundle-docs/operators/README.md).
+If you're maintaining the operator stack itself after a pilot, use
+[`bundle-docs/maintenance/README.md`](./bundle-docs/maintenance/README.md).
 
 ## Effigy-First Loop
 
@@ -104,6 +108,7 @@ rsync -a template-bundle/ /path/to/your-project/docs/
 
 - New to Northstar: [`bundle-docs/README.md`](./bundle-docs/README.md)
 - Want the copy-ready docs bundle: [`template-bundle/README.md`](./template-bundle/README.md)
+- Want Northstar's own live project docs: [`docs/README.md`](./docs/README.md)
 - Want the operator workflow: [`bundle-docs/operators/README.md`](./bundle-docs/operators/README.md)
 - Migrating or auditing a repo: [`bundle-docs/sweeps/README.md`](./bundle-docs/sweeps/README.md)
 
@@ -113,6 +118,7 @@ Deeper doctrine lives in [`bundle-docs/sections/`](./bundle-docs/sections/).
 
 - Template bundle guide: [`template-bundle/README.md`](./template-bundle/README.md)
 - Bundle docs guide: [`bundle-docs/README.md`](./bundle-docs/README.md)
+- Live repo docs: [`docs/README.md`](./docs/README.md)
 - Operator docs: [`bundle-docs/operators/README.md`](./bundle-docs/operators/README.md)
 - Sweep pack: [`bundle-docs/sweeps/README.md`](./bundle-docs/sweeps/README.md)
 

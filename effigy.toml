@@ -5,8 +5,8 @@ alias = "northstar"
 setup = ["health"]
 
 [tasks]
-"check:bundle" = "bash ./scripts/check-northstar-bundle.sh"
-"check:repo-contract" = "bash ./scripts/check-northstar-repo-contract.sh"
+"check:bundle" = "bun run ./scripts/check-northstar-bundle.ts"
+"check:repo-contract" = "bun run ./scripts/check-northstar-repo-contract.ts"
 "qa:docs" = [{ task = "check:repo-contract" }]
 health = [{ task = "check:bundle" }]
 validate = [{ task = "check:bundle" }]

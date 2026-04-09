@@ -20,6 +20,11 @@ Create a new generation when:
 - typically after a major vision/architecture or contract shift, or when
   roadmap scale warrants a new boundary.
 
+Generations are expected to be long-lived. Do not open `g02` just because one
+or two milestones landed; prefer rollover only when the sequencing baseline
+itself needs a reset.
+
 ## Next task
 
-When opening `g02`, add a generation log row and record the manual rollover trigger.
+When opening `g02`, add a generation log row and record the manual rollover
+trigger that justified a real sequencing reset.

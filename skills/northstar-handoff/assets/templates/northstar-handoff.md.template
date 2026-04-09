@@ -18,6 +18,10 @@ tags: [coordination, handoff]
 
 - Done so far: {{WHAT_IS_ALREADY_TRUE_NOW}}
 - Still open: {{WHAT_THE_NEXT_THREAD_NEEDS_TO_CONTINUE}}
+- Active spec lane: {{ACTIVE_SPEC_LANE_OR_NONE}}
+- Canonical refs: {{CANONICAL_PROMOTED_REFS}}
+- Remaining continuation envelope: {{IN_BOUNDS_NEXT_CARD_OR_STOP_SIGNAL}}
+- Lane budget / pause signal: {{LANE_BUDGET_OR_PAUSE_SIGNAL}}
 - Key files:
   - {{ABSOLUTE_PATH_ONE}}
   - {{ABSOLUTE_PATH_TWO}}
@@ -31,6 +35,7 @@ tags: [coordination, handoff]
 ## Important Context
 
 - Planning lineage: {{ACTIVE_VISION_ROADMAP_LOG_CONTEXT}}
+- Spec-to-canonical relationship: {{HOW_SPEC_RELATES_TO_ARCHITECTURE_AND_CONTRACTS}}
 - Decisions and preferences: {{NON_OBVIOUS_DECISIONS_OR_USER_PREFERENCES}}
 - Open tensions: {{KNOWN_RISKS_AMBIGUITIES_OR_JUDGMENT_CALLS}}
 
@@ -40,6 +45,10 @@ tags: [coordination, handoff]
 
 ## Completion Protocol
 
-1. Update the relevant roadmap/log surfaces with the outcome of this batch.
-2. Record unresolved risks or blockers explicitly.
-3. Leave one clear next task for the following thread.
+1. Confirm the current batch card already reflects the stopping point.
+2. Confirm the roadmap and log surfaces already reflect the outcome of this batch.
+3. Confirm whether any continuation envelope remains in-bounds or whether a
+   stop signal exhausted it.
+4. Confirm the lane budget or explicit pause signal for this stopping point.
+5. Record unresolved risks or blockers explicitly.
+6. Leave one clear next task for the following thread.

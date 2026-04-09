@@ -12,6 +12,72 @@ The folders here are intended to be copied into a target project's `docs/` direc
 - `roadmaps/`
 - `logs/`
 
+## Standard docs spines
+
+Baseline Northstar repos should use:
+
+- `vision/`
+- `architecture/`
+- `contracts/`
+- `roadmaps/`
+- `logs/`
+
+That baseline mode is enough for normal routing, clear active-lane tracking,
+and shorter bounded work.
+
+Stricter repos should keep the baseline spine and also use:
+
+- `architecture/product-guardrails.md`
+- `contracts/contract-index.md`
+- `contracts/001-working-rules-template.md`
+- `specs/`
+
+Use the stricter spine when the repo needs the fuller execution layer:
+continuation envelopes, lane budgets, pause signals, and batch-card-driven
+autonomy that should stay explicit in file state.
+
+In a mature baseline repo, that stricter layer can be adopted lane-first for
+the active lane that actually needs it. Treat that as a normal migration
+pattern, not a half-complete repo state.
+
+Where a project is intended to live under the full strict Northstar doctrine,
+that lane-first posture should be treated as the way in, not the final resting
+state.
+
+The expected migration is:
+
+1. baseline posture
+2. lane-first stricter adoption
+3. expanding strict coverage
+4. full strict compliance
+
+Treat mixed posture as migration state, not the desired long-term end state.
+
+## Strict-compliance migration pattern
+
+When a mature repo is moving toward full strict compliance, keep that migration
+inside the normal planning spine rather than inventing a detached governance
+surface.
+
+Use:
+
+- one active migration master spec
+- one active roadmap milestone
+- normal batch logs for completed migration tranches
+
+That migration spec should record:
+
+- current posture
+- satisfied checkpoints
+- blocking gaps
+- whether mixed posture is still valid migration state or has become drift
+- current tranche
+- next tranche
+- the evidence needed to close the current tranche
+
+Use the roadmap milestone to sequence the actual migration work and the logs to
+prove each closed tranche.
+
 ## Optional add-on folders
 
 Create these only if the project actually needs them.
@@ -34,6 +100,16 @@ Section-local template folders such as `docs/roadmaps/templates/`, `docs/logs/te
 - Treat `architecture/system-inventory.md`, `architecture/repo-authority-map.md`
   (when multi-repo), and `contracts/contract-index.md` as planning gate
   artifacts, not optional niceties.
+- Treat `contracts/001-working-rules-template.md` as the copy-ready starting
+  point for stricter repos that need an explicit execution grammar.
+- Treat `specs/` as a planning add-on: use it when a change needs provisional
+  shaping before its durable outcomes are promoted into architecture/contracts.
+- Treat specs as provisional planning surfaces rather than permanent authority:
+  keep them while a lane is active or their history is still useful, and archive
+  or remove them when they no longer add value beyond the promoted canonical
+  surfaces.
+- For stricter projects, `architecture/product-guardrails.md` should be treated
+  as part of the default working surface rather than an optional extra.
 - Keep research comparative, source-backed, and separate from architecture/roadmaps until translation memos are explicit.
 - Enforce clean migrations: no compatibility shim files in deprecated folders; update references and remove legacy files in the same batch.
 - Treat per-project `meta/` docs as deprecated; extract useful content and link to Northstar docs.
@@ -53,6 +129,15 @@ Northstar defaults to lean governance:
 - batch-based logging, not per-task logging
 - problem-led research, not collection-building for its own sake
 - manual-first evidence, automation only when recurring pain justifies it
+- prefer `effigy` first, then `TypeScript`+`bun` for repo-owned automation;
+  treat Bash/Python as exceptions rather than a mixed default
 - clear active queue + backlog separation to prevent roadmap sprawl
+- specs are provisional; architecture and contracts are the canonical execution
+  surfaces once a design is accepted
 - strict planning gates when execution spans multiple repos or high-risk seams:
   stop on planning gaps instead of making up missing behavior
+- use the stricter docs spine when the project needs tighter guardrails and
+  longer autonomous runs
+- where the project is meant to live under the strict doctrine, move from the
+  first stricter lane toward project-level full compliance deliberately rather
+  than leaving mixed posture to drift

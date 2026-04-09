@@ -1,7 +1,7 @@
 # 04 Logs
 
 Status: active
-Updated: 2026-03-05
+Updated: 2026-04-09
 
 ## Why this section matters now
 
@@ -57,6 +57,24 @@ When a batch produces or promotes research, cite the relevant research artifacts
 - Use optional currentness/consolidation logs only when roadmap/log volume creates decision noise.
 - Keep consolidation logs concise and explicitly linked to source logs.
 
+## Currentness support rule
+
+Logs are part of the repo's live navigation layer, not only its historical
+evidence.
+
+- `docs/logs/README.md` should reflect the current evidence chain rather than a
+  stale subset of old logs
+- when the active lane changes materially, refresh the log README so operators
+  can find the recent batch trail quickly
+- keep a bounded evidence window in `docs/logs/README.md`, usually the most
+  recent 5 active-lane logs plus any still-governing rollover or decision log
+  needed to explain the current state
+- do not mirror the whole month or whole generation in `docs/logs/README.md`
+  once that list stops helping an operator reach the live lane quickly
+- use the optional currentness-triage template only when currentness cleanup is
+  itself the batch, or when multiple stale front-door/evidence surfaces need a
+  short explicit cleanup record beyond normal batch closeout
+
 ## Content contract (per log)
 
 1. `Status`, `Created`, `Roadmap`, `Batch`
@@ -73,4 +91,5 @@ Each log must include roadmap references in `gNN.NNN` format and can include res
 
 ## Next task
 
-Pilot whether research-heavy projects need a dedicated research batch log template, or whether the existing roadmap/log templates stay sufficient.
+Keep log doctrine and templates aligned so currentness surfaces remain useful as
+operator navigation aids, not only as passive history.

@@ -6,5 +6,6 @@ activation:
     - "Turn this active roadmap/log state into a handoff prompt."
     - "Turn the current planning and log state into a continuation handoff."
     - "Write a handoff that keeps the thread context and intent, not just the task list."
+    - "Create a handoff that preserves the active spec lane and canonical refs."
 instructions:
-  default_prompt: "Use $northstar-handoff to produce a continuation brief that preserves thread intent, planning lineage, and the most important context for the next thread."
+  default_prompt: "Use $northstar-handoff to produce a continuation brief that preserves thread intent, planning lineage, the active spec lane, and the canonical promoted refs for the next thread."

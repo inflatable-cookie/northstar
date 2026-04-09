@@ -38,12 +38,18 @@ State the one-sentence outcome the next thread should deliver.
 ## Notes
 
 - Current context: <active vision/roadmap/log linkage>
+- Remaining continuation envelope: <in-bounds next card or explicit stop signal>
+- Lane budget / pause signal: <budget state or explicit pause signal>
 - Decisions: <non-obvious reasoning or user preferences>
 - Watch-outs: <known risks or ambiguities>
 - Next move: <one concrete thing to try or execute next>
 
 ## Completion Protocol
 
-1. Update the relevant roadmap or log surface with the outcome.
-2. Record unresolved blockers or risks explicitly.
-3. Leave one clear next task for the following thread.
+1. Confirm the current batch card already reflects the stopping point.
+2. Confirm the roadmap and log surfaces already reflect the outcome.
+3. Confirm whether any continuation envelope remains in-bounds or whether a
+   stop signal exhausted it.
+4. Confirm the lane budget or explicit pause signal for this stopping point.
+5. Record unresolved blockers or risks explicitly.
+6. Leave one clear next task for the following thread.
