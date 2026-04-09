@@ -1,6 +1,6 @@
 # 053 - Reprove Audit And Rollout Surface
 
-Status: pending
+Status: complete
 Owner: repo maintainers
 Updated: 2026-04-10
 Master spec refs: docs/specs/016-strict-compliance-audit-and-rollout.md
@@ -41,10 +41,14 @@ update.
 
 ## Completion Notes
 
-Record whether the audit and rollout surface is now good enough to use across
-real projects.
+- Re-proved the surface against Signal as a live mature baseline repo.
+- The posture, checkpoint, gap, tranche, and evidence model was sufficient to
+  classify Signal without inventing new doctrine.
+- The useful remaining work is no longer doctrinal. It is the first real
+  consumer-repo migration proof lane.
 
 ## Next Task
 
-Compile another slice only if the strict-compliance audit and rollout re-proof
-leaves a bounded remaining problem.
+Start `g02.014` batch `14.2` by compiling the first strict-compliance
+migration tranche plan for Signal from the audit posture captured in the new
+proof lane.

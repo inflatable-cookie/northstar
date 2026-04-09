@@ -1,6 +1,6 @@
 # 013 - Define Strict-Compliance Audit And Rollout Surface
 
-Status: active
+Status: complete
 Owner: repo maintainers
 Created: 2026-04-10
 Depends on: g02.012
@@ -50,14 +50,14 @@ toward that state.
 
 ### Batch 13.3 - Reprove Audit And Rollout Surface
 
-- [ ] re-prove the audit and rollout path after the guidance update
-- [ ] open another slice only if a bounded problem remains
+- [x] re-prove the audit and rollout path after the guidance update
+- [x] open another slice only if a bounded problem remains
 
 ## Acceptance Criteria
 
 - [x] The strict-compliance audit and rollout surface is explicit.
 - [x] The audit and rollout guidance is materially reflected in Northstar.
-- [ ] The strict-compliance audit and rollout surface is re-proved.
+- [x] The strict-compliance audit and rollout surface is re-proved.
 
 ## Planning Gaps
 
@@ -67,9 +67,10 @@ toward that state.
 
 - [x] definition log for the audit and rollout surface
 - [x] consolidation log for the audit and rollout guidance
-- [ ] re-proof log for the audit and rollout surface
+- [x] re-proof log for the audit and rollout surface
 
 ## Next Task
 
-Start `g02.013` batch `13.3` by re-proving the strict-compliance audit and
-rollout surface after the guidance update.
+Start `g02.014` batch `14.2` by compiling the first strict-compliance
+migration tranche plan for Signal from the audit posture captured in the new
+proof lane.

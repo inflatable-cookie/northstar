@@ -31,19 +31,14 @@ Use logs as the third step in closeout:
 
 ## Recent active-lane evidence
 
-- `2026-04/10/10-101500-reprove-lane-budget-and-open-consumer-proof-lane.md`
-- `2026-04/10/10-111500-define-consumer-repo-autonomy-proof-lane.md`
-- `2026-04/10/10-121500-run-signal-consumer-autonomy-proof.md`
-- `2026-04/10/10-131500-apply-consumer-repo-autonomy-findings-and-open-stricter-adoption-lane.md`
-- `2026-04/10/10-141500-run-signal-stricter-adoption-proof.md`
-- `2026-04/10/10-151500-apply-lane-first-adoption-findings-and-open-starter-pack-lane.md`
-- `2026-04/10/10-161500-clarify-full-strict-compliance-target.md`
-- `2026-04/10/10-171500-reprove-lane-first-surface-and-open-full-strict-migration-lane.md`
 - `2026-04/10/10-181500-apply-full-strict-migration-program-guidance.md`
 - `2026-04/10/10-191500-reprove-full-strict-surface-and-open-audit-rollout-lane.md`
 - `2026-04/10/10-201500-apply-audit-and-rollout-guidance.md`
+- `2026-04/10/10-211500-reprove-audit-rollout-and-open-signal-migration-lane.md`
+- `2026-04/10/10-221500-compile-signal-migration-tranche-plan.md`
+- `2026-04/10/10-231500-apply-signal-migration-proof-findings.md`
 
 ## Next Task
 
-Start `g02.013` batch `13.3` by re-proving the strict-compliance audit and
-rollout surface after the guidance update.
+Open a Signal-owned migration lane that installs the first strict tranche
+around the active `g09` queue.

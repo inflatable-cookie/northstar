@@ -18,10 +18,10 @@ Roadmaps sequence contract-backed work for Northstar itself.
 ## Current lane
 
 - `g02` is the active generation
-- `g02.013` is the current milestone for defining the strict-compliance audit
-  and rollout surface for real project migrations
+- `g02.014` is the current milestone for proving the first real strict-
+  compliance migration path in Signal
 
 ## Next Task
 
-Start `g02.013` batch `13.3` by re-proving the strict-compliance audit and
-rollout surface after the guidance update.
+Open a Signal-owned migration lane that installs the first strict tranche
+around the active `g09` queue.

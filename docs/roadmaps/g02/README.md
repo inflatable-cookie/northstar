@@ -22,8 +22,9 @@ single-pilot bucket.
 - `011-define-lane-first-stricter-adoption-starter-pack.md`
 - `012-define-full-strict-compliance-migration-program.md`
 - `013-define-strict-compliance-audit-and-rollout-surface.md`
+- `014-prove-strict-compliance-migration-in-signal.md`
 
 ## Next Task
 
-Start `g02.013` batch `13.3` by re-proving the strict-compliance audit and
-rollout surface after the guidance update.
+Open a Signal-owned migration lane that installs the first strict tranche
+around the active `g09` queue.
