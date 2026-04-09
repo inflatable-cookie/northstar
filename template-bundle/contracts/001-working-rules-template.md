@@ -28,6 +28,19 @@ informal habits.
 - A ready batch card should define scope, steps, governing refs, acceptance
   criteria, evidence requirements, stop conditions, and whether
   auto-continuation is allowed.
+- In a strict lane, a bare `continue` should resolve through the previous
+  closeout's `Next Task`, which should normally point at the current ready card
+  or an explicit stop/reassessment step.
+
+### Intent checkpoints
+
+- When planning is needed and the next direction is not clearly determined by
+  the current authority surfaces, stop and ask the operator for intent instead
+  of inventing the next lane or batch.
+- Treat competing plausible directions, milestone handoff choices, and still-open
+  product tradeoffs as intent checkpoints rather than routine planning work.
+- Do not mark a card `ready` while an unresolved intent checkpoint still
+  governs its scope.
 
 ### Execution guardrail pack
 
@@ -47,9 +60,13 @@ informal habits.
 - Do not call work done while it is still a mockup, placeholder, or partial
   token implementation.
 - Update dependent refs, roadmap state, and logs so they match reality.
+- Update any front-door or currentness surfaces that still name the active
+  lane, current ready card, or recent evidence chain so they do not keep
+  advertising stale authority after closeout.
 - Run the required validation commands and record them in a log.
 - Name unresolved blockers or limits explicitly instead of hiding them inside a
   completion claim.
+- Leave one explicit next task that makes a later bare `continue` unambiguous.
 
 ### Execution autonomy
 
@@ -81,9 +98,26 @@ informal habits.
 ### Stop conditions
 
 - stop on planning gaps, contradictions, or missing authority
+- stop when operator intent or prioritization is still unresolved across
+  multiple plausible planning directions
 - stop when user-facing ambiguity exceeds the project guardrails
 - stop when validation fails in a way that changes the plan
 - stop when the current card is complete and the next one is not already ready
+
+### Currentness surfaces
+
+- Keep the repo's front-door currentness surfaces aligned to the active lane:
+  - `docs/README.md`
+  - `docs/contracts/contract-index.md`
+  - `docs/roadmaps/README.md`
+  - `docs/roadmaps/generation-index.md`
+  - `docs/roadmaps/gNN/README.md` for the active generation
+  - `docs/specs/README.md` when specs are part of the lane
+  - `docs/logs/README.md`
+- When a card closes, those surfaces must either:
+  - point at the next ready card or active milestone state
+  - or explicitly say the lane is awaiting reassessment
+- Do not leave a completed card named as the current ready card after closeout.
 
 ## Validation
 

@@ -72,19 +72,26 @@ Then read:
    readiness rubric and continuation-envelope rules.
 6. Surface planning gaps instead of writing speculative roadmap or execution
    work.
-7. Leave one explicit next task in the planning chain.
-8. Keep specs only while they still help the active lane; once promotion is
+7. If planning is needed but the next direction is still materially ambiguous,
+   stop and ask the user for intent instead of manufacturing certainty.
+8. Leave one explicit next task in the planning chain.
+9. Keep specs only while they still help the active lane; once promotion is
    complete, treat them as provisional history and archive or remove them when
    they no longer add value.
-9. Leave the specs folder tidier than you found it when stale specs are now
+10. Leave the specs folder tidier than you found it when stale specs are now
    clearly outlived by the promoted canonical surfaces.
-10. Make lifecycle decisions explicit when a lane closes: keep the artifact
+11. Make lifecycle decisions explicit when a lane closes: keep the artifact
     active only if it still governs live work, use `retired-in-place` only for
     short-lived traceability, and otherwise move it into
     `docs/specs/archive/` or remove it.
-11. If a card or short chain may auto-continue, make the continuation envelope
+12. If a card or short chain may auto-continue, make the continuation envelope
     explicit in file state: the in-bounds next card, the remaining ready chain,
     and the proof each transition depends on.
+13. When a card closes, refresh any front-door currentness surfaces that still
+    name the active lane, current ready card, or recent evidence chain. A
+    completed card must not still appear as the active ready card anywhere.
+14. Make the `Next Task` explicit enough that a later bare `continue` can
+    resolve through file state without needing a recap prompt.
 
 ## Required Outputs
 
@@ -122,8 +129,14 @@ advanced:
   planning history still matter to the active lane.
 - Do not mark a card or chain `ready` if it still depends on fresh planning
   judgment during execution.
+- Do not guess the user's intent when multiple plausible planning directions
+  remain open; ask instead of churning through speculative planning.
 - Do not imply that a chain may continue just because cards exist in sequence;
   continuation must be explicitly bounded in file state.
+- Do not leave currentness surfaces advertising stale authority after closeout,
+  especially a completed card still shown as the current ready card.
+- Do not leave a vague `Next Task` that forces the operator to restate the lane
+  in chat before work can continue safely.
 - Do not expose roadmap compilation as if it were separate from the rest of the
   planning spine; it is a planning mode, not a different operating model.
 

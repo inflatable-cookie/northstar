@@ -14,6 +14,7 @@ Auto-start next card: <yes/no/conditional>
 - [ ] Scope boundaries and stop conditions are explicit.
 - [ ] Acceptance criteria, validation, and evidence requirements are explicit.
 - [ ] No unresolved planning gap still governs this card.
+- [ ] No unresolved intent checkpoint still governs this card.
 - [ ] If auto-start is allowed, the continuation envelope is explicit and the
       next card is already defined and ready or the condition is explicit and
       already satisfiable.
@@ -56,6 +57,8 @@ State the exact bounded outcome for this card.
 ## Stop Conditions
 
 - <stop condition>
+- Ask for operator intent if a real planning branch or milestone handoff choice
+  appears that is not already settled in the governing refs.
 
 ## Completion Notes
 
@@ -66,6 +69,8 @@ Record what changes once this card is complete.
 - [ ] Update this card's status and completion notes first.
 - [ ] Update the active roadmap milestone if progress, readiness, or the next
       batch changed.
+- [ ] Update front-door currentness surfaces that name the active lane, ready
+      card, or recent evidence chain so they no longer point at stale state.
 - [ ] Write the batch log with evidence, validation actually run, and
       unresolved blockers or limits.
 - [ ] Record whether the continuation envelope still holds or a stop signal
@@ -80,3 +85,5 @@ Record what changes once this card is complete.
 ## Next Task
 
 State the next ready card or promotion step unlocked by this card.
+In a strict repo, this should be the default target of a later bare
+`continue` unless the lane is explicitly stopping for reassessment.
