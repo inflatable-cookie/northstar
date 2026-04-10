@@ -70,6 +70,15 @@ For a thin workspace root that delegates into a nested docs-authority repo, the
 same contract still applies. The root should only keep the orchestration tasks
 and links it actually owns.
 
+When native Effigy docs tasks live in a nested docs-authority repo, make that
+mode explicit in config:
+
+- either run the child catalog from the workspace root with root-prefixed file
+  paths and policy files
+- or run the nested repo as the true repo root and use local relative paths
+
+Do not mix those two modes in one task surface.
+
 ## Minimum Docs Model
 
 Baseline docs spine:

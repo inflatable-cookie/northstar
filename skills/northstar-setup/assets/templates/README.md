@@ -33,6 +33,10 @@ Template rule:
   `CHANGELOG.md`, release config, or full docs-policy blocks there unless that
   root is actually the repo that owns them
 
+For the thin-root plus nested-authority shape, follow
+`references/workspace-container-example.md` instead of inventing the split by
+memory.
+
 Choose the Effigy template by installed surface:
 
 - native mode:

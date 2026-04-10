@@ -34,6 +34,34 @@ It does not replace vision, specs, architecture, contracts, roadmaps,
 research, or logs. It tightens what must happen between roadmap intent and
 claimed completion.
 
+## Repo posture classification
+
+Northstar work gets easier when the repo's live state is named explicitly
+before setup, planning, recovery, or execution continues.
+
+Use this compact posture model:
+
+- `baseline-routing`
+  healthy baseline spine, no stricter execution lane claimed
+- `strict-ready`
+  stricter spine, active spec lane, and one honest ready card or ready chain
+- `strict-paused`
+  stricter spine, active lane, but no honest ready card yet; planning or
+  intent must resolve first
+- `migration`
+  repo is moving from baseline or lane-first posture toward fuller strict
+  compliance
+- `drifted`
+  front doors, canonical refs, or live planning surfaces are no longer
+  trustworthy enough to continue execution
+
+Whenever posture matters, also name:
+
+- authority mode: root-owned or nested docs-authority
+- current active lane
+- whether a ready card exists
+- whether an intent checkpoint still blocks the next move
+
 ## Delivery chain
 
 For material work, the expected chain is:

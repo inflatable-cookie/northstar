@@ -47,7 +47,5 @@ Mirror only the minimum grouping needed to preserve traceability.
 
 ## Next Task
 
-Use `018-consumer-repo-follow-up-queue-and-underlay-recovery.md` to keep the
-consumer-repo strict-migration queue explicit, including deferred return
-targets and the active Underlay recovery target while `g01.098` proves the
-next honest Underlay-owned lane.
+Use `022-formalize-repo-posture-classification.md` to add one explicit
+repo-posture taxonomy to the reusable Northstar package.

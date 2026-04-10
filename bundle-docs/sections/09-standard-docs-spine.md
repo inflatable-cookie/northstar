@@ -55,6 +55,25 @@ Northstar framework.
 - `roadmaps/` sequence approved work from the canonical surfaces.
 - `logs/` capture batch-level evidence and decisions.
 
+## Nested Docs-Authority Repos
+
+Some projects keep the standard spine inside a nested authority repo such as
+`ledger/`, `trellis/`, `cp-docs/`, `acme-docs/`, or `composer-docs/` instead
+of at the workspace root.
+
+Treat that as a normal Northstar mode when:
+
+- the workspace root is intentionally thin
+- one nested repo clearly owns the planning contract
+- shipping repos should not duplicate the same docs spine
+
+In that shape:
+
+- the nested authority repo still carries the baseline or stricter spine
+- workspace-root front doors should point clearly into the authority repo
+- native Effigy docs checks must be wired for the nested root deliberately
+- setup should not frame this as a one-off exception
+
 ## Rules
 
 - Do not treat the stricter spine as optional when the repo needs longer
@@ -69,6 +88,10 @@ Northstar framework.
 - Do not leave `specs/` present without also making the promotion rule clear.
 - Do not let setup invent a bespoke docs structure when the standard spine is
   enough.
+- Do not force a workspace root to imitate a docs repo when a nested authority
+  repo already owns the contract cleanly.
+- Do not assume native Effigy docs-policy tasks written for a root-owned
+  `docs/` spine will work unchanged inside a nested authority repo.
 
 ## Migration posture
 
@@ -111,6 +134,8 @@ The template bundle should make both modes copy-ready:
 
 - the baseline spine should be obvious from the section layout
 - the stricter spine should have concrete starter files, not just doctrine
+- nested docs-authority repos should have an explicit native Effigy starter,
+  not only prose about adapting the root-owned one
 
 ## Next Task
 

@@ -13,8 +13,8 @@ to adopt.
 - [architecture/system-architecture.md](./architecture/system-architecture.md)
 - [architecture/product-guardrails.md](./architecture/product-guardrails.md)
 - [contracts/001-working-rules.md](./contracts/001-working-rules.md)
-- [specs/018-consumer-repo-follow-up-queue-and-underlay-recovery.md](./specs/018-consumer-repo-follow-up-queue-and-underlay-recovery.md)
-- [roadmaps/g02/015-queue-deferred-strict-follow-ups-and-open-underlay-recovery.md](./roadmaps/g02/015-queue-deferred-strict-follow-ups-and-open-underlay-recovery.md)
+- [specs/022-formalize-repo-posture-classification.md](./specs/022-formalize-repo-posture-classification.md)
+- [roadmaps/g02/019-formalize-repo-posture-classification.md](./roadmaps/g02/019-formalize-repo-posture-classification.md)
 
 ## Sections
 
@@ -40,6 +40,5 @@ Northstar system:
 
 ## Next Task
 
-Let Underlay execute `g01.098` Batch 98.2, then reassess from that audit
-whether the repo now needs only continued planning/currentness repair or a
-stricter execution lane too.
+Execute the repo-posture classification lane so the core skills can classify
+real repo state more mechanically.

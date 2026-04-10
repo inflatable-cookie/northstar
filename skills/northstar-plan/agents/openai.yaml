@@ -1,4 +1,4 @@
 interface:
   display_name: "Northstar Plan"
   short_description: "Plan, contract, and compile work."
-  default_prompt: "Use $northstar-plan for Northstar planning work: plan from scratch, shape a change in specs, promote the settled outcomes into architecture/contracts, keep specs provisional instead of permanent authority, and compile roadmap milestones from approved canonical surfaces."
+  default_prompt: "Use $northstar-plan for Northstar planning work: classify the repo posture first, then plan from scratch, shape a change in specs, promote the settled outcomes into architecture/contracts, keep specs provisional instead of permanent authority, and compile roadmap milestones or paused planning gates from approved canonical surfaces."

@@ -52,6 +52,8 @@ Then read:
 
 1. Diagnose which recovery mode is needed: bounded replan, broad refocus, or
    sweep-led audit/repair.
+   Name the repo posture explicitly first: `baseline-routing`, `strict-ready`,
+   `strict-paused`, `migration`, or `drifted`.
 2. If a previously valid contract or sequencing baseline changed, use
    [`references/modes/replan-after-change.md`](./references/modes/replan-after-change.md).
 3. If the planning state is stale, contradictory, or broadly untrustworthy, use
@@ -73,6 +75,8 @@ Then read:
     user for intent instead of choosing one by inertia.
 11. Leave one explicit next task pointing to the next valid planning artifact
     or the first newly valid execution batch.
+12. If recovery ends in a paused strict gate rather than a ready lane, say that
+    explicitly instead of implying the next thread should continue coding.
 
 ## Required Outputs
 
