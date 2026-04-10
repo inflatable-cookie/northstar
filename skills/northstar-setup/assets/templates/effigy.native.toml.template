@@ -1,6 +1,8 @@
 # Apply this template to a single repo or to the repo that actually owns the
 # Northstar docs contract. For a thin workspace container, keep only the routing
-# tasks you need and do not copy this whole file blindly.
+# tasks you need and do not copy this whole file blindly. If the docs contract
+# lives in a nested authority repo, use `effigy.native.docs-authority.toml.template`
+# instead of adapting this file by memory.
 
 [catalog]
 alias = "{{REPO_ALIAS}}"

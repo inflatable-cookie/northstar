@@ -18,10 +18,10 @@ Roadmaps sequence contract-backed work for Northstar itself.
 ## Current lane
 
 - `g02` is the active generation
-- `g02.014` is the current milestone for proving the first real strict-
-  compliance migration path in Signal
+- `g02.019` is the current milestone for formalizing repo-posture
+  classification across the core skills
 
 ## Next Task
 
-Open a Signal-owned migration lane that installs the first strict tranche
-around the active `g09` queue.
+Execute `g02.019` so setup, planning, and recovery classify repo state more
+mechanically.

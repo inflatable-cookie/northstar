@@ -47,6 +47,9 @@ In this mode:
 - treat a docs-only authority repo as a planning/control surface, not as a
   fake release target
 
+Use [`workspace-container-example.md`](./workspace-container-example.md) as the
+concrete specimen for this mode.
+
 ## Selection Rule
 
 First decide whether the repo is a single repo or a workspace container. Then

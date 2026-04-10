@@ -56,6 +56,8 @@ Then read:
 1. Diagnose which planning mode is actually needed: plan from scratch, shape a
    change in specs and promote it, repair contract surfaces, or compile
    roadmaps from already-approved canonical surfaces.
+   Name the repo posture first: `baseline-routing`, `strict-ready`,
+   `strict-paused`, `migration`, or `drifted`.
 2. If planning coverage is still missing, use
    [`references/modes/plan-from-scratch.md`](./references/modes/plan-from-scratch.md)
    and complete the architecture, inventory, authority, and contract surfaces.
@@ -75,22 +77,26 @@ Then read:
 7. If planning is needed but the next direction is still materially ambiguous,
    stop and ask the user for intent instead of manufacturing certainty.
 8. Leave one explicit next task in the planning chain.
-9. Keep specs only while they still help the active lane; once promotion is
+9. If the repo is `strict-paused`, treat the immediate goal as resolving the
+   paused gate cleanly instead of pretending execution is one card away.
+10. If the repo is `strict-ready`, keep the next move pointed at the ready
+    card or explicit ready chain rather than reopening planning by habit.
+11. Keep specs only while they still help the active lane; once promotion is
    complete, treat them as provisional history and archive or remove them when
    they no longer add value.
-10. Leave the specs folder tidier than you found it when stale specs are now
+12. Leave the specs folder tidier than you found it when stale specs are now
    clearly outlived by the promoted canonical surfaces.
-11. Make lifecycle decisions explicit when a lane closes: keep the artifact
+13. Make lifecycle decisions explicit when a lane closes: keep the artifact
     active only if it still governs live work, use `retired-in-place` only for
     short-lived traceability, and otherwise move it into
     `docs/specs/archive/` or remove it.
-12. If a card or short chain may auto-continue, make the continuation envelope
+14. If a card or short chain may auto-continue, make the continuation envelope
     explicit in file state: the in-bounds next card, the remaining ready chain,
     and the proof each transition depends on.
-13. When a card closes, refresh any front-door currentness surfaces that still
+15. When a card closes, refresh any front-door currentness surfaces that still
     name the active lane, current ready card, or recent evidence chain. A
     completed card must not still appear as the active ready card anywhere.
-14. Make the `Next Task` explicit enough that a later bare `continue` can
+16. Make the `Next Task` explicit enough that a later bare `continue` can
     resolve through file state without needing a recap prompt.
 
 ## Required Outputs

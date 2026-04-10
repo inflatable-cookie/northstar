@@ -37,9 +37,13 @@ Use logs as the third step in closeout:
 - `2026-04/10/10-231500-apply-signal-migration-proof-findings.md`
 - `2026-04/09/09-220658-queue-consumer-follow-ups-and-open-underlay-recovery.md`
 - `2026-04/09/09-221359-apply-underlay-recovery-findings.md`
+- `2026-04/10/10-120500-open-underlay-consumer-cohort-and-install-underlay-reference-strict-pass.md`
+- `2026-04/10/10-132500-apply-remaining-underlay-consumer-strict-passes.md`
+- `2026-04/10/10-140500-formalize-nested-docs-authority-setup.md`
+- `2026-04/10/10-142500-add-workspace-container-adoption-specimen.md`
+- `2026-04/10/10-150500-formalize-repo-posture-classification.md`
 
 ## Next Task
 
-Let Underlay execute `g01.098` Batch 98.2, then use that audit evidence to
-decide whether the repo needs only continued planning/currentness repair or a
-stricter execution lane too.
+Execute `g02.019` and log the package changes needed to make repo-posture
+classification explicit in the core skills.

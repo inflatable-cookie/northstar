@@ -11,22 +11,24 @@ active roadmap queue.
 ## Steps
 
 1. Audit the live planning and execution surfaces before editing.
-2. Identify drift explicitly: stale milestones, stale specs, missing contracts,
+2. Classify the starting posture first and explain why it is no longer
+   trustworthy enough to leave as-is.
+3. Identify drift explicitly: stale milestones, stale specs, missing contracts,
    repo authority ambiguity, research that never promoted, and logs that hide
    planning failures.
-3. Rebuild or repair `system-architecture.md`, `system-inventory.md`,
+4. Rebuild or repair `system-architecture.md`, `system-inventory.md`,
    `repo-authority-map.md`, and `contract-index.md`.
-4. Rebuild the active spec lane when it no longer matches the canonical
+5. Rebuild the active spec lane when it no longer matches the canonical
    architecture/contracts.
-5. Archive or remove stale specs when they only preserve a broken story instead
+6. Archive or remove stale specs when they only preserve a broken story instead
    of helping the active lane.
-6. Mark invalid roadmap work blocked or superseded instead of trying to keep it
+7. Mark invalid roadmap work blocked or superseded instead of trying to keep it
    limping forward.
-7. Create contract deltas or new contracts for the real boundaries now shaping
+8. Create contract deltas or new contracts for the real boundaries now shaping
    execution.
-8. Recompile the active roadmap or open a new generation when the old sequence
+9. Recompile the active roadmap or open a new generation when the old sequence
    is no longer trustworthy.
-9. Leave a clear next task pointing to the first newly valid batch or remaining
+10. Leave a clear next task pointing to the first newly valid batch or remaining
    planning blocker.
 
 ## Guardrails

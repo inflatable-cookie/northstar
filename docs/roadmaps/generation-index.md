@@ -1,7 +1,7 @@
 # Roadmap Generation Index
 
 Status: active
-Updated: 2026-04-09
+Updated: 2026-04-10
 
 ## Active generation
 
@@ -28,6 +28,5 @@ open `g03` just because `g02.001` closed or because one pilot lane completed.
 
 ## Next Task
 
-Use `g02.015` to keep the consumer-repo strict follow-up queue explicit while
-Underlay runs `g01.098` Batch 98.2 and Northstar evaluates whether a stricter
-execution-lane proof is warranted there.
+Use `g02.019` to formalize repo-posture classification now that the setup
+package has stronger concrete adoption examples.

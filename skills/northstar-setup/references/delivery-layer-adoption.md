@@ -42,6 +42,10 @@ Do not backfill closed history just to make the lane-first posture look
 symmetrical. Start from the active lane and let broader adoption follow only if
 the repo truly needs it.
 
+If the repo is a thin workspace with a nested docs-authority repo, lane-first
+or full stricter adoption should usually happen inside that authority repo.
+Keep the workspace root as orchestration-only unless it really owns planning.
+
 Treat lane-first adoption as the practical entry point. If the project is meant
 to live under the full strict Northstar doctrine, plan the broader migration
 deliberately after the active lane proves the stricter surface works.
@@ -179,6 +183,8 @@ Then make sure the docs front doors and the active planning lane explain:
 - when planning is needed and the way forward is still materially ambiguous,
   the thread should ask for operator intent instead of inventing the next lane
   or batch
+- if the project uses a nested docs-authority repo, that repo is the canonical
+  home for the strict surfaces and native docs validation
 
 The consumer-repo autonomy proof showed why this matters:
 
@@ -205,3 +211,5 @@ The consumer-repo autonomy proof showed why this matters:
 - Do not leave a project indefinitely in mixed posture once the stricter
   surface has already been proven and the project is meant to reach full
   strict compliance.
+- Do not treat nested docs-authority repos like bespoke migrations when they
+  already cleanly own the planning contract.

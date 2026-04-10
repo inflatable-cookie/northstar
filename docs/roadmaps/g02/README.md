@@ -24,9 +24,11 @@ single-pilot bucket.
 - `013-define-strict-compliance-audit-and-rollout-surface.md`
 - `014-prove-strict-compliance-migration-in-signal.md`
 - `015-queue-deferred-strict-follow-ups-and-open-underlay-recovery.md`
+- `016-open-underlay-consumer-cohort-and-underlay-reference-strict-pass.md`
+- `017-formalize-nested-docs-authority-setup.md`
+- `018-add-workspace-container-adoption-specimen.md`
+- `019-formalize-repo-posture-classification.md`
 
 ## Next Task
 
-Let Underlay execute `g01.098` Batch 98.2, then use the resulting audit to
-decide whether Northstar should stay at planning-layer recovery there or open a
-stricter execution-lane proof.
+Execute `g02.019` so the core skills share one explicit repo-posture model.

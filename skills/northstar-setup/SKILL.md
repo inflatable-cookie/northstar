@@ -35,6 +35,12 @@ Then choose the adoption mode from
 - compatibility mode only if the installed `effigy` binary cannot support the
   needed docs or release surface
 
+Treat a nested docs-authority repo as a first-class setup mode, not a
+special-case workaround. If the project already keeps its planning contract in
+`ledger/`, `trellis/`, `cp-docs/`, `acme-docs/`, `composer-docs/`, or a
+similar authority repo, normalize that shape instead of trying to force a root
+`docs/` spine.
+
 Also decide whether the repo should install the stricter delivery layer from
 [`references/delivery-layer-adoption.md`](./references/delivery-layer-adoption.md).
 Think in terms of a standard docs spine:
@@ -104,7 +110,9 @@ For repo automation, use a clear runtime hierarchy:
 3. Reuse Northstar's docs starter from
    [`../../template-bundle`](../../template-bundle) instead of inventing a
    bespoke structure. Apply either the baseline spine or the stricter spine
-   deliberately; do not leave the repo between the two.
+   deliberately; do not leave the repo between the two. If the project uses a
+   nested docs-authority repo, apply the same discipline there and keep the
+   workspace root intentionally thin.
 4. If the project is complex, long-running, or autonomy-sensitive, install the
    delivery-layer surfaces described in
    [`references/delivery-layer-adoption.md`](./references/delivery-layer-adoption.md).
@@ -126,7 +134,9 @@ For repo automation, use a clear runtime hierarchy:
 5. Choose the right top-level templates from
    [`assets/templates`](./assets/templates).
    That includes the scripts README template when the repo owns custom script
-   logic outside Effigy itself.
+   logic outside Effigy itself. For native Effigy config, choose the root-owned
+   or nested-authority template deliberately; do not hand-adapt the root-owned
+   template by memory.
 6. Validate with the repo's `qa`, `qa:docs`, `qa:northstar`, release surfaces,
    and any other existing setup checks where available.
 7. Leave one explicit next task in the active roadmap or log flow.
@@ -171,8 +181,10 @@ top-level repo surfaces and the Northstar bundle itself for the docs skeleton.
 In workspace-container mode, the full docs set may live in a nested
 docs-authority repo rather than at the workspace root, and `CHANGELOG.md` or
 release config may belong only to releasable repos instead of the container or
-authority root. If Effigy is not yet the right layer for a repo, the setup work
-should still leave the Northstar structure and repo front doors coherent.
+authority root. Use the nested-authority Effigy template when the docs spine
+is not at the workspace root so native docs checks are rooted correctly. If
+Effigy is not yet the right layer for a repo, the setup work should still
+leave the Northstar structure and repo front doors coherent.
 
 ## References
 
@@ -180,6 +192,8 @@ should still leave the Northstar structure and repo front doors coherent.
   repo contract
 - [`references/adoption-modes.md`](./references/adoption-modes.md): choose
   between single-repo, workspace-container, and compatibility behavior
+- [`references/workspace-container-example.md`](./references/workspace-container-example.md):
+  concrete specimen for thin workspace root plus nested docs-authority setup
 - [`references/delivery-layer-adoption.md`](./references/delivery-layer-adoption.md):
   when to install the stricter delivery-layer surfaces
 - [`references/monkey-example.md`](./references/monkey-example.md): first real

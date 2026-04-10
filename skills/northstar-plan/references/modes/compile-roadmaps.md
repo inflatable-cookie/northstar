@@ -11,13 +11,19 @@ Produce roadmap milestones that sequence only contract-approved work.
 
 1. Confirm the target work is fully represented in architecture, inventory, and
    contracts.
-2. If there is a spec for this lane, confirm its durable outcomes have already
+2. Classify the active repo posture before compiling anything:
+   - `baseline-routing`
+   - `strict-ready`
+   - `strict-paused`
+   - `migration`
+   - `drifted`
+3. If there is a spec for this lane, confirm its durable outcomes have already
    been promoted into the canonical surfaces the roadmap will reference.
-3. If any required contract is missing, stop and surface a planning gap instead
+4. If any required contract is missing, stop and surface a planning gap instead
    of drafting speculative batches.
-4. Group work into meaningful batches with clear acceptance criteria and
+5. Group work into meaningful batches with clear acceptance criteria and
    evidence requirements.
-5. Apply the repo's readiness rubric before marking a card or short chain
+6. Apply the repo's readiness rubric before marking a card or short chain
    `ready`:
    - the work is bounded enough to execute without fresh planning decisions
    - the governing refs are current and canonical
@@ -25,11 +31,13 @@ Produce roadmap milestones that sequence only contract-approved work.
      conditions are explicit
    - no unresolved planning gap still governs the work
    - any auto-continuation transition is already represented in file state
-6. Reference governing contract ids directly in each roadmap milestone.
-7. Keep planning gaps visible in the milestone until they are closed.
-8. Recommend generation rollover only when contract or architecture shifts make
+7. If the posture is `strict-paused`, compile toward a paused planning gate or
+   intent checkpoint instead of pretending the lane is ready for execution.
+8. Reference governing contract ids directly in each roadmap milestone.
+9. Keep planning gaps visible in the milestone until they are closed.
+10. Recommend generation rollover only when contract or architecture shifts make
    the current sequencing baseline misleading.
-9. Treat any remaining spec for the lane as context only; do not let it outrank
+11. Treat any remaining spec for the lane as context only; do not let it outrank
    the promoted canonical surfaces.
 
 ## Guardrails

@@ -53,6 +53,22 @@ The expected migration is:
 
 Treat mixed posture as migration state, not the desired long-term end state.
 
+## Nested Docs-Authority Mode
+
+Some projects keep the standard spine in a nested authority repo instead of at
+the workspace root. That is a normal Northstar mode when the root is only an
+orchestration container and one nested repo clearly owns planning.
+
+In that shape:
+
+- keep the full baseline or stricter spine in the nested authority repo
+- keep the workspace root lean and link clearly into the authority repo
+- adapt native Effigy docs checks so file paths and docs-policy config are
+  rooted correctly for the nested authority
+
+Do not treat this as a bespoke exception. It is a recurring setup mode for
+multi-repo systems.
+
 ## Strict-compliance migration pattern
 
 When a mature repo is moving toward full strict compliance, keep that migration
