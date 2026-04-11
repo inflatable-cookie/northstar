@@ -63,3 +63,15 @@ Do this especially when:
 - more than one reasonable next lane or batch exists
 - a milestone may close, continue, or hand off
 - the choice depends on product priority rather than missing file updates
+
+## Reporting Rule
+
+In normal operator-facing responses:
+
+- lead with what was actually achieved
+- then state the current lane state
+- then state the next move
+- keep validation and protocol detail brief and secondary
+
+Do not make the operator infer the real outcome from card ids, file lists, or
+long validation dumps.

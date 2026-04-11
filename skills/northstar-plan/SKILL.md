@@ -71,7 +71,8 @@ Then read:
    [`references/modes/compile-roadmaps.md`](./references/modes/compile-roadmaps.md)
    and compile only work backed by architecture and contracts. Mark cards or
    short chains as `ready` only when they satisfy the repo's explicit
-   readiness rubric and continuation-envelope rules.
+   readiness rubric and continuation-envelope rules. Leave a bounded runway,
+   not just one next card.
 6. Surface planning gaps instead of writing speculative roadmap or execution
    work.
 7. If planning is needed but the next direction is still materially ambiguous,
@@ -98,6 +99,13 @@ Then read:
     completed card must not still appear as the active ready card anywhere.
 16. Make the `Next Task` explicit enough that a later bare `continue` can
     resolve through file state without needing a recap prompt.
+17. When planning a material lane, make the higher-level lane owner, the next
+    few meaningful batches or milestone transitions, and the next planning
+    checkpoint explicit so execution does not fall back into one-card
+    improvisation after each closeout.
+18. In operator-facing summaries, lead with the achieved planning outcome, the
+    current lane state, and the next move. Keep validation and protocol detail
+    short.
 
 ## Required Outputs
 
@@ -115,6 +123,8 @@ advanced:
 - new or updated contract files for active roadmap dependencies
 - new or updated roadmap milestones under `docs/roadmaps/gNN/`
 - ready batch-card or short-chain state that is visibly justified in file state
+- visible lane runway state beyond the immediate ready card for any material
+  active lane
 - explicit continuation-envelope state when a ready chain is allowed to keep
   going without operator intervention
 
@@ -135,6 +145,8 @@ advanced:
   planning history still matter to the active lane.
 - Do not mark a card or chain `ready` if it still depends on fresh planning
   judgment during execution.
+- Do not stop planning at one immediate card when the lane clearly needs a
+  longer-horizon owner, batch sequence, or planning checkpoint.
 - Do not guess the user's intent when multiple plausible planning directions
   remain open; ask instead of churning through speculative planning.
 - Do not imply that a chain may continue just because cards exist in sequence;
@@ -145,6 +157,8 @@ advanced:
   in chat before work can continue safely.
 - Do not expose roadmap compilation as if it were separate from the rest of the
   planning spine; it is a planning mode, not a different operating model.
+- Do not let the operator-facing summary collapse into card ids, file churn,
+  and long validation dumps with the real outcome hidden underneath.
 
 ## Next Step
 

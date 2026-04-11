@@ -8,4 +8,4 @@ activation:
     - "Write a handoff that keeps the thread context and intent, not just the task list."
     - "Create a handoff that preserves the active spec lane and canonical refs."
 instructions:
-  default_prompt: "Use $northstar-handoff only when a fresh-thread boundary is genuinely required, not merely because context is low or compaction is near. Produce a continuation brief that preserves thread intent, planning lineage, the active spec lane, and the canonical promoted refs for the next thread."
+  default_prompt: "Use $northstar-handoff only when a fresh-thread boundary is genuinely required, not merely because context is low or compaction is near. Produce a continuation brief that preserves thread intent, planning lineage, the active spec lane, and the canonical promoted refs for the next thread. In the operator-facing message around that handoff, lead with why the handoff exists, the current lane state, and the next move; keep validation and protocol detail concise."

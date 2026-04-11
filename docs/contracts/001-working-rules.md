@@ -26,6 +26,9 @@ single-repo planning lane like this one.
 - A ready batch card must define scope, exact steps, governing refs, acceptance
   criteria, validation, evidence requirements, stop conditions, and whether
   auto-continuation is allowed.
+- When planning is required for a material lane, do not stop at one next card.
+  Compile a bounded runway that makes the higher-level owner, the next few
+  meaningful batches or milestones, and the next planning checkpoint explicit.
 - In a strict lane, a bare `continue` should resolve through the previous
   closeout's `Next Task`, which should normally point at the current ready card
   or an explicit stop/reassessment step.
@@ -78,6 +81,12 @@ single-repo planning lane like this one.
   - the order is explicit and the next transition is already represented in
     file state
   - the chain stays inside the project's autonomy envelope
+- A lane is planning-coherent only when:
+  - the current roadmap/spec surfaces name the higher-level owner of the lane
+  - the next likely batches or milestone handoff are visible beyond the
+    immediate ready card
+  - the next planning checkpoint is explicit rather than deferred until the
+    current card finishes
 
 ### Continuation envelope
 
@@ -129,6 +138,25 @@ Work in this repo is not done unless:
 - that next task is explicit enough that a later bare `continue` does not need
   a recap prompt to find the correct next move
 
+### Operator-facing reporting
+
+- Closeout summaries should be written for operator comprehension first, not as
+  a protocol dump.
+- Lead with:
+  - what was actually achieved
+  - what the current lane state is now
+  - what happens next
+- Compress validation and protocol bookkeeping into short secondary detail.
+- Mention roadmap/card/log ids only when they clarify the current state, not as
+  the main story.
+- Do not make the operator reconstruct the actual outcome from a list of file
+  updates, card numbers, or validation commands.
+- A good default closeout shape is:
+  - outcome in plain language
+  - current lane state
+  - concise next move
+  - validation run
+
 ### Closeout pattern
 
 - Closeout is an ordered sequence, not a generic reminder to update docs.
@@ -153,6 +181,8 @@ Work in this repo is not done unless:
 - Do not declare the lane complete or create a handoff merely because context
   is low or the runtime may compact the thread. If the same thread can keep
   going after compaction, normal closeout plus `Next Task` is the correct path.
+- In the operator-facing summary for that closeout, state the achieved change
+  and the lane state before listing protocol artifacts or validation commands.
 
 ### Execution autonomy
 
@@ -171,6 +201,10 @@ Work in this repo is not done unless:
   - no stop condition below has been triggered
 - In a strict lane, a later bare `continue` should normally be enough because
   the prior closeout already named the next task and the current ready card.
+- That should not collapse the lane into one-card improvisation. Planning work
+  should leave enough runway that execution can see the broader lane shape and
+  the next planning checkpoint without reopening strategy from scratch after
+  every card.
 - If a thread still needs a giant continuation prompt in ordinary use, treat
   that as a repo-surface or local-agent-contract failure worth tightening.
 - Context compaction is compatible with that model. It should not be treated as

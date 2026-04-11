@@ -69,6 +69,9 @@ writing the brief.
 8. If the only pressure is low context or impending compaction, do not create a
    handoff. Keep the thread open, complete normal closeout, and rely on the
    prior `Next Task` plus the current ready card after compaction.
+9. In the operator-facing message that accompanies the handoff, lead with why
+   the handoff exists, the current lane state, and the next move. Keep
+   validation and protocol detail concise.
 
 ## Required Output
 
@@ -116,6 +119,8 @@ The handoff should include these sections in this order:
   let the same thread continue after compaction when possible.
 - Do not hide whether the run paused because budget was exhausted, a stop
   signal fired, the lane ended, or a handoff is genuinely required.
+- Do not let the operator-facing summary read like a protocol dump with the
+  real thread state buried underneath.
 - Carry forward the user's preferences, non-obvious judgments, and unresolved
   tensions if they are shaping the work.
 

@@ -36,6 +36,17 @@ Use logs as the third step in closeout, not the first:
 - When the run paused cleanly, name the pause signal and whether more autonomy
   budget remains for the lane.
 
+## Operator-facing summary
+
+- In the human-facing closeout message, lead with the achieved result and the
+  current lane state before listing validation.
+- Keep protocol detail present but compressed.
+- A short useful pattern is:
+  - achieved result
+  - current lane state
+  - next move
+  - validation run
+
 ## Lean evidence rule
 
 - Manual validation notes and commands run are the default evidence format.

@@ -70,6 +70,14 @@ Treat `ready` as a real state:
 - the previous closeout should leave a `Next Task` that lets a later bare
   `continue` resolve to the right ready card without a giant reminder prompt
 
+Treat planning as a real runway:
+
+- do not leave a material lane with only one immediate card and no visible
+  higher-level owner beyond it
+- make the next few meaningful batches or milestone transitions visible
+- leave an explicit planning checkpoint so the lane does not fall back into
+  one-card-at-a-time improvisation after each closeout
+
 If a repo wants the full continuation-envelope, lane-budget, and pause-signal
 model, use this `specs/` layer with batch cards. A roadmap-only repo can still
 route live work well, but it should not pretend to carry the same explicit

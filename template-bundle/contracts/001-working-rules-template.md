@@ -68,6 +68,14 @@ informal habits.
   completion claim.
 - Leave one explicit next task that makes a later bare `continue` unambiguous.
 
+### Operator-facing reporting
+
+- Lead closeout summaries with what changed, what state the lane is now in, and
+  what happens next.
+- Keep validation and protocol bookkeeping concise and secondary.
+- Do not make the operator reconstruct the real outcome from card ids, file
+  updates, or long command lists.
+
 ### Execution autonomy
 
 - Agents may continue across consecutive ready batch cards without waiting for
