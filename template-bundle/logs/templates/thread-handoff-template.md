@@ -46,10 +46,16 @@ State the one-sentence outcome the next thread should deliver.
 
 ## Completion Protocol
 
+Use this section only when a fresh-thread boundary is genuinely required. If
+the same thread can continue after compaction, prefer normal closeout and do
+not create a handoff.
+
 1. Confirm the current batch card already reflects the stopping point.
 2. Confirm the roadmap and log surfaces already reflect the outcome.
 3. Confirm whether any continuation envelope remains in-bounds or whether a
    stop signal exhausted it.
 4. Confirm the lane budget or explicit pause signal for this stopping point.
-5. Record unresolved blockers or risks explicitly.
-6. Leave one clear next task for the following thread.
+5. Confirm that another thread truly needs to take over and that low context or
+   compaction alone is not the reason this handoff exists.
+6. Record unresolved blockers or risks explicitly.
+7. Leave one clear next task for the following thread.
