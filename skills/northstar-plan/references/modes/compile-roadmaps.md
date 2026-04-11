@@ -5,7 +5,8 @@ exist and the user wants the next milestones or batches.
 
 ## Goal
 
-Produce roadmap milestones that sequence only contract-approved work.
+Produce roadmap milestones that sequence only contract-approved work and leave
+a bounded execution runway rather than one-card-at-a-time improvisation.
 
 ## Steps
 
@@ -23,7 +24,12 @@ Produce roadmap milestones that sequence only contract-approved work.
    of drafting speculative batches.
 5. Group work into meaningful batches with clear acceptance criteria and
    evidence requirements.
-6. Apply the repo's readiness rubric before marking a card or short chain
+6. Make the lane runway explicit:
+   - the higher-level owner of the lane
+   - the immediate ready card or paused gate
+   - the next few meaningful batches or milestone transitions beyond it
+   - the next planning checkpoint where strategy or intent may need review
+7. Apply the repo's readiness rubric before marking a card or short chain
    `ready`:
    - the work is bounded enough to execute without fresh planning decisions
    - the governing refs are current and canonical
@@ -31,13 +37,13 @@ Produce roadmap milestones that sequence only contract-approved work.
      conditions are explicit
    - no unresolved planning gap still governs the work
    - any auto-continuation transition is already represented in file state
-7. If the posture is `strict-paused`, compile toward a paused planning gate or
+8. If the posture is `strict-paused`, compile toward a paused planning gate or
    intent checkpoint instead of pretending the lane is ready for execution.
-8. Reference governing contract ids directly in each roadmap milestone.
-9. Keep planning gaps visible in the milestone until they are closed.
-10. Recommend generation rollover only when contract or architecture shifts make
+9. Reference governing contract ids directly in each roadmap milestone.
+10. Keep planning gaps visible in the milestone until they are closed.
+11. Recommend generation rollover only when contract or architecture shifts make
    the current sequencing baseline misleading.
-11. Treat any remaining spec for the lane as context only; do not let it outrank
+12. Treat any remaining spec for the lane as context only; do not let it outrank
    the promoted canonical surfaces.
 
 ## Guardrails
@@ -52,3 +58,5 @@ Produce roadmap milestones that sequence only contract-approved work.
   authority map and contract support.
 - Do not create micro-batches; keep execution grouped into meaningful chunks.
 - Do not mark a batch `ready` just because it is next in sequence.
+- Do not leave execution with only one visible next card when the lane clearly
+  needs a broader runway or an explicit planning checkpoint.

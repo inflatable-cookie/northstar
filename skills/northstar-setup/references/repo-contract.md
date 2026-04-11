@@ -120,6 +120,8 @@ architecture/contracts rather than a second permanent authority.
 - leave one explicit next task in the current planning surface
 - keep repo-facing examples free of current-directory `--repo .` usage even if
   a nested authority repo needs internal delegation wiring in `effigy.toml`
+- in normal operator-facing responses, lead with achieved outcome, current lane
+  state, and next move; keep validation and protocol detail concise
 
 ## Minimum Release Posture
 

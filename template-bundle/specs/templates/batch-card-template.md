@@ -23,6 +23,12 @@ Auto-start next card: <yes/no/conditional>
 
 State the exact bounded outcome for this card.
 
+## Lane Runway Context
+
+- Higher-level lane owner: <what this card is serving beyond itself>
+- Next likely cards or milestone transitions after this one: <refs or none>
+- Next planning checkpoint: <when strategy/intent must be reconsidered>
+
 ## Scope
 
 - <in scope>

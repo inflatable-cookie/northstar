@@ -92,6 +92,9 @@ Record rollover reason in `docs/roadmaps/generation-index.md`.
   close the planning gap before continuing execution.
 - Do not run roadmap execution directly from a raw spec once the spec's durable
   outcomes should have been promoted into architecture/contracts.
+- For a material lane, do not leave the roadmap at one immediate card plus
+  guesswork. Show the higher-level owner, the next few meaningful batches or
+  milestone transitions, and the next planning checkpoint.
 
 ## Currentness rule
 

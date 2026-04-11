@@ -37,6 +37,9 @@ Describe the specific short-term problem this milestone solves.
       validation, evidence requirements, and stop conditions.
 - [ ] Auto-continuation is allowed only where the next card is already defined
       and ready or the transition condition is explicit.
+- [ ] The milestone leaves a visible runway beyond the immediate card: the
+      higher-level lane owner, the next few meaningful batches or transitions,
+      and the next planning checkpoint.
 
 ## Execution Plan
 
@@ -65,6 +68,13 @@ Describe the specific short-term problem this milestone solves.
 - [ ] <log cadence: one log per completed batch/update cycle>
 - [ ] <manual validation checks and commands actually run>
 - [ ] <if new checker script is proposed, record owner + cadence + sunset trigger>
+
+## Runway Notes
+
+- Higher-level lane owner: <owner>
+- Immediate ready card or paused gate: <ref>
+- Next likely batches or milestone transitions: <refs or none>
+- Next planning checkpoint: <checkpoint or none>
 
 ## Next Task
 

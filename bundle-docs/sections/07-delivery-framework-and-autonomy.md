@@ -166,6 +166,26 @@ the next move explicit.
 If the previous `Next Task` does not point at a real ready card or explicit
 stop/reassessment step, the lane is not continuation-ready.
 
+## Runway rule
+
+Northstar planning should not produce a one-card-at-a-time fake runway.
+
+When a material lane needs planning, the output should usually include:
+
+- the higher-level owner the lane is trying to realize
+- the current ready card or paused gate
+- the next few meaningful batches or milestone transitions beyond that card
+- the next planning checkpoint where strategy or intent may need to be
+  reconsidered
+
+The point is not to pretend the whole program is fully known. The point is to
+avoid a loop where the thread executes one card, then makes up the next card,
+then repeats that cycle indefinitely under stricter-looking paperwork.
+
+Good planning leaves a bounded execution runway.
+That runway may still contain uncertainty, but it should make the lane shape
+visible beyond the immediate card.
+
 ## Intent checkpoint rule
 
 Planning should not pretend to know the user's preference when the path is
@@ -211,6 +231,31 @@ is:
 If the lane is stopping because the next work is not ready, the closeout should
 say that explicitly rather than pretending the sequence naturally continues.
 
+## Operator-facing summary rule
+
+Northstar closeout should not read like compliance theatre.
+
+The normal operator-facing message should make three things easy to scan:
+
+- what changed
+- what state the lane is now in
+- what the next move is
+
+Validation and protocol detail still matter, but they should sit underneath
+that summary rather than replace it.
+
+Bad pattern:
+
+- lead with card ids, file churn, and long validation lists
+- make the operator infer the actual outcome from the paperwork
+
+Better pattern:
+
+- one or two plain sentences on the achieved result
+- one short statement of current lane state
+- one short statement of the next move
+- short validation note after that
+
 ## Master spec rule
 
 Use a master spec when a goal:
@@ -249,6 +294,10 @@ Every ready batch card should define:
 - evidence required for closure
 - stop conditions
 - whether the next card may auto-start
+
+Batch cards sit inside a larger lane runway.
+They should not be treated as the only visible planning horizon when a lane is
+large enough to justify a master spec and roadmap milestone.
 
 If a batch card still requires material product or system decisions, it is not
 ready.
@@ -401,6 +450,8 @@ following are true:
 
 Operators should not need to keep sending "continue" when the next ready card
 is already defined and permitted.
+They also should not have to re-invent the lane shape after every completed
+card because planning failed to leave a longer-horizon runway.
 
 ## Stop conditions
 
