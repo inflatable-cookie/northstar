@@ -102,6 +102,9 @@ single-repo planning lane like this one.
   - whether the current card is the end of the budgeted run
   - whether another operator decision is required before more autonomy is spent
   - which compact pause signal explains a clean stop
+- Low context or normal thread compaction is not a pause signal. Treat it as a
+  normal runtime event and let the same thread continue when the lane is still
+  active.
 - Use these pause-signal categories when a run stops cleanly:
   - `budget-exhausted`
   - `stop-signal-fired`
@@ -142,11 +145,14 @@ Work in this repo is not done unless:
   - record the lane budget state and the pause signal when the run is not
     simply continuing in-bounds
   - update or create a handoff only when another thread truly needs to take
-    over
+    over or the user explicitly asks for one
   - leave one explicit next task in the highest-authority active surface that
     still governs the lane
 - If the next work is not ready, say so explicitly in closeout rather than
   implying continuation.
+- Do not declare the lane complete or create a handoff merely because context
+  is low or the runtime may compact the thread. If the same thread can keep
+  going after compaction, normal closeout plus `Next Task` is the correct path.
 
 ### Execution autonomy
 
@@ -167,6 +173,9 @@ Work in this repo is not done unless:
   the prior closeout already named the next task and the current ready card.
 - If a thread still needs a giant continuation prompt in ordinary use, treat
   that as a repo-surface or local-agent-contract failure worth tightening.
+- Context compaction is compatible with that model. It should not be treated as
+  a handoff-required boundary when the same thread can continue from the prior
+  `Next Task`.
 - Default upper bound for one uninterrupted run:
   - up to 3 consecutive ready batch cards
   - or roughly 90 minutes of focused work

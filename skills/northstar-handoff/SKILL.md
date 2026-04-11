@@ -12,11 +12,16 @@ Use this skill when the user asks to:
 - create a Northstar handoff for the next thread
 - turn the current planning and log state into an execution-ready handoff
 - turn active Northstar planning state into an execution-ready brief
+- create a genuine fresh-thread boundary because the same thread should not
+  keep going
 
 ## Outcome
 
 Produce a handoff artifact that another agent can pick up quickly without
 losing the thread's longer-running intent, reasoning, and Northstar context.
+Do not use this skill just because the current thread is nearing context
+compaction. If the same thread can continue after compaction, prefer normal
+closeout and let it continue.
 
 ## Quick Start
 
@@ -61,6 +66,9 @@ writing the brief.
    stopping point unless the user explicitly asks for a handoff-first artifact.
 7. Leave one explicit next task in the handoff and make the completion
    protocol point back to the right roadmap/log surfaces.
+8. If the only pressure is low context or impending compaction, do not create a
+   handoff. Keep the thread open, complete normal closeout, and rely on the
+   prior `Next Task` plus the current ready card after compaction.
 
 ## Required Output
 
@@ -93,6 +101,9 @@ The handoff should include these sections in this order:
 - Do not lose the active roadmap/log linkage when handing work to another
   thread.
 - Do not use a handoff as a substitute for the batch log or roadmap update.
+- Do not create a handoff merely because context is low or compaction is near;
+  that is a normal runtime event, not a completion signal or a fresh-thread
+  requirement.
 - Do not hand off from stale front-door state; if currentness surfaces still
   advertise the wrong active card or lane state, fix that first unless the
   user explicitly wants a temporary handoff before closeout.
@@ -100,6 +111,9 @@ The handoff should include these sections in this order:
   architecture/contracts already govern the work.
 - Do not imply that the next thread should keep auto-continuing unless the
   remaining continuation envelope is explicit.
+- Do not declare the lane or thread complete solely because context budget is
+  low; if the lane is still active, keep the normal closeout state honest and
+  let the same thread continue after compaction when possible.
 - Do not hide whether the run paused because budget was exhausted, a stop
   signal fired, the lane ended, or a handoff is genuinely required.
 - Carry forward the user's preferences, non-obvious judgments, and unresolved

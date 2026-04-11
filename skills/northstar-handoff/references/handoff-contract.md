@@ -2,6 +2,9 @@
 
 Use this contract when a Northstar repo needs a fresh-thread brief or
 continuation artifact.
+Do not use it merely because the current thread is nearing context compaction;
+if the same thread can continue after compaction, prefer normal closeout and
+continue from the existing `Next Task`.
 
 ## Required Sections
 
@@ -49,6 +52,9 @@ Every handoff must include these sections in this order:
   any remaining continuation envelope should be named explicitly, any pause
   signal should be named explicitly, the next task should be clear, and
   unresolved risks should be called out.
+- A handoff is valid only when another thread genuinely needs to take over or
+  the user explicitly asked for a handoff artifact. Low context, compaction,
+  or ordinary thread-budget pressure alone is not enough.
 
 ## Placement Rule
 
@@ -73,3 +79,5 @@ A Northstar handoff should preserve:
 Do not reduce the handoff to a generic todo list with no planning lineage or
 continuity of thought.
 Do not use it as a substitute for proper closeout in the live planning spine.
+Do not treat context compaction as a handoff-required event when the same
+thread can continue after compaction.
