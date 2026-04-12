@@ -8,6 +8,9 @@ Vision tags: `<TAG1>`, `<TAG2>`
 Contract refs: `<001-contract>`, `<002-contract>`
 Planning state: <ready/blocked on planning>
 
+Writing style: internal, compressed, glue-light. Keep milestone prose dense
+and operational.
+
 ## Problem
 
 Describe the specific short-term problem this milestone solves.

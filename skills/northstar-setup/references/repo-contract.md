@@ -122,6 +122,8 @@ architecture/contracts rather than a second permanent authority.
   a nested authority repo needs internal delegation wiring in `effigy.toml`
 - in normal operator-facing responses, lead with achieved outcome, current lane
   state, and next move; keep validation and protocol detail concise
+- use compressed, glue-light writing for internal execution surfaces and normal
+  thread replies; keep fuller prose for public-facing docs
 
 ## Minimum Release Posture
 

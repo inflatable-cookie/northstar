@@ -256,6 +256,32 @@ Better pattern:
 - one short statement of the next move
 - short validation note after that
 
+## Selective compression rule
+
+Northstar should remove glue where it helps, not everywhere by default.
+
+Use compressed, high-density writing for internal execution surfaces:
+
+- agent chat responses
+- batch cards
+- roadmap milestones
+- logs
+- internal contracts and working rules
+
+That means:
+
+- no filler intros
+- no ceremonial politeness
+- no repeated restatement of the same point
+- prefer short bullets, fragments, arrows, and dense phrasing when still clear
+
+Do not apply that style blindly to public-facing or explanatory material.
+User-facing docs, onboarding, tutorials, and rich architectural explanation may
+still need normal prose.
+
+The goal is not caveman performance art.
+The goal is maximum signal with minimum glue.
+
 ## Master spec rule
 
 Use a master spec when a goal:

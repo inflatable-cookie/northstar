@@ -157,6 +157,27 @@ Work in this repo is not done unless:
   - concise next move
   - validation run
 
+### Compression policy
+
+- Use glue-light writing where token economy matters more than polished prose.
+- Internal execution surfaces should default to compressed, information-dense
+  language:
+  - agent chat responses
+  - batch cards
+  - roadmap milestones
+  - logs
+  - working rules and similar internal contracts
+- Public-facing or explanatory surfaces should keep normal prose:
+  - user-facing documentation
+  - marketing or onboarding copy
+  - tutorial or teaching material
+  - architecture or vision prose when richer explanation is part of the job
+- Compression should remove filler, repetition, and ceremonial transitions, not
+  meaning.
+- Prefer short bullets, fragments, symbols, and dense phrasing when the result
+  stays clear to an informed operator.
+- Do not force broken language when it harms comprehension or traceability.
+
 ### Closeout pattern
 
 - Closeout is an ordered sequence, not a generic reminder to update docs.

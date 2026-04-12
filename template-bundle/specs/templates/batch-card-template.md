@@ -7,6 +7,9 @@ Master spec refs: <docs/specs/NNN-...>
 Governing refs: <architecture files>, <contract files>, <roadmap refs>
 Auto-start next card: <yes/no/conditional>
 
+Writing style: internal, compressed, glue-light. Prefer dense operator-facing
+phrasing over polished prose.
+
 ## Ready-State Checks
 
 - [ ] Objective is bounded enough to finish without fresh planning decisions.
