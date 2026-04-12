@@ -76,6 +76,15 @@ informal habits.
 - Do not make the operator reconstruct the real outcome from card ids, file
   updates, or long command lists.
 
+### Selective compression
+
+- Use compressed, information-dense writing for internal execution surfaces:
+  agent chat, batch cards, roadmap milestones, logs, and internal contracts.
+- Remove filler, repetition, and ceremonial transitions.
+- Prefer short bullets, fragments, and dense phrasing when clarity survives.
+- Do not force this style onto public-facing or teaching docs that need normal
+  prose.
+
 ### Execution autonomy
 
 - Agents may continue across consecutive ready batch cards without waiting for

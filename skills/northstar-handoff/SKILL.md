@@ -72,6 +72,8 @@ writing the brief.
 9. In the operator-facing message that accompanies the handoff, lead with why
    the handoff exists, the current lane state, and the next move. Keep
    validation and protocol detail concise.
+10. Use glue-light, compressed writing for the handoff and its surrounding chat
+    message unless the user explicitly wants richer explanatory prose.
 
 ## Required Output
 
@@ -121,6 +123,8 @@ The handoff should include these sections in this order:
   signal fired, the lane ended, or a handoff is genuinely required.
 - Do not let the operator-facing summary read like a protocol dump with the
   real thread state buried underneath.
+- Do not waste tokens on filler or ceremonial phrasing in the handoff when a
+  denser operator-facing brief would do the job.
 - Carry forward the user's preferences, non-obvious judgments, and unresolved
   tensions if they are shaping the work.
 

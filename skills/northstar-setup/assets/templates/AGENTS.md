@@ -75,3 +75,13 @@ In normal operator-facing responses:
 
 Do not make the operator infer the real outcome from card ids, file lists, or
 long validation dumps.
+
+## Compression Rule
+
+For internal work surfaces and normal thread replies:
+
+- use glue-light, compressed writing
+- cut filler and ceremonial transitions
+- prefer dense bullets and short factual statements
+
+Do not apply that style blindly to public-facing docs that need fuller prose.

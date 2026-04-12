@@ -80,6 +80,8 @@ Then read:
 13. In operator-facing summaries, lead with what recovery actually fixed, the
     current lane posture, and the next move. Keep validation and protocol
     detail short.
+14. Use glue-light, compressed writing for internal recovery artifacts and chat
+    output unless the task is explicitly public-facing or explanatory.
 
 ## Required Outputs
 
@@ -113,6 +115,8 @@ advanced:
   depends on operator intent or prioritization.
 - Do not bury the actual recovery result under protocol chatter or long
   validation lists in the operator-facing summary.
+- Do not spend tokens on filler prose in internal recovery surfaces when dense
+  factual language would be clearer.
 
 ## Next Step
 

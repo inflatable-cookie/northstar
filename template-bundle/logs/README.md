@@ -47,6 +47,14 @@ Use logs as the third step in closeout, not the first:
   - next move
   - validation run
 
+## Writing style
+
+- Logs are internal execution evidence. Default to compressed, glue-light
+  writing.
+- Prefer dense factual bullets over polished narrative.
+- Keep enough context for later traceability, but remove filler and repeated
+  framing.
+
 ## Lean evidence rule
 
 - Manual validation notes and commands run are the default evidence format.

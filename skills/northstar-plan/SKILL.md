@@ -106,6 +106,8 @@ Then read:
 18. In operator-facing summaries, lead with the achieved planning outcome, the
     current lane state, and the next move. Keep validation and protocol detail
     short.
+19. Use glue-light, compressed writing for internal planning artifacts and chat
+    output unless the task is explicitly public-facing or explanatory.
 
 ## Required Outputs
 
@@ -159,6 +161,8 @@ advanced:
   planning spine; it is a planning mode, not a different operating model.
 - Do not let the operator-facing summary collapse into card ids, file churn,
   and long validation dumps with the real outcome hidden underneath.
+- Do not waste tokens on filler prose in internal planning surfaces when dense
+  operator-facing language would say the same thing more clearly.
 
 ## Next Step
 
