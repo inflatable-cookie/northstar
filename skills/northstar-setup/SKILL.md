@@ -154,6 +154,8 @@ The skill should leave these surfaces in a coherent state:
 - `docs/vision/README.md`
 - `docs/roadmaps/README.md`
 - `docs/logs/README.md`
+- `docs/policy/internal-writing-style.md`
+- `docs/policy/vision-next-task-verbs.txt`
 
 For mature repos moving toward full strict compliance, also leave one explicit
 audit and rollout surface in the normal planning spine:
@@ -170,6 +172,8 @@ installed from the bundle:
 - `docs/architecture/product-guardrails.md`
 - `docs/contracts/contract-index.md`
 - `docs/contracts/001-working-rules.md`
+- `docs/policy/internal-writing-style.md`
+- `docs/policy/vision-next-task-verbs.txt`
 - `docs/specs/README.md`
 - `docs/specs/archive/README.md`
 - `docs/specs/batch-cards/README.md`

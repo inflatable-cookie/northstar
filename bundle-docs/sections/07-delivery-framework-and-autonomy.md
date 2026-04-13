@@ -253,8 +253,11 @@ Better pattern:
 
 - one or two plain sentences on the achieved result
 - one short statement of current lane state
+- short validation note only when it failed or materially affects confidence
 - one short statement of the next move
-- short validation note after that
+
+Use that as the closeout or meaningful checkpoint shape, not as a script for
+every small in-thread message.
 
 ## Selective compression rule
 

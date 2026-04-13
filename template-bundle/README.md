@@ -11,6 +11,7 @@ The folders here are intended to be copied into a target project's `docs/` direc
 - `contracts/`
 - `roadmaps/`
 - `logs/`
+- `policy/`
 
 ## Standard docs spines
 
@@ -138,6 +139,10 @@ The roadmap and logs sections include a worked replan sequence showing how a
 planning gap becomes a contract delta and then a recompiled milestone.
 They also include a second specimen showing when refocus should force a clean
 `g02` rollover rather than preserve a misleading `g01`.
+
+`policy/` is the home for short repo-local rules that agent instruction files
+should point at rather than duplicating inline. Use it for lightweight
+allowlists and internal writing-style guidance.
 
 ## Operating posture
 

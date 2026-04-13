@@ -103,9 +103,10 @@ Then read:
     few meaningful batches or milestone transitions, and the next planning
     checkpoint explicit so execution does not fall back into one-card
     improvisation after each closeout.
-18. In operator-facing summaries, lead with the achieved planning outcome, the
-    current lane state, and the next move. Keep validation and protocol detail
-    short.
+18. In end-of-turn or meaningful checkpoint summaries, lead with the achieved
+    planning outcome, the current lane state, and the next move. Mention
+    validation only if it failed or materially affects confidence. Keep
+    protocol detail short.
 19. Use glue-light, compressed writing for internal planning artifacts and chat
     output unless the task is explicitly public-facing or explanatory.
 

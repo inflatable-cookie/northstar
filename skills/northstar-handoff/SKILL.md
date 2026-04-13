@@ -70,8 +70,9 @@ writing the brief.
    handoff. Keep the thread open, complete normal closeout, and rely on the
    prior `Next Task` plus the current ready card after compaction.
 9. In the operator-facing message that accompanies the handoff, lead with why
-   the handoff exists, the current lane state, and the next move. Keep
-   validation and protocol detail concise.
+   the handoff exists, the current lane state, and the next move. Mention
+   validation only if it failed or materially affects confidence. Keep
+   protocol detail concise.
 10. Use glue-light, compressed writing for the handoff and its surrounding chat
     message unless the user explicitly wants richer explanatory prose.
 
