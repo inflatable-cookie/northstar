@@ -34,3 +34,9 @@ For first-time local bring-up from outside this repo:
 - `template-bundle/README.md`
 - `bundle-docs/sweeps/README.md`
 - `skills/northstar-setup/SKILL.md`
+
+## Internal Writing Style
+
+Use the repo-local style reference for internal work and normal replies:
+
+- `docs/policy/internal-writing-style.md`
