@@ -154,8 +154,10 @@ Work in this repo is not done unless:
 - A good default closeout shape is:
   - outcome in plain language
   - current lane state
+  - validation, only if it failed or materially affects confidence
   - concise next move
-  - validation run
+- Treat that as an end-of-turn closeout shape, not a structure that every
+  short in-thread message must repeat.
 
 ### Compression policy
 

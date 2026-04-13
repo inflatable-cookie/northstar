@@ -1,0 +1,15 @@
+# {{PROJECT_NAME}} CLAUDE
+
+## Start Here
+
+- `docs/README.md`
+- `AGENTS.md`
+
+## Internal Writing Style
+
+For internal work and normal replies, use the repo's glue-light writing rule:
+
+- `docs/policy/internal-writing-style.md`
+
+Use that file as the stable reference instead of repeating the full style rule
+here.

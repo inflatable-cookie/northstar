@@ -77,9 +77,10 @@ Then read:
     or the first newly valid execution batch.
 12. If recovery ends in a paused strict gate rather than a ready lane, say that
     explicitly instead of implying the next thread should continue coding.
-13. In operator-facing summaries, lead with what recovery actually fixed, the
-    current lane posture, and the next move. Keep validation and protocol
-    detail short.
+13. In end-of-turn or meaningful checkpoint summaries, lead with what recovery
+    actually fixed, the current lane posture, and the next move. Mention
+    validation only if it failed or materially affects confidence. Keep
+    protocol detail short.
 14. Use glue-light, compressed writing for internal recovery artifacts and chat
     output unless the task is explicitly public-facing or explanatory.
 

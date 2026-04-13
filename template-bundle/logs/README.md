@@ -44,8 +44,10 @@ Use logs as the third step in closeout, not the first:
 - A short useful pattern is:
   - achieved result
   - current lane state
+  - validation only when it failed or materially affects confidence
   - next move
-  - validation run
+
+Use that pattern for the end-of-turn closeout message, not every short reply.
 
 ## Writing style
 

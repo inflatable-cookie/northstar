@@ -11,6 +11,7 @@ surface the repo needs.
 Use these top-level repo templates from this skill for the non-docs surfaces:
 
 - `AGENTS.md`
+- `CLAUDE.md.template` (optional)
 - `CHANGELOG.md`
 - `README.md.template`
 - `scripts.README.md.template`
@@ -25,6 +26,8 @@ For stricter repos, also copy the bundle's working-rules and specs surfaces:
 - `docs/specs/batch-cards/README.md`
 - `docs/specs/templates/master-spec-template.md`
 - `docs/specs/templates/batch-card-template.md`
+- `docs/policy/internal-writing-style.md`
+- `docs/policy/vision-next-task-verbs.txt`
 
 Template rule:
 

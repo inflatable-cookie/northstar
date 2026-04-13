@@ -66,12 +66,13 @@ Do this especially when:
 
 ## Reporting Rule
 
-In normal operator-facing responses:
+For the end-of-turn closeout or meaningful checkpoint reply:
 
 - lead with what was actually achieved
 - then state the current lane state
+- mention validation only if it failed or materially affects confidence
 - then state the next move
-- keep validation and protocol detail brief and secondary
+- keep protocol detail brief and secondary
 
 Do not make the operator infer the real outcome from card ids, file lists, or
 long validation dumps.
@@ -85,3 +86,4 @@ For internal work surfaces and normal thread replies:
 - prefer dense bullets and short factual statements
 
 Do not apply that style blindly to public-facing docs that need fuller prose.
+See `docs/policy/internal-writing-style.md`.

@@ -22,6 +22,8 @@ The boundary is intentional:
 - `docs/vision/README.md`
 - `docs/roadmaps/README.md`
 - `docs/logs/README.md`
+- `docs/policy/internal-writing-style.md`
+- `docs/policy/vision-next-task-verbs.txt`
 
 For workspace-container repos, keep the workspace root lean and apply this full
 file set inside the nested docs-authority repo instead of duplicating it at the
@@ -58,6 +60,7 @@ supports consumer-side `docs_policy`, the starter repo contract should include:
 That config should pair with repo-owned tasks composed from native validators:
 
 - `effigy docs check-paths README.md AGENTS.md docs/README.md docs/vision/README.md docs/roadmaps/README.md docs/logs/README.md docs/policy/vision-next-task-verbs.txt`
+ - `effigy docs check-paths docs/policy/internal-writing-style.md`
 - `effigy docs check-contains AGENTS.md --require "effigy tasks" --require "effigy test --plan"`
 - `effigy docs check-contains README.md --require "docs/README.md"`
 - `effigy docs check-contains docs/README.md --require "vision/README.md" --require "roadmaps/README.md" --require "logs/README.md"`
@@ -124,6 +127,8 @@ architecture/contracts rather than a second permanent authority.
   state, and next move; keep validation and protocol detail concise
 - use compressed, glue-light writing for internal execution surfaces and normal
   thread replies; keep fuller prose for public-facing docs
+- point `AGENTS.md` and `CLAUDE.md` at `docs/policy/internal-writing-style.md`
+  instead of repeating the full style rule inline
 
 ## Minimum Release Posture
 

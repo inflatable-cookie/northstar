@@ -70,9 +70,10 @@ informal habits.
 
 ### Operator-facing reporting
 
-- Lead closeout summaries with what changed, what state the lane is now in, and
-  what happens next.
-- Keep validation and protocol bookkeeping concise and secondary.
+- For the end-of-turn closeout or meaningful checkpoint reply, lead with what
+  changed, what state the lane is now in, and what happens next.
+- Mention validation only if it failed or materially affects confidence.
+- Keep protocol bookkeeping concise and secondary.
 - Do not make the operator reconstruct the real outcome from card ids, file
   updates, or long command lists.
 

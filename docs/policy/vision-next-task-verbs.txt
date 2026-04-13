@@ -1,0 +1,16 @@
+create
+define
+compile
+promote
+update
+close
+open
+audit
+run
+re-anchor
+continue
+resume
+repair
+refresh
+apply
+decide
