@@ -14,6 +14,7 @@ Recommended starter files:
 
 - `vision-next-task-verbs.txt`
 - `internal-writing-style.md`
+- `active-thread-style-reset-prompt.md`
 
 ## Next Task
 

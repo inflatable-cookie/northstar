@@ -9,6 +9,8 @@ worked through.
   master specs for material goals or epics
 - `batch-cards/NNN-<slug>.md`
   tightly scoped execution cards derived from an active master spec
+- `batch-cards/README.md`
+  active batch-card index and strict-lane working rule
 
 ## Rules
 
