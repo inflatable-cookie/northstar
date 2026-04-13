@@ -15,7 +15,7 @@ Meaning:
 - minimal glue words
 - no ceremonial phrasing
 - no long prose if bullets or fragments work
-- no big protocol recap unless needed
+- no big protocol recap unless it adds real value
 
 ## End-of-turn reply shape
 
@@ -44,15 +44,15 @@ reply, not for every message:
 
 ## Guardrails
 
-- compression removes glue, not meaning
-- no caveman theatre
-- file refs only when useful
+- compression should remove glue, not meaning
+- do not perform caveman theatre; stay clear
+- use file refs only where they help
 - mention validation only when it failed or materially changes confidence,
   risk, or next action
-- do not force the full end-of-turn frame into every single message when a
-  shorter reply is enough
+- do not force the full end-of-turn frame into every message when a shorter
+  answer is enough
 
 ## Next Task
 
-Point agent instruction files here instead of repeating the full style rule
-inline.
+Point `AGENTS.md` and `CLAUDE.md` here with a short note instead of repeating
+the full style rule inline.
