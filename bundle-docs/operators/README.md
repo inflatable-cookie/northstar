@@ -2,7 +2,7 @@
 
 This folder is for humans running Northstar in real work.
 
-Start with [operator-quick-start.md](/Users/betterthanclay/Dev/projects/northstar/bundle-docs/operators/operator-quick-start.md).
+Start with [operator-quick-start.md](~/Dev/projects/northstar/bundle-docs/operators/operator-quick-start.md).
 
 The normal day-to-day surfaces are:
 
@@ -11,7 +11,7 @@ The normal day-to-day surfaces are:
 - `live-project-refocus-specimen.md` for a worked recovery example
 
 Maintenance-only pilot and pruning docs now live under
-[maintenance/README.md](/Users/betterthanclay/Dev/projects/northstar/bundle-docs/maintenance/README.md)
+[maintenance/README.md](~/Dev/projects/northstar/bundle-docs/maintenance/README.md)
 so the normal operator front door stays short.
 
 ## Next task

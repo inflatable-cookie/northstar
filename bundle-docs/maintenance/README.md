@@ -4,7 +4,7 @@ This folder is for maintaining Northstar itself, not for normal day-to-day
 operator use inside a project.
 
 If you are trying to decide what to do in a live repo, start with
-[operators/README.md](/Users/betterthanclay/Dev/projects/northstar/bundle-docs/operators/README.md)
+[operators/README.md](~/Dev/projects/northstar/bundle-docs/operators/README.md)
 instead.
 
 Use the pages here when you are testing, pruning, or validating the Northstar

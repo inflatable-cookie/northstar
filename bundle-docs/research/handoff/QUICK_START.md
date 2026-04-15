@@ -18,7 +18,7 @@ A Rust library that can:
 ## Where it lives
 
 ```
-/Users/betterthanclay/Dev/projects/effigy/crates/changelog/
+~/Dev/projects/effigy/crates/changelog/
 ```
 
 **Why Effigy**: Start where it's used, extract if needed later.
@@ -27,13 +27,13 @@ A Rust library that can:
 
 1. Create the crate:
    ```bash
-   cd /Users/betterthanclay/Dev/projects/effigy
+   cd ~/Dev/projects/effigy
    cargo new --lib crates/changelog
    ```
 
 2. Look at the test fixture:
    ```bash
-   cat /Users/betterthanclay/Dev/projects/effigy/CHANGELOG.md
+   cat ~/Dev/projects/effigy/CHANGELOG.md
    ```
 
 3. Define your AST:
@@ -182,7 +182,7 @@ validate = "northstar-changelog validate"
 Parse Effigy's CHANGELOG.md and format it correctly.
 
 ```bash
-cd /Users/betterthanclay/Dev/projects/effigy/crates/changelog
+cd ~/Dev/projects/effigy/crates/changelog
 cargo test
 # All tests pass using Effigy's CHANGELOG as fixture
 ```

@@ -47,9 +47,9 @@ live dirty app worktree.
 
 - [x] `effigy qa`
 - [x] `effigy qa:docs`
-- [x] `git -C /Users/betterthanclay/Dev/projects/underlay-reference diff --check`
-- [x] `effigy acme-docs/qa:docs --repo /Users/betterthanclay/Dev/projects/underlay-reference`
-- [x] `effigy acme-docs/qa:northstar --repo /Users/betterthanclay/Dev/projects/underlay-reference`
+- [x] `git -C ~/Dev/projects/underlay-reference diff --check`
+- [x] `effigy acme-docs/qa:docs --repo ~/Dev/projects/underlay-reference`
+- [x] `effigy acme-docs/qa:northstar --repo ~/Dev/projects/underlay-reference`
 
 ## Evidence
 

@@ -42,25 +42,25 @@ Underlay consumer cohort repos after `underlay-reference` proved the pattern.
 
 ## Validation
 
-- [x] `git -C /Users/betterthanclay/Dev/projects/contact-patch diff --check`
-- [x] `effigy cp-docs/qa:docs --repo /Users/betterthanclay/Dev/projects/contact-patch`
-- [x] `effigy cp-docs/qa:northstar --repo /Users/betterthanclay/Dev/projects/contact-patch`
-- [x] `git -C /Users/betterthanclay/Dev/projects/compli-me diff --check`
-- [x] `effigy qa:northstar --repo /Users/betterthanclay/Dev/projects/compli-me/docs`
-- [x] `git -C /Users/betterthanclay/Dev/projects/songsprout diff --check`
-- [x] `effigy qa:docs --repo /Users/betterthanclay/Dev/projects/songsprout/trellis`
-- [x] `effigy qa:northstar --repo /Users/betterthanclay/Dev/projects/songsprout/trellis`
-- [x] `git -C /Users/betterthanclay/Dev/projects/acowtancy diff --check`
-- [x] `effigy qa:docs --repo /Users/betterthanclay/Dev/projects/acowtancy/ledger`
-- [x] `effigy qa:northstar --repo /Users/betterthanclay/Dev/projects/acowtancy/ledger`
-- [x] `git -C /Users/betterthanclay/Dev/projects/loophole/composer diff --check`
-- [x] `effigy qa:docs --repo /Users/betterthanclay/Dev/projects/loophole/composer/composer-docs`
-- [x] `effigy qa:northstar --repo /Users/betterthanclay/Dev/projects/loophole/composer/composer-docs`
+- [x] `git -C ~/Dev/projects/contact-patch diff --check`
+- [x] `effigy cp-docs/qa:docs --repo ~/Dev/projects/contact-patch`
+- [x] `effigy cp-docs/qa:northstar --repo ~/Dev/projects/contact-patch`
+- [x] `git -C ~/Dev/projects/compli-me diff --check`
+- [x] `effigy qa:northstar --repo ~/Dev/projects/compli-me/docs`
+- [x] `git -C ~/Dev/projects/songsprout diff --check`
+- [x] `effigy qa:docs --repo ~/Dev/projects/songsprout/trellis`
+- [x] `effigy qa:northstar --repo ~/Dev/projects/songsprout/trellis`
+- [x] `git -C ~/Dev/projects/acowtancy diff --check`
+- [x] `effigy qa:docs --repo ~/Dev/projects/acowtancy/ledger`
+- [x] `effigy qa:northstar --repo ~/Dev/projects/acowtancy/ledger`
+- [x] `git -C ~/Dev/projects/loophole/composer diff --check`
+- [x] `effigy qa:docs --repo ~/Dev/projects/loophole/composer/composer-docs`
+- [x] `effigy qa:northstar --repo ~/Dev/projects/loophole/composer/composer-docs`
 
 ## Notes
 
-- `effigy qa:docs --repo /Users/betterthanclay/Dev/projects/compli-me/docs` still fails on a pre-existing missing Underlay file in the repo's own rollout audit, not on the strict posture install.
-- `effigy qa --repo /Users/betterthanclay/Dev/projects/loophole/composer/composer-docs` still fails on a pre-existing reorder-conflict rollout check in app code, not on the strict posture install.
+- `effigy qa:docs --repo ~/Dev/projects/compli-me/docs` still fails on a pre-existing missing Underlay file in the repo's own rollout audit, not on the strict posture install.
+- `effigy qa --repo ~/Dev/projects/loophole/composer/composer-docs` still fails on a pre-existing reorder-conflict rollout check in app code, not on the strict posture install.
 
 ## Next Task
 

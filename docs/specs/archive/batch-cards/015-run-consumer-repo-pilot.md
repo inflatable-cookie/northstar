@@ -44,7 +44,7 @@ broke down.
 
 ## Completion Notes
 
-Ran the first real shadow-operator pilot against `/Users/betterthanclay/Dev/projects/signal`
+Ran the first real shadow-operator pilot against `~/Dev/projects/signal`
 using the active `g09.003` VST3 lane as the target. The decisive path was much
 shorter than the current operator doc cluster implies: once the repo and active
 lane were explicit, the useful chain was `operator-quick-start -> Signal
