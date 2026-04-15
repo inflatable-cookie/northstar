@@ -9,7 +9,7 @@ Governing refs: docs/contracts/001-working-rules.md, docs/specs/archive/004-cons
 ## Summary
 
 Ran the first real external Northstar pilot as a read-only shadow-operator pass
-against `/Users/betterthanclay/Dev/projects/signal`, using the active
+against `~/Dev/projects/signal`, using the active
 `g09.003` VST3 lane as the live target. The run confirmed that Signal is a
 better pilot than `monkey` because it has a real active batch chain rather
 than only a structurally valid docs spine.
@@ -19,7 +19,7 @@ than only a structurally valid docs spine.
 ### Pilot Context
 
 - Repo: `signal`
-- Repo path: `/Users/betterthanclay/Dev/projects/signal`
+- Repo path: `~/Dev/projects/signal`
 - Date: `2026-04-09`
 - Operator: `codex`
 - Starting request: `The thread is currently working through g09.003 around VST3 support. The most recent logs cover the work that thread has been doing.`
@@ -35,17 +35,17 @@ than only a structurally valid docs spine.
 
 - Minutes to choose first action: `2`
 - Minutes to valid next batch: `7`
-- First page opened: `/Users/betterthanclay/Dev/projects/northstar/bundle-docs/operators/operator-quick-start.md`
+- First page opened: `~/Dev/projects/northstar/bundle-docs/operators/operator-quick-start.md`
 - Additional pages opened before acting:
-  - `/Users/betterthanclay/Dev/projects/signal/README.md`
-  - `/Users/betterthanclay/Dev/projects/signal/AGENTS.md`
-  - `/Users/betterthanclay/Dev/projects/signal/docs/README.md`
-  - `/Users/betterthanclay/Dev/projects/signal/docs/roadmaps/generation-index.md`
-  - `/Users/betterthanclay/Dev/projects/signal/docs/roadmaps/g09/README.md`
-  - `/Users/betterthanclay/Dev/projects/signal/docs/roadmaps/g09/003-real-vst3-discovery-instantiation-and-lifecycle-proof.md`
-  - `/Users/betterthanclay/Dev/projects/signal/docs/logs/2026-04/09-001500-g09-003-vst3-broker-block-execution-tranche.md`
-  - `/Users/betterthanclay/Dev/projects/signal/docs/contracts/020-vst3-adapter-baseline-and-runtime-owned-lifecycle-contract.md`
-  - `/Users/betterthanclay/Dev/projects/signal/docs/contracts/072-real-plugin-hosting-discovery-and-sandbox-execution-contract.md`
+  - `~/Dev/projects/signal/README.md`
+  - `~/Dev/projects/signal/AGENTS.md`
+  - `~/Dev/projects/signal/docs/README.md`
+  - `~/Dev/projects/signal/docs/roadmaps/generation-index.md`
+  - `~/Dev/projects/signal/docs/roadmaps/g09/README.md`
+  - `~/Dev/projects/signal/docs/roadmaps/g09/003-real-vst3-discovery-instantiation-and-lifecycle-proof.md`
+  - `~/Dev/projects/signal/docs/logs/2026-04/09-001500-g09-003-vst3-broker-block-execution-tranche.md`
+  - `~/Dev/projects/signal/docs/contracts/020-vst3-adapter-baseline-and-runtime-owned-lifecycle-contract.md`
+  - `~/Dev/projects/signal/docs/contracts/072-real-plugin-hosting-discovery-and-sandbox-execution-contract.md`
 - Pages opened in order:
   1. `bundle-docs/operators/operator-quick-start.md`
   2. `signal/README.md`
@@ -139,7 +139,7 @@ than only a structurally valid docs spine.
 ## Outcome
 
 - the first external pilot is now grounded in a real active consumer-repo path:
-  `/Users/betterthanclay/Dev/projects/signal`
+  `~/Dev/projects/signal`
 - Northstar now has evidence that the healthy active-repo path is shorter and
   more repo-doc-driven than the current operator support cluster implies
 - the next batch should consolidate the operator front door around that finding

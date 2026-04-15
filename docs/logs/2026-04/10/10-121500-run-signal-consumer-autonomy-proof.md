@@ -11,13 +11,13 @@ proof target, using Signal's live `g09` lane as a read-only operator proof.
 
 ## Proof Target
 
-- Repo: `/Users/betterthanclay/Dev/projects/signal`
+- Repo: `~/Dev/projects/signal`
 - Active generation: `g09`
 - Active lane used for proof: `g09.005`
 - Key proof surfaces:
-  - `/Users/betterthanclay/Dev/projects/signal/docs/roadmaps/g09/README.md`
-  - `/Users/betterthanclay/Dev/projects/signal/docs/roadmaps/g09/005-real-lv2-discovery-extension-negotiation-and-linux-proof.md`
-  - `/Users/betterthanclay/Dev/projects/signal/docs/logs/2026-04/09-200000-g09-005-lv2-manifest-discovery-tranche.md`
+  - `~/Dev/projects/signal/docs/roadmaps/g09/README.md`
+  - `~/Dev/projects/signal/docs/roadmaps/g09/005-real-lv2-discovery-extension-negotiation-and-linux-proof.md`
+  - `~/Dev/projects/signal/docs/logs/2026-04/09-200000-g09-005-lv2-manifest-discovery-tranche.md`
 
 ## Findings
 

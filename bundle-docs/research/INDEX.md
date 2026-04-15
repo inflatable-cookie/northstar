@@ -110,8 +110,8 @@ northstar-release execute
 ## Test Fixtures
 
 Primary test data:
-- `/Users/betterthanclay/Dev/projects/effigy/CHANGELOG.md` - Real changelog
-- `/Users/betterthanclay/Dev/projects/effigy/scripts/prepare-release.sh` - Current flow
+- `~/Dev/projects/effigy/CHANGELOG.md` - Real changelog
+- `~/Dev/projects/effigy/scripts/prepare-release.sh` - Current flow
 
 ---
 

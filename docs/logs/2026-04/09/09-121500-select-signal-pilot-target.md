@@ -28,7 +28,7 @@ but inactive specimen-style pass.
 ## Outcome
 
 - the first external pilot target is now explicit:
-  `/Users/betterthanclay/Dev/projects/signal`
+  `~/Dev/projects/signal`
 - the target was chosen because it has a live Northstar docs spine, an
   Effigy-first operator loop, an active roadmap generation, and a real current
   execution lane in `g09.003` around VST3 support

@@ -47,7 +47,7 @@ decisions.
 
 ## Completion Notes
 
-Selected `/Users/betterthanclay/Dev/projects/signal` as the first external
+Selected `~/Dev/projects/signal` as the first external
 pilot target because it has a live Northstar docs spine, an Effigy-first
 operator loop, an active roadmap generation, and a real current execution lane
 in `g09.003` around VST3 support. The earlier `monkey` candidate was dropped

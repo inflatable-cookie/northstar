@@ -39,7 +39,7 @@ For a real external pilot, prefer a repo that:
 
 Open only:
 
-- [operator-quick-start.md](/Users/betterthanclay/Dev/projects/northstar/bundle-docs/operators/operator-quick-start.md)
+- [operator-quick-start.md](~/Dev/projects/northstar/bundle-docs/operators/operator-quick-start.md)
 
 Task:
 
@@ -55,7 +55,7 @@ Expected result:
 
 Open only if needed:
 
-- [operator-quick-start.md](/Users/betterthanclay/Dev/projects/northstar/bundle-docs/operators/operator-quick-start.md)
+- [operator-quick-start.md](~/Dev/projects/northstar/bundle-docs/operators/operator-quick-start.md)
 
 Task:
 
@@ -71,7 +71,7 @@ If you needed more than the quick start plus one support page, note that.
 
 Use:
 
-- [live-project-refocus-specimen.md](/Users/betterthanclay/Dev/projects/northstar/bundle-docs/operators/live-project-refocus-specimen.md)
+- [live-project-refocus-specimen.md](~/Dev/projects/northstar/bundle-docs/operators/live-project-refocus-specimen.md)
 
 Task:
 
@@ -88,7 +88,7 @@ Expected result:
 
 Use:
 
-- [SKILL.md](/Users/betterthanclay/Dev/projects/northstar/skills/northstar-plan/SKILL.md)
+- [SKILL.md](~/Dev/projects/northstar/skills/northstar-plan/SKILL.md)
 
 Task:
 
@@ -103,7 +103,7 @@ Expected result:
 
 Use:
 
-- [SKILL.md](/Users/betterthanclay/Dev/projects/northstar/skills/northstar-handoff/SKILL.md)
+- [SKILL.md](~/Dev/projects/northstar/skills/northstar-handoff/SKILL.md)
 
 Task:
 
@@ -129,8 +129,8 @@ After the drill, note:
 
 Use:
 
-- [operator-pilot-record-template.md](/Users/betterthanclay/Dev/projects/northstar/bundle-docs/maintenance/operator-pilot-record-template.md)
-- [operator-doc-pruning-rubric.md](/Users/betterthanclay/Dev/projects/northstar/bundle-docs/maintenance/operator-doc-pruning-rubric.md)
+- [operator-pilot-record-template.md](~/Dev/projects/northstar/bundle-docs/maintenance/operator-pilot-record-template.md)
+- [operator-doc-pruning-rubric.md](~/Dev/projects/northstar/bundle-docs/maintenance/operator-doc-pruning-rubric.md)
 
 ## Success Criteria
 

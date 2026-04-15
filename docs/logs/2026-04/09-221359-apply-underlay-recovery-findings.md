@@ -29,8 +29,8 @@ strict execution lane before fixing that queue would have been premature.
 
 ## Validation
 
-- `effigy qa:docs --repo /Users/betterthanclay/Dev/projects/underlay`
-- `effigy qa:northstar --repo /Users/betterthanclay/Dev/projects/underlay`
+- `effigy qa:docs --repo ~/Dev/projects/underlay`
+- `effigy qa:northstar --repo ~/Dev/projects/underlay`
 - `effigy qa`
 - `effigy qa:docs`
 

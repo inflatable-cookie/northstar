@@ -318,7 +318,7 @@ This defines the format the library must parse.
 ### 2. Look at Effigy's changelog
 
 ```bash
-cat /Users/betterthanclay/Dev/projects/effigy/CHANGELOG.md
+cat ~/Dev/projects/effigy/CHANGELOG.md
 ```
 
 This is your primary test fixture.
@@ -327,8 +327,8 @@ This is your primary test fixture.
 
 ```bash
 # Read these scripts
-cat /Users/betterthanclay/Dev/projects/effigy/scripts/prepare-release.sh
-cat /Users/betterthanclay/Dev/projects/effigy/scripts/check-release-gates.sh
+cat ~/Dev/projects/effigy/scripts/prepare-release.sh
+cat ~/Dev/projects/effigy/scripts/check-release-gates.sh
 ```
 
 These show the current flow the library will support.
@@ -336,7 +336,7 @@ These show the current flow the library will support.
 ### 4. Create the crate
 
 ```bash
-cd /Users/betterthanclay/Dev/projects/effigy
+cd ~/Dev/projects/effigy
 cargo new --lib crates/changelog
 ```
 

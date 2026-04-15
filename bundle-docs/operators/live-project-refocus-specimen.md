@@ -61,8 +61,8 @@ Valid actions:
 
 In the template-bundle specimen, this state is represented by:
 
-- [002-example-analytics-export.md](/Users/betterthanclay/Dev/projects/northstar/template-bundle/roadmaps/g01/002-example-analytics-export.md)
-- [02-100000-example-planning-gap-g01-002-analytics-export.md](/Users/betterthanclay/Dev/projects/northstar/template-bundle/logs/YYYY-MM/02-100000-example-planning-gap-g01-002-analytics-export.md)
+- [002-example-analytics-export.md](~/Dev/projects/northstar/template-bundle/roadmaps/g01/002-example-analytics-export.md)
+- [02-100000-example-planning-gap-g01-002-analytics-export.md](~/Dev/projects/northstar/template-bundle/logs/YYYY-MM/02-100000-example-planning-gap-g01-002-analytics-export.md)
 
 ## Step 3: Repair Planning Coverage
 
@@ -79,9 +79,9 @@ Checklist:
 
 In the specimen chain:
 
-- [example-system-inventory.md](/Users/betterthanclay/Dev/projects/northstar/template-bundle/architecture/example-system-inventory.md) shows the seam as a planning gap.
-- [example-repo-authority-map.md](/Users/betterthanclay/Dev/projects/northstar/template-bundle/architecture/example-repo-authority-map.md) shows the cross-repo authority surface.
-- [example-contract-index.md](/Users/betterthanclay/Dev/projects/northstar/template-bundle/contracts/example-contract-index.md) shows the seam blocked until contracted.
+- [example-system-inventory.md](~/Dev/projects/northstar/template-bundle/architecture/example-system-inventory.md) shows the seam as a planning gap.
+- [example-repo-authority-map.md](~/Dev/projects/northstar/template-bundle/architecture/example-repo-authority-map.md) shows the cross-repo authority surface.
+- [example-contract-index.md](~/Dev/projects/northstar/template-bundle/contracts/example-contract-index.md) shows the seam blocked until contracted.
 
 ## Step 4: Record the Contract Delta
 
@@ -96,7 +96,7 @@ Why this matters:
 
 In the specimen chain:
 
-- [03-110000-example-contract-delta-g01-002-analytics-export.md](/Users/betterthanclay/Dev/projects/northstar/template-bundle/logs/YYYY-MM/03-110000-example-contract-delta-g01-002-analytics-export.md)
+- [03-110000-example-contract-delta-g01-002-analytics-export.md](~/Dev/projects/northstar/template-bundle/logs/YYYY-MM/03-110000-example-contract-delta-g01-002-analytics-export.md)
 
 ## Step 5: Decide Recompile vs `g02` Rollover
 
@@ -134,7 +134,7 @@ Once planning is coherent again:
 
 In the specimen chain:
 
-- [04-120000-example-roadmap-recompile-g01-002.md](/Users/betterthanclay/Dev/projects/northstar/template-bundle/logs/YYYY-MM/04-120000-example-roadmap-recompile-g01-002.md)
+- [04-120000-example-roadmap-recompile-g01-002.md](~/Dev/projects/northstar/template-bundle/logs/YYYY-MM/04-120000-example-roadmap-recompile-g01-002.md)
 
 ## Step 7: Hand Execution Back Cleanly
 
@@ -162,8 +162,8 @@ before.
 
 ## Recommended Operator Sequence
 
-1. Run the sweep pack, especially [08-planning-gate-sweep.md](/Users/betterthanclay/Dev/projects/northstar/bundle-docs/sweeps/08-planning-gate-sweep.md).
-2. Use the refocus prompt at [project-refocus-starter-prompt.md](/Users/betterthanclay/Dev/projects/northstar/bundle-docs/operators/project-refocus-starter-prompt.md) or the skill at [northstar-recover](/Users/betterthanclay/Dev/projects/northstar/skills/northstar-recover/SKILL.md).
+1. Run the sweep pack, especially [08-planning-gate-sweep.md](~/Dev/projects/northstar/bundle-docs/sweeps/08-planning-gate-sweep.md).
+2. Use the refocus prompt at [project-refocus-starter-prompt.md](~/Dev/projects/northstar/bundle-docs/operators/project-refocus-starter-prompt.md) or the skill at [northstar-recover](~/Dev/projects/northstar/skills/northstar-recover/SKILL.md).
 3. Freeze invalid roadmap work.
 4. Repair planning surfaces and contracts.
 5. Decide recompile versus rollover explicitly.
@@ -173,10 +173,10 @@ before.
 
 For the harder rollover case, use these companion artifacts:
 
-- [001-example-platform-reset.md](/Users/betterthanclay/Dev/projects/northstar/template-bundle/roadmaps/g02/001-example-platform-reset.md)
-- [05-130000-example-rollover-decision-g02.md](/Users/betterthanclay/Dev/projects/northstar/template-bundle/logs/YYYY-MM/05-130000-example-rollover-decision-g02.md)
-- [06-140000-example-contract-delta-g02-platform-reset.md](/Users/betterthanclay/Dev/projects/northstar/template-bundle/logs/YYYY-MM/06-140000-example-contract-delta-g02-platform-reset.md)
-- [07-150000-example-first-batch-g02-001.md](/Users/betterthanclay/Dev/projects/northstar/template-bundle/logs/YYYY-MM/07-150000-example-first-batch-g02-001.md)
+- [001-example-platform-reset.md](~/Dev/projects/northstar/template-bundle/roadmaps/g02/001-example-platform-reset.md)
+- [05-130000-example-rollover-decision-g02.md](~/Dev/projects/northstar/template-bundle/logs/YYYY-MM/05-130000-example-rollover-decision-g02.md)
+- [06-140000-example-contract-delta-g02-platform-reset.md](~/Dev/projects/northstar/template-bundle/logs/YYYY-MM/06-140000-example-contract-delta-g02-platform-reset.md)
+- [07-150000-example-first-batch-g02-001.md](~/Dev/projects/northstar/template-bundle/logs/YYYY-MM/07-150000-example-first-batch-g02-001.md)
 
 Next task: add a compact operator checklist that compares the strict-planning,
 refocus, roadmap-compiler, and replan skills so teams know which entry point to

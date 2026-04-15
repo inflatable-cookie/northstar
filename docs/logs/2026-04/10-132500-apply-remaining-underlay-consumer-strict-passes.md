@@ -25,25 +25,25 @@ Underlay consumer cohort repos after the `underlay-reference` proof:
 
 ## Validation
 
-- `git -C /Users/betterthanclay/Dev/projects/contact-patch diff --check`
-- `effigy cp-docs/qa:docs --repo /Users/betterthanclay/Dev/projects/contact-patch`
-- `effigy cp-docs/qa:northstar --repo /Users/betterthanclay/Dev/projects/contact-patch`
-- `git -C /Users/betterthanclay/Dev/projects/compli-me diff --check`
-- `effigy qa:northstar --repo /Users/betterthanclay/Dev/projects/compli-me/docs`
-- `git -C /Users/betterthanclay/Dev/projects/songsprout diff --check`
-- `effigy qa:docs --repo /Users/betterthanclay/Dev/projects/songsprout/trellis`
-- `effigy qa:northstar --repo /Users/betterthanclay/Dev/projects/songsprout/trellis`
-- `git -C /Users/betterthanclay/Dev/projects/acowtancy diff --check`
-- `effigy qa:docs --repo /Users/betterthanclay/Dev/projects/acowtancy/ledger`
-- `effigy qa:northstar --repo /Users/betterthanclay/Dev/projects/acowtancy/ledger`
-- `git -C /Users/betterthanclay/Dev/projects/loophole/composer diff --check`
-- `effigy qa:docs --repo /Users/betterthanclay/Dev/projects/loophole/composer/composer-docs`
-- `effigy qa:northstar --repo /Users/betterthanclay/Dev/projects/loophole/composer/composer-docs`
+- `git -C ~/Dev/projects/contact-patch diff --check`
+- `effigy cp-docs/qa:docs --repo ~/Dev/projects/contact-patch`
+- `effigy cp-docs/qa:northstar --repo ~/Dev/projects/contact-patch`
+- `git -C ~/Dev/projects/compli-me diff --check`
+- `effigy qa:northstar --repo ~/Dev/projects/compli-me/docs`
+- `git -C ~/Dev/projects/songsprout diff --check`
+- `effigy qa:docs --repo ~/Dev/projects/songsprout/trellis`
+- `effigy qa:northstar --repo ~/Dev/projects/songsprout/trellis`
+- `git -C ~/Dev/projects/acowtancy diff --check`
+- `effigy qa:docs --repo ~/Dev/projects/acowtancy/ledger`
+- `effigy qa:northstar --repo ~/Dev/projects/acowtancy/ledger`
+- `git -C ~/Dev/projects/loophole/composer diff --check`
+- `effigy qa:docs --repo ~/Dev/projects/loophole/composer/composer-docs`
+- `effigy qa:northstar --repo ~/Dev/projects/loophole/composer/composer-docs`
 
 ## Residual Non-Docs Blockers
 
-- `effigy qa:docs --repo /Users/betterthanclay/Dev/projects/compli-me/docs` still fails on a pre-existing missing `underlay` file in the repo's own rollout audit path.
-- `effigy qa --repo /Users/betterthanclay/Dev/projects/loophole/composer/composer-docs` still fails on a pre-existing reorder-conflict rollout contract in app code.
+- `effigy qa:docs --repo ~/Dev/projects/compli-me/docs` still fails on a pre-existing missing `underlay` file in the repo's own rollout audit path.
+- `effigy qa --repo ~/Dev/projects/loophole/composer/composer-docs` still fails on a pre-existing reorder-conflict rollout contract in app code.
 
 ## Next Task
 

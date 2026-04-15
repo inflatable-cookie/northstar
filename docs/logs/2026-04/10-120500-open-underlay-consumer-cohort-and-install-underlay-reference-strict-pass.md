@@ -27,16 +27,16 @@ the first concrete strict pass to `underlay-reference`.
 - added product guardrails, working rules, specs, a batch-card surface, and a
   strict install log
 - left the dirty app file
-  `/Users/betterthanclay/Dev/projects/underlay-reference/acme-admin/src/routes/(app)/media/[mediaId]/+page.svelte`
+  `~/Dev/projects/underlay-reference/acme-admin/src/routes/(app)/media/[mediaId]/+page.svelte`
   untouched
 
 ## Validation
 
 - `effigy qa`
 - `effigy qa:docs`
-- `git -C /Users/betterthanclay/Dev/projects/underlay-reference diff --check`
-- `effigy acme-docs/qa:docs --repo /Users/betterthanclay/Dev/projects/underlay-reference`
-- `effigy acme-docs/qa:northstar --repo /Users/betterthanclay/Dev/projects/underlay-reference`
+- `git -C ~/Dev/projects/underlay-reference diff --check`
+- `effigy acme-docs/qa:docs --repo ~/Dev/projects/underlay-reference`
+- `effigy acme-docs/qa:northstar --repo ~/Dev/projects/underlay-reference`
 
 ## Continuation Envelope
 
