@@ -13,9 +13,14 @@ planning outcomes have been promoted out of specs.
 - Trigger generation rollover manually; do not use automatic file-count limits.
 - Treat generations as substantial sequencing eras, not one-or-two-file buckets.
   In long-running repos, one generation will often hold many milestones before
-  a clean rollover is warranted.
+  a clean rollover is warranted. A healthy default is roughly 20 to 40
+  milestone files before rollover is even worth discussing.
 - When refocus invalidates the sequencing baseline across multiple milestones,
   prefer a clean new generation over patching stale work in place.
+- Treat rollover as full generation closeout, not a convenience reset:
+  close or rehome every milestone in the current generation first, then purge
+  stale specs and batch cards from `docs/specs/` before opening the next
+  generation.
 
 ## Layout
 

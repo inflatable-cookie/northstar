@@ -42,8 +42,13 @@ a bounded execution runway rather than one-card-at-a-time improvisation.
 9. Reference governing contract ids directly in each roadmap milestone.
 10. Keep planning gaps visible in the milestone until they are closed.
 11. Recommend generation rollover only when contract or architecture shifts make
-   the current sequencing baseline misleading.
-12. Treat any remaining spec for the lane as context only; do not let it outrank
+   the current sequencing baseline misleading, the generation has had a
+   substantial run already, and the repo is ready to close that generation
+   cleanly rather than escaping local cleanup.
+12. Before recommending rollover, confirm all current-generation milestones can
+   be marked closed, superseded, or rehomed and that stale specs or batch cards
+   from that generation can be archived or removed from `docs/specs/`.
+13. Treat any remaining spec for the lane as context only; do not let it outrank
    the promoted canonical surfaces.
 
 ## Guardrails
@@ -60,3 +65,8 @@ a bounded execution runway rather than one-card-at-a-time improvisation.
 - Do not mark a batch `ready` just because it is next in sequence.
 - Do not leave execution with only one visible next card when the lane clearly
   needs a broader runway or an explicit planning checkpoint.
+- Do not suggest rollover after only a handful of milestones. Expect something
+  closer to a 20-to-40-milestone generation unless a real sequencing reset
+  clearly justifies earlier closure.
+- Do not open a new generation while the current one still has live milestones
+  or stale specs that should have been cleaned up first.

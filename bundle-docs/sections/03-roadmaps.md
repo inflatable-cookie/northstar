@@ -54,18 +54,35 @@ Start a new generation (`g02`) only when manually triggered.
 
 Generations are meant to be substantial sequencing eras, not tiny buckets of
 one or two milestone files. In a long-running repo, a healthy generation will
-often cover tens of roadmap files before rollover becomes useful.
+often cover tens of roadmap files before rollover becomes useful. As a default
+posture, expect roughly 20 to 40 milestone files inside one generation before
+rollover is even worth considering. Treat that as a judgment guardrail, not an
+automatic file-count trigger.
 
 Typical manual triggers:
 - a major vision, architecture, or contract shift requires a fresh sequencing
   baseline
-- the current generation has accumulated enough closed and deferred lanes that
-  a new boundary is genuinely clearer for execution
+- the current generation has been fully closed out and a fresh boundary is now
+  genuinely clearer for execution
 - the existing generation would become misleading if new work kept landing
   under its old sequencing assumptions
 
 Do not roll a generation just because one milestone closed quickly or because a
 single external proof lane completed.
+
+Generation rollover is a closeout event, not a convenience move. Before opening
+`gNN+1`, all of the following must be true:
+
+- every milestone in `gNN/` is explicitly closed, superseded, or moved to
+  backlog so no roadmap file in the old generation still presents as active
+- the roadmap front doors and generation README agree that `gNN` is fully
+  closed and ready for rollover
+- `docs/specs/` has been purged of stale artifacts from the closing generation,
+  with closed specs and batch cards archived or removed so the active specs
+  tree no longer carries obsolete lane debris
+
+If those conditions are not met, stay in the current generation and repair the
+lane state there first.
 
 Record rollover reason in `docs/roadmaps/generation-index.md`.
 

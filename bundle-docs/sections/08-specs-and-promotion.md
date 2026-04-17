@@ -108,6 +108,9 @@ Apply this rule:
   canonical surfaces for attention
 - treat spec cleanup as part of normal closeout and recovery work, not only as
   an occasional cleanup drive
+- before roadmap generation rollover, purge stale generation-specific specs and
+  batch cards from the active specs tree so the next generation does not open
+  on inherited planning debris
 
 ## Spec lifecycle rule
 

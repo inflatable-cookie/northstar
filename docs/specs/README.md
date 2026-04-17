@@ -29,6 +29,9 @@ worked through.
 - Keep `docs/specs/` tidy so it mostly reflects active planning:
   keep active or still-useful specs, and archive or remove stale ones once the
   canonical surfaces already carry the durable truth.
+- Before roadmap generation rollover, purge stale generation-specific specs and
+  batch cards from the active tree so the next generation does not inherit dead
+  planning debris.
 - Use explicit lifecycle states for specs and batch-card lanes:
   - `active` for live planning
   - `retired-in-place` for short-lived traceability near active work

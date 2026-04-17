@@ -256,8 +256,20 @@ Work in this repo is not done unless:
   one or two milestone files.
 - In long-running repos, expect one generation to hold many milestones before a
   new generation is useful.
+- Treat roughly 20 to 40 milestones as the normal scale of a healthy
+  generation before rollover is even worth discussing.
 - Roll to a new generation only when the sequencing baseline itself needs a
   reset, not merely because one lane closed quickly.
+- Treat rollover as full generation closeout:
+  - every roadmap in the old generation must be explicitly closed, superseded,
+    or moved to backlog
+  - the roadmap front doors must reflect that closed state before the next
+    generation opens
+  - stale specs and batch cards from the closing generation must be archived or
+    removed from `docs/specs/` so the new generation does not inherit old lane
+    debris
+- If those closeout conditions are not satisfied, repair the current generation
+  instead of opening a new one.
 
 ### Strict-compliance audit and rollout
 
