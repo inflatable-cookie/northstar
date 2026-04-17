@@ -91,23 +91,27 @@ Then read:
     active only if it still governs live work, use `retired-in-place` only for
     short-lived traceability, and otherwise move it into
     `docs/specs/archive/` or remove it.
-14. If a card or short chain may auto-continue, make the continuation envelope
+14. Do not propose roadmap generation rollover as a shortcut around cleanup.
+    A new generation should normally come only after the current one has had a
+    substantial run, every old-generation roadmap is closed or rehomed, and
+    stale specs from that generation are purged from `docs/specs/`.
+15. If a card or short chain may auto-continue, make the continuation envelope
     explicit in file state: the in-bounds next card, the remaining ready chain,
     and the proof each transition depends on.
-15. When a card closes, refresh any front-door currentness surfaces that still
+16. When a card closes, refresh any front-door currentness surfaces that still
     name the active lane, current ready card, or recent evidence chain. A
     completed card must not still appear as the active ready card anywhere.
-16. Make the `Next Task` explicit enough that a later bare `continue` can
+17. Make the `Next Task` explicit enough that a later bare `continue` can
     resolve through file state without needing a recap prompt.
-17. When planning a material lane, make the higher-level lane owner, the next
+18. When planning a material lane, make the higher-level lane owner, the next
     few meaningful batches or milestone transitions, and the next planning
     checkpoint explicit so execution does not fall back into one-card
     improvisation after each closeout.
-18. In end-of-turn or meaningful checkpoint summaries, lead with the achieved
+19. In end-of-turn or meaningful checkpoint summaries, lead with the achieved
     planning outcome, the current lane state, and the next move. Mention
     validation only if it failed or materially affects confidence. Keep
     protocol detail short.
-19. Use glue-light, compressed writing for internal planning artifacts and chat
+20. Use glue-light, compressed writing for internal planning artifacts and chat
     output unless the task is explicitly public-facing or explanatory.
 
 ## Required Outputs

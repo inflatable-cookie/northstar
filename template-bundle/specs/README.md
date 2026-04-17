@@ -61,6 +61,9 @@ Make spec hygiene explicit in normal project maintenance:
   project
 - prefer a smaller active specs folder over preserving every historical plan in
   place forever
+- before roadmap generation rollover, purge closed or stale generation debris
+  from the active specs tree so the next generation starts from clean authority
+  rather than inherited planning clutter
 
 Treat `ready` as a real state:
 
