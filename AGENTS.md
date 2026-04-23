@@ -17,6 +17,8 @@ Scope: whole `northstar/` repository.
 - Prefer `effigy qa` for the default validation baseline.
 - Use `--repo <PATH>` only when intentionally targeting a different repo.
 - Fall back to raw shell commands only when Effigy does not yet cover the needed repo operation.
+- Do not add `package.json` scripts that re-export Effigy tasks; run
+  `effigy <task>` directly and keep package scripts package-native.
 
 For first-time local bring-up from outside this repo:
 - use `effigy bootstrap git@github.com:inflatable-cookie/northstar.git`

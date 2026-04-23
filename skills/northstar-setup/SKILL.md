@@ -14,6 +14,10 @@ Use this skill when the user asks to:
 - set up a stricter Northstar repo with stronger delivery guardrails
 - normalize a repo onto the Northstar automation stack
 
+Do not mirror Effigy tasks into `package.json` scripts. When a repo uses
+Effigy, write docs and agent guidance that call `effigy <task>` directly.
+Keep package scripts for package-native workflows only.
+
 ## Quick Start
 
 Start by confirming the repo shape, current docs posture, and the installed

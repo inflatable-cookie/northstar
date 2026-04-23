@@ -17,6 +17,9 @@ effigy test --plan
 Then prefer `effigy <task>` for supported repo work before falling back to raw
 tools.
 
+Do not add `package.json` scripts that re-export Effigy tasks. Use
+`package.json` scripts only for package-native workflows.
+
 ## Default Loop
 
 ```sh
