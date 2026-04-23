@@ -35,6 +35,10 @@ Keep release posture on the repos that really ship code or packages.
 
 ## Minimum Semantics
 
+Do not mirror these commands into `package.json` scripts. Agents and humans
+should run `effigy <task>` directly; package scripts should stay
+package-native.
+
 - `effigy tasks`
 - `effigy doctor` or `effigy health`
 - `effigy test --plan`
