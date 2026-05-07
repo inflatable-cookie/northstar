@@ -322,7 +322,7 @@ Every ready batch card should define:
 - validation commands
 - evidence required for closure
 - stop conditions
-- whether the next card may auto-start
+- whether the next card should auto-start (default: yes if ready)
 
 Batch cards sit inside a larger lane runway.
 They should not be treated as the only visible planning horizon when a lane is
@@ -468,7 +468,11 @@ be true:
 Autonomy should be pre-authorized through artifacts, not recreated by operator
 intervention.
 
-An agent may continue across consecutive ready batch cards only when all of the
+When a thread has a ready runway of multiple cards, the default behavior is to
+continue through them without pausing for operator acknowledgment at every
+boundary.
+
+An agent must continue across consecutive ready batch cards when all of the
 following are true:
 
 - the cards belong to the same active spec/roadmap lane
@@ -476,6 +480,13 @@ following are true:
 - the prior card's evidence gate passed
 - the execution policy for the project allows auto-continuation
 - no stop condition has been triggered
+
+The agent should only pause and wait for operator input when:
+
+- the next card is not yet ready
+- a stop condition is triggered
+- the runway ends and planning is needed to generate the next batch
+- an intent checkpoint requires operator direction
 
 Operators should not need to keep sending "continue" when the next ready card
 is already defined and permitted.
@@ -574,6 +585,11 @@ by the repo's own planning surfaces.
 - Batch cards define the exact execution unit.
 - Roadmaps sequence the cards into milestone lanes.
 - Logs prove what was completed and why.
+
+## Quick reference
+
+- [Glossary: Batch card, continuation envelope, stop/pause signals](../glossary.md#agent-and-thread-concepts)
+- [Glossary: Lane budget](../glossary.md#agent-and-thread-concepts)
 
 ## Next task
 
