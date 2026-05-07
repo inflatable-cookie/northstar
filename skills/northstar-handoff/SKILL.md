@@ -115,8 +115,9 @@ The handoff should include these sections in this order:
   user explicitly wants a temporary handoff before closeout.
 - Do not hand off only the provisional planning surface when canonical
   architecture/contracts already govern the work.
-- Do not imply that the next thread should keep auto-continuing unless the
-  remaining continuation envelope is explicit.
+- Auto-continuation is the default when the continuation envelope is explicit
+  and the next card is ready. Only signal a pause when there is a specific
+  reason to stop.
 - Do not declare the lane or thread complete solely because context budget is
   low; if the lane is still active, keep the normal closeout state honest and
   let the same thread continue after compaction when possible.
