@@ -1,5 +1,7 @@
 # <NNN> - <Batch Card Title>
 
+**Type: TEMPLATE** -- Copy and fill in for each execution batch (strict posture).
+
 Status: draft
 Owner: <owner>
 Updated: YYYY-MM-DD

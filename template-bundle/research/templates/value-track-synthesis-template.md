@@ -1,5 +1,7 @@
 # Value Track Synthesis Template
 
+**Type: TEMPLATE** -- Copy and fill in when comparing options.
+
 Status: Draft
 Track:
 Owner:

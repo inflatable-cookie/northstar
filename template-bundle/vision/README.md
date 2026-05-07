@@ -1,5 +1,7 @@
 # Vision
 
+**Type: REQUIRED** -- Every Northstar project needs this folder.
+
 Vision docs define long-term direction and constraints.
 They guide architecture and roadmap decisions without becoming delivery plans.
 

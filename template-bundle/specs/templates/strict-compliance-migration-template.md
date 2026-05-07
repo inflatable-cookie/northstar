@@ -1,5 +1,7 @@
 # <NNN> - <Strict Compliance Migration Title>
 
+**Type: TEMPLATE** -- Copy and fill in when migrating to strict posture.
+
 Status: active
 Owner: <owner>
 Updated: YYYY-MM-DD

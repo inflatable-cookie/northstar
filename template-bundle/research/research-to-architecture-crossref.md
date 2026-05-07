@@ -1,5 +1,7 @@
 # Research-to-Architecture Cross-Reference
 
+**Type: TEMPLATE** -- Copy and fill in to map research to architecture.
+
 Status: Draft
 Owner:
 Last updated:

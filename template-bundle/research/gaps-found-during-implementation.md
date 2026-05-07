@@ -1,5 +1,7 @@
 # Research Gaps Found During Implementation
 
+**Type: TEMPLATE** -- Copy and fill in to track implementation-discovered research gaps.
+
 Status: Draft
 Owner:
 Last updated:

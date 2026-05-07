@@ -1,8 +1,19 @@
 # Template Bundle
 
+**Type: PRODUCT ARTIFACT** -- Copy this directory or its `minimal/` subset into your project's `docs/`.
+
 This directory is the product artifact.
 
 The folders here are intended to be copied into a target project's `docs/` directory.
+
+## Quick Start: Choose Your Bundle
+
+| What you need | Copy this | Contents |
+|--------------|-----------|----------|
+| Minimal viable setup, no examples | `minimal/` | 5 core folders, READMEs only |
+| Full bundle with examples and templates | this directory | Core + optional add-ons + specimens |
+
+For first-time users: start with `minimal/`, then add optional folders as needed.
 
 ## Core structure
 
@@ -143,6 +154,14 @@ They also include a second specimen showing when refocus should force a clean
 `policy/` is the home for short repo-local rules that agent instruction files
 should point at rather than duplicating inline. Use it for lightweight
 allowlists and internal writing-style guidance.
+
+## Operating posture
+
+## Quick reference
+
+- [Visual map](../bundle-docs/visual-map.md) -- one-page overview
+- [Glossary](../bundle-docs/glossary.md) -- terminology
+- [Cheat sheet](../bundle-docs/cheat-sheet.md) -- naming, formats, commands
 
 ## Operating posture
 

@@ -1,5 +1,7 @@
 # Active Thread Style Reset Prompt
 
+**Type: OPTIONAL** -- Copy into your project's policy/ if you want this prompt available.
+
 Status: active
 Audience: operators
 

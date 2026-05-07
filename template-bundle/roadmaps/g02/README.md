@@ -1,5 +1,7 @@
 # g02 Milestones
 
+**Type: EXAMPLE** -- Shows a second generation. Remove from your project after reading.
+
 Milestone files in this generation use:
 
 - `001-<slug>.md`

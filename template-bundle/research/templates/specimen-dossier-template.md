@@ -1,5 +1,7 @@
 # Specimen Dossier Template
 
+**Type: TEMPLATE** -- Copy and fill in when documenting external systems.
+
 Status: Draft
 Specimen:
 Owner:

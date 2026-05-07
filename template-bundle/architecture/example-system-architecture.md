@@ -1,5 +1,7 @@
 # Example System Architecture
 
+**Type: EXAMPLE** -- Illustrates a completed architecture doc. Remove from your project after reading.
+
 Status: draft
 Owner: Core Team
 Updated: YYYY-MM-DD

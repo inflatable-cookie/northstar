@@ -1,5 +1,7 @@
 # 001 - Example Platform Reset
 
+**Type: EXAMPLE** -- Illustrates a generation rollover. Remove from your project after reading.
+
 Status: ready
 Owner: Core Team
 Created: YYYY-MM-DD

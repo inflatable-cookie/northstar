@@ -1,5 +1,7 @@
 # Discovery Intake Template
 
+**Type: TEMPLATE** -- Copy and fill in when starting research.
+
 Status: Draft
 Owner:
 Last updated:

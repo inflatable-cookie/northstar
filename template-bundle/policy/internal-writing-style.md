@@ -1,5 +1,7 @@
 # Internal Writing Style
 
+**Type: OPTIONAL** -- Copy into your project's policy/ if you want repo-local style rules.
+
 Status: active
 Audience: agents and operators
 

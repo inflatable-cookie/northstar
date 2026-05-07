@@ -1,5 +1,7 @@
 # Logs
 
+**Type: REQUIRED** -- Every Northstar project needs this folder.
+
 Logs capture dated evidence and assessments.
 
 ## Segmentation model

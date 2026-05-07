@@ -20,6 +20,12 @@ Track template sections and their definition state.
 - [09-standard-docs-spine.md](./09-standard-docs-spine.md) - active
 - [10-automation-runtime-policy.md](./10-automation-runtime-policy.md) - active
 
+## Quick reference
+
+- [Visual map](../visual-map.md) -- one-page overview
+- [Glossary](../glossary.md) -- terminology
+- [Cheat sheet](../cheat-sheet.md) -- naming and formats
+
 ## Next task
 
 Keep the standard docs spine, delivery layer, specs-promotion model, and

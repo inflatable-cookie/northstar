@@ -1,5 +1,7 @@
 # Translation Memo Template
 
+**Type: TEMPLATE** -- Copy and fill in when bridging research to architecture.
+
 Status: Draft
 Memo:
 Owner:

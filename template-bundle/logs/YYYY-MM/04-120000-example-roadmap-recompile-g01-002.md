@@ -1,5 +1,7 @@
 # Roadmap g01.002 Batch 2.2 Recompile
 
+**Type: EXAMPLE** -- Illustrates a roadmap recompile log. Remove from your project after reading.
+
 Status: draft
 Created: YYYY-MM-DD
 Roadmap: g01.002

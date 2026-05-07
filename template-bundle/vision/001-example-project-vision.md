@@ -1,5 +1,7 @@
 # 001 Example Project Vision
 
+**Type: EXAMPLE** -- Illustrates what a completed vision artifact looks like. Remove from your project after reading.
+
 Status: draft
 Owner: Core Team
 Purpose: show a concrete long-horizon vision artifact for teams adopting Northstar.

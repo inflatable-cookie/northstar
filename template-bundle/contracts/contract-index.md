@@ -1,5 +1,7 @@
 # Contract Index
 
+**Type: REQUIRED** (strict posture) -- Maintain this index in all strict-posture repos. Optional in baseline.
+
 Status: draft
 Owner: <owner>
 Updated: YYYY-MM-DD

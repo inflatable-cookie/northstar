@@ -1,5 +1,7 @@
 # System Architecture
 
+**Type: REQUIRED** -- Every Northstar project needs this file.
+
 Status: draft
 Owner: <owner>
 Updated: YYYY-MM-DD

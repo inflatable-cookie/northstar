@@ -1,5 +1,7 @@
 # <NNN> - <Milestone Title>
 
+**Type: TEMPLATE** -- Copy and fill in for each roadmap milestone.
+
 Status: draft
 Owner: <owner>
 Created: YYYY-MM-DD

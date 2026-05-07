@@ -1,5 +1,7 @@
 # g01 Milestones
 
+**Type: REQUIRED** -- One README per active generation.
+
 Milestone files in this generation use:
 
 - `001-<slug>.md`

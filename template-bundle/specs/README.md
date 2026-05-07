@@ -1,5 +1,7 @@
 # Specs
 
+**Type: OPTIONAL** (strict posture) -- Add this folder when using strict posture and provisional planning.
+
 Use this folder when a change needs provisional planning before it is settled
 into architecture and contracts.
 

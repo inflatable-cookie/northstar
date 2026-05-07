@@ -1,5 +1,7 @@
 # Risk Checkpoint Ledger
 
+**Type: TEMPLATE** -- Optional governance artifact for tracking strategic risks.
+
 Status: draft
 Updated: YYYY-MM-DD
 

@@ -1,5 +1,7 @@
 # Handoff: <Topic>
 
+**Type: TEMPLATE** -- Copy and fill in when creating continuation briefs.
+
 Status: active
 Created: YYYY-MM-DD
 Roadmap: <gNN.NNN or none>

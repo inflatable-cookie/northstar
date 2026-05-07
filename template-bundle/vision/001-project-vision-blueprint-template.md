@@ -1,5 +1,7 @@
 # 001 Project Vision Blueprint
 
+**Type: TEMPLATE** -- Copy this file, remove this header, and fill in your project details.
+
 Status: draft
 Owner: <owner>
 Purpose: <long-horizon intent>

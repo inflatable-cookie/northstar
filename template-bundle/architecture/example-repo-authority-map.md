@@ -1,5 +1,7 @@
 # Example Repo Authority Map
 
+**Type: EXAMPLE** -- Illustrates a completed repo authority map. Remove from your project after reading.
+
 Status: draft
 Owner: Core Team
 Updated: YYYY-MM-DD

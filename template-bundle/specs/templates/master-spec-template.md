@@ -1,5 +1,7 @@
 # <NNN> - <Master Spec Title>
 
+**Type: TEMPLATE** -- Copy and fill in for provisional planning (strict posture).
+
 Status: draft
 Owner: <owner>
 Updated: YYYY-MM-DD

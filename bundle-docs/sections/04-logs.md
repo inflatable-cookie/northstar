@@ -89,6 +89,11 @@ evidence.
 
 Each log must include roadmap references in `gNN.NNN` format and can include research artifact links when those artifacts materially changed in the batch.
 
+## Quick reference
+
+- [Glossary: Batch, closeout, continuation envelope](../glossary.md#execution-and-workflow)
+- [Cheat sheet: Log naming](../cheat-sheet.md#file-naming)
+
 ## Next task
 
 Keep log doctrine and templates aligned so currentness surfaces remain useful as

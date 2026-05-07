@@ -40,11 +40,32 @@ repository.
 
 ## Useful Entry Points
 
+- New to the system: [`visual-map.md`](./visual-map.md) → [`glossary.md`](./glossary.md) → [`cheat-sheet.md`](./cheat-sheet.md)
 - Audit or migration work: [`sweeps/README.md`](./sweeps/README.md)
 - Operator workflow: [`operators/README.md`](./operators/README.md)
 - Operator-stack maintenance: [`maintenance/README.md`](./maintenance/README.md)
-- Skill architecture: [`skills/README.md`](./skills/README.md)
+- Agent skills (installable): [`skills/README.md`](./skills/README.md)
 - Deprecated `meta/` migration: [`meta-folder-migration.md`](./meta-folder-migration.md)
+
+## Agent Skills
+
+Five public skills that agents can install and invoke:
+
+| Skill | Use when |
+|-------|----------|
+| `northstar-setup` | Bootstrap or migrate a repo |
+| `northstar-plan` | Plan from scratch or compile roadmaps |
+| `northstar-recover` | Drifted plans, replanning, sweeps |
+| `northstar-research` | Research intake and promotion |
+| `northstar-handoff` | Thread continuation briefs |
+
+Each skill lives in `../skills/<skill-name>/` and routes to internal modes.
+
+## Quick reference
+
+- [Visual map](visual-map.md) -- one-page overview
+- [Glossary](glossary.md) -- terminology
+- [Cheat sheet](cheat-sheet.md) -- naming, formats, commands
 
 ## Governance posture
 

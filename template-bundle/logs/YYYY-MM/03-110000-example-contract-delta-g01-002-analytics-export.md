@@ -1,5 +1,7 @@
 # Roadmap g01.002 Batch 2.1 Contract Delta
 
+**Type: EXAMPLE** -- Illustrates a contract delta log. Remove from your project after reading.
+
 Status: draft
 Created: YYYY-MM-DD
 Roadmap: g01.002

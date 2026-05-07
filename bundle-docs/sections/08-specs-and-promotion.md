@@ -198,6 +198,11 @@ straight from those surfaces into roadmap execution.
 - Roadmaps sequence approved work.
 - Logs prove what was actually completed.
 
+## Quick reference
+
+- [Glossary: Specs, promotion](../glossary.md#research-and-promotion)
+- [Cheat sheet: Posture quick pick](../cheat-sheet.md#posture-quick-pick)
+
 ## Next task
 
 Apply the lifecycle and archive rule to a live specs surface so the active tree

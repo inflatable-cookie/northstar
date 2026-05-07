@@ -1,0 +1,142 @@
+# Northstar Glossary
+
+One-page reference for terms used across Northstar docs.
+
+## Core Concepts
+
+**Vision**
+: Long-term direction and constraints. Not a delivery plan. The first required write in any new Northstar project.
+
+**Architecture**
+: System shape, boundaries, and inventory. Defines what exists and how it relates.
+
+**Contracts**
+: Explicit non-code agreements that constrain behavior -- API rules, policy, cross-repo ownership. Stable reference artifacts.
+
+**Specs**
+: Provisional planning surfaces. Temporary documents that shape a change before its durable outcomes are promoted into architecture or contracts.
+
+**Roadmaps**
+: Executable milestone plans derived from vision, architecture, and contracts. Compiled after specs are promoted.
+
+**Logs**
+: Dated evidence and decision records. Written per completed batch, not per task.
+
+## Posture and Adoption
+
+**Baseline**
+: The standard five-folder spine: `vision/`, `architecture/`, `contracts/`, `roadmaps/`, `logs/`. Enough for normal routing and clear active-lane tracking.
+
+**Strict**
+: Baseline plus additional guardrails: `contracts/contract-index.md`, `contracts/001-working-rules-template.md`, `architecture/product-guardrails.md`, `specs/`. Used when execution spans high-risk boundaries or needs longer autonomous runs.
+
+**Posture**
+: The current compliance level of a repo. A repo may be baseline, strict, or in migration between them.
+
+**Lane-first adoption**
+: Adopting strict posture for one active lane first, then expanding. The normal migration path, not a half-complete state.
+
+## Execution and Workflow
+
+**Batch**
+: A meaningful chunk of work executed together. The unit of logging and closeout.
+
+**Batch card**
+: A short spec-like document that defines one batch's scope, evidence, and done criteria.
+
+**Generation**
+: A numbered era of roadmap milestones (`g01`, `g02`, `g03`). Holds 20-40 milestones before rollover is warranted.
+
+**Milestone**
+: One roadmap file inside a generation, named `NNN-<slug>.md`. Referenced as `gNN.NNN`.
+
+**Lane**
+: An active line of work within a roadmap. One active queue plus a backlog.
+
+**Backlog**
+: Deferred work. Lives only at `docs/roadmaps/backlog/`.
+
+## Planning and Control
+
+**Planning gate**
+: A required checkpoint. Execution stops when a required contract, architecture coverage, or repo authority is missing.
+
+**Planning gap**
+: Missing coverage that blocks roadmap execution. Recorded as a gap rather than inferred.
+
+**Currentness**
+: The property of front-door docs (`README.md`, `generation-index.md`) accurately reflecting the active lane and recent evidence.
+
+**Currentness curation**
+: The periodic or closeout-driven task of aligning front doors to active state.
+
+## Research and Promotion
+
+**Research**
+: Comparative, source-backed exploration. Problem-led, not collection-building.
+
+**Promotion**
+: Moving durable outcomes from provisional specs into canonical architecture or contracts.
+
+**Specimen dossier**
+: A research artifact that documents one external system or approach.
+
+**Value track**
+: A research artifact that compares options along one dimension.
+
+**Translation memo**
+: A research artifact that bridges findings to actionable architecture or contract changes.
+
+## Agent and Thread Concepts
+
+**Continuation envelope**
+: A brief that lets another thread pick up work without reconstructing context.
+
+**Stop signal**
+: An explicit reason why autonomous execution halted (planning gap, contract violation, budget exhausted).
+
+**Pause signal**
+: An explicit reason why a lane paused cleanly (budget hit, waiting for human input, external dependency).
+
+**Lane budget**
+: A bounded autonomy limit for a lane. Execution pauses when the budget is exhausted.
+
+**Sweep**
+: A structured audit-and-repair pass over project docs. Eight defined sweeps cover structure through planning gates.
+
+**Handoff**
+: A continuation brief created when one thread ends and another must continue.
+
+## Files and Naming
+
+**Slug**
+: A short kebab-case identifier used in filenames: `001-my-feature.md`.
+
+**Generation key**
+: The `gNN` format for generation folders.
+
+**Generation index**
+: `docs/roadmaps/generation-index.md` -- the record of active generation and rollover history.
+
+**Contract index**
+: `docs/contracts/contract-index.md` -- the inventory of all active contracts.
+
+## Quick Reference Table
+
+| Term | What it is | Where it lives |
+|------|-----------|----------------|
+| Vision | Long-term intent | `docs/vision/` |
+| Architecture | System shape | `docs/architecture/` |
+| Contracts | Behavior rules | `docs/contracts/` |
+| Specs | Provisional plans | `docs/specs/` |
+| Roadmaps | Executable milestones | `docs/roadmaps/gNN/` |
+| Logs | Evidence | `docs/logs/YYYY-MM/` |
+| Backlog | Deferred work | `docs/roadmaps/backlog/` |
+| Policy | Repo-local rules | `docs/policy/` |
+
+## Where to Start
+
+- New to Northstar: [`bundle-docs/README.md`](./README.md)
+- Want a quick visual overview: [`visual-map.md`](./visual-map.md)
+- Want copy-ready templates: [`template-bundle/README.md`](../template-bundle/README.md)
+- Want naming conventions fast: [`cheat-sheet.md`](./cheat-sheet.md)
