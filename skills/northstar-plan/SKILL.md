@@ -95,9 +95,11 @@ Then read:
     A new generation should normally come only after the current one has had a
     substantial run, every old-generation roadmap is closed or rehomed, and
     stale specs from that generation are purged from `docs/specs/`.
-15. If a card or short chain may auto-continue, make the continuation envelope
-    explicit in file state: the in-bounds next card, the remaining ready chain,
-    and the proof each transition depends on.
+15. Auto-continuation is the default when the next card is ready and belongs to
+    the same lane. Make the continuation envelope explicit in file state for
+    each ready card: the in-bounds next card, the remaining ready chain, and the
+    proof each transition depends on. Only mark auto-start as conditional or
+    disabled when there is a specific reason to pause.
 16. When a card closes, refresh any front-door currentness surfaces that still
     name the active lane, current ready card, or recent evidence chain. A
     completed card must not still appear as the active ready card anywhere.

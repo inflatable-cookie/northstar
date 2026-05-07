@@ -9,6 +9,9 @@ master spec lane.
   fresh planning
 - keep one live ready card at a time for the active strict lane
 - completed cards must not remain advertised as ready
+- default to auto-continuation when the next card is ready and in the same lane;
+  only pause when a stop condition, intent checkpoint, or lane budget boundary
+  requires it
 - if there is no ready card, the lane is back in planning
 
 ## Current Posture

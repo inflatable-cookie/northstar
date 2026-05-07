@@ -209,8 +209,9 @@ Work in this repo is not done unless:
 
 ### Execution autonomy
 
-- An agent may continue across consecutive ready batch cards without waiting
-  for a manual "continue" prompt.
+- When a thread has a ready runway of cards, the default behavior is to
+  continue through them without pausing for operator acknowledgment at every
+  boundary.
 - Baseline roadmap-only repos can still support healthy routing and shorter
   bounded runs, but the fuller continuation-envelope, lane-budget, and
   pause-signal model should be treated as a stricter `specs/` plus batch-card
