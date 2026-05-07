@@ -1,5 +1,7 @@
 # Research
 
+**Type: OPTIONAL** -- Add this folder only when your project needs external comparison or source-backed exploration.
+
 Purpose: give the project a durable place to study external systems, standards, competitors, and research programs without mixing raw research into architecture docs or execution roadmaps.
 
 ## When to use this section

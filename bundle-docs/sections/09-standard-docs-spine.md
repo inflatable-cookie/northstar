@@ -137,6 +137,11 @@ The template bundle should make both modes copy-ready:
 - nested docs-authority repos should have an explicit native Effigy starter,
   not only prose about adapting the root-owned one
 
+## Quick reference
+
+- [Visual map: Doc hierarchy](../visual-map.md#doc-hierarchy)
+- [Cheat sheet: Folder structure](../cheat-sheet.md#folder-structure)
+
 ## Next Task
 
 Keep `northstar-setup`, the template bundle, and repo checks aligned with this

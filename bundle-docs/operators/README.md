@@ -11,8 +11,14 @@ The normal day-to-day surfaces are:
 - `live-project-refocus-specimen.md` for a worked recovery example
 
 Maintenance-only pilot and pruning docs now live under
-[maintenance/README.md](~/Dev/projects/northstar/bundle-docs/maintenance/README.md)
+[maintenance/README.md](../maintenance/README.md)
 so the normal operator front door stays short.
+
+## Quick reference
+
+- [Visual map](../visual-map.md) -- one-page overview
+- [Glossary](../glossary.md) -- terminology
+- [Cheat sheet](../cheat-sheet.md) -- naming, formats, commands
 
 ## Next task
 

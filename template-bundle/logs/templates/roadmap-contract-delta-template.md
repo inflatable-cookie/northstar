@@ -1,5 +1,7 @@
 # Roadmap <gNN.NNN> Batch <N> Contract Delta
 
+**Type: TEMPLATE** -- Copy and fill in when a batch changes contracts.
+
 Status: draft
 Created: YYYY-MM-DD
 Roadmap: gNN.NNN

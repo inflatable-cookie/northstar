@@ -1,5 +1,7 @@
 # Backlog: <Item Name>
 
+**Type: TEMPLATE** -- Copy and fill in for each backlog item.
+
 Status: backlog
 Priority: <low / medium / high>
 Estimated effort: <range>

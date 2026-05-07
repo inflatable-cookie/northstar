@@ -1,5 +1,7 @@
 # Decision Log: <Decision Title>
 
+**Type: TEMPLATE** -- Copy and fill in for major decisions.
+
 Status: draft
 Created: YYYY-MM-DD
 Roadmap: <gNN.NNN or none>

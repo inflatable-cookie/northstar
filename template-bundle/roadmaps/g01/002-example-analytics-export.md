@@ -1,5 +1,7 @@
 # 002 - Example Analytics Export Refocus
 
+**Type: EXAMPLE** -- Illustrates a blocked milestone and planning gap. Remove from your project after reading.
+
 Status: blocked
 Owner: Core Team
 Created: YYYY-MM-DD

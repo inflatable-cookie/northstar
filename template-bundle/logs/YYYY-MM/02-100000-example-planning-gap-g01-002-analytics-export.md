@@ -1,5 +1,7 @@
 # Planning Gap g01.002 Analytics Export
 
+**Type: EXAMPLE** -- Illustrates a planning gap log. Remove from your project after reading.
+
 Status: draft
 Created: YYYY-MM-DD
 Roadmap: g01.002

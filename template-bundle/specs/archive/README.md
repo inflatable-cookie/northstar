@@ -1,5 +1,7 @@
 # Specs Archive
 
+**Type: OPTIONAL** (strict posture) -- Create when you have archived specs to preserve.
+
 Use this folder for closed planning artifacts that should be preserved for
 traceability but no longer belong in the active `docs/specs/` surface.
 

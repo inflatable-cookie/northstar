@@ -1,5 +1,7 @@
 # Roadmap g02.001 Batch 1.1 Closure
 
+**Type: EXAMPLE** -- Illustrates a post-rollover batch closure. Remove from your project after reading.
+
 Status: draft
 Created: YYYY-MM-DD
 Roadmap: g02.001

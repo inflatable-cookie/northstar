@@ -1,5 +1,7 @@
 # Source Hub Template
 
+**Type: TEMPLATE** -- Copy and fill in when organizing research sources.
+
 Status: Draft
 Hub:
 Owner:

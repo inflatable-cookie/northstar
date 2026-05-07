@@ -28,8 +28,8 @@ If you cannot trust the current state:
 - if the roadmap exists but no longer feels trustworthy, it needs recovery
 - if you are not sure which of those is true, run the sweep pack first
 
-- [sweeps/README.md](~/Dev/projects/northstar/bundle-docs/sweeps/README.md)
-- [08-planning-gate-sweep.md](~/Dev/projects/northstar/bundle-docs/sweeps/08-planning-gate-sweep.md)
+- [sweeps/README.md](../sweeps/README.md)
+- [08-planning-gate-sweep.md](../sweeps/08-planning-gate-sweep.md)
 
 ## Then Choose The Right Kind Of Work
 
@@ -51,13 +51,21 @@ If you cannot trust the current state:
 
 If humans are going to reuse the same opener across multiple threads, use:
 
-- [strict-planning-starter-prompt.md](~/Dev/projects/northstar/bundle-docs/operators/strict-planning-starter-prompt.md)
-- [project-refocus-starter-prompt.md](~/Dev/projects/northstar/bundle-docs/operators/project-refocus-starter-prompt.md)
+- [strict-planning-starter-prompt.md](./strict-planning-starter-prompt.md)
+- [project-refocus-starter-prompt.md](./project-refocus-starter-prompt.md)
 
 ## If You Need An Example
 
-- Use [live-project-refocus-specimen.md](~/Dev/projects/northstar/bundle-docs/operators/live-project-refocus-specimen.md)
+- Use [live-project-refocus-specimen.md](./live-project-refocus-specimen.md)
   to see what recovery looks like in practice.
+
+## If You Are New To Northstar
+
+Start here instead of wading through all docs:
+
+1. [Visual Map](../visual-map.md) -- one-page overview of how everything fits
+2. [Glossary](../glossary.md) -- terminology reference
+3. [Cheat Sheet](../cheat-sheet.md) -- naming conventions and quick rules
 
 ## Normal Loops
 
@@ -73,9 +81,9 @@ Drifted or unclear repo:
 
 These are for maintaining Northstar itself, not for normal repo operation:
 
-- [maintenance/README.md](~/Dev/projects/northstar/bundle-docs/maintenance/README.md)
+- [maintenance/README.md](../maintenance/README.md)
 
 ## Next task
 
-Keep shortening the healthy active-repo path until a human can reach the next
-valid batch with minimal extra reading.
+Validate whether the new visual map and glossary actually reduce the time from
+"open repo" to "start next batch" for active operators.

@@ -1,5 +1,7 @@
 # Roadmap Backlog
 
+**Type: REQUIRED** -- The only backlog pattern in Northstar.
+
 Use this folder for deferred items that are not in the active queue.
 
 ## Promotion rules

@@ -1,5 +1,7 @@
 # Example System Inventory
 
+**Type: EXAMPLE** -- Illustrates a completed system inventory. Remove from your project after reading.
+
 Status: draft
 Owner: Core Team
 Updated: YYYY-MM-DD

@@ -1,5 +1,7 @@
 # Roadmap Rollover Decision g02
 
+**Type: EXAMPLE** -- Illustrates a generation rollover log. Remove from your project after reading.
+
 Status: draft
 Created: YYYY-MM-DD
 Roadmap: g01 -> g02

@@ -1,5 +1,7 @@
 # Roadmaps
 
+**Type: REQUIRED** -- Every Northstar project needs this folder.
+
 Roadmaps are executable milestone plans derived from vision, architecture, and
 contracts.
 They compile contract-approved work into execution batches after durable

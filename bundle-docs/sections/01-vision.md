@@ -53,6 +53,11 @@ Do not include milestone task lists or delivery sequencing detail.
 - Architecture and roadmaps derive from accepted vision constraints.
 - `001` must exist before first roadmap milestone is created.
 
+## Quick reference
+
+- [Glossary: Vision](../glossary.md#core-concepts)
+- [Cheat sheet: Naming](../cheat-sheet.md#file-naming)
+
 ## Next task
 
 Align vision starter templates with the rubric/scorecard/checkpoint artifacts and keep review cadence explicitly periodic.

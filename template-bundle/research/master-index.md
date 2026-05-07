@@ -1,5 +1,7 @@
 # Research Master Index
 
+**Type: TEMPLATE** -- Copy and fill in to navigate research artifacts.
+
 Status: Draft
 Owner:
 Last updated:

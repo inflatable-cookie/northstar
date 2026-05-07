@@ -1,5 +1,7 @@
 # Roadmap Gate Log <gNN.NNN>
 
+**Type: TEMPLATE** -- Copy and fill in for planning gate reviews.
+
 Status: draft
 Created: YYYY-MM-DD
 Roadmap: gNN.NNN

@@ -1,5 +1,7 @@
 # Research-to-Implementation Playbook
 
+**Type: TEMPLATE** -- Copy and adapt for your project's research-to-delivery workflow.
+
 Status: Draft
 Owner:
 Last updated:

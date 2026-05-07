@@ -1,5 +1,7 @@
 # 001 - Working Rules
 
+**Type: TEMPLATE** -- Required for strict posture. Copy, remove this header, and adapt to your repo.
+
 Status: active
 Owner: <owner>
 Updated: YYYY-MM-DD

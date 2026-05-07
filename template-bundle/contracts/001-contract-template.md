@@ -1,5 +1,7 @@
 # 001 Contract Template
 
+**Type: TEMPLATE** -- Copy this file, remove this header, and fill in your contract details.
+
 Status: draft
 Owner: <owner>
 Updated: YYYY-MM-DD

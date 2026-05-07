@@ -45,3 +45,9 @@ At sweep completion, the agent should return:
 - validation checks run
 - unresolved items (if any)
 - next task
+
+## Quick reference
+
+- [Glossary: Sweep](../glossary.md#execution-and-workflow)
+- [Cheat sheet: Naming](../cheat-sheet.md#file-naming)
+- [Operator quick start](../operators/operator-quick-start.md)

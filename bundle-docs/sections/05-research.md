@@ -132,6 +132,11 @@ Keep tentative findings in `research/` until they can answer all of:
   finding defines an execution-relevant boundary or rule.
 - Implementation decision records and research-to-architecture crossrefs are optional support artifacts inside `research/`, not replacements for canonical architecture or roadmap docs.
 
+## Quick reference
+
+- [Glossary: Research and promotion](../glossary.md#research-and-promotion)
+- [Glossary: Specimen dossier, value track, translation memo](../glossary.md#research-and-promotion)
+
 ## Next task
 
 Pilot the starter pack in one live project and confirm whether Northstar should keep the generic `specimen-dossiers/` naming or document approved aliases per domain.

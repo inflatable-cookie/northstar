@@ -1,5 +1,7 @@
 # Repo Authority Map
 
+**Type: REQUIRED** (multi-repo) -- Define repo ownership and authority boundaries.
+
 Status: draft
 Owner: <owner>
 Updated: YYYY-MM-DD

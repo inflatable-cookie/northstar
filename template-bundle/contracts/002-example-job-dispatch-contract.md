@@ -1,5 +1,7 @@
 # 002 Example Job Dispatch Contract
 
+**Type: EXAMPLE** -- Illustrates a completed contract. Remove from your project after reading.
+
 Status: draft
 Owner: Platform Team
 Updated: YYYY-MM-DD

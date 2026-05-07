@@ -1,5 +1,7 @@
 # Vision Tag Rubric
 
+**Type: TEMPLATE** -- Optional governance artifact for periodic vision reviews.
+
 Status: draft
 Updated: YYYY-MM-DD
 

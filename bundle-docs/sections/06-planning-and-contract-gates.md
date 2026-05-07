@@ -164,6 +164,11 @@ multi-repo or seam-heavy systems, contracts remain important.
 - Roadmaps sequence only the work already authorized by those surfaces.
 - Logs prove what was changed and why.
 
+## Quick reference
+
+- [Glossary: Planning gate, planning gap](../glossary.md#planning-and-control)
+- [Glossary: Posture and adoption](../glossary.md#posture-and-adoption)
+
 ## Next task
 
 Pilot the planning gate on a live multi-repo program and tune the minimum

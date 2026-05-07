@@ -69,10 +69,11 @@ Keep milestone task sequencing out of architecture docs.
 - Must link to research translation memos when a boundary depends on comparative findings.
 - Must expose clear handoff points for roadmap milestones.
 
-## Glossary decision
+## Quick reference
 
-A dedicated glossary file is optional, not required in v1.
-Teams can add `docs/architecture/glossary.md` when term drift appears.
+- [Glossary: Architecture](../glossary.md#core-concepts)
+- [Glossary: Posture and adoption](../glossary.md#posture-and-adoption)
+- [Cheat sheet: Folder structure](../cheat-sheet.md#folder-structure)
 
 ## Next task
 

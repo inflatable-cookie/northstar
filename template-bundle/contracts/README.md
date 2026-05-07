@@ -1,5 +1,7 @@
 # Contracts
 
+**Type: REQUIRED** -- Every Northstar project needs this folder.
+
 Use this folder for explicit non-code contracts that constrain behavior.
 
 Examples:

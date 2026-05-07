@@ -1,5 +1,7 @@
 # Research Templates
 
+**Type: OPTIONAL** -- These templates live here when research/ is in use.
+
 Reusable templates for Northstar's research workflow.
 
 ## Available templates

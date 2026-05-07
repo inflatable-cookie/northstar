@@ -1,5 +1,7 @@
 # Automation Adoption Note
 
+**Type: TEMPLATE** -- Optional. Copy and fill in when adding checker scripts.
+
 Status: draft
 Created: YYYY-MM-DD
 Scope: <roadmap/log scope>

@@ -1,5 +1,7 @@
 # Architecture
 
+**Type: REQUIRED** -- Every Northstar project needs this folder.
+
 Architecture docs define the system shape and invariants derived from vision.
 They set the realized constraints roadmap batches must honor.
 

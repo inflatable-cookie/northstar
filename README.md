@@ -3,6 +3,8 @@
 Northstar is a reusable documentation system for software projects.
 It standardizes how teams define direction, translate it into execution, and keep evidence of progress.
 
+**New here?** Start with the [visual map](bundle-docs/visual-map.md), then the [glossary](bundle-docs/glossary.md), then the [cheat sheet](bundle-docs/cheat-sheet.md).
+
 ## What Northstar Is For
 
 Use Northstar to keep project docs consistent across repositories without adding heavy process overhead.
@@ -32,9 +34,14 @@ Core flow:
 - [`skills/northstar-research/`](./skills/northstar-research/) and
   [`skills/northstar-handoff/`](./skills/northstar-handoff/) cover research
   synthesis/promotion and execution handoff.
+- [`skills/`](./skills/) -- installable agent skills for common workflows:
+  - `northstar-setup` -- bootstrap or migrate a repo
+  - `northstar-plan` -- plan from scratch or compile roadmaps
+  - `northstar-recover` -- replan, refocus, run sweeps
+  - `northstar-research` -- research intake and promotion
+  - `northstar-handoff` -- create continuation briefs
 - [`bundle-docs/skills/README.md`](./bundle-docs/skills/README.md) describes
-  the planned consolidation from the current skill set into a smaller public
-  surface.
+  skill architecture and consolidation.
 - [`scripts/`](./scripts/) contains repo maintenance helpers when needed.
 
 If you're trying to understand the human workflow rather than the bundle
@@ -70,12 +77,29 @@ repository.
 
 ## Quick Start (New Project)
 
+### Choose your starting posture
+
+| Situation | Start With | Command |
+|-----------|-----------|---------|
+| Simple project, small team, clear scope | Minimal starter (5 folders, no examples) | `rsync -a template-bundle/minimal/ /path/to/your-project/docs/` |
+| Want examples and templates | Full template bundle | `rsync -a template-bundle/ /path/to/your-project/docs/` |
+| Existing project, needs audit | Sweep pack | See [Migrate section](#migrate-an-existing-project) |
+
+### Baseline vs Strict
+
+**Baseline posture** -- use for most projects:
+- `vision/`, `architecture/`, `contracts/`, `roadmaps/`, `logs/`
+- Enough for normal routing and clear active-lane tracking
+
+**Strict posture** -- add when execution spans high-risk boundaries or needs longer autonomous runs:
+- Baseline plus `contracts/contract-index.md`, `contracts/001-working-rules-template.md`, `architecture/product-guardrails.md`, `specs/`
+- Enables continuation envelopes, lane budgets, pause signals, batch-card-driven autonomy
+
+**Migration path**: baseline → lane-first stricter adoption → expanding strict coverage → full strict compliance
+
+### Steps for any posture
+
 1. Copy the bundle into your target project docs folder.
-
-```bash
-rsync -a template-bundle/ /path/to/your-project/docs/
-```
-
 2. Start with vision first, then architecture. Add `research/` when external comparison or source-backed exploration is needed before committing new bets.
 3. Create roadmap milestones under `docs/roadmaps/gNN/` using `NNN-<slug>.md`.
 4. Log each completed batch in `docs/logs/YYYY-MM/` using `DD-HHMMSS-<slug>.md`.
@@ -107,7 +131,11 @@ rsync -a template-bundle/ /path/to/your-project/docs/
 ## Where To Start
 
 - New to Northstar: [`bundle-docs/README.md`](./bundle-docs/README.md)
+- Want a quick visual overview: [`bundle-docs/visual-map.md`](./bundle-docs/visual-map.md)
+- Want terminology reference: [`bundle-docs/glossary.md`](./bundle-docs/glossary.md)
+- Want naming conventions fast: [`bundle-docs/cheat-sheet.md`](./bundle-docs/cheat-sheet.md)
 - Want the copy-ready docs bundle: [`template-bundle/README.md`](./template-bundle/README.md)
+- Want a minimal starter (5 folders, no examples): [`template-bundle/minimal/README.md`](./template-bundle/minimal/README.md)
 - Want Northstar's own live project docs: [`docs/README.md`](./docs/README.md)
 - Want the operator workflow: [`bundle-docs/operators/README.md`](./bundle-docs/operators/README.md)
 - Migrating or auditing a repo: [`bundle-docs/sweeps/README.md`](./bundle-docs/sweeps/README.md)
@@ -138,5 +166,4 @@ Northstar is intentionally lean:
 
 ## Next task
 
-Keep simplifying the front doors until a human can tell where to start without
-reading an inventory of files first.
+Validate that the new front doors (visual map, glossary, minimal starter, cheat sheet) actually reduce onboarding time. Measure by timing a fresh-user walkthrough from repo clone to minimal bundle copy.

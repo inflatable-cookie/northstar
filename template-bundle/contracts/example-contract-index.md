@@ -1,5 +1,7 @@
 # Example Contract Index
 
+**Type: EXAMPLE** -- Illustrates a completed contract index. Remove from your project after reading.
+
 Status: draft
 Owner: Core Team
 Updated: YYYY-MM-DD

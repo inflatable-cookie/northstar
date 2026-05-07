@@ -1,5 +1,7 @@
 # Roadmap Generation Index
 
+**Type: REQUIRED** -- Track active generation and rollover history.
+
 Status: active
 Updated: 2026-03-05
 

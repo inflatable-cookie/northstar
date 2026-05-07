@@ -1,5 +1,7 @@
 # System Inventory
 
+**Type: REQUIRED** (strict posture) -- Enumerate all system elements and their planning coverage.
+
 Status: draft
 Owner: <owner>
 Updated: YYYY-MM-DD

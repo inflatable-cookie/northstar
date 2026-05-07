@@ -1,5 +1,7 @@
 # Value Tracks
 
+**Type: OPTIONAL** -- Create when you have cross-specimen syntheses.
+
 Use this folder to synthesize multiple dossiers around one problem area.
 Value tracks should turn many specimen-specific observations into a smaller set of repeated patterns, tradeoffs, and project implications.
 

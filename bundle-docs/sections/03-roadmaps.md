@@ -148,6 +148,12 @@ Only add a new script/checker when all are true:
 
 If these conditions are not met, keep validation in batch logs as human-run checks.
 
+## Quick reference
+
+- [Glossary: Generation, milestone, lane](../glossary.md#execution-and-workflow)
+- [Glossary: Currentness, backlog](../glossary.md#execution-and-workflow)
+- [Cheat sheet: Reference keys](../cheat-sheet.md#reference-keys)
+
 ## Next task
 
 Keep roadmap doctrine, templates, and currentness surfaces aligned around the

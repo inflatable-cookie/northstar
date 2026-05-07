@@ -1,5 +1,7 @@
 # Discovery Triage Log Template
 
+**Type: TEMPLATE** -- Copy and fill in when triaging research signals.
+
 Status: Draft
 Owner:
 Last updated:

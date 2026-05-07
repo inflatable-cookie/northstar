@@ -1,5 +1,7 @@
 # Policy
 
+**Type: OPTIONAL** -- Add this folder for repo-local rules and style guidance.
+
 Use this folder for small repo-local rules that should be easy for agents and
 operators to reference without embedding long instructions in `AGENTS.md` or
 `CLAUDE.md`.

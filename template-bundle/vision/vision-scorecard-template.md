@@ -1,5 +1,7 @@
 # Vision Scorecard
 
+**Type: TEMPLATE** -- Optional governance artifact for periodic vision reviews.
+
 Status: draft
 Period: <YYYY-MM or YYYY-Q#>
 Updated: YYYY-MM-DD

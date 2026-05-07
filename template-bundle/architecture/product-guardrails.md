@@ -1,5 +1,7 @@
 # Product Guardrails
 
+**Type: REQUIRED** (strict posture) -- Define execution constraints for strict-posture repos.
+
 Status: draft
 Owner: <owner>
 Updated: YYYY-MM-DD

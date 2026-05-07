@@ -1,5 +1,7 @@
 # Roadmap Currentness Log
 
+**Type: TEMPLATE** -- Optional. Copy and fill in when currentness cleanup is the batch.
+
 Status: draft
 Created: YYYY-MM-DD
 Scope: <roadmap generation / project scope>

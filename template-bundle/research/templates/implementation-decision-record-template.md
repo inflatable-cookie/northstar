@@ -1,5 +1,7 @@
 # Implementation Decision Record Template
 
+**Type: TEMPLATE** -- Copy and fill in for implementation decisions.
+
 ## Feature
 
 Name:

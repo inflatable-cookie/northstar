@@ -1,5 +1,7 @@
 # 001 - Example Foundation Batch
 
+**Type: EXAMPLE** -- Shows what a completed milestone looks like. Remove from your project after reading.
+
 Status: draft
 Owner: Core Team
 Created: YYYY-MM-DD

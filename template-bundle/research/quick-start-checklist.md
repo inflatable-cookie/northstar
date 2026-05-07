@@ -1,5 +1,7 @@
 # Research Integration Quick-Start Checklist
 
+**Type: TEMPLATE** -- Copy and adapt for your project's research workflow.
+
 Use this when research starts feeding active implementation work.
 
 ## Before Starting a Task

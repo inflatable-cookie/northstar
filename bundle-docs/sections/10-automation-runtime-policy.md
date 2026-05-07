@@ -45,6 +45,10 @@ Setup guidance should make this hierarchy explicit for new repos:
 Northstar itself should follow the same rule so the published protocol is
 credible.
 
+## Quick reference
+
+- [Cheat sheet: Effigy commands](../cheat-sheet.md#effigy-commands)
+
 ## Next Task
 
 Keep the setup skill, live repo scripts, and reusable working-rules template
