@@ -1,5 +1,7 @@
 # Batch Cards
 
+**Type: OPTIONAL** (strict posture) -- Create when using batch-card-driven execution.
+
 Use this folder for ready execution cards that sit under an active master spec.
 
 ## Rule
@@ -7,8 +9,10 @@ Use this folder for ready execution cards that sit under an active master spec.
 - create a batch card only when the work is specific enough to execute without
   fresh design decisions
 - keep cards tightly scoped and sequence them through the active roadmap lane
-- allow auto-continuation only when the next card is already ready and the
+- allow auto-continuation when the next card is already ready and the
   governing refs still match the work
+- default to continuing through ready cards without pausing for operator
+  acknowledgment at every boundary
 - stop when a planning gap, contract contradiction, or failed evidence gate
   changes the plan
 
