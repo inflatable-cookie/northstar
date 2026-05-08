@@ -1,6 +1,6 @@
 # Specs
 
-Use this folder for master specs and batch cards while a change is still being
+Use this folder for master specs while a change is still being
 worked through.
 
 ## Artifact types
@@ -12,8 +12,6 @@ worked through.
 
 - Use a master spec when a goal spans multiple meaningful batches, changes
   user-facing behavior, or introduces non-trivial execution policy.
-- Use batch cards when you want execution to be paint-by-numbers rather than
-  driven by fresh design or planning decisions.
 - Treat the stricter `specs/` plus batch-card layer as the surface for the full
   continuation-envelope, lane-budget, and pause-signal model. A roadmap-only
   repo can still route live work well, but it should not pretend to carry the

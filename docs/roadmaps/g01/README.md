@@ -12,3 +12,6 @@ Northstar.
 ## Next Task
 
 `g01` is complete. Use `g02` for the next live Northstar improvement lane.
+
+
+Batch cards live in `g01/batch-cards/` when strict posture uses them.

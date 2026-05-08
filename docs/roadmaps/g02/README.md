@@ -32,3 +32,6 @@ single-pilot bucket.
 ## Next Task
 
 Execute `g02.019` so the core skills share one explicit repo-posture model.
+
+
+Batch cards live in `g02/batch-cards/` when strict posture uses them.

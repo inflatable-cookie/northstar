@@ -43,9 +43,9 @@ That means:
 ## Artifact Set
 
 - docs/roadmaps/g02/009-prove-combined-autonomy-model-in-consumer-repo.md
-- docs/specs/batch-cards/039-define-consumer-repo-autonomy-proof-lane.md
-- docs/specs/batch-cards/040-run-consumer-repo-autonomy-proof.md
-- docs/specs/batch-cards/041-apply-consumer-repo-autonomy-findings.md
+- docs/roadmaps/g02/batch-cards/039-define-consumer-repo-autonomy-proof-lane.md
+- docs/roadmaps/g02/batch-cards/040-run-consumer-repo-autonomy-proof.md
+- docs/roadmaps/g02/batch-cards/041-apply-consumer-repo-autonomy-findings.md
 
 ## Proof Contract
 

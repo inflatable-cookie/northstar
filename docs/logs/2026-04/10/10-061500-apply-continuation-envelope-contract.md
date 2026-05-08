@@ -2,7 +2,7 @@
 
 Date: 2026-04-10
 Roadmap refs: docs/roadmaps/g02/007-define-continuation-envelope-and-stop-signal-contract.md
-Batch refs: docs/specs/batch-cards/034-apply-continuation-envelope-contract.md
+Batch refs: docs/roadmaps/g02/batch-cards/034-apply-continuation-envelope-contract.md
 
 ## Summary
 
@@ -32,8 +32,8 @@ surfaces that need to carry bounded continuation state.
 - skills/northstar-handoff/references/handoff-contract.md
 - skills/northstar-handoff/assets/templates/northstar-handoff.md.template
 - docs/specs/010-continuation-envelope-and-stop-signal-contract.md
-- docs/specs/batch-cards/034-apply-continuation-envelope-contract.md
-- docs/specs/batch-cards/035-reprove-continuation-envelope-contract.md
+- docs/roadmaps/g02/batch-cards/034-apply-continuation-envelope-contract.md
+- docs/roadmaps/g02/batch-cards/035-reprove-continuation-envelope-contract.md
 - docs/roadmaps/g02/007-define-continuation-envelope-and-stop-signal-contract.md
 - docs/README.md
 - docs/specs/README.md

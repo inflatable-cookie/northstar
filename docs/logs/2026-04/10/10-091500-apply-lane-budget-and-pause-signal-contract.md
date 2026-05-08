@@ -2,7 +2,7 @@
 
 Date: 2026-04-10
 Roadmap refs: docs/roadmaps/g02/008-define-lane-budget-and-pause-signal-contract.md
-Batch refs: docs/specs/batch-cards/037-apply-lane-budget-and-pause-signal-contract.md
+Batch refs: docs/roadmaps/g02/batch-cards/037-apply-lane-budget-and-pause-signal-contract.md
 
 ## Summary
 
@@ -30,8 +30,8 @@ batch-card template, log guidance, and handoff surfaces.
 - skills/northstar-handoff/references/handoff-contract.md
 - skills/northstar-handoff/assets/templates/northstar-handoff.md.template
 - docs/specs/011-lane-budget-and-pause-signal-contract.md
-- docs/specs/batch-cards/037-apply-lane-budget-and-pause-signal-contract.md
-- docs/specs/batch-cards/038-reprove-lane-budget-and-pause-signal-contract.md
+- docs/roadmaps/g02/batch-cards/037-apply-lane-budget-and-pause-signal-contract.md
+- docs/roadmaps/g02/batch-cards/038-reprove-lane-budget-and-pause-signal-contract.md
 - docs/roadmaps/g02/008-define-lane-budget-and-pause-signal-contract.md
 - docs/README.md
 - docs/specs/README.md

@@ -28,9 +28,9 @@ not another abstract clarification lane.
 
 - `docs/specs/017-signal-strict-compliance-migration-proof.md`
 - `docs/roadmaps/g02/014-prove-strict-compliance-migration-in-signal.md`
-- `docs/specs/batch-cards/054-define-signal-migration-proof-lane.md`
-- `docs/specs/batch-cards/055-compile-signal-migration-tranche-plan.md`
-- `docs/specs/batch-cards/056-apply-signal-migration-proof-findings.md`
+- `docs/roadmaps/g02/batch-cards/054-define-signal-migration-proof-lane.md`
+- `docs/roadmaps/g02/batch-cards/055-compile-signal-migration-tranche-plan.md`
+- `docs/roadmaps/g02/batch-cards/056-apply-signal-migration-proof-findings.md`
 
 ## Validation
 
@@ -39,8 +39,8 @@ not another abstract clarification lane.
 
 ## Continuation Envelope
 
-- Current card completed: `docs/specs/batch-cards/053-reprove-audit-and-rollout-surface.md`
-- Next card ready: `docs/specs/batch-cards/055-compile-signal-migration-tranche-plan.md`
+- Current card completed: `docs/roadmaps/g02/batch-cards/053-reprove-audit-and-rollout-surface.md`
+- Next card ready: `docs/roadmaps/g02/batch-cards/055-compile-signal-migration-tranche-plan.md`
 - Remaining ready chain: `1 card`
 - Transition proof: the audit posture and next tranche for Signal are explicit
   in the new proof spec and roadmap lane

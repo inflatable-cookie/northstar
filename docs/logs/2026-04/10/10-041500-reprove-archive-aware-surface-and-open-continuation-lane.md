@@ -2,7 +2,7 @@
 
 Date: 2026-04-10
 Roadmap refs: docs/roadmaps/g02/006-align-archive-aware-skill-and-setup-surfaces.md
-Batch refs: docs/specs/batch-cards/032-reprove-archive-aware-surface.md
+Batch refs: docs/roadmaps/g02/batch-cards/032-reprove-archive-aware-surface.md
 
 ## Summary
 
@@ -23,7 +23,7 @@ clear continuation envelopes and stop signals for longer ready chains.
 ## Files Changed
 
 - docs/specs/009-archive-aware-skill-and-setup-surfaces.md
-- docs/specs/batch-cards/032-reprove-archive-aware-surface.md
+- docs/roadmaps/g02/batch-cards/032-reprove-archive-aware-surface.md
 - docs/roadmaps/g02/006-align-archive-aware-skill-and-setup-surfaces.md
 
 ## Validation

@@ -30,9 +30,9 @@ provisional and regularly reduced.
 ## Files Changed
 
 - added `docs/specs/008-spec-lifecycle-and-archive-mechanics.md`
-- added `docs/specs/archive/batch-cards/027-define-spec-lifecycle-and-archive-rule.md`
-- added `docs/specs/batch-cards/028-apply-spec-lifecycle-rule-to-live-repo.md`
-- added `docs/specs/batch-cards/029-reprove-specs-surface-after-lifecycle-update.md`
+- added `docs/roadmaps/g02/batch-cards/027-define-spec-lifecycle-and-archive-rule.md`
+- added `docs/roadmaps/g02/batch-cards/028-apply-spec-lifecycle-rule-to-live-repo.md`
+- added `docs/roadmaps/g02/batch-cards/029-reprove-specs-surface-after-lifecycle-update.md`
 - added `docs/roadmaps/g02/005-tighten-spec-lifecycle-and-archive-mechanics.md`
 
 ## Validation

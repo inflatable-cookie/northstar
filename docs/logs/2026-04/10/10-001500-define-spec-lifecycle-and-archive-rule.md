@@ -35,8 +35,8 @@ traceability or leaving old specs to compete with canonical surfaces.
 - updated `docs/contracts/001-working-rules.md`
 - updated `docs/specs/README.md`
 - added `docs/specs/archive/README.md`
-- updated `docs/specs/archive/batch-cards/027-define-spec-lifecycle-and-archive-rule.md`
-- updated `docs/specs/batch-cards/028-apply-spec-lifecycle-rule-to-live-repo.md`
+- updated `docs/roadmaps/g02/batch-cards/027-define-spec-lifecycle-and-archive-rule.md`
+- updated `docs/roadmaps/g02/batch-cards/028-apply-spec-lifecycle-rule-to-live-repo.md`
 - updated `docs/roadmaps/g02/005-tighten-spec-lifecycle-and-archive-mechanics.md`
 
 ## Validation

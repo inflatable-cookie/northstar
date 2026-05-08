@@ -2,7 +2,7 @@
 
 Date: 2026-04-10
 Roadmap refs: docs/roadmaps/g02/006-align-archive-aware-skill-and-setup-surfaces.md
-Batch refs: docs/specs/batch-cards/031-apply-archive-aware-skill-alignment.md
+Batch refs: docs/roadmaps/g02/batch-cards/031-apply-archive-aware-skill-alignment.md
 
 ## Summary
 
@@ -32,8 +32,8 @@ without extra operator explanation.
 - skills/northstar-setup/references/delivery-layer-adoption.md
 - template-bundle/specs/README.md
 - template-bundle/specs/archive/README.md
-- docs/specs/batch-cards/031-apply-archive-aware-skill-alignment.md
-- docs/specs/batch-cards/032-reprove-archive-aware-surface.md
+- docs/roadmaps/g02/batch-cards/031-apply-archive-aware-skill-alignment.md
+- docs/roadmaps/g02/batch-cards/032-reprove-archive-aware-surface.md
 - docs/roadmaps/g02/006-align-archive-aware-skill-and-setup-surfaces.md
 - docs/README.md
 - docs/specs/README.md

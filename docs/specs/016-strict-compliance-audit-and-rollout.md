@@ -44,9 +44,9 @@ operators:
 ## Artifact Set
 
 - docs/roadmaps/g02/013-define-strict-compliance-audit-and-rollout-surface.md
-- docs/specs/batch-cards/051-define-strict-compliance-audit-surface.md
-- docs/specs/batch-cards/052-apply-audit-and-rollout-guidance.md
-- docs/specs/batch-cards/053-reprove-audit-and-rollout-surface.md
+- docs/roadmaps/g02/batch-cards/051-define-strict-compliance-audit-surface.md
+- docs/roadmaps/g02/batch-cards/052-apply-audit-and-rollout-guidance.md
+- docs/roadmaps/g02/batch-cards/053-reprove-audit-and-rollout-surface.md
 
 ## Audit Surface
 

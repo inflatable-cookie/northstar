@@ -11,7 +11,7 @@ Roadmaps sequence contract-backed work for Northstar itself.
 ## Rules
 
 - Roadmaps sequence work already backed by contracts and, for material goals,
-  by master specs and batch cards under `docs/roadmaps/gNN/batch-cards/`.
+  by master specs under `docs/roadmaps/gNN/batch-cards/`.
 - Execute milestones in meaningful batches and log completed batches.
 - Stop execution when a planning gap or contract gap appears.
 

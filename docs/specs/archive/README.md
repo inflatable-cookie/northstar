@@ -16,7 +16,6 @@ traceability but no longer belong in the active `docs/specs/` surface.
 Keep the archive lean:
 
 - `archive/NNN-<slug>.md`
-- `archive/batch-cards/NNN-<slug>.md`
 
 Do not recreate a second complex planning tree here.
 

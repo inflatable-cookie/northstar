@@ -20,8 +20,8 @@ checks, based directly on the findings from the completed autonomy run.
 - updated `docs/contracts/001-working-rules.md`
 - updated `docs/contracts/contract-index.md`
 - added `docs/specs/archive/006-currentness-surfaces-and-lightweight-alignment.md`
-- added `docs/specs/archive/batch-cards/021-define-currentness-surfaces-and-refresh-rule.md`
-- added `docs/specs/archive/batch-cards/022-add-lightweight-currentness-checks.md`
+- added `docs/roadmaps/g02/batch-cards/021-define-currentness-surfaces-and-refresh-rule.md`
+- added `docs/roadmaps/g02/batch-cards/022-add-lightweight-currentness-checks.md`
 - added `docs/roadmaps/g02/003-tighten-currentness-surfaces-and-alignment-checks.md`
 
 ## Validation

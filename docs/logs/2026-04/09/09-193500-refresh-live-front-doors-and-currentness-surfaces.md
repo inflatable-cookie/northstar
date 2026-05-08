@@ -21,7 +21,7 @@ real active generation, milestone, and evidence chain.
 - updated `docs/contracts/contract-index.md`
 - updated `docs/logs/README.md`
 - updated `docs/roadmaps/g02/002-tighten-execution-guardrails-and-extend-autonomy.md`
-- added `docs/specs/archive/batch-cards/020-refresh-live-front-doors-and-currentness-surfaces.md`
+- added `docs/roadmaps/g02/batch-cards/020-refresh-live-front-doors-and-currentness-surfaces.md`
 
 ## Validation
 

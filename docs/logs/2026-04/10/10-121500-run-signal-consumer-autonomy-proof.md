@@ -2,7 +2,7 @@
 
 Date: 2026-04-10
 Roadmap refs: docs/roadmaps/g02/009-prove-combined-autonomy-model-in-consumer-repo.md
-Batch refs: docs/specs/batch-cards/040-run-consumer-repo-autonomy-proof.md
+Batch refs: docs/roadmaps/g02/batch-cards/040-run-consumer-repo-autonomy-proof.md
 
 ## Summary
 

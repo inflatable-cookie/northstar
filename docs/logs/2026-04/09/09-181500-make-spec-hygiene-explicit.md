@@ -23,7 +23,7 @@ grows.
 - updated `skills/northstar-setup/references/delivery-layer-adoption.md`
 - updated `docs/specs/archive/005-execution-guardrails-and-longer-autonomy.md`
 - updated `docs/roadmaps/g02/002-tighten-execution-guardrails-and-extend-autonomy.md`
-- added `docs/specs/archive/batch-cards/019-make-spec-hygiene-explicit.md`
+- added `docs/roadmaps/g02/batch-cards/019-make-spec-hygiene-explicit.md`
 
 ## Validation
 

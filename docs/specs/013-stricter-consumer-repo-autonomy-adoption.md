@@ -45,9 +45,9 @@ the stricter one.
 ## Artifact Set
 
 - docs/roadmaps/g02/010-prove-stricter-autonomy-adoption-in-consumer-repo.md
-- docs/specs/batch-cards/042-define-stricter-adoption-proof-lane.md
-- docs/specs/batch-cards/043-run-stricter-consumer-repo-adoption-proof.md
-- docs/specs/batch-cards/044-apply-stricter-adoption-findings.md
+- docs/roadmaps/g02/batch-cards/042-define-stricter-adoption-proof-lane.md
+- docs/roadmaps/g02/batch-cards/043-run-stricter-consumer-repo-adoption-proof.md
+- docs/roadmaps/g02/batch-cards/044-apply-stricter-adoption-findings.md
 
 ## Proof Contract
 

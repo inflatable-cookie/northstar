@@ -75,9 +75,9 @@ The migration program should also make explicit:
 ## Artifact Set
 
 - docs/roadmaps/g02/012-define-full-strict-compliance-migration-program.md
-- docs/specs/batch-cards/048-define-full-strict-target-state.md
-- docs/specs/batch-cards/049-apply-migration-program-guidance.md
-- docs/specs/batch-cards/050-reprove-full-strict-migration-surface.md
+- docs/roadmaps/g02/batch-cards/048-define-full-strict-target-state.md
+- docs/roadmaps/g02/batch-cards/049-apply-migration-program-guidance.md
+- docs/roadmaps/g02/batch-cards/050-reprove-full-strict-migration-surface.md
 
 ## Acceptance Criteria
 

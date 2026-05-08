@@ -14,7 +14,7 @@ Minimum strict pack:
 - `docs/architecture/product-guardrails.md`
 - `docs/contracts/001-working-rules.md`
 - `docs/specs/README.md`
-- `docs/specs/batch-cards/README.md`
+- `docs/roadmaps/g02/batch-cards/README.md`
 - one active Signal spec for the strict lane
 - one bounded batch-card chain tied to the active `g09` execution path
 
@@ -38,9 +38,9 @@ compliance across the whole repo.
 ## Continuation Envelope
 
 - Current card completed:
-  `docs/specs/batch-cards/055-compile-signal-migration-tranche-plan.md`
+  `docs/roadmaps/g02/batch-cards/055-compile-signal-migration-tranche-plan.md`
 - Next card ready:
-  `docs/specs/batch-cards/056-apply-signal-migration-proof-findings.md`
+  `docs/roadmaps/g02/batch-cards/056-apply-signal-migration-proof-findings.md`
 - Remaining ready chain: `1 card`
 - Transition proof: the first Signal tranche is explicit in the proof spec and
   active roadmap lane

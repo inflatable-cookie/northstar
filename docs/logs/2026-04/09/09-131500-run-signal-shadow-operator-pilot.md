@@ -122,8 +122,8 @@ than only a structurally valid docs spine.
 
 ## Files Changed
 
-- updated `docs/specs/archive/batch-cards/014-select-consumer-repo-pilot-target.md`
-- updated `docs/specs/archive/batch-cards/015-run-consumer-repo-pilot.md`
+- updated `docs/roadmaps/g02/batch-cards/014-select-consumer-repo-pilot-target.md`
+- updated `docs/roadmaps/g02/batch-cards/015-run-consumer-repo-pilot.md`
 - updated `docs/specs/archive/004-consumer-repo-pilot-and-consolidation.md`
 - updated `docs/roadmaps/g02/001-run-consumer-repo-pilot-and-consolidate.md`
 - updated `docs/roadmaps/g02/README.md`

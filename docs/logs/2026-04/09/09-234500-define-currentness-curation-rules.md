@@ -33,7 +33,7 @@ of curation rules:
 - updated `template-bundle/roadmaps/README.md`
 - updated `template-bundle/logs/README.md`
 - updated `docs/contracts/001-working-rules.md`
-- updated `docs/specs/archive/batch-cards/024-define-currentness-curation-rules.md`
+- updated `docs/roadmaps/g02/batch-cards/024-define-currentness-curation-rules.md`
 - updated `docs/roadmaps/g02/004-define-currentness-curation-and-evidence-window.md`
 
 ## Validation

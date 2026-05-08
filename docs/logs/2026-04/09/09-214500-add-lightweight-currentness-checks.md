@@ -20,7 +20,7 @@ they match the active `g02.003` lane.
 - updated `docs/roadmaps/generation-index.md`
 - updated `docs/logs/README.md`
 - updated `scripts/check-northstar-repo-contract.ts`
-- updated `docs/specs/archive/batch-cards/022-add-lightweight-currentness-checks.md`
+- updated `docs/roadmaps/g02/batch-cards/022-add-lightweight-currentness-checks.md`
 - updated `docs/roadmaps/g02/003-tighten-currentness-surfaces-and-alignment-checks.md`
 
 ## Validation

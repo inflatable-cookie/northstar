@@ -27,9 +27,9 @@ Those are curation questions, not alignment-check questions.
 
 ## Files Changed
 
-- added `docs/specs/archive/batch-cards/023-prove-currentness-path-and-compile-next-slice.md`
+- added `docs/roadmaps/g02/batch-cards/023-prove-currentness-path-and-compile-next-slice.md`
 - added `docs/specs/archive/007-currentness-curation-and-evidence-window.md`
-- added `docs/specs/archive/batch-cards/024-define-currentness-curation-rules.md`
+- added `docs/roadmaps/g02/batch-cards/024-define-currentness-curation-rules.md`
 - added `docs/roadmaps/g02/004-define-currentness-curation-and-evidence-window.md`
 - updated `docs/README.md`
 - updated `docs/roadmaps/README.md`

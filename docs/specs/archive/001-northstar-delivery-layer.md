@@ -50,7 +50,7 @@ That means:
 
 - `docs/architecture/product-guardrails.md`
 - `docs/contracts/001-working-rules.md`
-- `docs/specs/archive/batch-cards/001-establish-live-northstar-docs-spine.md`
+- `docs/roadmaps/g01/batch-cards/001-establish-live-northstar-docs-spine.md`
 - `docs/roadmaps/g01/001-enact-northstar-on-northstar.md`
 
 ## Phased Delivery
