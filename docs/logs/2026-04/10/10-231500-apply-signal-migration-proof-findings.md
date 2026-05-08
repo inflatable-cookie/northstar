@@ -38,7 +38,7 @@ That is product-side migration work, not another reusable-framework question.
 ## Continuation Envelope
 
 - Current card completed:
-  `docs/specs/batch-cards/056-apply-signal-migration-proof-findings.md`
+  `docs/roadmaps/g02/batch-cards/056-apply-signal-migration-proof-findings.md`
 - Remaining ready chain: `none`
 - Transition proof: ownership is now explicit and no further Northstar lane is
   required before Signal can move

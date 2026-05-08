@@ -25,8 +25,8 @@ detached governance layer.
 
 ## Continuation Envelope
 
-- Current card completed: `docs/specs/batch-cards/052-apply-audit-and-rollout-guidance.md`
-- Next card ready: `docs/specs/batch-cards/053-reprove-audit-and-rollout-surface.md`
+- Current card completed: `docs/roadmaps/g02/batch-cards/052-apply-audit-and-rollout-guidance.md`
+- Next card ready: `docs/roadmaps/g02/batch-cards/053-reprove-audit-and-rollout-surface.md`
 - Remaining ready chain: `1 card`
 - Transition proof: currentness surfaces and validation stay aligned after the
   guidance update

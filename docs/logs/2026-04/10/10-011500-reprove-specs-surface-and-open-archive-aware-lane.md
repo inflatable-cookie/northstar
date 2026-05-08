@@ -28,11 +28,11 @@ reliably without extra interpretation.
 ## Files Changed
 
 - added `docs/specs/009-archive-aware-skill-and-setup-surfaces.md`
-- added `docs/specs/batch-cards/030-define-archive-aware-skill-contract.md`
-- added `docs/specs/batch-cards/031-apply-archive-aware-skill-alignment.md`
-- added `docs/specs/batch-cards/032-reprove-archive-aware-surface.md`
+- added `docs/roadmaps/g02/batch-cards/030-define-archive-aware-skill-contract.md`
+- added `docs/roadmaps/g02/batch-cards/031-apply-archive-aware-skill-alignment.md`
+- added `docs/roadmaps/g02/batch-cards/032-reprove-archive-aware-surface.md`
 - added `docs/roadmaps/g02/006-align-archive-aware-skill-and-setup-surfaces.md`
-- updated `docs/specs/batch-cards/029-reprove-specs-surface-after-lifecycle-update.md`
+- updated `docs/roadmaps/g02/batch-cards/029-reprove-specs-surface-after-lifecycle-update.md`
 - updated `docs/specs/008-spec-lifecycle-and-archive-mechanics.md`
 - updated `docs/roadmaps/g02/005-tighten-spec-lifecycle-and-archive-mechanics.md`
 

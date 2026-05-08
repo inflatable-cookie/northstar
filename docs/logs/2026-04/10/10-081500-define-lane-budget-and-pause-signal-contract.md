@@ -2,7 +2,7 @@
 
 Date: 2026-04-10
 Roadmap refs: docs/roadmaps/g02/008-define-lane-budget-and-pause-signal-contract.md
-Batch refs: docs/specs/batch-cards/036-define-lane-budget-and-pause-signal-contract.md
+Batch refs: docs/roadmaps/g02/batch-cards/036-define-lane-budget-and-pause-signal-contract.md
 
 ## Summary
 
@@ -22,9 +22,9 @@ card-level continuation envelope.
 ## Files Changed
 
 - docs/specs/011-lane-budget-and-pause-signal-contract.md
-- docs/specs/batch-cards/036-define-lane-budget-and-pause-signal-contract.md
-- docs/specs/batch-cards/037-apply-lane-budget-and-pause-signal-contract.md
-- docs/specs/batch-cards/038-reprove-lane-budget-and-pause-signal-contract.md
+- docs/roadmaps/g02/batch-cards/036-define-lane-budget-and-pause-signal-contract.md
+- docs/roadmaps/g02/batch-cards/037-apply-lane-budget-and-pause-signal-contract.md
+- docs/roadmaps/g02/batch-cards/038-reprove-lane-budget-and-pause-signal-contract.md
 - docs/roadmaps/g02/008-define-lane-budget-and-pause-signal-contract.md
 
 ## Validation

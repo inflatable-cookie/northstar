@@ -28,10 +28,10 @@ because the closed artifacts now live under `docs/specs/archive/`.
 ## Files Changed
 
 - moved `docs/specs/archive/001-northstar-delivery-layer.md` through `docs/specs/archive/007-currentness-curation-and-evidence-window.md`
-- moved `docs/specs/archive/batch-cards/001-establish-live-northstar-docs-spine.md` through `docs/specs/archive/batch-cards/027-define-spec-lifecycle-and-archive-rule.md`
+- moved `docs/roadmaps/g01/batch-cards/001-establish-live-northstar-docs-spine.md` through `docs/roadmaps/g02/batch-cards/027-define-spec-lifecycle-and-archive-rule.md`
 - updated repo references that still pointed at those archived planning artifacts
-- updated `docs/specs/batch-cards/028-apply-spec-lifecycle-rule-to-live-repo.md`
-- updated `docs/specs/batch-cards/029-reprove-specs-surface-after-lifecycle-update.md`
+- updated `docs/roadmaps/g02/batch-cards/028-apply-spec-lifecycle-rule-to-live-repo.md`
+- updated `docs/roadmaps/g02/batch-cards/029-reprove-specs-surface-after-lifecycle-update.md`
 - updated `docs/specs/README.md`
 - updated `docs/roadmaps/g02/005-tighten-spec-lifecycle-and-archive-mechanics.md`
 - updated `docs/logs/README.md`

@@ -25,8 +25,8 @@ README is a full archive index.
 
 ## Files Changed
 
-- added `docs/specs/archive/batch-cards/025-apply-currentness-curation-to-live-front-doors.md`
-- added `docs/specs/archive/batch-cards/026-reprove-front-door-path-after-curation.md`
+- added `docs/roadmaps/g02/batch-cards/025-apply-currentness-curation-to-live-front-doors.md`
+- added `docs/roadmaps/g02/batch-cards/026-reprove-front-door-path-after-curation.md`
 - updated `docs/specs/archive/007-currentness-curation-and-evidence-window.md`
 - updated `docs/README.md`
 - updated `docs/roadmaps/README.md`

@@ -24,8 +24,8 @@ next active lane instead of preparing a premature `g03`.
 - updated `docs/README.md`
 - updated `docs/specs/README.md`
 - added `docs/specs/archive/005-execution-guardrails-and-longer-autonomy.md`
-- added `docs/specs/archive/batch-cards/017-define-execution-guardrail-pack-and-keep-g02-open.md`
-- added `docs/specs/archive/batch-cards/018-promote-guardrails-into-bundle-and-skills.md`
+- added `docs/roadmaps/g02/batch-cards/017-define-execution-guardrail-pack-and-keep-g02-open.md`
+- added `docs/roadmaps/g02/batch-cards/018-promote-guardrails-into-bundle-and-skills.md`
 - added `docs/roadmaps/g02/002-tighten-execution-guardrails-and-extend-autonomy.md`
 
 ## Validation

@@ -30,8 +30,8 @@ The reusable contract needs to make four things explicit:
 ## Files Changed
 
 - updated `docs/specs/009-archive-aware-skill-and-setup-surfaces.md`
-- updated `docs/specs/batch-cards/030-define-archive-aware-skill-contract.md`
-- updated `docs/specs/batch-cards/031-apply-archive-aware-skill-alignment.md`
+- updated `docs/roadmaps/g02/batch-cards/030-define-archive-aware-skill-contract.md`
+- updated `docs/roadmaps/g02/batch-cards/031-apply-archive-aware-skill-alignment.md`
 - updated `docs/roadmaps/g02/006-align-archive-aware-skill-and-setup-surfaces.md`
 
 ## Validation

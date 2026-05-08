@@ -37,7 +37,7 @@ Before opening the next generation in sequential mode:
 
 - close, supersede, or rehome every milestone in the current generation
 - refresh the roadmap front doors so the old generation is visibly closed
-- purge stale specs and batch cards from `docs/specs/` so the active specs tree
+- purge stale specs from `docs/specs/` so the active specs tree
   no longer carries debris from the closing generation
 
 If that cleanup has not happened, stay in the current generation and finish the

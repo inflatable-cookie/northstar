@@ -46,9 +46,9 @@ Northstar should offer a minimal starter pack for lane-first stricter adoption:
 ## Artifact Set
 
 - docs/roadmaps/g02/011-define-lane-first-stricter-adoption-starter-pack.md
-- docs/specs/batch-cards/045-define-lane-first-starter-pack.md
-- docs/specs/batch-cards/046-apply-lane-first-starter-pack-guidance.md
-- docs/specs/batch-cards/047-reprove-lane-first-adoption-surface.md
+- docs/roadmaps/g02/batch-cards/045-define-lane-first-starter-pack.md
+- docs/roadmaps/g02/batch-cards/046-apply-lane-first-starter-pack-guidance.md
+- docs/roadmaps/g02/batch-cards/047-reprove-lane-first-adoption-surface.md
 
 ## Acceptance Criteria
 

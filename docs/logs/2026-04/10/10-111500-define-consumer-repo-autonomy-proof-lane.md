@@ -2,7 +2,7 @@
 
 Date: 2026-04-10
 Roadmap refs: docs/roadmaps/g02/009-prove-combined-autonomy-model-in-consumer-repo.md
-Batch refs: docs/specs/batch-cards/039-define-consumer-repo-autonomy-proof-lane.md
+Batch refs: docs/roadmaps/g02/batch-cards/039-define-consumer-repo-autonomy-proof-lane.md
 
 ## Summary
 
@@ -19,9 +19,9 @@ Defined the external-proof lane for the combined autonomy model.
 ## Files Changed
 
 - docs/specs/012-consumer-repo-autonomy-proof-and-adoption.md
-- docs/specs/batch-cards/039-define-consumer-repo-autonomy-proof-lane.md
-- docs/specs/batch-cards/040-run-consumer-repo-autonomy-proof.md
-- docs/specs/batch-cards/041-apply-consumer-repo-autonomy-findings.md
+- docs/roadmaps/g02/batch-cards/039-define-consumer-repo-autonomy-proof-lane.md
+- docs/roadmaps/g02/batch-cards/040-run-consumer-repo-autonomy-proof.md
+- docs/roadmaps/g02/batch-cards/041-apply-consumer-repo-autonomy-findings.md
 - docs/roadmaps/g02/009-prove-combined-autonomy-model-in-consumer-repo.md
 
 ## Validation

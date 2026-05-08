@@ -92,7 +92,7 @@ repair queue instead of backfilling older closed generations.
 - `docs/architecture/product-guardrails.md`
 - `docs/contracts/001-working-rules.md`
 - `docs/specs/README.md`
-- `docs/specs/batch-cards/README.md`
+- `docs/roadmaps/g02/batch-cards/README.md`
 - one active Signal spec covering the active strict lane
 - one or more bounded batch cards for the current `g09` execution chain
 
