@@ -34,7 +34,7 @@ For that shape, add only the minimum stricter surfaces needed for the active
 lane:
 
 - `docs/specs/README.md`
-- `docs/specs/batch-cards/README.md`
+- `docs/roadmaps/g01/batch-cards/README.md`
 - one active master spec for the lane
 - one or more active batch cards for the current bounded chain
 
@@ -156,9 +156,9 @@ For stricter projects, install or create:
   `template-bundle/contracts/001-working-rules-template.md`
 - `docs/specs/README.md`
 - `docs/specs/archive/README.md`
-- `docs/specs/batch-cards/README.md`
 - `docs/specs/templates/master-spec-template.md`
 - `docs/specs/templates/batch-card-template.md`
+- `docs/roadmaps/g01/batch-cards/README.md`
 
 For projects on the path to full strict compliance, the broader migration
 should eventually make these project-level surfaces normal rather than

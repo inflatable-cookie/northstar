@@ -21,12 +21,14 @@ planning outcomes have been promoted out of specs.
   prefer a clean new generation over patching stale work in place.
 - Treat rollover as full generation closeout, not a convenience reset:
   close or rehome every milestone in the current generation first, then purge
-  stale specs and batch cards from `docs/specs/` before opening the next
-  generation.
+  stale specs from `docs/specs/` before opening the next generation. Batch cards
+  stay with their generation under `docs/roadmaps/gNN/batch-cards/` and do not
+  need separate archiving.
 
 ## Layout
 
 - `g01/` first generation milestones
+- `g01/batch-cards/` execution cards for the active generation (strict posture)
 - `generation-index.md` active generation and rollover history
 - `backlog/` deferred items with promotion criteria
 - `templates/roadmap-milestone-template.md` milestone starter contract
@@ -42,11 +44,22 @@ planning outcomes have been promoted out of specs.
 
 ## Lean governance rule
 
-- Keep one active queue and use backlog for deferred scope.
+- Keep one active queue per generation and use backlog for deferred scope.
+- In sequential mode, maintain exactly one active generation.
+- In parallel mode, each active generation is its own queue; keep each queue's
+  front doors accurate for that thread.
 - Run currentness triage only when queue clarity degrades.
 - Prefer manual evidence over new checker scripts unless repetition clearly justifies automation.
 - Do not use roadmap prose to guess what an unplanned system surface probably
   does; repair the planning surface first.
+
+## Batch cards
+
+In strict posture, batch cards live inside each generation:
+
+- `docs/roadmaps/gNN/batch-cards/NNN-<slug>.md`
+- numbered per-generation so parallel generations never collide
+- stay with their generation; no need to archive or purge on rollover
 
 ## Currentness surfaces
 
@@ -54,15 +67,18 @@ Treat these as the normal roadmap front doors:
 
 - `docs/roadmaps/README.md`
 - `docs/roadmaps/generation-index.md`
-- `docs/roadmaps/gNN/README.md` for the active generation
+- `docs/roadmaps/gNN/README.md` for each active generation
 
 Keep them aligned to the active generation and milestone so operators can reach
 the live lane quickly without reconstructing it from stale prose.
 
 ## Currentness curation
 
-- Name one active generation and one active milestone across the roadmap front
-  doors.
+- In sequential mode, name one active generation and one active milestone across
+  the roadmap front doors.
+- In parallel mode, name all active generations and their active milestones.
+  Each generation's `gNN/README.md` remains the authoritative front door for its
+  thread.
 - If `docs/README.md` also surfaces an active spec, keep that to one spec and
   only when it still governs the next planning or execution decisions.
 - Prefer omitting the spec link over surfacing a stale or already-superseded

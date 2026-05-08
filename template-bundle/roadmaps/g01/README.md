@@ -10,10 +10,11 @@ Milestone files in this generation use:
 
 References must include generation key: `g01.001`, `g01.002`, `g01.003`.
 
-## Seed file
+## Seed files
 
 - `001-example-foundation-batch.md`
 - `002-example-analytics-export.md`
+- `batch-cards/README.md`
 
 ## Next task
 

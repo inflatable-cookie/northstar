@@ -2,7 +2,7 @@
 
 ## Goal
 
-Ensure roadmap execution model is aligned: one clear active queue, proper
+Ensure roadmap execution model is aligned: clear active queue(s), proper
 generation handling, backlog discipline, and contract-backed execution
 readiness.
 
@@ -10,6 +10,8 @@ readiness.
 
 - Active roadmap sequence lives under `docs/roadmaps/gNN/`.
 - Generation rollover is manual-only and reasoned in `docs/roadmaps/generation-index.md`.
+- In sequential mode, only one generation is active at a time.
+- In parallel mode, each active generation operates as its own queue.
 - Deferred work belongs only in `docs/roadmaps/backlog/`.
 - Backlog items require promotion criteria.
 - Active roadmap milestones should reference governing contracts directly.
@@ -18,16 +20,20 @@ readiness.
 
 ## Drift Patterns
 
-- Multiple competing active queues
+- Multiple competing active queues within one generation
 - Backlog items in random folders
 - Missing generation rollover rationale
 - Global phase-number assumptions that bypass `gNN.NNN`
 - Milestones marked ready even though contract refs or planning state are missing
 - Roadmap text that assumes behavior from unplanned repos or undeclared seams
+- Parallel mode enabled without clear lane separation between generations
 
 ## Fix Rules
 
-- Consolidate active queue and mark stale branches as backlog/deferred.
+- Consolidate competing queues within a generation and mark stale branches as
+  backlog/deferred.
+- In parallel mode, ensure each generation's queue is clearly separated and
+  front doors name all active generations.
 - Move stray backlog docs into canonical backlog folder.
 - Add or update generation index entries for rollover reasons.
 - Normalize all roadmap references to `gNN.NNN`.
@@ -44,7 +50,9 @@ rg -n "backlog|g[0-9]{2}\.[0-9]{3}|generation|Contract refs|Planning state|Plann
 
 ## Completion Criteria
 
-- One clear active queue remains.
+- In sequential mode, one clear active queue remains.
+- In parallel mode, each active generation has a clear queue and front doors
+  accurately name all active generations.
 - Backlog is centralized and reference-safe.
 - Active roadmap work is visibly contract-backed or explicitly blocked on
   planning.

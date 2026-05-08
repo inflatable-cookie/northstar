@@ -45,13 +45,13 @@ One-page reference for terms used across Northstar docs.
 : A short spec-like document that defines one batch's scope, evidence, and done criteria.
 
 **Generation**
-: A numbered era of roadmap milestones (`g01`, `g02`, `g03`). Holds 20-40 milestones before rollover is warranted.
+: A numbered era of roadmap milestones (`g01`, `g02`, `g03`). Holds 20-40 milestones before rollover is warranted. In parallel mode, multiple generations may be active simultaneously as independent queues.
 
 **Milestone**
 : One roadmap file inside a generation, named `NNN-<slug>.md`. Referenced as `gNN.NNN`.
 
 **Lane**
-: An active line of work within a roadmap. One active queue plus a backlog.
+: An active line of work within a roadmap. One active queue per generation plus a backlog.
 
 **Backlog**
 : Deferred work. Lives only at `docs/roadmaps/backlog/`.
@@ -116,7 +116,7 @@ One-page reference for terms used across Northstar docs.
 : The `gNN` format for generation folders.
 
 **Generation index**
-: `docs/roadmaps/generation-index.md` -- the record of active generation and rollover history.
+: `docs/roadmaps/generation-index.md` -- the record of active generation(s), mode (sequential/parallel), and rollover history.
 
 **Contract index**
 : `docs/contracts/contract-index.md` -- the inventory of all active contracts.

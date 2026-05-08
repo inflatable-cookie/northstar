@@ -32,7 +32,9 @@ docs/
 ├── contracts/
 ├── roadmaps/
 │   ├── g01/
+│   │   └── batch-cards/  (strict posture)
 │   ├── g02/
+│   │   └── batch-cards/  (strict posture)
 │   ├── backlog/
 │   └── generation-index.md
 ├── logs/
@@ -60,7 +62,7 @@ docs/
 3. Create contracts before roadmaps
 4. Log per batch, not per task
 5. Stop on planning gaps -- do not infer missing behavior
-6. One active generation, one active milestone
+6. One active generation in sequential mode; parallel mode allows multiple
 7. Backlog lives only at `roadmaps/backlog/`
 8. Clean migrations only: move, update refs, remove legacy in one batch
 

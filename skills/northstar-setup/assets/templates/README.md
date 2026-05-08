@@ -23,9 +23,9 @@ For stricter repos, also copy the bundle's working-rules and specs surfaces:
 
 - `docs/contracts/001-working-rules.md`
 - `docs/specs/README.md`
-- `docs/specs/batch-cards/README.md`
 - `docs/specs/templates/master-spec-template.md`
 - `docs/specs/templates/batch-card-template.md`
+- `docs/roadmaps/g01/batch-cards/README.md`
 - `docs/policy/internal-writing-style.md`
 - `docs/policy/vision-next-task-verbs.txt`
 

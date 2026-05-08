@@ -21,6 +21,7 @@ Roadmaps are executable milestone plans derived from vision, architecture, and c
 - Execute milestones in meaningful batches.
 - Create logs per completed batch, not per individual task.
 - Stop execution when a batch reveals a missing contract or planning gap.
+- In parallel mode, each generation operates as its own queue.
 
 ## Next Task
 

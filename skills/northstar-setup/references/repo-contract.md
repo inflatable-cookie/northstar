@@ -104,7 +104,7 @@ For stricter or more failure-prone projects, adopt the stricter spine:
 - `contracts/001-working-rules.md`
 - `contracts/contract-index.md`
 - `specs` as a provisional planning surface
-- `specs/batch-cards/`
+- `roadmaps/gNN/batch-cards/` for execution cards in strict posture
 
 In that mode, specs should be treated as a stepping stone to
 architecture/contracts rather than a second permanent authority.

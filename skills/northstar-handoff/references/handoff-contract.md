@@ -28,6 +28,7 @@ Every handoff must include these sections in this order:
   - where the work stands now
   - what is finished vs still open
   - the active spec lane when one is still shaping the work
+  - the current batch card under `docs/roadmaps/gNN/batch-cards/` when present
   - the canonical promoted refs the next thread should trust for execution
   - the remaining continuation envelope, if another ready card is still
     in-bounds

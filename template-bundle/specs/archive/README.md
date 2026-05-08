@@ -10,7 +10,7 @@ artifact exists, so the archive posture is explicit from the beginning.
 
 ## Rule
 
-- archive only closed or no-longer-governing specs and batch-card lanes
+- archive only closed or no-longer-governing specs
 - keep the active `docs/specs/` surface focused on live planning
 - preserve enough surrounding context that the archived artifact is still
   understandable
@@ -23,7 +23,6 @@ Keep the archive lean. Mirror only the minimum grouping needed for traceability
 in the repo, for example:
 
 - `archive/NNN-<slug>.md`
-- `archive/batch-cards/NNN-<slug>.md`
 
 Do not build a second complex planning tree under `archive/`.
 

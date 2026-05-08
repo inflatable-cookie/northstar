@@ -39,6 +39,7 @@ Then read the relevant front doors and active planning surfaces:
 - `docs/README.md`
 - `docs/vision/README.md`
 - `docs/specs/README.md` when present
+- `docs/roadmaps/gNN/batch-cards/` when present
 - `docs/architecture/`
 - `docs/contracts/`
 - `docs/roadmaps/README.md`

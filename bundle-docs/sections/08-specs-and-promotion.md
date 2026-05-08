@@ -108,13 +108,14 @@ Apply this rule:
   canonical surfaces for attention
 - treat spec cleanup as part of normal closeout and recovery work, not only as
   an occasional cleanup drive
-- before roadmap generation rollover, purge stale generation-specific specs and
-  batch cards from the active specs tree so the next generation does not open
-  on inherited planning debris
+- before roadmap generation rollover, purge stale generation-specific specs from
+  the active specs tree so the next generation does not open on inherited
+  planning debris. Batch cards live under `docs/roadmaps/gNN/batch-cards/` and
+  stay with their generation.
 
 ## Spec lifecycle rule
 
-Treat specs and batch-card lanes as having explicit lifecycle states:
+Treat specs as having explicit lifecycle states:
 
 - `active`: still governs an active lane or an imminent continuation batch
 - `retired-in-place`: closed and still worth keeping briefly in the active tree
@@ -163,7 +164,7 @@ The master spec should define:
 
 ## Batch card rule
 
-Batch cards sit under a master spec and define a bounded execution card.
+Batch cards define a bounded execution card.
 
 They should contain:
 
@@ -176,6 +177,10 @@ They should contain:
 - evidence required
 - stop conditions
 - whether the next card may auto-start
+
+Batch cards live under `docs/roadmaps/gNN/batch-cards/`, not in `docs/specs/`.
+They are numbered per-generation so parallel generations never collide.
+They stay with their generation and do not need separate archiving on rollover.
 
 Batch cards can guide execution tightly, but they should still inherit their
 durable truths from architecture/contracts once those truths have been

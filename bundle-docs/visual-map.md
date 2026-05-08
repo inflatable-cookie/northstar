@@ -21,7 +21,9 @@ specs/          (strict posture only)
 
 roadmaps/
   ├─ g01/       generation of milestones
+  │   └─ batch-cards/  execution cards (strict posture)
   ├─ g02/
+  │   └─ batch-cards/  execution cards (strict posture)
   ├─ backlog/   deferred work
   └─ generation-index.md
 

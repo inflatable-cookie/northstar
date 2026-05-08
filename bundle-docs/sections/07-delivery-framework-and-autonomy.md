@@ -78,7 +78,7 @@ Projects using the stricter mode should carry these artifacts:
 
 - `docs/architecture/product-guardrails.md`
 - `docs/specs/NNN-<slug>.md` for master specs
-- `docs/specs/batch-cards/NNN-<slug>.md` for execution cards
+- `docs/roadmaps/gNN/batch-cards/NNN-<slug>.md` for execution cards
 - `docs/contracts/NNN-<slug>.md` only when a separate contract surface is worth
   the extra split
 

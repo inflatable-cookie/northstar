@@ -84,7 +84,7 @@ const requiredFiles = [
   "template-bundle/README.md",
   "template-bundle/specs/archive/README.md",
   "template-bundle/contracts/001-working-rules-template.md",
-  "template-bundle/specs/batch-cards/README.md",
+  "template-bundle/roadmaps/g01/batch-cards/README.md",
   "skills/northstar-setup/SKILL.md",
   "skills/northstar-setup/agents/openai.yaml",
   "skills/northstar-setup/references/repo-contract.md",

@@ -1,7 +1,11 @@
 # Roadmap Generation Index
 
 Status: active
-Updated: 2026-04-10
+Updated: 2026-05-08
+
+## Mode
+
+- `sequential` (default)
 
 ## Active generation
 
@@ -19,8 +23,8 @@ Updated: 2026-04-10
 Create a new generation when:
 
 - the sequencing baseline itself materially changes
-- the current generation has been fully closed out and becomes misleading for
-  new work after contract/spec rewrites
+- the current generation has been fully closed out and a fresh boundary is now
+  genuinely clearer for execution
 - maintainers explicitly decide the queue needs a clean reset
 
 Northstar generations should usually be substantial. The default expectation is
@@ -29,7 +33,7 @@ judgment guardrail, expect something closer to 20 to 40 milestones before
 rollover is worth considering. Do not open `g03` just because `g02.001` closed
 or because one pilot lane completed.
 
-Before opening the next generation:
+Before opening the next generation in sequential mode:
 
 - close, supersede, or rehome every milestone in the current generation
 - refresh the roadmap front doors so the old generation is visibly closed
@@ -38,6 +42,19 @@ Before opening the next generation:
 
 If that cleanup has not happened, stay in the current generation and finish the
 closeout there first.
+
+### Parallel mode
+
+Switch to `parallel` mode only when:
+- genuinely independent work streams need separate generations without blocking
+  each other
+- each stream has distinct contracts, milestones, and lane context
+- front doors can accurately track all active generations without collision
+
+In parallel mode, each active generation operates as its own queue. Opening a
+new generation does not require closing prior generations. Each generation's
+`gNN/README.md` and milestone files remain the authoritative front door for
+that thread.
 
 ## Next Task
 

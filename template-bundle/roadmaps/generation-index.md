@@ -5,6 +5,10 @@
 Status: active
 Updated: 2026-03-05
 
+## Mode
+
+- `sequential` (default)
+
 ## Active generation
 
 - `g01`
@@ -30,14 +34,29 @@ As a healthy default, expect roughly 20 to 40 milestones in one generation
 before rollover is even worth considering. Treat that as a judgment guardrail,
 not an automatic counter.
 
-Before opening the next generation:
+Before opening the next generation in sequential mode:
 - close, supersede, or rehome every milestone in the current generation.
 - refresh the roadmap front doors so the old generation is visibly closed.
-- purge stale specs and batch cards from `docs/specs/` so the active specs tree
-  no longer carries debris from the closing generation.
+- purge stale specs from `docs/specs/` so the active specs tree no longer
+  carries debris from the closing generation. Batch cards stay with their
+  generation under `docs/roadmaps/gNN/batch-cards/` and do not need separate
+  archiving.
 
 If that cleanup has not happened, stay in the current generation and finish the
 closeout there first.
+
+### Parallel mode
+
+Switch to `parallel` mode only when:
+- genuinely independent work streams need separate generations without blocking
+  each other
+- each stream has distinct contracts, milestones, and lane context
+- front doors can accurately track all active generations without collision
+
+In parallel mode, each active generation operates as its own queue. Opening a
+new generation does not require closing prior generations. Each generation's
+`gNN/README.md` and milestone files remain the authoritative front door for
+that thread.
 
 ## Next task
 
