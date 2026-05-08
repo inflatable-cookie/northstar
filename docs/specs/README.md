@@ -7,10 +7,6 @@ worked through.
 
 - `NNN-<slug>.md`
   master specs for material goals or epics
-- `batch-cards/NNN-<slug>.md`
-  tightly scoped execution cards derived from an active master spec
-- `batch-cards/README.md`
-  active batch-card index and strict-lane working rule
 
 ## Rules
 
@@ -29,10 +25,11 @@ worked through.
 - Keep `docs/specs/` tidy so it mostly reflects active planning:
   keep active or still-useful specs, and archive or remove stale ones once the
   canonical surfaces already carry the durable truth.
-- Before roadmap generation rollover, purge stale generation-specific specs and
-  batch cards from the active tree so the next generation does not inherit dead
-  planning debris.
-- Use explicit lifecycle states for specs and batch-card lanes:
+- Before roadmap generation rollover, purge stale generation-specific specs
+  from the active tree so the next generation does not inherit dead planning
+  debris. Batch cards live under `docs/roadmaps/gNN/batch-cards/` and stay with
+  their generation.
+- Use explicit lifecycle states for specs:
   - `active` for live planning
   - `retired-in-place` for short-lived traceability near active work
   - `archived` for closed planning artifacts that should be preserved but no
@@ -46,7 +43,6 @@ worked through.
 When archive is warranted, use:
 
 - `archive/NNN-<slug>.md`
-- `archive/batch-cards/NNN-<slug>.md`
 
 Mirror only the minimum grouping needed to preserve traceability.
 

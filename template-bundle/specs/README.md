@@ -9,10 +9,6 @@ into architecture and contracts.
 
 - `NNN-<slug>.md`
   master specs for material goals or epics
-- `batch-cards/NNN-<slug>.md`
-  tightly scoped execution cards derived from an active master spec
-- `batch-cards/README.md`
-  explains how the batch-card lane should work in a stricter repo
 
 ## Rule
 
@@ -63,9 +59,9 @@ Make spec hygiene explicit in normal project maintenance:
   project
 - prefer a smaller active specs folder over preserving every historical plan in
   place forever
-- before roadmap generation rollover, purge closed or stale generation debris
-  from the active specs tree so the next generation starts from clean authority
-  rather than inherited planning clutter
+- before roadmap generation rollover, purge closed or stale specs from the
+  active specs tree so the next generation starts from clean authority rather
+  than inherited planning clutter
 
 Treat `ready` as a real state:
 
@@ -84,9 +80,9 @@ Treat planning as a real runway:
   one-card-at-a-time improvisation after each closeout
 
 If a repo wants the full continuation-envelope, lane-budget, and pause-signal
-model, use this `specs/` layer with batch cards. A roadmap-only repo can still
-route live work well, but it should not pretend to carry the same explicit
-autonomy state.
+model, use `specs/` for master specs and `roadmaps/gNN/batch-cards/` for
+execution cards. A roadmap-only repo can still route live work well, but it
+should not pretend to carry the same explicit autonomy state.
 
 In a mature baseline repo, you may introduce this layer lane-first for the
 active work that needs it. Start with the current lane and bounded active
@@ -123,7 +119,6 @@ this.
 
 ## Templates
 
-- `batch-cards/README.md`
 - `archive/README.md`
 - `templates/master-spec-template.md`
 - `templates/batch-card-template.md`

@@ -10,9 +10,10 @@ Milestone files in this generation use:
 
 References must include generation key: `g02.001`, `g02.002`, `g02.003`.
 
-## Seed file
+## Seed files
 
 - `001-example-platform-reset.md`
+- `batch-cards/README.md` (strict posture)
 
 ## Next task
 

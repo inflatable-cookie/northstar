@@ -124,8 +124,8 @@ advanced:
 - `docs/architecture/system-architecture.md`
 - `docs/architecture/system-inventory.md`
 - `docs/architecture/repo-authority-map.md` for multi-repo work
-- `docs/specs/NNN-<slug>.md` and `docs/specs/batch-cards/NNN-<slug>.md` when a
-  change needs provisional planning
+- `docs/specs/NNN-<slug>.md` when a change needs provisional planning
+- `docs/roadmaps/gNN/batch-cards/NNN-<slug>.md` for ready execution cards
 - `docs/specs/archive/README.md` or archived planning artifacts when closeout
   moved closed work out of the active tree
 - `docs/contracts/contract-index.md`

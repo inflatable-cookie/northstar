@@ -112,19 +112,26 @@ informal habits.
 
 - Treat roadmap generations as substantial sequencing eras, not one-or-two-file
   buckets.
-- Keep one generation active across many milestones until the sequencing
-  baseline itself needs a reset.
+- Default to sequential mode: keep one generation active across many milestones
+  until the sequencing baseline itself needs a reset.
 - Treat roughly 20 to 40 milestones as the normal scale of a healthy
   generation before rollover is even worth discussing.
-- Treat rollover as full generation closeout:
+- Treat rollover as full generation closeout in sequential mode:
   - every roadmap in the old generation must be explicitly closed, superseded,
     or moved to backlog
   - the roadmap front doors must reflect that closed state before the next
     generation opens
-  - stale specs and batch cards from the closing generation must be archived or
-    removed from `docs/specs/`
-- If those closeout conditions are not satisfied, repair the current generation
-  instead of opening a new one.
+  - stale specs from the closing generation must be archived or removed from
+    `docs/specs/`
+- If those closeout conditions are not satisfied in sequential mode, repair the
+  current generation instead of opening a new one.
+- Allow parallel mode when genuinely independent work streams need separate
+  generations without blocking each other:
+  - each generation operates as its own queue with distinct lane context
+  - opening a new generation does not require closing prior active generations
+  - each generation's `gNN/README.md` remains the authoritative front door for
+    that thread
+  - front doors must accurately name all active generations and their milestones
 
 ### Stop conditions
 

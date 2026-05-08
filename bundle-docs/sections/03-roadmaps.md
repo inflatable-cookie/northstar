@@ -71,20 +71,36 @@ Do not roll a generation just because one milestone closed quickly or because a
 single external proof lane completed.
 
 Generation rollover is a closeout event, not a convenience move. Before opening
-`gNN+1`, all of the following must be true:
+`gNN+1` in sequential mode, all of the following must be true:
 
 - every milestone in `gNN/` is explicitly closed, superseded, or moved to
   backlog so no roadmap file in the old generation still presents as active
 - the roadmap front doors and generation README agree that `gNN` is fully
   closed and ready for rollover
-- `docs/specs/` has been purged of stale artifacts from the closing generation,
-  with closed specs and batch cards archived or removed so the active specs
-  tree no longer carries obsolete lane debris
+- `docs/specs/` has been purged of stale specs from the closing generation so
+  the active specs tree no longer carries obsolete planning debris. Batch cards
+  stay with their generation under `docs/roadmaps/gNN/batch-cards/` and do not
+  need separate archiving.
 
 If those conditions are not met, stay in the current generation and repair the
 lane state there first.
 
 Record rollover reason in `docs/roadmaps/generation-index.md`.
+
+### Parallel mode exception
+
+Switch to parallel mode when genuinely independent work streams need separate
+active generations without blocking each other. In parallel mode:
+
+- each generation operates as its own queue with distinct lane context
+- opening a new generation does not require closing prior active generations
+- each generation's `gNN/README.md` remains the authoritative front door for
+  that thread
+- front doors must accurately name all active generations and their active
+  milestones
+
+Use parallel mode only when the work streams are truly independent. Do not use
+it to bypass closeout discipline for related work that should share a queue.
 
 ## Content contract (per roadmap file)
 
@@ -115,21 +131,28 @@ Record rollover reason in `docs/roadmaps/generation-index.md`.
 
 ## Currentness rule
 
-- Keep one clearly identified active queue.
+- Keep one clearly identified active queue per generation.
+- In sequential mode, maintain exactly one active generation.
+- In parallel mode, each active generation is its own queue.
 - Move deferred items into backlog with promotion criteria.
 - Use lightweight currentness triage logs only when queue clarity degrades.
 - Keep the roadmap currentness surfaces aligned to the active lane:
-  - `docs/roadmaps/README.md`
-  - `docs/roadmaps/generation-index.md`
-  - `docs/roadmaps/gNN/README.md` for the active generation
+- `docs/roadmaps/README.md`
+- `docs/roadmaps/generation-index.md`
+- `docs/roadmaps/gNN/README.md` for each active generation
+- `docs/roadmaps/gNN/batch-cards/` when strict posture batch cards are in use
 - Refresh those surfaces whenever the active milestone or generation changes so
   operators do not have to reconstruct the live lane from stale front doors.
 
 ## Currentness curation rule
 
-- `docs/roadmaps/README.md`, `docs/roadmaps/generation-index.md`, and the
-  active `docs/roadmaps/gNN/README.md` should each name one active generation
-  and one active milestone, not a cluster of competing "current" lanes.
+- In sequential mode, `docs/roadmaps/README.md`,
+  `docs/roadmaps/generation-index.md`, and the active
+  `docs/roadmaps/gNN/README.md` should each name one active generation and one
+  active milestone, not a cluster of competing "current" lanes.
+- In parallel mode, front doors must name all active generations and their
+  active milestones. Each generation's `gNN/README.md` remains the
+  authoritative front door for that thread.
 - `docs/README.md` may surface one active spec alongside the active roadmap,
   but only when that spec still materially governs the next planning or
   execution decisions for the current lane.

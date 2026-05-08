@@ -22,7 +22,7 @@ to adopt.
 - `architecture/` defines system shape, inventory, and guardrails
 - `contracts/` is used only when a compact or seam-specific contract surface is
   worth the extra precision
-- `specs/` carries master specs and batch cards for material goals
+- `specs/` carries master specs for material goals
 - `roadmaps/` sequences contract-backed work into milestones
 - `logs/` records completed batch evidence and decisions
 

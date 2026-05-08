@@ -33,7 +33,6 @@ That mode keeps the baseline spine and adds:
 - `docs/contracts/contract-index.md`
 - `docs/contracts/001-working-rules.md`
 - `docs/specs/README.md`
-- `docs/specs/batch-cards/`
 - `docs/specs/templates/`
 
 In a mature baseline repo, that stricter surface may be introduced lane-first

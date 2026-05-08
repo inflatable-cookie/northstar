@@ -90,7 +90,8 @@ Depending on the active mode, leave some or all of these surfaces materially
 advanced:
 
 - updated planning artifacts for the changed or drifted boundary
-- updated spec lane and/or batch-card chain when the realization path changed
+- updated spec lane and/or batch-card chain under `docs/roadmaps/gNN/batch-cards/`
+  when the realization path changed
 - updated canonical refs in roadmap, spec, or handoff surfaces
 - blocked, superseded, or recompiled roadmap milestones
 - generation index updates when rollover is required

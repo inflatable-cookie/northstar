@@ -51,7 +51,8 @@ Think in terms of a standard docs spine:
 
 - baseline spine: `vision`, `architecture`, `contracts`, `roadmaps`, `logs`
 - stricter spine: baseline plus `product-guardrails`, `contract-index`,
-  `001-working-rules`, and `specs/` with batch-card support
+  `001-working-rules`, and `specs/` for master specs, plus `roadmaps/gNN/batch-cards/`
+  for execution cards
 
 Treat those as two valid modes, not one correct mode and one compromise:
 
@@ -180,9 +181,9 @@ installed from the bundle:
 - `docs/policy/vision-next-task-verbs.txt`
 - `docs/specs/README.md`
 - `docs/specs/archive/README.md`
-- `docs/specs/batch-cards/README.md`
 - `docs/specs/templates/master-spec-template.md`
 - `docs/specs/templates/batch-card-template.md`
+- `docs/roadmaps/g01/batch-cards/README.md`
 
 Use the starter templates in [`assets/templates`](./assets/templates) for the
 top-level repo surfaces and the Northstar bundle itself for the docs skeleton.

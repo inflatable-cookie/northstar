@@ -266,9 +266,10 @@ Work in this repo is not done unless:
     or moved to backlog
   - the roadmap front doors must reflect that closed state before the next
     generation opens
-  - stale specs and batch cards from the closing generation must be archived or
-    removed from `docs/specs/` so the new generation does not inherit old lane
-    debris
+  - stale specs from the closing generation must be archived or removed from
+    `docs/specs/` so the new generation does not inherit old lane debris. Batch
+    cards stay with their generation under `docs/roadmaps/gNN/batch-cards/` and
+    do not need separate archiving.
 - If those closeout conditions are not satisfied, repair the current generation
   instead of opening a new one.
 
