@@ -1,3 +1,6 @@
+[manifest]
+minimum_effigy_version = "0.7.0"
+
 [catalog]
 alias = "northstar"
 
