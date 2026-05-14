@@ -68,5 +68,8 @@ a bounded execution runway rather than one-card-at-a-time improvisation.
 - Do not suggest rollover after only a handful of milestones. Expect something
   closer to a 20-to-40-milestone generation unless a real sequencing reset
   clearly justifies earlier closure.
+- Do not treat the end of a planned batch or lane as a generation closeout.
+  After one batch closes, compile or continue the next batch inside the same
+  generation.
 - Do not open a new generation while the current one still has live milestones
   or stale specs that should have been cleaned up first.

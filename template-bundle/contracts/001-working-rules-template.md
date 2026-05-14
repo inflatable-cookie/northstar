@@ -116,6 +116,9 @@ informal habits.
   until the sequencing baseline itself needs a reset.
 - Treat roughly 20 to 40 milestones as the normal scale of a healthy
   generation before rollover is even worth discussing.
+- Finishing a batch, suite, or lane of roadmaps does **not** close the
+  generation. After one batch closes, compile or continue the next batch inside
+  the same generation.
 - Treat rollover as full generation closeout in sequential mode:
   - every roadmap in the old generation must be explicitly closed, superseded,
     or moved to backlog

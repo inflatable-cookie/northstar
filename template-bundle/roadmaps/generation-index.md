@@ -34,6 +34,14 @@ As a healthy default, expect roughly 20 to 40 milestones in one generation
 before rollover is even worth considering. Treat that as a judgment guardrail,
 not an automatic counter.
 
+### Batch completion does not close the generation
+
+Finishing a batch, suite, or lane of roadmaps does **not** mark the generation
+as complete. The generation remains open until the rollover conditions above are
+met. After closing one batch, compile or continue the next batch inside the same
+generation. Do not treat the end of a planned sequence as a generation closeout
+event.
+
 Before opening the next generation in sequential mode:
 - close, supersede, or rehome every milestone in the current generation.
 - refresh the roadmap front doors so the old generation is visibly closed.

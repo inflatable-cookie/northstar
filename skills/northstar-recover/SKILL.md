@@ -94,7 +94,10 @@ advanced:
   when the realization path changed
 - updated canonical refs in roadmap, spec, or handoff surfaces
 - blocked, superseded, or recompiled roadmap milestones
-- generation index updates when rollover is required
+- generation index updates when rollover is genuinely required
+- batch or lane completion does **not** automatically warrant generation rollover;
+  keep the current generation open and compile the next batch inside it unless
+  the full closeout conditions are met
 - visible log evidence showing what changed, what became stale, and why
 - sweep findings and repair evidence when running audit mode
 

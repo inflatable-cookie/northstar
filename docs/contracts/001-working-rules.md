@@ -260,7 +260,10 @@ Work in this repo is not done unless:
 - Treat roughly 20 to 40 milestones as the normal scale of a healthy
   generation before rollover is even worth discussing.
 - Roll to a new generation only when the sequencing baseline itself needs a
-  reset, not merely because one lane closed quickly.
+  reset, not merely because one lane or batch closed quickly.
+- Finishing a batch, suite, or lane of roadmaps does **not** close the
+  generation. After one batch closes, compile or continue the next batch inside
+  the same generation.
 - Treat rollover as full generation closeout:
   - every roadmap in the old generation must be explicitly closed, superseded,
     or moved to backlog
