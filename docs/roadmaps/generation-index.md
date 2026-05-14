@@ -33,6 +33,14 @@ judgment guardrail, expect something closer to 20 to 40 milestones before
 rollover is worth considering. Do not open `g03` just because `g02.001` closed
 or because one pilot lane completed.
 
+### Batch completion does not close the generation
+
+Finishing a batch, suite, or lane of roadmaps does **not** mark the generation
+as complete. The generation remains open until the rollover conditions above are
+met. After closing one batch, compile or continue the next batch inside the same
+generation. Do not treat the end of a planned sequence as a generation closeout
+event.
+
 Before opening the next generation in sequential mode:
 
 - close, supersede, or rehome every milestone in the current generation

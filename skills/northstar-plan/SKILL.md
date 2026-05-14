@@ -95,6 +95,9 @@ Then read:
     A new generation should normally come only after the current one has had a
     substantial run, every old-generation roadmap is closed or rehomed, and
     stale specs from that generation are purged from `docs/specs/`.
+    Finishing a batch, suite, or lane of roadmaps does **not** close the
+    generation. After one batch closes, compile or continue the next batch
+    inside the same generation.
 15. Auto-continuation is the default when the next card is ready and belongs to
     the same lane. Make the continuation envelope explicit in file state for
     each ready card: the in-bounds next card, the remaining ready chain, and the

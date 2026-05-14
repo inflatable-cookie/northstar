@@ -68,7 +68,10 @@ Typical manual triggers:
   under its old sequencing assumptions
 
 Do not roll a generation just because one milestone closed quickly or because a
-single external proof lane completed.
+single external proof lane completed. Finishing a batch, suite, or lane of
+roadmaps does **not** mark the generation as complete. After closing one batch,
+compile or continue the next batch inside the same generation. The generation
+stays open until the rollover conditions above are met.
 
 Generation rollover is a closeout event, not a convenience move. Before opening
 `gNN+1` in sequential mode, all of the following must be true:

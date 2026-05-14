@@ -17,6 +17,10 @@ planning outcomes have been promoted out of specs.
   In long-running repos, one generation will often hold many milestones before
   a clean rollover is warranted. A healthy default is roughly 20 to 40
   milestone files before rollover is even worth discussing.
+- Finishing a batch, suite, or lane of roadmaps does **not** close the
+  generation. After one batch closes, compile or continue the next batch inside
+  the same generation. The generation stays open until the rollover conditions
+  above are met.
 - When refocus invalidates the sequencing baseline across multiple milestones,
   prefer a clean new generation over patching stale work in place.
 - Treat rollover as full generation closeout, not a convenience reset:
