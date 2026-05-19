@@ -22,7 +22,11 @@ Execution requirements:
 1. Audit first, then list drift findings with exact file paths.
 2. Fix in meaningful batches, not tiny edits.
 3. Re-run checks after each batch and close findings.
-4. Enforce clean migrations only: no compatibility shim docs.
+4. Enforce clean migrations only: no compatibility shim docs. For code and
+   automation (not just docs), **before v1.0** do not add compatibility aliases,
+   shims, or silent fallbacks; if work would be breaking, stop and ask the
+   operator. **At v1.0+**, preserve expected stable behavior unless the operator
+   directs otherwise.
 5. Update references in the same batch as moves/renames.
 6. Keep canonical structure, naming, and content contracts compliant.
 7. Keep optional add-on folders (`research`, `schemas`, `templates`, `diagrams`, `specs`) absent unless explicitly needed by current project docs; if `docs/research/` is canonical, keep it Northstar-compliant instead of deleting it.

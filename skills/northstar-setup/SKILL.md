@@ -1,6 +1,6 @@
 ---
 name: northstar-setup
-description: Use when a repo needs to be set up or normalized for Northstar. Scaffolds the repo shape, docs front doors, AGENTS guidance, changelog and release posture where needed, uses Effigy as part of the setup and validation layer, and installs the stricter delivery-layer surfaces by default where appropriate.
+description: Use when a repo needs to be set up or normalized for Northstar. Scaffolds the repo shape, docs front doors, AGENTS guidance, changelog and release posture where needed, uses Effigy as part of the setup and validation layer, and installs the stricter delivery-layer surfaces by default where appropriate. Enforces Northstar refactor maturity rules—no opportunistic compatibility shims before v1.0; preserve expected stable behavior from v1.0 onward unless the owner directs otherwise.
 ---
 
 # Northstar Setup
@@ -13,6 +13,28 @@ Use this skill when the user asks to:
 - create the docs skeleton, changelog, release posture, and repo QA loop
 - set up a stricter Northstar repo with stronger delivery guardrails
 - normalize a repo onto the Northstar automation stack
+
+## Refactoring posture (read first)
+
+This applies whenever setup or normalization touches **code, scripts, APIs, or
+automation**—not only the docs tree.
+
+- **Before v1.0:** do not add compatibility aliases, shims, re-export layers,
+  deprecated stubs, or silent fallbacks to keep obsolete paths alive. Prefer
+  clean migrations: update call sites and remove superseded symbols in the same
+  batch unless the operator explicitly chooses a different shape.
+- **Breaking changes:** if a refactor would break callers, contracts, or
+  documented behavior, **stop and ask the operator** with a short impact summary
+  and options. Do not add a compatibility layer on your own to avoid that
+  conversation.
+- **At v1.0 maturity and beyond:** default stance is **maintaining expected
+  functionality** for stable, user-visible, or externally depended behavior.
+  Deprecation timelines and adapters are owner decisions, but agents must not
+  casually remove supported paths or narrow behavior without explicit policy.
+
+Doctrine (full framing): [`../../bundle-docs/sections/07-delivery-framework-and-autonomy.md`](../../bundle-docs/sections/07-delivery-framework-and-autonomy.md) — section *Refactoring posture by release maturity*.
+
+Encode in the repo: copy/adapt [`../../template-bundle/contracts/001-working-rules-template.md`](../../template-bundle/contracts/001-working-rules-template.md) into `docs/contracts/001-working-rules.md` when strict posture applies. Minimum contract bullets: [`references/repo-contract.md`](./references/repo-contract.md).
 
 Do not mirror Effigy tasks into `package.json` scripts. When a repo uses
 Effigy, write docs and agent guidance that call `effigy <task>` directly.
@@ -197,6 +219,10 @@ leave the Northstar structure and repo front doors coherent.
 
 ## References
 
+- [`../../bundle-docs/sections/07-delivery-framework-and-autonomy.md`](../../bundle-docs/sections/07-delivery-framework-and-autonomy.md):
+  delivery doctrine, including **refactoring posture by release maturity**
+- [`../../template-bundle/contracts/001-working-rules-template.md`](../../template-bundle/contracts/001-working-rules-template.md):
+  working rules template (includes refactor maturity subsection for strict repos)
 - [`references/repo-contract.md`](./references/repo-contract.md): minimum shared
   repo contract
 - [`references/adoption-modes.md`](./references/adoption-modes.md): choose
@@ -210,6 +236,10 @@ leave the Northstar structure and repo front doors coherent.
 
 ## Guardrails
 
+- Do not add pre-1.0 compatibility shims, silent fallbacks, or “temporary”
+  re-exports without explicit operator approval; escalate breaking refactors
+  instead. From v1.0 onward, do not casually break stable expected behavior—get
+  owner policy first.
 - Do not teach `--repo .` for current-repo usage.
 - Do not introduce a custom `tasks.test` unless the repo intentionally needs to
   override built-in `effigy test`.

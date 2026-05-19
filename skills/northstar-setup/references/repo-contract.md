@@ -133,6 +133,11 @@ architecture/contracts rather than a second permanent authority.
   thread replies; keep fuller prose for public-facing docs
 - point `AGENTS.md` and `CLAUDE.md` at `docs/policy/internal-writing-style.md`
   instead of repeating the full style rule inline
+- **Refactoring:** before v1.0, do not add compatibility shims, aliases, or
+  silent fallbacks; clean migrations and operator decisions on breaks. At v1.0+
+  maturity, default to preserving expected stable behavior; material breaks need
+  explicit owner policy. Encode detail in `contracts/001-working-rules.md`
+  (or the project's adapted copy).
 
 ## Minimum Release Posture
 

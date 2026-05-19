@@ -1,7 +1,7 @@
 # 07 Delivery Framework and Autonomy
 
 Status: active
-Updated: 2026-04-08
+Updated: 2026-05-19
 
 ## Why this section matters now
 
@@ -133,6 +133,21 @@ explicit:
 - explicit incompleteness over implied closure
   - if the remaining path is still scaffolded, mocked, or unproven, record that
     limit instead of claiming the milestone is effectively done
+
+## Refactoring posture by release maturity
+
+Agents often add compatibility aliases, shims, and silent fallbacks during
+refactors. That is usually wrong noise **before v1.0**, and often mandatory care
+**once a product or library has shipped v1.0-level stability expectations**.
+
+- **Pre-1.0:** forbid opportunistic compatibility layers. Prefer clean migration:
+  update references, rename in place, delete superseded paths in the same batch.
+  If a change is breaking or needs a phased rollout, **stop and ask the
+  operator** for a decision instead of inventing a shim.
+- **v1.0 and later:** default to preserving expected behavior for stable,
+  user-visible, or externally depended surfaces. Compatibility or deprecation
+  timelines are owner decisions, but agents should not casually narrow behavior
+  or delete supported paths without explicit policy.
 
 ## Definition of done rule
 
