@@ -29,6 +29,20 @@ Northstar is a docs/template repo, so the default Effigy surface is bundle-integ
 Use `--repo <PATH>` only when you intentionally want to operate on another
 repository.
 
+## Refactoring posture (agents)
+
+Agents often add compatibility shims during refactors. Northstar’s stance is
+**maturity-dependent**:
+
+- **Before v1.0:** no opportunistic compatibility aliases, shims, wrappers, or
+  silent fallbacks. Prefer clean migrations. If work would be **breaking**, stop
+  and ask the project owner—do not invent a compat layer to dodge the decision.
+- **From v1.0 onward:** default to **preserving expected behavior** for stable,
+  user-visible, or externally depended surfaces. Material breaks need explicit
+  owner policy, not silent removal.
+
+Full doctrine: [`sections/07-delivery-framework-and-autonomy.md`](./sections/07-delivery-framework-and-autonomy.md) (heading *Refactoring posture by release maturity*). Stricter repos should also encode the same rules in `docs/contracts/001-working-rules.md` (start from [`../template-bundle/contracts/001-working-rules-template.md`](../template-bundle/contracts/001-working-rules-template.md)). This repo’s live contract: [`../docs/contracts/001-working-rules.md`](../docs/contracts/001-working-rules.md).
+
 ## What Lives Here
 
 - `sections/` defines the doctrine

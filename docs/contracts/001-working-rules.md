@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-04-09
+Updated: 2026-05-19
 Depends on: docs/architecture/system-architecture.md
 Authority owners: repo maintainers
 Affects: bundle-docs, template-bundle, skills, docs, scripts
@@ -63,6 +63,23 @@ single-repo planning lane like this one.
   scaffolded or unproven.
 - Treat disconnected gesture work as incomplete unless the batch was explicitly
   scoped as a bounded substrate-only step.
+
+### Refactoring and release maturity
+
+- **Before v1.0:** do not add compatibility aliases, shims, re-export layers,
+  deprecated stubs, or silent fallbacks to keep obsolete paths working. Prefer
+  direct migrations: update call sites and remove superseded surfaces in the
+  same batch unless the operator directs a different shape.
+- **Breaking changes:** when a refactor would break callers, contracts, or
+  documented behavior, stop and raise it with the operator with a short impact
+  summary and options. Do not unilaterally add a compatibility layer to avoid
+  that conversation.
+- **At v1.0 maturity and beyond:** default stance is maintaining expected
+  functionality for stable, user-visible, or externally depended behavior.
+  Deprecation windows, adapters, or other compatibility work may be required;
+  still coordinate material breaks with the operator, but do not treat "delete
+  the old path in one batch" as the automatic default when it would abandon
+  supported behavior without an explicit decision.
 
 ### Ready-state rubric
 

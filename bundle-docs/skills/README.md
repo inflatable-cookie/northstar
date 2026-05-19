@@ -70,6 +70,10 @@ Suggested mode layout:
   - repo bootstrap and normalization
   - Effigy adoption and validation setup when appropriate
   - migration from loose docs structure into canonical Northstar shape
+  - **refactor maturity rules for agents:** no pre-1.0 compatibility shims;
+    escalate breaking changes; from v1.0 onward preserve expected stable behavior
+    (see `bundle-docs/sections/07-delivery-framework-and-autonomy.md` and the
+    working-rules contract in the template bundle)
 - `northstar-plan`
   - plan from scratch
   - write or repair contract surfaces

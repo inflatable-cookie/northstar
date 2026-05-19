@@ -139,7 +139,7 @@ Section-local template folders such as `docs/roadmaps/templates/`, `docs/logs/te
 - For stricter projects, `architecture/product-guardrails.md` should be treated
   as part of the default working surface rather than an optional extra.
 - Keep research comparative, source-backed, and separate from architecture/roadmaps until translation memos are explicit.
-- Enforce clean migrations: no compatibility shim files in deprecated folders; update references and remove legacy files in the same batch.
+- Enforce clean migrations: no compatibility shim files in deprecated folders; update references and remove legacy files in the same batch. For code refactors, **before v1.0** avoid compatibility aliases and silent fallbacks and escalate breaking changes to the operator; **at v1.0+** default to preserving expected stable behavior unless policy says otherwise (see `contracts/001-working-rules-template.md`).
 - Treat per-project `meta/` docs as deprecated; extract useful content and link to Northstar docs.
 
 Examples should be seeded inside the relevant section content rather than in a separate top-level examples directory.

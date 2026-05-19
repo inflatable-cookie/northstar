@@ -31,6 +31,11 @@ to adopt.
 This repo is using the delivery-layer doctrine it is proposing for the broader
 Northstar system:
 
+- **Agent refactors:** before v1.0, no compatibility shims or silent fallbacks;
+  breaking changes get an operator decision. From v1.0, preserve expected stable
+  behavior unless policy says otherwise. Canonical wording lives in
+  [`contracts/001-working-rules.md`](./contracts/001-working-rules.md) and
+  [`../bundle-docs/sections/07-delivery-framework-and-autonomy.md`](../bundle-docs/sections/07-delivery-framework-and-autonomy.md).
 - planning should be explicit
 - specs should shape changes before they are promoted into canonical surfaces
 - batch execution should be tightly defined

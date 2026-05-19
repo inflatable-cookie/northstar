@@ -110,12 +110,21 @@ repository.
 1. Run the sweep pack: [`bundle-docs/sweeps/README.md`](./bundle-docs/sweeps/README.md)
 2. Use the fresh-thread starter prompt: [`bundle-docs/sweeps/fresh-agent-sweep-prompt.md`](./bundle-docs/sweeps/fresh-agent-sweep-prompt.md)
 3. Apply clean migrations only:
-- no compatibility shims
+- **pre-1.0:** no compatibility shims, aliases, or silent fallbacks; if a change
+  is breaking, decide with the project owner rather than adding a compat layer
+  on your own
+- **v1.0+:** preserve expected behavior for stable surfaces; breaking changes
+  need explicit owner policy, not casual removal
 - update references in the same batch
 - remove deprecated legacy folders after migration
 
 ## Key Conventions
 
+- **Agents refactoring code or automation:** before v1.0, no compatibility shims,
+  aliases, or silent fallbacks—clean migrations and owner decisions on breaks.
+  From v1.0 onward, preserve expected stable behavior unless policy directs
+  otherwise. See [`bundle-docs/sections/07-delivery-framework-and-autonomy.md`](./bundle-docs/sections/07-delivery-framework-and-autonomy.md) and
+  [`template-bundle/contracts/001-working-rules-template.md`](./template-bundle/contracts/001-working-rules-template.md).
 - Roadmap folder key format: `gNN` (example: `g01`)
 - Roadmap reference format: `gNN.NNN` (example: `g01.105`)
 - Roadmap file format: `docs/roadmaps/gNN/NNN-<slug>.md`

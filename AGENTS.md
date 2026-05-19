@@ -7,7 +7,16 @@ Scope: whole `northstar/` repository.
 - Treat this repo as the authority for the reusable Northstar documentation system.
 - Keep `template-bundle/` lean and copy-ready; do not add project-specific examples outside clearly marked templates.
 - Keep `bundle-docs/` focused on doctrine, migration guidance, and maintenance policy for the bundle itself.
-- Prefer clean migrations and direct reference updates over compatibility shims.
+- **Pre-1.0 refactoring:** do not add compatibility aliases, shims, wrappers, or
+  silent fallbacks to keep old paths alive. Prefer clean migrations: update
+  references and remove superseded symbols in the same batch. If a change is
+  breaking or needs a staged rollout, **stop and ask the operator** how to
+  handle it instead of inventing a compatibility layer.
+- **v1.0 and later:** treat preserving expected, user-visible, or externally
+  depended behavior as the default priority. Compatibility or deprecation
+  strategy still belongs to the operator, but agents should not casually break
+  stable contracts; when a break is unavoidable, surface it with impact and
+  options rather than silently narrowing behavior.
 - Keep AGENTS content lean: scope, hard rules, validation, links.
 
 ## Effigy-First Execution
@@ -65,7 +74,8 @@ This repo's local `.agents/skills/effigy` copy is authoritative for this
 project. When an agent supports both project-local and global skills, prefer
 the project-local copy over any globally installed Effigy skill.
 
-Do not add `--repo .` while already inside the target repo. Do not edit
+Do not pass `effigy --repo` with the current directory as the target while
+already inside that repo. Do not edit
 `.github/workflows/` or run release mutations unless the user explicitly asks.
 
 Reference docs:
