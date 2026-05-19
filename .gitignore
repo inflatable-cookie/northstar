@@ -1,3 +1,6 @@
-.effigy/
 .claude/settings.local.json
 .DS_Store
+
+# BEGIN EFFIGY LOCAL STATE
+.effigy/
+# END EFFIGY LOCAL STATE
