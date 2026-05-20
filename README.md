@@ -3,7 +3,7 @@
 Northstar is a reusable documentation system for software projects.
 It standardizes how teams define direction, translate it into execution, and keep evidence of progress.
 
-**New here?** Start with the [visual map](bundle-docs/visual-map.md), then the [glossary](bundle-docs/glossary.md), then the [cheat sheet](bundle-docs/cheat-sheet.md).
+**New here?** Start with the [visual map](bundle-docs/visual-map.md), the [protocol kernel](bundle-docs/protocol-kernel.md), the [glossary](bundle-docs/glossary.md), then the [cheat sheet](bundle-docs/cheat-sheet.md).
 
 ## What Northstar Is For
 
@@ -64,6 +64,7 @@ The current repo baseline is bundle integrity and documentation structure valida
 ```bash
 effigy check:bundle
 effigy qa:docs
+effigy check:posture-advisory
 ```
 
 First-time bring-up from another directory:

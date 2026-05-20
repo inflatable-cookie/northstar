@@ -29,7 +29,10 @@ a bounded execution runway rather than one-card-at-a-time improvisation.
    - the immediate ready card or paused gate
    - the next few meaningful batches or milestone transitions beyond it
    - the next planning checkpoint where strategy or intent may need review
-7. Apply the repo's readiness rubric before marking a card or short chain
+7. For the authoritative batch-card field list and expanded ready-state checks,
+   use [`bundle-docs/sections/07-delivery-framework-and-autonomy.md`](../../../../bundle-docs/sections/07-delivery-framework-and-autonomy.md)
+   (see [`bundle-docs/protocol-kernel.md`](../../../../bundle-docs/protocol-kernel.md)); do not invent a divergent checklist.
+8. Apply the repo's readiness rubric before marking a card or short chain
    `ready`:
    - the work is bounded enough to execute without fresh planning decisions
    - the governing refs are current and canonical
@@ -37,18 +40,18 @@ a bounded execution runway rather than one-card-at-a-time improvisation.
      conditions are explicit
    - no unresolved planning gap still governs the work
    - any auto-continuation transition is already represented in file state
-8. If the posture is `strict-paused`, compile toward a paused planning gate or
+9. If the posture is `strict-paused`, compile toward a paused planning gate or
    intent checkpoint instead of pretending the lane is ready for execution.
-9. Reference governing contract ids directly in each roadmap milestone.
-10. Keep planning gaps visible in the milestone until they are closed.
-11. Recommend generation rollover only when contract or architecture shifts make
+10. Reference governing contract ids directly in each roadmap milestone.
+11. Keep planning gaps visible in the milestone until they are closed.
+12. Recommend generation rollover only when contract or architecture shifts make
    the current sequencing baseline misleading, the generation has had a
    substantial run already, and the repo is ready to close that generation
    cleanly rather than escaping local cleanup.
-12. Before recommending rollover, confirm all current-generation milestones can
+13. Before recommending rollover, confirm all current-generation milestones can
    be marked closed, superseded, or rehomed and that stale specs or batch cards
    from that generation can be archived or removed from `docs/specs/`.
-13. Treat any remaining spec for the lane as context only; do not let it outrank
+14. Treat any remaining spec for the lane as context only; do not let it outrank
    the promoted canonical surfaces.
 
 ## Guardrails

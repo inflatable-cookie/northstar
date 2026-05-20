@@ -36,6 +36,7 @@ Then read the relevant front doors and active planning surfaces:
 
 - `README.md`
 - `AGENTS.md`
+- `bundle-docs/protocol-kernel.md` when the brief should cite canonical protocol homes
 - `docs/README.md`
 - `docs/vision/README.md`
 - `docs/specs/README.md` when present

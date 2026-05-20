@@ -1,7 +1,7 @@
 # Automation Runtime Policy
 
 Status: active
-Updated: 2026-04-08
+Updated: 2026-05-19
 
 ## Purpose
 
@@ -48,6 +48,10 @@ credible.
 ## Quick reference
 
 - [Cheat sheet: Effigy commands](../cheat-sheet.md#effigy-commands)
+- Optional posture drift warnings: `effigy check:posture-advisory` (see
+  [`../../scripts/README.md`](../../scripts/README.md) — always exits success;
+  prints `[northstar:advisory]` lines when a Northstar-shaped `docs/` tree looks
+  inconsistent)
 
 ## Next Task
 

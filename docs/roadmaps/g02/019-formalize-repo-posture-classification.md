@@ -37,6 +37,5 @@ drifted recovery state.
 
 ## Next Task
 
-Use the posture taxonomy in the next real setup, planning, or recovery pass
-and see whether the package now needs a concrete recovery specimen or whether
-the current skill wording is enough.
+Continue with `g02.020` (protocol kernel + dedupe) or `g02.021` (Effigy posture and
+archive advisory checks), depending on which lane should move next.

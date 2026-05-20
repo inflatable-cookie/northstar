@@ -18,10 +18,9 @@ Roadmaps sequence contract-backed work for Northstar itself.
 ## Current lane
 
 - `g02` is the active generation
-- `g02.019` is the current milestone for formalizing repo-posture
-  classification across the core skills
+- `g02.020` and `g02.021` are complete
 
 ## Next Task
 
-Execute `g02.019` so setup, planning, and recovery classify repo state more
-mechanically.
+Compile or open the next contract-backed `g02` milestone when the next slice is
+ready.

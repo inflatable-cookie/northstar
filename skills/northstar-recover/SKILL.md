@@ -36,6 +36,7 @@ Then read:
 
 - `README.md`
 - `AGENTS.md`
+- `bundle-docs/protocol-kernel.md` when recovery must distinguish doctrine from repo-local contract wording
 - `docs/specs/` when present
 - `docs/specs/archive/README.md` when present
 - `docs/architecture/`

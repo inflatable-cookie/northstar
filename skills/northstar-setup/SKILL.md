@@ -32,7 +32,7 @@ automation**—not only the docs tree.
   Deprecation timelines and adapters are owner decisions, but agents must not
   casually remove supported paths or narrow behavior without explicit policy.
 
-Doctrine (full framing): [`../../bundle-docs/sections/07-delivery-framework-and-autonomy.md`](../../bundle-docs/sections/07-delivery-framework-and-autonomy.md) — section *Refactoring posture by release maturity*.
+Doctrine (full framing): [`../../bundle-docs/sections/07-delivery-framework-and-autonomy.md`](../../bundle-docs/sections/07-delivery-framework-and-autonomy.md) — section *Refactoring posture by release maturity*. Short canonical map: [`../../bundle-docs/protocol-kernel.md`](../../bundle-docs/protocol-kernel.md).
 
 Encode in the repo: copy/adapt [`../../template-bundle/contracts/001-working-rules-template.md`](../../template-bundle/contracts/001-working-rules-template.md) into `docs/contracts/001-working-rules.md` when strict posture applies. Minimum contract bullets: [`references/repo-contract.md`](./references/repo-contract.md).
 

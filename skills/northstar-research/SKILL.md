@@ -30,6 +30,7 @@ Read:
 - `docs/research/research-to-implementation-playbook.md`
 - `docs/architecture/system-architecture.md`
 - `docs/contracts/contract-index.md`
+- `bundle-docs/protocol-kernel.md` when promotion work should stay aligned with canonical doctrine homes
 
 ## Workflow
 

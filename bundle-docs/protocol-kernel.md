@@ -1,0 +1,67 @@
+# Northstar Protocol Kernel
+
+Status: active  
+Updated: 2026-05-19
+
+One-page map of **what counts as the protocol**, **where normative detail
+lives**, and **how surfaces should relate**. Use this before pasting long
+excerpts of doctrine into skills, contracts, or operator prompts.
+
+## What the protocol is
+
+Northstar is a **docs spine + execution grammar**: direction in `vision/`,
+shape in `architecture/`, durable rules in `contracts/`, time-ordered work in
+`roadmaps/`, evidence in `logs/`. Optional `research/` and provisional `specs/`
+feed promotion into architecture and contracts before execution bets on them.
+
+Full picture: [visual-map.md](./visual-map.md) and [glossary.md](./glossary.md).
+
+## Posture (pick deliberately)
+
+| Posture | Spine | Typical use |
+| --- | --- | --- |
+| **Baseline** | `vision/`, `architecture/`, `contracts/`, `roadmaps/`, `logs/` | Single repo, clear scope, normal routing |
+| **Strict** | Baseline + `product-guardrails`, indexed contracts, `specs/`, `roadmaps/gNN/batch-cards/` | High-risk boundaries, longer hands-off runs |
+
+Lane-first strict adoption is the normal migration path, not a permanent
+mixed-mode excuse. See [glossary.md](./glossary.md) (*Lane-first adoption*).
+
+## Canonical homes (single owners for enumerations)
+
+Do **not** maintain parallel copies of the same bullet lists across skills,
+templates, and doctrine unless a surface is intentionally binding (repo
+contracts).
+
+| Topic | Doctrine (authoritative full detail) | Binding in a strict repo |
+| --- | --- | --- |
+| Planning completeness and execution authority | [sections/06-planning-and-contract-gates.md](./sections/06-planning-and-contract-gates.md) | Same expectations; repo records gaps in its own planning files |
+| Batch cards, ready-state, closeout shape, autonomy levels, master specs | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Batch card rule**, **Ready-state rubric**, **Operator-facing summary rule**, **Autonomy support levels** | `docs/contracts/001-working-rules.md` (from [`template-bundle/contracts/001-working-rules-template.md`](../template-bundle/contracts/001-working-rules-template.md)); keep compact, point here for full enumerations |
+| Spec lifecycle and archive | [sections/08-specs-and-promotion.md](./sections/08-specs-and-promotion.md) + [template-bundle/specs/README.md](../template-bundle/specs/README.md) | `docs/specs/` + `docs/specs/archive/` in the installed repo |
+| Automation defaults | [sections/10-automation-runtime-policy.md](./sections/10-automation-runtime-policy.md) | `AGENTS.md` / Effigy config in each repo |
+
+**Northstar maintainers:** the live repo may tighten wording in
+`docs/contracts/001-working-rules.md`, but expanded checklists should stay in
+`bundle-docs/sections/07-…` unless the contract intentionally narrows behavior.
+
+## Skills and operators
+
+- **Operators:** [operators/operator-quick-start.md](./operators/operator-quick-start.md)
+- **Skill routing (five public skills):** [skills/README.md](./skills/README.md)
+
+Skills should **name modes and file paths**, not restate full batch-card field
+lists. When an agent needs doctrine depth, prefer this kernel → linked section
+→ glossary, in that order.
+
+## Naming and validation
+
+- [cheat-sheet.md](./cheat-sheet.md) — file patterns, `gNN.NNN`, log names
+- Repo validation: `effigy qa` / `effigy check:bundle` as wired in each repo
+- Optional drift triage: `effigy check:posture-advisory` (non-blocking; see
+  [`../scripts/README.md`](../scripts/README.md))
+
+## Next Task
+
+Live repo: run `effigy check:posture-advisory` on downstream strict repos when
+triaging drift. When extending the protocol after that, update **one**
+canonical enumeration in `bundle-docs/sections/07-…` (or `06-…`), then align
+contracts/templates/skills with short pointers — not duplicate prose.

@@ -39,6 +39,7 @@ Then read:
 
 - `README.md`
 - `AGENTS.md`
+- `bundle-docs/protocol-kernel.md` when aligning planning output with canonical doctrine
 - `docs/vision/`
 - `docs/architecture/system-architecture.md`
 - `docs/architecture/system-inventory.md`

@@ -6,6 +6,10 @@ The main goal is to keep the always-visible skill surface small so activation
 stays reliable. Northstar should prefer a few broad entry-point skills with
 clear intent, then load deeper modes and references only when needed.
 
+When authoring or editing skill bodies, use the [protocol kernel](../protocol-kernel.md)
+as the map of canonical doctrine versus repo contracts so skills **link**
+instead of duplicating long enumerations.
+
 ## Recommended Public Skill Surface
 
 Keep the top-level installable surface to these skills:

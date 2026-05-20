@@ -66,6 +66,12 @@ docs/
 7. Backlog lives only at `roadmaps/backlog/`
 8. Clean migrations only: move, update refs, remove legacy in one batch
 
+## Protocol kernel
+
+Authoritative **enumerations** (batch-card fields, ready-state checks, closeout
+shape) live in [`sections/07-delivery-framework-and-autonomy.md`](./sections/07-delivery-framework-and-autonomy.md). One-page map of surfaces:
+[`protocol-kernel.md`](./protocol-kernel.md).
+
 ## Effigy Commands
 
 ```bash
@@ -74,6 +80,7 @@ effigy doctor         # check environment
 effigy qa             # run validation
 effigy check:bundle   # validate bundle integrity
 effigy qa:docs        # validate docs structure
+effigy check:posture-advisory  # optional non-blocking docs posture warnings
 ```
 
 ## Agent Skills
@@ -88,6 +95,6 @@ effigy qa:docs        # validate docs structure
 
 ## Next Steps
 
-- New user: [Visual Map](visual-map.md) → [Glossary](glossary.md) → [Template Bundle](../template-bundle/)
+- New user: [Visual Map](visual-map.md) → [Protocol kernel](protocol-kernel.md) → [Glossary](glossary.md) → [Template Bundle](../template-bundle/)
 - Existing user: [Operator Quick Start](operators/operator-quick-start.md)
 - Migrating: [Sweep Pack](sweeps/README.md)

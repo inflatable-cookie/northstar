@@ -2,6 +2,13 @@
 
 Text-based overview of how Northstar pieces fit together.
 
+## Protocol kernel
+
+Normative **detail** for batch cards, ready-state, closeout, and autonomy lives
+in [`sections/07-delivery-framework-and-autonomy.md`](./sections/07-delivery-framework-and-autonomy.md).
+Before agents or tools re-embed those lists, read the one-page map:
+[`protocol-kernel.md`](./protocol-kernel.md).
+
 ## Doc Hierarchy
 
 ```
@@ -104,6 +111,7 @@ Five public skills. Each routes to internal modes:
 
 ## Quick Links
 
+- [Protocol kernel](protocol-kernel.md) -- where each protocol topic is authoritative
 - [Glossary](glossary.md) -- terminology reference
 - [Cheat Sheet](cheat-sheet.md) -- naming and formats
 - [Template Bundle](../template-bundle/README.md) -- copy-ready files
