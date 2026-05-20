@@ -37,21 +37,26 @@ If you cannot trust the current state:
 
 ## Then Choose The Right Kind Of Work
 
-- No real planning yet -> `northstar-plan`
-- Planning is sound and you want the next milestones or next valid batch -> `northstar-plan`
-- The plan used to be right but changed -> `northstar-recover`
-- The project has drifted and the current state is messy -> `northstar-recover`
-- Research needs to become architecture or contracts -> `northstar-research`
-- Another thread needs a clear continuation brief -> `northstar-handoff`
+Invoke the **`northstar`** skill and open
+[`skills/northstar/references/router.md`](../../skills/northstar/references/router.md)
+to pick one mode:
+
+- No real planning yet -> planning: `plan-from-scratch`
+- Sound planning; need milestones or batches -> planning: `compile-roadmaps`
+- Plan was right but changed -> recovery: `replan-after-change`
+- Drifted or messy state -> recovery: `refocus-drifted-project` or `sweep-audit-repair`
+- Research -> contracts/architecture -> `research`
+- Bootstrap, migrate, or spine hygiene -> `normalize-docs`
+- **Explicit** continuation brief / fresh thread -> `handoff` only (not bare `continue`)
 
 ## If You Want Clear Prompting, Say It Plainly
 
-- “Plan this system before we build” -> `northstar-plan`
-- “Lay out the next few roadmaps from the current contracts” -> `northstar-plan`
-- “Replan this after the contract change” -> `northstar-recover`
-- “Refocus this project under Northstar” -> `northstar-recover`
-- “Turn this memo into contracts” -> `northstar-research`
-- “Create a handoff for the next thread” -> `northstar-handoff`
+- “Plan this system before we build” -> `northstar` (plan-from-scratch)
+- “Lay out the next few roadmaps from the current contracts” -> `northstar` (compile-roadmaps)
+- “Replan this after the contract change” -> `northstar` (replan-after-change)
+- “Refocus this project under Northstar” -> `northstar` (refocus-drifted-project)
+- “Turn this memo into contracts” -> `northstar` (research)
+- “Create a handoff for the next thread” -> `northstar` (handoff mode)
 
 If humans are going to reuse the same opener across multiple threads, use:
 

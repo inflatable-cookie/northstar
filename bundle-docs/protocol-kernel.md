@@ -46,7 +46,9 @@ contracts).
 ## Skills and operators
 
 - **Operators:** [operators/operator-quick-start.md](./operators/operator-quick-start.md)
-- **Skill routing (five public skills):** [skills/README.md](./skills/README.md)
+- **Agent skill (one install):** [`skills/northstar/`](../../skills/northstar/) +
+  [skills/README.md](./skills/README.md) — always run
+  [`references/router.md`](../../skills/northstar/references/router.md) first.
 
 Skills should **name modes and file paths**, not restate full batch-card field
 lists. When an agent needs doctrine depth, prefer this kernel → linked section

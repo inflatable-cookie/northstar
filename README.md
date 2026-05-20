@@ -24,24 +24,11 @@ Core flow:
 - [`bundle-docs/`](./bundle-docs/) explains how the system is meant to work.
 - [`docs/`](./docs/) is the live Northstar planning spine for building and
   extending Northstar itself.
-- [`skills/northstar-setup/`](./skills/northstar-setup/) sets a repo or
-  project up under Northstar and uses Effigy as one setup layer where helpful.
-- [`skills/northstar-plan/`](./skills/northstar-plan/) covers planning from
-  scratch, contract authoring, and roadmap compilation as one planning surface.
-- [`skills/northstar-recover/`](./skills/northstar-recover/) covers bounded
-  replanning, broad refocus, and sweep-led recovery work as one recovery
-  surface.
-- [`skills/northstar-research/`](./skills/northstar-research/) and
-  [`skills/northstar-handoff/`](./skills/northstar-handoff/) cover research
-  synthesis/promotion and execution handoff.
-- [`skills/`](./skills/) -- installable agent skills for common workflows:
-  - `northstar-setup` -- bootstrap or migrate a repo
-  - `northstar-plan` -- plan from scratch or compile roadmaps
-  - `northstar-recover` -- replan, refocus, run sweeps
-  - `northstar-research` -- research intake and promotion
-  - `northstar-handoff` -- create continuation briefs
+- [`skills/northstar/`](./skills/northstar/) -- single installable agent skill;
+  routes internally to plan, research, recovery, docs normalization, and
+  explicit handoff modes (see [`references/router.md`](./skills/northstar/references/router.md)).
 - [`bundle-docs/skills/README.md`](./bundle-docs/skills/README.md) describes
-  skill architecture and consolidation.
+  skill architecture.
 - [`scripts/`](./scripts/) contains repo maintenance helpers when needed.
 
 If you're trying to understand the human workflow rather than the bundle

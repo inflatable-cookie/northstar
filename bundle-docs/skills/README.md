@@ -1,130 +1,60 @@
 # Skill Architecture
 
-This folder describes how Northstar skills should be structured.
+Northstar exposes **one installable agent skill**: `northstar`.
 
-The main goal is to keep the always-visible skill surface small so activation
-stays reliable. Northstar should prefer a few broad entry-point skills with
-clear intent, then load deeper modes and references only when needed.
+Human operators use [`protocol-kernel.md`](../protocol-kernel.md), the
+[visual map](../visual-map.md), and [operator quick start](../operators/operator-quick-start.md).
+Agents use `skills/northstar/SKILL.md` and **must** run
+[`skills/northstar/references/router.md`](../../skills/northstar/references/router.md)
+before loading a mode.
 
-When authoring or editing skill bodies, use the [protocol kernel](../protocol-kernel.md)
-as the map of canonical doctrine versus repo contracts so skills **link**
-instead of duplicating long enumerations.
+## Public surface
 
-## Recommended Public Skill Surface
+| Install | Role |
+| --- | --- |
+| `skills/northstar/` | Single front door for all Northstar agent work |
 
-Keep the top-level installable surface to these skills:
+Retired top-level skills (`northstar-setup`, `northstar-plan`,
+`northstar-recover`, `northstar-research`, `northstar-handoff`) were merged
+into internal **modes** under `skills/northstar/references/modes/`. No
+compatibility aliases.
 
-- `northstar-setup`
-- `northstar-plan`
-- `northstar-recover`
-- `northstar-research`
-- `northstar-handoff`
+## Modes (internal, not separate installs)
 
-`northstar-setup` should absorb the former `northstar-effigy` role rather than
-exposing Effigy in the public skill name. Effigy remains one useful setup
-layer, not the whole operator-facing identity.
+| Mode file | Use when |
+| --- | --- |
+| `normalize-docs.md` | Bootstrap, migrate, or ongoing docs-spine hygiene |
+| `plan-from-scratch.md` | Planning coverage still missing |
+| `shape-with-specs-and-promote.md` | Provisional spec lane before promotion |
+| `compile-roadmaps.md` | Canonical surfaces exist; compile milestones/cards |
+| `research.md` | Evidence → architecture/contracts |
+| `replan-after-change.md` | Valid plan, changed boundary |
+| `refocus-drifted-project.md` | Broad drift or untrustworthy state |
+| `sweep-audit-repair.md` | Structured sweep pass |
+| `handoff.md` | User **explicitly** asks for handoff / fresh thread |
 
-## Why This Shape
+Setup references live under `skills/northstar/references/setup/`.
+Templates live under `skills/northstar/assets/templates/`.
 
-Use a top-level skill only when the user intent is already distinct in the
-first sentence of the request.
+## Activation rules
 
-Examples:
+- **Implicit (auto-invoke):** plan, research, recover, normalize language in the
+  user message — covered by the `northstar` skill description.
+- **Handoff:** only when the user clearly wants a continuation brief or fresh
+  thread. The router and handoff mode forbid compaction-only or bare
+  `continue`.
 
-- “Set this repo up under Northstar”
-- “Plan this system before we build”
-- “Recover this project; the plan has drifted”
-- “Turn this research into project decisions”
-- “Create a handoff for the next thread”
+## Structural rules
 
-Do not create a separate public skill when the distinction only appears after
-diagnosis. That should be an internal mode inside a broader skill.
-
-## Merge Map
-
-Current skill surface:
-
-- `northstar-setup`
-- `northstar-plan`
-- `northstar-recover`
-- `northstar-research`
-- `northstar-handoff`
-
-Recommended consolidated surface:
-
-- `northstar-setup`
-  absorbs: former `northstar-effigy`
-- `northstar-plan`
-  absorbs: former `northstar-plan-product`, former `northstar-roadmap-compiler`
-- `northstar-recover`
-  absorbs: former `northstar-replan`, former `northstar-refocus`
-- `northstar-research`
-  absorbs: former `northstar-research-contracts`
-- `northstar-handoff`
-  remains top-level
-
-## Internal Modes
-
-Each public skill should stay short and route internally to a small number of
-deeper modes.
-
-Suggested mode layout:
-
-- `northstar-setup`
-  - repo bootstrap and normalization
-  - Effigy adoption and validation setup when appropriate
-  - migration from loose docs structure into canonical Northstar shape
-  - **refactor maturity rules for agents:** no pre-1.0 compatibility shims;
-    escalate breaking changes; from v1.0 onward preserve expected stable behavior
-    (see `bundle-docs/sections/07-delivery-framework-and-autonomy.md` and the
-    working-rules contract in the template bundle)
-- `northstar-plan`
-  - plan from scratch
-  - write or repair contract surfaces
-  - compile roadmaps from approved contracts
-- `northstar-recover`
-  - bounded replan after known change
-  - broad refocus after drift
-  - audit-and-repair sweep flow
-- `northstar-research`
-  - research intake and framing
-  - promotion into architecture
-  - promotion into contracts
-- `northstar-handoff`
-  - continuation brief
-  - batch closeout handoff
-  - spin-off prompt for parallel or follow-on work
-
-## Structural Rules
-
-- Keep the number of public skills low.
-- Keep public skill descriptions broad, distinct, and non-overlapping.
-- Put detailed procedures in `references/` and load them only when the chosen
-  mode requires them.
-- Prefer internal mode files over adding new top-level skills for adjacent
-  concepts.
-- Use operator docs and starter prompts for human guidance; do not turn every
-  reusable prompt into a skill.
-
-## Migration Plan
-
-Recommended order:
-
-1. Move deeper procedures into mode references under each merged skill.
-2. Update operator docs and install surfaces after the merged skills are stable.
-
-## Day-To-Day Posture
-
-Northstar should feel like:
-
-- a small number of reliable entry points
-- strong internal routing once a skill is chosen
-- detailed guidance loaded on demand
-
-It should not feel like a large menu of near-duplicate skills competing to
-trigger on slightly different wording.
+- Keep the public skill count at **one**.
+- Put procedures in `references/modes/` and load **one** mode per invocation.
+- Point at doctrine via `bundle-docs/protocol-kernel.md`; do not duplicate
+  long enumerations inside the skill body.
+- Operator starter prompts stay under `bundle-docs/operators/`; not every
+  prompt becomes a skill.
 
 ## Next task
 
-Stabilize the five-skill surface in real use, then trim any remaining operator
-or maintenance wording that still speaks in terms of the retired split skills.
+After installing `northstar` in agent homes, run real threads through plan,
+normalize, and explicit handoff paths to confirm router classification and
+description triggers still fire reliably.

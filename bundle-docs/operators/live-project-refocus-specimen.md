@@ -163,7 +163,7 @@ before.
 ## Recommended Operator Sequence
 
 1. Run the sweep pack, especially [08-planning-gate-sweep.md](~/Dev/projects/northstar/bundle-docs/sweeps/08-planning-gate-sweep.md).
-2. Use the refocus prompt at [project-refocus-starter-prompt.md](~/Dev/projects/northstar/bundle-docs/operators/project-refocus-starter-prompt.md) or the skill at [northstar-recover](~/Dev/projects/northstar/skills/northstar-recover/SKILL.md).
+2. Use the refocus prompt at [project-refocus-starter-prompt.md](~/Dev/projects/northstar/bundle-docs/operators/project-refocus-starter-prompt.md) or the `northstar` skill router mode `refocus-drifted-project` at [skills/northstar/references/router.md](~/Dev/projects/northstar/skills/northstar/references/router.md).
 3. Freeze invalid roadmap work.
 4. Repair planning surfaces and contracts.
 5. Decide recompile versus rollover explicitly.
