@@ -1,4 +1,0 @@
-interface:
-  display_name: "Northstar Recover"
-  short_description: "Recover changed or drifting plans."
-  default_prompt: "Use $northstar-recover for Northstar recovery work: classify the repo posture first, then do bounded replanning after change, broad refocus after drift, or sweep-led audit and repair while restoring the active spec lane, removing stale shadow authority, and re-establishing the canonical promoted refs. For internal recovery artifacts and end-of-turn summaries, use glue-light compressed writing: lead with what recovery fixed, the current lane state, then next move; mention validation only if it failed or materially affects confidence."

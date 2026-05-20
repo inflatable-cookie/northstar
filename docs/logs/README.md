@@ -44,8 +44,9 @@ Use logs as the third step in closeout:
 - `2026-04/10/10-150500-formalize-repo-posture-classification.md`
 - `2026-05/19-164500-finish-protocol-kernel-batch-20-3.md`
 - `2026-05/19-172500-add-posture-advisory-effigy-checks.md`
+- `2026-05/20-144500-consolidate-northstar-skill-surface.md`
 
 ## Next Task
 
-Run `effigy check:posture-advisory` when triaging strict docs trees; write a log
-when you complete the next meaningful `g02` batch.
+Re-install `skills/northstar/` in agent homes; smoke-test router + one explicit
+handoff path.

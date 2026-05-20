@@ -86,28 +86,23 @@ Starting a new project?
 
 ```
 1. Run sweep pack (8 sweeps)
-2. Choose entry point:
-   - No planning yet          → northstar-plan
-   - Plan exists, needs work  → northstar-plan
-   - Plan drifted             → northstar-recover
-   - Research → decisions     → northstar-research
-   - Thread handoff needed    → northstar-handoff
-3. Repair/complete planning
-4. Compile roadmap
-5. Execute batch → log → handoff
+2. Invoke the `northstar` skill; open [`skills/northstar/references/router.md`](../skills/northstar/references/router.md) and pick one mode.
+3. Repair/complete planning or normalize docs posture as needed.
+4. Compile roadmap.
+5. Execute batch → log → handoff (handoff mode only when explicitly requested).
 ```
 
 ## Skill Surface
 
-Five public skills. Each routes to internal modes:
+One installable skill: **`northstar`**. Internal modes (not separate installs):
 
-| Skill | Use when |
-|-------|----------|
-| `northstar-setup` | Bootstrapping or migrating a repo |
-| `northstar-plan` | Planning from scratch or compiling roadmaps |
-| `northstar-recover` | Drifted plans, replanning, sweeps |
-| `northstar-research` | Research intake and promotion |
-| `northstar-handoff` | Thread continuation briefs |
+| Mode | Use when |
+|------|----------|
+| Normalize docs | Bootstrap, migrate, or keep docs spine healthy |
+| Planning sub-modes | Plan, promote specs, compile roadmaps |
+| Recovery sub-modes | Replan, refocus, sweep |
+| Research | Promote evidence into architecture/contracts |
+| Handoff | User explicitly asks for a continuation brief / fresh thread |
 
 ## Quick Links
 

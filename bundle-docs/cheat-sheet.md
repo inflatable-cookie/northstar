@@ -83,15 +83,11 @@ effigy qa:docs        # validate docs structure
 effigy check:posture-advisory  # optional non-blocking docs posture warnings
 ```
 
-## Agent Skills
+## Agent Skill
 
 | Skill | When to Use |
 |-------|-------------|
-| `northstar-setup` | Bootstrap or migrate a repo |
-| `northstar-plan` | Plan from scratch, compile roadmaps |
-| `northstar-recover` | Replan, refocus, run sweeps |
-| `northstar-research` | Research intake and promotion |
-| `northstar-handoff` | Create continuation briefs |
+| `northstar` | All Northstar work: plan, normalize/migrate docs, recover, research; handoff only when explicitly requested (see skill router) |
 
 ## Next Steps
 

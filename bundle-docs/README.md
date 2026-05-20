@@ -65,19 +65,12 @@ Full doctrine: [`sections/07-delivery-framework-and-autonomy.md`](./sections/07-
 - Agent skills (installable): [`skills/README.md`](./skills/README.md)
 - Deprecated `meta/` migration: [`meta-folder-migration.md`](./meta-folder-migration.md)
 
-## Agent Skills
+## Agent skill
 
-Five public skills that agents can install and invoke:
-
-| Skill | Use when |
-|-------|----------|
-| `northstar-setup` | Bootstrap or migrate a repo |
-| `northstar-plan` | Plan from scratch or compile roadmaps |
-| `northstar-recover` | Drifted plans, replanning, sweeps |
-| `northstar-research` | Research intake and promotion |
-| `northstar-handoff` | Thread continuation briefs |
-
-Each skill lives in `../skills/<skill-name>/` and routes to internal modes.
+One installable skill: [`../skills/northstar/`](../skills/northstar/). It routes
+through [`references/router.md`](../skills/northstar/references/router.md) to
+internal modes (plan, normalize, recover, research, handoff). See
+[`skills/README.md`](./skills/README.md).
 
 ## Quick reference
 

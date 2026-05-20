@@ -1,4 +1,0 @@
-interface:
-  display_name: "Northstar Plan"
-  short_description: "Plan, contract, and compile work."
-  default_prompt: "Use $northstar-plan for Northstar planning work: classify the repo posture first, then plan from scratch, shape a change in specs, promote the settled outcomes into architecture/contracts, keep specs provisional instead of permanent authority, and compile roadmap milestones or paused planning gates from approved canonical surfaces. When planning a material lane, leave a bounded runway with a higher-level owner, the next few meaningful batches or transitions, and the next planning checkpoint instead of only one next card. For internal planning artifacts and end-of-turn summaries, use glue-light compressed writing: lead with achieved outcome, current lane state, then next move; mention validation only if it failed or materially affects confidence."

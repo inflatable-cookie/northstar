@@ -91,27 +91,26 @@ const requiredFiles = [
   "template-bundle/specs/archive/README.md",
   "template-bundle/contracts/001-working-rules-template.md",
   "template-bundle/roadmaps/g01/batch-cards/README.md",
-  "skills/northstar-setup/SKILL.md",
-  "skills/northstar-setup/agents/openai.yaml",
-  "skills/northstar-setup/references/repo-contract.md",
-  "skills/northstar-setup/references/adoption-modes.md",
-  "skills/northstar-setup/references/monkey-example.md",
-  "skills/northstar-setup/assets/templates/README.md",
-  "skills/northstar-setup/assets/templates/AGENTS.md",
-  "skills/northstar-setup/assets/templates/CHANGELOG.md",
-  "skills/northstar-setup/assets/templates/docs.README.md.template",
-  "skills/northstar-setup/assets/templates/scripts.README.md.template",
-  "skills/northstar-setup/assets/templates/effigy.native.toml.template",
-  "skills/northstar-setup/assets/templates/effigy.compat.toml.template",
-  "skills/northstar-plan/SKILL.md",
-  "skills/northstar-plan/agents/openai.yaml",
-  "skills/northstar-plan/references/modes/plan-from-scratch.md",
-  "skills/northstar-plan/references/modes/compile-roadmaps.md",
-  "skills/northstar-recover/SKILL.md",
-  "skills/northstar-recover/agents/openai.yaml",
-  "skills/northstar-recover/references/modes/replan-after-change.md",
-  "skills/northstar-recover/references/modes/refocus-drifted-project.md",
-  "skills/northstar-recover/references/modes/sweep-audit-repair.md",
+  "skills/northstar/SKILL.md",
+  "skills/northstar/agents/openai.yaml",
+  "skills/northstar/references/router.md",
+  "skills/northstar/references/handoff-contract.md",
+  "skills/northstar/references/setup/repo-contract.md",
+  "skills/northstar/references/setup/adoption-modes.md",
+  "skills/northstar/references/setup/delivery-layer-adoption.md",
+  "skills/northstar/references/setup/monkey-example.md",
+  "skills/northstar/references/modes/normalize-docs.md",
+  "skills/northstar/references/modes/handoff.md",
+  "skills/northstar/references/modes/plan-from-scratch.md",
+  "skills/northstar/references/modes/shape-with-specs-and-promote.md",
+  "skills/northstar/references/modes/compile-roadmaps.md",
+  "skills/northstar/references/modes/research.md",
+  "skills/northstar/references/modes/replan-after-change.md",
+  "skills/northstar/references/modes/refocus-drifted-project.md",
+  "skills/northstar/references/modes/sweep-audit-repair.md",
+  "skills/northstar/assets/templates/README.md",
+  "skills/northstar/assets/templates/effigy.native.toml.template",
+  "skills/northstar/assets/templates/northstar-handoff.md.template",
 ] as const;
 
 for (const file of requiredFiles) {
@@ -127,9 +126,7 @@ requireContains(repoRoot, "README.md", "effigy tasks", "Effigy discovery step");
 requireContains(repoRoot, "README.md", "effigy doctor", "Effigy doctor step");
 requireContains(repoRoot, "README.md", "effigy qa", "Effigy QA step");
 requireContains(repoRoot, "README.md", "check:posture-advisory", "README posture advisory hint");
-requireContains(repoRoot, "README.md", "skills/northstar-setup/", "setup skill entry point");
-requireContains(repoRoot, "README.md", "skills/northstar-plan/", "plan skill entry point");
-requireContains(repoRoot, "README.md", "skills/northstar-recover/", "recover skill entry point");
+requireContains(repoRoot, "README.md", "skills/northstar/", "northstar skill entry point");
 requireContains(repoRoot, "README.md", "docs/README.md", "live docs entry point");
 
 requireContains(repoRoot, "bundle-docs/README.md", "effigy tasks", "Effigy discovery step");
@@ -138,6 +135,8 @@ requireContains(repoRoot, "bundle-docs/README.md", "effigy qa", "Effigy QA step"
 requireContains(repoRoot, "bundle-docs/README.md", "delivery/autonomy layer", "delivery doctrine reference");
 requireContains(repoRoot, "bundle-docs/README.md", "standard docs spine", "standard docs spine reference");
 requireContains(repoRoot, "bundle-docs/README.md", "protocol-kernel.md", "bundle docs protocol kernel entry");
+requireContains(repoRoot, "bundle-docs/README.md", "skills/northstar/", "bundle docs northstar skill entry");
+requireContains(repoRoot, "bundle-docs/skills/README.md", "one installable agent skill", "skills README single skill doctrine");
 requireContains(repoRoot, "bundle-docs/cheat-sheet.md", "check:posture-advisory", "cheat sheet posture advisory command");
 requireContains(repoRoot, "bundle-docs/protocol-kernel.md", "check:posture-advisory", "protocol kernel posture advisory hint");
 requireContains(repoRoot, "bundle-docs/sections/10-automation-runtime-policy.md", "check:posture-advisory", "automation policy posture advisory hint");
@@ -166,33 +165,23 @@ requireContains(repoRoot, "template-bundle/specs/README.md", "seed `docs/specs/a
 requireContains(repoRoot, "template-bundle/specs/archive/README.md", "closed planning artifacts", "template specs archive purpose");
 requireContains(repoRoot, "template-bundle/specs/archive/README.md", "seed this README from the start", "template specs archive seeded from start");
 
-requireContains(repoRoot, "skills/northstar-setup/SKILL.md", "use Northstar and Effigy", "setup skill trigger language");
-requireContains(repoRoot, "skills/northstar-setup/SKILL.md", "references/adoption-modes.md", "adoption mode reference");
-requireContains(repoRoot, "skills/northstar-setup/SKILL.md", "effigy docs --help", "PATH verification step");
-requireContains(repoRoot, "skills/northstar-setup/SKILL.md", "references/monkey-example.md", "consumer example reference");
-requireContains(repoRoot, "skills/northstar-setup/SKILL.md", "standard docs spine", "standard docs spine language");
-requireContains(repoRoot, "skills/northstar-setup/SKILL.md", "TypeScript", "TypeScript runtime language");
-requireContains(repoRoot, "skills/northstar-setup/SKILL.md", "bun", "Bun runtime language");
-requireContains(repoRoot, "skills/northstar-setup/SKILL.md", "docs/specs/archive/README.md", "setup skill archive surface");
-requireContains(repoRoot, "skills/northstar-setup/agents/openai.yaml", "display_name", "OpenAI skill metadata");
-requireContains(repoRoot, "skills/northstar-setup/assets/templates/README.md", "effigy.native.toml.template", "native template selection");
-requireContains(repoRoot, "skills/northstar-setup/assets/templates/README.md", "effigy.compat.toml.template", "compatibility template selection");
-requireContains(repoRoot, "skills/northstar-setup/assets/templates/README.md", "scripts.README.md.template", "scripts template selection");
-requireContains(repoRoot, "skills/northstar-setup/assets/templates/docs.README.md.template", "contracts/001-working-rules.md", "stricter docs spine template ref");
-requireContains(repoRoot, "skills/northstar-setup/assets/templates/scripts.README.md.template", "TypeScript", "scripts template runtime language");
-requireContains(repoRoot, "skills/northstar-setup/references/repo-contract.md", "Baseline docs spine", "baseline docs spine contract");
-requireContains(repoRoot, "skills/northstar-setup/references/repo-contract.md", "TypeScript", "repo contract TypeScript policy");
-requireContains(repoRoot, "skills/northstar-setup/SKILL.md", "protocol-kernel.md", "setup skill protocol kernel pointer");
-requireContains(repoRoot, "skills/northstar-recover/SKILL.md", "protocol-kernel.md", "recover skill protocol kernel pointer");
-requireContains(repoRoot, "skills/northstar-handoff/SKILL.md", "protocol-kernel.md", "handoff skill protocol kernel pointer");
-requireContains(repoRoot, "skills/northstar-research/SKILL.md", "protocol-kernel.md", "research skill protocol kernel pointer");
-requireContains(repoRoot, "skills/northstar-setup/references/delivery-layer-adoption.md", "Baseline Mode Is Enough When", "delivery layer baseline mode heading");
-requireContains(repoRoot, "skills/northstar-setup/references/delivery-layer-adoption.md", "Lane-First Stricter Adoption", "delivery layer lane-first heading");
-requireContains(repoRoot, "skills/northstar-setup/references/delivery-layer-adoption.md", "Full Strict Compliance Target", "delivery layer full strict heading");
-requireContains(repoRoot, "skills/northstar-setup/references/delivery-layer-adoption.md", "Migration Phases", "delivery layer migration phases heading");
-requireContains(repoRoot, "skills/northstar-setup/references/delivery-layer-adoption.md", "Audit The Current Posture", "delivery layer audit heading");
-requireContains(repoRoot, "skills/northstar-setup/references/delivery-layer-adoption.md", "Rollout Tracking Pattern", "delivery layer rollout heading");
-requireContains(repoRoot, "skills/northstar-setup/references/delivery-layer-adoption.md", "roadmap-only repos can still route active work cleanly", "delivery layer proof-backed baseline wording");
+requireContains(repoRoot, "skills/northstar/SKILL.md", "references/router.md", "northstar skill router");
+requireContains(repoRoot, "skills/northstar/SKILL.md", "protocol-kernel.md", "northstar skill protocol kernel pointer");
+requireContains(repoRoot, "skills/northstar/SKILL.md", "Handoff", "northstar skill handoff mode table");
+requireContains(repoRoot, "skills/northstar/SKILL.md", "Normalize docs", "northstar skill normalize mode table");
+requireContains(repoRoot, "skills/northstar/references/router.md", "Handoff (explicit only)", "router handoff gate");
+requireContains(repoRoot, "skills/northstar/references/router.md", "bare `continue`", "router handoff anti-trigger");
+requireContains(repoRoot, "skills/northstar/references/modes/normalize-docs.md", "../setup/adoption-modes.md", "normalize adoption modes ref");
+requireContains(repoRoot, "skills/northstar/references/modes/normalize-docs.md", "check:posture-advisory", "normalize posture advisory hint");
+requireContains(repoRoot, "skills/northstar/references/setup/delivery-layer-adoption.md", "Baseline Mode Is Enough When", "delivery layer baseline mode heading");
+requireContains(repoRoot, "skills/northstar/references/setup/repo-contract.md", "Baseline docs spine", "baseline docs spine contract");
+requireContains(repoRoot, "skills/northstar/agents/openai.yaml", "references/router.md", "openai default router");
+requireContains(repoRoot, "skills/northstar/references/modes/compile-roadmaps.md", "Do not mark a batch `ready` just because it is next in sequence.", "compile-roadmaps readiness guardrail");
+requireContains(repoRoot, "skills/northstar/references/modes/handoff.md", "explicit trigger only", "handoff mode explicit gate");
+requireContains(repoRoot, "skills/northstar/references/handoff-contract.md", "Do not use it as a substitute for proper closeout in the live planning spine.", "handoff contract closeout rule");
+requireContains(repoRoot, "skills/northstar/assets/templates/northstar-handoff.md.template", "Confirm the current batch card already reflects the stopping point.", "handoff template closeout step");
+forbidContains(repoRoot, "skills/northstar/SKILL.md", "northstar-setup", "retired setup skill name in northstar skill");
+forbidContains(repoRoot, "skills/northstar/SKILL.md", "northstar-plan", "retired plan skill name in northstar skill");
 requireContains(repoRoot, "scripts/README.md", "TypeScript", "scripts README runtime language");
 requireContains(repoRoot, "scripts/README.md", "bun", "scripts README bun policy");
 requireContains(repoRoot, "scripts/README.md", "check:posture-advisory", "scripts README posture advisory task");
@@ -219,8 +208,8 @@ requireContains(repoRoot, "docs/logs/README.md", "## Closeout rule", "live logs 
 requireContains(repoRoot, "docs/logs/README.md", "## Still-governing context", "logs context heading");
 requireContains(repoRoot, "docs/logs/README.md", "## Recent active-lane evidence", "logs evidence heading");
 requireContains(repoRoot, "docs/logs/README.md", "09-111500-roll-to-g02-external-pilot.md", "governing context log");
-requireContains(repoRoot, "docs/logs/README.md", "19-172500-add-posture-advisory-effigy-checks.md", "latest active-lane log");
-requireContains(repoRoot, "docs/logs/README.md", "Run `effigy check:posture-advisory` when triaging", "logs next task");
+requireContains(repoRoot, "docs/logs/README.md", "20-144500-consolidate-northstar-skill-surface.md", "latest active-lane log");
+requireContains(repoRoot, "docs/logs/README.md", "Re-install `skills/northstar/`", "logs next task");
 forbidContains(repoRoot, "docs/logs/README.md", "08-120000-bootstrap-live-northstar-docs.md", "stale bootstrap log in bounded evidence window");
 forbidContains(repoRoot, "docs/logs/README.md", "09-205500-open-currentness-alignment-lane.md", "older currentness-alignment log in bounded evidence window");
 forbidContains(repoRoot, "docs/logs/README.md", "09-121500-select-signal-pilot-target.md", "old pilot-selection log in bounded evidence window");
@@ -232,27 +221,10 @@ requireContains(repoRoot, "effigy.toml", "bun run ./scripts/check-northstar-bund
 requireContains(repoRoot, "effigy.toml", "bun run ./scripts/check-northstar-repo-contract.ts", "bun repo checker task");
 requireContains(repoRoot, "effigy.toml", "check:posture-advisory", "posture advisory task name");
 requireContains(repoRoot, "effigy.toml", "bun run ./scripts/check-northstar-posture-advisory.ts", "bun posture advisory checker task");
-requireContains(repoRoot, "skills/northstar-plan/SKILL.md", "references/modes/plan-from-scratch.md", "plan mode reference");
-requireContains(repoRoot, "skills/northstar-plan/SKILL.md", "bundle-docs/protocol-kernel.md", "plan skill protocol kernel pointer");
-requireContains(repoRoot, "skills/northstar-plan/SKILL.md", "references/modes/compile-roadmaps.md", "roadmap mode reference");
-requireContains(repoRoot, "skills/northstar-plan/SKILL.md", "readiness rubric", "plan readiness wording");
-requireContains(repoRoot, "skills/northstar-plan/SKILL.md", "docs/specs/archive/README.md", "plan skill archive surface");
-requireContains(repoRoot, "skills/northstar-plan/SKILL.md", "continuation envelope", "plan continuation envelope wording");
-requireContains(repoRoot, "skills/northstar-plan/references/modes/compile-roadmaps.md", "Do not mark a batch `ready` just because it is next in sequence.", "plan readiness guardrail");
-requireContains(repoRoot, "skills/northstar-recover/SKILL.md", "references/modes/replan-after-change.md", "replan mode reference");
-requireContains(repoRoot, "skills/northstar-recover/SKILL.md", "references/modes/refocus-drifted-project.md", "refocus mode reference");
-requireContains(repoRoot, "skills/northstar-recover/SKILL.md", "references/modes/sweep-audit-repair.md", "sweep mode reference");
-requireContains(repoRoot, "skills/northstar-recover/SKILL.md", "docs/specs/archive/README.md", "recover skill archive surface");
-requireContains(repoRoot, "skills/northstar-handoff/SKILL.md", "Treat handoff as the fourth closeout step", "handoff closeout ordering");
-requireContains(repoRoot, "skills/northstar-handoff/SKILL.md", "continuation envelope", "handoff continuation wording");
-requireContains(repoRoot, "skills/northstar-handoff/SKILL.md", "pause signal", "handoff pause-signal wording");
-requireContains(repoRoot, "skills/northstar-handoff/SKILL.md", "Do not use a handoff as a substitute for the batch log or roadmap update.", "handoff closeout guardrail");
-requireContains(repoRoot, "skills/northstar-handoff/references/handoff-contract.md", "remaining continuation envelope", "handoff contract continuation state");
-requireContains(repoRoot, "skills/northstar-handoff/references/handoff-contract.md", "pause signal", "handoff contract pause-signal state");
-requireContains(repoRoot, "skills/northstar-handoff/references/handoff-contract.md", "Do not use it as a substitute for proper closeout in the live planning spine.", "handoff contract closeout rule");
-requireContains(repoRoot, "skills/northstar-handoff/assets/templates/northstar-handoff.md.template", "Remaining continuation envelope", "handoff template continuation state");
-requireContains(repoRoot, "skills/northstar-handoff/assets/templates/northstar-handoff.md.template", "Lane budget / pause signal", "handoff template lane-budget state");
-requireContains(repoRoot, "skills/northstar-handoff/assets/templates/northstar-handoff.md.template", "Confirm the current batch card already reflects the stopping point.", "handoff template closeout step");
+requireContains(repoRoot, "skills/northstar/references/handoff-contract.md", "remaining continuation envelope", "handoff contract continuation state");
+requireContains(repoRoot, "skills/northstar/assets/templates/northstar-handoff.md.template", "Lane budget / pause signal", "handoff template lane-budget state");
+forbidContains(repoRoot, "README.md", "skills/northstar-setup/", "retired northstar-setup path in README");
+forbidContains(repoRoot, "README.md", "skills/northstar-plan/", "retired northstar-plan path in README");
 requireContains(repoRoot, "template-bundle/logs/templates/thread-handoff-template.md", "Remaining continuation envelope", "bundle handoff continuation state");
 requireContains(repoRoot, "template-bundle/logs/templates/thread-handoff-template.md", "Lane budget / pause signal", "bundle handoff lane-budget state");
 requireContains(repoRoot, "template-bundle/logs/templates/thread-handoff-template.md", "Confirm the current batch card already reflects the stopping point.", "bundle handoff closeout step");
