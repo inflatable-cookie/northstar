@@ -2,7 +2,7 @@
 
 This folder is for humans running Northstar in real work.
 
-Start with [operator-quick-start.md](~/Dev/projects/northstar/bundle-docs/operators/operator-quick-start.md).
+Start with [operator-quick-start.md](./operator-quick-start.md).
 
 The normal day-to-day surfaces are:
 
@@ -17,6 +17,7 @@ so the normal operator front door stays short.
 ## Quick reference
 
 - [Visual map](../visual-map.md) -- one-page overview
+- [Protocol kernel](../protocol-kernel.md) -- canonical map of doctrine vs contracts
 - [Glossary](../glossary.md) -- terminology
 - [Cheat sheet](../cheat-sheet.md) -- naming, formats, commands
 

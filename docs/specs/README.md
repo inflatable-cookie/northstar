@@ -46,5 +46,6 @@ Mirror only the minimum grouping needed to preserve traceability.
 
 ## Next Task
 
-Use `022-formalize-repo-posture-classification.md` to add one explicit
-repo-posture taxonomy to the reusable Northstar package.
+Open a new master spec when the next material `g02` lane needs one. Optional:
+`effigy check:posture-advisory` on strict-shape downstream repos. Recent
+evidence: `docs/logs/2026-05/19-172500-add-posture-advisory-effigy-checks.md`.

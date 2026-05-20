@@ -42,8 +42,10 @@ Use logs as the third step in closeout:
 - `2026-04/10/10-140500-formalize-nested-docs-authority-setup.md`
 - `2026-04/10/10-142500-add-workspace-container-adoption-specimen.md`
 - `2026-04/10/10-150500-formalize-repo-posture-classification.md`
+- `2026-05/19-164500-finish-protocol-kernel-batch-20-3.md`
+- `2026-05/19-172500-add-posture-advisory-effigy-checks.md`
 
 ## Next Task
 
-Execute `g02.019` and log the package changes needed to make repo-posture
-classification explicit in the core skills.
+Run `effigy check:posture-advisory` when triaging strict docs trees; write a log
+when you complete the next meaningful `g02` batch.

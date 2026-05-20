@@ -3,6 +3,10 @@
 Use this page when you want to decide what to do next without wading through
 the rest of the docs.
 
+For the **one-page map** from posture to canonical doctrine files (before you
+open long sections), read [`../protocol-kernel.md`](../protocol-kernel.md), then
+[`../visual-map.md`](../visual-map.md) if you still need the hierarchy picture.
+
 ## Start With The Real First Question
 
 Is this repo healthy and actively moving, or unclear and drifting?

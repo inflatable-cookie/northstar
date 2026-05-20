@@ -29,7 +29,10 @@ informal habits.
   whether they still help the active lane.
 - A ready batch card should define scope, steps, governing refs, acceptance
   criteria, evidence requirements, stop conditions, and whether
-  auto-continuation is allowed.
+  auto-continuation is allowed. Full field enumeration lives in the Northstar
+  bundle at `bundle-docs/sections/07-delivery-framework-and-autonomy.md`
+  (heading *Batch card rule*); keep this contract aligned with that section when
+  you customize wording.
 - In a strict lane, a bare `continue` should resolve through the previous
   closeout's `Next Task`, which should normally point at the current ready card
   or an explicit stop/reassessment step.

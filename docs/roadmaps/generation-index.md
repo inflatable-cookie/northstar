@@ -1,7 +1,7 @@
 # Roadmap Generation Index
 
 Status: active
-Updated: 2026-05-08
+Updated: 2026-05-19
 
 ## Mode
 
@@ -66,5 +66,6 @@ that thread.
 
 ## Next Task
 
-Use `g02.019` to formalize repo-posture classification now that the setup
-package has stronger concrete adoption examples.
+No blocking roadmap milestone is open. Use `roadmaps/g02/README.md` for
+milestone history. Optional: `effigy check:posture-advisory` on downstream
+strict repos before opening the next `g02` slice.

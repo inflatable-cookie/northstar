@@ -28,10 +28,13 @@ single-pilot bucket.
 - `017-formalize-nested-docs-authority-setup.md`
 - `018-add-workspace-container-adoption-specimen.md`
 - `019-formalize-repo-posture-classification.md`
+- `020-add-protocol-kernel-and-dedupe-canonical-surfaces.md`
+- `021-add-posture-and-archive-advisory-checks-to-effigy.md`
 
 ## Next Task
 
-Execute `g02.019` so the core skills share one explicit repo-posture model.
+`g02.020` and `g02.021` are complete. Compile the next contract-backed `g02`
+milestone when you queue new work.
 
 
 Batch cards live in `g02/batch-cards/` when strict posture uses them.

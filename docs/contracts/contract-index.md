@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-04-10
+Updated: 2026-05-19
 
 ## Coverage Rules
 
@@ -15,7 +15,7 @@ Updated: 2026-04-10
 
 | Contract | Boundary | Owning surface | Dependent roadmaps | Status |
 | --- | --- | --- | --- | --- |
-| `001-working-rules` | compact delivery grammar, done-ness, guardrail pack, spec-hygiene rule, currentness-surface rules, autonomy rules, automation runtime policy, and the live ready-state/closeout rules for the repo | `docs/`, `bundle-docs/`, `template-bundle/`, `skills/`, `scripts/` | `g01.001`, `g01.002`, `g01.003`, `g02.001`, `g02.002`, `g02.003`, `g02.004`, `g02.005`, `g02.006`, `g02.007`, `g02.008`, `g02.009`, `g02.010`, `g02.011`, `g02.012`, `g02.013`, `g02.014`, `g02.015`, `g02.016`, `g02.017`, `g02.018`, `g02.019` | active |
+| `001-working-rules` | compact delivery grammar, done-ness, guardrail pack, spec-hygiene rule, currentness-surface rules, autonomy rules, automation runtime policy, and the live ready-state/closeout rules for the repo | `docs/`, `bundle-docs/`, `template-bundle/`, `skills/`, `scripts/` | `g01.001`, `g01.002`, `g01.003`, `g02.001`, `g02.002`, `g02.003`, `g02.004`, `g02.005`, `g02.006`, `g02.007`, `g02.008`, `g02.009`, `g02.010`, `g02.011`, `g02.012`, `g02.013`, `g02.014`, `g02.015`, `g02.016`, `g02.017`, `g02.018`, `g02.019`, `g02.020`, `g02.021` | active |
 
 ## Missing or Pending Contracts
 
@@ -25,12 +25,12 @@ No active contract gaps are blocking the current `g02` lane.
 
 `g01.001`, `g01.002`, `g01.003`, `g02.001`, `g02.002`, `g02.003`, `g02.004`,
 `g02.005`, `g02.006`, `g02.007`, `g02.008`, `g02.009`, `g02.010`, `g02.011`,
-`g02.012`, `g02.013`, `g02.014`, `g02.015`, `g02.016`, `g02.017`, and `g02.018` are complete.
-`g02.019` is the active setup/package lane for repo-posture classification,
-so `001-working-rules` remains sufficient for the current proof and sequencing
-surface.
+`g02.012`, `g02.013`, `g02.014`, `g02.015`, `g02.016`, `g02.017`, `g02.018`,
+`g02.019`, `g02.020`, and `g02.021` are complete. The `g02` generation remains open
+for future milestones; no single roadmap file currently gates contract work.
 
 ## Next Task
 
-Use `g02.019` to formalize repo-posture classification across the core setup,
-planning, and recovery surfaces.
+Use `roadmaps/g02/README.md` for milestone history. Run
+`effigy check:posture-advisory` when triaging strict-shape downstream repos before
+opening the next `g02` slice.

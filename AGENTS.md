@@ -36,12 +36,15 @@ For first-time local bring-up from outside this repo:
 
 - `effigy qa`
 - `effigy qa:docs`
+- optional: `effigy check:posture-advisory` for non-blocking docs posture drift
+  (`[northstar:advisory]` lines; see `scripts/README.md`)
 
 ## References
 
 - `README.md`
 - `docs/README.md`
 - `bundle-docs/README.md`
+- `bundle-docs/protocol-kernel.md`
 - `template-bundle/README.md`
 - `bundle-docs/sweeps/README.md`
 - `skills/northstar-setup/SKILL.md`

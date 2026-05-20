@@ -14,7 +14,7 @@ to adopt.
 - [architecture/product-guardrails.md](./architecture/product-guardrails.md)
 - [contracts/001-working-rules.md](./contracts/001-working-rules.md)
 - [specs/022-formalize-repo-posture-classification.md](./specs/022-formalize-repo-posture-classification.md)
-- [roadmaps/g02/019-formalize-repo-posture-classification.md](./roadmaps/g02/019-formalize-repo-posture-classification.md)
+- [roadmaps/generation-index.md](./roadmaps/generation-index.md)
 
 ## Sections
 
@@ -45,5 +45,5 @@ Northstar system:
 
 ## Next Task
 
-Execute the repo-posture classification lane so the core skills can classify
-real repo state more mechanically.
+Run `effigy check:posture-advisory` when sanity-checking strict Northstar-shaped
+repos; open the next `g02` milestone when new contract-backed work is queued.

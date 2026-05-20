@@ -14,6 +14,8 @@ const requiredFiles = [
   "docs/README.md",
   "docs/vision/README.md",
   "docs/roadmaps/README.md",
+  "docs/roadmaps/generation-index.md",
+  "docs/roadmaps/g02/README.md",
   "docs/logs/README.md",
   "docs/architecture/system-architecture.md",
   "docs/architecture/system-inventory.md",
@@ -74,12 +76,16 @@ const requiredFiles = [
   "docs/roadmaps/g02/012-define-full-strict-compliance-migration-program.md",
   "docs/roadmaps/g02/013-define-strict-compliance-audit-and-rollout-surface.md",
   "bundle-docs/README.md",
+  "bundle-docs/cheat-sheet.md",
+  "bundle-docs/protocol-kernel.md",
+  "bundle-docs/operators/operator-quick-start.md",
   "bundle-docs/sections/07-delivery-framework-and-autonomy.md",
   "bundle-docs/sections/09-standard-docs-spine.md",
   "bundle-docs/sections/10-automation-runtime-policy.md",
   "scripts/README.md",
   "scripts/check-northstar-bundle.ts",
   "scripts/check-northstar-repo-contract.ts",
+  "scripts/check-northstar-posture-advisory.ts",
   "scripts/lib/checks.ts",
   "template-bundle/README.md",
   "template-bundle/specs/archive/README.md",
@@ -115,10 +121,12 @@ for (const file of requiredFiles) {
 requireContains(repoRoot, "AGENTS.md", "effigy tasks", "Effigy discovery step");
 requireContains(repoRoot, "AGENTS.md", "effigy doctor", "Effigy doctor step");
 requireContains(repoRoot, "AGENTS.md", "effigy qa", "Effigy QA step");
+requireContains(repoRoot, "AGENTS.md", "check:posture-advisory", "AGENTS posture advisory hint");
 
 requireContains(repoRoot, "README.md", "effigy tasks", "Effigy discovery step");
 requireContains(repoRoot, "README.md", "effigy doctor", "Effigy doctor step");
 requireContains(repoRoot, "README.md", "effigy qa", "Effigy QA step");
+requireContains(repoRoot, "README.md", "check:posture-advisory", "README posture advisory hint");
 requireContains(repoRoot, "README.md", "skills/northstar-setup/", "setup skill entry point");
 requireContains(repoRoot, "README.md", "skills/northstar-plan/", "plan skill entry point");
 requireContains(repoRoot, "README.md", "skills/northstar-recover/", "recover skill entry point");
@@ -129,7 +137,10 @@ requireContains(repoRoot, "bundle-docs/README.md", "effigy doctor", "Effigy doct
 requireContains(repoRoot, "bundle-docs/README.md", "effigy qa", "Effigy QA step");
 requireContains(repoRoot, "bundle-docs/README.md", "delivery/autonomy layer", "delivery doctrine reference");
 requireContains(repoRoot, "bundle-docs/README.md", "standard docs spine", "standard docs spine reference");
-requireContains(repoRoot, "bundle-docs/README.md", "automation runtime policy", "runtime policy reference");
+requireContains(repoRoot, "bundle-docs/README.md", "protocol-kernel.md", "bundle docs protocol kernel entry");
+requireContains(repoRoot, "bundle-docs/cheat-sheet.md", "check:posture-advisory", "cheat sheet posture advisory command");
+requireContains(repoRoot, "bundle-docs/protocol-kernel.md", "check:posture-advisory", "protocol kernel posture advisory hint");
+requireContains(repoRoot, "bundle-docs/sections/10-automation-runtime-policy.md", "check:posture-advisory", "automation policy posture advisory hint");
 requireContains(repoRoot, "bundle-docs/sections/07-delivery-framework-and-autonomy.md", "## Ready-state rubric", "ready-state doctrine heading");
 requireContains(repoRoot, "bundle-docs/sections/07-delivery-framework-and-autonomy.md", "## Closeout pattern", "closeout doctrine heading");
 requireContains(repoRoot, "bundle-docs/sections/07-delivery-framework-and-autonomy.md", "## Autonomy support levels", "autonomy support levels heading");
@@ -171,7 +182,10 @@ requireContains(repoRoot, "skills/northstar-setup/assets/templates/docs.README.m
 requireContains(repoRoot, "skills/northstar-setup/assets/templates/scripts.README.md.template", "TypeScript", "scripts template runtime language");
 requireContains(repoRoot, "skills/northstar-setup/references/repo-contract.md", "Baseline docs spine", "baseline docs spine contract");
 requireContains(repoRoot, "skills/northstar-setup/references/repo-contract.md", "TypeScript", "repo contract TypeScript policy");
-requireContains(repoRoot, "skills/northstar-setup/references/delivery-layer-adoption.md", "docs/specs/archive/README.md", "delivery layer archive surface");
+requireContains(repoRoot, "skills/northstar-setup/SKILL.md", "protocol-kernel.md", "setup skill protocol kernel pointer");
+requireContains(repoRoot, "skills/northstar-recover/SKILL.md", "protocol-kernel.md", "recover skill protocol kernel pointer");
+requireContains(repoRoot, "skills/northstar-handoff/SKILL.md", "protocol-kernel.md", "handoff skill protocol kernel pointer");
+requireContains(repoRoot, "skills/northstar-research/SKILL.md", "protocol-kernel.md", "research skill protocol kernel pointer");
 requireContains(repoRoot, "skills/northstar-setup/references/delivery-layer-adoption.md", "Baseline Mode Is Enough When", "delivery layer baseline mode heading");
 requireContains(repoRoot, "skills/northstar-setup/references/delivery-layer-adoption.md", "Lane-First Stricter Adoption", "delivery layer lane-first heading");
 requireContains(repoRoot, "skills/northstar-setup/references/delivery-layer-adoption.md", "Full Strict Compliance Target", "delivery layer full strict heading");
@@ -181,36 +195,45 @@ requireContains(repoRoot, "skills/northstar-setup/references/delivery-layer-adop
 requireContains(repoRoot, "skills/northstar-setup/references/delivery-layer-adoption.md", "roadmap-only repos can still route active work cleanly", "delivery layer proof-backed baseline wording");
 requireContains(repoRoot, "scripts/README.md", "TypeScript", "scripts README runtime language");
 requireContains(repoRoot, "scripts/README.md", "bun", "scripts README bun policy");
+requireContains(repoRoot, "scripts/README.md", "check:posture-advisory", "scripts README posture advisory task");
+requireContains(repoRoot, "scripts/README.md", "[northstar:advisory]", "scripts README advisory prefix");
 requireContains(repoRoot, "docs/contracts/001-working-rules.md", "### Ready-state rubric", "working-rules readiness heading");
 requireContains(repoRoot, "docs/contracts/001-working-rules.md", "### Continuation envelope", "working-rules continuation heading");
 requireContains(repoRoot, "docs/contracts/001-working-rules.md", "### Lane budget and pause signals", "working-rules lane-budget heading");
 requireContains(repoRoot, "docs/contracts/001-working-rules.md", "### Closeout pattern", "working-rules closeout heading");
 requireContains(repoRoot, "docs/contracts/001-working-rules.md", "### Strict-compliance audit and rollout", "working-rules audit heading");
+requireContains(repoRoot, "docs/contracts/001-working-rules.md", "Full doctrine enumerations for batch-card fields", "working-rules doctrine pointer");
 requireContains(repoRoot, "docs/contracts/001-working-rules.md", "`active`, `retired-in-place`, and `archived`", "working-rules spec lifecycle states");
-requireContains(repoRoot, "docs/logs/README.md", "## Closeout rule", "live logs closeout rule");
+requireContains(repoRoot, "bundle-docs/operators/operator-quick-start.md", "protocol-kernel.md", "operator quick start protocol kernel link");
 requireContains(repoRoot, "docs/README.md", "specs/022-formalize-repo-posture-classification.md", "active spec front door");
-requireContains(repoRoot, "docs/README.md", "roadmaps/g02/019-formalize-repo-posture-classification.md", "active roadmap front door");
-requireContains(repoRoot, "docs/README.md", "Execute the repo-posture classification lane", "live docs next task");
+requireContains(repoRoot, "docs/README.md", "Run `effigy check:posture-advisory` when sanity-checking", "live docs next task");
 requireContains(repoRoot, "docs/roadmaps/README.md", "`g02` is the active generation", "roadmaps active generation");
-requireContains(repoRoot, "docs/roadmaps/README.md", "`g02.019` is the current milestone", "roadmaps active milestone");
+requireContains(repoRoot, "docs/roadmaps/README.md", "`g02.020` and `g02.021` are complete", "roadmaps g02.020 and g02.021 complete");
 requireContains(repoRoot, "docs/roadmaps/g02/README.md", "018-add-workspace-container-adoption-specimen.md", "g02 milestone listing");
-requireContains(repoRoot, "docs/roadmaps/g02/README.md", "Execute `g02.019`", "g02 next task");
-requireContains(repoRoot, "docs/roadmaps/generation-index.md", "Use `g02.019` to formalize repo-posture classification", "generation index next task");
-requireContains(repoRoot, "docs/contracts/contract-index.md", "`g02.019` is the active setup/package lane", "contract index current lane");
+requireContains(repoRoot, "docs/roadmaps/g02/README.md", "020-add-protocol-kernel-and-dedupe-canonical-surfaces.md", "g02 milestone listing tail");
+requireContains(repoRoot, "docs/roadmaps/g02/README.md", "021-add-posture-and-archive-advisory-checks-to-effigy.md", "g02 milestone listing end");
+requireContains(repoRoot, "docs/roadmaps/g02/README.md", "`g02.021` are complete", "g02 next task");
+requireContains(repoRoot, "docs/roadmaps/generation-index.md", "No blocking roadmap milestone is open", "generation index next task");
+requireContains(repoRoot, "docs/contracts/contract-index.md", "`g02.021` are complete", "contract index current lane");
+requireContains(repoRoot, "docs/logs/README.md", "## Closeout rule", "live logs closeout rule");
 requireContains(repoRoot, "docs/logs/README.md", "## Still-governing context", "logs context heading");
 requireContains(repoRoot, "docs/logs/README.md", "## Recent active-lane evidence", "logs evidence heading");
 requireContains(repoRoot, "docs/logs/README.md", "09-111500-roll-to-g02-external-pilot.md", "governing context log");
-requireContains(repoRoot, "docs/logs/README.md", "10-231500-apply-signal-migration-proof-findings.md", "latest active-lane log");
-requireContains(repoRoot, "docs/logs/README.md", "Execute `g02.019`", "logs next task");
+requireContains(repoRoot, "docs/logs/README.md", "19-172500-add-posture-advisory-effigy-checks.md", "latest active-lane log");
+requireContains(repoRoot, "docs/logs/README.md", "Run `effigy check:posture-advisory` when triaging", "logs next task");
 forbidContains(repoRoot, "docs/logs/README.md", "08-120000-bootstrap-live-northstar-docs.md", "stale bootstrap log in bounded evidence window");
 forbidContains(repoRoot, "docs/logs/README.md", "09-205500-open-currentness-alignment-lane.md", "older currentness-alignment log in bounded evidence window");
 forbidContains(repoRoot, "docs/logs/README.md", "09-121500-select-signal-pilot-target.md", "old pilot-selection log in bounded evidence window");
-requireContains(repoRoot, "docs/specs/README.md", "022-formalize-repo-posture-classification.md", "specs README next task");
+requireContains(repoRoot, "docs/specs/README.md", "19-172500-add-posture-advisory-effigy-checks.md", "specs README g02.021 closeout evidence");
+requireContains(repoRoot, "docs/specs/README.md", "`effigy check:posture-advisory`", "specs README advisory task hint");
 requireContains(repoRoot, "template-bundle/specs/README.md", "templates/strict-compliance-migration-template.md", "strict migration template listing");
 
 requireContains(repoRoot, "effigy.toml", "bun run ./scripts/check-northstar-bundle.ts", "bun bundle checker task");
 requireContains(repoRoot, "effigy.toml", "bun run ./scripts/check-northstar-repo-contract.ts", "bun repo checker task");
+requireContains(repoRoot, "effigy.toml", "check:posture-advisory", "posture advisory task name");
+requireContains(repoRoot, "effigy.toml", "bun run ./scripts/check-northstar-posture-advisory.ts", "bun posture advisory checker task");
 requireContains(repoRoot, "skills/northstar-plan/SKILL.md", "references/modes/plan-from-scratch.md", "plan mode reference");
+requireContains(repoRoot, "skills/northstar-plan/SKILL.md", "bundle-docs/protocol-kernel.md", "plan skill protocol kernel pointer");
 requireContains(repoRoot, "skills/northstar-plan/SKILL.md", "references/modes/compile-roadmaps.md", "roadmap mode reference");
 requireContains(repoRoot, "skills/northstar-plan/SKILL.md", "readiness rubric", "plan readiness wording");
 requireContains(repoRoot, "skills/northstar-plan/SKILL.md", "docs/specs/archive/README.md", "plan skill archive surface");

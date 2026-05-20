@@ -14,6 +14,9 @@ The main current sections are vision, architecture, roadmaps, logs, research,
 strict planning gates, the delivery/autonomy layer, the specs-promotion
 model, the standard docs spine, and the automation runtime policy.
 
+For a **single-page map** of canonical homes (what to copy vs what to link),
+read [`protocol-kernel.md`](./protocol-kernel.md) first.
+
 ## Effigy-First Loop
 
 From the repo root:
@@ -46,6 +49,7 @@ Full doctrine: [`sections/07-delivery-framework-and-autonomy.md`](./sections/07-
 ## What Lives Here
 
 - `sections/` defines the doctrine
+- [`protocol-kernel.md`](./protocol-kernel.md) maps topics to canonical doctrine and contracts
 - `sweeps/` defines audit and cleanup passes
 - `operators/` holds the human-facing operator workflow docs
 - `maintenance/` holds pilot, pruning, and maintenance-only operator-stack docs
@@ -54,7 +58,7 @@ Full doctrine: [`sections/07-delivery-framework-and-autonomy.md`](./sections/07-
 
 ## Useful Entry Points
 
-- New to the system: [`visual-map.md`](./visual-map.md) → [`glossary.md`](./glossary.md) → [`cheat-sheet.md`](./cheat-sheet.md)
+- New to the system: [`visual-map.md`](./visual-map.md) → [`protocol-kernel.md`](./protocol-kernel.md) → [`glossary.md`](./glossary.md) → [`cheat-sheet.md`](./cheat-sheet.md)
 - Audit or migration work: [`sweeps/README.md`](./sweeps/README.md)
 - Operator workflow: [`operators/README.md`](./operators/README.md)
 - Operator-stack maintenance: [`maintenance/README.md`](./maintenance/README.md)
@@ -77,6 +81,7 @@ Each skill lives in `../skills/<skill-name>/` and routes to internal modes.
 
 ## Quick reference
 
+- [Protocol kernel](protocol-kernel.md) -- canonical map of doctrine vs contracts
 - [Visual map](visual-map.md) -- one-page overview
 - [Glossary](glossary.md) -- terminology
 - [Cheat sheet](cheat-sheet.md) -- naming, formats, commands

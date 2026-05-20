@@ -83,6 +83,10 @@ single-repo planning lane like this one.
 
 ### Ready-state rubric
 
+- Full doctrine enumerations for batch-card fields and card-level readiness live
+  in [`bundle-docs/sections/07-delivery-framework-and-autonomy.md`](../../bundle-docs/sections/07-delivery-framework-and-autonomy.md)
+  under **Batch card rule** and **Ready-state rubric**. This subsection stays the
+  compact binding surface for the northstar repo.
 - Treat `ready` as a constrained execution state, not a placeholder label.
 - A card is ready only when:
   - its objective is bounded enough to complete without fresh planning
