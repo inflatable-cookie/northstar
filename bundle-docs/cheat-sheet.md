@@ -61,10 +61,11 @@ docs/
 2. Define architecture before contracts
 3. Create contracts before roadmaps
 4. Log per batch, not per task
-5. Stop on planning gaps -- do not infer missing behavior
-6. One active generation in sequential mode; parallel mode allows multiple
-7. Backlog lives only at `roadmaps/backlog/`
-8. Clean migrations only: move, update refs, remove legacy in one batch
+5. Roadmaps span multiple batches/cards; batch cards own step detail
+6. Stop on planning gaps -- do not infer missing behavior
+7. One active generation in sequential mode; parallel mode allows multiple
+8. Backlog lives only at `roadmaps/backlog/`
+9. Clean migrations only: move, update refs, remove legacy in one batch
 
 ## Protocol kernel
 

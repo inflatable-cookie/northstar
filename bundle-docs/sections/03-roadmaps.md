@@ -1,7 +1,7 @@
 # 03 Roadmaps
 
 Status: active
-Updated: 2026-04-09
+Updated: 2026-06-05
 
 ## Why this section matters now
 
@@ -113,12 +113,68 @@ it to bypass closeout discipline for related work that should share a queue.
 3. `## Goals`
 4. `## Non-Goals`
 5. `## Contract Coverage`
-6. `## Execution Plan` (batch-based executable task lists)
+6. `## Execution Plan` (batch-based executable task lists with checkboxes)
 7. `## Acceptance Criteria`
 8. `## Risks and Mitigations`
 9. `## Planning Gaps`
 10. `## Evidence Requirements`
 11. `## Next Task`
+
+## Scope and granularity rule
+
+Roadmaps are **turnkey milestone definitions**, not thread-scoped planning
+notes. A roadmap should survive closeout and handoff without the originating
+agent chat.
+
+### Roadmap owns the lane shape
+
+- A roadmap milestone names the problem, goals, acceptance, and **batch
+  sequence** for a material slice of work.
+- `## Execution Plan` groups work into named batches (`### Batch n.m`). Each
+  batch is a meaningful execution chunk, not a single agent turn.
+- In strict posture, most batches map to one or more **batch cards** under
+  `docs/roadmaps/gNN/batch-cards/`. The roadmap defines the sequence; batch
+  cards define the step-by-step instructions for the current batch.
+
+### Batch cards own the steps
+
+- Do not put batch-card-level steps only in roadmap prose and then recreate the
+  roadmap on the next thread.
+- Do not use a roadmap as a one-card scratchpad. If strict posture applies,
+  promote the immediate work into a batch card and keep the roadmap at milestone
+  granularity.
+
+### Minimum runway inside a milestone
+
+For a non-trivial lane:
+
+- `## Execution Plan` should name **at least two or three batches** before
+  execution starts, or name the immediate batch plus explicit runway notes that
+  list the next few batches or milestone transitions.
+- In strict posture, a freshly compiled material milestone should normally
+  anticipate **several batch cards** across the visible runway (a useful default
+  is three or more), not a single card with implied follow-on work.
+- One batch in the execution plan may span multiple batch cards when the scope
+  is still one meaningful chunk.
+
+### Checkbox format
+
+Write `## Execution Plan`, `## Goals`, and `## Acceptance Criteria` as
+actionable checkbox lines (`- [ ]` / `- [x]`). That keeps milestone progress
+scannable at a glance. Batch-level tasks inside `## Execution Plan` should be
+concrete enough to tick off during closeout.
+
+### Anti-patterns
+
+- Creating a new roadmap file each agent turn instead of updating the active
+  milestone and batch cards.
+- A roadmap whose entire execution plan is one batch that duplicates a single
+  batch card.
+- Micro-batches sized to a single trivial task.
+- Prose-only bullet lists where checkbox progress would be clearer.
+
+See also the runway rule in
+[07-delivery-framework-and-autonomy.md](./07-delivery-framework-and-autonomy.md).
 
 ## Batch rule
 

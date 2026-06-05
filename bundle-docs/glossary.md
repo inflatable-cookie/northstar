@@ -17,7 +17,11 @@ One-page reference for terms used across Northstar docs.
 : Provisional planning surfaces. Temporary documents that shape a change before its durable outcomes are promoted into architecture or contracts.
 
 **Roadmaps**
-: Executable milestone plans derived from vision, architecture, and contracts. Compiled after specs are promoted.
+: Turnkey milestone plans derived from vision, architecture, and contracts.
+  Name the batch sequence for a material slice of work — typically several
+  batches and, in strict posture, several batch cards — not one agent turn.
+  Use checkbox task lists in `## Execution Plan`, `## Goals`, and `## Acceptance
+  Criteria`. Compiled after specs are promoted.
 
 **Logs**
 : Dated evidence and decision records. Written per completed batch, not per task.
@@ -42,7 +46,9 @@ One-page reference for terms used across Northstar docs.
 : A meaningful chunk of work executed together. The unit of logging and closeout.
 
 **Batch card**
-: A short spec-like document that defines one batch's scope, evidence, and done criteria.
+: A short spec-like document that defines one batch's step-by-step scope,
+  evidence, and done criteria. Sits under a roadmap milestone; the roadmap
+  owns lane shape, batch cards own execution detail.
 
 **Generation**
 : A numbered era of roadmap milestones (`g01`, `g02`, `g03`). Holds 20-40 milestones before rollover is warranted. In parallel mode, multiple generations may be active simultaneously as independent queues.

@@ -33,6 +33,9 @@ informal habits.
   bundle at `bundle-docs/sections/07-delivery-framework-and-autonomy.md`
   (heading *Batch card rule*); keep this contract aligned with that section when
   you customize wording.
+- Roadmap milestones are turnkey lane definitions: name a multi-batch execution
+  plan (checkbox tasks), not one agent turn. Batch cards carry step detail.
+  See `bundle-docs/sections/03-roadmaps.md` (*Scope and granularity rule*).
 - In a strict lane, a bare `continue` should resolve through the previous
   closeout's `Next Task`, which should normally point at the current ready card
   or an explicit stop/reassessment step.

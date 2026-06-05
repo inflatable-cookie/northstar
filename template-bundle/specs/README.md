@@ -78,6 +78,9 @@ Treat planning as a real runway:
 - make the next few meaningful batches or milestone transitions visible
 - leave an explicit planning checkpoint so the lane does not fall back into
   one-card-at-a-time improvisation after each closeout
+- compile roadmaps as turnkey multi-batch milestones with checkbox execution
+  plans; put step detail in batch cards, not per-thread roadmap scratchpads
+  (`bundle-docs/sections/03-roadmaps.md`, *Scope and granularity rule*)
 
 If a repo wants the full continuation-envelope, lane-budget, and pause-signal
 model, use `specs/` for master specs and `roadmaps/gNN/batch-cards/` for

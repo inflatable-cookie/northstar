@@ -185,6 +185,12 @@ stop/reassessment step, the lane is not continuation-ready.
 
 Northstar planning should not produce a one-card-at-a-time fake runway.
 
+Roadmap milestones own lane shape; batch cards own step detail. A material
+roadmap should name several batches (and, in strict posture, several batch
+cards) — not one agent turn. Checkbox task lists in roadmap execution plans
+make that runway scannable. Full granularity doctrine:
+[03-roadmaps.md](./03-roadmaps.md) (*Scope and granularity rule*).
+
 When a material lane needs planning, the output should usually include:
 
 - the higher-level owner the lane is trying to realize
