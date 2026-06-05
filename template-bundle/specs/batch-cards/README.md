@@ -4,6 +4,11 @@
 
 Use this folder for ready execution cards that sit under an active master spec.
 
+Batch cards own **step-by-step execution detail** for one batch. The parent
+roadmap milestone owns lane shape and the multi-batch sequence. Do not recreate
+the roadmap each agent turn — update cards and tick roadmap checkboxes during
+closeout.
+
 ## Rule
 
 - create a batch card only when the work is specific enough to execute without

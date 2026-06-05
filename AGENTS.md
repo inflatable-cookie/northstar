@@ -78,7 +78,8 @@ This repo's local `.agents/skills/effigy` copy is authoritative for this
 project. When an agent supports both project-local and global skills, prefer
 the project-local copy over any globally installed Effigy skill.
 
-Do not add `--repo .` while already inside the target repo. Do not edit
+Omit redundant `--repo` when already inside the target repo (do not pass the
+current directory as the path). Do not edit
 `.github/workflows/` or run release mutations unless the user explicitly asks.
 
 Reference docs:

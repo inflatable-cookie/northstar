@@ -48,7 +48,19 @@ Describe the specific short-term problem this milestone solves.
 
 ## Execution Plan
 
+Roadmap batches are **broad execution chunks**, not agent-turn scratchpads.
+Name at least two or three batches for non-trivial milestones. In strict
+posture, most batches map to one or more batch cards; put step-by-step detail
+in those cards, not here.
+
+Use checkbox lines for every batch-level task. Tick them off during closeout.
+
 ### Batch <n.1> - <batch title>
+
+- [ ] <executable task>
+- [ ] <executable task>
+
+### Batch <n.2> - <batch title>
 
 - [ ] <executable task>
 - [ ] <executable task>

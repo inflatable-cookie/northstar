@@ -37,6 +37,41 @@ planning outcomes have been promoted out of specs.
 - `backlog/` deferred items with promotion criteria
 - `templates/roadmap-milestone-template.md` milestone starter contract
 
+## Roadmap vs batch card
+
+Roadmaps are turnkey milestone plans. Batch cards are the smaller execution
+units inside them.
+
+- **Roadmap milestone** — problem, goals, acceptance, and the **batch
+  sequence** for a material slice of work. Should span multiple batches and,
+  in strict posture, multiple batch cards — not one agent turn.
+- **Batch card** — bounded step-by-step instructions for the current batch.
+  Create or update cards as execution proceeds; do not recreate the roadmap
+  each turn.
+
+### Minimum runway
+
+For non-trivial work, `## Execution Plan` should name at least two or three
+batches before execution starts. In strict posture, a freshly compiled
+material milestone should normally anticipate several batch cards across the
+visible runway (three or more is a useful default), not one card plus implied
+follow-on work.
+
+### Checkbox format
+
+Use actionable checkbox lines (`- [ ]` / `- [x]`) in `## Execution Plan`,
+`## Goals`, and `## Acceptance Criteria` so milestone progress is scannable at
+a glance.
+
+### Anti-patterns
+
+- A new roadmap file per agent turn instead of updating the active milestone
+- A roadmap that only mirrors one batch card
+- Micro-batches sized to a single trivial task
+
+Full doctrine: `bundle-docs/sections/03-roadmaps.md` (*Scope and granularity
+rule*).
+
 ## Batch and logging rule
 
 - Execute milestones in meaningful batches.

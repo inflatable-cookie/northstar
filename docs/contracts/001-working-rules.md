@@ -29,6 +29,9 @@ single-repo planning lane like this one.
 - When planning is required for a material lane, do not stop at one next card.
   Compile a bounded runway that makes the higher-level owner, the next few
   meaningful batches or milestones, and the next planning checkpoint explicit.
+- Roadmap milestones are turnkey lane definitions: name a multi-batch execution
+  plan with checkbox tasks, not one agent turn. Batch cards carry step detail.
+  See `bundle-docs/sections/03-roadmaps.md` (*Scope and granularity rule*).
 - In a strict lane, a bare `continue` should resolve through the previous
   closeout's `Next Task`, which should normally point at the current ready card
   or an explicit stop/reassessment step.

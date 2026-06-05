@@ -20,6 +20,12 @@ readiness.
 
 ## Drift Patterns
 
+- Roadmaps sized to one agent turn or one batch card instead of a multi-batch
+  milestone runway
+- New roadmap files created per thread instead of updating the active milestone
+  and batch cards
+- `## Execution Plan` with only one micro-batch or prose bullets instead of
+  checkbox task lists
 - Multiple competing active queues within one generation
 - Backlog items in random folders
 - Missing generation rollover rationale
@@ -30,6 +36,12 @@ readiness.
 
 ## Fix Rules
 
+- Expand thin roadmaps into multi-batch milestones; move step detail into batch
+  cards where strict posture applies
+- Merge per-thread roadmap scratchpads into the active milestone; retire
+  duplicate milestone files
+- Convert execution-plan prose bullets to checkbox tasks where progress should
+  be scannable
 - Consolidate competing queues within a generation and mark stale branches as
   backlog/deferred.
 - In parallel mode, ensure each generation's queue is clearly separated and
