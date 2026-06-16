@@ -48,8 +48,3 @@ Lane `g02.020` completed with Batch 20.3 proof and batch log
 in the active tree briefly as `retired-in-place` for traceability; move to
 `docs/specs/archive/` when the next specs hygiene pass prefers a leaner active
 surface.
-
-## Next task
-
-None for this spec. Follow **`g02.021`** on the roadmap for Effigy advisory
-checks.

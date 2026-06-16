@@ -21,7 +21,3 @@ Define measurable target envelopes (for example performance, reliability, UX, ma
 ## Alignment Signals
 
 State which signals show the project is aligned or drifting.
-
-## Next Task
-
-State the architecture artifact or roadmap milestone this vision should unlock next.

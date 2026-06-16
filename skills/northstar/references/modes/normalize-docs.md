@@ -43,7 +43,9 @@ Optional: `effigy check:posture-advisory` after structural edits.
 6. Runtime stack: Effigy first; TypeScript+Bun for repo scripts; bash/python
    only by exception.
 7. Validate: `effigy qa`, `effigy qa:docs`, project-specific checks.
-8. Leave explicit `Next Task` in `docs/README.md`, active roadmap, or log.
+8. Keep the live `Next Task` pointer in the roadmap front doors. Other front
+   doors may summarize state or dependencies, but should not each own the
+   active thread pointer.
 
 ## Required outputs (when applicable)
 

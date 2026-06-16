@@ -14,8 +14,3 @@ Examples:
 Use this folder sparingly. For Northstar's live repo pilot, one compact
 working-rules contract is enough for now. Add more contracts only when a seam
 or boundary genuinely needs an independent reference surface.
-
-## Next Task
-
-Keep the delivery-layer contracts current as the live repo pilot proves what
-should become permanent Northstar behavior.

@@ -90,8 +90,3 @@ The migration program should also make explicit:
 - the lane turns into a repo-specific migration without first defining the
   reusable program
 - the guidance normalizes indefinite mixed-mode operation
-
-## Next Task
-
-Start `g02.013` batch `13.1` by defining the strict-compliance audit and
-rollout surface for real project migrations.

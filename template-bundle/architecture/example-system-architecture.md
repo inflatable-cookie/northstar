@@ -40,8 +40,3 @@ Vision refs: docs/vision/001-example-project-vision.md
   execution batch.
 - `g01.002` remains blocked until the unresolved analytics seam is either
   contracted or removed from scope.
-
-## Next Task
-
-Create the contract index and the first cross-repo contract doc under
-`docs/contracts/` for the highest-risk boundary.

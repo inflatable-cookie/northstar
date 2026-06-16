@@ -46,7 +46,3 @@ Add open gaps here.
 ## Resolved Gaps
 
 Move resolved entries here with the research or validation work that closed them.
-
-## Next Task
-
-Record the first real implementation gap instead of leaving this as dead scaffolding once research is in active use.

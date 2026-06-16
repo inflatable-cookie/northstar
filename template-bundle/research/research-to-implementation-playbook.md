@@ -72,9 +72,3 @@ Reviewers should check:
 4. Queue deeper research or prototype work if the risk is material.
 5. Avoid roadmap execution against research-driven behavior until the resulting
    decision is promoted into architecture/contracts.
-
-## Next Task
-
-Adapt this playbook to the project's actual architecture doc names, review
-flow, and prototype naming scheme once research starts shaping active delivery,
-then verify contract promotion happens before roadmap execution.

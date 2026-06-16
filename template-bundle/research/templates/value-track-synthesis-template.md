@@ -39,7 +39,3 @@ Primary project tags:
 - `promote to architecture work`
 - `continue research`
 - `prototype first`
-
-## Next Task
-
-Write a translation memo only after the repeated patterns and prototype needs are concrete enough to constrain design choices.

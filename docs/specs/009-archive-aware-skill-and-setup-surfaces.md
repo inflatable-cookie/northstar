@@ -135,9 +135,3 @@ unnecessary complexity.
 
 - the lane turns into speculative feature creep beyond archive-aware behavior
 - the archive posture becomes heavier in automation than in doctrine
-
-## Next Task
-
-Start `g02.007` batch `7.2` by applying the continuation-envelope and
-stop-signal contract to the working rules, templates, and handoff/planning
-surfaces.

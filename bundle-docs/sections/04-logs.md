@@ -83,11 +83,13 @@ evidence.
 4. `## Validation Performed`
 5. `## Evidence`
 6. `## Risks`
-7. `## Next Task`
 
 ## Traceability rule
 
 Each log must include roadmap references in `gNN.NNN` format and can include research artifact links when those artifacts materially changed in the batch.
+
+Logs should describe evidence and remaining risks, but should not own the live
+`## Next Task` pointer. Keep that pointer in the roadmap front doors.
 
 ## Quick reference
 

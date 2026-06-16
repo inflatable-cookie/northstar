@@ -28,7 +28,3 @@ Use this when research starts feeding active implementation work.
 - [ ] I documented the gap.
 - [ ] I made the provisional decision explicit.
 - [ ] I added the gap to `gaps-found-during-implementation.md`.
-
-## Next Task
-
-Trim this checklist to the few research checks the team actually uses in day-to-day implementation and review.

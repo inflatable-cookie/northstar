@@ -52,8 +52,3 @@ Vision refs: docs/vision/001-northstar-delivery-vision.md
 
 - `g01.001` uses this architecture to enact Northstar on Northstar and pilot
   the delivery layer inside this repo.
-
-## Next Task
-
-Use the autonomy-pilot findings to tighten Northstar's live execution lane so
-status updates and closeout become more mechanical before adding more doctrine.

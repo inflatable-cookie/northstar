@@ -103,9 +103,3 @@ That queue should be lightweight but real, so “return later” does not become
   authority drift is diagnosed
 - the deferred follow-up queue turns into vague prose with no practical return
   triggers
-
-## Next Task
-
-Let Underlay execute `g01.098` Batch 98.2, then reassess from that audit
-whether Northstar should stay at planning-layer recovery there or open a
-stricter execution-lane proof.

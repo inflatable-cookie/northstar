@@ -16,9 +16,3 @@ for Northstar itself.
   against explicitly planned surfaces.
 - Use `product-guardrails.md` for cross-cutting rules that should influence
   every implementation thread in this repo.
-
-## Next Task
-
-Keep the live architecture and guardrails synchronized with the current
-delivery-layer rollout rather than letting the repo drift back to implicit
-process.

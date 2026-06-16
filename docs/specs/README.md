@@ -44,8 +44,8 @@ When archive is warranted, use:
 
 Mirror only the minimum grouping needed to preserve traceability.
 
-## Next Task
+## Current strict posture note
 
-Open a new master spec when the next material `g02` lane needs one. Optional:
-`effigy check:posture-advisory` on strict-shape downstream repos. Recent
-evidence: `docs/logs/2026-05/19-172500-add-posture-advisory-effigy-checks.md`.
+- Optional drift check: `effigy check:posture-advisory`
+- Recent evidence:
+  `docs/logs/2026-05/19-172500-add-posture-advisory-effigy-checks.md`

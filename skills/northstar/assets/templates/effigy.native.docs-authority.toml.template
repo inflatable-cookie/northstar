@@ -11,16 +11,11 @@ dir = "{{DOCS_AUTHORITY_PATH}}/vision"
 section = "Vision Artifacts"
 exclude = ["history/**"]
 
-[docs_policy.next_actions.vision]
-index = "vision"
-heading = "## Next Task"
-allowlist_file = "{{DOCS_AUTHORITY_PATH}}/policy/vision-next-task-verbs.txt"
-
 [tasks]
 "qa:docs:links" = "effigy docs check-links {{DOCS_AUTHORITY_PATH}}/README.md {{DOCS_AUTHORITY_PATH}}/roadmaps/README.md {{DOCS_AUTHORITY_PATH}}/logs/README.md {{DOCS_AUTHORITY_PATH}}/vision/README.md"
 "qa:docs:agent-defaults" = "effigy docs check-forbidden AGENTS.md README.md --forbid '--repo .'"
-"qa:docs:headings" = "effigy docs check-headings {{DOCS_AUTHORITY_PATH}}/README.md {{DOCS_AUTHORITY_PATH}}/roadmaps/README.md {{DOCS_AUTHORITY_PATH}}/logs/README.md {{DOCS_AUTHORITY_PATH}}/vision/README.md --require-heading '## Next Task'"
-"qa:northstar:vision" = "effigy docs check-headings {{DOCS_AUTHORITY_PATH}}/vision/README.md --require-heading '## Current Entrypoint' --require-heading '## Working Rule' --require-heading '## Next Task'"
+"qa:docs:headings" = "effigy docs check-headings {{DOCS_AUTHORITY_PATH}}/roadmaps/README.md --require-heading '## Next Task'"
+"qa:northstar:vision" = "effigy docs check-headings {{DOCS_AUTHORITY_PATH}}/vision/README.md --require-heading '## Current Entrypoint' --require-heading '## Working Rule'"
 "qa:northstar:roadmaps" = "effigy docs check-headings {{DOCS_AUTHORITY_PATH}}/roadmaps/README.md --require-heading '## Generation Model' --require-heading '## Layout' --require-heading '## Current Queue' --require-heading '## Next Task'"
 "qa:northstar" = [
   { task = "qa:docs:headings" },

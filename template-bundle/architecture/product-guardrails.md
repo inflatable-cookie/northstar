@@ -51,8 +51,3 @@ Vision refs: <docs/vision/001-...>
   behavior or policy into contracts
 - keep specs only while they still help the active lane or provide useful
   planning history; archive or remove them when they no longer add value
-
-## Next Task
-
-Keep these guardrails reflected in contracts, specs, roadmaps, and logs so
-they remain enforceable rather than aspirational.

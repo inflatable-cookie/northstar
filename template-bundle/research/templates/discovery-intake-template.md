@@ -16,7 +16,3 @@ Purpose:
 ## 4) Reject signals
 
 ## 5) Promotion rule
-
-## Next Task
-
-Open a triage log only after these rules are specific enough to separate active research from watchlist noise.

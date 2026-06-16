@@ -34,7 +34,3 @@ Scope:
 | --- | --- | --- | --- | --- |
 
 ## 9) Open questions
-
-## Next Task
-
-Promote repeated findings from this dossier into a value-track synthesis once at least two other specimens have been compared against the same problem space.

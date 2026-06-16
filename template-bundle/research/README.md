@@ -57,6 +57,8 @@ As the corpus grows:
 - use `research-to-architecture-crossref.md` to track where memo findings are aligned, missing, or conflicting in architecture
 - use `gaps-found-during-implementation.md` to capture missing research instead of losing it in PR chatter
 - use `templates/implementation-decision-record-template.md` when a build decision needs explicit research traceability
+- keep the live `Next Task` pointer in the roadmap front doors instead of
+  turning research docs into execution breadcrumbs
 
 ## Templates
 
@@ -67,7 +69,3 @@ As the corpus grows:
 - `templates/implementation-decision-record-template.md`
 - `templates/discovery-intake-template.md` (optional)
 - `templates/discovery-triage-log-template.md` (optional)
-
-## Next task
-
-Start with a source hub and one specimen dossier for the first problem area, then add the master index and playbook once research starts actively shaping implementation work.

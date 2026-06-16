@@ -18,7 +18,3 @@ Reusable templates for Northstar's research workflow.
 
 Instantiate the dossier and source-hub templates first, then promote repeated findings into a value-track synthesis before writing a translation memo.
 Add the implementation decision record template when delivery choices need explicit research traceability.
-
-## Next task
-
-Copy the minimum template set needed for the first research batch instead of pre-creating every optional research file.

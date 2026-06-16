@@ -52,9 +52,3 @@ Templates live under `skills/northstar/assets/templates/`.
   long enumerations inside the skill body.
 - Operator starter prompts stay under `bundle-docs/operators/`; not every
   prompt becomes a skill.
-
-## Next task
-
-After installing `northstar` in agent homes, run real threads through plan,
-normalize, and explicit handoff paths to confirm router classification and
-description triggers still fire reliably.

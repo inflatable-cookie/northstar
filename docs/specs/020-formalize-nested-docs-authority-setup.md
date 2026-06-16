@@ -34,8 +34,3 @@ adoption does not depend on repo-by-repo improvisation.
 ## Ready Chain
 
 - `062-promote-nested-docs-authority-support-into-setup.md` — complete
-
-## Next Task
-
-Use the follow-on workspace-container specimen lane to turn the new
-nested-authority setup guidance into one concrete reusable example.

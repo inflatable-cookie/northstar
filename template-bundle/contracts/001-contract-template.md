@@ -33,7 +33,3 @@ List affected roadmap keys (`gNN.NNN`) and batch implications.
 
 State whether this contract closes a planning gap, introduces follow-on
 contracts, or blocks roadmap work until adjacent contracts exist.
-
-## Next Task
-
-State the next contract refinement or roadmap batch unlocked by this contract.

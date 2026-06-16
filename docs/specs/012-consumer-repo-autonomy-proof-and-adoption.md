@@ -111,8 +111,3 @@ as a model. The important boundary is adoption depth:
   explicit in file state
 
 That finding should now shape setup guidance and the next external proof lane.
-
-## Next Task
-
-Start `g02.010` batch `10.2` by testing the stricter delivery-layer adoption
-threshold against a real active consumer-repo lane.

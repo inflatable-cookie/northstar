@@ -64,7 +64,3 @@ Observed reusable `meta` patterns worth keeping (from Chorus/Ledger/Underlay sca
 Observed patterns to avoid carrying forward verbatim:
 - tool-specific procedural noise
 - excessive checker scripts without clear run cadence/ownership
-
-## Next task
-
-Run this playbook on one existing project and publish a migration log listing extracted docs and removed `meta` files.

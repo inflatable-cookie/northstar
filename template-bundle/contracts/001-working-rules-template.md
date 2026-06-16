@@ -91,7 +91,10 @@ informal habits.
 - Run the required validation commands and record them in a log.
 - Name unresolved blockers or limits explicitly instead of hiding them inside a
   completion claim.
-- Leave one explicit next task that makes a later bare `continue` unambiguous.
+- Keep one explicit next-task pointer in the roadmap front doors unless the
+  lane is genuinely complete.
+- Make that roadmap pointer explicit enough that a later bare `continue` stays
+  unambiguous.
 
 ### Operator-facing reporting
 
@@ -181,6 +184,9 @@ informal habits.
 - When a card closes, those surfaces must either:
   - point at the next ready card or active milestone state
   - or explicitly say the lane is awaiting reassessment
+- Keep the live next-task pointer only in the roadmap front doors. Other docs
+  surfaces may summarize state or dependencies, but should not own the active
+  thread pointer.
 - Do not leave a completed card named as the current ready card after closeout.
 
 ## Validation
@@ -194,7 +200,3 @@ informal habits.
 ## Planning Notes
 
 Record the practical reason these working rules exist in this repo.
-
-## Next Task
-
-Name the next batch that should use or tighten these rules.

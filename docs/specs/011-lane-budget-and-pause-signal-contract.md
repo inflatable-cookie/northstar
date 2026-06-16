@@ -109,9 +109,3 @@ lane.
 
 - the lane starts introducing heavy run-state bookkeeping
 - the pause model blurs the difference between a clean pause and a hard stop
-
-## Next Task
-
-Start `g02.009` batch `9.2` by running the combined autonomy model against a
-real active consumer-repo lane and recording what still breaks outside
-Northstar itself.

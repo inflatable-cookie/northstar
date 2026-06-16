@@ -46,7 +46,3 @@ Purpose: Map promoted research findings to architecture documents, identify gaps
 ### Tier 3: Refinement
 
 1. `<prototype>` - `<why it can follow after earlier data>`
-
-## Next Task
-
-Run the first memo-to-architecture audit and record which gaps are direct doc edits versus prototype-gated decisions.

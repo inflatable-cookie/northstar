@@ -26,8 +26,3 @@ Document key constraints and budgets.
 ## Interfaces With Roadmaps
 
 List the roadmap milestones/batches this architecture currently unlocks or constrains.
-
-## Next Task
-
-State the next contract, inventory update, or roadmap milestone this
-architecture unlocks.

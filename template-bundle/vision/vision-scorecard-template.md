@@ -28,7 +28,3 @@ Updated: YYYY-MM-DD
 
 1. <commitment with measurable signal>
 2. <commitment with measurable signal>
-
-## Next Task
-
-Publish the next scorecard update and sync checkpoint ledger statuses.

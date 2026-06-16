@@ -132,7 +132,6 @@ multi-repo or seam-heavy systems, contracts remain important.
 4. `## Interfaces and Dependencies`
 5. `## Validation Surfaces`
 6. `## Planning Gaps`
-7. `## Next Task`
 
 ## Content contract (repo authority map)
 
@@ -142,7 +141,6 @@ multi-repo or seam-heavy systems, contracts remain important.
 4. `## Cross-Repo Contracts`
 5. `## Conflict Resolution Rules`
 6. `## Planning Gaps`
-7. `## Next Task`
 
 ## Content contract (contract index)
 
@@ -151,7 +149,6 @@ multi-repo or seam-heavy systems, contracts remain important.
 3. `## Contract Register`
 4. `## Missing or Pending Contracts`
 5. `## Roadmap Readiness`
-6. `## Next Task`
 
 ## Dependencies
 
@@ -163,6 +160,8 @@ multi-repo or seam-heavy systems, contracts remain important.
 - Specs define the realization path for material goals.
 - Roadmaps sequence only the work already authorized by those surfaces.
 - Logs prove what was changed and why.
+- Planning coverage artifacts should not carry the live `## Next Task` pointer.
+  Keep that in the roadmap front doors.
 
 ## Quick reference
 

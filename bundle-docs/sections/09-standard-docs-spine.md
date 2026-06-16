@@ -127,6 +127,11 @@ The migration spec should record:
 
 The roadmap milestone should then sequence the actual migration batches.
 
+The live `## Next Task` pointer belongs in the roadmap front doors:
+`docs/roadmaps/README.md`, `docs/roadmaps/generation-index.md`, and the active
+`docs/roadmaps/gNN/README.md`. Other spine surfaces should summarize state or
+dependencies without becoming the live thread pointer.
+
 ## Template Impact
 
 The template bundle should make both modes copy-ready:
@@ -140,8 +145,3 @@ The template bundle should make both modes copy-ready:
 
 - [Visual map: Doc hierarchy](../visual-map.md#doc-hierarchy)
 - [Cheat sheet: Folder structure](../cheat-sheet.md#folder-structure)
-
-## Next Task
-
-Keep `northstar-setup`, the template bundle, and repo checks aligned with this
-standard spine so adoption does not depend on operator memory.

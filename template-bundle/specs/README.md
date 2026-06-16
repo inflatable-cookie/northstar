@@ -68,8 +68,9 @@ Treat `ready` as a real state:
 - a card is ready only when it can execute without fresh planning decisions
 - a short auto-continuation chain is ready only when every transition is
   already represented in file state
-- the previous closeout should leave a `Next Task` that lets a later bare
-  `continue` resolve to the right ready card without a giant reminder prompt
+- the roadmap front doors should keep the live `Next Task` pointer so a later
+  bare `continue` resolves to the right ready card without a giant reminder
+  prompt
 
 Treat planning as a real runway:
 
@@ -126,9 +127,3 @@ this.
 - `templates/master-spec-template.md`
 - `templates/batch-card-template.md`
 - `templates/strict-compliance-migration-template.md`
-
-## Next Task
-
-Create a master spec only when a change is large or uncertain enough to justify
-provisional planning before promotion into architecture/contracts, and archive
-closed planning artifacts once they no longer belong in the active specs tree.

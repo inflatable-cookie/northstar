@@ -109,8 +109,3 @@ Northstar should treat these apps as one consumer cohort with:
 
 - `underlay-reference` strict work touches unrelated live app code
 - the cohort order gets rewritten without proof from the active app-level pass
-
-## Next Task
-
-Promote the cohort lessons into Northstar setup/package doctrine so nested
-docs-authority repos become a first-class supported setup path.

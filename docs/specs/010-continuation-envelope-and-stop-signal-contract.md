@@ -111,8 +111,3 @@ Re-prove the contract against a longer autonomous lane.
   contract
 - the continuation envelope weakens the existing stop conditions around
   planning gaps or failed validation
-
-## Next Task
-
-Start `g02.008` batch `8.2` by applying the lane-budget and pause-signal
-contract to the reusable doctrine, template, and handoff/log surfaces.

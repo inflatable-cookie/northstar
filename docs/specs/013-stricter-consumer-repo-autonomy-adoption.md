@@ -119,8 +119,3 @@ That means Northstar should support three practical postures:
 - baseline roadmap mode
 - lane-first stricter adoption inside a mature baseline repo
 - fuller stricter delivery mode where the repo broadly needs it
-
-## Next Task
-
-Start `g02.011` batch `11.1` by defining the minimal lane-first stricter
-adoption starter pack and migration sequence for mature baseline repos.

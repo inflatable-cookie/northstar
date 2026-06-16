@@ -29,9 +29,3 @@ and other durable rules that should not live only in provisional specs.
 For stricter repos, start with `001-working-rules-template.md` so execution
 grammar, done-ness, and autonomy rules are explicit before longer hands-off
 delivery starts.
-
-## Next task
-
-Create the contract index, then add the first contract artifact for the
-highest-risk boundary that roadmap work depends on. For stricter repos, start
-with `001-working-rules-template.md`.

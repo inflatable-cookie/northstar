@@ -42,8 +42,3 @@ Northstar system:
 - work should not be called done without real evidence
 - agents should be able to continue through ready batch cards without needing
   repeated "continue" prompts from the operator
-
-## Next Task
-
-Run `effigy check:posture-advisory` when sanity-checking strict Northstar-shaped
-repos; open the next `g02` milestone when new contract-backed work is queued.

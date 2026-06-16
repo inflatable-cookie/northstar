@@ -43,8 +43,3 @@ sink repo is confirmed.
 
 - Confirm whether `analytics-export` is an owned repo, a vendor sink, or a
   deferred integration before roadmap work touches export behavior.
-
-## Next Task
-
-Close the analytics export ownership gap, then add the missing seam contract or
-remove export work from active roadmap scope.

@@ -23,7 +23,6 @@ The boundary is intentional:
 - `docs/roadmaps/README.md`
 - `docs/logs/README.md`
 - `docs/policy/internal-writing-style.md`
-- `docs/policy/vision-next-task-verbs.txt`
 
 For workspace-container repos, keep the workspace root lean and apply this full
 file set inside the nested docs-authority repo instead of duplicating it at the
@@ -56,20 +55,14 @@ supports consumer-side `docs_policy`, the starter repo contract should include:
   - `dir = "docs/vision"`
   - `section = "Vision Artifacts"`
   - `exclude = ["history/**"]`
-- `[docs_policy.next_actions.vision]`
-  - `index = "vision"`
-  - `heading = "## Next Task"`
-  - `allowlist_file = "docs/policy/vision-next-task-verbs.txt"`
-
 That config should pair with repo-owned tasks composed from native validators:
 
-- `effigy docs check-paths README.md AGENTS.md docs/README.md docs/vision/README.md docs/roadmaps/README.md docs/logs/README.md docs/policy/vision-next-task-verbs.txt`
+- `effigy docs check-paths README.md AGENTS.md docs/README.md docs/vision/README.md docs/roadmaps/README.md docs/logs/README.md`
  - `effigy docs check-paths docs/policy/internal-writing-style.md`
 - `effigy docs check-contains AGENTS.md --require "effigy tasks" --require "effigy test --plan"`
 - `effigy docs check-contains README.md --require "docs/README.md"`
 - `effigy docs check-contains docs/README.md --require "vision/README.md" --require "roadmaps/README.md" --require "logs/README.md"`
 - `effigy docs check-index --policy-index vision`
-- `effigy docs check-next-action --policy vision`
 - `effigy docs check-headings docs/vision/README.md --require-heading "## Current Vision"`
 - `effigy docs check-forbidden ... --forbid '--repo .'`
 
@@ -124,7 +117,7 @@ architecture/contracts rather than a second permanent authority.
 - start with Effigy, not raw shell commands
 - prefer built-in `effigy test` unless the repo intentionally overrides it
 - use `--repo <PATH>` only for a different repo
-- leave one explicit next task in the current planning surface
+- keep one explicit next-task pointer in the roadmap front doors
 - keep repo-facing examples free of current-directory `--repo .` usage even if
   a nested authority repo needs internal delegation wiring in `effigy.toml`
 - in normal operator-facing responses, lead with achieved outcome, current lane
