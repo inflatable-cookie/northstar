@@ -25,7 +25,3 @@ Scope:
 ## 5) Tracks or questions this hub should feed
 
 ## 6) Known blind spots
-
-## Next Task
-
-Capture the strongest missing primary source before expanding this hub with weaker supporting material.

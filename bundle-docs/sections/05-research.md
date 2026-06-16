@@ -88,7 +88,6 @@ Prefer sources in this order:
 8. `## Project-relevant lessons`
 9. `## Source inventory`
 10. `## Open questions`
-11. `## Next Task`
 
 ## Content contract (value-track synthesis)
 
@@ -101,7 +100,6 @@ Prefer sources in this order:
 7. `## Project implications`
 8. `## Source inventory`
 9. `## Decision state`
-10. `## Next Task`
 
 ## Content contract (translation memo)
 
@@ -114,7 +112,6 @@ Prefer sources in this order:
 7. `## Required prototype or validation work`
 8. `## Promotion target`
 9. `## Sources`
-10. `## Next Task`
 
 ## Promotion rule
 
@@ -131,12 +128,10 @@ Keep tentative findings in `research/` until they can answer all of:
 - Research-backed roadmap work should flow through contracts first when the
   finding defines an execution-relevant boundary or rule.
 - Implementation decision records and research-to-architecture crossrefs are optional support artifacts inside `research/`, not replacements for canonical architecture or roadmap docs.
+- Research artifacts should not carry the live `## Next Task` pointer. Keep
+  that in the roadmap front doors.
 
 ## Quick reference
 
 - [Glossary: Research and promotion](../glossary.md#research-and-promotion)
 - [Glossary: Specimen dossier, value track, translation memo](../glossary.md#research-and-promotion)
-
-## Next task
-
-Pilot the starter pack in one live project and confirm whether Northstar should keep the generic `specimen-dossiers/` naming or document approved aliases per domain.

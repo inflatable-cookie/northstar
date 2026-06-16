@@ -49,8 +49,3 @@ Affected roadmap keys:
 This contract closes the core async seam between API and worker repos.
 Further work that touches downstream analytics export remains blocked until that
 separate seam has an owner and contract.
-
-## Next Task
-
-Compile or update the roadmap milestone that implements the shared dispatch
-schema and worker rejection behavior.

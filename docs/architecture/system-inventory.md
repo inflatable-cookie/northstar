@@ -48,8 +48,3 @@ skills.
 - `skills/` do not yet consistently emit master specs, batch cards, and
   autonomy envelopes by default.
 - The live repo pilot has not yet proven a longer autonomous multi-card run.
-
-## Next Task
-
-Close the template-bundle promotion gap first so the repo's live delivery layer
-can become reusable rather than remaining local doctrine.

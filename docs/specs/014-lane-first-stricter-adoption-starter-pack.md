@@ -62,8 +62,3 @@ Northstar should offer a minimal starter pack for lane-first stricter adoption:
 
 - the starter pack grows into a full stricter-mode rewrite
 - the lane starts requiring closed-history backfill
-
-## Next Task
-
-Start `g02.012` batch `12.1` by defining the full strict-compliance migration
-program for mature Northstar projects.

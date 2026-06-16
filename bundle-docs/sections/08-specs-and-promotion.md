@@ -202,14 +202,10 @@ straight from those surfaces into roadmap execution.
 - Contracts capture durable behavioral rules.
 - Roadmaps sequence approved work.
 - Logs prove what was actually completed.
+- Specs should inform the active lane, but should not own the live `## Next
+  Task` pointer. Keep that in the roadmap front doors.
 
 ## Quick reference
 
 - [Glossary: Specs, promotion](../glossary.md#research-and-promotion)
 - [Cheat sheet: Posture quick pick](../cheat-sheet.md#posture-quick-pick)
-
-## Next task
-
-Apply the lifecycle and archive rule to a live specs surface so the active tree
-shrinks back toward active planning instead of accumulating closed lanes in
-place.

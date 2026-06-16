@@ -89,8 +89,3 @@ reusable automation layer rather than changing the docs tree again.
   solve
 - the work starts preserving every closed spec in the active tree "just in
   case"
-
-## Next Task
-
-Start `g02.006` batch `6.1` by aligning the setup, plan, and recover surfaces
-with the spec archive posture so downstream repos inherit it more reliably.

@@ -158,9 +158,10 @@ Work in this repo is not done unless:
   current truth
 - unresolved blockers or limits are named explicitly instead of hidden inside a
   completion claim
-- one clear next task remains unless the lane is genuinely complete
-- that next task is explicit enough that a later bare `continue` does not need
-  a recap prompt to find the correct next move
+- the roadmap front doors carry one clear next-task pointer unless the lane is
+  genuinely complete
+- that roadmap pointer is explicit enough that a later bare `continue` does not
+  need a recap prompt to find the correct next move
 
 ### Operator-facing reporting
 
@@ -221,8 +222,9 @@ Work in this repo is not done unless:
     simply continuing in-bounds
   - update or create a handoff only when another thread truly needs to take
     over or the user explicitly asks for one
-  - leave one explicit next task in the highest-authority active surface that
-    still governs the lane
+  - leave one explicit next-task pointer in the roadmap front doors:
+    `docs/roadmaps/README.md`, `docs/roadmaps/generation-index.md`, and the
+    active `docs/roadmaps/gNN/README.md`
 - If the next work is not ready, say so explicitly in closeout rather than
   implying continuation.
 - Do not declare the lane complete or create a handoff merely because context
@@ -335,6 +337,9 @@ Work in this repo is not done unless:
 - `docs/roadmaps/README.md`, `docs/roadmaps/generation-index.md`, and the
   active `docs/roadmaps/gNN/README.md` should each point to one active
   milestone, not a list of competing "current" lanes.
+- Keep the live next-task pointer only in those roadmap front doors. Other
+  docs surfaces may describe current state or dependencies, but should not own
+  the active thread pointer.
 - `docs/logs/README.md` should keep a bounded recent-evidence window, usually
   the most recent 5 active-lane logs plus any still-governing rollover or
   decision log needed to explain the current state.
@@ -391,9 +396,3 @@ working-rules contract until separate seam contracts become necessary.
 This contract closes the repo's immediate planning gap around how material work
 should execute while keeping the active surface smaller and more focused than a
 split contract stack.
-
-## Next Task
-
-Use `g02.010` to test the stricter delivery-layer adoption threshold against a
-real active consumer-repo lane while continuing to rely on these working rules
-as the live execution grammar.

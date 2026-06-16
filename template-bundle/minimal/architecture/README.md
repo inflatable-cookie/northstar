@@ -15,7 +15,3 @@ Architecture docs define system shape, inventory, and boundaries.
 
 - Define system boundaries before writing contracts.
 - Keep architecture descriptive, not a delivery plan.
-
-## Next Task
-
-Create `system-architecture.md` describing the system's major components and boundaries.

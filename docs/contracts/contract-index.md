@@ -28,9 +28,3 @@ No active contract gaps are blocking the current `g02` lane.
 `g02.012`, `g02.013`, `g02.014`, `g02.015`, `g02.016`, `g02.017`, `g02.018`,
 `g02.019`, `g02.020`, and `g02.021` are complete. The `g02` generation remains open
 for future milestones; no single roadmap file currently gates contract work.
-
-## Next Task
-
-Use `roadmaps/g02/README.md` for milestone history. Run
-`effigy check:posture-advisory` when triaging strict-shape downstream repos before
-opening the next `g02` slice.

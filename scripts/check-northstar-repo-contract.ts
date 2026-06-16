@@ -13,6 +13,8 @@ const requiredFiles = [
   "README.md",
   "docs/README.md",
   "docs/vision/README.md",
+  "docs/architecture/README.md",
+  "docs/contracts/README.md",
   "docs/roadmaps/README.md",
   "docs/roadmaps/generation-index.md",
   "docs/roadmaps/g02/README.md",
@@ -195,7 +197,6 @@ requireContains(repoRoot, "docs/contracts/001-working-rules.md", "Full doctrine 
 requireContains(repoRoot, "docs/contracts/001-working-rules.md", "`active`, `retired-in-place`, and `archived`", "working-rules spec lifecycle states");
 requireContains(repoRoot, "bundle-docs/operators/operator-quick-start.md", "protocol-kernel.md", "operator quick start protocol kernel link");
 requireContains(repoRoot, "docs/README.md", "specs/022-formalize-repo-posture-classification.md", "active spec front door");
-requireContains(repoRoot, "docs/README.md", "Run `effigy check:posture-advisory` when sanity-checking", "live docs next task");
 requireContains(repoRoot, "docs/roadmaps/README.md", "`g02` is the active generation", "roadmaps active generation");
 requireContains(repoRoot, "docs/roadmaps/README.md", "`g02.020` and `g02.021` are complete", "roadmaps g02.020 and g02.021 complete");
 requireContains(repoRoot, "docs/roadmaps/g02/README.md", "018-add-workspace-container-adoption-specimen.md", "g02 milestone listing");
@@ -203,16 +204,20 @@ requireContains(repoRoot, "docs/roadmaps/g02/README.md", "020-add-protocol-kerne
 requireContains(repoRoot, "docs/roadmaps/g02/README.md", "021-add-posture-and-archive-advisory-checks-to-effigy.md", "g02 milestone listing end");
 requireContains(repoRoot, "docs/roadmaps/g02/README.md", "`g02.021` are complete", "g02 next task");
 requireContains(repoRoot, "docs/roadmaps/generation-index.md", "No blocking roadmap milestone is open", "generation index next task");
-requireContains(repoRoot, "docs/contracts/contract-index.md", "`g02.021` are complete", "contract index current lane");
 requireContains(repoRoot, "docs/logs/README.md", "## Closeout rule", "live logs closeout rule");
 requireContains(repoRoot, "docs/logs/README.md", "## Still-governing context", "logs context heading");
 requireContains(repoRoot, "docs/logs/README.md", "## Recent active-lane evidence", "logs evidence heading");
 requireContains(repoRoot, "docs/logs/README.md", "09-111500-roll-to-g02-external-pilot.md", "governing context log");
 requireContains(repoRoot, "docs/logs/README.md", "20-144500-consolidate-northstar-skill-surface.md", "latest active-lane log");
-requireContains(repoRoot, "docs/logs/README.md", "Re-install `skills/northstar/`", "logs next task");
 forbidContains(repoRoot, "docs/logs/README.md", "08-120000-bootstrap-live-northstar-docs.md", "stale bootstrap log in bounded evidence window");
 forbidContains(repoRoot, "docs/logs/README.md", "09-205500-open-currentness-alignment-lane.md", "older currentness-alignment log in bounded evidence window");
 forbidContains(repoRoot, "docs/logs/README.md", "09-121500-select-signal-pilot-target.md", "old pilot-selection log in bounded evidence window");
+forbidContains(repoRoot, "docs/README.md", "## Next Task", "docs front door should not own live next task");
+forbidContains(repoRoot, "docs/vision/README.md", "## Next Task", "vision front door should not own live next task");
+forbidContains(repoRoot, "docs/architecture/README.md", "## Next Task", "architecture front door should not own live next task");
+forbidContains(repoRoot, "docs/contracts/README.md", "## Next Task", "contracts front door should not own live next task");
+forbidContains(repoRoot, "docs/contracts/contract-index.md", "## Next Task", "contract index should not own live next task");
+forbidContains(repoRoot, "docs/logs/README.md", "## Next Task", "logs front door should not own live next task");
 requireContains(repoRoot, "docs/specs/README.md", "19-172500-add-posture-advisory-effigy-checks.md", "specs README g02.021 closeout evidence");
 requireContains(repoRoot, "docs/specs/README.md", "`effigy check:posture-advisory`", "specs README advisory task hint");
 requireContains(repoRoot, "template-bundle/specs/README.md", "templates/strict-compliance-migration-template.md", "strict migration template listing");

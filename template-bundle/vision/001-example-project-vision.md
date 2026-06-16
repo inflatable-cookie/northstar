@@ -29,7 +29,3 @@ Deliver a reliable, fast-moving product platform where roadmap execution stays a
 - Roadmap milestones map directly to vision constraints.
 - Batch logs show concrete movement and clear next actions.
 - Deferred work moves into backlog rather than bloating active queues.
-
-## Next Task
-
-Create `docs/architecture/system-architecture.md` and define the first active milestone in `docs/roadmaps/g01/`.

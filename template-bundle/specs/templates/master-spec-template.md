@@ -56,8 +56,3 @@ Describe the intended end state if this plan succeeds.
 ## Stop Conditions
 
 - <stop condition>
-
-## Next Task
-
-State the next planning step, promotion step, or first batch card unlocked by
-this spec.

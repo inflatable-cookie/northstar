@@ -23,7 +23,7 @@ Use logs as the third step in closeout:
 4. record whether the continuation envelope still holds or a stop signal exhausted it
 5. record the lane budget state and pause signal when the run paused cleanly
 6. create or update a handoff only if another thread needs to continue
-7. leave one explicit next task in the governing active surface
+7. refresh the roadmap front doors with one explicit next-task pointer
 
 ## Still-governing context
 
@@ -45,8 +45,3 @@ Use logs as the third step in closeout:
 - `2026-05/19-164500-finish-protocol-kernel-batch-20-3.md`
 - `2026-05/19-172500-add-posture-advisory-effigy-checks.md`
 - `2026-05/20-144500-consolidate-northstar-skill-surface.md`
-
-## Next Task
-
-Re-install `skills/northstar/` in agent homes; smoke-test router + one explicit
-handoff path.

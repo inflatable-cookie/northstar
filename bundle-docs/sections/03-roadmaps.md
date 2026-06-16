@@ -209,6 +209,9 @@ See also the runway rule in
   `docs/roadmaps/generation-index.md`, and the active
   `docs/roadmaps/gNN/README.md` should each name one active generation and one
   active milestone, not a cluster of competing "current" lanes.
+- Keep the live `## Next Task` pointer only in those roadmap front doors.
+  Non-roadmap docs may describe active state, but should not each own the
+  current thread pointer.
 - In parallel mode, front doors must name all active generations and their
   active milestones. Each generation's `gNN/README.md` remains the
   authoritative front door for that thread.

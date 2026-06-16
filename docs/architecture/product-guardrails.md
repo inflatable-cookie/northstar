@@ -38,8 +38,3 @@ Vision refs: docs/vision/001-northstar-delivery-vision.md
   operator prompts when the execution policy allows it.
 - Agents should stop immediately on planning gaps, contract ambiguity, failed
   validation, or unresolved design uncertainty.
-
-## Next Task
-
-Keep these guardrails reflected in the repo's contracts, specs, and skills so
-they remain enforceable rather than aspirational.

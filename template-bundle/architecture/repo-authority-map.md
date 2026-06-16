@@ -34,8 +34,3 @@ them.
 ## Planning Gaps
 
 - <missing repo contract, authority rule, or integration seam>
-
-## Next Task
-
-Convert every `pending` seam into an explicit contract or remove it from the
-active roadmap scope.

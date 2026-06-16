@@ -21,7 +21,3 @@ Updated: YYYY-MM-DD
 ## Update rule
 
 Update this ledger only when checkpoint status changes or dates are revised.
-
-## Next Task
-
-Review upcoming checkpoints and publish status changes in the next periodic log.

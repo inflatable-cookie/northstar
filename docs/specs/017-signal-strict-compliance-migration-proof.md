@@ -168,8 +168,3 @@ The initial bounded card chain should cover:
 - the lane starts editing Signal before the migration tranche is explicitly
   planned
 - the proof starts inventing another abstract migration framework
-
-## Next Task
-
-Open a Signal-owned migration lane that installs the first strict tranche
-around the active `g09` queue.

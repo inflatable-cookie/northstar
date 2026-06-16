@@ -46,8 +46,3 @@ This example system has three owned repos and one unresolved downstream sink:
 
 - Determine whether the analytics sink is a first-party repo, external system,
   or out-of-scope integration.
-
-## Next Task
-
-Resolve the analytics seam authority, then convert the pending seam into an
-explicit contract or drop it from active delivery.

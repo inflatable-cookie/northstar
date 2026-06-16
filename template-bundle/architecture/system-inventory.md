@@ -32,8 +32,3 @@ State whether planning coverage is complete, partial, or blocked and why.
 ## Planning Gaps
 
 - <missing repo, contract, authority, or validation surface>
-
-## Next Task
-
-Close the highest-risk planning gap or promote the next required contract so
-roadmap work can start without inferred system behavior.

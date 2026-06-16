@@ -60,10 +60,3 @@ lists. When an agent needs doctrine depth, prefer this kernel → linked section
 - Repo validation: `effigy qa` / `effigy check:bundle` as wired in each repo
 - Optional drift triage: `effigy check:posture-advisory` (non-blocking; see
   [`../scripts/README.md`](../scripts/README.md))
-
-## Next Task
-
-Live repo: run `effigy check:posture-advisory` on downstream strict repos when
-triaging drift. When extending the protocol after that, update **one**
-canonical enumeration in `bundle-docs/sections/07-…` (or `06-…`), then align
-contracts/templates/skills with short pointers — not duplicate prose.

@@ -45,7 +45,6 @@ Keep milestone task sequencing out of architecture docs.
 4. `## Invariants`
 5. `## Performance and Reliability Constraints`
 6. `## Interfaces With Roadmaps`
-7. `## Next Task`
 
 ## Content contract (contract docs)
 
@@ -55,7 +54,6 @@ Keep milestone task sequencing out of architecture docs.
 4. `## Validation`
 5. `## Migration Notes`
 6. `## Roadmap Impact`
-7. `## Next Task`
 
 ## Dependencies
 
@@ -68,6 +66,8 @@ Keep milestone task sequencing out of architecture docs.
   one repo or deployable owner exists.
 - Must link to research translation memos when a boundary depends on comparative findings.
 - Must expose clear handoff points for roadmap milestones.
+- Architecture and contract artifacts should not carry the live `## Next Task`
+  pointer. Keep that in the roadmap front doors.
 
 ## Quick reference
 

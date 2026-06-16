@@ -29,8 +29,3 @@ should fit together.
 ## Ready Chain
 
 - `063-add-workspace-container-adoption-specimen.md` — complete
-
-## Next Task
-
-Use the follow-on posture-classification lane to make setup, planning, and
-recovery classify real repo state more mechanically.

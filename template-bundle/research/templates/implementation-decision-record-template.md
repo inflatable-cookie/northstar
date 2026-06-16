@@ -91,7 +91,3 @@ Brief description of what is being built and why.
 - Memo:
 - Value track:
 - Dossier or source hub:
-
-## Next Task
-
-Link this decision record from the roadmap batch log or architecture update if it materially affected the accepted implementation path.

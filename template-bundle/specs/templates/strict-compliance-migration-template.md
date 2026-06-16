@@ -62,8 +62,3 @@ Describe what full strict compliance should look like in this repo.
 ## Stop Conditions
 
 - <stop condition>
-
-## Next Task
-
-State the next migration batch or the next proof needed before the repo can
-advance to another migration phase.

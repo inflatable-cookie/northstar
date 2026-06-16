@@ -38,8 +38,3 @@ and the core Northstar skills.
 ## Ready Chain
 
 - `064-promote-repo-posture-classification-into-skills.md` — complete
-
-## Next Task
-
-Use the posture taxonomy in the next real setup, planning, or recovery pass
-and assess whether it reduces operator interpretation at planning boundaries.

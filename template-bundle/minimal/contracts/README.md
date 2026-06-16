@@ -13,7 +13,3 @@ Use this folder for explicit non-code contracts that constrain behavior.
 
 - Contracts should be stable reference artifacts.
 - Roadmap work should not proceed until the required contract exists and is listed in the contract index.
-
-## Next Task
-
-Create the contract index, then add the first contract artifact for the highest-risk boundary that roadmap work depends on.

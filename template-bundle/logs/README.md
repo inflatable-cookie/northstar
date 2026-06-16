@@ -27,7 +27,7 @@ Use logs as the third step in closeout, not the first:
    exhausted it
 6. record the lane budget state and pause signal when the run paused cleanly
 7. create or update a handoff only if another thread needs to continue
-8. leave one explicit next task in the governing active surface
+8. refresh the roadmap front doors with one explicit next-task pointer
 
 ## Continuation note
 
@@ -102,7 +102,3 @@ Use that pattern for the end-of-turn closeout message, not every short reply.
 - use `templates/roadmap-currentness-triage-template.md` only when currentness
   cleanup is itself the batch, or when multiple stale front-door/evidence
   surfaces need a short explicit cleanup pass beyond ordinary closeout
-
-## Next task
-
-Create the current month directory and add the first batch-level log for a completed roadmap batch.

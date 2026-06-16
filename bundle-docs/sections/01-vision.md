@@ -40,13 +40,14 @@ Do not include milestone task lists or delivery sequencing detail.
 3. `## Strategic Constraints`
 4. `## Target Envelopes`
 5. `## Alignment Signals`
-6. `## Next Task`
 
 ## Vision governance rule (lean)
 
 - Keep governance lightweight and periodic.
 - Use scorecards/checkpoint ledger at defined review points (for example monthly/quarterly), not per task.
 - Prefer short, evidence-linked updates over heavyweight process overhead.
+- Vision artifacts should not carry the live `## Next Task` pointer. Keep that
+  in the roadmap front doors instead.
 
 ## Dependencies
 

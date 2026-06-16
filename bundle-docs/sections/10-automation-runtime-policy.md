@@ -52,8 +52,3 @@ credible.
   [`../../scripts/README.md`](../../scripts/README.md) — always exits success;
   prints `[northstar:advisory]` lines when a Northstar-shaped `docs/` tree looks
   inconsistent)
-
-## Next Task
-
-Keep the setup skill, live repo scripts, and reusable working-rules template
-aligned with this runtime hierarchy.

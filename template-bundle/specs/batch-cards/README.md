@@ -24,8 +24,3 @@ closeout.
 ## File pattern
 
 - `NNN-<slug>.md`
-
-## Next Task
-
-Add the first ready card only after the governing architecture, contracts, and
-roadmap lane already exist.

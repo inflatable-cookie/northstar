@@ -30,8 +30,3 @@ Updated: YYYY-MM-DD
 
 State which roadmap milestones are fully contracted and which remain blocked on
 planning work.
-
-## Next Task
-
-Remove the highest-risk item from `Missing or Pending Contracts` so active
-roadmap work has a complete contract chain.

@@ -77,8 +77,3 @@ The rollout view should make these questions explicit:
 - the lane turns into migrating one real project before the reusable surface
   exists
 - the surface becomes broader than needed to drive real rollout decisions
-
-## Next Task
-
-Use the re-proved audit and rollout model as the basis for the first real
-consumer-repo strict-compliance migration proof lane.

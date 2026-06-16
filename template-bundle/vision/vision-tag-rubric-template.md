@@ -30,7 +30,3 @@ Updated: YYYY-MM-DD
 ## Logging rule
 
 Use the same marker vocabulary in roadmap closures and scorecards.
-
-## Next Task
-
-Adopt this rubric in the first periodic vision scorecard.

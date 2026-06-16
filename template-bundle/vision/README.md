@@ -28,7 +28,3 @@ Use these at periodic checkpoints (for example monthly/quarterly), not per task.
 
 - `001-project-vision-blueprint-template.md`
 - `001-example-project-vision.md`
-
-## Next task
-
-Create `001-<project-blueprint>.md` with long-term outcomes, constraints, and target envelopes.

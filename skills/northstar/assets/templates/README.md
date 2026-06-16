@@ -27,7 +27,6 @@ For stricter repos, also copy the bundle's working-rules and specs surfaces:
 - `docs/specs/templates/batch-card-template.md`
 - `docs/roadmaps/g01/batch-cards/README.md`
 - `docs/policy/internal-writing-style.md`
-- `docs/policy/vision-next-task-verbs.txt`
 
 Template rule:
 
@@ -52,11 +51,11 @@ Choose the Effigy template by installed surface:
 Native template note:
 
 - `effigy.native.toml.template` now carries the starter
-  `[docs_policy.indexes.vision]` and `[docs_policy.next_actions.vision]`
-  blocks plus a task-composed `qa:northstar` bundle with root/front-door/
-  docs-spine drift checks
-- that starter assumes the repo also creates
-  `docs/policy/vision-next-task-verbs.txt`
+  `[docs_policy.indexes.vision]` block plus a task-composed `qa:northstar`
+  bundle with root/front-door/docs-spine drift checks
+- the roadmap front doors keep the live `## Next Task` pointer; non-roadmap
+  front doors should summarize state or dependencies without becoming the live
+  thread pointer
 - `README.md.template` and `docs.README.md.template` provide the front-door
   links that the starter `qa:northstar` bundle now validates
 

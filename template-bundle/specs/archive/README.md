@@ -25,8 +25,3 @@ in the repo, for example:
 - `archive/NNN-<slug>.md`
 
 Do not build a second complex planning tree under `archive/`.
-
-## Next Task
-
-Archive closed planning artifacts only when they no longer belong in the active
-specs surface but still merit preservation.

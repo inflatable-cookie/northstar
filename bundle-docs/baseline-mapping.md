@@ -50,7 +50,3 @@ Record explicit Northstar deviations to avoid accidental drift.
 
 - Confirm whether Northstar should eventually ship an Effigy check that validates research contracts only when `docs/research/` exists.
 - Confirm whether project-specific research domains should keep the canonical `specimen-dossiers/` name or allow alias folders with a documented mapping.
-
-## Next task
-
-Pilot the new research add-on in a live project and decide whether the sweep pack needs stronger checks for discovery intake and research-to-architecture promotion hygiene.

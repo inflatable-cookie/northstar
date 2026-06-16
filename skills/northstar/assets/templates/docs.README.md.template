@@ -26,3 +26,7 @@ sequencing, and `logs/` for batch evidence and decisions.
 
 If `specs/` exists, treat it as provisional planning that should promote into
 `architecture/` and `contracts/` before execution relies on it.
+
+Keep the live `Next Task` pointer in the roadmap front doors:
+`roadmaps/README.md`, `roadmaps/generation-index.md`, and the active
+`roadmaps/gNN/README.md`.

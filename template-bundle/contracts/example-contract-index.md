@@ -32,8 +32,3 @@ Updated: YYYY-MM-DD
 `g01.001` is ready because its contract chain is complete.
 `g01.002` is blocked until the analytics export seam is either contracted or
 removed from scope.
-
-## Next Task
-
-Resolve the pending analytics seam so the next milestone can be compiled
-without inferred cross-repo behavior.

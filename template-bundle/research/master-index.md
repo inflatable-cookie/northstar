@@ -35,7 +35,3 @@ Purpose: Navigate from architecture or implementation questions to the most rele
 
 - Update this index whenever a new memo, major synthesis, or architecture cross-reference becomes part of active implementation work.
 - Prefer links to durable artifacts over prose summaries.
-
-## Next Task
-
-Map the first active architecture area to its translation memo, value track, dossiers, and validation work.

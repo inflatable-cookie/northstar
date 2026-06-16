@@ -27,9 +27,3 @@ They set the realized constraints roadmap batches must honor.
   deployable surface is in play.
 - Keep milestone execution lists in roadmap files, not architecture files.
 - Use contract docs for explicit technical boundaries that need validation and migration notes.
-
-## Next task
-
-Fill `system-architecture.md`, enumerate execution-relevant surfaces in
-`system-inventory.md`, and add the first contract doc in `docs/contracts/` for
-the highest-risk boundary.
