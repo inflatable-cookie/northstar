@@ -26,9 +26,16 @@ single-repo planning lane like this one.
 - A ready batch card must define scope, exact steps, governing refs, acceptance
   criteria, validation, evidence requirements, stop conditions, and whether
   auto-continuation is allowed.
+- Each active generation README should carry a `## Generation Runway`: a short,
+  coarse list of generation goals, states, governing refs, and likely next
+  milestones. Use it to choose the next milestone when a lane closes instead of
+  inventing a new direction from recent context. It does not need to pre-plan
+  every milestone, but it should be written to keep a significant generation
+  moving across many roadmap files.
 - When planning is required for a material lane, do not stop at one next card.
-  Compile a bounded runway that makes the higher-level owner, the next few
-  meaningful batches or milestones, and the next planning checkpoint explicit.
+  Compile a bounded execution runway that names the generation-runway goal it
+  advances, the next few meaningful batches or milestones, and the next
+  planning checkpoint.
 - Roadmap milestones are turnkey lane definitions: name a multi-batch execution
   plan with checkbox tasks, not one agent turn. Batch cards carry step detail.
   See `bundle-docs/sections/03-roadmaps.md` (*Scope and granularity rule*).
@@ -281,9 +288,17 @@ Work in this repo is not done unless:
 
 - Treat roadmap generations as substantial sequencing eras, not tiny buckets of
   one or two milestone files.
+- Each active generation's `docs/roadmaps/gNN/README.md` owns its
+  `## Generation Runway`.
+- Keep the generation runway coarse and stable. Write it for a long-lived
+  generation, not the next four or five roadmaps. Update it when
+  generation-level intent changes, a milestone materially advances or closes a
+  goal, or rollover is being considered.
+- Do not use the generation runway as a backlog, checkbox task list, or
+  per-turn currentness surface.
 - In long-running repos, expect one generation to hold many milestones before a
   new generation is useful.
-- Treat roughly 20 to 40 milestones as the normal scale of a healthy
+- Treat roughly 20 to 50 milestones as the normal scale of a healthy
   generation before rollover is even worth discussing.
 - Roll to a new generation only when the sequencing baseline itself needs a
   reset, not merely because one lane or batch closed quickly.
@@ -337,6 +352,8 @@ Work in this repo is not done unless:
 - `docs/roadmaps/README.md`, `docs/roadmaps/generation-index.md`, and the
   active `docs/roadmaps/gNN/README.md` should each point to one active
   milestone, not a list of competing "current" lanes.
+- The active `docs/roadmaps/gNN/README.md` owns the full generation runway.
+  Other front doors may point to it, but should not duplicate the runway table.
 - Keep the live next-task pointer only in those roadmap front doors. Other
   docs surfaces may describe current state or dependencies, but should not own
   the active thread pointer.

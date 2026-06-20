@@ -20,6 +20,7 @@ Roadmaps sequence contract-backed work for Northstar itself.
 ## Current lane
 
 - `g02` is the active generation
+- `g02/README.md` owns the active generation runway
 - `g02.020` and `g02.021` are complete
 
 ## Next Task

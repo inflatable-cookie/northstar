@@ -10,6 +10,7 @@ Updated: 2026-05-19
 ## Active generation
 
 - `g02`
+- Generation runway: `g02/README.md`
 
 ## Generation log
 
@@ -29,7 +30,7 @@ Create a new generation when:
 
 Northstar generations should usually be substantial. The default expectation is
 that one generation will cover many milestone files before rollover. As a
-judgment guardrail, expect something closer to 20 to 40 milestones before
+judgment guardrail, expect something closer to 20 to 50 milestones before
 rollover is worth considering. Do not open `g03` just because `g02.001` closed
 or because one pilot lane completed.
 
@@ -63,6 +64,15 @@ In parallel mode, each active generation operates as its own queue. Opening a
 new generation does not require closing prior generations. Each generation's
 `gNN/README.md` and milestone files remain the authoritative front door for
 that thread.
+
+## Runway rule
+
+Each active generation's `gNN/README.md` owns its `## Generation Runway`: a
+short, coarse goal list for the generation. Use it to choose the next milestone
+when a lane closes instead of inventing a new direction from recent context.
+Keep the runway stable between real strategy, milestone, or rollover changes.
+It should be written for a significant generation, not a four-or-five-roadmap
+sequence.
 
 ## Next Task
 

@@ -17,10 +17,12 @@ exclude = ["history/**"]
 "qa:docs:headings" = "effigy docs check-headings {{DOCS_AUTHORITY_PATH}}/roadmaps/README.md --require-heading '## Next Task'"
 "qa:northstar:vision" = "effigy docs check-headings {{DOCS_AUTHORITY_PATH}}/vision/README.md --require-heading '## Current Entrypoint' --require-heading '## Working Rule'"
 "qa:northstar:roadmaps" = "effigy docs check-headings {{DOCS_AUTHORITY_PATH}}/roadmaps/README.md --require-heading '## Generation Model' --require-heading '## Layout' --require-heading '## Current Queue' --require-heading '## Next Task'"
+"qa:northstar:generation-runway" = "effigy docs check-headings {{DOCS_AUTHORITY_PATH}}/roadmaps/g01/README.md --require-heading '## Generation Runway' --require-heading '## Next Task'"
 "qa:northstar" = [
   { task = "qa:docs:headings" },
   { task = "qa:northstar:vision" },
   { task = "qa:northstar:roadmaps" },
+  { task = "qa:northstar:generation-runway" },
 ]
 "qa:docs" = [
   { task = "qa:docs:links" },
