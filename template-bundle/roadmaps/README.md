@@ -15,7 +15,7 @@ planning outcomes have been promoted out of specs.
 - Trigger generation rollover manually; do not use automatic file-count limits.
 - Treat generations as substantial sequencing eras, not one-or-two-file buckets.
   In long-running repos, one generation will often hold many milestones before
-  a clean rollover is warranted. A healthy default is roughly 20 to 40
+  a clean rollover is warranted. A healthy default is roughly 20 to 50
   milestone files before rollover is even worth discussing.
 - Finishing a batch, suite, or lane of roadmaps does **not** close the
   generation. After one batch closes, compile or continue the next batch inside
@@ -48,6 +48,18 @@ units inside them.
 - **Batch card** — bounded step-by-step instructions for the current batch.
   Create or update cards as execution proceeds; do not recreate the roadmap
   each turn.
+
+### Generation runway
+
+Each active generation's `gNN/README.md` owns a `## Generation Runway`: a short,
+coarse goal list for the generation. Use it to steer the next milestone when a
+lane closes, before inventing a new direction from recent context.
+
+Keep the generation runway stable. Update it when generation-level intent
+changes, a milestone materially advances or closes a goal, or rollover is being
+considered. Do not use it as a backlog, checkbox list, or per-turn task queue.
+It does not need to pre-plan every milestone, but it should be written to keep
+a significant 20-to-50-roadmap generation moving for a long time.
 
 ### Minimum runway
 
@@ -110,6 +122,8 @@ Treat these as the normal roadmap front doors:
 
 Keep them aligned to the active generation and milestone so operators can reach
 the live lane quickly without reconstructing it from stale prose.
+The active `gNN/README.md` owns the generation runway; the other front doors
+may point to it but should not duplicate the full table.
 
 ## Currentness curation
 

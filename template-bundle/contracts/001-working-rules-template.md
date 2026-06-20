@@ -33,6 +33,12 @@ informal habits.
   bundle at `bundle-docs/sections/07-delivery-framework-and-autonomy.md`
   (heading *Batch card rule*); keep this contract aligned with that section when
   you customize wording.
+- Each active generation README should carry a `## Generation Runway`: a short,
+  coarse list of generation goals, states, governing refs, and likely next
+  milestones. Use it to choose the next milestone when a lane closes instead of
+  inventing a new direction from recent context. It does not need to pre-plan
+  every milestone, but it should be written to keep a significant generation
+  moving across many roadmap files.
 - Roadmap milestones are turnkey lane definitions: name a multi-batch execution
   plan (checkbox tasks), not one agent turn. Batch cards carry step detail.
   See `bundle-docs/sections/03-roadmaps.md` (*Scope and granularity rule*).
@@ -138,9 +144,17 @@ informal habits.
 
 - Treat roadmap generations as substantial sequencing eras, not one-or-two-file
   buckets.
+- Each active generation's `docs/roadmaps/gNN/README.md` owns its
+  `## Generation Runway`.
+- Keep the generation runway coarse and stable. Write it for a long-lived
+  generation, not the next four or five roadmaps. Update it when
+  generation-level intent changes, a milestone materially advances or closes a
+  goal, or rollover is being considered.
+- Do not use the generation runway as a backlog, checkbox task list, or
+  per-turn currentness surface.
 - Default to sequential mode: keep one generation active across many milestones
   until the sequencing baseline itself needs a reset.
-- Treat roughly 20 to 40 milestones as the normal scale of a healthy
+- Treat roughly 20 to 50 milestones as the normal scale of a healthy
   generation before rollover is even worth discussing.
 - Finishing a batch, suite, or lane of roadmaps does **not** close the
   generation. After one batch closes, compile or continue the next batch inside
@@ -187,6 +201,8 @@ informal habits.
 - Keep the live next-task pointer only in the roadmap front doors. Other docs
   surfaces may summarize state or dependencies, but should not own the active
   thread pointer.
+- The active `docs/roadmaps/gNN/README.md` owns the full generation runway.
+  Other front doors may point to it, but should not duplicate the runway table.
 - Do not leave a completed card named as the current ready card after closeout.
 
 ## Validation

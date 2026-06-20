@@ -185,15 +185,16 @@ stop/reassessment step, the lane is not continuation-ready.
 
 Northstar planning should not produce a one-card-at-a-time fake runway.
 
-Roadmap milestones own lane shape; batch cards own step detail. A material
-roadmap should name several batches (and, in strict posture, several batch
-cards) — not one agent turn. Checkbox task lists in roadmap execution plans
-make that runway scannable. Full granularity doctrine:
+Generation READMEs own the coarse `## Generation Runway`; roadmap milestones
+own lane shape; batch cards own step detail. A material roadmap should derive
+from the generation runway, then name several batches (and, in strict posture,
+several batch cards) — not one agent turn. Checkbox task lists in roadmap
+execution plans make that lane runway scannable. Full granularity doctrine:
 [03-roadmaps.md](./03-roadmaps.md) (*Scope and granularity rule*).
 
 When a material lane needs planning, the output should usually include:
 
-- the higher-level owner the lane is trying to realize
+- the generation runway goal the lane is trying to realize
 - the current ready card or paused gate
 - the next few meaningful batches or milestone transitions beyond that card
 - the next planning checkpoint where strategy or intent may need to be
@@ -203,9 +204,9 @@ The point is not to pretend the whole program is fully known. The point is to
 avoid a loop where the thread executes one card, then makes up the next card,
 then repeats that cycle indefinitely under stricter-looking paperwork.
 
-Good planning leaves a bounded execution runway.
-That runway may still contain uncertainty, but it should make the lane shape
-visible beyond the immediate card.
+Good planning leaves both a generation runway and a bounded execution runway.
+Both may still contain uncertainty, but they should make the program shape and
+lane shape visible beyond the immediate card.
 
 ## Intent checkpoint rule
 

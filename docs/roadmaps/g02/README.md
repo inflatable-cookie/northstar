@@ -7,6 +7,22 @@ This generation is intended to stay open for a substantial tranche of work. It
 is the long-running external-proof and execution-hardening generation, not a
 single-pilot bucket.
 
+## Generation Runway
+
+| Goal | State | Governing refs | Next milestone |
+| --- | --- | --- | --- |
+| Keep proving Northstar against real consumer repositories before treating stricter posture as settled doctrine. | active | `docs/contracts/001-working-rules.md`, `docs/specs/012-consumer-repo-autonomy-proof-and-adoption.md`, `docs/specs/013-stricter-consumer-repo-autonomy-adoption.md` | pending |
+| Harden setup, nested-authority adoption, and posture classification so downstream repos can install the spine without hand adaptation. | active | `docs/specs/020-formalize-nested-docs-authority-setup.md`, `docs/specs/022-formalize-repo-posture-classification.md` | pending |
+| Keep execution autonomy bounded by ready cards, lane budgets, pause signals, and front-door currentness instead of ad-hoc continuation prompts. | active | `docs/contracts/001-working-rules.md`, `bundle-docs/sections/07-delivery-framework-and-autonomy.md` | pending |
+| Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | pending |
+
+Update this runway only when generation-level intent changes, a milestone
+materially advances or closes a goal, or rollover is being considered. Do not
+rewrite it as a per-turn task list. The runway does not need to pre-plan every
+future milestone, but it should keep `g02` moving as a significant 20-to-50
+roadmap generation rather than treating four or five completed roadmaps as a
+rollover signal.
+
 ## Milestones
 
 - `001-run-consumer-repo-pilot-and-consolidate.md`

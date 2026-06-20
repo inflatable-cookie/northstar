@@ -198,11 +198,15 @@ requireContains(repoRoot, "docs/contracts/001-working-rules.md", "`active`, `ret
 requireContains(repoRoot, "bundle-docs/operators/operator-quick-start.md", "protocol-kernel.md", "operator quick start protocol kernel link");
 requireContains(repoRoot, "docs/README.md", "specs/022-formalize-repo-posture-classification.md", "active spec front door");
 requireContains(repoRoot, "docs/roadmaps/README.md", "`g02` is the active generation", "roadmaps active generation");
+requireContains(repoRoot, "docs/roadmaps/README.md", "`g02/README.md` owns the active generation runway", "roadmaps generation runway pointer");
 requireContains(repoRoot, "docs/roadmaps/README.md", "`g02.020` and `g02.021` are complete", "roadmaps g02.020 and g02.021 complete");
+requireContains(repoRoot, "docs/roadmaps/g02/README.md", "## Generation Runway", "g02 generation runway heading");
+requireContains(repoRoot, "docs/roadmaps/g02/README.md", "per-turn task list", "g02 generation runway stability note");
 requireContains(repoRoot, "docs/roadmaps/g02/README.md", "018-add-workspace-container-adoption-specimen.md", "g02 milestone listing");
 requireContains(repoRoot, "docs/roadmaps/g02/README.md", "020-add-protocol-kernel-and-dedupe-canonical-surfaces.md", "g02 milestone listing tail");
 requireContains(repoRoot, "docs/roadmaps/g02/README.md", "021-add-posture-and-archive-advisory-checks-to-effigy.md", "g02 milestone listing end");
 requireContains(repoRoot, "docs/roadmaps/g02/README.md", "`g02.021` are complete", "g02 next task");
+requireContains(repoRoot, "docs/roadmaps/generation-index.md", "## Runway rule", "generation index runway rule");
 requireContains(repoRoot, "docs/roadmaps/generation-index.md", "No blocking roadmap milestone is open", "generation index next task");
 requireContains(repoRoot, "docs/logs/README.md", "## Closeout rule", "live logs closeout rule");
 requireContains(repoRoot, "docs/logs/README.md", "## Still-governing context", "logs context heading");

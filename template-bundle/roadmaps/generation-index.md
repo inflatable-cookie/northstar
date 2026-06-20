@@ -12,6 +12,7 @@ Updated: 2026-03-05
 ## Active generation
 
 - `g01`
+- Generation runway: `g01/README.md`
 
 ## Generation log
 
@@ -30,7 +31,7 @@ Generations are expected to be long-lived. Do not open `g02` just because one
 or two milestones landed; prefer rollover only when the sequencing baseline
 itself needs a reset.
 
-As a healthy default, expect roughly 20 to 40 milestones in one generation
+As a healthy default, expect roughly 20 to 50 milestones in one generation
 before rollover is even worth considering. Treat that as a judgment guardrail,
 not an automatic counter.
 
@@ -65,6 +66,15 @@ In parallel mode, each active generation operates as its own queue. Opening a
 new generation does not require closing prior generations. Each generation's
 `gNN/README.md` and milestone files remain the authoritative front door for
 that thread.
+
+## Runway rule
+
+Each active generation's `gNN/README.md` owns its `## Generation Runway`: a
+short, coarse goal list for the generation. Use it to choose the next milestone
+when a lane closes instead of inventing a new direction from recent context.
+Keep the runway stable between real strategy, milestone, or rollover changes.
+It should be written for a significant generation, not a four-or-five-roadmap
+sequence.
 
 ## Next task
 

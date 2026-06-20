@@ -30,3 +30,6 @@ If `specs/` exists, treat it as provisional planning that should promote into
 Keep the live `Next Task` pointer in the roadmap front doors:
 `roadmaps/README.md`, `roadmaps/generation-index.md`, and the active
 `roadmaps/gNN/README.md`.
+The active `roadmaps/gNN/README.md` also owns the generation runway so new
+milestones come from generation intent rather than ad-hoc post-closeout
+planning.

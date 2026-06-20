@@ -55,7 +55,7 @@ Start a new generation (`g02`) only when manually triggered.
 Generations are meant to be substantial sequencing eras, not tiny buckets of
 one or two milestone files. In a long-running repo, a healthy generation will
 often cover tens of roadmap files before rollover becomes useful. As a default
-posture, expect roughly 20 to 40 milestone files inside one generation before
+posture, expect roughly 20 to 50 milestone files inside one generation before
 rollover is even worth considering. Treat that as a judgment guardrail, not an
 automatic file-count trigger.
 
@@ -89,6 +89,43 @@ If those conditions are not met, stay in the current generation and repair the
 lane state there first.
 
 Record rollover reason in `docs/roadmaps/generation-index.md`.
+
+## Generation runway rule
+
+Each active generation's `docs/roadmaps/gNN/README.md` should carry a
+`## Generation Runway`: a short, coarse goal list for the generation.
+
+Use it to steer the next milestone when a lane closes. Write it with the
+express intent of keeping a significant generation moving for a long time. It
+does not need to plan all 20 to 50 likely milestones in one pass, but it should
+make the next several durable goal areas visible so agents do not treat four or
+five completed roadmaps as a rollover signal.
+
+The generation runway sits above individual milestones and batch cards:
+
+- vision explains why the generation matters
+- architecture and contracts define the allowed shape
+- the generation runway names the main goals still governing this generation
+- milestones turn those goals into executable slices
+- batch cards carry step detail in strict posture
+- `Next Task` remains the live continuation pointer in roadmap front doors
+
+The runway is not a backlog, not a checkbox task list, and not a second current
+queue. Keep it stable between real strategy, milestone, or rollover changes.
+If an agent is rewriting the runway every turn, it is using the surface wrong.
+If an agent wants to roll the generation after only a handful of milestones,
+the runway should bias toward compiling the next milestone inside the current
+generation unless a real sequencing reset is already documented.
+
+Recommended shape:
+
+| Goal | State | Governing refs | Next milestone |
+| --- | --- | --- | --- |
+| Establish the first contract-backed execution lane. | active | `<contract refs>` | `g01.001` |
+
+Use a small state vocabulary such as `active`, `next`, `blocked`, `deferred`,
+and `done`. Keep the list short enough to scan; three to seven goals is usually
+enough.
 
 ### Parallel mode exception
 

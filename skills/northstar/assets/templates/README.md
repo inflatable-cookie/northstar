@@ -53,6 +53,8 @@ Native template note:
 - `effigy.native.toml.template` now carries the starter
   `[docs_policy.indexes.vision]` block plus a task-composed `qa:northstar`
   bundle with root/front-door/docs-spine drift checks
+- active generation READMEs carry the `## Generation Runway`; use that coarse
+  goal list to steer new milestones after lanes close
 - the roadmap front doors keep the live `## Next Task` pointer; non-roadmap
   front doors should summarize state or dependencies without becoming the live
   thread pointer
