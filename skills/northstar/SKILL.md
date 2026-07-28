@@ -21,7 +21,10 @@ open **one** [`references/modes/`](./references/modes/) file and follow it.
 | Recovery | Drifted or changed planning state |
 | Planning | Default: plan, promote, compile roadmaps (sub-modes in router) |
 
-Doctrine map: [`bundle-docs/protocol-kernel.md`](../../bundle-docs/protocol-kernel.md).
+Runtime authority comes from the target repo's `AGENTS.md` and local contracts.
+When the target is the Northstar source repo, also read
+`bundle-docs/protocol-kernel.md`. Its absence is normal in consumer repos and
+is not a contract gap by itself.
 
 ## Outcomes by mode
 
@@ -41,9 +44,10 @@ matters. Glue-light internal prose unless the task is public-facing.
 ## Refactoring posture
 
 When work touches code or automation: no pre-1.0 compat shims; ask the operator
-on breaking changes; from v1.0 preserve expected stable behavior. See
-[`bundle-docs/sections/07-delivery-framework-and-autonomy.md`](../../bundle-docs/sections/07-delivery-framework-and-autonomy.md)
-and repo `docs/contracts/001-working-rules.md` when present.
+on breaking changes; from v1.0 preserve expected stable behavior. Follow the
+target repo's `docs/contracts/001-working-rules.md` when present. In the
+Northstar source repo, expanded doctrine lives at
+`bundle-docs/sections/07-delivery-framework-and-autonomy.md`.
 
 ## Assets
 

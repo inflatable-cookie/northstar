@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 
 function fail(message: string): never {
@@ -60,6 +60,56 @@ export function requireHeading(
   const lines = text.split(/\r?\n/);
   if (!lines.includes(expected)) {
     fail(`missing heading '${expected}' in ${file}`);
+  }
+}
+
+function markdownFilesUnder(directory: string): string[] {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const entryPath = path.join(directory, entry.name);
+    if (entry.isDirectory()) {
+      return markdownFilesUnder(entryPath);
+    }
+
+    return entry.isFile() && entry.name.endsWith(".md") ? [entryPath] : [];
+  });
+}
+
+export function requirePortableMarkdownLinks(
+  repoRoot: string,
+  directory: string,
+): void {
+  const portableRoot = path.resolve(repoRoot, directory);
+  requireFile(repoRoot, directory);
+
+  for (const markdownFile of markdownFilesUnder(portableRoot)) {
+    const text = readFileSync(markdownFile, "utf8");
+    for (const match of text.matchAll(/!?\[[^\]]*]\(([^)]+)\)/g)) {
+      const rawTarget = match[1].trim();
+      const target = rawTarget.startsWith("<")
+        ? rawTarget.slice(1, rawTarget.indexOf(">"))
+        : rawTarget.split(/\s+/, 1)[0];
+
+      if (!target || /^(?:[a-z][a-z0-9+.-]*:|#|\/\/)/i.test(target)) {
+        continue;
+      }
+
+      const fileTarget = target.split(/[?#]/, 1)[0];
+      const resolvedTarget = path.resolve(path.dirname(markdownFile), fileTarget);
+      const relativeTarget = path.relative(portableRoot, resolvedTarget);
+      const escapesRoot =
+        relativeTarget === ".." ||
+        relativeTarget.startsWith(`..${path.sep}`) ||
+        path.isAbsolute(relativeTarget);
+      const sourceFile = path.relative(repoRoot, markdownFile);
+
+      if (escapesRoot) {
+        fail(`non-portable Markdown link in ${sourceFile}: ${target}`);
+      }
+
+      if (!existsSync(resolvedTarget)) {
+        fail(`broken Markdown link in ${sourceFile}: ${target}`);
+      }
+    }
   }
 }
 

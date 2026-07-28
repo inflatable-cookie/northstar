@@ -1,7 +1,7 @@
 # Roadmap Generation Index
 
 Status: active
-Updated: 2026-05-19
+Updated: 2026-07-28
 
 ## Mode
 
@@ -76,6 +76,5 @@ sequence.
 
 ## Next Task
 
-No blocking roadmap milestone is open. Use `roadmaps/g02/README.md` for
-milestone history. Optional: `effigy check:posture-advisory` on downstream
-strict repos before opening the next `g02` slice.
+No blocking roadmap milestone is open. Use `roadmaps/g02/README.md` for the
+generation runway and milestone history.

@@ -48,7 +48,15 @@ Templates live under `skills/northstar/assets/templates/`.
 
 - Keep the public skill count at **one**.
 - Put procedures in `references/modes/` and load **one** mode per invocation.
-- Point at doctrine via `bundle-docs/protocol-kernel.md`; do not duplicate
-  long enumerations inside the skill body.
+- Keep every local Markdown link inside `skills/northstar/`; the installed
+  skill is a one-folder artifact.
+- Write target-repo and Northstar-source paths as code literals, not links
+  relative to the installed skill. Resolve them from the target workspace or
+  an explicitly located Northstar source checkout.
+- `bundle-docs/` and `template-bundle/` are source-repo surfaces, not skill
+  payload. Their absence is normal in consumer repos and does not by itself
+  indicate a contract gap.
+- Point at doctrine when a Northstar source checkout is available; do not
+  duplicate long enumerations inside the skill body.
 - Operator starter prompts stay under `bundle-docs/operators/`; not every
   prompt becomes a skill.
