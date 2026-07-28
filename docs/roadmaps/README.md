@@ -22,6 +22,7 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02` is the active generation
 - `g02/README.md` owns the active generation runway
 - `g02.020` and `g02.021` are complete
+- `g02.022` is complete
 
 ## Next Task
 

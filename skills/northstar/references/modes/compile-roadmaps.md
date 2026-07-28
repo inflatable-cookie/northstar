@@ -40,9 +40,12 @@ one-card-at-a-time improvisation.
    - the immediate ready card or paused gate
    - the next few meaningful batches or milestone transitions beyond it
    - the next planning checkpoint where strategy or intent may need review
-10. For the authoritative batch-card field list and expanded ready-state checks,
-   use [`bundle-docs/sections/07-delivery-framework-and-autonomy.md`](../../../../bundle-docs/sections/07-delivery-framework-and-autonomy.md)
-   (see [`bundle-docs/protocol-kernel.md`](../../../../bundle-docs/protocol-kernel.md)); do not invent a divergent checklist.
+10. For batch-card fields and ready-state checks, follow the target repo's
+   `docs/contracts/001-working-rules.md` and installed batch-card template.
+   When working in the Northstar source repo, expanded doctrine lives at
+   `bundle-docs/sections/07-delivery-framework-and-autonomy.md` and maps
+   through `bundle-docs/protocol-kernel.md`. Do not invent a divergent
+   checklist when those source-repo surfaces are absent.
 11. Apply the repo's readiness rubric before marking a card or short chain
    `ready`:
    - the work is bounded enough to execute without fresh planning decisions

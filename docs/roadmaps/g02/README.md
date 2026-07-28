@@ -46,11 +46,12 @@ rollover signal.
 - `019-formalize-repo-posture-classification.md`
 - `020-add-protocol-kernel-and-dedupe-canonical-surfaces.md`
 - `021-add-posture-and-archive-advisory-checks-to-effigy.md`
+- `022-repair-installed-skill-portability.md`
 
 ## Next Task
 
-`g02.020` and `g02.021` are complete. Compile the next contract-backed `g02`
-milestone when you queue new work.
+`g02.022` is complete. Compile the next contract-backed `g02` milestone when
+new work is queued.
 
 
 Batch cards live in `g02/batch-cards/` when strict posture uses them.

@@ -4,6 +4,7 @@ import {
   repoRootFrom,
   requireContains,
   requireFile,
+  requirePortableMarkdownLinks,
 } from "./lib/checks";
 
 const repoRoot = repoRootFrom(import.meta.dir);
@@ -77,6 +78,10 @@ const requiredFiles = [
   "docs/roadmaps/g02/011-define-lane-first-stricter-adoption-starter-pack.md",
   "docs/roadmaps/g02/012-define-full-strict-compliance-migration-program.md",
   "docs/roadmaps/g02/013-define-strict-compliance-audit-and-rollout-surface.md",
+  "docs/roadmaps/g02/022-repair-installed-skill-portability.md",
+  "docs/roadmaps/g02/batch-cards/065-repair-portable-skill-boundary.md",
+  "docs/roadmaps/g02/batch-cards/066-enforce-and-prove-skill-portability.md",
+  "docs/logs/2026-07/28-101319-repair-installed-skill-portability.md",
   "bundle-docs/README.md",
   "bundle-docs/cheat-sheet.md",
   "bundle-docs/protocol-kernel.md",
@@ -119,6 +124,8 @@ for (const file of requiredFiles) {
   requireFile(repoRoot, file);
 }
 
+requirePortableMarkdownLinks(repoRoot, "skills/northstar");
+
 requireContains(repoRoot, "AGENTS.md", "effigy tasks", "Effigy discovery step");
 requireContains(repoRoot, "AGENTS.md", "effigy doctor", "Effigy doctor step");
 requireContains(repoRoot, "AGENTS.md", "effigy qa", "Effigy QA step");
@@ -139,6 +146,7 @@ requireContains(repoRoot, "bundle-docs/README.md", "standard docs spine", "stand
 requireContains(repoRoot, "bundle-docs/README.md", "protocol-kernel.md", "bundle docs protocol kernel entry");
 requireContains(repoRoot, "bundle-docs/README.md", "skills/northstar/", "bundle docs northstar skill entry");
 requireContains(repoRoot, "bundle-docs/skills/README.md", "one installable agent skill", "skills README single skill doctrine");
+requireContains(repoRoot, "bundle-docs/skills/README.md", "one-folder artifact", "portable skill boundary");
 requireContains(repoRoot, "bundle-docs/cheat-sheet.md", "check:posture-advisory", "cheat sheet posture advisory command");
 requireContains(repoRoot, "bundle-docs/protocol-kernel.md", "check:posture-advisory", "protocol kernel posture advisory hint");
 requireContains(repoRoot, "bundle-docs/sections/10-automation-runtime-policy.md", "check:posture-advisory", "automation policy posture advisory hint");
@@ -200,12 +208,14 @@ requireContains(repoRoot, "docs/README.md", "specs/022-formalize-repo-posture-cl
 requireContains(repoRoot, "docs/roadmaps/README.md", "`g02` is the active generation", "roadmaps active generation");
 requireContains(repoRoot, "docs/roadmaps/README.md", "`g02/README.md` owns the active generation runway", "roadmaps generation runway pointer");
 requireContains(repoRoot, "docs/roadmaps/README.md", "`g02.020` and `g02.021` are complete", "roadmaps g02.020 and g02.021 complete");
+requireContains(repoRoot, "docs/roadmaps/README.md", "`g02.022` is complete", "roadmaps g02.022 complete");
 requireContains(repoRoot, "docs/roadmaps/g02/README.md", "## Generation Runway", "g02 generation runway heading");
 requireContains(repoRoot, "docs/roadmaps/g02/README.md", "per-turn task list", "g02 generation runway stability note");
 requireContains(repoRoot, "docs/roadmaps/g02/README.md", "018-add-workspace-container-adoption-specimen.md", "g02 milestone listing");
 requireContains(repoRoot, "docs/roadmaps/g02/README.md", "020-add-protocol-kernel-and-dedupe-canonical-surfaces.md", "g02 milestone listing tail");
 requireContains(repoRoot, "docs/roadmaps/g02/README.md", "021-add-posture-and-archive-advisory-checks-to-effigy.md", "g02 milestone listing end");
-requireContains(repoRoot, "docs/roadmaps/g02/README.md", "`g02.021` are complete", "g02 next task");
+requireContains(repoRoot, "docs/roadmaps/g02/README.md", "022-repair-installed-skill-portability.md", "g02 portability milestone");
+requireContains(repoRoot, "docs/roadmaps/g02/README.md", "`g02.022` is complete", "g02 portability closeout");
 requireContains(repoRoot, "docs/roadmaps/generation-index.md", "## Runway rule", "generation index runway rule");
 requireContains(repoRoot, "docs/roadmaps/generation-index.md", "No blocking roadmap milestone is open", "generation index next task");
 requireContains(repoRoot, "docs/logs/README.md", "## Closeout rule", "live logs closeout rule");
@@ -213,6 +223,7 @@ requireContains(repoRoot, "docs/logs/README.md", "## Still-governing context", "
 requireContains(repoRoot, "docs/logs/README.md", "## Recent active-lane evidence", "logs evidence heading");
 requireContains(repoRoot, "docs/logs/README.md", "09-111500-roll-to-g02-external-pilot.md", "governing context log");
 requireContains(repoRoot, "docs/logs/README.md", "20-144500-consolidate-northstar-skill-surface.md", "latest active-lane log");
+requireContains(repoRoot, "docs/logs/README.md", "28-101319-repair-installed-skill-portability.md", "portability repair log");
 forbidContains(repoRoot, "docs/logs/README.md", "08-120000-bootstrap-live-northstar-docs.md", "stale bootstrap log in bounded evidence window");
 forbidContains(repoRoot, "docs/logs/README.md", "09-205500-open-currentness-alignment-lane.md", "older currentness-alignment log in bounded evidence window");
 forbidContains(repoRoot, "docs/logs/README.md", "09-121500-select-signal-pilot-target.md", "old pilot-selection log in bounded evidence window");

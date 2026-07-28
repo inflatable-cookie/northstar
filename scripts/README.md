@@ -23,6 +23,12 @@ effigy qa
 Scripts remain implementation detail until the helper flow is stable enough to
 expose as a first-class Effigy task.
 
+## Repo contract (`qa:docs`)
+
+`check:repo-contract` validates required Northstar surfaces and the installable
+skill boundary. Every local Markdown link under `skills/northstar/` must resolve
+inside that folder; escaping or missing targets fail QA.
+
 ## Posture advisory (`check:posture-advisory`)
 
 Non-blocking checks for common **declared vs actual** drift in Northstar-shaped

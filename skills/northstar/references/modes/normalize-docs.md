@@ -12,7 +12,8 @@ hygiene when front doors, generation index, or strict surfaces drift.
 - [`../setup/workspace-container-example.md`](../setup/workspace-container-example.md)
 - [`../setup/monkey-example.md`](../setup/monkey-example.md)
 - Templates: [`../../assets/templates/`](../../assets/templates/)
-- Doctrine: [`../../../../bundle-docs/protocol-kernel.md`](../../../../bundle-docs/protocol-kernel.md)
+- Northstar source checkout, when available: `bundle-docs/protocol-kernel.md`
+  and `template-bundle/`
 
 ## Quick start
 
@@ -31,8 +32,11 @@ Optional: `effigy check:posture-advisory` after structural edits.
    target; record blocking gaps in an active spec/milestone when migrating.
 2. Choose adoption mode (single repo, workspace container + docs authority, or
    compatibility only when the installed Effigy binary lacks needed surfaces).
-3. Apply spine from [`../../../../template-bundle`](../../../../template-bundle)—
-   baseline or strict deliberately, not a permanent mixed posture.
+3. For bootstrap or template-copy work, locate a Northstar source checkout
+   explicitly and apply its `template-bundle/`—baseline or strict deliberately,
+   not a permanent mixed posture. Never resolve `template-bundle/` relative to
+   the installed skill. If no source checkout is available, stop and ask the
+   operator for its path instead of inventing the docs tree.
 4. When strict: install `product-guardrails`, `contract-index`,
    `001-working-rules`, `specs/`, `specs/archive/README.md`, batch-cards as
    warranted. Explain specs as provisional; archive when canonical surfaces

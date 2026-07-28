@@ -81,6 +81,11 @@ effigy tasks
 effigy doctor
 ```
 
-Then `README.md`, `AGENTS.md`, `docs/README.md`, and
-[`bundle-docs/protocol-kernel.md`](../../../bundle-docs/protocol-kernel.md)
-before loading mode-specific paths listed in that mode file.
+Then read the target repo's available `README.md`, `AGENTS.md`,
+`docs/README.md`, and `docs/contracts/001-working-rules.md` before loading
+mode-specific paths.
+
+Repo paths written as code literals are resolved from the target workspace,
+not from this installed skill folder. When the target is the Northstar source
+repo, also read `bundle-docs/protocol-kernel.md`. Consumer repos normally do
+not contain `bundle-docs/`; its absence is not a contract gap.
