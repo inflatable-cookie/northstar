@@ -36,6 +36,9 @@ roadmaps/
 
 logs/
   └─ YYYY-MM/   dated evidence per batch
+
+PAPERCUTS.md
+  └─ agent-observed friction, triaged later into the docs spine
 ```
 
 ## Core Flow
@@ -79,7 +82,8 @@ Starting a new project?
 3. Open active milestone in gNN/
 4. Read latest log in logs/YYYY-MM/
 5. Execute next batch
-6. Closeout: update card → milestone → front doors → log
+6. Append any solvable execution friction to root PAPERCUTS.md
+7. Closeout: update card → milestone → front doors → log
 ```
 
 ## Workflow: Drifted or New Repo

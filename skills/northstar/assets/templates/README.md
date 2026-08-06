@@ -12,6 +12,7 @@ Use these top-level repo templates from this skill for the non-docs surfaces:
 
 - `AGENTS.md`
 - `CLAUDE.md.template` (optional)
+- `PAPERCUTS.md`
 - `CHANGELOG.md`
 - `README.md.template`
 - `scripts.README.md.template`

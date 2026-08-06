@@ -41,6 +41,22 @@ is not a contract gap by itself.
 Lead with what changed, lane state, next move. Validation only if it failed or
 matters. Glue-light internal prose unless the task is public-facing.
 
+## Papercuts loop (required during execution)
+
+- Locate the root of the repository that owns the work and read
+  `PAPERCUTS.md` if it exists.
+- When a small, solvable execution hurdle appears, append a terse entry to that
+  file before continuing. If it is missing, create it without asking the
+  operator.
+- Capture the friction, impact, plausible fix, and affected surface. Do not
+  stop the current task, wait for permission, or fix the papercut unless that
+  fix is already in scope.
+- Do not log ordinary one-off failures, external blockers, sensitive data, or
+  duplicate open entries. Papercuts are observations for later triage, not an
+  automatic backlog or roadmap commitment.
+
+The starter file is available at `assets/templates/PAPERCUTS.md`.
+
 ## Refactoring posture
 
 When work touches code or automation: no pre-1.0 compat shims; ask the operator
@@ -52,6 +68,7 @@ Northstar source repo, expanded doctrine lives at
 ## Assets
 
 - Setup/templates: [`assets/templates/`](./assets/templates/)
+- Papercuts starter: `assets/templates/PAPERCUTS.md`
 - Handoff template: [`assets/templates/northstar-handoff.md.template`](./assets/templates/northstar-handoff.md.template)
 - Handoff contract: [`references/handoff-contract.md`](./references/handoff-contract.md)
 

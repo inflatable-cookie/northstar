@@ -67,6 +67,14 @@ docs/
 8. Backlog lives only at `roadmaps/backlog/`
 9. Clean migrations only: move, update refs, remove legacy in one batch
 
+## Papercuts
+
+- Every repository may keep a root `PAPERCUTS.md` queue.
+- Agents append solvable execution friction when it happens; create the file if
+  missing and continue without operator permission.
+- Triage later; papercuts are observations, not automatic roadmap work.
+- Full rule: [`papercuts.md`](./papercuts.md)
+
 ## Protocol kernel
 
 Authoritative **enumerations** (batch-card fields, ready-state checks, closeout

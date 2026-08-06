@@ -13,8 +13,9 @@ to adopt.
 - [architecture/system-architecture.md](./architecture/system-architecture.md)
 - [architecture/product-guardrails.md](./architecture/product-guardrails.md)
 - [contracts/001-working-rules.md](./contracts/001-working-rules.md)
-- [specs/022-formalize-repo-posture-classification.md](./specs/022-formalize-repo-posture-classification.md)
+- [specs/024-papercuts-feedback-loop.md](./specs/024-papercuts-feedback-loop.md)
 - [roadmaps/generation-index.md](./roadmaps/generation-index.md)
+- [PAPERCUTS.md](../PAPERCUTS.md) — agent-observed execution friction
 
 ## Sections
 

@@ -38,6 +38,7 @@ contracts).
 | Batch cards, ready-state, closeout shape, autonomy levels, master specs | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Batch card rule**, **Ready-state rubric**, **Operator-facing summary rule**, **Autonomy support levels** | `docs/contracts/001-working-rules.md` (from [`template-bundle/contracts/001-working-rules-template.md`](../template-bundle/contracts/001-working-rules-template.md)); keep compact, point here for full enumerations |
 | Spec lifecycle and archive | [sections/08-specs-and-promotion.md](./sections/08-specs-and-promotion.md) + [template-bundle/specs/README.md](../template-bundle/specs/README.md) | `docs/specs/` + `docs/specs/archive/` in the installed repo |
 | Automation defaults | [sections/10-automation-runtime-policy.md](./sections/10-automation-runtime-policy.md) | `AGENTS.md` / Effigy config in each repo |
+| Agent execution feedback | [papercuts.md](./papercuts.md) | root `PAPERCUTS.md` + agent contract |
 
 **Northstar maintainers:** the live repo may tighten wording in
 `docs/contracts/001-working-rules.md`, but expanded checklists should stay in

@@ -12,7 +12,8 @@ If you are:
 The doctrine itself lives in `sections/`.
 The main current sections are vision, architecture, roadmaps, logs, research,
 strict planning gates, the delivery/autonomy layer, the specs-promotion
-model, the standard docs spine, and the automation runtime policy.
+model, the standard docs spine, the automation runtime policy, and the
+agent-facing papercuts feedback loop.
 
 For a **single-page map** of canonical homes (what to copy vs what to link),
 read [`protocol-kernel.md`](./protocol-kernel.md) first.
@@ -63,6 +64,7 @@ Full doctrine: [`sections/07-delivery-framework-and-autonomy.md`](./sections/07-
 - Operator workflow: [`operators/README.md`](./operators/README.md)
 - Operator-stack maintenance: [`maintenance/README.md`](./maintenance/README.md)
 - Agent skills (installable): [`skills/README.md`](./skills/README.md)
+- Agent feedback loop: [`papercuts.md`](./papercuts.md)
 - Deprecated `meta/` migration: [`meta-folder-migration.md`](./meta-folder-migration.md)
 
 ## Agent skill

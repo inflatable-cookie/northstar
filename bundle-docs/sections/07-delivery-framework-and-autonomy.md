@@ -134,6 +134,15 @@ explicit:
   - if the remaining path is still scaffolded, mocked, or unproven, record that
     limit instead of claiming the milestone is effectively done
 
+## Papercut feedback loop
+
+Execution also carries a lightweight feedback loop. When an agent meets small,
+solvable friction, it appends a short note to the owning repository's root
+`PAPERCUTS.md` before continuing. The agent creates the file if it is missing;
+no operator prompt is required. Papercuts do not pause the active task or become
+automatic roadmap work. Use [`../papercuts.md`](../papercuts.md) for the entry
+shape, exclusions, ownership rule, and later triage path.
+
 ## Refactoring posture by release maturity
 
 Agents often add compatibility aliases, shims, and silent fallbacks during

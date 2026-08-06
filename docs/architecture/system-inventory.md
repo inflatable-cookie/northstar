@@ -22,6 +22,7 @@ skills.
 | `skills/` | automation surface | repo maintainers | installable agent workflows | `docs/contracts/001-working-rules.md`, `docs/specs/archive/001-northstar-delivery-layer.md` |
 | `docs/` | live planning surface | repo maintainers | Northstar's own planning and execution state | all files in this repo-local docs spine |
 | `scripts/` and `effigy` checks | validation surface | repo maintainers | repo integrity and enforcement hooks | `scripts/check-northstar-repo-contract.sh`, roadmap evidence requirements |
+| root `PAPERCUTS.md` | agent feedback surface | executing agents + repo maintainers | owning repository root | `bundle-docs/papercuts.md`, agent templates, working rules |
 
 ## Interfaces and Dependencies
 
@@ -31,6 +32,7 @@ skills.
 | Live repo planning | `docs/vision/`, `docs/architecture/`, `docs/contracts/` | repo changes | `001-working-rules` | Internal repo development now follows Northstar in a compact contract mode |
 | Spec-to-roadmap execution | `docs/specs/` | `docs/roadmaps/`, `docs/logs/` | `001-working-rules` | Batch cards are the detailed execution unit |
 | Validation loop | roadmap/log state | `effigy qa`, `effigy qa:docs` | `001-working-rules` | Validation evidence is required for closure |
+| Papercut feedback | agent execution | maintenance triage and normal planning surfaces | `bundle-docs/papercuts.md`, `001-working-rules` | Notes are captured at encounter time and promoted only after triage |
 
 ## Validation Surfaces
 
@@ -40,10 +42,11 @@ skills.
 | Bundle docs integrity | `effigy qa:docs` | repo maintainers | ready |
 | Delivery-layer adoption | active docs spine, compact working rules, spec, roadmap, log | repo maintainers | ready |
 | Template/skill promotion | follow-on roadmap batches and logs | repo maintainers | pending |
+| Papercut loop | root queue, doctrine, templates, skill instruction, and QA coverage | repo maintainers | ready |
 
 ## Planning Gaps
 
-- `template-bundle/` does not yet expose the delivery-layer artifacts as
+- `template-bundle/` does not yet expose every delivery-layer artifact as
   canonical copy-ready surfaces.
 - `skills/` do not yet consistently emit master specs, batch cards, and
   autonomy envelopes by default.

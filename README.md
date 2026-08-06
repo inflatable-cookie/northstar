@@ -29,6 +29,8 @@ Core flow:
   explicit handoff modes (see [`references/router.md`](./skills/northstar/references/router.md)).
 - [`bundle-docs/skills/README.md`](./bundle-docs/skills/README.md) describes
   skill architecture.
+- [`PAPERCUTS.md`](./PAPERCUTS.md) is the live agent-observed friction queue;
+  consumer projects seed the same root file from the skill templates.
 - [`scripts/`](./scripts/) contains repo maintenance helpers when needed.
 
 If you're trying to understand the human workflow rather than the bundle
@@ -88,10 +90,12 @@ repository.
 ### Steps for any posture
 
 1. Copy the bundle into your target project docs folder.
-2. Start with vision first, then architecture. Add `research/` when external comparison or source-backed exploration is needed before committing new bets.
-3. Create roadmap milestones under `docs/roadmaps/gNN/` using `NNN-<slug>.md`.
-4. Log each completed batch in `docs/logs/YYYY-MM/` using `DD-HHMMSS-<slug>.md`.
-5. Delete unused add-on folders after copying the bundle; keep only the ones the project actually needs (`docs/research/`, `docs/schemas/`, `docs/templates/`, `docs/diagrams/`, `docs/specs/`).
+2. Install the top-level agent starters from `skills/northstar/assets/templates/`,
+   including `AGENTS.md` and `PAPERCUTS.md`.
+3. Start with vision first, then architecture. Add `research/` when external comparison or source-backed exploration is needed before committing new bets.
+4. Create roadmap milestones under `docs/roadmaps/gNN/` using `NNN-<slug>.md`.
+5. Log each completed batch in `docs/logs/YYYY-MM/` using `DD-HHMMSS-<slug>.md`.
+6. Delete unused add-on folders after copying the bundle; keep only the ones the project actually needs (`docs/research/`, `docs/schemas/`, `docs/templates/`, `docs/diagrams/`, `docs/specs/`).
 
 ## Migrate An Existing Project
 
