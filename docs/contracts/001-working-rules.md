@@ -61,6 +61,20 @@ single-repo planning lane like this one.
 - Keep the archive lean and traceable. Do not treat archived specs as canonical
   execution authority once architecture and contracts carry the truth.
 
+### Papercuts feedback loop
+
+- During execution, agents must append a short entry to the owning repository's
+  root `PAPERCUTS.md` when they encounter small, solvable friction.
+- If the file is missing, the agent creates it without asking the operator and
+  continues the current task after recording the note.
+- Each entry captures friction, impact, a plausible smallest fix, and the
+  affected tool, document, script, or workflow.
+- Papercuts do not pause work, authorize unplanned fixes, or replace the normal
+  backlog, roadmap, spec, architecture, or contract surfaces. Triage them in
+  normal maintenance and promote repeated or material items as appropriate.
+- Do not record ordinary one-off failures, external blockers, sensitive data, or
+  duplicate open entries. Full detail lives in `bundle-docs/papercuts.md`.
+
 ### Execution guardrail pack
 
 - Prefer real integrated behavior over mockups, placeholders, or token

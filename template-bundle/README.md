@@ -6,6 +6,11 @@ This directory is the product artifact.
 
 The folders here are intended to be copied into a target project's `docs/` directory.
 
+The root `PAPERCUTS.md` queue is a companion starter surface, not a `docs/`
+folder. Seed it from `skills/northstar/assets/templates/PAPERCUTS.md` when
+installing the top-level agent templates. The installed Northstar skill also
+creates it on first use when it is missing.
+
 ## Quick Start: Choose Your Bundle
 
 | What you need | Copy this | Contents |

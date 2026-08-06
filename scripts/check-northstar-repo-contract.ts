@@ -12,6 +12,7 @@ const repoRoot = repoRootFrom(import.meta.dir);
 const requiredFiles = [
   "AGENTS.md",
   "README.md",
+  "PAPERCUTS.md",
   "docs/README.md",
   "docs/vision/README.md",
   "docs/architecture/README.md",
@@ -29,6 +30,7 @@ const requiredFiles = [
   "docs/specs/archive/007-currentness-curation-and-evidence-window.md",
   "docs/specs/008-spec-lifecycle-and-archive-mechanics.md",
   "docs/specs/009-archive-aware-skill-and-setup-surfaces.md",
+  "docs/specs/024-papercuts-feedback-loop.md",
   "docs/specs/010-continuation-envelope-and-stop-signal-contract.md",
   "docs/specs/011-lane-budget-and-pause-signal-contract.md",
   "docs/specs/012-consumer-repo-autonomy-proof-and-adoption.md",
@@ -79,11 +81,15 @@ const requiredFiles = [
   "docs/roadmaps/g02/012-define-full-strict-compliance-migration-program.md",
   "docs/roadmaps/g02/013-define-strict-compliance-audit-and-rollout-surface.md",
   "docs/roadmaps/g02/022-repair-installed-skill-portability.md",
+  "docs/roadmaps/g02/023-add-papercuts-feedback-loop.md",
   "docs/roadmaps/g02/batch-cards/065-repair-portable-skill-boundary.md",
   "docs/roadmaps/g02/batch-cards/066-enforce-and-prove-skill-portability.md",
+  "docs/roadmaps/g02/batch-cards/067-add-papercuts-feedback-loop.md",
   "docs/logs/2026-07/28-101319-repair-installed-skill-portability.md",
+  "docs/logs/2026-08/06-000000-add-papercuts-feedback-loop.md",
   "bundle-docs/README.md",
   "bundle-docs/cheat-sheet.md",
+  "bundle-docs/papercuts.md",
   "bundle-docs/protocol-kernel.md",
   "bundle-docs/operators/operator-quick-start.md",
   "bundle-docs/sections/07-delivery-framework-and-autonomy.md",
@@ -116,6 +122,8 @@ const requiredFiles = [
   "skills/northstar/references/modes/refocus-drifted-project.md",
   "skills/northstar/references/modes/sweep-audit-repair.md",
   "skills/northstar/assets/templates/README.md",
+  "skills/northstar/assets/templates/AGENTS.md",
+  "skills/northstar/assets/templates/PAPERCUTS.md",
   "skills/northstar/assets/templates/effigy.native.toml.template",
   "skills/northstar/assets/templates/northstar-handoff.md.template",
 ] as const;
@@ -130,6 +138,7 @@ requireContains(repoRoot, "AGENTS.md", "effigy tasks", "Effigy discovery step");
 requireContains(repoRoot, "AGENTS.md", "effigy doctor", "Effigy doctor step");
 requireContains(repoRoot, "AGENTS.md", "effigy qa", "Effigy QA step");
 requireContains(repoRoot, "AGENTS.md", "check:posture-advisory", "AGENTS posture advisory hint");
+requireContains(repoRoot, "AGENTS.md", "PAPERCUTS.md", "AGENTS papercuts loop");
 
 requireContains(repoRoot, "README.md", "effigy tasks", "Effigy discovery step");
 requireContains(repoRoot, "README.md", "effigy doctor", "Effigy doctor step");
@@ -137,6 +146,7 @@ requireContains(repoRoot, "README.md", "effigy qa", "Effigy QA step");
 requireContains(repoRoot, "README.md", "check:posture-advisory", "README posture advisory hint");
 requireContains(repoRoot, "README.md", "skills/northstar/", "northstar skill entry point");
 requireContains(repoRoot, "README.md", "docs/README.md", "live docs entry point");
+requireContains(repoRoot, "README.md", "PAPERCUTS.md", "README papercuts entry point");
 
 requireContains(repoRoot, "bundle-docs/README.md", "effigy tasks", "Effigy discovery step");
 requireContains(repoRoot, "bundle-docs/README.md", "effigy doctor", "Effigy doctor step");
@@ -145,10 +155,13 @@ requireContains(repoRoot, "bundle-docs/README.md", "delivery/autonomy layer", "d
 requireContains(repoRoot, "bundle-docs/README.md", "standard docs spine", "standard docs spine reference");
 requireContains(repoRoot, "bundle-docs/README.md", "protocol-kernel.md", "bundle docs protocol kernel entry");
 requireContains(repoRoot, "bundle-docs/README.md", "skills/northstar/", "bundle docs northstar skill entry");
+requireContains(repoRoot, "bundle-docs/README.md", "papercuts.md", "bundle docs papercuts entry");
 requireContains(repoRoot, "bundle-docs/skills/README.md", "one installable agent skill", "skills README single skill doctrine");
 requireContains(repoRoot, "bundle-docs/skills/README.md", "one-folder artifact", "portable skill boundary");
 requireContains(repoRoot, "bundle-docs/cheat-sheet.md", "check:posture-advisory", "cheat sheet posture advisory command");
 requireContains(repoRoot, "bundle-docs/protocol-kernel.md", "check:posture-advisory", "protocol kernel posture advisory hint");
+requireContains(repoRoot, "bundle-docs/protocol-kernel.md", "Agent execution feedback", "protocol kernel papercuts row");
+requireContains(repoRoot, "bundle-docs/papercuts.md", "must append", "papercuts agent contract");
 requireContains(repoRoot, "bundle-docs/sections/10-automation-runtime-policy.md", "check:posture-advisory", "automation policy posture advisory hint");
 requireContains(repoRoot, "bundle-docs/sections/07-delivery-framework-and-autonomy.md", "## Ready-state rubric", "ready-state doctrine heading");
 requireContains(repoRoot, "bundle-docs/sections/07-delivery-framework-and-autonomy.md", "## Closeout pattern", "closeout doctrine heading");
@@ -159,6 +172,7 @@ requireContains(repoRoot, "bundle-docs/sections/07-delivery-framework-and-autono
 requireContains(repoRoot, "template-bundle/README.md", "Standard docs spines", "template bundle spine heading");
 requireContains(repoRoot, "template-bundle/README.md", "contracts/001-working-rules-template.md", "working-rules template reference");
 requireContains(repoRoot, "template-bundle/README.md", "continuation envelopes, lane budgets, pause signals", "template bundle stricter autonomy wording");
+requireContains(repoRoot, "template-bundle/README.md", "PAPERCUTS.md", "template bundle papercuts companion");
 requireContains(repoRoot, "template-bundle/specs/templates/batch-card-template.md", "## Ready-State Checks", "batch-card ready-state section");
 requireContains(repoRoot, "template-bundle/specs/templates/batch-card-template.md", "## Continuation Envelope", "batch-card continuation section");
 requireContains(repoRoot, "template-bundle/specs/templates/batch-card-template.md", "## Lane Budget", "batch-card lane-budget section");
@@ -179,6 +193,7 @@ requireContains(repoRoot, "skills/northstar/SKILL.md", "references/router.md", "
 requireContains(repoRoot, "skills/northstar/SKILL.md", "protocol-kernel.md", "northstar skill protocol kernel pointer");
 requireContains(repoRoot, "skills/northstar/SKILL.md", "Handoff", "northstar skill handoff mode table");
 requireContains(repoRoot, "skills/northstar/SKILL.md", "Normalize docs", "northstar skill normalize mode table");
+requireContains(repoRoot, "skills/northstar/SKILL.md", "Papercuts loop", "northstar skill papercuts loop");
 requireContains(repoRoot, "skills/northstar/references/router.md", "Handoff (explicit only)", "router handoff gate");
 requireContains(repoRoot, "skills/northstar/references/router.md", "bare `continue`", "router handoff anti-trigger");
 requireContains(repoRoot, "skills/northstar/references/modes/normalize-docs.md", "../setup/adoption-modes.md", "normalize adoption modes ref");
@@ -186,6 +201,7 @@ requireContains(repoRoot, "skills/northstar/references/modes/normalize-docs.md",
 requireContains(repoRoot, "skills/northstar/references/setup/delivery-layer-adoption.md", "Baseline Mode Is Enough When", "delivery layer baseline mode heading");
 requireContains(repoRoot, "skills/northstar/references/setup/repo-contract.md", "Baseline docs spine", "baseline docs spine contract");
 requireContains(repoRoot, "skills/northstar/agents/openai.yaml", "references/router.md", "openai default router");
+requireContains(repoRoot, "skills/northstar/agents/openai.yaml", "PAPERCUTS.md", "openai papercuts prompt");
 requireContains(repoRoot, "skills/northstar/references/modes/compile-roadmaps.md", "Do not mark a batch `ready` just because it is next in sequence.", "compile-roadmaps readiness guardrail");
 requireContains(repoRoot, "skills/northstar/references/modes/handoff.md", "explicit trigger only", "handoff mode explicit gate");
 requireContains(repoRoot, "skills/northstar/references/handoff-contract.md", "Do not use it as a substitute for proper closeout in the live planning spine.", "handoff contract closeout rule");
@@ -203,8 +219,10 @@ requireContains(repoRoot, "docs/contracts/001-working-rules.md", "### Closeout p
 requireContains(repoRoot, "docs/contracts/001-working-rules.md", "### Strict-compliance audit and rollout", "working-rules audit heading");
 requireContains(repoRoot, "docs/contracts/001-working-rules.md", "Full doctrine enumerations for batch-card fields", "working-rules doctrine pointer");
 requireContains(repoRoot, "docs/contracts/001-working-rules.md", "`active`, `retired-in-place`, and `archived`", "working-rules spec lifecycle states");
+requireContains(repoRoot, "docs/contracts/001-working-rules.md", "### Papercuts feedback loop", "working-rules papercuts contract");
+requireContains(repoRoot, "template-bundle/contracts/001-working-rules-template.md", "### Papercuts feedback loop", "working-rules template papercuts contract");
 requireContains(repoRoot, "bundle-docs/operators/operator-quick-start.md", "protocol-kernel.md", "operator quick start protocol kernel link");
-requireContains(repoRoot, "docs/README.md", "specs/022-formalize-repo-posture-classification.md", "active spec front door");
+requireContains(repoRoot, "docs/README.md", "specs/024-papercuts-feedback-loop.md", "active spec front door");
 requireContains(repoRoot, "docs/roadmaps/README.md", "`g02` is the active generation", "roadmaps active generation");
 requireContains(repoRoot, "docs/roadmaps/README.md", "`g02/README.md` owns the active generation runway", "roadmaps generation runway pointer");
 requireContains(repoRoot, "docs/roadmaps/README.md", "`g02.020` and `g02.021` are complete", "roadmaps g02.020 and g02.021 complete");
@@ -215,7 +233,9 @@ requireContains(repoRoot, "docs/roadmaps/g02/README.md", "018-add-workspace-cont
 requireContains(repoRoot, "docs/roadmaps/g02/README.md", "020-add-protocol-kernel-and-dedupe-canonical-surfaces.md", "g02 milestone listing tail");
 requireContains(repoRoot, "docs/roadmaps/g02/README.md", "021-add-posture-and-archive-advisory-checks-to-effigy.md", "g02 milestone listing end");
 requireContains(repoRoot, "docs/roadmaps/g02/README.md", "022-repair-installed-skill-portability.md", "g02 portability milestone");
-requireContains(repoRoot, "docs/roadmaps/g02/README.md", "`g02.022` is complete", "g02 portability closeout");
+requireContains(repoRoot, "docs/roadmaps/g02/README.md", "`g02.023` is complete", "g02 papercuts closeout");
+requireContains(repoRoot, "docs/roadmaps/g02/README.md", "023-add-papercuts-feedback-loop.md", "g02 papercuts milestone");
+requireContains(repoRoot, "docs/roadmaps/g02/README.md", "consumer-repo papercuts proof", "g02 papercuts next task");
 requireContains(repoRoot, "docs/roadmaps/generation-index.md", "## Runway rule", "generation index runway rule");
 requireContains(repoRoot, "docs/roadmaps/generation-index.md", "No blocking roadmap milestone is open", "generation index next task");
 requireContains(repoRoot, "docs/logs/README.md", "## Closeout rule", "live logs closeout rule");

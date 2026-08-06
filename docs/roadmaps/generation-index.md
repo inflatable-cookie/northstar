@@ -1,7 +1,7 @@
 # Roadmap Generation Index
 
 Status: active
-Updated: 2026-07-28
+Updated: 2026-08-06
 
 ## Mode
 
@@ -76,5 +76,6 @@ sequence.
 
 ## Next Task
 
-No blocking roadmap milestone is open. Use `roadmaps/g02/README.md` for the
-generation runway and milestone history.
+No blocking roadmap milestone is open. Run the first consumer-repo papercuts
+proof, then use `roadmaps/g02/README.md` to compile the next milestone from its
+evidence.

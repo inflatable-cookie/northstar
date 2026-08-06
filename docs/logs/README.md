@@ -46,3 +46,4 @@ Use logs as the third step in closeout:
 - `2026-05/19-172500-add-posture-advisory-effigy-checks.md`
 - `2026-05/20-144500-consolidate-northstar-skill-surface.md`
 - `2026-07/28-101319-repair-installed-skill-portability.md`
+- `2026-08/06-000000-add-papercuts-feedback-loop.md`

@@ -42,6 +42,19 @@ repository.
 If those files live in a nested docs-authority repo instead of this root, point
 agents there explicitly and keep this root focused on orchestration tasks.
 
+## Papercuts Loop
+
+During execution, when a small solvable hurdle appears, append a short entry to
+the owning repository's root `PAPERCUTS.md` before continuing. If the file is
+missing, create it from the starter template in this skill without asking the
+operator.
+
+Record the friction, impact, possible fix, and affected surface. Do not stop
+the current task, wait for permission, or fix the papercut unless that fix is
+already in scope. Skip ordinary one-off failures, external blockers, sensitive
+data, and duplicate open entries. Papercuts are observations for later triage,
+not automatic roadmap work.
+
 ## Continuation Rule
 
 In a strict Northstar lane, a bare `continue` should be enough.

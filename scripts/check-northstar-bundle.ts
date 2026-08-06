@@ -10,10 +10,12 @@ const repoRoot = repoRootFrom(import.meta.dir);
 const requiredFiles = [
   "README.md",
   "AGENTS.md",
+  "PAPERCUTS.md",
   "effigy.toml",
   "bundle-docs/README.md",
   "bundle-docs/baseline-mapping.md",
   "bundle-docs/meta-folder-migration.md",
+  "bundle-docs/papercuts.md",
   "bundle-docs/sections/01-vision.md",
   "bundle-docs/sections/02-architecture.md",
   "bundle-docs/sections/03-roadmaps.md",

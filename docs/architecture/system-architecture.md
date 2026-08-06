@@ -17,6 +17,8 @@ Vision refs: docs/vision/001-northstar-delivery-vision.md
   is the live Northstar planning spine for developing this repo itself
 - `scripts/` plus `effigy`
   provide repo validation and maintenance checks
+- root `PAPERCUTS.md`
+  records small, solvable execution friction for later maintenance
 
 ## Data and Authority Flow
 
@@ -27,6 +29,8 @@ Vision refs: docs/vision/001-northstar-delivery-vision.md
   changes.
 - Roadmaps in `docs/roadmaps/` sequence approved work.
 - Logs in `docs/logs/` provide batch-level evidence.
+- Agents append execution friction to root `PAPERCUTS.md`; maintenance promotes
+  repeated or material items into the normal planning spine.
 - `bundle-docs/`, `template-bundle/`, and `skills/` should be updated from this
   planning spine rather than by ad hoc repo edits.
 
@@ -39,6 +43,8 @@ Vision refs: docs/vision/001-northstar-delivery-vision.md
 - Material delivery work should flow through contracts, master specs, batch
   cards, roadmaps, and logs rather than jumping straight from idea to edits.
 - The public skill surface should remain small and deliberately routed.
+- Papercuts remain an observation queue, not a competing planning authority or
+  automatic work queue.
 
 ## Performance and Reliability Constraints
 

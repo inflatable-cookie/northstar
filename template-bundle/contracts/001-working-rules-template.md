@@ -46,6 +46,20 @@ informal habits.
   closeout's `Next Task`, which should normally point at the current ready card
   or an explicit stop/reassessment step.
 
+### Papercuts feedback loop
+
+- During execution, agents must append a short entry to the owning repository's
+  root `PAPERCUTS.md` when they encounter small, solvable friction.
+- If the file is missing, create it without asking the operator and continue the
+  current task after recording the note.
+- Capture friction, impact, a plausible smallest fix, and the affected tool,
+  document, script, or workflow.
+- Papercuts are observations for later maintenance, not automatic roadmap work;
+  do not pause the task or fix them unless that work is already in scope.
+- Skip ordinary one-off failures, external blockers, sensitive data, and
+  duplicate open entries. Full detail lives in `bundle-docs/papercuts.md` when
+  the Northstar source repo is available.
+
 ### Intent checkpoints
 
 - When planning is needed and the next direction is not clearly determined by

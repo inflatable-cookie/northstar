@@ -23,8 +23,9 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02/README.md` owns the active generation runway
 - `g02.020` and `g02.021` are complete
 - `g02.022` is complete
+- `g02.023` is complete
 
 ## Next Task
 
-Compile or open the next contract-backed `g02` milestone when the next slice is
-ready.
+Run the first consumer-repo papercuts proof, then compile the next
+contract-backed `g02` milestone from that evidence.

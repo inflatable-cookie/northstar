@@ -47,13 +47,21 @@ For first-time local bring-up from outside this repo:
 - `bundle-docs/protocol-kernel.md`
 - `template-bundle/README.md`
 - `bundle-docs/sweeps/README.md`
-- `skills/northstar-setup/SKILL.md`
+- `skills/northstar/SKILL.md`
 
 ## Internal Writing Style
 
 Use the repo-local style reference for internal work and normal replies:
 
 - `docs/policy/internal-writing-style.md`
+
+## Papercuts Loop
+
+During execution, when a small solvable hurdle appears, append a short entry to
+the repository root `PAPERCUTS.md` before continuing. Create the file without
+asking if it is missing. Record friction, impact, possible fix, and surface;
+skip one-off failures, external blockers, sensitive data, and duplicate open
+entries. Do not stop the current task or turn the note into unplanned work.
 
 <!-- BEGIN EFFIGY AGENT CONTRACT -->
 ## Effigy Agent Contract
