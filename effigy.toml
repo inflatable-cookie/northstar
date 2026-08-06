@@ -9,7 +9,7 @@ setup = ["health"]
 
 [tasks]
 "check:bundle" = [{ rhai = "scripts/check-northstar-bundle.rhai" }]
-"check:repo-contract" = "bun run ./scripts/check-northstar-repo-contract.ts"
+"check:repo-contract" = [{ rhai = "scripts/check-northstar-repo-contract.rhai" }]
 "check:posture-advisory" = [{ rhai = "scripts/check-northstar-posture-advisory.rhai" }]
 "check:skill-install" = [{ rhai = "scripts/check-northstar-skill-install.rhai" }]
 "qa:docs" = [{ task = "check:repo-contract" }]

@@ -13,8 +13,8 @@ effigy qa
 ## Runtime Policy
 
 - prefer `effigy` when it already covers the operation
-- when repo-owned script logic is still needed, use Effigy-native `Rhai` for
-  small repository checks and `TypeScript` run with `bun` for larger scans
+- when repo-owned script logic is still needed, use Effigy-native `Rhai`
+- use TypeScript run with `bun` only for a concrete technical reason
 - use `bash` only for thin glue or compatibility boundaries
 - use `python` or another runtime only with a concrete technical reason
 
@@ -46,9 +46,10 @@ rsync -a --delete skills/northstar/ /path/to/installed/northstar/
 Restart agent sessions after updating an installed skill so they reload the
 new instructions.
 
-The parity, bundle, and posture checks are Effigy-native Rhai tasks. The
-repo-contract checker and shared `scripts/lib/checks.ts` remain TypeScript for
-now because they perform the largest static contract scan.
+The parity, bundle, posture, and repo-contract checks are Effigy-native Rhai
+tasks. The repo-contract data lives in
+`scripts/lib/northstar-repo-contract-data.rhai`, and its portable Markdown link
+boundary is checked before Effigy’s native link validator runs.
 
 ## Repo contract (`qa:docs`)
 
