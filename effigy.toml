@@ -8,9 +8,9 @@ alias = "northstar"
 setup = ["health"]
 
 [tasks]
-"check:bundle" = "bun run ./scripts/check-northstar-bundle.ts"
+"check:bundle" = [{ rhai = "scripts/check-northstar-bundle.rhai" }]
 "check:repo-contract" = "bun run ./scripts/check-northstar-repo-contract.ts"
-"check:posture-advisory" = "bun run ./scripts/check-northstar-posture-advisory.ts"
+"check:posture-advisory" = [{ rhai = "scripts/check-northstar-posture-advisory.rhai" }]
 "check:skill-install" = [{ rhai = "scripts/check-northstar-skill-install.rhai" }]
 "qa:docs" = [{ task = "check:repo-contract" }]
 health = [{ task = "check:bundle" }]

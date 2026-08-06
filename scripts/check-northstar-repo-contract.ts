@@ -101,9 +101,9 @@ const requiredFiles = [
   "bundle-docs/sections/09-standard-docs-spine.md",
   "bundle-docs/sections/10-automation-runtime-policy.md",
   "scripts/README.md",
-  "scripts/check-northstar-bundle.ts",
+  "scripts/check-northstar-bundle.rhai",
   "scripts/check-northstar-repo-contract.ts",
-  "scripts/check-northstar-posture-advisory.ts",
+  "scripts/check-northstar-posture-advisory.rhai",
   "scripts/check-northstar-skill-install.rhai",
   "scripts/lib/checks.ts",
   "template-bundle/README.md",
@@ -270,10 +270,10 @@ requireContains(repoRoot, "docs/specs/README.md", "19-172500-add-posture-advisor
 requireContains(repoRoot, "docs/specs/README.md", "`effigy check:posture-advisory`", "specs README advisory task hint");
 requireContains(repoRoot, "template-bundle/specs/README.md", "templates/strict-compliance-migration-template.md", "strict migration template listing");
 
-requireContains(repoRoot, "effigy.toml", "bun run ./scripts/check-northstar-bundle.ts", "bun bundle checker task");
+requireContains(repoRoot, "effigy.toml", '"check:bundle" = [{ rhai = "scripts/check-northstar-bundle.rhai" }]', "Rhai bundle checker task");
 requireContains(repoRoot, "effigy.toml", "bun run ./scripts/check-northstar-repo-contract.ts", "bun repo checker task");
 requireContains(repoRoot, "effigy.toml", "check:posture-advisory", "posture advisory task name");
-requireContains(repoRoot, "effigy.toml", "bun run ./scripts/check-northstar-posture-advisory.ts", "bun posture advisory checker task");
+requireContains(repoRoot, "effigy.toml", '"check:posture-advisory" = [{ rhai = "scripts/check-northstar-posture-advisory.rhai" }]', "Rhai posture advisory checker task");
 requireContains(repoRoot, "effigy.toml", "check:skill-install", "Rhai skill parity task");
 requireContains(repoRoot, "effigy.toml", "scripts/check-northstar-skill-install.rhai", "Rhai skill parity script");
 requireContains(repoRoot, "skills/northstar/references/handoff-contract.md", "remaining continuation envelope", "handoff contract continuation state");

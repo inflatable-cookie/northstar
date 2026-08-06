@@ -13,8 +13,8 @@ effigy qa
 ## Runtime Policy
 
 - prefer `effigy` when it already covers the operation
-- when repo-owned script logic is still needed, default to `TypeScript` run
-  with `bun`
+- when repo-owned script logic is still needed, use Effigy-native `Rhai` for
+  small repository checks and `TypeScript` run with `bun` for larger scans
 - use `bash` only for thin glue or compatibility boundaries
 - use `python` or another runtime only with a concrete technical reason
 
@@ -46,11 +46,9 @@ rsync -a --delete skills/northstar/ /path/to/installed/northstar/
 Restart agent sessions after updating an installed skill so they reload the
 new instructions.
 
-The parity checker is an Effigy-native Rhai task. The repo-contract checker and
-shared `scripts/lib/checks.ts` stay TypeScript for now because they perform the
-largest static contract scan. The smaller bundle and posture checks are
-possible future Rhai candidates, but do not need a forced migration in this
-batch.
+The parity, bundle, and posture checks are Effigy-native Rhai tasks. The
+repo-contract checker and shared `scripts/lib/checks.ts` remain TypeScript for
+now because they perform the largest static contract scan.
 
 ## Repo contract (`qa:docs`)
 
@@ -66,10 +64,14 @@ folders). Always exits `0`; warnings print as `[northstar:advisory] …`.
 
 ```bash
 effigy check:posture-advisory
-# or target another repo root:
-bun run ./scripts/check-northstar-posture-advisory.ts /path/to/project
-bun run ./scripts/check-northstar-posture-advisory.ts --repo /path/to/project
+# or target another repo root with a positional path:
+effigy check:posture-advisory /path/to/project
+# from a different discovered catalog:
+effigy northstar/check:posture-advisory /path/to/project
 ```
+
+`--repo` is reserved by Effigy for selecting the catalog repository, so it is
+not a pass-through option for this task.
 
 Smoke examples (expect one advisory line each):
 

@@ -14,6 +14,20 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 - Surface: `effigy.toml` task declaration / Effigy manifest schema
 - Resolution: changed the task to `[{ rhai = "scripts/check-northstar-skill-install.rhai" }]` and verified the task end to end.
 
+### [x] Nested Rhai regex capture indexing exceeded parser complexity — 2026-08-06
+- Friction: the posture checker translation used nested map and array indexing to read a regex capture group, and Effigy rejected the expression before execution.
+- Impact: `effigy check:posture-advisory` could not start after the TypeScript-to-Rhai conversion.
+- Possible fix: keep simple Rhai checks on scalar string operations and avoid unnecessary nested capture expressions.
+- Surface: `scripts/check-northstar-posture-advisory.rhai` / Effigy Rhai expression limits
+- Resolution: normalized the active-generation line and matched it with a bounded scalar regex; both posture advisory invocation forms now run.
+
+### [x] Effigy reserves `--repo` before task arguments — 2026-08-06
+- Friction: the TypeScript checker accepted `--repo <path>`, but Effigy consumes `--repo` globally to select the catalog before the Rhai task receives arguments.
+- Impact: the converted task routed into the target repository and failed when that repository did not define Northstar's task.
+- Possible fix: document task-specific target paths separately from Effigy's global catalog selector.
+- Surface: `effigy check:posture-advisory` invocation contract
+- Resolution: use a positional target path, or the explicit `northstar/check:posture-advisory` catalog selector plus a positional path.
+
 ### [ ] Repo contract checker trips a god-file warning — 2026-08-06
 - Friction: `effigy doctor` flags `scripts/check-northstar-repo-contract.ts` at 281 code lines / 292 total because its required-file manifest and content assertions live in one checker.
 - Impact: the validation surface is harder to navigate and every new canonical surface increases the warning pressure.
