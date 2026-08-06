@@ -5,7 +5,7 @@ Owner: repo maintainers
 Updated: 2026-04-09
 Master spec refs: docs/specs/archive/006-currentness-surfaces-and-lightweight-alignment.md
 Roadmap refs: g02.003 batch 3.2
-Governing refs: docs/contracts/001-working-rules.md, docs/roadmaps/generation-index.md, scripts/check-northstar-repo-contract.ts
+Governing refs: docs/contracts/001-working-rules.md, docs/roadmaps/generation-index.md, scripts/check-northstar-repo-contract.rhai
 Auto-start next card: yes, if the proof pass is explicit
 
 ## Objective

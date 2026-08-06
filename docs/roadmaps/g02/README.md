@@ -48,11 +48,13 @@ rollover signal.
 - `021-add-posture-and-archive-advisory-checks-to-effigy.md`
 - `022-repair-installed-skill-portability.md`
 - `023-add-papercuts-feedback-loop.md`
+- `024-harden-skill-distribution-and-consumer-papercut-proof.md`
 
 ## Next Task
 
-`g02.023` is complete. Run the first consumer-repo papercuts proof, then compile
-the next contract-backed `g02` milestone from the resulting evidence.
+`g02.024` is complete. Compile the next contract-backed `g02` milestone from
+the consumer papercuts evidence; keep triage manual until repetition or
+materiality justifies promotion.
 
 
 Batch cards live in `g02/batch-cards/` when strict posture uses them.

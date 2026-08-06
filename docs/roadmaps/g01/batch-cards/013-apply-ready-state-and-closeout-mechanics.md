@@ -5,7 +5,7 @@ Owner: repo maintainers
 Updated: 2026-04-08
 Master spec refs: docs/specs/archive/003-ready-state-and-closeout-mechanics.md
 Roadmap refs: g01.003 batch 3.3
-Governing refs: docs/contracts/001-working-rules.md, scripts/check-northstar-repo-contract.ts, docs/logs/README.md
+Governing refs: docs/contracts/001-working-rules.md, scripts/check-northstar-repo-contract.rhai, docs/logs/README.md
 Auto-start next card: no
 
 ## Objective

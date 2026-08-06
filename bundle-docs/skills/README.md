@@ -14,6 +14,27 @@ before loading a mode.
 | --- | --- |
 | `skills/northstar/` | Single front door for all Northstar agent work |
 
+## Distribution and update
+
+The published skill is distributed through the Skills CLI. After a Northstar
+release or published source update:
+
+```bash
+npx skills update northstar -g -y
+npx skills list -g --json
+```
+
+`skills list` shows the configured source and installed agent targets. A
+source checkout can verify a specific install with:
+
+```bash
+effigy check:skill-install /path/to/installed/northstar
+```
+
+The parity checker is source-repo Effigy tooling. A direct `rsync -a --delete` from
+`skills/northstar/` is reserved for local development before the change is
+published. Restart agent sessions after an update.
+
 Retired top-level skills (`northstar-setup`, `northstar-plan`,
 `northstar-recover`, `northstar-research`, `northstar-handoff`) were merged
 into internal **modes** under `skills/northstar/references/modes/`. No

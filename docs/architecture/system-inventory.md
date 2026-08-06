@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-04-08
+Updated: 2026-08-06
 Architecture refs: docs/architecture/system-architecture.md
 
 ## Coverage Summary
@@ -19,9 +19,9 @@ skills.
 | --- | --- | --- | --- | --- |
 | `bundle-docs/` | doctrine surface | repo maintainers | reusable Northstar doctrine | `system-architecture.md`, `docs/contracts/001-working-rules.md` |
 | `template-bundle/` | product artifact | repo maintainers | copy-ready downstream docs bundle | `docs/specs/archive/001-northstar-delivery-layer.md`, `docs/roadmaps/g01/001-enact-northstar-on-northstar.md` |
-| `skills/` | automation surface | repo maintainers | installable agent workflows | `docs/contracts/001-working-rules.md`, `docs/specs/archive/001-northstar-delivery-layer.md` |
+| `skills/` | automation surface | repo maintainers | installable agent workflows and published distribution | `docs/contracts/001-working-rules.md`, `bundle-docs/skills/README.md`, `scripts/check-northstar-skill-install.rhai` |
 | `docs/` | live planning surface | repo maintainers | Northstar's own planning and execution state | all files in this repo-local docs spine |
-| `scripts/` and `effigy` checks | validation surface | repo maintainers | repo integrity and enforcement hooks | `scripts/check-northstar-repo-contract.sh`, roadmap evidence requirements |
+| `scripts/` and `effigy` checks | validation surface | repo maintainers | repo integrity and enforcement hooks | `scripts/check-northstar-repo-contract.rhai`, roadmap evidence requirements |
 | root `PAPERCUTS.md` | agent feedback surface | executing agents + repo maintainers | owning repository root | `bundle-docs/papercuts.md`, agent templates, working rules |
 
 ## Interfaces and Dependencies
@@ -43,6 +43,8 @@ skills.
 | Delivery-layer adoption | active docs spine, compact working rules, spec, roadmap, log | repo maintainers | ready |
 | Template/skill promotion | follow-on roadmap batches and logs | repo maintainers | pending |
 | Papercut loop | root queue, doctrine, templates, skill instruction, and QA coverage | repo maintainers | ready |
+| Published skill parity | Skills CLI update path, global install inspection, and source checker | repo maintainers | ready |
+| Consumer papercut proof | real consumer queue entry and manual triage boundary | repo maintainers + consumer owner | observed |
 
 ## Planning Gaps
 
