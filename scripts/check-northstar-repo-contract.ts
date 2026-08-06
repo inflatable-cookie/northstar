@@ -31,6 +31,7 @@ const requiredFiles = [
   "docs/specs/008-spec-lifecycle-and-archive-mechanics.md",
   "docs/specs/009-archive-aware-skill-and-setup-surfaces.md",
   "docs/specs/024-papercuts-feedback-loop.md",
+  "docs/specs/025-skill-distribution-and-consumer-papercut-proof.md",
   "docs/specs/010-continuation-envelope-and-stop-signal-contract.md",
   "docs/specs/011-lane-budget-and-pause-signal-contract.md",
   "docs/specs/012-consumer-repo-autonomy-proof-and-adoption.md",
@@ -82,11 +83,15 @@ const requiredFiles = [
   "docs/roadmaps/g02/013-define-strict-compliance-audit-and-rollout-surface.md",
   "docs/roadmaps/g02/022-repair-installed-skill-portability.md",
   "docs/roadmaps/g02/023-add-papercuts-feedback-loop.md",
+  "docs/roadmaps/g02/024-harden-skill-distribution-and-consumer-papercut-proof.md",
   "docs/roadmaps/g02/batch-cards/065-repair-portable-skill-boundary.md",
   "docs/roadmaps/g02/batch-cards/066-enforce-and-prove-skill-portability.md",
   "docs/roadmaps/g02/batch-cards/067-add-papercuts-feedback-loop.md",
+  "docs/roadmaps/g02/batch-cards/068-document-and-prove-skill-distribution.md",
+  "docs/roadmaps/g02/batch-cards/069-run-consumer-papercuts-proof.md",
   "docs/logs/2026-07/28-101319-repair-installed-skill-portability.md",
   "docs/logs/2026-08/06-000000-add-papercuts-feedback-loop.md",
+  "docs/logs/2026-08/06-120000-harden-skill-distribution-and-consumer-proof.md",
   "bundle-docs/README.md",
   "bundle-docs/cheat-sheet.md",
   "bundle-docs/papercuts.md",
@@ -99,6 +104,7 @@ const requiredFiles = [
   "scripts/check-northstar-bundle.ts",
   "scripts/check-northstar-repo-contract.ts",
   "scripts/check-northstar-posture-advisory.ts",
+  "scripts/check-northstar-skill-install.rhai",
   "scripts/lib/checks.ts",
   "template-bundle/README.md",
   "template-bundle/specs/archive/README.md",
@@ -210,6 +216,10 @@ forbidContains(repoRoot, "skills/northstar/SKILL.md", "northstar-setup", "retire
 forbidContains(repoRoot, "skills/northstar/SKILL.md", "northstar-plan", "retired plan skill name in northstar skill");
 requireContains(repoRoot, "scripts/README.md", "TypeScript", "scripts README runtime language");
 requireContains(repoRoot, "scripts/README.md", "bun", "scripts README bun policy");
+requireContains(repoRoot, "scripts/README.md", "npx skills update northstar -g -y", "published skill update command");
+requireContains(repoRoot, "scripts/README.md", "effigy check:skill-install", "skill parity checker command");
+requireContains(repoRoot, "bundle-docs/skills/README.md", "npx skills update northstar -g -y", "skills distribution update command");
+requireContains(repoRoot, "bundle-docs/skills/README.md", "effigy check:skill-install", "skills distribution parity command");
 requireContains(repoRoot, "scripts/README.md", "check:posture-advisory", "scripts README posture advisory task");
 requireContains(repoRoot, "scripts/README.md", "[northstar:advisory]", "scripts README advisory prefix");
 requireContains(repoRoot, "docs/contracts/001-working-rules.md", "### Ready-state rubric", "working-rules readiness heading");
@@ -223,6 +233,7 @@ requireContains(repoRoot, "docs/contracts/001-working-rules.md", "### Papercuts 
 requireContains(repoRoot, "template-bundle/contracts/001-working-rules-template.md", "### Papercuts feedback loop", "working-rules template papercuts contract");
 requireContains(repoRoot, "bundle-docs/operators/operator-quick-start.md", "protocol-kernel.md", "operator quick start protocol kernel link");
 requireContains(repoRoot, "docs/README.md", "specs/024-papercuts-feedback-loop.md", "active spec front door");
+requireContains(repoRoot, "docs/README.md", "specs/025-skill-distribution-and-consumer-papercut-proof.md", "distribution spec front door");
 requireContains(repoRoot, "docs/roadmaps/README.md", "`g02` is the active generation", "roadmaps active generation");
 requireContains(repoRoot, "docs/roadmaps/README.md", "`g02/README.md` owns the active generation runway", "roadmaps generation runway pointer");
 requireContains(repoRoot, "docs/roadmaps/README.md", "`g02.020` and `g02.021` are complete", "roadmaps g02.020 and g02.021 complete");
@@ -233,9 +244,10 @@ requireContains(repoRoot, "docs/roadmaps/g02/README.md", "018-add-workspace-cont
 requireContains(repoRoot, "docs/roadmaps/g02/README.md", "020-add-protocol-kernel-and-dedupe-canonical-surfaces.md", "g02 milestone listing tail");
 requireContains(repoRoot, "docs/roadmaps/g02/README.md", "021-add-posture-and-archive-advisory-checks-to-effigy.md", "g02 milestone listing end");
 requireContains(repoRoot, "docs/roadmaps/g02/README.md", "022-repair-installed-skill-portability.md", "g02 portability milestone");
-requireContains(repoRoot, "docs/roadmaps/g02/README.md", "`g02.023` is complete", "g02 papercuts closeout");
+requireContains(repoRoot, "docs/roadmaps/g02/README.md", "`g02.024` is complete", "g02 distribution proof closeout");
 requireContains(repoRoot, "docs/roadmaps/g02/README.md", "023-add-papercuts-feedback-loop.md", "g02 papercuts milestone");
-requireContains(repoRoot, "docs/roadmaps/g02/README.md", "consumer-repo papercuts proof", "g02 papercuts next task");
+requireContains(repoRoot, "docs/roadmaps/g02/README.md", "024-harden-skill-distribution-and-consumer-papercut-proof.md", "g02 distribution milestone");
+requireContains(repoRoot, "docs/roadmaps/g02/README.md", "consumer papercuts evidence", "g02 consumer evidence next task");
 requireContains(repoRoot, "docs/roadmaps/generation-index.md", "## Runway rule", "generation index runway rule");
 requireContains(repoRoot, "docs/roadmaps/generation-index.md", "No blocking roadmap milestone is open", "generation index next task");
 requireContains(repoRoot, "docs/logs/README.md", "## Closeout rule", "live logs closeout rule");
@@ -244,6 +256,7 @@ requireContains(repoRoot, "docs/logs/README.md", "## Recent active-lane evidence
 requireContains(repoRoot, "docs/logs/README.md", "09-111500-roll-to-g02-external-pilot.md", "governing context log");
 requireContains(repoRoot, "docs/logs/README.md", "20-144500-consolidate-northstar-skill-surface.md", "latest active-lane log");
 requireContains(repoRoot, "docs/logs/README.md", "28-101319-repair-installed-skill-portability.md", "portability repair log");
+requireContains(repoRoot, "docs/logs/README.md", "06-120000-harden-skill-distribution-and-consumer-proof.md", "distribution proof log");
 forbidContains(repoRoot, "docs/logs/README.md", "08-120000-bootstrap-live-northstar-docs.md", "stale bootstrap log in bounded evidence window");
 forbidContains(repoRoot, "docs/logs/README.md", "09-205500-open-currentness-alignment-lane.md", "older currentness-alignment log in bounded evidence window");
 forbidContains(repoRoot, "docs/logs/README.md", "09-121500-select-signal-pilot-target.md", "old pilot-selection log in bounded evidence window");
@@ -261,6 +274,8 @@ requireContains(repoRoot, "effigy.toml", "bun run ./scripts/check-northstar-bund
 requireContains(repoRoot, "effigy.toml", "bun run ./scripts/check-northstar-repo-contract.ts", "bun repo checker task");
 requireContains(repoRoot, "effigy.toml", "check:posture-advisory", "posture advisory task name");
 requireContains(repoRoot, "effigy.toml", "bun run ./scripts/check-northstar-posture-advisory.ts", "bun posture advisory checker task");
+requireContains(repoRoot, "effigy.toml", "check:skill-install", "Rhai skill parity task");
+requireContains(repoRoot, "effigy.toml", "scripts/check-northstar-skill-install.rhai", "Rhai skill parity script");
 requireContains(repoRoot, "skills/northstar/references/handoff-contract.md", "remaining continuation envelope", "handoff contract continuation state");
 requireContains(repoRoot, "skills/northstar/assets/templates/northstar-handoff.md.template", "Lane budget / pause signal", "handoff template lane-budget state");
 forbidContains(repoRoot, "README.md", "skills/northstar-setup/", "retired northstar-setup path in README");

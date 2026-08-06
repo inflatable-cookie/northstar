@@ -23,6 +23,35 @@ effigy qa
 Scripts remain implementation detail until the helper flow is stable enough to
 expose as a first-class Effigy task.
 
+## Installed skill parity
+
+After a published Northstar skill change, update the configured global install
+with the Skills CLI:
+
+```bash
+npx skills update northstar -g -y
+npx skills list -g --json
+effigy check:skill-install /path/to/installed/northstar
+```
+
+`npx skills update` follows the configured published source. It cannot see
+uncommitted or unpushed changes in this checkout. During local skill
+development, a direct sync is appropriate; keep it out of the published
+operator path:
+
+```bash
+rsync -a --delete skills/northstar/ /path/to/installed/northstar/
+```
+
+Restart agent sessions after updating an installed skill so they reload the
+new instructions.
+
+The parity checker is an Effigy-native Rhai task. The repo-contract checker and
+shared `scripts/lib/checks.ts` stay TypeScript for now because they perform the
+largest static contract scan. The smaller bundle and posture checks are
+possible future Rhai candidates, but do not need a forced migration in this
+batch.
+
 ## Repo contract (`qa:docs`)
 
 `check:repo-contract` validates required Northstar surfaces and the installable
