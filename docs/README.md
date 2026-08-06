@@ -14,6 +14,7 @@ to adopt.
 - [architecture/product-guardrails.md](./architecture/product-guardrails.md)
 - [contracts/001-working-rules.md](./contracts/001-working-rules.md)
 - [specs/024-papercuts-feedback-loop.md](./specs/024-papercuts-feedback-loop.md)
+- [specs/025-skill-distribution-and-consumer-papercut-proof.md](./specs/025-skill-distribution-and-consumer-papercut-proof.md)
 - [roadmaps/generation-index.md](./roadmaps/generation-index.md)
 - [PAPERCUTS.md](../PAPERCUTS.md) — agent-observed execution friction
 

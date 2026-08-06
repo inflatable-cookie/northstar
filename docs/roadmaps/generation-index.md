@@ -76,6 +76,5 @@ sequence.
 
 ## Next Task
 
-No blocking roadmap milestone is open. Run the first consumer-repo papercuts
-proof, then use `roadmaps/g02/README.md` to compile the next milestone from its
-evidence.
+No blocking roadmap milestone is open. Use `roadmaps/g02/README.md` to compile
+the next milestone from the consumer papercuts evidence.

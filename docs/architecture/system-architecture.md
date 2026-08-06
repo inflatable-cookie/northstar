@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-04-08
+Updated: 2026-08-06
 Vision refs: docs/vision/001-northstar-delivery-vision.md
 
 ## Top-Level Stack
@@ -17,6 +17,8 @@ Vision refs: docs/vision/001-northstar-delivery-vision.md
   is the live Northstar planning spine for developing this repo itself
 - `scripts/` plus `effigy`
   provide repo validation and maintenance checks
+- published skill updates use the Skills CLI; source checkouts can verify an
+  installed skill with the local parity checker
 - root `PAPERCUTS.md`
   records small, solvable execution friction for later maintenance
 
@@ -33,6 +35,8 @@ Vision refs: docs/vision/001-northstar-delivery-vision.md
   repeated or material items into the normal planning spine.
 - `bundle-docs/`, `template-bundle/`, and `skills/` should be updated from this
   planning spine rather than by ad hoc repo edits.
+- published skill propagation and source/install parity should remain explicit
+  so multi-harness installs do not depend on manual operator memory.
 
 ## Invariants
 

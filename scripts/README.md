@@ -13,8 +13,8 @@ effigy qa
 ## Runtime Policy
 
 - prefer `effigy` when it already covers the operation
-- when repo-owned script logic is still needed, default to `TypeScript` run
-  with `bun`
+- when repo-owned script logic is still needed, use Effigy-native `Rhai`
+- use TypeScript run with `bun` only for a concrete technical reason
 - use `bash` only for thin glue or compatibility boundaries
 - use `python` or another runtime only with a concrete technical reason
 
@@ -22,6 +22,34 @@ effigy qa
 
 Scripts remain implementation detail until the helper flow is stable enough to
 expose as a first-class Effigy task.
+
+## Installed skill parity
+
+After a published Northstar skill change, update the configured global install
+with the Skills CLI:
+
+```bash
+npx skills update northstar -g -y
+npx skills list -g --json
+effigy check:skill-install /path/to/installed/northstar
+```
+
+`npx skills update` follows the configured published source. It cannot see
+uncommitted or unpushed changes in this checkout. During local skill
+development, a direct sync is appropriate; keep it out of the published
+operator path:
+
+```bash
+rsync -a --delete skills/northstar/ /path/to/installed/northstar/
+```
+
+Restart agent sessions after updating an installed skill so they reload the
+new instructions.
+
+The parity, bundle, posture, and repo-contract checks are Effigy-native Rhai
+tasks. The repo-contract data lives in
+`scripts/lib/northstar-repo-contract-data.rhai`, and its portable Markdown link
+boundary is checked before Effigy’s native link validator runs.
 
 ## Repo contract (`qa:docs`)
 
@@ -37,10 +65,14 @@ folders). Always exits `0`; warnings print as `[northstar:advisory] …`.
 
 ```bash
 effigy check:posture-advisory
-# or target another repo root:
-bun run ./scripts/check-northstar-posture-advisory.ts /path/to/project
-bun run ./scripts/check-northstar-posture-advisory.ts --repo /path/to/project
+# or target another repo root with a positional path:
+effigy check:posture-advisory /path/to/project
+# from a different discovered catalog:
+effigy northstar/check:posture-advisory /path/to/project
 ```
+
+`--repo` is reserved by Effigy for selecting the catalog repository, so it is
+not a pass-through option for this task.
 
 Smoke examples (expect one advisory line each):
 
