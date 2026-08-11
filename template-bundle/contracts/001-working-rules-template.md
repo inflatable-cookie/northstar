@@ -52,6 +52,8 @@ informal habits.
   root `PAPERCUTS.md` when they encounter small, solvable friction.
 - If the file is missing, create it without asking the operator and continue the
   current task after recording the note.
+- Seed the starter on adopt/upgrade before exact-SHA / clean-tree release prep;
+  do not add it during tag closeout after that SHA is green.
 - Capture friction, impact, a plausible smallest fix, and the affected tool,
   document, script, or workflow.
 - Papercuts are observations for later maintenance, not automatic roadmap work;

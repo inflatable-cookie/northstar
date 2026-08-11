@@ -12,7 +12,9 @@ Use these top-level repo templates from this skill for the non-docs surfaces:
 
 - `AGENTS.md`
 - `CLAUDE.md.template` (optional)
-- `PAPERCUTS.md`
+- `PAPERCUTS.md` (seed on adopt/upgrade before exact-SHA / clean-tree release
+  prep; do not introduce it during tag closeout after CI is green on a pinned
+  SHA)
 - `CHANGELOG.md`
 - `README.md.template`
 - `scripts.README.md.template`

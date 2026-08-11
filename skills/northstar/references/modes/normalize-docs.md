@@ -42,8 +42,10 @@ Optional: `effigy check:posture-advisory` after structural edits.
    warranted. Explain specs as provisional; archive when canonical surfaces
    carry truth.
 5. Select templates from `assets/templates/` (Effigy native vs docs-authority
-   vs compat). Verify native Effigy with `effigy docs --help` before assuming
-   compat mode.
+   vs compat), including root `PAPERCUTS.md` when missing. Seed it during
+   adopt/upgrade — before release-candidate / exact-SHA prep, not during tag
+   closeout after a green clean-tree SHA. Verify native Effigy with
+   `effigy docs --help` before assuming compat mode.
 6. Runtime stack: Effigy first; TypeScript+Bun for repo scripts; bash/python
    only by exception. When wiring `effigy.toml`, keep `tasks.health` cheap
    (seconds-scale). Never alias `health` to `qa` — doctor runs health during
@@ -55,8 +57,8 @@ Optional: `effigy check:posture-advisory` after structural edits.
 
 ## Required outputs (when applicable)
 
-- `README.md`, `AGENTS.md`, `effigy.toml`, `docs/README.md`, vision/roadmaps/logs
-  front doors, `docs/policy/internal-writing-style.md`
+- `README.md`, `AGENTS.md`, `PAPERCUTS.md`, `effigy.toml`, `docs/README.md`,
+  vision/roadmaps/logs front doors, `docs/policy/internal-writing-style.md`
 - Strict: guardrails, contract index, working rules, specs README + archive,
   batch-card templates under active `gNN/`
 

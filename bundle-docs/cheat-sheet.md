@@ -69,7 +69,8 @@ docs/
 
 ## Papercuts
 
-- Every repository may keep a root `PAPERCUTS.md` queue.
+- Every repository keeps a root `PAPERCUTS.md` queue (seed on adopt/upgrade,
+  before exact-SHA / clean-tree release prep).
 - Agents append solvable execution friction when it happens; create the file if
   missing and continue without operator permission.
 - Triage later; papercuts are observations, not automatic roadmap work.

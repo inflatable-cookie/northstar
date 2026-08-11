@@ -15,6 +15,7 @@ The boundary is intentional:
 
 - `README.md`
 - `AGENTS.md`
+- `PAPERCUTS.md`
 - `effigy.toml`
 - `CHANGELOG.md`
 - `scripts/README.md`
@@ -23,6 +24,12 @@ The boundary is intentional:
 - `docs/roadmaps/README.md`
 - `docs/logs/README.md`
 - `docs/policy/internal-writing-style.md`
+
+Seed root `PAPERCUTS.md` from `assets/templates/PAPERCUTS.md` during adopt or
+upgrade, before release-candidate / exact-SHA preparation. Do not add it during
+tag closeout after a clean-tree release SHA is already green — that dirties the
+tree or forces a retag. Missing-file create-on-first-friction remains valid for
+agents mid-task; adoption must still install the starter early.
 
 For workspace-container repos, keep the workspace root lean and apply this full
 file set inside the nested docs-authority repo instead of duplicating it at the
@@ -152,6 +159,8 @@ architecture/contracts rather than a second permanent authority.
 - define a release-readiness validation path
 - use native Effigy release config when the installed surface supports it
 - otherwise keep release posture explicit through changelog plus QA tasks
+- confirm root `PAPERCUTS.md` exists before pinning an exact-commit /
+  clean-tree release candidate (seed from the starter if absent)
 
 For workspace-container repos, add release posture only to the repos that are
 actually releasable. Do not force a docs-only authority repo to pretend it

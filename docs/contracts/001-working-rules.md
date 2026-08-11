@@ -67,6 +67,9 @@ single-repo planning lane like this one.
   root `PAPERCUTS.md` when they encounter small, solvable friction.
 - If the file is missing, the agent creates it without asking the operator and
   continues the current task after recording the note.
+- Seed the starter during Northstar adopt/upgrade before release-candidate /
+  exact-SHA prep; do not add it during tag closeout after a green clean-tree
+  SHA. Full timing rule: `bundle-docs/papercuts.md`.
 - Each entry captures friction, impact, a plausible smallest fix, and the
   affected tool, document, script, or workflow.
 - Papercuts do not pause work, authorize unplanned fixes, or replace the normal
