@@ -1,7 +1,7 @@
 # Papercuts Feedback Loop
 
 Status: active  
-Updated: 2026-08-06
+Updated: 2026-08-11
 
 Papercuts are small, solvable sources of execution friction noticed while an
 agent is doing real work: unclear tool usage, repeated file discovery, noisy
@@ -55,3 +55,14 @@ to review.
 Known adoption footgun: `tasks.health = [{ task = "qa" }]` makes every
 `effigy doctor` run the full board. Prefer a cheap health baseline; keep full
 validation on `effigy qa`. See the skill repo-contract task ladder.
+
+## Adoption and release timing
+
+Seed root `PAPERCUTS.md` from
+`skills/northstar/assets/templates/PAPERCUTS.md` when adopting or upgrading
+Northstar, before release-candidate / exact-SHA preparation.
+
+Do not add the file during tag closeout after a clean-tree release candidate
+has already passed exact-commit CI. That dirties the tree or moves the tag
+past the green SHA. Create-on-first-friction still applies mid-task; adoption
+must install the starter early so release lanes are not the first touch.

@@ -56,7 +56,9 @@ matters. Glue-light internal prose unless the task is public-facing.
   duplicate open entries. Papercuts are observations for later triage, not an
   automatic backlog or roadmap commitment.
 
-The starter file is available at `assets/templates/PAPERCUTS.md`.
+The starter file is available at `assets/templates/PAPERCUTS.md`. Seed it on
+adopt/upgrade before exact-SHA / clean-tree release prep; do not add it during
+tag closeout after a green pinned SHA.
 
 ## Refactoring posture
 

@@ -139,9 +139,11 @@ explicit:
 Execution also carries a lightweight feedback loop. When an agent meets small,
 solvable friction, it appends a short note to the owning repository's root
 `PAPERCUTS.md` before continuing. The agent creates the file if it is missing;
-no operator prompt is required. Papercuts do not pause the active task or become
+no operator prompt is required. Adopt/upgrade installs must seed the starter
+before release-candidate / exact-SHA prep so tag closeout does not dirty a
+green clean-tree SHA. Papercuts do not pause the active task or become
 automatic roadmap work. Use [`../papercuts.md`](../papercuts.md) for the entry
-shape, exclusions, ownership rule, and later triage path.
+shape, exclusions, ownership rule, timing, and later triage path.
 
 ## Refactoring posture by release maturity
 
