@@ -18,6 +18,18 @@ Every handoff must include these sections in this order:
 6. `## Suggested Next Move`
 7. `## Completion Protocol`
 
+### Consumer trailing sections
+
+After `## Completion Protocol`, a consumer repo may require additional `##`
+headings for its own docs policy (for example Jetstream log report-policy:
+`## Vision Target Delta` and `## Next Task`). Those trailing sections:
+
+- must not replace, reorder, or rename the seven core sections
+- must come after `## Completion Protocol`
+- are required when the consumer's QA gate checks for them on handoff logs
+
+Omit trailing sections when the consumer does not require them.
+
 ## Rules
 
 - `What This Thread Was Doing` should explain the actual arc of the current

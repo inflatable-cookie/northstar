@@ -58,3 +58,18 @@ not create a handoff.
    compaction alone is not the reason this handoff exists.
 6. Record unresolved risks or blockers explicitly.
 7. Leave one clear next task for the following thread.
+
+<!--
+Consumer trailing sections (optional): keep the seven core sections above
+first and in order. Append headings the consumer's docs policy requires on
+handoff logs. Jetstream's report-policy gate requires both of the following;
+omit them in repos that do not.
+-->
+
+## Vision Target Delta
+
+{{HOW_THIS_HANDOFF_MOVES_OR_PRESERVES_THE_VISION_TARGET_OR_DELETE_SECTION}}
+
+## Next Task
+
+{{SINGLE_CLEAR_NEXT_TASK_FOR_THE_FOLLOWING_THREAD_OR_DELETE_SECTION}}
