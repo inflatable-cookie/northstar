@@ -8,4 +8,8 @@ alias = "{{REPO_ALIAS}}"
 [tasks]
 "qa:docs" = []
 "qa:northstar" = []
+# Cheap orientation for `effigy doctor`. Full board is `effigy qa`.
+# Never alias health to qa. Wire a seconds-scale check once docs tasks exist
+# (for example `{ task = "qa:docs:agent-defaults" }`).
+# health = []
 qa = [{ task = "qa:docs" }, { task = "qa:northstar" }]

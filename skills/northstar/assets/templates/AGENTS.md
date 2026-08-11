@@ -14,6 +14,9 @@ effigy doctor
 effigy test --plan
 ```
 
+`doctor` is orientation (built-in checks + cheap `tasks.health`). It is not
+the full validation board — that is `effigy qa`. Never map `health` to `qa`.
+
 Then prefer `effigy <task>` for supported repo work before falling back to raw
 tools.
 

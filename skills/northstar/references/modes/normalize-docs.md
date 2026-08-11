@@ -45,7 +45,9 @@ Optional: `effigy check:posture-advisory` after structural edits.
    vs compat). Verify native Effigy with `effigy docs --help` before assuming
    compat mode.
 6. Runtime stack: Effigy first; TypeScript+Bun for repo scripts; bash/python
-   only by exception.
+   only by exception. When wiring `effigy.toml`, keep `tasks.health` cheap
+   (seconds-scale). Never alias `health` to `qa` — doctor runs health during
+   orientation; full validation is `effigy qa`.
 7. Validate: `effigy qa`, `effigy qa:docs`, project-specific checks.
 8. Keep the live `Next Task` pointer in the roadmap front doors. Other front
    doors may summarize state or dependencies, but should not each own the

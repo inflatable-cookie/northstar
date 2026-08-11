@@ -28,6 +28,9 @@ effigy doctor
 effigy qa
 ```
 
+`doctor` is orientation; `qa` is full validation. Keep `tasks.health` cheap —
+never alias it to `qa`.
+
 Northstar is a docs/template repo, so the default Effigy surface is bundle-integrity validation rather than runtime build orchestration.
 
 Use `--repo <PATH>` only when you intentionally want to operate on another
