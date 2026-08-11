@@ -39,11 +39,25 @@ should run `effigy <task>` directly; package scripts should stay
 package-native.
 
 - `effigy tasks`
-- `effigy doctor` or `effigy health`
+- `effigy doctor`
 - `effigy test --plan`
 - `effigy qa`
 - `qa:docs`
 - `qa:northstar`
+
+### Task ladder: `health` vs `qa`
+
+`effigy doctor` runs built-in checks and, when present, `tasks.health`. Keep
+that ladder honest:
+
+- `health` — cheap orientation only (seconds-scale: fmt, toolchain floor,
+  docs-forbidden, or a single `check`). This is what doctor should invoke.
+- `validate` — mid gate when the repo uses one (check + build, etc.).
+- `qa` — full validation board.
+
+Never set `health = [{ task = "qa" }]` (or otherwise make health expand into
+the full board). That turns every orientation `effigy doctor` into an
+unbounded suite run. Full validation stays on `effigy qa`.
 
 ## Starter Native Docs Policy
 

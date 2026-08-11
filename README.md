@@ -48,6 +48,9 @@ effigy doctor
 effigy qa
 ```
 
+`doctor` is orientation (built-ins + cheap `tasks.health`); `qa` is the full
+board. Never map `health` to `qa`.
+
 The current repo baseline is bundle integrity and documentation structure validation:
 
 ```bash

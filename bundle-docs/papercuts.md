@@ -51,3 +51,7 @@ maintenance or planning, group duplicates, close entries fixed by other work,
 and promote material or repeated items into the appropriate backlog, roadmap,
 spec, architecture, contract, or automation change. Keep the queue small enough
 to review.
+
+Known adoption footgun: `tasks.health = [{ task = "qa" }]` makes every
+`effigy doctor` run the full board. Prefer a cheap health baseline; keep full
+validation on `effigy qa`. See the skill repo-contract task ladder.

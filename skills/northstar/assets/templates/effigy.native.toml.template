@@ -40,6 +40,9 @@ exclude = ["history/**"]
   { task = "qa:northstar:roadmap-headings" },
   { task = "qa:northstar:agent-defaults" },
 ]
+# Cheap orientation for `effigy doctor`. Full board is `effigy qa`.
+# Never alias health to qa (or any aggregate that expands into the full suite).
+health = [{ task = "qa:docs:agent-defaults" }]
 qa = [{ task = "qa:docs" }, { task = "qa:northstar" }]
 
 # Remove this block when the repo is docs-only or otherwise not a release target.

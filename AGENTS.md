@@ -23,7 +23,9 @@ Scope: whole `northstar/` repository.
 
 - Start with `effigy tasks`.
 - Run `effigy doctor` when task discovery or environment state is uncertain.
-- Prefer `effigy qa` for the default validation baseline.
+  Doctor is orientation (built-ins + cheap `tasks.health`), not the full board.
+- Prefer `effigy qa` for the default validation baseline. Never map `health` to
+  `qa`.
 - Use `--repo <PATH>` only when intentionally targeting a different repo.
 - Fall back to raw shell commands only when Effigy does not yet cover the needed repo operation.
 - Do not add `package.json` scripts that re-export Effigy tasks; run

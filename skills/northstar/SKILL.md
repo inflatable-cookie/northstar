@@ -78,3 +78,5 @@ Northstar source repo, expanded doctrine lives at
 - Use handoff mode for compaction-only or ordinary `continue`.
 - Start roadmap execution to discover missing contracts.
 - Mirror Effigy tasks into `package.json` scripts.
+- Alias `tasks.health` to `qa` (doctor orientation must stay cheap; full
+  validation is `effigy qa` — see `references/setup/repo-contract.md`).

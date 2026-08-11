@@ -85,12 +85,14 @@ shape) live in [`sections/07-delivery-framework-and-autonomy.md`](./sections/07-
 
 ```bash
 effigy tasks          # list available tasks
-effigy doctor         # check environment
-effigy qa             # run validation
+effigy doctor         # orientation: built-ins + cheap tasks.health (not full qa)
+effigy qa             # full validation board
 effigy check:bundle   # validate bundle integrity
 effigy qa:docs        # validate docs structure
 effigy check:posture-advisory  # optional non-blocking docs posture warnings
 ```
+
+Keep `tasks.health` seconds-scale. Never set `health = qa`.
 
 ## Agent Skill
 
