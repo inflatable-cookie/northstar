@@ -33,7 +33,8 @@ is not a contract gap by itself.
 - **Research:** promoted decisions in architecture/contracts, not stranded memos.
 - **Recovery:** trustworthy planning surfaces and canonical refs restored.
 - **Normalize:** baseline or strict spine installed/maintained; Effigy-first QA.
-- **Handoff:** seven-section brief for another thread; not a substitute for
+- **Handoff:** seven-section brief for another thread (plus any consumer
+  trailing headings the target docs policy requires); not a substitute for
   log/roadmap closeout.
 
 ## Operator summary (all modes)

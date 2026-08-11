@@ -29,6 +29,9 @@ relevant log in `docs/logs/YYYY-MM/`.
    log should reflect the stop unless user wants handoff-first.
 5. Seven sections in order (see handoff contract).
 6. Leave explicit next task and completion protocol pointing at roadmap/log surfaces.
+7. If the consumer docs policy requires trailing headings on log handoffs
+   (Jetstream: `## Vision Target Delta` and `## Next Task`), append them after
+   `## Completion Protocol`. Do not fold them into the core seven.
 
 ## Do not
 
@@ -37,6 +40,8 @@ relevant log in `docs/logs/YYYY-MM/`.
 - Hand off from stale front doors without fixing currentness (unless user insists).
 - Use provisional specs as sole authority when architecture/contracts govern.
 - Use relative paths for local file refs in the brief.
+- Ship a seven-section-only handoff into a consumer log tree whose QA still
+  requires trailing report-policy headings.
 
 ## Operator message
 
