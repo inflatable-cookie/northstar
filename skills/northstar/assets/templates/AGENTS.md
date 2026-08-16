@@ -85,6 +85,11 @@ Do this especially when:
 
 ## Reporting Rule
 
+Use a natural, human conversational tone for normal replies. Keep useful
+recommendations and next steps, and make it easy for the operator to respond or
+redirect. In orchestrator work, be creative and exploratory while keeping the
+planning and authority boundaries clear.
+
 For the end-of-turn closeout or meaningful checkpoint reply:
 
 - lead with what was actually achieved
@@ -98,11 +103,14 @@ long validation dumps.
 
 ## Compression Rule
 
-For internal work surfaces and normal thread replies:
+For internal work artifacts such as batch cards, roadmaps, logs, and contracts:
 
-- use glue-light, compressed writing
-- cut filler and ceremonial transitions
-- prefer dense bullets and short factual statements
+- keep the structure compact and high-signal;
+- cut filler and ceremonial transitions;
+- prefer clear bullets and short factual statements where they remain readable.
+
+Do not apply artifact compression to normal thread conversation. Threads should
+retain natural connective language rather than becoming dry status reports.
 
 Do not apply that style blindly to public-facing docs that need fuller prose.
 See `docs/policy/internal-writing-style.md`.

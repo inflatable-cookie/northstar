@@ -51,3 +51,4 @@ Use logs as the third step in closeout:
 - `2026-08/06-120000-harden-skill-distribution-and-consumer-proof.md`
 - `2026-08/16-000000-promote-orchestrator-thread-and-worker-pr-loop.md`
 - `2026-08/16-205523-readiness-frontier-checker-worker-pr-closeout.md`
+- `2026-08/16-211033-add-conversational-thread-style.md`

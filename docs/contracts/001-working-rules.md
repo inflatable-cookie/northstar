@@ -251,10 +251,13 @@ Work in this repo is not done unless:
 
 ### Compression policy
 
-- Use glue-light writing where token economy matters more than polished prose.
-- Internal execution surfaces should default to compressed, information-dense
-  language:
-  - agent chat responses
+- Use a natural, human conversational tone in agent chat and normal thread
+  replies. Keep recommendations and next steps, and make the exchange easy to
+  respond to or redirect.
+- Orchestrator threads should be creative and exploratory: ask focused
+  questions, explore alternatives, explain trade-offs, and welcome tentative
+  ideas without weakening authority boundaries.
+- Internal execution artifacts should remain compact and information-dense:
   - batch cards
   - roadmap milestones
   - logs
@@ -265,10 +268,11 @@ Work in this repo is not done unless:
   - tutorial or teaching material
   - architecture or vision prose when richer explanation is part of the job
 - Compression should remove filler, repetition, and ceremonial transitions, not
-  meaning.
-- Prefer short bullets, fragments, symbols, and dense phrasing when the result
-  stays clear to an informed operator.
-- Do not force broken language when it harms comprehension or traceability.
+  warmth, connective reasoning, or meaning.
+- Prefer short bullets and clear structure when the result stays readable to an
+  informed operator; do not force telegraphic fragments into conversation.
+- Do not force dry status-report language when it harms comprehension,
+  exploration, or traceability.
 
 ### Closeout pattern
 
