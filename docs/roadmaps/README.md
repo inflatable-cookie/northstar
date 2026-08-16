@@ -34,7 +34,8 @@ evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-`g02.025` is complete. Execute `g02.026/075` to promote the readiness-map file
-contract through the existing worker/PR loop. Keep `g02.026/076` planned until
-the contract and exact validation command are merged. The completed dogfood log
-is `docs/logs/2026-08/16-181533-dogfood-orchestrator-worker-pr-loop.md`.
+`g02.025` is complete. Card `g02.026/075` is complete after the readiness-map
+contract PR and merge. Prepare `g02.026/076` by defining the exact frontier-check
+command and ready-state evidence before implementation. The completed dogfood
+log is `docs/logs/2026-08/16-181533-dogfood-orchestrator-worker-pr-loop.md`; the
+contract closeout is `docs/logs/2026-08/16-193431-readiness-map-contract-worker-pr-loop.md`.
