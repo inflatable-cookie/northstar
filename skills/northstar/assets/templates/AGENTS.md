@@ -7,9 +7,12 @@ file focused on orchestration and point to the nested docs-authority repository.
 
 - Use the repository's canonical docs and ready-card surfaces; do not invent a
   parallel planning authority.
-- Prefer harness-managed worktrees. Manual worktrees require the operator's
-  absolute `AGENTS_WORKTREE_CONTAINER_DIR` in ignored `.agents.local.env`; never
-  guess a path, use `/tmp`/`TMPDIR`, or create a repository-child worktree.
+- At startup, first inspect the current Git context. A clean, dedicated,
+  non-`main` registered worktree supplied by the harness is authoritative; use
+  its actual path/branch and never create another because a handoff placeholder
+  differs. Manual worktrees require the operator's absolute
+  `AGENTS_WORKTREE_CONTAINER_DIR` in ignored `.agents.local.env`; never guess a
+  path, use `/tmp`/`TMPDIR`, or create a repository-child worktree.
 - If planning authority does not settle the next direction, stop and ask. Keep
   continuation inside the current bounded lane.
 - Do not run release mutations or change CI/workflow files without an explicit

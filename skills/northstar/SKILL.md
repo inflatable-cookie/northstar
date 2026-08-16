@@ -29,6 +29,12 @@ When the target is the Northstar source repo, also read
 `bundle-docs/protocol-kernel.md`. Its absence is normal in consumer repos and
 is not a contract gap by itself.
 
+Worker startup is intentionally light: before `effigy tasks`, `effigy doctor`,
+or broad repository reads, run the router's four-command worktree probe. Reuse a
+clean, dedicated, non-`main` registered launcher worktree even when its generated
+path or branch differs from a handoff placeholder; never create a second one for
+that reason.
+
 ## Outcomes by mode
 
 - **Planning:** coherent architecture/contracts/roadmaps; no invented system

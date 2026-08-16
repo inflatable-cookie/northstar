@@ -35,6 +35,10 @@ do not execute or `source` the file.
 ## First-use procedure
 
 - Prefer a harness-managed worktree or artifact location when one is supplied.
+  A clean, dedicated, non-`main` worktree registered by Git in the current
+  launch context is sufficient evidence that the harness owns it, even when its
+  generated path or branch differs from a handoff placeholder. Record the
+  actual path/branch and do not create a second worktree.
 - Before creating a manual worktree, read `.agents.local.env`.
 - If it is absent or `AGENTS_WORKTREE_CONTAINER_DIR` is empty/invalid, stop and
   ask the operator:

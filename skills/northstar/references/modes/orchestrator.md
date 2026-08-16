@@ -68,8 +68,10 @@ visible without making the conversation feel like a workflow form.
    `.agents.local.env` and resolve `AGENTS_WORKTREE_CONTAINER_DIR`. If it is
    absent or invalid, ask the operator for the absolute container directory and
    create the ignored file from that answer. Never guess `/tmp`, `TMPDIR`, or a
-   repository-adjacent path. If the harness already owns a worktree, use it and
-   do not create another one.
+   repository-adjacent path. If the worker launcher already starts the thread in
+   a clean, dedicated, non-`main` registered worktree, that current worktree is
+   authoritative: use it, record its actual path/branch, and do not compare it
+   with the handoff's planned path or create another one.
 7. **Prepare and publish the base.** Use `terminal` for Git/Effigy inspection and
    `write_file` or `patch` for planning artifacts. The planning checkout must be
    on `main`, with no unrelated changes. Run the required QA, commit all
@@ -90,16 +92,20 @@ visible without making the conversation feel like a workflow form.
 
    Each handoff records the planning base commit from before the handoff was
    created. It must not try to contain the SHA of the commit that contains the
-   handoff itself. After pushing the handoff set, create each worktree from the
-   current `origin/main` tip. The worker must run its startup worktree-safety
-   check before broad repo reads; if its current context is not a clean,
-   dedicated, non-`main` worktree matching the handoff, it must not edit there.
-   Instead it reads `.agents.local.env` and requires a valid
-   `AGENTS_WORKTREE_CONTAINER_DIR` before creating a unique worktree and branch
-   from the current `origin/main`, records that resolved path, and continues
-   only there. A dirty current checkout is preserved; it is never cleaned,
-   reset, or used for worker edits. If the path is missing, the worker stops and
-   reports the operator question instead of falling back to `/tmp`.
+   handoff itself. Record the intended worker branch/worktree in the handoff;
+   let the launch harness create it when it owns the worker start, and create a
+   manual worktree only when no harness-provided worktree exists and the local
+   path contract is satisfied. The worker must run a quick startup worktree-safety
+   check before broad repo reads. First inspect the current context. If it is a
+   clean, dedicated, non-`main` registered worktree supplied by the launcher,
+   use it immediately even when its generated path or branch differs from the
+   handoff placeholders; record the actual path/branch and do not create another
+   worktree. A dirty current checkout is preserved; it is never cleaned, reset,
+   or used for worker edits. Only when the current context is `main`, dirty,
+   unregistered, or otherwise unusable should the worker consider the named
+   handoff worktree, then the operator-configured manual fallback. If the manual
+   path is missing, the worker stops and reports the operator question instead
+   of falling back to `/tmp`.
 9. **Handle worker reports.** Treat operator-relayed reports as status evidence,
    not authority. After each chunk, reconcile card/log state and tell the
    operator the next report or action needed. If the worker reports a planning
@@ -134,15 +140,21 @@ manually pasted references are part of the protocol.
 The file must say, in substance:
 
 - you are the implementation worker, not the planning authority;
-- before broad repo reads, run the startup worktree-safety preflight: identify
-  the repository root, current worktree, branch, and `git status --porcelain`;
-- use the named worktree and branch only when it is clean, dedicated, non-`main`,
-  and matches the handoff;
-- if that preflight fails, do not edit the current checkout. Read the target
-  repo's `.agents.local.env`; require `AGENTS_WORKTREE_CONTAINER_DIR`, ask the
-  operator for it when absent, and create a unique worktree and branch under
-  that container from `origin/main`. Record the resolved path/branch and
-  continue only there; never use `/tmp`, `TMPDIR`, or a guessed path;
+- before broad repo reads, run one quick read-only preflight identifying the
+  repository root, current worktree registration, branch, and
+  `git status --porcelain`;
+- if the current context is a clean, dedicated, non-`main` registered worktree,
+  treat it as the harness-provided worktree. Use it regardless of generated path
+  or branch-name differences from the handoff, record the actual path/branch,
+  and do not create another worktree;
+- only if the current context is `main`, dirty, unregistered, or otherwise
+  unusable should the worker inspect the named handoff worktree and then use the
+  target repo's `.agents.local.env` for a manual fallback. Require
+  `AGENTS_WORKTREE_CONTAINER_DIR`, ask the operator for it when absent, and
+  create a unique worktree and branch under that container from `origin/main`.
+  Never use `/tmp`, `TMPDIR`, or a guessed path;
+- do not run `effigy tasks`, `effigy doctor`, broad repository reads, or discovery
+  commands before this worktree decision;
 - never clean, reset, or discard a dirty checkout while creating the fallback;
 - run `git fetch origin`, confirm `HEAD == origin/main`, confirm the recorded
   planning base is an ancestor of `HEAD`, and confirm this handoff file exists;
@@ -189,6 +201,8 @@ Stop and return to planning or the operator when:
 - the startup preflight cannot establish a clean dedicated worker worktree and
   the operator-selected manual worktree under `AGENTS_WORKTREE_CONTAINER_DIR`
   cannot be created;
+- the launcher supplied a dirty or `main` worktree; stop and report it rather
+  than creating a second worktree behind the launcher's back;
 - the base/worktree/branch boundary remains unverifiable after fallback;
 - merge authority is not explicit;
 - a manual worktree is needed but the local path contract has not been satisfied;

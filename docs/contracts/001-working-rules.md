@@ -401,10 +401,13 @@ Before a worker starts:
 - the worker receives only that handoff's repository-relative path;
 - the worker performs a quick startup preflight before broad reads: repository
   root, current worktree, branch, and `git status --porcelain`;
-- a clean, dedicated, non-`main` worktree matching the handoff is preferred;
-- if the current context is unsuitable, the worker creates a unique temporary
-  worktree and branch from pushed `origin/main`, records the actual path/branch,
-  and works only there;
+- a clean, dedicated, non-`main` registered current worktree supplied by the
+  harness is authoritative, even when its generated path or branch differs from
+  the handoff; record the actual path/branch and reuse it;
+- only if the current context is `main`, dirty, unregistered, or otherwise
+  unsuitable does the worker consider the named handoff worktree and then create
+  a unique manual worktree and branch from pushed `origin/main`, recording the
+  actual path/branch;
 - the worker never cleans, resets, or discards a dirty checkout while creating
   or selecting the fallback;
 - the selected worker worktree has a separate branch created from pushed `main`;

@@ -42,8 +42,10 @@ in it. Read `KEY=VALUE` entries as data; never execute or `source` the file.
 ## First-use procedure
 
 1. Prefer the worktree, scratch area, or artifact location supplied by the
-   harness. Do not create a second manual location when the harness already
-   owns the lifecycle.
+   harness. A clean, dedicated, non-`main` worktree registered by Git in the
+   current launch context is sufficient evidence that the harness owns it, even
+   when its generated path or branch differs from a handoff placeholder. Record
+   the actual path/branch and do not create a second manual location.
 2. If a manual worktree is required, read `.agents.local.env`.
 3. If the file is absent or `AGENTS_WORKTREE_CONTAINER_DIR` is empty/invalid,
    stop before creating a worktree and ask the operator exactly:

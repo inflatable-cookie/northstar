@@ -103,6 +103,10 @@ The orchestrator owns question-led discovery, promoted planning, ready-state,
 launch preparation, and review. Each worker owns only the assigned ready cards in
 its dedicated worktree and branch. Independent roadmap lanes may use parallel
 worker threads, each with its own worktree, branch, handoff, PR, and closeout.
+When a harness has already placed a worker thread in a clean, dedicated,
+non-`main` registered worktree, that current context is authoritative; the worker
+reuses it even when the generated path or branch differs from the handoff
+placeholder.
 The operator relays reports and PR URLs while Northstar remains independent of
 provider-specific session messaging.
 
@@ -111,9 +115,11 @@ cards, one committed worker handoff per worker lane under `docs/handoffs/`, push
 `main`, commits, validation, and PR review. Private model conversation is not an
 authority surface. A worker launch is valid only after the planning checkout has
 published `main` and the operator has a repository-relative handoff path to give
-the new thread. The worker must then verify its startup worktree safety or create
-a worktree under the operator-selected `AGENTS_WORKTREE_CONTAINER_DIR` from
-pushed `origin/main` before editing.
+the new thread. The worker must then run a quick startup worktree check. It reuses
+a clean, dedicated, non-`main` registered current worktree supplied by the
+harness; only an unusable current context may proceed to a named worktree or a
+worktree under the operator-selected `AGENTS_WORKTREE_CONTAINER_DIR` from pushed
+`origin/main` before editing.
 
 ## Local agent path registry
 
@@ -145,8 +151,9 @@ orchestrator lane when a parent harness already owns the worktree.
 - Each worker handoff is exactly one repository-relative path; no second prompt or
   copied private context is required.
 - A worker must quickly verify that its current context is a clean, dedicated,
-  non-`main` worktree matching the handoff before broad reads or edits. If not,
-  it reads `.agents.local.env`, requires `AGENTS_WORKTREE_CONTAINER_DIR`, and
+  non-`main` registered worktree before broad reads or edits. If so, it reuses
+  that launcher-provided worktree regardless of handoff path/branch placeholders.
+  If not, it reads `.agents.local.env`, requires `AGENTS_WORKTREE_CONTAINER_DIR`, and
   creates a unique worktree and branch under that container from pushed
   `origin/main`, recording the resolved path. It never cleans, resets, or
   discards a dirty checkout.

@@ -7,6 +7,16 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 
 <!-- Keep entries short. Append newest entries at the top. Do not include secrets. -->
 
+- **2026-08-17 — harness worktree path mismatch duplicated a worker checkout:**
+  t3code launched a clean registered worktree under `~/.t3/worktrees`, but the
+  worker preflight treated its generated path/branch as invalid because they did
+  not match handoff placeholders and created another worktree under a manual
+  container; impact was 59 tool calls and an unwanted duplicate checkout;
+  plausible fix is to make the current clean registered non-`main` worktree
+  authoritative and run the four-command probe before Effigy orientation;
+  affected surfaces are the worker handoff template, orchestrator mode, router,
+  AGENTS guidance, and worktree contracts.
+
 - **2026-08-17 — installed-skill audit discoverability:** `SKILL.md`, the
   router, and normalize-docs mode do not name `effigy
   check:agent-instructions` or contract 003, so the Poodle consumer review

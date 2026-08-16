@@ -33,18 +33,23 @@ roadmap readiness, launch preparation, and PR review. It does not implement the
 feature in the planning checkout once the worker boundary is declared.
 
 The operator creates a fresh worker thread in a dedicated worktree from the
-pushed `main` commit for each approved independent lane. The orchestrator has
+pushed `main` commit for each approved independent lane. When the harness creates
+that worktree before the worker starts, the current launch context is authoritative
+even if the harness-generated path or branch differs from a handoff placeholder;
+the worker reuses it rather than creating a second worktree. The orchestrator has
 already committed and pushed the planning artifacts and one concrete worker
 handoff under `docs/handoffs/` per worker. The worker receives only the
 repository-relative path to that handoff; the file contains the complete worker
 instructions and canonical references. The worker owns only the ready cards
 named in that file. At startup, it quickly verifies that its current context is
-a clean, dedicated, non-`main` worktree matching the handoff. If the harness or
-operator did not provide one, or the context is dirty/incorrect, the worker
-reads `.agents.local.env` and requires `AGENTS_WORKTREE_CONTAINER_DIR` before
-creating a unique worktree and branch from pushed `origin/main`, records that
-resolved path, and continues only there without cleaning or discarding the
-original checkout. It can execute several bounded cards in one thread, reports
+a clean, dedicated, non-`main` registered worktree. If the harness did not
+provide one, or the context is `main`, dirty, unregistered, or otherwise
+unusable, the worker first considers the named handoff worktree, then reads
+`.agents.local.env` and requires `AGENTS_WORKTREE_CONTAINER_DIR` before
+creating a unique manual worktree and branch from pushed `origin/main`, records
+that resolved path, and continues only there without cleaning or discarding the
+original checkout. A dirty or `main` harness checkout is reported, not silently
+duplicated. It can execute several bounded cards in one thread, reports
 after each meaningful chunk, updates execution evidence, and stops whenever the
 contract says planning or operator intent is required. When the assigned runway
 is complete, it opens a PR against the prepared base and returns the URL plus
@@ -137,21 +142,27 @@ The orchestrator/worker boundary is a strict sequence:
    under `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md` per approved worker lane;
 7. commit the handoff set to `main`, push `main`, and verify local `HEAD` equals
    `origin/main`;
-8. create each worker branch/worktree from the current pushed `origin/main` tip.
-   Do not try to include any handoff commit's own SHA in its handoff file; that
-   would be self-referential because changing the file changes the commit SHA;
+8. record the intended worker branch/worktree in each handoff. Let the launch
+   harness create the worktree when it owns the worker start; create a manual
+   worktree only when no harness-provided worktree exists and the local-path
+   contract is satisfied. Do not try to include any handoff commit's own SHA in
+   its handoff file; that would be self-referential because changing the file
+   changes the commit SHA;
 9. give each worker thread only its own repository-relative handoff path.
 
 The worker must not require a separately copied prompt, transcript, or list of
 canonical refs. The handoff may point at canonical repository files, but it is
 the only external handoff artifact. Before broad repo reads or editing, the
-worker runs the startup worktree-safety preflight. It uses the named worktree
-only when the current root/path and branch match, `git status --porcelain` is
-empty, the branch is not `main`, and `HEAD == origin/main`. Otherwise it reads
+worker runs one quick startup worktree-safety preflight. If the current root is a
+registered worktree, `git status --porcelain` is empty, and the branch is not
+`main`, it reuses that launcher-provided worktree regardless of generated path or
+branch-name differences from the handoff, records the actual path and branch, and
+does not create another. Otherwise it considers the named worktree, then reads
 `.agents.local.env`, requires `AGENTS_WORKTREE_CONTAINER_DIR`, and creates a
-unique worktree and branch under that container from pushed `origin/main`,
+unique manual worktree and branch under that container from pushed `origin/main`,
 records the actual path and branch, and continues only there. A dirty original
-checkout is never cleaned, reset, or discarded. From the selected worktree, the worker then
+checkout is never cleaned, reset, or discarded; a dirty or `main` launcher
+checkout is reported rather than duplicated. From the selected worktree, the worker then
 confirms the recorded planning base is an ancestor of `HEAD` and the handoff
 file exists at `HEAD`.
 
@@ -183,11 +194,13 @@ The file must contain or point to all information required for execution:
 1. Read the supplied repository-relative handoff path first. Before broad repo
    reads, run the startup worktree-safety preflight: identify the repository
    root, current worktree, branch, and `git status --porcelain`.
-2. Use the named worktree only when it is clean, dedicated, non-`main`, matches
-   the handoff, and after fetching `origin` has `HEAD == origin/main`. If any
-   condition fails, do not edit the current checkout. Create a unique temporary
-   worktree and branch from pushed `origin/main`, record the actual path/branch,
-   and continue only there. Never clean, reset, or discard a dirty checkout.
+2. If the current context is a clean, dedicated, non-`main` registered worktree,
+   use it as the harness-provided worktree even when its generated path or branch
+   differs from the handoff; record the actual path/branch and do not create
+   another. Only if it is `main`, dirty, unregistered, or otherwise unusable may
+   the worker consider the named worktree and then create a manual worktree and
+   branch from pushed `origin/main`. Never clean, reset, or discard a dirty
+   checkout; report a dirty or `main` launcher checkout instead of duplicating it.
 3. From the selected worktree, confirm the recorded planning base is an ancestor
    of `HEAD` and confirm the handoff exists before editing.
 4. Read the active milestone, every assigned card, and governing refs.

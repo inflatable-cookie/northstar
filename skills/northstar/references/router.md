@@ -116,6 +116,30 @@ Choose one:
 | Change still in provisional specs | [`shape-with-specs-and-promote.md`](./modes/shape-with-specs-and-promote.md) |
 | Canonical surfaces exist; need milestones/cards | [`compile-roadmaps.md`](./modes/compile-roadmaps.md) |
 
+## Worker startup fast path
+
+When the thread is an implementation worker receiving a handoff, or the
+launcher has already supplied a worktree, do not perform the normal shared reads
+first. Run one quick read-only probe from the current context:
+
+```sh
+git rev-parse --show-toplevel
+git branch --show-current
+git status --porcelain
+git worktree list --porcelain
+```
+
+If the current root is a registered worktree, the status is empty, and the branch
+is not `main`, reuse it as the launcher-provided worktree. Record its actual
+root/branch and do not compare generated path or branch names with a handoff
+placeholder. Do not create another worktree merely because those values differ.
+Only a `main`, dirty, unregistered, or otherwise unusable current context may
+proceed to the named handoff worktree and then the manual local-path fallback.
+
+Do not run `effigy tasks`, `effigy doctor`, broad repository reads, or discovery
+commands before this decision. After the worktree is selected, read the handoff
+and continue with the normal mode-specific checks.
+
 ## Posture label (all modes except handoff)
 
 Name repo posture early: `baseline-routing`, `strict-ready`, `strict-paused`,
@@ -123,7 +147,7 @@ Name repo posture early: `baseline-routing`, `strict-ready`, `strict-paused`,
 
 ## Shared reads
 
-After choosing a mode:
+After choosing a mode (and after the worker startup fast path when applicable):
 
 ```sh
 effigy tasks
