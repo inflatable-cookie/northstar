@@ -124,7 +124,10 @@ natural and useful; you do not need to repeat this whole file back.
 The orchestrator will review the PR against the canonical refs, diff, and checks.
 Current review state: `{{AWAITING_REVIEW_OR_OTHER_STATE}}`.
 
-It may ask for specific changes or say the PR is ready. If changes are requested,
+The orchestrator records an evidence-backed verdict in the provider's review
+surface. When the orchestrator and worker share a GitHub identity, formal
+self-approval is unavailable, so the orchestrator posts the verdict as a PR
+comment; that comment is the canonical review record. If changes are requested,
 make only those changes on this branch, push again, and report back through the
 operator. Requested changes are: `{{REQUESTED_CHANGES_OR_NONE}}`. The PR should
 link the card, milestone, spec, changed surfaces, evidence, validation, and

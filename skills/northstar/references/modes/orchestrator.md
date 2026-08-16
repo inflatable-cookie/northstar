@@ -69,8 +69,11 @@ The operator relays worker messages and PR URLs between threads.
    giving permission to continue.
 9. **Review the PR.** On the PR URL, inspect metadata, commits, diff, checks, and
    changed files against the spec, milestone, cards, and contracts. Review
-   independently of the worker narrative. Return `approve`, `request changes`,
-   or `pause` with evidence. Leave precise comments when changes are needed.
+   independently of the worker narrative. Record an evidence-backed verdict in
+   the provider's review surface. If the orchestrator and worker share a GitHub
+   identity, formal self-approval is unavailable: post the verdict as a PR
+   comment and treat that comment as the canonical review record. Leave precise
+   comments when changes are needed.
 10. **Merge and close out.** Merge only after the operator authorises that merge
     action and the review/check gate is satisfied. Then update card, milestone,
     log, front-door currentness, continuation/pause state, and the single next

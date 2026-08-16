@@ -52,7 +52,10 @@ and orchestrator closeout.
    thread only the repository-relative handoff path.
 6. Relay at least one worker chunk report; reconcile card/log state.
 7. Receive the PR URL; review diff, checks, and canonical-plan fit.
-8. Request changes or approve/merge with explicit operator authorisation.
+8. Record an evidence-backed review verdict in the provider review surface; when
+   the orchestrator and worker share a GitHub identity, post it as a PR comment
+   because formal self-approval is unavailable. Merge only with explicit
+   operator authorization.
 9. Close the card, milestone, log, and front-door next-task state.
 10. Record measured friction and adapter observations.
 

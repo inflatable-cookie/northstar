@@ -41,8 +41,13 @@ evidence.
 
 The operator relays worker reports and the PR URL to the orchestrator. The
 orchestrator reviews the exact diff and checks against the canonical refs, then
-returns one of: approve/merge when explicitly authorised, request changes with
-line-specific or card-specific comments, or pause with a named planning gap.
+records one of these evidence-backed outcomes in the hosting provider's review
+surface: ready for merge, changes requested with line-specific or card-specific
+comments, or pause with a named planning gap. When the orchestrator and worker
+use the same GitHub identity, GitHub blocks formal self-approval; the
+orchestrator must post the verdict as a PR comment instead. A review comment is
+canonical review evidence in that case. Merge remains a separate,
+operator-authorized action.
 
 ## Goals
 
@@ -160,7 +165,10 @@ worker's report:
 3. check that out-of-scope files, hidden planning decisions, and missing tests are
    not smuggled into the diff;
 4. run or inspect the relevant validation independently where practical;
-5. leave specific comments or return an approval verdict;
+5. record an evidence-backed verdict in the hosting provider's review surface;
+   when formal approval is unavailable because the orchestrator and worker share
+   a GitHub identity, post the verdict as a PR comment and treat that comment as
+   the canonical review record;
 6. merge only when checks and review are satisfactory and the operator has
    authorised the merge action;
 7. after merge, update roadmap/card/log/currentness surfaces and identify the next
