@@ -38,6 +38,43 @@ Vision refs: docs/vision/001-northstar-delivery-vision.md
 - published skill propagation and source/install parity should remain explicit
   so multi-harness installs do not depend on manual operator memory.
 
+## Readiness-mapping artifact contract
+
+Readiness mapping is a plan-only index for a bounded destination. It does not
+replace the existing spec, contract, roadmap, or log surfaces. For a destination
+named `<destination-slug>`, the repository-native surfaces are:
+
+| Surface | Path | Role |
+| --- | --- | --- |
+| readiness map | `docs/specs/<destination-slug>/README.md` | index, summary, and current frontier |
+| decision record | `docs/specs/<destination-slug>/decisions/<decision-id>-<slug>.md` | one canonical record for one decision, research item, prototype, or task |
+
+Both surfaces are Markdown with YAML frontmatter and explicit relative links.
+The map frontmatter requires `kind: readiness-map`, stable `id`, `title`,
+`destination`, `owner`, `status`, `master_spec`, and `roadmap`. Map `status` is
+one of `active`, `cleared`, or `paused`. Its body has four required sections:
+`## Destination`, `## Decision index`, `## Current frontier`, and
+`## Readiness gate`. The decision index may summarise state and blockers, but
+must link each record and must not copy its rationale.
+
+Each record frontmatter requires stable `id`, `kind` (`decision`, `research`,
+`prototype`, or `task`), `mode` (`operator`, `research`, `prototype`, or `task`),
+`status` (`open`, `in-progress`, `resolved`, or `out-of-scope`), `title`,
+`owner`, `authority`, and `blocked_by`. `blocked_by` contains stable decision
+IDs and is empty when there are no blockers. A resolved record must expose
+exactly one of `resolution_evidence` or `accepted_uncertainty`; neither may be
+inferred from the map or from agent preference.
+
+Map and record IDs are stable lowercase kebab-case identifiers, unique within
+the destination. A record filename begins with its exact decision ID followed
+by a descriptive slug; changing a title or slug does not change the ID. Links
+must stay inside the destination subtree or target named canonical docs surfaces
+(the governing spec, architecture, contract, roadmap, or log). Operator-owned
+decisions cannot be resolved by agent inference, and research, prototype, and
+task records remain distinct from operator decisions. A `cleared` map never
+authorises execution by itself; the explicit operator-owned readiness decision
+and normal spec/promotion/roadmap gates remain authoritative.
+
 ## Thread topology
 
 For material work that benefits from a separate implementation context, the
