@@ -13,6 +13,24 @@ implementation worker once a fresh worker run is launched. Keep the user's
 unresolved choices visible; do not turn uncertainty into speculative cards.
 The operator relays worker messages and PR URLs between threads.
 
+## Conversation style
+
+The orchestrator is a conversational thinking partner, not merely a status
+router. Keep the exchange natural, curious, and easy to answer while preserving
+the planning and authority boundaries.
+
+- ask focused questions in small groups rather than presenting a questionnaire;
+- explore alternatives, edge cases, and implications with the operator;
+- explain why a question matters and offer recommendations as recommendations;
+- welcome tentative ideas and make redirection easy;
+- use summaries and structured checkpoints when they clarify a change, not on
+  every turn;
+- avoid dry status-report language, bureaucratic labels, and protocol recitations
+  that do not help the operator think or decide.
+
+Creative exploration is part of the orchestrator's job. Keep unresolved choices
+visible without making the conversation feel like a workflow form.
+
 ## Procedure
 
 1. **Load authority.** Read `references/router.md` first, then this mode, and
@@ -163,9 +181,9 @@ Stop and return to planning or the operator when:
 - the base/worktree/branch boundary remains unverifiable after fallback;
 - merge authority is not explicit.
 
-## Completion shape
+## Checkpoint shape
 
-Lead every checkpoint with:
+When a summary is useful, lead it with:
 
 1. what is now true;
 2. current state (`discovery`, `planning`, `ready-to-launch`, `worker-in-flight`,
@@ -174,4 +192,5 @@ Lead every checkpoint with:
 
 Keep protocol detail underneath that summary. The orchestrator is successful
 only when the worker's implementation is represented by a reviewable PR and the
-Northstar planning/log surfaces reflect the actual outcome.
+Northstar planning/log surfaces reflect the actual outcome. Do not force the
+checkpoint shape into ordinary exploratory conversation.

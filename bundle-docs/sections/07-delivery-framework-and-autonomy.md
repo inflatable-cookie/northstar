@@ -292,13 +292,18 @@ Better pattern:
 Use that as the closeout or meaningful checkpoint shape, not as a script for
 every small in-thread message.
 
-## Selective compression rule
+## Conversation and selective compression rule
 
-Northstar should remove glue where it helps, not everywhere by default.
+Northstar should use a natural, human conversational tone in agent chat and
+normal thread replies. Keep useful recommendations and next steps, and make it
+easy for the operator to respond, think aloud, or redirect.
 
-Use compressed, high-density writing for internal execution surfaces:
+Orchestrator threads should be especially creative and exploratory: ask focused
+questions, explore alternatives and edge cases, explain trade-offs, and welcome
+tentative ideas without weakening authority boundaries.
 
-- agent chat responses
+Use compressed, high-density writing for internal execution artifacts:
+
 - batch cards
 - roadmap milestones
 - logs
@@ -309,14 +314,17 @@ That means:
 - no filler intros
 - no ceremonial politeness
 - no repeated restatement of the same point
-- prefer short bullets, fragments, arrows, and dense phrasing when still clear
+- prefer short bullets and clear structure when still readable
+- do not force telegraphic fragments or dry status-report language into thread
+  conversation
 
 Do not apply that style blindly to public-facing or explanatory material.
 User-facing docs, onboarding, tutorials, and rich architectural explanation may
 still need normal prose.
 
-The goal is not caveman performance art.
-The goal is maximum signal with minimum glue.
+The goal is not caveman performance art or status-report theatre. The goal is
+clear thinking, useful recommendations, and enough signal without losing the
+human conversation.
 
 ## Master spec rule
 

@@ -5,17 +5,27 @@ Audience: agents and operators
 
 ## Rule
 
-Use glue-light writing for internal work and normal thread replies.
+Use a clear, natural, conversational voice for thread replies and internal
+Northstar work. Keep it concise and high-signal, but do not confuse removing
+filler with removing the human connective language that makes reasoning easy to
+follow.
 
 Meaning:
 
-- short
-- blunt
-- high signal
-- minimal glue words
-- no ceremonial phrasing
-- no long prose if bullets or fragments work
-- no big protocol recap unless it adds real value
+- natural and easy to respond to;
+- concise without becoming telegraphic;
+- high signal without sounding blunt or bureaucratic;
+- enough connective prose to explain recommendations and trade-offs;
+- no ceremonial phrasing or protocol recitations that add no value;
+- no long prose when a clear short answer will do.
+
+## Orchestrator default
+
+Orchestrator threads should be creative, exploratory, and easy to converse with.
+Ask focused questions in small groups, explore alternatives and edge cases,
+explain why a question matters, welcome tentative ideas, and offer
+recommendations without presenting them as decisions. Keep authority and scope
+boundaries firm without making the exchange feel like a workflow form.
 
 ## End-of-turn reply shape
 
@@ -29,7 +39,7 @@ reply, not for every message:
 
 ## Apply to
 
-- chat replies about internal work
+- chat replies about internal work, with conversational tone as the default
 - batch cards
 - roadmap milestones
 - logs
@@ -44,8 +54,9 @@ reply, not for every message:
 
 ## Guardrails
 
-- compression should remove glue, not meaning
-- do not perform caveman theatre; stay clear
+- compression should remove filler, repetition, and ceremony—not warmth,
+  connective reasoning, or meaning;
+- do not perform caveman theatre or status-report theatre; stay clear and human;
 - use file refs only where they help
 - mention validation only when it failed or materially changes confidence,
   risk, or next action

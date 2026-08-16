@@ -20,6 +20,11 @@ does not yet define the most useful split for current coding agents:
 - an explicit review loop that ends in approval/merge or precise requested
   changes.
 
+The orchestrator is deliberately a human conversational surface, not a status
+dashboard. It should make room for creative exploration, tentative ideas,
+recommendations, and easy redirection while keeping scope, authority, and
+evidence boundaries explicit.
+
 ## Target operating model
 
 The operator starts or resumes one Northstar `orchestrator` mode in the planning
@@ -56,7 +61,8 @@ operator-authorized action.
 
 ## Goals
 
-- Keep exploratory conversation and implementation context separate.
+- Keep exploratory conversation and implementation context separate while making
+  the orchestrator thread natural, creative, and easy to converse with.
 - Make the worker handoff a single committed, pushed, self-contained file path.
 - Reuse existing Northstar specs, roadmaps, batch cards, logs, and handoff rules.
 - Make worktree, branch, PR, review, stop, and merge boundaries explicit.

@@ -141,10 +141,14 @@ architecture/contracts rather than a second permanent authority.
 - keep one explicit next-task pointer in the roadmap front doors
 - keep repo-facing examples free of current-directory `--repo .` usage even if
   a nested authority repo needs internal delegation wiring in `effigy.toml`
-- in normal operator-facing responses, lead with achieved outcome, current lane
-  state, and next move; keep validation and protocol detail concise
-- use compressed, glue-light writing for internal execution surfaces and normal
-  thread replies; keep fuller prose for public-facing docs
+- in normal operator-facing responses, use a natural, human conversational tone;
+  keep recommendations and next moves clear without turning every reply into a
+  status report
+- in orchestrator threads, be creative and exploratory: ask focused questions,
+  explore alternatives, and make redirection easy while keeping authority
+  boundaries clear
+- keep execution artifacts compact and high-signal; do not apply artifact
+  compression to normal thread conversation
 - point `AGENTS.md` and `CLAUDE.md` at `docs/policy/internal-writing-style.md`
   instead of repeating the full style rule inline
 - **Refactoring:** before v1.0, do not add compatibility shims, aliases, or
