@@ -137,10 +137,11 @@ Promoted the readiness-map and decision-record contract into:
 - `docs/specs/027-northstar-native-pre-execution-discovery.md` — exact Batch
   26.1 contract and resolved placement/representation decisions.
 
-The dependent `g02.026/076` checker is now ready to execute through the
-worker/PR loop because the contract is reviewed and merged and its exact
-command surface is defined. No checker, router, skill, template, or
-production-code surface changed.
+The dependent `g02.026/076` checker was then ready to execute through the
+worker/PR loop because the contract was reviewed and merged and its exact
+command surface was defined. It has since been implemented, reviewed, and
+merged. No checker, router, skill, template, or production-code surface changed
+in this contract-definition card.
 
 ## Validation Evidence
 
@@ -158,6 +159,7 @@ production-code surface changed.
 
 ## Next Task
 
-Review and merge this contract-definition card through the existing worker/PR
-loop. Then prepare `g02.026/076` as the first deterministic frontier-check
-implementation card.
+The dependent `g02.026/076` deterministic frontier-check card was subsequently
+implemented, reviewed, and merged. Continue at the next `g02.026` planning
+checkpoint for Batch 26.2; do not make a new implementation card ready until
+its contracts and evidence requirements are explicit.
