@@ -8,8 +8,9 @@ Vision tags: `pre-execution-discovery`, `readiness-mapping`, `intent-rounds`, `d
 Master spec refs: `docs/specs/027-northstar-native-pre-execution-discovery.md`
 Research refs: `bundle-docs/research/translation-memos/matt-pocock-skills-audit-to-northstar.md`
 Governing refs: `docs/architecture/system-architecture.md`, `docs/contracts/001-working-rules.md`
-Planning state: Batch 26.1 contract and checker complete; Batch 26.2 planning
-checkpoint complete; `g02.026/077` ready for route implementation
+Planning state: Batch 26.1 contract and checker complete; Batch 26.2 route
+implementation complete; Batch 26.3 requires a starter-surface planning
+checkpoint
 
 ## Problem
 
@@ -19,7 +20,7 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 
 ## Goals
 
-- [ ] define readiness mapping and intent rounds with Northstar-native names
+- [x] define readiness mapping and intent rounds with Northstar-native names
 - [ ] keep decisions, research, prototypes, and operator questions distinct
 - [ ] enforce a plan-only boundary that the map cannot override
 - [ ] compile a cleared map into the normal spec/promotion/roadmap chain
@@ -41,10 +42,10 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 
 ### Batch 26.2 - Add intent and uncertainty-resolution procedures
 
-- add intent-rounds procedure and router activation;
-- add project-language rules and vocabulary ownership;
-- add decision-prototype and questionnaire routes;
-- ensure facts are investigated and decisions remain operator-owned.
+- `g02.026/077` — complete; added the routed discovery mode, router activation,
+  frontier-first intent rounds, project-language guidance, decision prototypes,
+  and operator-owned questionnaires;
+- ensure facts are investigated and decisions remain operator-owned; complete.
 
 ### Batch 26.3 - Add starter surfaces and promotion path
 
@@ -84,6 +85,6 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 
 ## Next task
 
-Execute `g02.026/077` through the isolated worker/PR loop. After its merge and
-closeout, compile the starter surfaces and worked example for Batch 26.3 before
-dogfooding Figmatic.
+Run the Batch 26.3 starter-surface planning checkpoint. Define the copy-ready
+project-language surface, worked example, cleared-map promotion path, and their
+validation before dogfooding Figmatic.

@@ -284,7 +284,8 @@ spec, promotion, roadmap, or operator gates.
 
 ## Next task
 
-Execute `g02.026/077`: implement the provider-neutral pre-execution discovery
-routes and their router activation through the worker/PR loop. Keep starter
-bundle templates, architecture refocus, reframe, and consumer-repo dogfood out
-of that card.
+The Batch 26.2 route implementation is merged and closed out. Run the Batch 26.3
+starter-surface planning checkpoint: define the copy-ready project-language
+surface, worked example, cleared-map promotion path, and validation before
+dogfooding Figmatic. Keep architecture refocus, reframe, and consumer dogfood
+out of that planning checkpoint.

@@ -79,5 +79,6 @@ sequence.
 No blocking roadmap milestone is open. `g02.025` is complete after the
 orchestrator/worker dogfood and closeout; `g02.026/075` is complete after its
 contract PR and merge; and `g02.026/076` is complete after its checker PR,
-review, merge, and evidence closeout. The Batch 26.2 planning checkpoint is
-complete and `g02.026/077` is ready for route implementation.
+review, merge, and evidence closeout. `g02.026/077` is now complete after its
+route PR, review, merge, and closeout. The next task is the Batch 26.3
+starter-surface planning checkpoint.

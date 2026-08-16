@@ -1,6 +1,6 @@
 # 077 - Implement Pre-Execution Discovery Routes
 
-Status: ready
+Status: complete
 Owner: repo maintainers
 Updated: 2026-08-16
 Master spec refs: `docs/specs/027-northstar-native-pre-execution-discovery.md`
@@ -80,6 +80,21 @@ without weakening the plan-only boundary.
 - source/install parity passes for both installed Northstar copies;
 - `git diff --check` passes.
 
+## Resolution
+
+Implemented, independently reviewed, and merged through the Northstar
+worker/PR loop:
+
+- added `skills/northstar/references/modes/pre-execution-discovery.md`;
+- activated the route from `skills/northstar/references/router.md`;
+- updated `skills/northstar/SKILL.md` discovery metadata and mode guidance;
+- added explicit precedence so orchestrator requests win over direct discovery
+  routing when both are mentioned;
+- preserved the one-public-skill boundary and plan-only authority.
+
+PR [inflatable-cookie/northstar#5](https://github.com/inflatable-cookie/northstar/pull/5)
+merged as squash commit `42cebba35e50cbeb577c69857119971d021b5027`.
+
 ## Evidence Required
 
 - exact changed-file list;
@@ -107,13 +122,13 @@ without weakening the plan-only boundary.
 ## Continuation Envelope
 
 - Auto-start next card: no
-- In-bounds next card: none until this card is implemented, reviewed, and merged
+- In-bounds next card: none; Batch 26.3 requires a new planning/compilation step
 - Remaining ready chain after this card: 0
-- Transition proof required before the next card becomes ready: route behavior,
-  plan-only boundaries, installed-skill parity, and docs QA are recorded
+- Transition proof required before the next card becomes ready: starter-surface
+  contract, worked example scope, validation, and evidence requirements are
+  explicit
 
 ## Next Task
 
-Run this card through the isolated worker/PR loop. After its merge and closeout,
-compile the starter surfaces and worked example for Batch 26.3 before dogfooding
-Figmatic.
+The route implementation is merged and closed out. Compile the starter surfaces
+and worked example for Batch 26.3 before dogfooding Figmatic.
