@@ -17,6 +17,7 @@ to adopt.
 - [specs/025-skill-distribution-and-consumer-papercut-proof.md](./specs/025-skill-distribution-and-consumer-papercut-proof.md)
 - [specs/026-orchestrator-thread-and-worker-pr-loop.md](./specs/026-orchestrator-thread-and-worker-pr-loop.md)
 - [roadmaps/generation-index.md](./roadmaps/generation-index.md)
+- [handoffs/README.md](./handoffs/README.md)
 - [PAPERCUTS.md](../PAPERCUTS.md) — agent-observed execution friction
 
 ## Sections
@@ -28,6 +29,7 @@ to adopt.
 - `specs/` carries master specs for material goals
 - `roadmaps/` sequences contract-backed work into milestones
 - `logs/` records completed batch evidence and decisions
+- `handoffs/` stores friendly, timestamped notes for genuine fresh-thread takeovers
 
 ## Current posture
 

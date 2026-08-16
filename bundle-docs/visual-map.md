@@ -37,6 +37,9 @@ roadmaps/
 logs/
   └─ YYYY-MM/   dated evidence per batch
 
+handoffs/
+  └─ YYYYMMDD-HHMMSS-<slug>.md   friendly fresh-thread notes
+
 PAPERCUTS.md
   └─ agent-observed friction, triaged later into the docs spine
 ```

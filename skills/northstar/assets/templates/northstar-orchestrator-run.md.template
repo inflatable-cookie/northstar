@@ -1,95 +1,135 @@
 ---
-title: {{TOPIC}} orchestrator run
+title: {{TOPIC}} worker handoff
+kind: northstar-handoff
+handoff_mode: worker-pr-loop
+handoff: single-file-path-only
 status: ready-to-launch
 owner: {{OWNER}}
-kind: orchestrator-run
-handoff: single-file-path-only
-base_required: pushed-main
+created: {{YYYY-MM-DD}}
 updated: {{YYYY-MM-DD}}
+handoff_path: {{ABSOLUTE_HANDOFF_PATH}}
+base_required: pushed-main
+tags: [coordination, handoff, worker, pr]
 ---
 
-## Handoff Rule
+## What This Thread Was Doing
 
-This file is the complete worker handoff. The operator must give the new worker
-thread only this repository-relative path. Do not copy another prompt, transcript,
-summary, or list of refs. The file is committed to `main` and pushed before the
-worker worktree is created; all relative paths resolve from the repository root.
+{{PLAIN_LANGUAGE_THREAD_ARC}}
 
-## Intent Summary
+This is the handoff from the planning/orchestrator thread to one bounded
+implementation thread. It is written so the worker can start from this file
+without needing a copied transcript or a second prompt.
 
-{{ONE_PARAGRAPH_SUMMARY_OF_THE_SETTLED_OUTCOME}}
+## Why It Matters
 
-## Canonical Authority
+{{WHY_THIS_WORK_MATTERS_TO_THE_BIGGER_PICTURE}}
 
-- Vision: {{VISION_REF}}
-- Architecture: {{ARCHITECTURE_REFS}}
-- Contracts: {{CONTRACT_REFS}}
-- Master spec: {{SPEC_REF}}
-- Roadmap milestone: {{ROADMAP_REF}}
-- Ready cards, in order: {{CARD_REFS}}
+## Current State
 
-## Prepared Base
+Here is the state the worker is inheriting:
 
-- Repository: {{REPOSITORY}}
-- Planning branch: `main`
-- Base ref: {{BASE_REF}}
-- Pushed main commit: {{PUSHED_MAIN_COMMIT}}
-- Remote verification: {{LOCAL_HEAD_EQUALS_ORIGIN_MAIN}}
-- Planning checkout status: {{CLEAN_OR_EXPLICIT_EXCEPTION}}
-- Planning artifacts available at base: {{COMMITTED_REF}}
-- Worker branch: {{WORKER_BRANCH}}
-- Worker worktree: {{WORKTREE_PATH}}
-- Worktree creation command: {{WORKTREE_COMMAND}}
+- **Repository:** `{{REPOSITORY}}`
+- **Planning branch:** `main`
+- **Base ref:** `{{BASE_REF}}`
+- **Pushed main commit:** `{{PUSHED_MAIN_COMMIT}}`
+- **Remote verification:** `{{LOCAL_HEAD_EQUALS_ORIGIN_MAIN}}`
+- **Planning checkout:** `{{CLEAN_OR_EXPLICIT_EXCEPTION}}`
+- **Planning artifacts included at the base:** `{{COMMITTED_REF}}`
+- **Worker branch:** `{{WORKER_BRANCH}}`
+- **Worker worktree:** `{{WORKTREE_PATH}}`
+- **Worktree creation command:** `{{WORKTREE_COMMAND}}`
+- **Active spec lane:** `{{SPEC_REF}}`
+- **Roadmap milestone:** `{{ROADMAP_REF}}`
+- **Ready cards, in order:** `{{CARD_REFS}}`
+- **Allowed runway:** `{{ASSIGNED_RUNWAY}}`
+- **Remaining card budget:** `{{CARD_COUNT_OR_TIME_BOUND}}`
+- **Canonical refs:** {{ARCHITECTURE_REFS}}; {{CONTRACT_REFS}}
+- **Model capability profile:** `{{WORKER_PROFILE}}`
+- **Tool/runtime restrictions:** `{{RESTRICTIONS_OR_NONE}}`
+- **Required validation:** `{{CHECKS}}`
+- **PR base/head:** `{{PR_BASE_AND_HEAD}}`
+- **PR URL:** `{{PR_URL_OR_PENDING}}`
+- **Review state:** `{{AWAITING_REVIEW_OR_OTHER_STATE}}`
+- **Merge authorisation:** `{{OPERATOR_AUTHORITY_STATE}}`
 
-## Worker Runway
+## Boundaries
 
-- Allowed cards/chunks: {{ASSIGNED_RUNWAY}}
-- Remaining card budget: {{CARD_COUNT_OR_TIME_BOUND}}
-- Model capability profile: {{WORKER_PROFILE}}
-- Tool/runtime restrictions: {{RESTRICTIONS_OR_NONE}}
-- Report after: {{MEANINGFUL_CHUNK_DEFINITION}}
+Please keep this run inside the named runway:
 
-## Worker Instructions
+- **In scope:** `{{ASSIGNED_RUNWAY}}`
+- **Out of scope:** `{{EXPLICIT_OUT_OF_SCOPE_BOUNDARY}}`
+- Do not invent architecture, change contracts, widen the roadmap, or choose an
+  unresolved product/API/persistence/security decision.
+- Work only in `{{WORKTREE_PATH}}` on `{{WORKER_BRANCH}}`. Do not edit the
+  orchestrator's planning checkout.
+- Do not merge the PR. Merge remains a separate operator-authorised action.
 
-You are the implementation worker for the Northstar lane named above. This file
-is your complete handoff. Work only in `{{WORKTREE_PATH}}` on `{{WORKER_BRANCH}}`.
-Read this file, the active milestone, every assigned card, `AGENTS.md`, and the
-governing refs before editing.
+## Important Context
 
-Execute the ready cards in order. Do not invent architecture, change contracts,
-expand scope, or use another worktree. After each meaningful chunk, report through
-the operator with: changed files, tests/validation actually run, remaining card,
-new risks, and any blocker. Stop and record a planning gap if intent, ownership,
-contracts, or validation becomes ambiguous.
+- **Planning lineage:** {{ACTIVE_VISION_ROADMAP_LOG_CONTEXT}}
+- **Why these cards are ready:** {{WHY_THE_RUNWAY_IS_READY}}
+- **Decisions and preferences:** {{NON_OBVIOUS_DECISIONS_OR_USER_PREFERENCES}}
+- **Open tensions:** {{KNOWN_RISKS_AMBIGUITIES_OR_JUDGMENT_CALLS}}
+- **Report after:** `{{MEANINGFUL_CHUNK_DEFINITION}}`
+- **Report to:** the operator, who will relay progress to the orchestrator
 
-When the assigned runway is complete, update the card/log evidence required by
-the cards, run the final checks, push `{{WORKER_BRANCH}}`, and open a PR against
-`{{BASE_REF}}`. The PR body must link the spec, milestone, cards, evidence,
-validation, and unresolved items. Do not merge.
+## Suggested Next Move
 
-## PR Completion Contract
+Start by reading this handoff from the top, then read `AGENTS.md`, the active
+milestone, each assigned card, and the canonical architecture/contracts named
+above. Verify that the worktree, branch, and pushed base match this file before
+editing.
 
-- PR URL: {{PR_URL_OR_PENDING}}
-- Base/head: {{PR_BASE_AND_HEAD}}
-- Required checks: {{CHECKS}}
-- Required review outcome: {{APPROVE_OR_REQUEST_CHANGES}}
-- Merge authorisation: {{OPERATOR_AUTHORITY_STATE}}
+Once that checks out, take the first coherent chunk. When you reach a natural
+pause, tell the operator what changed, what validation you actually ran, what
+remains, and whether anything needs a planning decision. Keep the conversation
+natural and useful; you do not need to repeat this whole file back.
 
-## Orchestrator Review Notes
+## Completion Protocol
 
-- Review state: {{AWAITING_REVIEW_OR_OTHER_STATE}}
-- Diff/check findings: {{FINDINGS}}
-- Requested changes: {{REQUESTED_CHANGES_OR_NONE}}
-- Closeout refs: {{CARD_LOG_ROADMAP_FRONT_DOORS}}
+### Before you start
 
-## Stop And Escalate
+1. Confirm the worker worktree is `{{WORKTREE_PATH}}` and the branch is
+   `{{WORKER_BRANCH}}`.
+2. Confirm the branch starts from pushed `main` at `{{PUSHED_MAIN_COMMIT}}`.
+3. Read the active milestone, assigned cards, `AGENTS.md`, and canonical refs.
+4. Run the repo's cheap orientation checks and record what you actually ran.
 
-Stop rather than improvise if:
+### While you work
 
-- a required contract or authority is missing;
-- a product, API, persistence, security, concurrency, or deployment choice is
-  unresolved;
-- validation fails in a way that changes the plan;
-- the branch/worktree/base boundary is not clean;
-- the assigned runway is exhausted;
-- the PR cannot be reviewed against the canonical refs.
+- Execute the ready cards in order and keep commits aligned with meaningful
+  chunks, not arbitrary model turns.
+- After each meaningful chunk, report through the operator with changed files,
+  validation actually run, remaining cards, new risks, and blockers.
+- Stop and say so if a contract is missing, intent is ambiguous, scope expands,
+  authority/access is missing, or validation changes the plan.
+- Do not quietly turn an open question into a new architecture.
+
+### When the assigned runway is complete
+
+1. Run the required final validation: `{{CHECKS}}`.
+2. Update the card/log evidence required by the runway.
+3. Push `{{WORKER_BRANCH}}`.
+4. Open a reviewable PR against `main` / `{{PUSHED_MAIN_COMMIT}}`.
+5. In the PR body, link the spec, milestone, cards, changed surfaces, evidence,
+   validation, and unresolved items.
+6. Report the PR URL and the evidence to the operator. Do not merge.
+
+### Review and merge path
+
+The orchestrator will review the PR against the canonical refs, diff, and checks.
+Current review state: `{{AWAITING_REVIEW_OR_OTHER_STATE}}`.
+
+It may ask for specific changes or say the PR is ready. If changes are requested,
+make only those changes on this branch, push again, and report back through the
+operator. Requested changes are: `{{REQUESTED_CHANGES_OR_NONE}}`. The PR should
+link the card, milestone, spec, changed surfaces, evidence, validation, and
+unresolved items. The operator must explicitly authorise any merge.
+
+- **Closeout refs:** `{{CARD_LOG_ROADMAP_FRONT_DOORS}}`
+
+### Handoff closeout
+
+Before calling the runway complete, leave the card, roadmap, log, and next-task
+state honest. If the work is blocked, record the blocker and stop rather than
+making the handoff look more complete than it is.

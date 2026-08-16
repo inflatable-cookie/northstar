@@ -22,7 +22,8 @@ Use logs as the third step in closeout:
 3. write the batch log with evidence and validation actually run
 4. record whether the continuation envelope still holds or a stop signal exhausted it
 5. record the lane budget state and pause signal when the run paused cleanly
-6. create or update a handoff only if another thread needs to continue
+6. create or update a handoff under `docs/handoffs/` only if another thread
+   needs to continue, and link it from the relevant log when useful
 7. refresh the roadmap front doors with one explicit next-task pointer
 
 ## Still-governing context

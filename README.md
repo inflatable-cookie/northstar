@@ -81,8 +81,8 @@ repository.
 ### Baseline vs Strict
 
 **Baseline posture** -- use for most projects:
-- `vision/`, `architecture/`, `contracts/`, `roadmaps/`, `logs/`
-- Enough for normal routing and clear active-lane tracking
+- `vision/`, `architecture/`, `contracts/`, `roadmaps/`, `logs/`, `handoffs/`
+- Enough for normal routing, clear active-lane tracking, and dependable fresh-thread handoffs
 
 **Strict posture** -- add when execution spans high-risk boundaries or needs longer autonomous runs:
 - Baseline plus `contracts/contract-index.md`, `contracts/001-working-rules-template.md`, `architecture/product-guardrails.md`, `specs/`
@@ -100,7 +100,9 @@ repository.
 3. Start with vision first, then architecture. Add `research/` when external comparison or source-backed exploration is needed before committing new bets.
 4. Create roadmap milestones under `docs/roadmaps/gNN/` using `NNN-<slug>.md`.
 5. Log each completed batch in `docs/logs/YYYY-MM/` using `DD-HHMMSS-<slug>.md`.
-6. Delete unused add-on folders after copying the bundle; keep only the ones the project actually needs (`docs/research/`, `docs/schemas/`, `docs/templates/`, `docs/diagrams/`, `docs/specs/`).
+6. Create a handoff under `docs/handoffs/` only when another thread genuinely
+   needs to take over.
+7. Delete unused add-on folders after copying the bundle; keep only the ones the project actually needs (`docs/research/`, `docs/schemas/`, `docs/templates/`, `docs/diagrams/`, `docs/specs/`).
 
 ## Migrate An Existing Project
 
@@ -127,6 +129,8 @@ repository.
 - Roadmap file format: `docs/roadmaps/gNN/NNN-<slug>.md`
 - Logs folder format: `docs/logs/YYYY-MM/`
 - Logs file format: `docs/logs/YYYY-MM/DD-HHMMSS-<slug>.md`
+- Handoffs folder format: `docs/handoffs/`
+- Handoff file format: `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md`
 - Backlog lives only at `docs/roadmaps/backlog/`
 - Decision records live in logs by default, not a separate `decisions/` root
 - Research promotes through `specimen-dossiers` -> `value-tracks` -> `translation-memos` before architecture or roadmap commitments

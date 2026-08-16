@@ -30,6 +30,7 @@ For first-time users: start with `minimal/`, then add optional folders as needed
 - `contracts/`
 - `roadmaps/`
 - `logs/`
+- `handoffs/`
 - `policy/`
 
 ## Standard docs spines
@@ -41,9 +42,10 @@ Baseline Northstar repos should use:
 - `contracts/`
 - `roadmaps/`
 - `logs/`
+- `handoffs/`
 
 That baseline mode is enough for normal routing, clear active-lane tracking,
-and shorter bounded work.
+friendly fresh-thread takeovers, and shorter bounded work.
 
 Stricter repos should keep the baseline spine and also use:
 

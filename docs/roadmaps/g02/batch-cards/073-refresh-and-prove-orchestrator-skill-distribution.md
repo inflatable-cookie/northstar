@@ -16,7 +16,7 @@ installed skill copy and prove source/install parity before dogfood.
 
 - repair or adapt the parity checker to the supported Effigy runtime;
 - refresh the installed skill from the source tree through the documented path;
-- verify the new mode, packet template, router, and skill metadata are present;
+- verify the new mode, worker handoff template, router, and skill metadata are present;
 - record exact source/install comparison evidence;
 - do not change the orchestrator protocol or add provider-specific automation.
 

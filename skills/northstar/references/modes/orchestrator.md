@@ -46,13 +46,16 @@ The operator relays worker messages and PR URLs between threads.
    local `HEAD` equals `origin/main`. Do not dispatch a worker from unpushed or
    merely local planning state. Never mix worker implementation edits into the
    planning checkout.
-7. **Create the single-file handoff.** Fill
+7. **Write the handoff file.** Reuse the handoff flow: fill
    `assets/templates/northstar-orchestrator-run.md.template` into one concrete
-   repository-relative file under `docs/logs/YYYY-MM/`. The file is mandatory,
-   must be committed and pushed on `main`, and must contain the complete worker
-   instructions, refs, runway, base verification, worktree/branch command,
-   reporting rules, stop conditions, and PR contract. Give the new worker thread
-   only this file path. Do not provide a second prompt or require copied context.
+   worker handoff under `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md`. The file must
+   keep the seven core handoff sections and add worker-mode/PR instructions
+   inside `## Completion Protocol`. It is mandatory, must be committed and
+   pushed on `main`, and must contain the complete worker instructions, refs,
+   runway, base verification, worktree/branch command, reporting rules, stop
+   conditions, and PR contract. Give the new worker thread only this file's
+   repository-relative path. Do not provide a second prompt or require copied
+   context.
 8. **Handle worker reports.** Treat operator-relayed reports as status evidence,
    not authority. After each chunk, reconcile card/log state and tell the
    operator the next report or action needed. If the worker reports a planning
@@ -70,11 +73,12 @@ The operator relays worker messages and PR URLs between threads.
 
 ## Worker file contract
 
-The orchestrator creates exactly one concrete run file from the packet template,
-commits it to `main`, pushes `main`, and verifies the remote base before dispatch.
-The operator starts the fresh worker thread in the named worktree and gives it
-only the repository-relative path to that file. No second prompt, transcript
-copy, or manually pasted references are part of the protocol.
+The orchestrator creates exactly one concrete worker handoff from the shared
+handoff template, commits it to `main`, pushes `main`, and verifies the remote
+base before dispatch. The operator starts the fresh worker thread in the named
+worktree and gives it only the repository-relative path to that handoff. No
+second prompt, transcript copy, or manually pasted references are part of the
+protocol.
 
 The file must say, in substance:
 
@@ -91,10 +95,10 @@ The file must say, in substance:
 - finish the assigned runway with a pushed branch and a reviewable PR;
 - do not merge or invent a new architecture.
 
-The only external worker handoff is the packet path, for example:
+The only external worker handoff is the handoff path, for example:
 
 ```text
-Read and follow `docs/logs/YYYY-MM/DD-HHMMSS-topic-orchestrator-run.md`.
+Read and follow `docs/handoffs/20260816-143500-soundcheck-worker.md`.
 ```
 
 ## Model routing

@@ -8,7 +8,7 @@ Copy these folders into your project's `docs/` directory and delete anything you
 
 ## What Is Here
 
-Five core folders, no examples, no optional add-ons.
+Six core folders, no examples, no optional add-ons.
 
 ```
 docs/
@@ -26,10 +26,12 @@ docs/
 │   ├── generation-index.md
 │   └── g01/
 │       └── README.md
-└── logs/
-    ├── README.md
-    └── YYYY-MM/
-        └── .gitkeep
+├── logs/
+│   ├── README.md
+│   └── YYYY-MM/
+│       └── .gitkeep
+└── handoffs/
+    └── README.md
 ```
 
 ## How to Use
@@ -40,6 +42,7 @@ docs/
 4. Add `docs/architecture/system-architecture.md` before creating roadmaps.
 5. Create the first roadmap milestone only after contracts exist.
 6. Add logs per completed batch.
+7. Create a handoff only when another thread genuinely needs to take over.
 
 ## Naming Conventions
 
@@ -48,6 +51,7 @@ docs/
 - Contracts: `docs/contracts/NNN-<slug>.md`
 - Roadmaps: `docs/roadmaps/gNN/NNN-<slug>.md`
 - Logs: `docs/logs/YYYY-MM/DD-HHMMSS-<slug>.md`
+- Handoffs: `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md`
 
 ## When to Expand
 

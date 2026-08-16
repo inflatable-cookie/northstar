@@ -38,7 +38,7 @@ single public `northstar` skill.
 - Auto-start next card: yes
 - In-bounds next card: `g02.025/071`
 - Remaining ready chain after this card: 1
-- Transition proof required before auto-start: packet contract is defined
+- Transition proof required before auto-start: worker handoff contract is defined
 
 ## Lane Budget
 

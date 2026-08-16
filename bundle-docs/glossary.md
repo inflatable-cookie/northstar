@@ -26,10 +26,14 @@ One-page reference for terms used across Northstar docs.
 **Logs**
 : Dated evidence and decision records. Written per completed batch, not per task.
 
+**Handoffs**
+: Friendly, timestamped notes that let another thread or person take over. They
+  live in `docs/handoffs/` and do not replace batch logs.
+
 ## Posture and Adoption
 
 **Baseline**
-: The standard five-folder spine: `vision/`, `architecture/`, `contracts/`, `roadmaps/`, `logs/`. Enough for normal routing and clear active-lane tracking.
+: The standard six-folder spine: `vision/`, `architecture/`, `contracts/`, `roadmaps/`, `logs/`, and `handoffs/`. Enough for normal routing, clear active-lane tracking, and dependable fresh-thread takeovers.
 
 **Strict**
 : Baseline plus additional guardrails: `contracts/contract-index.md`, `contracts/001-working-rules-template.md`, `architecture/product-guardrails.md`, `specs/`. Used when execution spans high-risk boundaries or needs longer autonomous runs.
@@ -137,6 +141,7 @@ One-page reference for terms used across Northstar docs.
 | Specs | Provisional plans | `docs/specs/` |
 | Roadmaps | Executable milestones | `docs/roadmaps/gNN/` |
 | Logs | Evidence | `docs/logs/YYYY-MM/` |
+| Handoffs | Coordination | `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md` |
 | Backlog | Deferred work | `docs/roadmaps/backlog/` |
 | Policy | Repo-local rules | `docs/policy/` |
 

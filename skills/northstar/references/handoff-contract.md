@@ -1,10 +1,12 @@
 # Handoff Contract
 
 Use this contract when a Northstar repo needs a fresh-thread brief or
-continuation artifact.
-Do not use it merely because the current thread is nearing context compaction;
-if the same thread can continue after compaction, prefer normal closeout and
-continue from the existing `Next Task`.
+continuation artifact. A handoff is a note for the next person or agent, not a
+replacement for the live planning spine.
+
+Do not create one merely because the current thread is nearing compaction. If
+the same thread can continue after compaction, use normal closeout and continue
+from the existing `Next Task`.
 
 ## Required Sections
 
@@ -18,79 +20,115 @@ Every handoff must include these sections in this order:
 6. `## Suggested Next Move`
 7. `## Completion Protocol`
 
+A worker handoff uses the same seven sections. It adds its worker-mode and PR
+instructions as subsections inside `## Completion Protocol`; it does not invent a
+second handoff structure.
+
 ### Consumer trailing sections
 
 After `## Completion Protocol`, a consumer repo may require additional `##`
-headings for its own docs policy (for example Jetstream log report-policy:
-`## Vision Target Delta` and `## Next Task`). Those trailing sections:
+headings for its own docs policy. Those trailing sections:
 
-- must not replace, reorder, or rename the seven core sections
-- must come after `## Completion Protocol`
-- are required when the consumer's QA gate checks for them on handoff logs
+- must not replace, reorder, or rename the seven core sections;
+- must come after `## Completion Protocol`;
+- are added only when the consumer's QA gate actually requires them.
 
-Omit trailing sections when the consumer does not require them.
+The generic Northstar handoff template does not add consumer-specific headings by
+default.
 
-## Rules
+## Human writing rules
 
-- `What This Thread Was Doing` should explain the actual arc of the current
-  thread in plain language, not just name a task.
-- `Why It Matters` should connect the immediate work to the larger product,
-  roadmap, or planning goal.
-- `Current State` must capture:
-  - where the work stands now
-  - what is finished vs still open
-  - the active spec lane when one is still shaping the work
-  - the current batch card under `docs/roadmaps/gNN/batch-cards/` when present
-  - the canonical promoted refs the next thread should trust for execution
-  - the remaining continuation envelope, if another ready card is still
-    in-bounds
-  - the lane budget or explicit pause signal when the run did not simply
-    continue
-  - the key files or artifacts involved, using absolute paths for local files
-- `Boundaries` must include at least one explicit out-of-scope boundary and any
-  hard constraints the next thread must respect.
-- `Important Context` should capture:
-  - current roadmap/log lineage
-  - how the spec lane relates to the canonical architecture/contracts
-  - non-obvious decisions or user preferences
-  - relevant repo constraints from `AGENTS.md`
-  - open questions, tensions, or judgment calls that could change the approach
-- `Suggested Next Move` should tell the next thread how to re-enter the work
-  without pretending the rest of the plan is already settled.
-- `Completion Protocol` should point back to the repo's Northstar surfaces:
-  the batch card and roadmap state should already reflect the stopping point,
-  any front-door currentness surfaces that name the active lane or ready card
-  should already reflect the stopping point, the relevant log should already
-  exist or be part of the same closeout step,
-  any remaining continuation envelope should be named explicitly, any pause
-  signal should be named explicitly, the next task should be clear, and
-  unresolved risks should be called out.
-- A handoff is valid only when another thread genuinely needs to take over or
-  the user explicitly asked for a handoff artifact. Low context, compaction,
-  or ordinary thread-budget pressure alone is not enough.
+A good handoff should feel like a thoughtful teammate catching someone up:
 
-## Placement Rule
+- start with the story, not a command list;
+- explain why the work matters in a sentence or two;
+- use plain language and short paragraphs;
+- use contractions and “you” when that makes the note warmer and clearer;
+- be candid about uncertainty, unfinished work, and decisions still needed;
+- use bullets for facts, paths, constraints, and checks;
+- write the suggested next move as an inviting, concrete starting point;
+- keep hard boundaries explicit without sounding theatrical or bureaucratic.
 
-Default placement is the current month log directory:
+Avoid machine-like language such as “execute the following protocol”, “the agent
+must now”, or “completion authority is granted”. Prefer “Start by checking…”,
+“Please keep this within…”, and “If you hit this, pause and bring it back to…”.
 
-- `docs/logs/YYYY-MM/DD-HHMMSS-<slug>-handoff.md`
+## Content rules
 
-If the user gives a different destination, use that path instead.
+- `What This Thread Was Doing` explains the actual arc in plain language, not
+  just the task title.
+- `Why It Matters` connects the immediate work to the larger product, roadmap,
+  or planning goal.
+- `Current State` captures:
+  - what is true now;
+  - what is finished versus still open;
+  - the active spec lane and current batch card when present;
+  - the canonical promoted refs the next thread should trust;
+  - the remaining continuation envelope, if another ready card is in-bounds;
+  - lane budget or pause signal when the run did not simply continue;
+  - the key files or artifacts involved, using absolute paths for local files.
+- `Boundaries` includes at least one explicit out-of-scope boundary and any hard
+  constraints the next thread must respect.
+- `Important Context` captures roadmap/log lineage, the relationship between
+  the spec and canonical architecture/contracts, non-obvious decisions or user
+  preferences, repo constraints from `AGENTS.md`, and open tensions.
+- `Suggested Next Move` tells the next thread how to begin without pretending
+  that unresolved choices are settled.
+- `Completion Protocol` points back to the repo's batch card, roadmap,
+  currentness, and log surfaces. It names the continuation envelope or pause
+  signal, the next task, and unresolved risks. Worker handoffs also put the
+  worker/PR flow here.
 
-## Northstar Alignment
+## Validity rules
+
+A handoff is valid only when another thread genuinely needs to take over or the
+user explicitly asked for a handoff artifact. Low context, compaction, or normal
+thread-budget pressure alone is not enough.
+
+The handoff must be useful without the originating transcript. It may point at
+canonical files rather than copy their full contents, but it must explain what
+the next thread should read and why.
+
+## Placement and naming rule
+
+Every handoff is written under the target repository's `docs/handoffs/`
+directory. Create that directory if it does not exist. Do not put new handoffs in
+`docs/logs/`; logs and handoffs are related but different artifacts.
+
+Use this filename shape:
+
+```text
+YYYYMMDD-HHMMSS-<slug>.md
+```
+
+For example:
+
+```text
+docs/handoffs/20260816-143500-soundcheck-api-review.md
+```
+
+The timestamp is the local creation time. The slug is short, lowercase, and
+kebab-case. If a same-timestamp collision occurs, add `-2`, `-3`, and so on after
+the slug.
+
+## Output rule
+
+The handoff skill must write the concrete file with `write_file` and verify it
+with `read_file` before reporting success. The final operator-facing response
+must include the absolute path to the created file. A chat summary alone is not
+a handoff.
+
+## Northstar alignment
 
 A Northstar handoff should preserve:
 
-- vision context: what long-horizon outcome the work serves
-- roadmap context: which milestone or batch the work belongs to
-- spec context: which provisional planning lane is still active, if any
-- canonical context: which promoted architecture/contracts now govern execution
-- log context: what evidence or decision chain the next thread should continue
+- vision context: what long-horizon outcome the work serves;
+- roadmap context: which milestone or batch the work belongs to;
+- spec context: which provisional planning lane is still active, if any;
+- canonical context: which promoted architecture/contracts govern execution;
+- log context: what evidence or decision chain the next thread should continue;
 - thread context: what the current thread was really trying to figure out,
-  protect, or improve
+  protect, or improve.
 
 Do not reduce the handoff to a generic todo list with no planning lineage or
-continuity of thought.
-Do not use it as a substitute for proper closeout in the live planning spine.
-Do not treat context compaction as a handoff-required event when the same
-thread can continue after compaction.
+continuity of thought. Do not use it as a substitute for proper closeout in the live planning spine.
