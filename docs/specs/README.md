@@ -8,6 +8,11 @@ worked through.
 - `NNN-<slug>.md`
   master specs for material goals or epics
 
+## Active planning
+
+- [027 - Northstar Native Pre-Execution Discovery](./027-northstar-native-pre-execution-discovery.md)
+- [Related translation memo](../../bundle-docs/research/translation-memos/matt-pocock-skills-audit-to-northstar.md)
+
 ## Rules
 
 - Use a master spec when a goal spans multiple meaningful batches, changes
