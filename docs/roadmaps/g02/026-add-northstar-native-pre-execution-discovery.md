@@ -60,7 +60,7 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 
 ## Acceptance criteria
 
-- [ ] current g02.025 dogfood is closed before this milestone becomes active;
+- [x] current g02.025 dogfood is closed before this milestone becomes active;
 - [ ] readiness maps use existing docs authority surfaces and no external tracker;
 - [ ] frontier validation is deterministic and fail-closed on invalid state;
 - [ ] no implementation card becomes ready while a governing decision is unresolved;
@@ -82,5 +82,6 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 
 ## Next task
 
-Complete `g02.025/072` and its closeout. Then compile Batch 26.1 from the active
-master spec and create its first ready card only after the file contract is settled.
+Compile Batch 26.1 from this master spec and settle the readiness-map file
+contract, frontier representation, and execution gate before creating any
+implementation card.

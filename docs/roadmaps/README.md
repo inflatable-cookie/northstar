@@ -25,14 +25,15 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02.022` is complete
 - `g02.023` is complete
 - `g02.024` is complete
-- `g02.025` is active; batches 25.1, 25.2, and 25.4 are complete. Dogfood card
-`g02.025/072` is ready.
+- `g02.025` is complete; batches 25.1, 25.2, 25.3, and 25.4 are complete.
+- `g02.026` is queued behind the completed orchestrator dogfood.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Complete `g02.025/073` first: repair the parity-checker runtime path and refresh
-the installed skill. Then dogfood `g02.025/072` with one fresh worker thread,
-one dedicated worktree, and one reviewable PR.
+`g02.025` is complete. Begin the `g02.026` planning checkpoint from spec 027,
+keeping implementation cards deferred until the readiness-map contract is
+settled. The completed dogfood log is
+`docs/logs/2026-08/16-181533-dogfood-orchestrator-worker-pr-loop.md`.

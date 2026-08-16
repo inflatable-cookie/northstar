@@ -1,6 +1,6 @@
 # 074 - Dogfood Docs Front Door Crosslink
 
-Status: ready
+Status: complete
 Owner: repo maintainers
 Updated: 2026-08-16
 Master spec refs: `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `docs/specs/027-northstar-native-pre-execution-discovery.md`
@@ -68,8 +68,17 @@ searching the repository.
 - stop if QA exposes a planning or contract gap;
 - stop if the worker cannot verify the pushed base or dedicated worktree.
 
-## Next task
+## Resolution
 
-After the worker PR is reviewed and the dogfood parent closes, remove or retain
-this probe only according to the recorded dogfood evidence; it is not a reusable
-product lane by itself.
+Completed through the full bounded worker/PR loop. The worker used the committed
+handoff in a dedicated worktree, changed only `docs/specs/README.md`, passed
+`git diff --check` and `effigy qa:docs`, opened PR #2, received an evidence-backed
+orchestrator review comment, and was merged after explicit operator
+authorization. See `docs/logs/2026-08/16-181533-dogfood-orchestrator-worker-pr-loop.md`
+for measurements and protocol friction.
+
+## Next Task
+
+Use the closed dogfood evidence to compile the first `g02.026` readiness-mapping
+batch. Do not treat this probe as a reusable product lane or auto-start another
+worker.

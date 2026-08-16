@@ -7,6 +7,21 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 
 <!-- Keep entries short. Append newest entries at the top. Do not include secrets. -->
 
+- **2026-08-16 — path-only worker handoff resolution:** the fresh worker's first
+  relative `read_file` lookup resolved under `/Users/tom` instead of the named
+  worktree and required repository search to recover the handoff path; impact is
+  that a path-only brief is not yet uniformly consumable by every file-tool
+  backend; plausible fix is to make worker file resolution explicitly root at
+  the selected worktree; affected surfaces are the worker launcher/tool adapter
+  and `skills/northstar/references/modes/orchestrator.md`.
+
+- **2026-08-16 — stale remote HEAD lock during worker preflight:** `git fetch
+  origin` was blocked by a leftover `refs/remotes/origin/HEAD.lock`; after
+  confirming no Git process was active, removing the stale lock restored fetch;
+  impact is avoidable launch friction; plausible fix is a guarded preflight that
+  detects and reports stale locks without deleting live locks; affected surfaces
+  are the orchestrator launch procedure and local Git preflight.
+
 - **2026-08-16 — skill parity checker runtime (resolved):** `effigy
   check:skill-install` failed before comparison because the runtime did not
   provide array `.join(...)`; impact was that source/install parity could not be

@@ -66,4 +66,5 @@ tested before more adapter automation is added.
 
 ## Next Task
 
-Dogfood `g02.025/072` with one fresh worker thread and one isolated worktree.
+`g02.025/072` and probe `g02.025/074` are complete. Use their closeout log as
+input to the `g02.026` planning checkpoint.

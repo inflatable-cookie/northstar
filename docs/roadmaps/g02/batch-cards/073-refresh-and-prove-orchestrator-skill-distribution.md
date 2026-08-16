@@ -65,5 +65,5 @@ passes against the refreshed installed skill with 32 files.
 
 ## Next Task
 
-Run `g02.025/072` through a fresh worker thread, dedicated worktree, operator-
-relayed chunk report, and reviewable PR.
+`g02.025/072` is complete. Use the dogfood closeout log to compile the first
+`g02.026` planning card; keep adapter defaults and automatic messaging deferred.

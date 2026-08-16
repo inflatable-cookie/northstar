@@ -1,13 +1,13 @@
 # 025 - Add Orchestrator Thread And Worker PR Loop
 
-Status: active
+Status: complete
 Owner: repo maintainers
 Created: 2026-08-16
 Depends on: g02.024
 Vision tags: `orchestration`, `worker-thread`, `worktrees`, `pull-request`, `model-efficiency`
 Master spec refs: `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`
 Governing refs: `docs/architecture/system-architecture.md`, `docs/contracts/001-working-rules.md`, `bundle-docs/research/translation-memos/northstar-orchestrator-thread.md`
-Planning state: ready for dogfood
+Planning state: complete
 
 ## Problem
 
@@ -21,8 +21,8 @@ resulting PR without depending on private cross-thread history.
 - [x] promote the orchestrator/worker/PR boundary into architecture and contract
 - [x] add the internal `orchestrator` mode to the single public skill
 - [x] add a reusable worker handoff extension of the core handoff template
-- [ ] prove the loop with one bounded low-risk lane
-- [ ] measure relay burden, worker rework, review cycles, and validation success
+- [x] prove the loop with one bounded low-risk lane
+- [x] measure relay burden, worker rework, review cycles, and validation success
 - [x] refresh the installed skill and prove source/install parity
 
 ## Execution Plan
@@ -41,12 +41,12 @@ resulting PR without depending on private cross-thread history.
 
 ### Batch 25.3 - Dogfood And Measure The Loop
 
-- [ ] choose one bounded, low-risk consumer or Northstar lane
-- [ ] use `g02.025/074` as the one-file worker probe if no independent ready card exists
-- [ ] prepare main, create a dedicated worktree, and run a fresh worker thread
-- [ ] relay at least one chunk report and one PR URL to the orchestrator
-- [ ] exercise approval or requested-changes review
-- [ ] record measured friction before promoting more automation
+- [x] choose one bounded, low-risk consumer or Northstar lane
+- [x] use `g02.025/074` as the one-file worker probe because no independent ready card existed
+- [x] prepare main, create a dedicated worktree, and run a fresh worker thread
+- [x] relay a worker completion report and one PR URL to the orchestrator
+- [x] exercise approval and merge review with explicit operator authorization
+- [x] record measured friction before promoting more automation
 
 ### Batch 25.4 - Refresh And Prove Skill Distribution
 
@@ -61,12 +61,20 @@ resulting PR without depending on private cross-thread history.
 - [x] the worker can operate from canonical file refs plus a small packet
 - [x] worker scope, worktree, branch, stop, evidence, PR, and merge boundaries are explicit
 - [x] model selection is capability-based and provider-neutral
-- [ ] a real worker thread completes one bounded runway and opens a reviewable PR
-- [ ] the orchestrator review and closeout leave coherent roadmap/card/log state
+- [x] a real worker thread completes one bounded runway and opens a reviewable PR
+- [x] the orchestrator review and closeout leave coherent roadmap/card/log state
 - [x] the installed skill matches the source skill and loads the new mode
+
+## Resolution
+
+The first dogfood is complete. See
+`docs/logs/2026-08/16-181533-dogfood-orchestrator-worker-pr-loop.md` for the
+worker/PR evidence, measurements, two protocol repairs, and remaining papercuts.
+The manual operator-mediated path remains the default; provider adapters and
+automatic cross-session messaging remain unproven.
 
 ## Next Task
 
-Run `g02.025/072` through a fresh worker thread, dedicated worktree, operator-
-relayed chunk report, and reviewable PR. Keep adapter and packet-persistence
-choices open until that evidence exists.
+Begin `g02.026` planning from `docs/specs/027-northstar-native-pre-execution-discovery.md`.
+Compile Batch 26.1 only after the readiness-map file contract and execution gate
+are settled; do not start implementation from the queued milestone alone.
