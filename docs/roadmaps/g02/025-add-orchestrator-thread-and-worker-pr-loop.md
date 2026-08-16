@@ -23,7 +23,7 @@ resulting PR without depending on private cross-thread history.
 - [x] add a reusable worker launch-packet template
 - [ ] prove the loop with one bounded low-risk lane
 - [ ] measure relay burden, worker rework, review cycles, and validation success
-- [ ] refresh the installed skill and prove source/install parity
+- [x] refresh the installed skill and prove source/install parity
 
 ## Execution Plan
 
@@ -49,10 +49,10 @@ resulting PR without depending on private cross-thread history.
 
 ### Batch 25.4 - Refresh And Prove Skill Distribution
 
-- [ ] repair or adapt the parity checker to the supported Effigy runtime
-- [ ] refresh the installed skill from source through the documented path
-- [ ] prove source/install file-set and content parity
-- [ ] confirm a fresh session loads the new mode and packet template
+- [x] repair or adapt the parity checker to the supported Effigy runtime
+- [x] refresh the installed skill from source through the documented path
+- [x] prove source/install file-set and content parity
+- [x] confirm a fresh session loads the new mode and packet template
 
 ## Acceptance Criteria
 
@@ -62,11 +62,10 @@ resulting PR without depending on private cross-thread history.
 - [x] model selection is capability-based and provider-neutral
 - [ ] a real worker thread completes one bounded runway and opens a reviewable PR
 - [ ] the orchestrator review and closeout leave coherent roadmap/card/log state
-- [ ] the installed skill matches the source skill and loads the new mode
+- [x] the installed skill matches the source skill and loads the new mode
 
 ## Next Task
 
-Complete `g02.025/073` first: repair the parity-checker runtime path, refresh the
-installed skill, and prove source/install parity. Then dogfood `g02.025/072`.
-Keep the adapter choice and packet persistence policy open until that evidence
-exists.
+Run `g02.025/072` through a fresh worker thread, dedicated worktree, operator-
+relayed chunk report, and reviewable PR. Keep adapter and packet-persistence
+choices open until that evidence exists.

@@ -54,9 +54,8 @@ rollover signal.
 ## Next Task
 
 `g02.024` is complete. Its planning input was the consumer papercuts evidence.
-Complete `g02.025/073` first: repair the parity-checker runtime path and refresh
-the installed skill. Then run `g02.025/072` through a fresh worker/worktree PR
-loop.
+Run `g02.025/072` through a fresh worker/worktree PR loop; the parity checker
+and installed skill distribution are now proven.
 
 
 Batch cards live in `g02/batch-cards/` when strict posture uses them.

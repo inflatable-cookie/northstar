@@ -51,18 +51,17 @@ Recorded one actionable root-queue entry for Markdown hard-break whitespace in
 - targeted mode, packet, spec, roadmap, dogfood-card, and log existence/content
   checks: passed
 - changed-file Markdown link/table-shape check: passed
-- source/install parity command: blocked by existing Effigy `join(array, ...)`
-  runtime error;
-- direct read-only tree comparison: source 32 files, installed 30; installed
-  copy missing `assets/templates/northstar-orchestrator-run.md.template` and
-  `references/modes/orchestrator.md`, with differing `SKILL.md` and router;
-- therefore the source feature is implemented, but the currently installed
-  skill is not yet refreshed or parity-proven.
+- `effigy check:skill-install /Users/tom/.agents/skills/northstar`: passed
+  (`Northstar skill install parity: OK (32 files)`)
+- direct source/install tree comparison: source 32 files, installed 32; no missing,
+  extra, or differing files; both orchestrator assets are present;
+- negative-path parity probe: removing the orchestrator mode produced the expected
+  non-zero `missing: references/modes/orchestrator.md` failure;
+- therefore the source feature is implemented, distributed, and parity-proven.
 
 
 ## Next task
 
-Complete `g02.025/073` first: repair the parity-checker runtime path and refresh
-the installed skill. Then dogfood `g02.025/072` with one fresh worker thread,
-one dedicated worktree, and one reviewable PR before adding adapters or automatic
+Run `g02.025/072` through a fresh worker thread, dedicated worktree, operator-
+relayed chunk report, and reviewable PR before adding adapters or automatic
 cross-session messaging.

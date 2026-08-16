@@ -49,7 +49,7 @@ skills.
 | Delivery-layer adoption | active docs spine, compact working rules, spec, roadmap, log | repo maintainers | ready |
 | Template/skill promotion | follow-on roadmap batches and logs | repo maintainers | pending |
 | Papercut loop | root queue, doctrine, templates, skill instruction, and QA coverage | repo maintainers | ready |
-| Published skill parity | Skills CLI update path, global install inspection, and source checker | repo maintainers | source/install drift; parity checker blocked by Effigy `join` runtime error |
+| Published skill parity | Skills CLI update path, global install inspection, and source checker | repo maintainers | ready; 32-file parity proven |
 | Consumer papercut proof | real consumer queue entry and manual triage boundary | repo maintainers + consumer owner | observed |
 | Orchestrator mode | packet, fresh worker worktree, chunk report, PR, review, and closeout evidence | repo maintainers + operator | designed; dogfood pending |
 | Model-efficiency comparison | measured role routing, rework, review cycles, and relay burden | repo maintainers | pending dogfood |
@@ -63,5 +63,5 @@ skills.
 - The live repo pilot has not yet proven a longer autonomous multi-card run.
 - The orchestrator packet and PR loop have not yet been proven in a real fresh
   worker thread/worktree; adapter and persistence defaults remain open.
-- The new source skill is not yet distributed to the installed skill copy; the
-  intended parity checker is currently blocked by an Effigy runtime mismatch.
+- The new source skill is distributed to the installed skill copy and the
+  32-file parity check now passes.

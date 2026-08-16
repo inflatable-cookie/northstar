@@ -25,9 +25,8 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02.022` is complete
 - `g02.023` is complete
 - `g02.024` is complete
-- `g02.025` is active; batches 25.1 and 25.2 are complete, distribution card
-`g02.025/073` is blocked on the parity-checker runtime, and dogfood card
-`g02.025/072` is ready after parity.
+- `g02.025` is active; batches 25.1, 25.2, and 25.4 are complete. Dogfood card
+`g02.025/072` is ready.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.

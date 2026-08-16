@@ -25,6 +25,5 @@ No active contract gaps are blocking the current `g02` lane.
 
 `g01.001`, `g01.002`, `g01.003`, and `g02.001` through `g02.024` are complete.
 `g02.025` is active with the orchestrator/worker PR loop promoted. Distribution
-card `g02.025/073` is blocked on the parity-checker runtime; dogfood card
-`g02.025/072` is ready after parity. The generation remains open; no separate
-contract gap blocks the current repair.
+card `g02.025/073` is complete and dogfood card `g02.025/072` is ready. The
+generation remains open; no separate contract gap blocks the current dogfood.
