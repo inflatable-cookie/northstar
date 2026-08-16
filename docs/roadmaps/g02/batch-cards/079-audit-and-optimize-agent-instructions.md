@@ -37,6 +37,8 @@ boundaries.
 - Keep the audit advisory and explainable; it must not rewrite or delete files.
 - Review the current Northstar `AGENTS.md` and the copy-ready template against
   the content-class contract.
+- Provide a root `CLAUDE.md` and copy-ready Claude bridge containing the exact
+  `@AGENTS.md` reference.
 - Move detailed rules to their existing canonical surfaces where possible,
   leaving short pointers in the root files.
 - Compact the source and template files and record the before/after evidence.
@@ -60,6 +62,8 @@ boundaries.
 - the audit flags likely scoped, procedural, historical, duplicated, or stale
   content without pretending semantic classification is perfect;
 - the final root files retain only every-turn content and concise pointers;
+- the source and template Claude bridges contain `@AGENTS.md` and do not
+  duplicate the shared contract;
 - all removed detail has a canonical surviving home or an explicit disposition;
 - retained commands are verified or labelled conditional;
 - `git diff --check`, `effigy qa`, `effigy qa:docs`, and `effigy doctor` pass;
@@ -70,6 +74,7 @@ boundaries.
 
 - before/after line, byte, and approximate-token measurements;
 - audit output for the source and template;
+- audit output proving both Claude bridges reference `@AGENTS.md`;
 - exact changed-file list;
 - disposition table for moved, retained, removed, and unresolved content;
 - validation and parity output;
@@ -91,6 +96,7 @@ Implemented directly on Northstar's source branch:
   template;
 - added the read-only `effigy check:agent-instructions` Rhai task;
 - compacted the source and copy-ready `AGENTS.md` files;
+- added the root and copy-ready one-line `CLAUDE.md` bridge;
 - updated indexes, contract inventories, and setup guidance;
 - refreshed both installed skill copies and proved 34-file parity.
 

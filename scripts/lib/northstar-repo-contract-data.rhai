@@ -1,6 +1,7 @@
 fn required_files() {
     [
         "AGENTS.md",
+        "CLAUDE.md",
         ".agents.local.env.example",
         "README.md",
         "PAPERCUTS.md",
@@ -132,6 +133,7 @@ fn required_files() {
         "skills/northstar/references/modes/sweep-audit-repair.md",
         "skills/northstar/assets/templates/README.md",
         "skills/northstar/assets/templates/AGENTS.md",
+        "skills/northstar/assets/templates/CLAUDE.md.template",
         "skills/northstar/assets/templates/.agents.local.env.example",
         "skills/northstar/assets/templates/PAPERCUTS.md",
         "skills/northstar/assets/templates/effigy.native.toml.template",
@@ -150,6 +152,8 @@ fn required_content() {
         ["AGENTS.md", "PAPERCUTS.md", "AGENTS papercuts loop"],
         ["AGENTS.md", ".agents.local.env", "AGENTS local path registry"],
         ["AGENTS.md", "AGENTS_WORKTREE_CONTAINER_DIR", "AGENTS manual worktree boundary"],
+        ["CLAUDE.md", "@AGENTS.md", "Claude Code shared AGENTS bridge"],
+        ["skills/northstar/assets/templates/CLAUDE.md.template", "@AGENTS.md", "Claude Code template shared AGENTS bridge"],
         ["docs/contracts/002-agent-local-paths.md", "## First-use procedure", "agent local path first-use contract"],
         ["docs/contracts/002-agent-local-paths.md", "Nested-agent boundary", "nested-agent worktree boundary"],
         ["README.md", "effigy tasks", "Effigy discovery step"],

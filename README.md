@@ -94,7 +94,8 @@ repository.
 
 1. Copy the bundle into your target project docs folder.
 2. Install the top-level agent starters from `skills/northstar/assets/templates/`,
-   including `AGENTS.md` and `PAPERCUTS.md`, before any exact-SHA /
+   including `AGENTS.md`, the one-line `CLAUDE.md` bridge, and `PAPERCUTS.md`,
+   before any exact-SHA /
    clean-tree release-candidate prep (do not add `PAPERCUTS.md` during tag
    closeout after CI is already green on a pinned SHA).
 3. Start with vision first, then architecture. Add `research/` when external comparison or source-backed exploration is needed before committing new bets.

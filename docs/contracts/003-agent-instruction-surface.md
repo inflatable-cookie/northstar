@@ -14,6 +14,16 @@ turns without becoming a handbook, history file, or duplicate contract store.
 This contract defines what belongs in the root file and what should move to a
 scoped or on-demand surface.
 
+## Claude Code bridge
+
+Repositories adopting this Northstar surface must also provide a root
+`CLAUDE.md` containing the exact import reference `@AGENTS.md`.
+
+`CLAUDE.md` is a Claude Code bridge, not a second repository authority. It may
+contain concise Claude-specific instructions only when they cannot be expressed
+in the shared `AGENTS.md` contract. Do not repeat cross-agent rules, policy, or
+procedures in the bridge.
+
 ## Content classes
 
 Every instruction belongs to one primary class:
@@ -26,7 +36,8 @@ Every instruction belongs to one primary class:
 | Rules for one directory, package, language, or file type | no | nearest nested `AGENTS.md` or path-scoped rule |
 | Multi-step procedure or task-specific workflow | no | skill, guide, contract, or task surface |
 | Rationale, history, examples, or completed work | no | architecture, research, logs, or README |
-| Personal or machine-local preference/path | no | ignored local file or user-level configuration |
+- Personal or machine-local preference/path | no | ignored local file or user-level configuration |
+| Claude Code bridge to the shared root contract | separate minimal `CLAUDE.md` | root `CLAUDE.md` with `@AGENTS.md` |
 
 A short pointer may remain in the root file when it makes the canonical surface
 discoverable. The root file must not duplicate the full rule.
@@ -81,6 +92,7 @@ The instruction-surface audit is read-only. It should report:
 - links to canonical references and broken links;
 - command candidates that need execution verification;
 - budget warnings and a compactness score with explainable factors.
+- presence of the root Claude bridge and its exact `@AGENTS.md` reference.
 
 The audit may suggest moves, deletions, or rewrites, but it must never edit an
 instruction file or weaken a safety/authority rule automatically. A compaction

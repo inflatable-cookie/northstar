@@ -36,7 +36,8 @@ For first-time users: start with `minimal/`, then add optional folders as needed
 The top-level agent starter also includes `.agents.local.env.example`. Copy it
 to the ignored `.agents.local.env` only when an agent needs local paths. Manual
 worktree creation requires `AGENTS_WORKTREE_CONTAINER_DIR` from that file;
-harness-managed worktrees do not.
+harness-managed worktrees do not. Install `AGENTS.md` and the one-line
+`CLAUDE.md` bridge (`@AGENTS.md`) together.
 
 ## Standard docs spines
 

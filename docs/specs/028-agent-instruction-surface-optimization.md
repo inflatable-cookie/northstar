@@ -57,6 +57,7 @@ advisory warning at 150 lines / 20 KiB.
 ## Required surfaces
 
 - `docs/contracts/003-agent-instruction-surface.md`;
+- a root `CLAUDE.md` bridge containing `@AGENTS.md`;
 - `effigy check:agent-instructions` or an equivalent deterministic read-only
   Effigy audit;
 - an optimized Northstar source `AGENTS.md`;
@@ -69,6 +70,8 @@ advisory warning at 150 lines / 20 KiB.
 - the audit reports line, byte, and approximate token measurements;
 - the audit identifies likely scoped/procedural/history/duplicate content without
   claiming semantic certainty it cannot prove;
+- the source repository and copy-ready starter both provide a minimal Claude
+  bridge containing `@AGENTS.md`;
 - the source and template root files contain only every-turn content plus short
   canonical pointers;
 - detailed local-path, papercut, writing-style, Effigy, and orchestrator rules

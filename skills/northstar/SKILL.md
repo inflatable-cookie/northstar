@@ -92,6 +92,9 @@ Northstar source repo, expanded doctrine lives at
 ## Assets
 
 - Setup/templates: [`assets/templates/`](./assets/templates/)
+- Claude Code bridge: `assets/templates/CLAUDE.md.template` must reference
+  `@AGENTS.md`; add Claude-only guidance there only when it cannot live in the
+  shared contract.
 - Papercuts starter: `assets/templates/PAPERCUTS.md`
 - Handoff template: [`assets/templates/northstar-handoff.md.template`](./assets/templates/northstar-handoff.md.template)
 - Orchestrator worker handoff extension: [`assets/templates/northstar-orchestrator-run.md.template`](./assets/templates/northstar-orchestrator-run.md.template)

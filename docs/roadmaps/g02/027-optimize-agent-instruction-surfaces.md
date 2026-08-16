@@ -23,6 +23,7 @@ procedural dump.
 - [x] add a deterministic read-only instruction-surface audit;
 - [x] compact the Northstar source `AGENTS.md` without losing boundaries;
 - [x] compact the copy-ready `AGENTS.md` template;
+- [x] provide a minimal Claude Code bridge that imports `@AGENTS.md`;
 - [x] prove command, link, docs, doctor, and skill-parity validation;
 - [ ] measure one later consumer run for context pollution and missed guidance.
 
@@ -40,6 +41,7 @@ procedural dump.
 - [x] audit the current source and template files;
 - [x] move detailed content to canonical references where needed;
 - [x] rewrite the source and template root files;
+- [x] add and validate the source/template Claude bridges;
 - [x] validate the final diff and parity.
 
 ### Batch 27.3 — Dogfood and measure

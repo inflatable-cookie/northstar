@@ -79,8 +79,27 @@ fn audit_file(relative_path) {
     }
 }
 
+fn audit_claude_bridge(relative_path) {
+    let full_path = path::join(repo_root, relative_path);
+    if !fs::is_file(full_path) {
+        log_warn("[northstar:agent-instructions] missing Claude bridge: " + relative_path);
+        return;
+    }
+
+    let text = fs::read_file(full_path);
+    if !text.contains("@AGENTS.md") {
+        log_warn("[northstar:agent-instructions] Claude bridge missing exact @AGENTS.md reference: " + relative_path);
+    } else {
+        log("[northstar:agent-instructions] Claude bridge OK: " + relative_path + " -> @AGENTS.md");
+    }
+}
+
 for target in parse_targets(args) {
     audit_file(target);
+}
+
+for bridge in ["CLAUDE.md", "skills/northstar/assets/templates/CLAUDE.md.template"] {
+    audit_claude_bridge(bridge);
 }
 
 log("Northstar agent-instruction audit complete (advisory; no files changed)");

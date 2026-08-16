@@ -15,6 +15,7 @@ The boundary is intentional:
 
 - `README.md`
 - `AGENTS.md`
+- `CLAUDE.md` containing `@AGENTS.md`
 - `PAPERCUTS.md`
 - `effigy.toml`
 - `CHANGELOG.md`
@@ -37,6 +38,14 @@ the ignored file from that answer, and stop rather than guessing `/tmp`,
 `TMPDIR`, or a repository-adjacent path.
 
 See `docs/contracts/002-agent-local-paths.md` for the full contract.
+
+### Claude Code bridge
+
+When adopting the Northstar starter, copy `CLAUDE.md.template` to the
+repository root as `CLAUDE.md`. Keep the exact `@AGENTS.md` reference so Claude
+Code loads the shared cross-agent contract. Add Claude-specific instructions
+only when they cannot be expressed in `AGENTS.md`; do not duplicate shared
+rules.
 
 Seed root `PAPERCUTS.md` from `assets/templates/PAPERCUTS.md` during adopt or
 upgrade, before release-candidate / exact-SHA preparation. Do not add it during
