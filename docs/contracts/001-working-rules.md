@@ -348,19 +348,33 @@ following authority split:
   action is desired.
 
 The repository is the durable communication boundary. A worker must be able to
-re-enter from the single worker handoff, `AGENTS.md`, canonical refs, cards,
-commits, tests, and PR metadata; private conversation history is not required
-authority.
+re-enter from its worker handoff, `AGENTS.md`, canonical refs, cards, commits,
+tests, and PR metadata; private conversation history is not required authority.
+
+Before dispatch, the orchestrator assesses whether multiple independent roadmap
+lanes can run concurrently. Parallel dispatch is appropriate only when lanes
+have no shared mutable scope, ordering/data/generated-artifact dependencies,
+or overlapping authority decisions, and each lane has its own ready cards,
+validation, evidence, stop conditions, worktree, branch, and handoff. Otherwise
+keep the run serial and record the dependency or ambiguity.
 
 Before a worker starts:
 
 - the planning checkout is on `main` and has no unrelated changes;
 - required QA has passed;
 - all planning and roadmap artifacts are committed to `main`;
-- one concrete worker handoff is committed to `main`;
+- one concrete worker handoff for that lane is committed to `main`;
 - `main` is pushed and local `HEAD` equals `origin/main`;
-- the worker receives only the repository-relative handoff path;
-- the worker has a separate worktree and branch created from pushed `main`;
+- the worker receives only that handoff's repository-relative path;
+- the worker performs a quick startup preflight before broad reads: repository
+  root, current worktree, branch, and `git status --porcelain`;
+- a clean, dedicated, non-`main` worktree matching the handoff is preferred;
+- if the current context is unsuitable, the worker creates a unique temporary
+  worktree and branch from pushed `origin/main`, records the actual path/branch,
+  and works only there;
+- the worker never cleans, resets, or discards a dirty checkout while creating
+  or selecting the fallback;
+- the selected worker worktree has a separate branch created from pushed `main`;
 
 During execution:
 
@@ -378,10 +392,12 @@ During execution:
 
 A worker completes the assigned runway with a pushed branch, evidence, and a
 reviewable PR. PR creation is not approval or merge. The orchestrator reviews the
-actual diff, changed files, commits, and checks against canonical refs. It may
-request changes or approve; merge remains a separate action requiring explicit
-operator authorisation. Requested changes return to the same worker branch when
-possible, followed by another review cycle.
+actual diff, changed files, commits, and checks against canonical refs. It records
+an evidence-backed verdict in the provider review surface; on same-identity
+GitHub runs, it posts that verdict as a PR comment because formal self-approval
+is unavailable. Merge remains a separate action requiring explicit operator
+authorisation. Requested changes return to the same worker branch when possible,
+followed by another review cycle.
 
 Northstar does not require live cross-session messaging, provider subagents, or
 hosted coding agents. Those are optional adapters; they must not weaken the
