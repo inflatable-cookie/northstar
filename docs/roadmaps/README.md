@@ -26,7 +26,8 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02.023` is complete
 - `g02.024` is complete
 - `g02.025` is complete; batches 25.1, 25.2, 25.3, and 25.4 are complete.
-- `g02.026` is queued behind the completed orchestrator dogfood.
+- `g02.026` is active; card 075 is complete and card 076 remains planned until
+  its exact checker command and ready-state evidence are explicit.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.

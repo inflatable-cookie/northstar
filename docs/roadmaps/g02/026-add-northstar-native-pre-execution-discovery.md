@@ -8,7 +8,7 @@ Vision tags: `pre-execution-discovery`, `readiness-mapping`, `intent-rounds`, `d
 Master spec refs: `docs/specs/027-northstar-native-pre-execution-discovery.md`
 Research refs: `bundle-docs/research/translation-memos/matt-pocock-skills-audit-to-northstar.md`
 Governing refs: `docs/architecture/system-architecture.md`, `docs/contracts/001-working-rules.md`
-Planning state: compiling Batch 26.1 contract
+Planning state: contract promoted; checker card planned
 
 ## Problem
 
@@ -31,9 +31,9 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 
 ### Batch 26.1 - Define readiness state and frontier integrity
 
-- `g02.026/075` — promote the map and decision-record file contract;
-- `g02.026/076` — implement deterministic orphan, cycle, and frontier checks
-  after the contract card is merged;
+- `g02.026/075` — complete; promoted the map and decision-record file contract;
+- `g02.026/076` — planned; implement deterministic orphan, cycle, and frontier
+  checks only after its exact command surface is ready;
 - define status, ownership, blocking, resolution, and accepted-uncertainty fields;
 - define the operator-owned transition gate.
 
@@ -82,6 +82,6 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 
 ## Next task
 
-Review and execute `g02.026/075` through the existing worker/PR loop. Keep
-`g02.026/076` planned until the promoted contract and exact validation command
-are present.
+Prepare `g02.026/076` by defining its exact checker command and ready-state
+evidence. Keep implementation blocked until the promoted contract and command
+surface are explicit.
