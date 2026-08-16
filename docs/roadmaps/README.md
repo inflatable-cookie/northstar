@@ -33,7 +33,7 @@ evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-`g02.025` is complete. Begin the `g02.026` planning checkpoint from spec 027,
-keeping implementation cards deferred until the readiness-map contract is
-settled. The completed dogfood log is
-`docs/logs/2026-08/16-181533-dogfood-orchestrator-worker-pr-loop.md`.
+`g02.025` is complete. Execute `g02.026/075` to promote the readiness-map file
+contract through the existing worker/PR loop. Keep `g02.026/076` planned until
+the contract and exact validation command are merged. The completed dogfood log
+is `docs/logs/2026-08/16-181533-dogfood-orchestrator-worker-pr-loop.md`.
