@@ -1,7 +1,7 @@
 # Roadmap Generation Index
 
 Status: active
-Updated: 2026-08-06
+Updated: 2026-08-16
 
 ## Mode
 
@@ -76,5 +76,6 @@ sequence.
 
 ## Next Task
 
-No blocking roadmap milestone is open. Use `roadmaps/g02/README.md` to compile
-the next milestone from the consumer papercuts evidence.
+No blocking roadmap milestone is open. `g02.025` is the active orchestrator/worker
+PR-loop lane; repair `g02.025/073` next, then run `g02.025/072`. Keep the
+provider adapter and packet-persistence choices open until evidence exists.

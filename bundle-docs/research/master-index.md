@@ -1,7 +1,7 @@
 # Northstar Active Systems Research - Master Index
 
 Status: Active  
-Last Updated: 2026-03-10  
+Last Updated: 2026-08-16
 
 ## Research Overview
 
@@ -46,6 +46,7 @@ Project-facing recommendations:
 - [Northstar-Effigy Integration](translation-memos/northstar-effigy-integration.md) - How Effigy's existing system informs Northstar's design
 - [AI Agent Release Playbook](translation-memos/ai-agent-release-playbook.md) - Human-in-the-loop release playbook for AI agents
 - [Changelog Library Placement](translation-memos/changelog-library-placement.md) - Where the changelog parser library should live
+- [Northstar Orchestrator Thread](translation-memos/northstar-orchestrator-thread.md) - Evidence-backed split between conversational planning, worker execution, and PR review
 
 ### Specifications
 Technical specifications for tools and formats:

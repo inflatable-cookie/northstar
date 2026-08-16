@@ -19,7 +19,16 @@ ordinary continuation:
 
 → [`modes/handoff.md`](./modes/handoff.md)
 
-## 2. Normalize docs posture
+## 2. Orchestrator thread
+
+Use when the user wants Northstar to own a question-led planning conversation,
+prepare a separate worker thread/worktree, maintain a runway, or review the
+worker's PR. This is an internal mode of the single public skill; the operator
+still relays messages between threads.
+
+→ [`modes/orchestrator.md`](./modes/orchestrator.md)
+
+## 3. Normalize docs posture
 
 Use when the job is **repo shape and spine health** (initial or ongoing):
 
@@ -30,14 +39,14 @@ Use when the job is **repo shape and spine health** (initial or ongoing):
 
 → [`modes/normalize-docs.md`](./modes/normalize-docs.md)
 
-## 3. Research
+## 4. Research
 
 Use when **external evidence** must become architecture or contracts before
 roadmap work bets on it.
 
 → [`modes/research.md`](./modes/research.md)
 
-## 4. Recovery
+## 5. Recovery
 
 Use when planning **was valid but state is now untrustworthy**:
 
@@ -50,7 +59,7 @@ If planning coverage is **still missing**, use plan-from-scratch instead.
 → `replan-after-change.md`, `refocus-drifted-project.md`, or
 `sweep-audit-repair.md`
 
-## 5. Planning (default for implicit work)
+## 6. Planning (default for implicit work)
 
 Use when the job is **planning or sequencing** and recovery is not the main
 problem:

@@ -44,6 +44,7 @@ compatibility aliases.
 
 | Mode file | Use when |
 | --- | --- |
+| `orchestrator.md` | Question-led planning, worker launch packet, bounded PR review loop |
 | `normalize-docs.md` | Bootstrap, migrate, or ongoing docs-spine hygiene |
 | `plan-from-scratch.md` | Planning coverage still missing |
 | `shape-with-specs-and-promote.md` | Provisional spec lane before promotion |
@@ -59,11 +60,11 @@ Templates live under `skills/northstar/assets/templates/`.
 
 ## Activation rules
 
-- **Implicit (auto-invoke):** plan, research, recover, normalize language in the
-  user message — covered by the `northstar` skill description.
+- **Implicit (auto-invoke):** plan, research, recover, normalize, or explicit
+  orchestrator-thread language in the user message — covered by the `northstar`
+  skill description.
 - **Handoff:** only when the user clearly wants a continuation brief or fresh
-  thread. The router and handoff mode forbid compaction-only or bare
-  `continue`.
+  thread. The router and handoff mode forbid compaction-only or bare `continue`.
 
 ## Structural rules
 
