@@ -34,6 +34,14 @@ This is an internal mode of the single public `northstar` skill. It is
 provider-neutral, plan-only, and non-mutating by default; it cannot clear a map,
 make a card ready, or replace normal spec, promotion, roadmap, or operator gates.
 
+**Precedence:** If the user explicitly asks for an orchestrator thread, separate
+worker/worktree preparation, or PR review around a readiness/discovery lane,
+choose **Orchestrator** mode even when the request also mentions readiness or
+discovery; treat discovery as the Orchestrator's planning lane. Direct
+readiness, intent, project-language, decision-prototype, or questionnaire
+requests without that orchestrator/worker/worktree/PR language remain
+**Pre-execution discovery**.
+
 → [`modes/pre-execution-discovery.md`](./modes/pre-execution-discovery.md)
 
 ## 3. Orchestrator thread
