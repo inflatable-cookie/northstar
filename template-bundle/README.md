@@ -57,6 +57,7 @@ Stricter repos should keep the baseline spine and also use:
 - `architecture/product-guardrails.md`
 - `contracts/contract-index.md`
 - `contracts/001-working-rules-template.md`
+- `contracts/003-agent-instruction-surface-template.md`
 - `specs/`
 
 Use the stricter spine when the repo needs the fuller execution layer:

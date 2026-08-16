@@ -22,5 +22,6 @@ Use this folder for ready execution cards that sit under an active master spec.
 
 ## Next Task
 
-`g02.026/078` is the current ready card: add discovery starter surfaces and the
-Poodle `g15.006` worked example through the isolated worker/PR loop.
+`g02.027/079` is complete: the always-loaded instruction audit and Northstar
+source/template compaction are closed out. `g02.026/078` remains ready but
+deferred until the Poodle dogfood provides evidence for the starter surfaces.

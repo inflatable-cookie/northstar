@@ -76,6 +76,20 @@ operator-blocked cases without network, database, provider, or external tracker
 access. A repository with no live readiness maps passes with deterministic
 zero-map output.
 
+## Agent-instruction audit (`check:agent-instructions`)
+
+The read-only agent-instruction audit measures root or supplied `AGENTS.md`
+files and prints line, byte, approximate-token, heading, link, and code-block
+counts. It also reports transparent review signals for likely scoped,
+procedural, historical, conversational, or over-budget content. Signals are
+advisory heuristics, not semantic verdicts, and the task never edits files.
+
+```bash
+effigy check:agent-instructions
+effigy check:agent-instructions AGENTS.md
+effigy check:agent-instructions skills/northstar/assets/templates/AGENTS.md
+```
+
 ## Posture advisory (`check:posture-advisory`)
 
 Non-blocking checks for common **declared vs actual** drift in Northstar-shaped

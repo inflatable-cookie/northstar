@@ -44,6 +44,7 @@ let required_files = [
     "template-bundle/contracts/001-contract-template.md",
     "template-bundle/contracts/001-working-rules-template.md",
     "template-bundle/contracts/002-agent-local-paths-template.md",
+    "template-bundle/contracts/003-agent-instruction-surface-template.md",
     "template-bundle/logs/README.md",
     "template-bundle/research/master-index.md",
     "template-bundle/research/README.md",

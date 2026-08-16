@@ -13,9 +13,11 @@ to adopt.
 - [architecture/system-architecture.md](./architecture/system-architecture.md)
 - [architecture/product-guardrails.md](./architecture/product-guardrails.md)
 - [contracts/001-working-rules.md](./contracts/001-working-rules.md)
+- [contracts/003-agent-instruction-surface.md](./contracts/003-agent-instruction-surface.md)
 - [specs/024-papercuts-feedback-loop.md](./specs/024-papercuts-feedback-loop.md)
 - [specs/025-skill-distribution-and-consumer-papercut-proof.md](./specs/025-skill-distribution-and-consumer-papercut-proof.md)
 - [specs/026-orchestrator-thread-and-worker-pr-loop.md](./specs/026-orchestrator-thread-and-worker-pr-loop.md)
+- [specs/028-agent-instruction-surface-optimization.md](./specs/028-agent-instruction-surface-optimization.md)
 - [roadmaps/generation-index.md](./roadmaps/generation-index.md)
 - [handoffs/README.md](./handoffs/README.md)
 - [PAPERCUTS.md](../PAPERCUTS.md) — agent-observed execution friction

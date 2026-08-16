@@ -47,6 +47,7 @@ Project-facing recommendations:
 - [AI Agent Release Playbook](translation-memos/ai-agent-release-playbook.md) - Human-in-the-loop release playbook for AI agents
 - [Changelog Library Placement](translation-memos/changelog-library-placement.md) - Where the changelog parser library should live
 - [Northstar Orchestrator Thread](translation-memos/northstar-orchestrator-thread.md) - Evidence-backed split between conversational planning, worker execution, and PR review
+- [Agent Instruction Surface Optimization](translation-memos/agent-instruction-surface-optimization.md) - Evidence-backed rules for compact always-loaded agent instructions
 
 ### Specifications
 Technical specifications for tools and formats:

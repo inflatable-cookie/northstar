@@ -80,5 +80,6 @@ No blocking roadmap milestone is open. `g02.025` is complete after the
 orchestrator/worker dogfood and closeout; `g02.026/075` is complete after its
 contract PR and merge; and `g02.026/076` is complete after its checker PR,
 review, merge, and evidence closeout. `g02.026/077` is now complete after its
-route PR, review, merge, and closeout. The next task is the Batch 26.3
-starter-surface planning checkpoint.
+route PR, review, merge, and closeout. The Batch 26.3 starter-surface planning
+checkpoint is complete. `g02.027/079` is now complete; the next measurement is
+the later Poodle-first consumer dogfood using the optimized instruction surface.

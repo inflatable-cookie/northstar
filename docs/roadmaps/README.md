@@ -28,13 +28,16 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02.025` is complete; batches 25.1, 25.2, 25.3, and 25.4 are complete.
 - `g02.026` is active; cards 075, 076, and 077 are complete. Batch 26.3's
   starter-surface planning checkpoint is complete and card 078 is ready.
+- `g02.027` is active; research, the instruction-surface contract, and
+  implementation card 079 are complete. Batch 27.3 consumer measurement is
+  pending.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Execute `g02.026/078` through the isolated worker/PR loop. After its reviewed
-merge and closeout, prepare the separate clean Poodle dogfood handoff for
-`g15.006`. Figmatic remains the later dogfood target while its direct
-interactive bug-fixing work continues.
+Use the optimized instruction surface in the later Poodle-first direct dogfood
+and record the Batch 27.3 measurement. Card `g02.026/078` remains ready but
+deferred; Figmatic remains later while its direct interactive bug-fixing work
+continues.

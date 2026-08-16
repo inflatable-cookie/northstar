@@ -16,6 +16,8 @@ Template:
 - `001-working-rules-template.md` for stricter repos
 - `002-agent-local-paths-template.md` for ignored local path settings and
   manual worktree placement
+- `003-agent-instruction-surface-template.md` for compact always-loaded agent
+  instructions and scoped/on-demand guidance
 
 Examples:
 - `example-contract-index.md`

@@ -2,120 +2,51 @@
 
 Scope: whole `northstar/` repository.
 
-## Hard Rules
+## Always-loaded boundaries
 
-- Treat this repo as the authority for the reusable Northstar documentation system.
-- Keep `template-bundle/` lean and copy-ready; do not add project-specific examples outside clearly marked templates.
-- Keep `bundle-docs/` focused on doctrine, migration guidance, and maintenance policy for the bundle itself.
-- **Pre-1.0 refactoring:** do not add compatibility aliases, shims, wrappers, or
-  silent fallbacks to keep old paths alive. Prefer clean migrations: update
-  references and remove superseded symbols in the same batch. If a change is
-  breaking or needs a staged rollout, **stop and ask the operator** how to
-  handle it instead of inventing a compatibility layer.
-- **v1.0 and later:** treat preserving expected, user-visible, or externally
-  depended behavior as the default priority. Compatibility or deprecation
-  strategy still belongs to the operator, but agents should not casually break
-  stable contracts; when a break is unavoidable, surface it with impact and
-  options rather than silently narrowing behavior.
-- Keep AGENTS content lean: scope, hard rules, validation, links.
+- This repository is the authority for the reusable Northstar documentation
+  system. Keep `template-bundle/` copy-ready and `bundle-docs/` focused on bundle
+  doctrine; do not add project-specific examples to either surface casually.
+- Before 1.0, do not add compatibility aliases, shims, wrappers, or silent
+  fallbacks. Update references and remove superseded symbols together. If a
+  staged migration or breaking choice is needed, stop and ask the operator.
+  After 1.0, preserve stable user-visible contracts by default and surface any
+  unavoidable break with impact and options.
+- Prefer the existing harness-managed lane and worktree. A worker or subagent
+  must not create a nested orchestrator/worktree lane.
+- Manual worktrees require an absolute `AGENTS_WORKTREE_CONTAINER_DIR` from
+  ignored `.agents.local.env`; never guess a path, use `/tmp`/`TMPDIR`, or create
+  a repository-child worktree. Read `docs/contracts/002-agent-local-paths.md`.
+- Do not edit `.github/workflows/` or run release mutations without an explicit
+  operator request.
 
-## Local Agent Paths and Worktrees
+## Common commands
 
-- `.agents.local.env.example` documents the supported local path keys.
-- `.agents.local.env` is the ignored, path-only local registry; never commit it
-  and never put credentials, secrets, or commands in it.
-- Prefer a harness-managed worktree, scratch location, or artifact location when
-  one is supplied. Do not create a second manual location around it.
-- Before creating a worktree manually, read `.agents.local.env` and require a
-  valid absolute `AGENTS_WORKTREE_CONTAINER_DIR`.
-- If the file or key is absent, stop and ask: “What absolute directory should
-  this repository use as its manual worktree container? I will store it in
-  untracked `.agents.local.env` as `AGENTS_WORKTREE_CONTAINER_DIR=...` and use a
-  separate subdirectory per repository and lane.” Do not guess, use `/tmp`, use
-  `TMPDIR`, or create a repository-child/sibling worktree first.
-- After the operator answers, create the local file, validate/create the
-  container, and use `<container>/<repository-slug>-<lane-slug>` for manual
-  worktrees. If validation fails, stop and report the boundary failure.
-- A worker or subagent must not start a second orchestrator workflow or create a
-  nested worktree when a parent harness/orchestrator already owns the lane.
+- Start with `effigy tasks`; use `effigy doctor` only when routing or environment
+  state is uncertain. Doctor is orientation, not the full validation board.
+- Prefer `effigy <task>` and `effigy graph` for code understanding before raw
+  package-manager or shell commands. Use `--repo <PATH>` only for another repo.
+- Do not add `package.json` scripts that merely re-export Effigy tasks.
 
-The durable details live in `docs/contracts/002-agent-local-paths.md`.
+## Validation
 
-## Effigy-First Execution
+- Normal validation: `effigy qa` and, for documentation changes, `effigy qa:docs`.
+- The instruction-surface review is `effigy check:agent-instructions`; it is
+  advisory and read-only.
+- Optional docs-drift check: `effigy check:posture-advisory` (see
+  `scripts/README.md`).
+- During execution, record a small recurring solvable hurdle in `PAPERCUTS.md`
+  under `docs/contracts/001-working-rules.md`; do not turn it into unplanned work.
 
-- Start with `effigy tasks`.
-- Run `effigy doctor` when task discovery or environment state is uncertain.
-  Doctor is orientation (built-ins + cheap `tasks.health`), not the full board.
-- Prefer `effigy qa` for the default validation baseline. Never map `health` to
-  `qa`.
-- Use `--repo <PATH>` only when intentionally targeting a different repo.
-- Fall back to raw shell commands only when Effigy does not yet cover the needed repo operation.
-- Do not add `package.json` scripts that re-export Effigy tasks; run
-  `effigy <task>` directly and keep package scripts package-native.
+## Stop and read
 
-For first-time local bring-up from outside this repo:
-- use `effigy bootstrap git@github.com:inflatable-cookie/northstar.git`
-
-## Validate
-
-- `effigy qa`
-- `effigy qa:docs`
-- optional: `effigy check:posture-advisory` for non-blocking docs posture drift
-  (`[northstar:advisory]` lines; see `scripts/README.md`)
-
-## References
-
-- `README.md`
-- `docs/README.md`
-- `bundle-docs/README.md`
-- `bundle-docs/protocol-kernel.md`
-- `template-bundle/README.md`
-- `bundle-docs/sweeps/README.md`
-- `skills/northstar/SKILL.md`
-
-## Internal Writing Style
-
-Use the repo-local style reference for internal work and normal replies:
-
-- `docs/policy/internal-writing-style.md`
-
-## Papercuts Loop
-
-During execution, when a small solvable hurdle appears, append a short entry to
-the repository root `PAPERCUTS.md` before continuing. Create the file without
-asking if it is missing. Record friction, impact, possible fix, and surface;
-skip one-off failures, external blockers, sensitive data, and duplicate open
-entries. Do not stop the current task or turn the note into unplanned work.
-
-<!-- BEGIN EFFIGY AGENT CONTRACT -->
-## Effigy Agent Contract
-
-Use Effigy as the default command surface for supported project work.
-
-Route by job, not by startup ritual:
-- use `effigy graph` for code understanding
-- use `effigy tasks` for selector inventory
-- use `effigy doctor` for routing ambiguity or repo health
-- use `effigy test --plan` when test execution shape matters
-
-Use `effigy graph` when the job is code understanding: ownership, flow,
-implementation, or changed-file impact. Do not insert graph into unrelated
-deployment, state, docs, release, or direct task-execution work.
-
-Prefer `effigy <task>`, `effigy test`, and the matching built-in surface over
-raw package-manager or shell commands when Effigy covers the path. Use
-`effigy --json <command>` whenever another agent or tool will consume output.
-
-This repo's local `.agents/skills/effigy` copy is authoritative for this
-project. When an agent supports both project-local and global skills, prefer
-the project-local copy over any globally installed Effigy skill.
-
-Omit redundant `--repo` when already inside the target repo (do not pass the
-current directory as the path). Do not edit
-`.github/workflows/` or run release mutations unless the user explicitly asks.
-
-Reference docs:
-- Effigy agent adoption: `docs/guides/047-agent-and-cross-repo-adoption.md`
-- Graph workflows: `docs/guides/076-code-graph-and-agent-workflows.md`
-- JSON contracts: `docs/guides/017-json-output-contracts.md`
-<!-- END EFFIGY AGENT CONTRACT -->
+- If the canonical roadmap, contract, or ready-card surfaces do not settle the
+  next direction, stop and ask instead of guessing. Continuation stays inside the
+  current bounded lane.
+- Read `docs/contracts/001-working-rules.md` for delivery, readiness, closeout,
+  and papercut policy; `docs/contracts/003-agent-instruction-surface.md` for
+  root-versus-scoped instruction policy.
+- Read `docs/README.md`, `bundle-docs/protocol-kernel.md`,
+  `template-bundle/README.md`, or `skills/northstar/SKILL.md` when the task
+  enters those surfaces. Their detailed rules are authoritative over this
+  summary.

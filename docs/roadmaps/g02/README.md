@@ -14,6 +14,7 @@ single-pilot bucket.
 | Keep proving Northstar against real consumer repositories before treating stricter posture as settled doctrine. | active | `docs/contracts/001-working-rules.md`, `docs/specs/012-consumer-repo-autonomy-proof-and-adoption.md`, `docs/specs/013-stricter-consumer-repo-autonomy-adoption.md` | pending |
 | Harden setup, nested-authority adoption, and posture classification so downstream repos can install the spine without hand adaptation. | active | `docs/specs/020-formalize-nested-docs-authority-setup.md`, `docs/specs/022-formalize-repo-posture-classification.md` | pending |
 | Keep execution autonomy bounded by ready cards, lane budgets, pause signals, and a file-based orchestrator/worker PR boundary instead of ad-hoc continuation prompts. | active | `docs/contracts/001-working-rules.md`, `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `bundle-docs/sections/07-delivery-framework-and-autonomy.md` | `g02.026` planning checkpoint |
+| Reduce always-loaded agent context while preserving safety, authority, and common-run efficiency. | active | `docs/contracts/003-agent-instruction-surface.md`, `docs/specs/028-agent-instruction-surface-optimization.md` | `g02.027` implementation |
 | Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | pending |
 
 Update this runway only when generation-level intent changes, a milestone
@@ -52,6 +53,8 @@ rollover signal.
 - `025-add-orchestrator-thread-and-worker-pr-loop.md`
 - `026-add-northstar-native-pre-execution-discovery.md` (active; Batch 26.1 and
   Batch 26.2 complete, `g02.026/078` ready for Batch 26.3)
+- `027-optimize-agent-instruction-surfaces.md` (active; implementation complete,
+  Batch 27.3 consumer measurement pending)
 
 ## Next Task
 
@@ -59,8 +62,10 @@ rollover signal.
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and
 `g02.026/077` are complete.
 The Batch 26.2 planning and route implementation are complete. The Batch 26.3
-starter-surface planning checkpoint is complete and `g02.026/078` is ready. Its
-route closeout is
-`docs/logs/2026-08/16-215610-pre-execution-discovery-routes-worker-pr-closeout.md`.
+starter-surface planning checkpoint is complete and `g02.026/078` remains ready
+for the later Poodle-informed starter-surface pass. The current Northstar task
+`g02.027/079` is complete. The remaining Batch 27.3 measurement uses the
+optimized surface in the later Poodle-first direct dogfood. Its research memo is
+`bundle-docs/research/translation-memos/agent-instruction-surface-optimization.md`.
 
 Batch cards live in `g02/batch-cards/` when strict posture uses them.
