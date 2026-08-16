@@ -92,18 +92,23 @@ The orchestrator/worker boundary is a strict sequence:
 1. finish discovery and promote the spec, architecture, contract, and ready cards;
 2. put the planning checkout on `main` and remove unrelated changes;
 3. run required QA;
-4. commit all planning and roadmap artifacts to `main`;
+4. commit all planning and roadmap artifacts to `main`; this is the planning
+   base recorded in the handoff as `BASE_REF`;
 5. create one concrete worker handoff from
    `skills/northstar/assets/templates/northstar-orchestrator-run.md.template`
    under `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md`;
 6. commit that handoff to `main`, push `main`, and verify local `HEAD` equals
    `origin/main`;
-7. create the worker branch/worktree from that pushed commit;
+7. create the worker branch/worktree from the current pushed `origin/main` tip.
+   Do not try to include the handoff commit's own SHA in the handoff file; that
+   would be self-referential because changing the file changes the commit SHA;
 8. give the worker thread only the repository-relative handoff path.
 
 The worker must not require a separately copied prompt, transcript, or list of
 canonical refs. The handoff may point at canonical repository files, but it is
-the only external handoff artifact.
+the only external handoff artifact. Before editing, the worker verifies that
+`HEAD == origin/main`, the recorded planning base is an ancestor of `HEAD`, and
+the handoff file exists at `HEAD`.
 
 ## Required single-file handoff
 
@@ -116,7 +121,7 @@ relative path.
 
 The file must contain or point to all information required for execution:
 
-- target repository, pushed base commit, worker branch, and worktree command;
+- planning base commit, remote-tip verification, worker branch, and worktree command;
 - active vision/architecture/contract refs;
 - active master spec and roadmap milestone;
 - ordered ready batch cards and allowed runway length;
@@ -129,8 +134,9 @@ The file must contain or point to all information required for execution:
 ## Worker protocol
 
 1. Read the supplied repository-relative handoff path first. Verify the
-   worktree, branch, pushed base ref, clean starting state, and loaded repo
-   instructions before editing.
+   worktree and branch, fetch `origin`, confirm `HEAD == origin/main`, confirm
+   the recorded planning base is an ancestor of `HEAD`, and confirm the handoff
+   exists before editing.
 2. Read the active milestone, every assigned card, and governing refs.
 3. Run the repo's cheap orientation and relevant graph/query commands before code
    changes.

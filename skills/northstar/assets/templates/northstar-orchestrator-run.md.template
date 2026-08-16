@@ -30,9 +30,8 @@ Here is the state the worker is inheriting:
 
 - **Repository:** `{{REPOSITORY}}`
 - **Planning branch:** `main`
-- **Base ref:** `{{BASE_REF}}`
-- **Pushed main commit:** `{{PUSHED_MAIN_COMMIT}}`
-- **Remote verification:** `{{LOCAL_HEAD_EQUALS_ORIGIN_MAIN}}`
+- **Planning base commit:** `{{BASE_REF}}`
+- **Pushed main verification:** `{{REMOTE_VERIFICATION}}`
 - **Planning checkout:** `{{CLEAN_OR_EXPLICIT_EXCEPTION}}`
 - **Planning artifacts included at the base:** `{{COMMITTED_REF}}`
 - **Worker branch:** `{{WORKER_BRANCH}}`
@@ -91,9 +90,12 @@ natural and useful; you do not need to repeat this whole file back.
 
 1. Confirm the worker worktree is `{{WORKTREE_PATH}}` and the branch is
    `{{WORKER_BRANCH}}`.
-2. Confirm the branch starts from pushed `main` at `{{PUSHED_MAIN_COMMIT}}`.
-3. Read the active milestone, assigned cards, `AGENTS.md`, and canonical refs.
-4. Run the repo's cheap orientation checks and record what you actually ran.
+2. Run `git fetch origin` and confirm `git rev-parse HEAD` equals
+   `git rev-parse origin/main`.
+3. Confirm `git merge-base --is-ancestor {{BASE_REF}} HEAD` succeeds and that
+   this handoff file exists in the current `HEAD`.
+4. Read the active milestone, assigned cards, `AGENTS.md`, and canonical refs.
+5. Run the repo's cheap orientation checks and record what you actually ran.
 
 ### While you work
 
@@ -110,7 +112,9 @@ natural and useful; you do not need to repeat this whole file back.
 1. Run the required final validation: `{{CHECKS}}`.
 2. Update the card/log evidence required by the runway.
 3. Push `{{WORKER_BRANCH}}`.
-4. Open a reviewable PR against `main` / `{{PUSHED_MAIN_COMMIT}}`.
+4. Open a reviewable PR against the current pushed `main` tip. The handoff's
+   `{{BASE_REF}}` is the planning base before the handoff commit, not a
+   self-referential hash for the commit that contains this file.
 5. In the PR body, link the spec, milestone, cards, changed surfaces, evidence,
    validation, and unresolved items.
 6. Report the PR URL and the evidence to the operator. Do not merge.
