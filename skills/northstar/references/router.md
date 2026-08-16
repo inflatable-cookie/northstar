@@ -19,7 +19,24 @@ ordinary continuation:
 
 → [`modes/handoff.md`](./modes/handoff.md)
 
-## 2. Orchestrator thread
+## 2. Pre-execution discovery
+
+Use when the request explicitly concerns readiness mapping or the discovery
+routes that precede ordinary planning:
+
+- readiness mapping or a readiness frontier;
+- intent rounds over the current frontier;
+- destination-local project language;
+- a decision prototype;
+- an operator questionnaire for an unresolved decision.
+
+This is an internal mode of the single public `northstar` skill. It is
+provider-neutral, plan-only, and non-mutating by default; it cannot clear a map,
+make a card ready, or replace normal spec, promotion, roadmap, or operator gates.
+
+→ [`modes/pre-execution-discovery.md`](./modes/pre-execution-discovery.md)
+
+## 3. Orchestrator thread
 
 Use when the user wants Northstar to own a question-led planning conversation,
 prepare a separate worker thread/worktree, maintain a runway, or review the
@@ -28,7 +45,7 @@ still relays messages between threads.
 
 → [`modes/orchestrator.md`](./modes/orchestrator.md)
 
-## 3. Normalize docs posture
+## 4. Normalize docs posture
 
 Use when the job is **repo shape and spine health** (initial or ongoing):
 
@@ -39,14 +56,14 @@ Use when the job is **repo shape and spine health** (initial or ongoing):
 
 → [`modes/normalize-docs.md`](./modes/normalize-docs.md)
 
-## 4. Research
+## 5. Research
 
 Use when **external evidence** must become architecture or contracts before
 roadmap work bets on it.
 
 → [`modes/research.md`](./modes/research.md)
 
-## 5. Recovery
+## 6. Recovery
 
 Use when planning **was valid but state is now untrustworthy**:
 
@@ -59,7 +76,7 @@ If planning coverage is **still missing**, use plan-from-scratch instead.
 → `replan-after-change.md`, `refocus-drifted-project.md`, or
 `sweep-audit-repair.md`
 
-## 6. Planning (default for implicit work)
+## 7. Planning (default for implicit work)
 
 Use when the job is **planning or sequencing** and recovery is not the main
 problem:
