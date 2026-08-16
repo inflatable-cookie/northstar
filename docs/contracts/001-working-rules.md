@@ -177,6 +177,35 @@ provide their distinct evidence or execution context and do not grant operator
 authority. The map is plan-only: `status: cleared` does not override the normal
 spec, promotion, roadmap, or operator-owned readiness gates.
 
+### Pre-execution discovery route contract
+
+Batch 26.2 adds four bounded routes to the readiness-mapping workflow. They are
+planning instruments, not execution permissions:
+
+- **Intent rounds** ask a small, breadth-first set of questions over the current
+  decision frontier. Before asking the operator, resolve facts that repository
+  inspection, deterministic commands, or bounded research can answer. Link each
+  question to a canonical decision record or explicitly record why it is
+  non-material. Do not turn an intent round into an exhaustive questionnaire.
+- **Project language** is destination-local by default. A linked project-language
+  surface records preferred terms, aliases, meaning, authority, status, and
+  rejected ambiguity. Stable terms may later be promoted to the global glossary;
+  local wording does not become global doctrine automatically.
+- **Decision prototypes** are throwaway, question-specific evidence. A prototype
+  records the question, hypothesis or options, bounded scope, evaluation method,
+  evidence, verdict, limitations, and promotion target. It may inform a decision
+  but cannot resolve an operator-owned decision by itself or edit production code
+  as part of the route.
+- **Questionnaires** preserve operator-owned questions across turns or sessions.
+  They record context, constraints, options or recommendation, operator response,
+  authority, and unresolved state in the canonical decision record. They do not
+  use an external tracker and do not silently substitute an agent answer.
+
+All four routes are provider-neutral, plan-only, non-mutating by default, and
+must leave a traceable path back to the readiness map and its canonical decision
+records. A route may update planning evidence, but it cannot mark a map cleared,
+make a card ready, or bypass normal spec, promotion, roadmap, or operator gates.
+
 ### Continuation envelope
 
 - Treat auto-continuation as a bounded envelope, not an open-ended permission.

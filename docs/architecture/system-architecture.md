@@ -75,6 +75,23 @@ task records remain distinct from operator decisions. A `cleared` map never
 authorises execution by itself; the explicit operator-owned readiness decision
 and normal spec/promotion/roadmap gates remain authoritative.
 
+## Pre-execution discovery routes
+
+The readiness map is extended by four planning routes without creating a second
+planning authority:
+
+| Route | Durable home | Role |
+| --- | --- | --- |
+| Intent rounds | readiness map plus linked decision records | breadth-first questions over the live frontier |
+| Project language | destination-local project-language surface linked from the map | preferred terms, aliases, meanings, authority, and rejected ambiguities |
+| Decision prototype | canonical `kind: prototype` decision record plus linked evidence | bounded throwaway evidence for questions conversation cannot settle |
+| Questionnaire | canonical operator-owned decision record | durable questions and explicit operator responses across turns or sessions |
+
+Project language stays local unless a stable term earns promotion to the global
+glossary. Prototypes and questionnaires can inform decisions but cannot change
+execution authority. All four routes remain provider-neutral, plan-only, and
+non-mutating by default.
+
 ## Thread topology
 
 For material work that benefits from a separate implementation context, the

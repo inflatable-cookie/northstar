@@ -238,14 +238,53 @@ messaging.
   Operator-owned decisions cannot be resolved by agent inference, and research,
   prototype, and task records remain distinct from operator decisions.
 
-## Open questions
+## Resolved decisions for Batch 26.2
 
-- How much of project language belongs in a glossary versus architecture or
-  contract ownership records?
-- Which first consumer project will provide the strongest pre-execution test?
+The first dogfood sequence is **Figmatic, then Poodle**. Figmatic is the stronger
+first stress test because its boundary between deterministic componentization and
+human-directed responsive behaviour is materially ambiguous and active. Poodle
+follows as a larger cross-runtime contract test.
+
+Project language is local by default:
+
+- glossary surfaces own stable cross-project preferred terms and synonyms;
+- architecture owns structural concepts and system boundaries;
+- contracts own authority terms, behavioural meanings, and explicitly rejected
+  ambiguities;
+- a destination-local project-language surface owns project-specific preferred
+  terms, aliases, meanings, authority, status, and rejected ambiguity;
+- a stable local term may be promoted to the global glossary, but local wording
+  does not become global doctrine automatically;
+- readiness records own destination-specific decisions without silently promoting
+  them into global vocabulary.
+
+The four Batch 26.2 routes are bounded as follows:
+
+1. **Intent rounds** ask a small, breadth-first set of questions over the live
+   decision frontier. The route resolves repository-answerable facts first, links
+   each question to a canonical decision record, and stops when the remaining
+   unknowns are answered, routed, accepted as non-material, or explicitly left as
+   accepted uncertainty. It is not an exhaustive questionnaire.
+2. **Project language** provides the destination-local vocabulary surface. It is
+   linked from the readiness map and cannot resolve a decision or grant authority.
+3. **Decision prototypes** are throwaway, question-specific evidence. They record
+   the question, hypothesis or options, bounded scope, evaluation method,
+   evidence, verdict, limitations, and promotion target. They may inform a
+   decision but cannot resolve an operator-owned decision or edit production code
+   through the route.
+4. **Questionnaires** preserve operator-owned questions across turns or sessions
+   in the canonical decision record. They record context, constraints, options or
+   recommendation, operator response, authority, and unresolved state. They do
+   not use an external tracker or silently substitute an agent answer.
+
+All four routes are provider-neutral, plan-only, non-mutating by default, and
+must leave a traceable path back to the readiness map and canonical decision
+records. No route can mark a map cleared, make a card ready, or bypass normal
+spec, promotion, roadmap, or operator gates.
 
 ## Next task
 
-The Batch 26.1 contract and deterministic checker are complete and merged. Run
-the next `g02.026` planning checkpoint for Batch 26.2 before implementing the
-intent-rounds, project-language, decision-prototype, and questionnaire routes.
+Execute `g02.026/077`: implement the provider-neutral pre-execution discovery
+routes and their router activation through the worker/PR loop. Keep starter
+bundle templates, architecture refocus, reframe, and consumer-repo dogfood out
+of that card.

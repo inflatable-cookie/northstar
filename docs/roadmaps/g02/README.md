@@ -51,13 +51,16 @@ rollover signal.
 - `024-harden-skill-distribution-and-consumer-papercut-proof.md`
 - `025-add-orchestrator-thread-and-worker-pr-loop.md`
 - `026-add-northstar-native-pre-execution-discovery.md` (active; Batch 26.1
-  complete, Batch 26.2 pending planning checkpoint)
+  complete, `g02.026/077` ready for Batch 26.2 route implementation)
 
 ## Next Task
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075` and `g02.026/076` are complete.
-The next task is a Batch 26.2 planning checkpoint. The checker closeout log is
+The Batch 26.2 planning checkpoint is complete. `g02.026/077` is ready to
+implement the provider-neutral pre-execution discovery routes. The governing
+checkpoint evidence is in `docs/specs/027-northstar-native-pre-execution-discovery.md`;
+the preceding checker closeout is
 `docs/logs/2026-08/16-205523-readiness-frontier-checker-worker-pr-closeout.md`.
 
 Batch cards live in `g02/batch-cards/` when strict posture uses them.

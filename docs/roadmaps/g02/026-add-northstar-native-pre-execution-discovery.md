@@ -8,8 +8,8 @@ Vision tags: `pre-execution-discovery`, `readiness-mapping`, `intent-rounds`, `d
 Master spec refs: `docs/specs/027-northstar-native-pre-execution-discovery.md`
 Research refs: `bundle-docs/research/translation-memos/matt-pocock-skills-audit-to-northstar.md`
 Governing refs: `docs/architecture/system-architecture.md`, `docs/contracts/001-working-rules.md`
-Planning state: Batch 26.1 contract and checker complete; Batch 26.2 requires a
-planning checkpoint
+Planning state: Batch 26.1 contract and checker complete; Batch 26.2 planning
+checkpoint complete; `g02.026/077` ready for route implementation
 
 ## Problem
 
@@ -84,6 +84,6 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 
 ## Next task
 
-Run the next `g02.026` planning checkpoint for Batch 26.2. The next route must
-shape intent rounds, project language, decision prototypes, and questionnaire
-contracts before another implementation card is made ready.
+Execute `g02.026/077` through the isolated worker/PR loop. After its merge and
+closeout, compile the starter surfaces and worked example for Batch 26.3 before
+dogfooding Figmatic.
