@@ -55,8 +55,7 @@ rollover signal.
 ## Next Task
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
-consumer papercuts evidence. Begin the `g02.026` planning checkpoint from spec
-027; keep implementation cards deferred until the readiness-map contract is
-settled.
+consumer papercuts evidence. Execute `g02.026/075` through the worker/PR loop;
+keep implementation card `g02.026/076` planned until the contract is merged.
 
 Batch cards live in `g02/batch-cards/` when strict posture uses them.

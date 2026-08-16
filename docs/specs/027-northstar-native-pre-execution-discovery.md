@@ -197,17 +197,22 @@ messaging.
 3. Add the routed Northstar procedures and starter-bundle templates.
 4. Add architecture refocus and reframe, then dogfood the complete flow.
 
+## Resolved decisions for Batch 26.1
+
+- Readiness maps and their canonical decision records use bounded destination
+  subdirectories under `docs/specs/`.
+- The repository-native representation is Markdown with YAML frontmatter and
+  explicit relative links; the map is an index and decision rationale remains
+  in one canonical linked record.
+
 ## Open questions
 
-- Should decision records remain flat under `docs/specs/` or use a bounded
-  destination subdirectory?
-- Which repository-native file format gives the clearest frontier output without
-  introducing a second planning database?
 - How much of project language belongs in a glossary versus architecture or
   contract ownership records?
 - Which first consumer project will provide the strongest pre-execution test?
 
 ## Next task
 
-After `g02.025` orchestrator dogfood closeout, define the readiness-map file
-contract and deterministic frontier checks as the first `g02.026` batch.
+Implement `g02.026/075` to promote the exact readiness-map and decision-record
+file contract. Keep `g02.026/076` planned until that contract and its validation
+command are merged.

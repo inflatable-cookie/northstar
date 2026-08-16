@@ -77,6 +77,6 @@ sequence.
 ## Next Task
 
 No blocking roadmap milestone is open. `g02.025` is complete after the
-orchestrator/worker dogfood and closeout; begin the queued `g02.026` planning
-checkpoint from spec 027. Keep the provider adapter and packet-persistence
-choices open until more evidence exists.
+orchestrator/worker dogfood and closeout; execute `g02.026/075` to promote the
+readiness-map contract. Keep the provider adapter, packet-persistence, and
+frontier-check implementation choices bounded by the promoted contract.

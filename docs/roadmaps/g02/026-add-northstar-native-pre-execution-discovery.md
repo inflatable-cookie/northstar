@@ -1,6 +1,6 @@
 # 026 - Add Northstar Native Pre-Execution Discovery
 
-Status: planned
+Status: active
 Owner: repo maintainers
 Created: 2026-08-16
 Depends on: g02.025
@@ -8,7 +8,7 @@ Vision tags: `pre-execution-discovery`, `readiness-mapping`, `intent-rounds`, `d
 Master spec refs: `docs/specs/027-northstar-native-pre-execution-discovery.md`
 Research refs: `bundle-docs/research/translation-memos/matt-pocock-skills-audit-to-northstar.md`
 Governing refs: `docs/architecture/system-architecture.md`, `docs/contracts/001-working-rules.md`
-Planning state: queued behind the g02.025 orchestrator dogfood
+Planning state: compiling Batch 26.1 contract
 
 ## Problem
 
@@ -31,10 +31,10 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 
 ### Batch 26.1 - Define readiness state and frontier integrity
 
-- define the map and decision-record schema;
-- choose flat or bounded-subdirectory placement under `docs/specs/`;
+- `g02.026/075` — promote the map and decision-record file contract;
+- `g02.026/076` — implement deterministic orphan, cycle, and frontier checks
+  after the contract card is merged;
 - define status, ownership, blocking, resolution, and accepted-uncertainty fields;
-- add deterministic orphan, cycle, and frontier checks;
 - define the operator-owned transition gate.
 
 ### Batch 26.2 - Add intent and uncertainty-resolution procedures
@@ -82,6 +82,6 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 
 ## Next task
 
-Compile Batch 26.1 from this master spec and settle the readiness-map file
-contract, frontier representation, and execution gate before creating any
-implementation card.
+Review and execute `g02.026/075` through the existing worker/PR loop. Keep
+`g02.026/076` planned until the promoted contract and exact validation command
+are present.
