@@ -246,6 +246,6 @@ messaging.
 
 ## Next task
 
-Review and merge `g02.026/075` through the worker/PR loop. Keep
-`g02.026/076` planned until the promoted contract and its exact validation
-command are present in the merged canonical surfaces.
+Execute `g02.026/076` through the worker/PR loop. Its exact command contract is
+now defined in the ready card: `effigy check:readiness-map`,
+`effigy test:readiness-map`, and their `effigy qa:docs` integration.

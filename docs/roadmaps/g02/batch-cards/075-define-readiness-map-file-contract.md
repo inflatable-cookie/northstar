@@ -137,8 +137,9 @@ Promoted the readiness-map and decision-record contract into:
 - `docs/specs/027-northstar-native-pre-execution-discovery.md` — exact Batch
   26.1 contract and resolved placement/representation decisions.
 
-The dependent `g02.026/076` checker remains planned and cannot start until this
-contract is reviewed and merged. No checker, router, skill, template, or
+The dependent `g02.026/076` checker is now ready to execute through the
+worker/PR loop because the contract is reviewed and merged and its exact
+command surface is defined. No checker, router, skill, template, or
 production-code surface changed.
 
 ## Validation Evidence

@@ -26,16 +26,15 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02.023` is complete
 - `g02.024` is complete
 - `g02.025` is complete; batches 25.1, 25.2, 25.3, and 25.4 are complete.
-- `g02.026` is active; card 075 is complete and card 076 remains planned until
-  its exact checker command and ready-state evidence are explicit.
+- `g02.026` is active; card 075 is complete and card 076 is ready for
+  execution through the exact Effigy command contract in the card.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-`g02.025` is complete. Card `g02.026/075` is complete after the readiness-map
-contract PR and merge. Prepare `g02.026/076` by defining the exact frontier-check
-command and ready-state evidence before implementation. The completed dogfood
-log is `docs/logs/2026-08/16-181533-dogfood-orchestrator-worker-pr-loop.md`; the
-contract closeout is `docs/logs/2026-08/16-193431-readiness-map-contract-worker-pr-loop.md`.
+Execute `g02.026/076` through the worker/PR loop. Card 075 is complete and card
+076's exact frontier-check command and ready-state evidence are now explicit.
+The governing closeout evidence remains
+`docs/logs/2026-08/16-193431-readiness-map-contract-worker-pr-loop.md`.

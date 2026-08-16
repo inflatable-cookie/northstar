@@ -32,8 +32,8 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 ### Batch 26.1 - Define readiness state and frontier integrity
 
 - `g02.026/075` — complete; promoted the map and decision-record file contract;
-- `g02.026/076` — planned; implement deterministic orphan, cycle, and frontier
-  checks only after its exact command surface is ready;
+- `g02.026/076` — ready; implement deterministic orphan, cycle, and frontier
+  checks through the exact Effigy command contract above;
 - define status, ownership, blocking, resolution, and accepted-uncertainty fields;
 - define the operator-owned transition gate.
 
@@ -82,6 +82,5 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 
 ## Next task
 
-Prepare `g02.026/076` by defining its exact checker command and ready-state
-evidence. Keep implementation blocked until the promoted contract and command
-surface are explicit.
+Execute `g02.026/076` through the worker/PR loop. Its exact checker command,
+targeted fixture-test command, and ready-state evidence are defined in the card.
