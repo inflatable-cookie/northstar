@@ -49,7 +49,8 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 
 ### Batch 26.3 - Add starter surfaces and promotion path
 
-- add copy-ready templates and a worked docs-native example;
+- `g02.026/078` — ready; add copy-ready templates and a worked docs-native
+  Poodle `g15.006` example;
 - compile a cleared map into a master spec and roadmap lane;
 - update setup, operator, and template-bundle guidance;
 - add QA coverage for the new files and states.
@@ -85,6 +86,7 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 
 ## Next task
 
-Run the Batch 26.3 starter-surface planning checkpoint. Define the copy-ready
-project-language surface, worked example, cleared-map promotion path, and their
-validation before dogfooding Figmatic.
+Execute `g02.026/078` through the isolated worker/PR loop. After its reviewed
+merge and closeout, prepare the separate clean Poodle dogfood handoff for
+`g15.006`. Figmatic remains the later dogfood target after its direct
+interactive bug-fixing work returns to the orchestrator flow.

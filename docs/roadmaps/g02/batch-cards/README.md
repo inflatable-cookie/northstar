@@ -22,5 +22,5 @@ Use this folder for ready execution cards that sit under an active master spec.
 
 ## Next Task
 
-Add the first ready card only after the governing architecture, contracts, and
-roadmap lane already exist.
+`g02.026/078` is the current ready card: add discovery starter surfaces and the
+Poodle `g15.006` worked example through the isolated worker/PR loop.

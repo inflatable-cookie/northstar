@@ -131,4 +131,5 @@ merged as squash commit `42cebba35e50cbeb577c69857119971d021b5027`.
 ## Next Task
 
 The route implementation is merged and closed out. Compile the starter surfaces
-and worked example for Batch 26.3 before dogfooding Figmatic.
+and worked example for Batch 26.3 before dogfooding Poodle. Figmatic remains the
+later dogfood target while its direct interactive bug-fixing work continues.

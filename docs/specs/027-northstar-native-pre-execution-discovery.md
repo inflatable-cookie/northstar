@@ -240,10 +240,11 @@ messaging.
 
 ## Resolved decisions for Batch 26.2
 
-The first dogfood sequence is **Figmatic, then Poodle**. Figmatic is the stronger
-first stress test because its boundary between deterministic componentization and
-human-directed responsive behaviour is materially ambiguous and active. Poodle
-follows as a larger cross-runtime contract test.
+The first dogfood sequence is now **Poodle, then Figmatic**. Poodle is the next
+available dogfood target; Figmatic is temporarily reserved for direct interactive
+bug fixing and will return to the orchestrator flow afterwards. Poodle provides
+the larger cross-runtime contract and vocabulary test, while Figmatic remains the
+stronger later test of an actively ambiguous product boundary.
 
 Project language is local by default:
 
@@ -282,10 +283,46 @@ must leave a traceable path back to the readiness map and canonical decision
 records. No route can mark a map cleared, make a card ready, or bypass normal
 spec, promotion, roadmap, or operator gates.
 
+## Resolved decisions for Batch 26.3
+
+The starter-surface worked example targets Poodle's ready card
+`g15.006 — React Mirror Implementation and Gallery Closure`. It is a bounded,
+repository-backed example of the discovery and promotion path, not a change to
+the Poodle repository. The Poodle dogfood runs separately after the starter
+surfaces are implemented, reviewed, and merged.
+
+The example's destination-local project language includes:
+
+- release denominator;
+- measured gap;
+- React mirror;
+- focused evidence;
+- gallery specimen;
+- active cohort; and
+- deferred backend.
+
+These terms remain local to the Poodle example. Each entry records aliases,
+meaning, authority, status, and rejected ambiguity; none becomes global
+Northstar vocabulary automatically.
+
+The cleared-map promotion path is explicit and non-automatic:
+
+1. inspect the destination's current canonical docs;
+2. establish or repair the linked readiness map and decision records;
+3. resolve repository facts and route operator-owned questions separately;
+4. recompute and validate the deterministic frontier;
+5. write a promotion record linking the cleared map, evidence, master-spec
+   target, roadmap target, and operator gate;
+6. promote durable outcomes through normal architecture/contracts/spec surfaces;
+7. update roadmap/card status only after normal validation and authorization.
+
+The Poodle example must show this path without applying it to Poodle. Poodle's
+existing Effigy doctor findings are baseline board-health findings and must not
+be presented as new Batch 26.3 failures.
+
 ## Next task
 
-The Batch 26.2 route implementation is merged and closed out. Run the Batch 26.3
-starter-surface planning checkpoint: define the copy-ready project-language
-surface, worked example, cleared-map promotion path, and validation before
-dogfooding Figmatic. Keep architecture refocus, reframe, and consumer dogfood
-out of that planning checkpoint.
+The Batch 26.3 starter-surface planning checkpoint is complete. Execute
+`g02.026/078` through the isolated worker/PR loop. After its reviewed merge and
+closeout, prepare the separate clean Poodle dogfood handoff for `g15.006`.
+Keep architecture refocus, reframe, and Figmatic dogfooding out of card 078.
