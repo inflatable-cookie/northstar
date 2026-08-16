@@ -246,6 +246,6 @@ messaging.
 
 ## Next task
 
-Execute `g02.026/076` through the worker/PR loop. Its exact command contract is
-now defined in the ready card: `effigy check:readiness-map`,
-`effigy test:readiness-map`, and their `effigy qa:docs` integration.
+The Batch 26.1 contract and deterministic checker are complete and merged. Run
+the next `g02.026` planning checkpoint for Batch 26.2 before implementing the
+intent-rounds, project-language, decision-prototype, and questionnaire routes.

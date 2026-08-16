@@ -8,7 +8,8 @@ Vision tags: `pre-execution-discovery`, `readiness-mapping`, `intent-rounds`, `d
 Master spec refs: `docs/specs/027-northstar-native-pre-execution-discovery.md`
 Research refs: `bundle-docs/research/translation-memos/matt-pocock-skills-audit-to-northstar.md`
 Governing refs: `docs/architecture/system-architecture.md`, `docs/contracts/001-working-rules.md`
-Planning state: contract promoted; checker card planned
+Planning state: Batch 26.1 contract and checker complete; Batch 26.2 requires a
+planning checkpoint
 
 ## Problem
 
@@ -22,7 +23,8 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 - [ ] keep decisions, research, prototypes, and operator questions distinct
 - [ ] enforce a plan-only boundary that the map cannot override
 - [ ] compile a cleared map into the normal spec/promotion/roadmap chain
-- [ ] add starter templates and deterministic frontier checks
+- [ ] add starter templates
+- [x] add deterministic frontier checks
 - [ ] add architecture refocus and reframe as bounded planning/communication routes
 - [ ] preserve the current durable handoff and worker/PR contract
 - [ ] dogfood the complete flow on a new or materially ambiguous project
@@ -32,7 +34,7 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 ### Batch 26.1 - Define readiness state and frontier integrity
 
 - `g02.026/075` — complete; promoted the map and decision-record file contract;
-- `g02.026/076` — ready; implement deterministic orphan, cycle, and frontier
+- `g02.026/076` — complete; merged deterministic orphan, cycle, and frontier
   checks through the exact Effigy command contract above;
 - define status, ownership, blocking, resolution, and accepted-uncertainty fields;
 - define the operator-owned transition gate.
@@ -62,7 +64,7 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 
 - [x] current g02.025 dogfood is closed before this milestone becomes active;
 - [ ] readiness maps use existing docs authority surfaces and no external tracker;
-- [ ] frontier validation is deterministic and fail-closed on invalid state;
+- [x] frontier validation is deterministic and fail-closed on invalid state;
 - [ ] no implementation card becomes ready while a governing decision is unresolved;
 - [ ] operator-owned decisions cannot be resolved by agent-authored notes;
 - [ ] the no-fog early exit works on a small change;
@@ -82,5 +84,6 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 
 ## Next task
 
-Execute `g02.026/076` through the worker/PR loop. Its exact checker command,
-targeted fixture-test command, and ready-state evidence are defined in the card.
+Run the next `g02.026` planning checkpoint for Batch 26.2. The next route must
+shape intent rounds, project language, decision prototypes, and questionnaire
+contracts before another implementation card is made ready.

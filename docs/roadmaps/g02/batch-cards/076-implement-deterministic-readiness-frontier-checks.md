@@ -1,6 +1,6 @@
 # 076 - Implement Deterministic Readiness Frontier Checks
 
-Status: ready
+Status: complete
 Owner: repo maintainers
 Updated: 2026-08-16
 Master spec refs: `docs/specs/027-northstar-native-pre-execution-discovery.md`
@@ -80,10 +80,43 @@ integrity using the promoted Batch 26.1 file contract.
 - `effigy test:readiness-map`, `effigy qa`, and `effigy qa:docs` output;
 - explicit confirmation that no map or record file was mutated.
 
+## Resolution
+
+Implemented, independently reviewed, and merged through the Northstar
+worker/PR loop:
+
+- `effigy check:readiness-map`;
+- `effigy test:readiness-map`;
+- `effigy qa:docs` integration;
+- shared deterministic Rhai validation/parser logic;
+- committed valid, missing-reference, cycle, orphan, and operator-blocked
+  fixtures;
+- script documentation and repo-contract assertions.
+
+The implementation was merged in PR
+[inflatable-cookie/northstar#4](https://github.com/inflatable-cookie/northstar/pull/4)
+as squash commit `36fe4559290dc0878aaaa2d5c49fa15f6350f1cd`.
+
+## Validation Evidence
+
+- `git diff --check` — passed;
+- `effigy tasks` — both readiness commands registered;
+- `effigy doctor` — `ok:19 warn:0 err:0` after refreshing the derived graph index;
+- `effigy check:readiness-map` — live zero-map case passed;
+- valid fixture frontier — deterministic `choose-runtime, document-task`;
+- `effigy test:readiness-map` — five fixture cases passed;
+- invalid fixture commands — non-zero exits with actionable diagnostics;
+- consecutive valid-fixture runs — byte-identical output;
+- checker/test execution — no map, record, or fixture mutation;
+- `effigy qa` — passed;
+- `effigy qa:docs` — passed;
+- orchestrator review — `PASS`, recorded on PR #4.
+
 ## Continuation Envelope
 
 - Auto-start next card: no
-- In-bounds next card: none until this card is reviewed and merged
+- In-bounds next card: none; the next transition is a planning checkpoint for
+  Batch 26.2
 - Remaining ready chain after this card: 0
 - Transition proof required before the next card becomes ready: checker behavior,
   fixture evidence, and the next planning checkpoint are recorded
@@ -97,6 +130,7 @@ integrity using the promoted Batch 26.1 file contract.
 
 ## Next Task
 
-Execute this ready card through the existing orchestrator/worker PR loop. Keep
-implementation limited to the command contract above and do not begin the next
-readiness-mapping route until the checker evidence is reviewed and merged.
+Use the next planning checkpoint to shape Batch 26.2 — intent rounds, project
+language, decision prototypes, and questionnaire routes. Do not mark a new
+implementation card ready until its governing contracts, acceptance criteria,
+validation, and evidence requirements are explicit.
