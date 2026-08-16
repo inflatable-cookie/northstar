@@ -53,7 +53,22 @@ still relays messages between threads.
 
 → [`modes/orchestrator.md`](./modes/orchestrator.md)
 
-## 4. Normalize docs posture
+## 4. Agent instruction review
+
+Use when the user explicitly asks for an always-loaded instruction-surface
+review, especially:
+
+- `northstar AGENTS file review`;
+- review, audit, optimize, or compact `AGENTS.md`;
+- review the root `CLAUDE.md` bridge alongside `AGENTS.md`;
+- reduce agent-context noise or improve agent-run efficiency.
+
+This mode is target-repository-aware and docs-only. It must not inspect
+Northstar's own files when the target is a consumer repository.
+
+→ [`modes/agent-instruction-review.md`](./modes/agent-instruction-review.md)
+
+## 5. Normalize docs posture
 
 Use when the job is **repo shape and spine health** (initial or ongoing):
 
@@ -64,14 +79,14 @@ Use when the job is **repo shape and spine health** (initial or ongoing):
 
 → [`modes/normalize-docs.md`](./modes/normalize-docs.md)
 
-## 5. Research
+## 6. Research
 
 Use when **external evidence** must become architecture or contracts before
 roadmap work bets on it.
 
 → [`modes/research.md`](./modes/research.md)
 
-## 6. Recovery
+## 7. Recovery
 
 Use when planning **was valid but state is now untrustworthy**:
 
@@ -84,7 +99,7 @@ If planning coverage is **still missing**, use plan-from-scratch instead.
 → `replan-after-change.md`, `refocus-drifted-project.md`, or
 `sweep-audit-repair.md`
 
-## 7. Planning (default for implicit work)
+## 8. Planning (default for implicit work)
 
 Use when the job is **planning or sequencing** and recovery is not the main
 problem:

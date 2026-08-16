@@ -88,6 +88,8 @@ advisory heuristics, not semantic verdicts, and the task never edits files.
 effigy check:agent-instructions
 effigy check:agent-instructions AGENTS.md
 effigy check:agent-instructions skills/northstar/assets/templates/AGENTS.md
+# from the Northstar catalog, audit a consumer repository instead:
+effigy northstar/check:agent-instructions /path/to/project
 ```
 
 ## Posture advisory (`check:posture-advisory`)

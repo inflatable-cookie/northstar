@@ -1,6 +1,6 @@
 ---
 name: northstar
-description: Use for Northstar docs-spine work in this repo or a consumer project—planning, specs, contracts, roadmaps, research promotion, recovery after drift, ongoing normalization of docs posture, pre-execution discovery, and orchestrator-thread planning/PR review. Invoke automatically for plan, roadmap, contract, spec, research, recover, refocus, sweep, normalize/migrate/setup, readiness mapping, intent rounds, project language, decision prototypes, questionnaires, or explicit orchestrator-thread language. Handoff or continuation brief only when the user explicitly asks for a handoff, fresh thread, or spin-off—not for bare continue or context limits alone.
+description: Use for Northstar docs-spine and AGENTS/CLAUDE instruction-surface work in this repo or a consumer project—planning, specs, contracts, roadmaps, research promotion, recovery after drift, ongoing normalization, and explicit AGENTS file reviews. Invoke automatically for “northstar AGENTS file review”, plan, roadmap, contract, spec, research, recover, refocus, sweep, normalize/migrate/setup, readiness mapping, intent rounds, project language, decision prototypes, questionnaires, or explicit orchestrator-thread language. Handoff or continuation brief only when the user explicitly asks for a handoff, fresh thread, or spin-off—not for bare continue or context limits alone.
 ---
 
 # Northstar
@@ -16,6 +16,7 @@ open **one** [`references/modes/`](./references/modes/) file and follow it.
 | Mode | When |
 | --- | --- |
 | Handoff | User explicitly asks for a continuation brief / fresh thread |
+| Agent instruction review | User asks for a `northstar AGENTS file review`, or to review/optimize `AGENTS.md`/`CLAUDE.md` |
 | Pre-execution discovery | Readiness mapping, intent rounds, project language, decision prototypes, or questionnaires |
 | Orchestrator | User wants question-led planning plus a separate worker/PR loop |
 | Normalize docs | Bootstrap, migrate, or keep docs spine healthy over time |

@@ -1,11 +1,9 @@
-fn parse_targets(argv) {
-    if argv.len() > 0 {
-        return argv;
+fn resolve_path(base_root, raw_path) {
+    if str::starts_with(raw_path, "/") {
+        raw_path
+    } else {
+        path::join(base_root, raw_path)
     }
-    [
-        "AGENTS.md",
-        "skills/northstar/assets/templates/AGENTS.md",
-    ]
 }
 
 fn count_matching(lines, pattern) {
@@ -18,8 +16,8 @@ fn count_matching(lines, pattern) {
     count
 }
 
-fn audit_file(relative_path) {
-    let full_path = path::join(repo_root, relative_path);
+fn audit_file(target_root, relative_path) {
+    let full_path = resolve_path(target_root, relative_path);
     if !fs::is_file(full_path) {
         log_warn("[northstar:agent-instructions] missing: " + relative_path);
         return;
@@ -28,7 +26,7 @@ fn audit_file(relative_path) {
     let text = fs::read_file(full_path);
     let lines = str::split_lines(text);
     let non_blank = count_matching(lines, "\\S");
-    let bytes = text.len();
+    let bytes = fs::file_size(full_path);
     let approx_tokens = (bytes + 3) / 4;
     let headings = count_matching(lines, "^#{1,6} ");
     let links = count_matching(lines, "\\[[^]]+\\]\\([^)]*\\)");
@@ -79,8 +77,8 @@ fn audit_file(relative_path) {
     }
 }
 
-fn audit_claude_bridge(relative_path) {
-    let full_path = path::join(repo_root, relative_path);
+fn audit_claude_bridge(target_root, relative_path) {
+    let full_path = resolve_path(target_root, relative_path);
     if !fs::is_file(full_path) {
         log_warn("[northstar:agent-instructions] missing Claude bridge: " + relative_path);
         return;
@@ -94,12 +92,28 @@ fn audit_claude_bridge(relative_path) {
     }
 }
 
-for target in parse_targets(args) {
-    audit_file(target);
+let target_root = repo_root;
+let targets = [
+    "AGENTS.md",
+    "skills/northstar/assets/templates/AGENTS.md",
+];
+let bridges = [
+    "CLAUDE.md",
+    "skills/northstar/assets/templates/CLAUDE.md.template",
+];
+
+if args.len() > 0 && fs::is_dir(resolve_path(repo_root, args[0])) {
+    target_root = resolve_path(repo_root, args[0]);
+    targets = ["AGENTS.md"];
+    bridges = ["CLAUDE.md"];
 }
 
-for bridge in ["CLAUDE.md", "skills/northstar/assets/templates/CLAUDE.md.template"] {
-    audit_claude_bridge(bridge);
+for target in targets {
+    audit_file(target_root, target);
+}
+
+for bridge in bridges {
+    audit_claude_bridge(target_root, bridge);
 }
 
 log("Northstar agent-instruction audit complete (advisory; no files changed)");
