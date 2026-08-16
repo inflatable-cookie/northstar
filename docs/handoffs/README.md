@@ -46,7 +46,8 @@ Northstar handoff contract's seven core sections:
 The generic handoff should be a friendly, timestamped note written like a
 thoughtful teammate: clear, warm, plain-spoken, and honest about uncertainty.
 Worker handoffs use the same seven sections and add their worktree, runway,
-reporting, validation, and PR flow inside `Completion Protocol`.
+reporting, validation, PR flow, and startup worktree-safety/fallback instructions
+inside `Completion Protocol`.
 
 ## Relationship to logs
 

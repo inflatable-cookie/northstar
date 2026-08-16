@@ -28,12 +28,17 @@ roadmap readiness, launch preparation, and PR review. It does not implement the
 feature in the planning checkout once the worker boundary is declared.
 
 The operator creates a fresh worker thread in a dedicated worktree from the
-pushed `main` commit. The orchestrator has already committed and pushed the
-planning artifacts and one concrete worker handoff under `docs/handoffs/`. The
-worker receives only the repository-relative path to that handoff; the file
-contains the complete worker instructions and canonical references. The worker
-owns only the ready cards
-named in that file. It can execute several bounded cards in one thread, reports
+pushed `main` commit for each approved independent lane. The orchestrator has
+already committed and pushed the planning artifacts and one concrete worker
+handoff under `docs/handoffs/` per worker. The worker receives only the
+repository-relative path to that handoff; the file contains the complete worker
+instructions and canonical references. The worker owns only the ready cards
+named in that file. At startup, it quickly verifies that its current context is
+a clean, dedicated, non-`main` worktree matching the handoff. If the harness or
+operator did not provide one, or the context is dirty/incorrect, the worker
+creates a unique temporary worktree and branch from pushed `origin/main`, records
+that fallback, and continues only there without cleaning or discarding the
+original checkout. It can execute several bounded cards in one thread, reports
 after each meaningful chunk, updates execution evidence, and stops whenever the
 contract says planning or operator intent is required. When the assigned runway
 is complete, it opens a PR against the prepared base and returns the URL plus
@@ -73,8 +78,27 @@ operator-authorized action.
 | Role | Owns | Must not assume |
 | --- | --- | --- |
 | Operator | answers unresolved questions, starts the worker thread, relays reports/PR URLs, grants merge authority | that one thread can see another thread's private history |
-| Orchestrator | discovery, intent summary, promoted planning, ready runway, single-file handoff, PR review verdict, closeout | that a worker's narrative substitutes for diff/check evidence |
+| Orchestrator | discovery, intent summary, promoted planning, ready runway, per-worker handoff, PR review verdict, closeout | that a worker's narrative substitutes for diff/check evidence |
 | Worker | implementation in its worktree, bounded card execution, tests, commits, evidence, PR creation | new architecture, missing contracts, or scope expansion |
+
+## Parallel lane dispatch
+
+Before preparing a worker, the orchestrator inspects the active roadmap runway
+for multiple independent, bounded ready lanes that can run at the same time. It
+should offer multiple worker-thread prompts when all of the following hold:
+
+- lanes have no shared mutable files or overlapping write scope;
+- lanes have no ordering, data, or generated-artifact dependencies;
+- lanes do not contain overlapping authority decisions or unresolved intent;
+- each lane has its own ready cards, acceptance, validation, evidence, and stop
+  conditions;
+- each worker can use its own worktree, branch, and committed handoff.
+
+If any condition fails, keep the work serial and name the dependency or
+ambiguity. Parallelism is an offered execution shape, not a reason to split an
+unclear lane. Each parallel worker follows the same startup worktree-safety,
+PR, review-comment fallback, and explicit operator-authorised merge protocol
+independently.
 
 ## State model
 
@@ -95,38 +119,48 @@ Use these states in the worker handoff or log when the run spans turns:
 The orchestrator/worker boundary is a strict sequence:
 
 1. finish discovery and promote the spec, architecture, contract, and ready cards;
-2. put the planning checkout on `main` and remove unrelated changes;
-3. run required QA;
-4. commit all planning and roadmap artifacts to `main`; this is the planning
-   base recorded in the handoff as `BASE_REF`;
-5. create one concrete worker handoff from
+2. assess whether independent roadmap lanes can run in parallel; if so, keep one
+   worktree/branch/handoff plan per lane;
+3. put the planning checkout on `main` and remove unrelated changes;
+4. run required QA;
+5. commit all planning and roadmap artifacts to `main`; this is the planning
+   base recorded in each handoff as `BASE_REF`;
+6. create one concrete worker handoff from
    `skills/northstar/assets/templates/northstar-orchestrator-run.md.template`
-   under `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md`;
-6. commit that handoff to `main`, push `main`, and verify local `HEAD` equals
+   under `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md` per approved worker lane;
+7. commit the handoff set to `main`, push `main`, and verify local `HEAD` equals
    `origin/main`;
-7. create the worker branch/worktree from the current pushed `origin/main` tip.
-   Do not try to include the handoff commit's own SHA in the handoff file; that
+8. create each worker branch/worktree from the current pushed `origin/main` tip.
+   Do not try to include any handoff commit's own SHA in its handoff file; that
    would be self-referential because changing the file changes the commit SHA;
-8. give the worker thread only the repository-relative handoff path.
+9. give each worker thread only its own repository-relative handoff path.
 
 The worker must not require a separately copied prompt, transcript, or list of
 canonical refs. The handoff may point at canonical repository files, but it is
-the only external handoff artifact. Before editing, the worker verifies that
-`HEAD == origin/main`, the recorded planning base is an ancestor of `HEAD`, and
-the handoff file exists at `HEAD`.
+the only external handoff artifact. Before broad repo reads or editing, the
+worker runs the startup worktree-safety preflight. It uses the named worktree
+only when the current root/path and branch match, `git status --porcelain` is
+empty, the branch is not `main`, and `HEAD == origin/main`. Otherwise it creates
+a unique temporary worktree and branch from pushed `origin/main`, records the
+actual path and branch, and continues only there. A dirty original checkout is
+never cleaned, reset, or discarded. From the selected worktree, the worker then
+confirms the recorded planning base is an ancestor of `HEAD` and the handoff
+file exists at `HEAD`.
 
-## Required single-file handoff
+## Required per-worker handoff
 
 The orchestrator must create one concrete worker handoff from
 `skills/northstar/assets/templates/northstar-orchestrator-run.md.template` before
-the worker starts. It must preserve the seven core handoff sections, add the
-worker/PR flow inside `## Completion Protocol`, be committed to `main`, pushed,
-and verified against `origin/main`. The worker receives only its repository-
-relative path.
+each worker starts. Parallel lanes therefore receive separate handoff files;
+workers must not share an ambiguous combined brief. Each handoff must preserve
+the seven core handoff sections, add the worker/PR flow inside
+`## Completion Protocol`, be committed to `main`, pushed, and verified against
+`origin/main`. Each worker receives only its own repository-relative path.
 
 The file must contain or point to all information required for execution:
 
 - planning base commit, remote-tip verification, worker branch, and worktree command;
+- startup worktree-safety preflight and temporary-worktree fallback instructions;
 - active vision/architecture/contract refs;
 - active master spec and roadmap milestone;
 - ordered ready batch cards and allowed runway length;
@@ -138,22 +172,29 @@ The file must contain or point to all information required for execution:
 
 ## Worker protocol
 
-1. Read the supplied repository-relative handoff path first. Verify the
-   worktree and branch, fetch `origin`, confirm `HEAD == origin/main`, confirm
-   the recorded planning base is an ancestor of `HEAD`, and confirm the handoff
-   exists before editing.
-2. Read the active milestone, every assigned card, and governing refs.
-3. Run the repo's cheap orientation and relevant graph/query commands before code
+1. Read the supplied repository-relative handoff path first. Before broad repo
+   reads, run the startup worktree-safety preflight: identify the repository
+   root, current worktree, branch, and `git status --porcelain`.
+2. Use the named worktree only when it is clean, dedicated, non-`main`, matches
+   the handoff, and after fetching `origin` has `HEAD == origin/main`. If any
+   condition fails, do not edit the current checkout. Create a unique temporary
+   worktree and branch from pushed `origin/main`, record the actual path/branch,
+   and continue only there. Never clean, reset, or discard a dirty checkout.
+3. From the selected worktree, confirm the recorded planning base is an ancestor
+   of `HEAD` and confirm the handoff exists before editing.
+4. Read the active milestone, every assigned card, and governing refs.
+5. Run the repo's cheap orientation and relevant graph/query commands before code
    changes.
-4. Execute only ready cards in the stated order. Keep commits and reports aligned
+6. Execute only ready cards in the stated order. Keep commits and reports aligned
    to meaningful chunks, not arbitrary model turns.
-5. After each chunk, report changed surfaces, validation, remaining cards, and
+7. After each chunk, report changed surfaces, validation, remaining cards, and
    blockers for the operator to relay. Do not require live agent-to-agent access.
-6. Stop on a planning gap, contract contradiction, unresolved product choice,
+8. Stop on a planning gap, contract contradiction, unresolved product choice,
    failed validation that changes the plan, missing authority/access, or scope
    expansion. Record the stop in the card/log state.
-7. When the assigned runway is complete, run the required final checks, update
-   evidence and closeout surfaces, push the branch, and create a PR. Do not merge.
+9. When the assigned runway is complete, run the required final checks, update
+   evidence and closeout surfaces, push the selected branch, and create a PR. Do
+   not merge.
 
 ## Review protocol
 
@@ -200,7 +241,11 @@ The initial Northstar dogfood must prove:
 
 - the worker handoff path can be handed to a fresh thread without private chat
   context;
-- the worker remains in the dedicated worktree and branch;
+- the worker remains in a clean dedicated worktree and branch, or safely creates a
+  temporary worktree from pushed `origin/main` when the harness context is not
+  suitable;
+- the worker never edits `main` or discards dirty state while selecting its
+  worktree;
 - the worker completes at least one bounded card and reports evidence;
 - the worker opens a reviewable PR against the prepared base;
 - the orchestrator can find at least one real issue or explicitly record a clean

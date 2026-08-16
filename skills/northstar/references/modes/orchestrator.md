@@ -67,8 +67,13 @@ The operator relays worker messages and PR URLs between threads.
    Each handoff records the planning base commit from before the handoff was
    created. It must not try to contain the SHA of the commit that contains the
    handoff itself. After pushing the handoff set, create each worktree from the
-   current `origin/main` tip and let every worker verify `HEAD == origin/main`,
-   that its recorded planning base is an ancestor, and that its handoff exists.
+   current `origin/main` tip. The worker must run its startup worktree-safety
+   check before broad repo reads; if its current context is not a clean,
+   dedicated, non-`main` worktree matching the handoff, it must not edit there.
+   Instead it creates a unique temporary worktree and branch from the current
+   `origin/main`, records that fallback path, and continues only there. A dirty
+   current checkout is preserved; it is never cleaned, reset, or used for worker
+   edits.
 9. **Handle worker reports.** Treat operator-relayed reports as status evidence,
    not authority. After each chunk, reconcile card/log state and tell the
    operator the next report or action needed. If the worker reports a planning
@@ -103,7 +108,14 @@ manually pasted references are part of the protocol.
 The file must say, in substance:
 
 - you are the implementation worker, not the planning authority;
-- use the named worktree and branch only;
+- before broad repo reads, run the startup worktree-safety preflight: identify
+  the repository root, current worktree, branch, and `git status --porcelain`;
+- use the named worktree and branch only when it is clean, dedicated, non-`main`,
+  and matches the handoff;
+- if that preflight fails, do not edit the current checkout. Fetch `origin`,
+  create a unique temporary worktree and branch from `origin/main`, record the
+  fallback path/branch, and continue only from that temporary worktree;
+- never clean, reset, or discard a dirty checkout while creating the fallback;
 - run `git fetch origin`, confirm `HEAD == origin/main`, confirm the recorded
   planning base is an ancestor of `HEAD`, and confirm this handoff file exists;
 - read this file first; all canonical refs and instructions needed for the run
@@ -146,7 +158,9 @@ Stop and return to planning or the operator when:
 - the next card is not ready or the continuation envelope is exhausted;
 - the worker changes scope or contradicts the plan;
 - validation changes the plan or the PR cannot be reviewed honestly;
-- the base/worktree/branch boundary is not clean;
+- the startup preflight cannot establish a clean dedicated worker worktree and
+  the temporary-worktree fallback cannot be created;
+- the base/worktree/branch boundary remains unverifiable after fallback;
 - merge authority is not explicit.
 
 ## Completion shape

@@ -29,8 +29,8 @@ Each handoff keeps these seven sections in order:
 
 Write for a thoughtful teammate. Explain the story, use plain language, and be
 honest about what is still uncertain. Worker handoffs use the same seven sections
-and add worktree, runway, reporting, validation, and PR instructions inside the
-completion protocol.
+and add worktree, runway, reporting, validation, PR, and startup worktree-safety
+instructions inside the completion protocol.
 
 The handoff does not replace the batch log or roadmap closeout. It points to
 those artifacts when the next thread needs them.

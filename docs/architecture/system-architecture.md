@@ -83,15 +83,19 @@ preferred split is:
 `operator ↔ orchestrator thread -> canonical plan/runway -> worker thread/worktree -> PR -> orchestrator review -> merge/closeout`
 
 The orchestrator owns question-led discovery, promoted planning, ready-state,
-launch preparation, and review. The worker owns only the assigned ready cards in
-its dedicated worktree and branch. The operator relays reports and PR URLs while
-Northstar remains independent of provider-specific session messaging.
+launch preparation, and review. Each worker owns only the assigned ready cards in
+its dedicated worktree and branch. Independent roadmap lanes may use parallel
+worker threads, each with its own worktree, branch, handoff, PR, and closeout.
+The operator relays reports and PR URLs while Northstar remains independent of
+provider-specific session messaging.
 
 The durable boundary is the repository: architecture, contracts, specs, roadmap
-cards, one committed worker handoff under `docs/handoffs/`, pushed `main`, commits,
-validation, and PR review. Private model conversation is not an authority surface.
-A worker launch is valid only after the planning checkout has published `main`
-and the operator has a repository-relative handoff path to give the new thread.
+cards, one committed worker handoff per worker lane under `docs/handoffs/`, pushed
+`main`, commits, validation, and PR review. Private model conversation is not an
+authority surface. A worker launch is valid only after the planning checkout has
+published `main` and the operator has a repository-relative handoff path to give
+the new thread. The worker must then verify its startup worktree safety or create
+a temporary worktree from pushed `origin/main` before editing.
 
 ## Invariants
 
@@ -103,10 +107,18 @@ and the operator has a repository-relative handoff path to give the new thread.
   cards, roadmaps, and logs rather than jumping straight from idea to edits.
 - The public skill surface should remain small and deliberately routed.
 - Before dispatch, the planning checkout must publish canonical planning state
-  and one concrete worker handoff under `docs/handoffs/` on `main`; local-only
-  state is not a valid worker base.
-- The worker handoff is exactly one repository-relative path; no second prompt or
+  and one concrete worker handoff per approved worker lane under
+  `docs/handoffs/` on `main`; local-only state is not a valid worker base.
+- Parallel worker lanes are allowed only when their scopes, dependencies, and
+  authority decisions are independent; otherwise the orchestrator keeps the run
+  serial and records the reason.
+- Each worker handoff is exactly one repository-relative path; no second prompt or
   copied private context is required.
+- A worker must quickly verify that its current context is a clean, dedicated,
+  non-`main` worktree matching the handoff before broad reads or edits. If not,
+  it creates a unique temporary worktree and branch from pushed `origin/main`,
+  records the fallback path, and works only there. It never cleans, resets, or
+  discards a dirty checkout.
 - Orchestrator and worker threads must use separate worktree/branch boundaries;
   a worker may not edit the orchestrator's planning checkout.
 - A worker's completion authority is a reviewable PR plus evidence, not a chat
