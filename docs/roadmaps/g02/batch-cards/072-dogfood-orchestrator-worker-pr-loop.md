@@ -1,6 +1,6 @@
 # 072 - Dogfood Orchestrator Worker PR Loop
 
-Status: ready
+Status: complete
 Owner: repo maintainers
 Updated: 2026-08-16
 Master spec refs: `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`
@@ -32,8 +32,10 @@ and orchestrator closeout.
 ## Scope
 
 - prepare and publish `main` with the planning artifacts;
-- create one mandatory worker handoff under `docs/handoffs/` and commit/push it on `main`;
-- create a fresh worker thread in a dedicated worktree from pushed `main`;
+- create one mandatory worker handoff under `docs/handoffs/` and commit/push it on
+  `main`; record the planning ancestor rather than a self-referential handoff SHA;
+- create a fresh worker thread in a dedicated worktree from the current pushed
+  `origin/main` tip;
 - give the worker only the repository-relative handoff path;
 - exercise approval or requested-changes review
 - measure elapsed time, rework, review cycles, validation, and relay burden
@@ -98,7 +100,17 @@ and orchestrator closeout.
 - stop if the PR cannot be reviewed against canonical refs
 - stop if merge authority is not explicit
 
+## Resolution
+
+Completed. Three dispatch attempts exposed and then repaired the handoff-base
+protocol; the successful run verified the dedicated worktree, remote tip,
+planning ancestor, and handoff presence. One bounded worker report produced a
+one-file PR, independent review passed, explicit merge authorization was given,
+and PR #2 was squash-merged. Measurements and remaining reporting friction are
+recorded in `docs/logs/2026-08/16-181533-dogfood-orchestrator-worker-pr-loop.md`.
+
 ## Next Task
 
-After closeout, decide whether to add a provider adapter, revise worker-handoff
-placement, or keep the manual operator-mediated path as the default.
+Close `g02.025` and begin the `g02.026` planning checkpoint. Keep provider
+adapters, packet persistence, and automatic cross-session messaging open until
+more than this one dogfood run justifies a default.

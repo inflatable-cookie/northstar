@@ -13,7 +13,7 @@ single-pilot bucket.
 | --- | --- | --- | --- |
 | Keep proving Northstar against real consumer repositories before treating stricter posture as settled doctrine. | active | `docs/contracts/001-working-rules.md`, `docs/specs/012-consumer-repo-autonomy-proof-and-adoption.md`, `docs/specs/013-stricter-consumer-repo-autonomy-adoption.md` | pending |
 | Harden setup, nested-authority adoption, and posture classification so downstream repos can install the spine without hand adaptation. | active | `docs/specs/020-formalize-nested-docs-authority-setup.md`, `docs/specs/022-formalize-repo-posture-classification.md` | pending |
-| Keep execution autonomy bounded by ready cards, lane budgets, pause signals, and a file-based orchestrator/worker PR boundary instead of ad-hoc continuation prompts. | active | `docs/contracts/001-working-rules.md`, `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `bundle-docs/sections/07-delivery-framework-and-autonomy.md` | `g02.025` dogfood |
+| Keep execution autonomy bounded by ready cards, lane budgets, pause signals, and a file-based orchestrator/worker PR boundary instead of ad-hoc continuation prompts. | active | `docs/contracts/001-working-rules.md`, `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `bundle-docs/sections/07-delivery-framework-and-autonomy.md` | `g02.026` planning checkpoint |
 | Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | pending |
 
 Update this runway only when generation-level intent changes, a milestone
@@ -54,9 +54,9 @@ rollover signal.
 
 ## Next Task
 
-`g02.024` is complete. Its planning input was the consumer papercuts evidence.
-Run `g02.025/072` through a fresh worker/worktree PR loop; the parity checker
-and installed skill distribution are now proven.
-
+`g02.025` is complete. `g02.024` is complete; its planning input was the
+consumer papercuts evidence. Begin the `g02.026` planning checkpoint from spec
+027; keep implementation cards deferred until the readiness-map contract is
+settled.
 
 Batch cards live in `g02/batch-cards/` when strict posture uses them.

@@ -76,6 +76,7 @@ sequence.
 
 ## Next Task
 
-No blocking roadmap milestone is open. `g02.025` is the active orchestrator/worker
-PR-loop lane; run `g02.025/072` next. Keep the provider adapter and
-packet-persistence choices open until worker/PR evidence exists.
+No blocking roadmap milestone is open. `g02.025` is complete after the
+orchestrator/worker dogfood and closeout; begin the queued `g02.026` planning
+checkpoint from spec 027. Keep the provider adapter and packet-persistence
+choices open until more evidence exists.
