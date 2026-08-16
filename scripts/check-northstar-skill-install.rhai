@@ -49,7 +49,14 @@ for relative in target_files {
 }
 
 if problems.len() > 0 {
-    throw(problems.join(", "));
+    let message = "";
+    for problem in problems {
+        if message != "" {
+            message += ", ";
+        }
+        message += problem;
+    }
+    throw(message);
 }
 
 log("Northstar skill install parity: OK (" + source_files.len() + " files)");

@@ -7,12 +7,11 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 
 <!-- Keep entries short. Append newest entries at the top. Do not include secrets. -->
 
-- **2026-08-16 — skill parity checker runtime:** `effigy check:skill-install
-  /Users/tom/.agents/skills/northstar` fails before comparison because the
-  current Effigy runtime does not provide `join(array, ...)`; impact is that
-  source/install parity cannot be proven by the intended command; plausible fix
-  is to update `scripts/check-northstar-skill-install.rhai` to the supported
-  join idiom or pin the task runtime; affected surface is the parity checker.
+- **2026-08-16 — skill parity checker runtime (resolved):** `effigy
+  check:skill-install` failed before comparison because the runtime did not
+  provide array `.join(...)`; impact was that source/install parity could not be
+  proven; fixed by using an explicit separator loop in
+  `scripts/check-northstar-skill-install.rhai`; parity now passes for 32 files.
 
 - **2026-08-16 — roadmap provenance check:** the docs QA also requires the phrase
   `consumer papercuts evidence` in the g02 front door after the next-task rewrite;

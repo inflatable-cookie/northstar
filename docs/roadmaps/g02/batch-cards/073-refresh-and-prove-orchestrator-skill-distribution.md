@@ -1,6 +1,6 @@
 # 073 - Refresh And Prove Orchestrator Skill Distribution
 
-Status: blocked
+Status: complete
 Owner: repo maintainers
 Updated: 2026-08-16
 Master spec refs: `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`
@@ -20,20 +20,20 @@ installed skill copy and prove source/install parity before dogfood.
 - record exact source/install comparison evidence;
 - do not change the orchestrator protocol or add provider-specific automation.
 
-## Blocker
+## Resolution
 
-`effigy check:skill-install /Users/tom/.agents/skills/northstar` currently fails
-before comparison because the runtime does not provide `join(array, ...)`. The
-source tree and installed tree are therefore not parity-proven.
+The checker failed because the current Rhai runtime does not expose array
+`.join(...)`. Replaced that call with an explicit separator loop. The checker now
+passes against the refreshed installed skill with 32 files.
 
 ## Acceptance Criteria
 
-- the parity command exits successfully;
-- source and installed file sets and contents match;
-- the installed copy contains `references/modes/orchestrator.md` and
+- [x] the parity command exits successfully;
+- [x] source and installed file sets and contents match;
+- [x] the installed copy contains `references/modes/orchestrator.md` and
   `assets/templates/northstar-orchestrator-run.md.template`;
-- a fresh Hermes/consumer session can load the updated router and mode;
-- no unrelated installed-skill changes are introduced.
+- [x] a fresh Hermes/consumer session can load the updated router and mode;
+- [x] no unrelated installed-skill changes are introduced.
 
 ## Evidence Required
 
@@ -45,9 +45,9 @@ source tree and installed tree are therefore not parity-proven.
 ## Continuation Envelope
 
 - Auto-start next card: no
-- In-bounds next card: none
-- Remaining ready chain after this card: 0
-- Transition proof required before auto-start: parity passes
+- In-bounds next card: `g02.025/072`
+- Remaining ready chain after this card: 1
+- Transition proof required before auto-start: operator starts the worker dogfood
 
 ## Lane Budget
 
@@ -65,5 +65,5 @@ source tree and installed tree are therefore not parity-proven.
 
 ## Next Task
 
-Repair the parity-checker runtime path, refresh the installed skill, and prove
-parity before running `g02.025/072`.
+Run `g02.025/072` through a fresh worker thread, dedicated worktree, operator-
+relayed chunk report, and reviewable PR.
