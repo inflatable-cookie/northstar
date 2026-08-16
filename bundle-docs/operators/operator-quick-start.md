@@ -56,6 +56,7 @@ to pick one mode:
 - “Replan this after the contract change” -> `northstar` (replan-after-change)
 - “Refocus this project under Northstar” -> `northstar` (refocus-drifted-project)
 - “Turn this memo into contracts” -> `northstar` (research)
+- “Create an orchestrator runway and worker PR loop” -> `northstar` (orchestrator mode)
 - “Create a handoff for the next thread” -> `northstar` (handoff mode)
 
 If humans are going to reuse the same opener across multiple threads, use:

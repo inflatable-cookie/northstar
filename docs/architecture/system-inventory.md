@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-08-06
+Updated: 2026-08-16
 Architecture refs: docs/architecture/system-architecture.md
 
 ## Coverage Summary
@@ -23,6 +23,9 @@ skills.
 | `docs/` | live planning surface | repo maintainers | Northstar's own planning and execution state | all files in this repo-local docs spine |
 | `scripts/` and `effigy` checks | validation surface | repo maintainers | repo integrity and enforcement hooks | `scripts/check-northstar-repo-contract.rhai`, roadmap evidence requirements |
 | root `PAPERCUTS.md` | agent feedback surface | executing agents + repo maintainers | owning repository root | `bundle-docs/papercuts.md`, agent templates, working rules |
+| orchestrator thread | conversational planning and review surface | repo maintainers / operator | active Northstar lane | `skills/northstar/references/modes/orchestrator.md`, active spec/roadmap/contract |
+| worker thread/worktree | bounded implementation surface | worker agent | assigned ready cards and branch | orchestrator packet, `AGENTS.md`, batch cards, tests, commits |
+| PR review boundary | delivery and merge-control surface | orchestrator + operator | worker branch against prepared base | PR metadata, diff, checks, review verdict, closeout log |
 
 ## Interfaces and Dependencies
 
@@ -33,6 +36,9 @@ skills.
 | Spec-to-roadmap execution | `docs/specs/` | `docs/roadmaps/`, `docs/logs/` | `001-working-rules` | Batch cards are the detailed execution unit |
 | Validation loop | roadmap/log state | `effigy qa`, `effigy qa:docs` | `001-working-rules` | Validation evidence is required for closure |
 | Papercut feedback | agent execution | maintenance triage and normal planning surfaces | `bundle-docs/papercuts.md`, `001-working-rules` | Notes are captured at encounter time and promoted only after triage |
+| Orchestrator planning | operator conversation + canonical planning spine | worker launch packet | `026-orchestrator-thread-and-worker-pr-loop` | Questions settle intent before cards are marked ready |
+| Worker execution | launch packet + ready cards | worker branch/worktree and evidence | `001-working-rules`, active batch cards | Worker stops rather than infers missing behavior |
+| PR review and merge | worker branch/PR | orchestrator verdict + operator-authorised merge | `001-working-rules`, active cards | Review uses diff/check evidence; merge is separate from PR creation |
 
 ## Validation Surfaces
 
@@ -43,8 +49,10 @@ skills.
 | Delivery-layer adoption | active docs spine, compact working rules, spec, roadmap, log | repo maintainers | ready |
 | Template/skill promotion | follow-on roadmap batches and logs | repo maintainers | pending |
 | Papercut loop | root queue, doctrine, templates, skill instruction, and QA coverage | repo maintainers | ready |
-| Published skill parity | Skills CLI update path, global install inspection, and source checker | repo maintainers | ready |
+| Published skill parity | Skills CLI update path, global install inspection, and source checker | repo maintainers | source/install drift; parity checker blocked by Effigy `join` runtime error |
 | Consumer papercut proof | real consumer queue entry and manual triage boundary | repo maintainers + consumer owner | observed |
+| Orchestrator mode | packet, fresh worker worktree, chunk report, PR, review, and closeout evidence | repo maintainers + operator | designed; dogfood pending |
+| Model-efficiency comparison | measured role routing, rework, review cycles, and relay burden | repo maintainers | pending dogfood |
 
 ## Planning Gaps
 
@@ -53,3 +61,7 @@ skills.
 - `skills/` do not yet consistently emit master specs, batch cards, and
   autonomy envelopes by default.
 - The live repo pilot has not yet proven a longer autonomous multi-card run.
+- The orchestrator packet and PR loop have not yet been proven in a real fresh
+  worker thread/worktree; adapter and persistence defaults remain open.
+- The new source skill is not yet distributed to the installed skill copy; the
+  intended parity checker is currently blocked by an Effigy runtime mismatch.

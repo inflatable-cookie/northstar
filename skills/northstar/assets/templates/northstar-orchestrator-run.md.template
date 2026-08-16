@@ -1,0 +1,82 @@
+---
+title: {{TOPIC}} orchestrator run
+status: ready-to-launch
+owner: {{OWNER}}
+updated: {{YYYY-MM-DD}}
+kind: orchestrator-run
+---
+
+## Intent Summary
+
+{{ONE_PARAGRAPH_SUMMARY_OF_THE_SETTLED_OUTCOME}}
+
+## Canonical Authority
+
+- Vision: {{VISION_REF}}
+- Architecture: {{ARCHITECTURE_REFS}}
+- Contracts: {{CONTRACT_REFS}}
+- Master spec: {{SPEC_REF}}
+- Roadmap milestone: {{ROADMAP_REF}}
+- Ready cards, in order: {{CARD_REFS}}
+
+## Prepared Base
+
+- Repository: {{REPOSITORY}}
+- Base ref: {{BASE_REF}}
+- Planning checkout status: {{CLEAN_OR_EXPLICIT_EXCEPTION}}
+- Planning artifacts available at base: {{COMMITTED_REF_OR_OPERATOR_STEP}}
+- Worker branch: {{WORKER_BRANCH}}
+- Worker worktree: {{WORKTREE_PATH}}
+
+## Worker Runway
+
+- Allowed cards/chunks: {{ASSIGNED_RUNWAY}}
+- Remaining card budget: {{CARD_COUNT_OR_TIME_BOUND}}
+- Model capability profile: {{WORKER_PROFILE}}
+- Tool/runtime restrictions: {{RESTRICTIONS_OR_NONE}}
+- Report after: {{MEANINGFUL_CHUNK_DEFINITION}}
+
+## Worker Prompt
+
+You are the implementation worker for the Northstar lane named above. Work only
+in `{{WORKTREE_PATH}}` on `{{WORKER_BRANCH}}`. Read this packet, the active
+milestone, every assigned card, `AGENTS.md`, and the governing refs before
+editing.
+
+Execute the ready cards in order. Do not invent architecture, change contracts,
+expand scope, or use another worktree. After each meaningful chunk, report through
+the operator with: changed files, tests/validation actually run, remaining card,
+new risks, and any blocker. Stop and record a planning gap if intent, ownership,
+contracts, or validation becomes ambiguous.
+
+When the assigned runway is complete, update the card/log evidence required by
+the cards, run the final checks, push `{{WORKER_BRANCH}}`, and open a PR against
+`{{BASE_REF}}`. The PR body must link the spec, milestone, cards, evidence,
+validation, and unresolved items. Do not merge.
+
+## PR Completion Contract
+
+- PR URL: {{PR_URL_OR_PENDING}}
+- Base/head: {{PR_BASE_AND_HEAD}}
+- Required checks: {{CHECKS}}
+- Required review outcome: {{APPROVE_OR_REQUEST_CHANGES}}
+- Merge authorisation: {{OPERATOR_AUTHORITY_STATE}}
+
+## Orchestrator Review Notes
+
+- Review state: {{AWAITING_REVIEW_OR_OTHER_STATE}}
+- Diff/check findings: {{FINDINGS}}
+- Requested changes: {{REQUESTED_CHANGES_OR_NONE}}
+- Closeout refs: {{CARD_LOG_ROADMAP_FRONT_DOORS}}
+
+## Stop And Escalate
+
+Stop rather than improvise if:
+
+- a required contract or authority is missing;
+- a product, API, persistence, security, concurrency, or deployment choice is
+  unresolved;
+- validation fails in a way that changes the plan;
+- the branch/worktree/base boundary is not clean;
+- the assigned runway is exhausted;
+- the PR cannot be reviewed against the canonical refs.

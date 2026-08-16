@@ -1,6 +1,6 @@
 ---
 name: northstar
-description: Use for Northstar docs-spine work in this repo or a consumer project—planning, specs, contracts, roadmaps, research promotion, recovery after drift, and ongoing normalization of docs posture. Invoke automatically for plan, roadmap, contract, spec, research, recover, refocus, sweep, or normalize/migrate/setup language. Handoff or continuation brief only when the user explicitly asks for a handoff, fresh thread, or spin-off—not for bare continue or context limits alone.
+description: Use for Northstar docs-spine work in this repo or a consumer project—planning, specs, contracts, roadmaps, research promotion, recovery after drift, ongoing normalization of docs posture, and orchestrator-thread planning/PR review. Invoke automatically for plan, roadmap, contract, spec, research, recover, refocus, sweep, normalize/migrate/setup, or explicit orchestrator-thread language. Handoff or continuation brief only when the user explicitly asks for a handoff, fresh thread, or spin-off—not for bare continue or context limits alone.
 ---
 
 # Northstar
@@ -16,6 +16,7 @@ open **one** [`references/modes/`](./references/modes/) file and follow it.
 | Mode | When |
 | --- | --- |
 | Handoff | User explicitly wants a continuation brief / fresh thread |
+| Orchestrator | User wants question-led planning plus a separate worker/PR loop |
 | Normalize docs | Bootstrap, migrate, or keep docs spine healthy over time |
 | Research | Evidence → architecture/contracts |
 | Recovery | Drifted or changed planning state |
@@ -33,6 +34,7 @@ is not a contract gap by itself.
 - **Research:** promoted decisions in architecture/contracts, not stranded memos.
 - **Recovery:** trustworthy planning surfaces and canonical refs restored.
 - **Normalize:** baseline or strict spine installed/maintained; Effigy-first QA.
+- **Orchestrator:** question-led planning, worker launch packet, bounded PR review loop.
 - **Handoff:** seven-section brief for another thread (plus any consumer
   trailing headings the target docs policy requires); not a substitute for
   log/roadmap closeout.
@@ -73,6 +75,7 @@ Northstar source repo, expanded doctrine lives at
 - Setup/templates: [`assets/templates/`](./assets/templates/)
 - Papercuts starter: `assets/templates/PAPERCUTS.md`
 - Handoff template: [`assets/templates/northstar-handoff.md.template`](./assets/templates/northstar-handoff.md.template)
+- Orchestrator run packet: [`assets/templates/northstar-orchestrator-run.md.template`](./assets/templates/northstar-orchestrator-run.md.template)
 - Handoff contract: [`references/handoff-contract.md`](./references/handoff-contract.md)
 
 ## Do not

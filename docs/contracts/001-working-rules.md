@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-05-19
+Updated: 2026-08-16
 Depends on: docs/architecture/system-architecture.md
 Authority owners: repo maintainers
 Affects: bundle-docs, template-bundle, skills, docs, scripts
@@ -291,6 +291,57 @@ Work in this repo is not done unless:
 - When that upper bound is reached cleanly, use `budget-exhausted` instead of
   implying that a hard stop condition fired.
 
+### Orchestrator and worker boundary
+
+For material work that benefits from a separate implementation context, use the
+following authority split:
+
+- the **orchestrator thread** owns question-led discovery, intent summary,
+  promoted architecture/contracts, roadmap readiness, worker launch preparation,
+  and PR review;
+- the **worker thread** owns implementation only inside its dedicated worktree
+  and branch, the assigned ready cards, tests, commits, evidence, and PR
+  creation;
+- the **operator** answers unresolved questions, starts the separate worker
+  thread, relays reports and PR URLs, and explicitly authorises merge when that
+  action is desired.
+
+The repository is the durable communication boundary. A worker must be able to
+re-enter from the launch packet, `AGENTS.md`, canonical refs, cards, commits,
+tests, and PR metadata; private conversation history is not required authority.
+
+Before a worker starts:
+
+- the base ref is explicit and the planning checkout is clean or its exception
+  is recorded;
+- the worker has a separate worktree and branch; it must not edit the
+  orchestrator's planning checkout;
+- every assigned card is already ready, ordered, and inside the continuation
+  envelope;
+- the packet names scope, acceptance, validation, evidence, stop conditions,
+  report cadence, and PR base/head expectations.
+
+During execution:
+
+- the worker reports after meaningful chunks with changed surfaces, validation,
+  remaining cards, blockers, and new risks;
+- the worker stops on a planning gap, contract contradiction, unresolved product
+  choice, scope expansion, missing authority/access, or validation failure that
+  changes the plan;
+- the worker may continue through in-bounds ready cards without a new operator
+  prompt, but may not invent the next card or architecture.
+
+A worker completes the assigned runway with a pushed branch, evidence, and a
+reviewable PR. PR creation is not approval or merge. The orchestrator reviews the
+actual diff, changed files, commits, and checks against canonical refs. It may
+request changes or approve; merge remains a separate action requiring explicit
+operator authorisation. Requested changes return to the same worker branch when
+possible, followed by another review cycle.
+
+Northstar does not require live cross-session messaging, provider subagents, or
+hosted coding agents. Those are optional adapters; they must not weaken the
+file-based planning, worktree, PR, and review boundaries.
+
 ### Automation runtime policy
 
 - Prefer `effigy` when it already covers the repo operation.
@@ -424,6 +475,7 @@ working-rules contract until separate seam contracts become necessary.
 - `g02.008`
 - `g02.009`
 - `g02.010`
+- `g02.024` through `g02.025` (skill distribution and orchestrator/worker PR loop)
 
 ## Planning Notes
 

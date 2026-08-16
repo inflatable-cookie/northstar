@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-08-06
+Updated: 2026-08-16
 Vision refs: docs/vision/001-northstar-delivery-vision.md
 
 ## Top-Level Stack
@@ -38,6 +38,22 @@ Vision refs: docs/vision/001-northstar-delivery-vision.md
 - published skill propagation and source/install parity should remain explicit
   so multi-harness installs do not depend on manual operator memory.
 
+## Thread topology
+
+For material work that benefits from a separate implementation context, the
+preferred split is:
+
+`operator ↔ orchestrator thread -> canonical plan/runway -> worker thread/worktree -> PR -> orchestrator review -> merge/closeout`
+
+The orchestrator owns question-led discovery, promoted planning, ready-state,
+launch preparation, and review. The worker owns only the assigned ready cards in
+its dedicated worktree and branch. The operator relays reports and PR URLs while
+Northstar remains independent of provider-specific session messaging.
+
+The durable boundary is the repository: architecture, contracts, specs, roadmap
+cards, packet/log artifacts, commits, validation, and PR review. Private model
+conversation is not an authority surface.
+
 ## Invariants
 
 - `bundle-docs/` remains the doctrine authority for the reusable system.
@@ -47,6 +63,12 @@ Vision refs: docs/vision/001-northstar-delivery-vision.md
 - Material delivery work should flow through contracts, master specs, batch
   cards, roadmaps, and logs rather than jumping straight from idea to edits.
 - The public skill surface should remain small and deliberately routed.
+- Orchestrator and worker threads must use separate worktree/branch boundaries;
+  a worker may not edit the orchestrator's planning checkout.
+- A worker's completion authority is a reviewable PR plus evidence, not a chat
+  claim. The orchestrator reviews the diff and checks against canonical refs.
+- Provider-native subagents, session messaging, and hosted agents are optional
+  adapters, not Northstar protocol dependencies.
 - Papercuts remain an observation queue, not a competing planning authority or
   automatic work queue.
 

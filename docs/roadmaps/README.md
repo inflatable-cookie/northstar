@@ -25,8 +25,15 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02.022` is complete
 - `g02.023` is complete
 - `g02.024` is complete
+- `g02.025` is active; batches 25.1 and 25.2 are complete, distribution card
+`g02.025/073` is blocked on the parity-checker runtime, and dogfood card
+`g02.025/072` is ready after parity.
+
+The preceding `g02.024` milestone was compiled from the consumer papercuts
+evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Compile the next contract-backed `g02` milestone from the consumer papercuts
-proof; keep consumer triage manual until evidence warrants promotion.
+Complete `g02.025/073` first: repair the parity-checker runtime path and refresh
+the installed skill. Then dogfood `g02.025/072` with one fresh worker thread,
+one dedicated worktree, and one reviewable PR.
