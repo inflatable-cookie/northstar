@@ -42,6 +42,7 @@ resulting PR without depending on private cross-thread history.
 ### Batch 25.3 - Dogfood And Measure The Loop
 
 - [ ] choose one bounded, low-risk consumer or Northstar lane
+- [ ] use `g02.025/074` as the one-file worker probe if no independent ready card exists
 - [ ] prepare main, create a dedicated worktree, and run a fresh worker thread
 - [ ] relay at least one chunk report and one PR URL to the orchestrator
 - [ ] exercise approval or requested-changes review
