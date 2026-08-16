@@ -52,10 +52,16 @@ The operator relays worker messages and PR URLs between threads.
    keep the seven core handoff sections and add worker-mode/PR instructions
    inside `## Completion Protocol`. It is mandatory, must be committed and
    pushed on `main`, and must contain the complete worker instructions, refs,
-   runway, base verification, worktree/branch command, reporting rules, stop
-   conditions, and PR contract. Give the new worker thread only this file's
+   runway, planning base verification, worktree/branch command, reporting rules,
+   stop conditions, and PR contract. Give the new worker thread only this file's
    repository-relative path. Do not provide a second prompt or require copied
    context.
+
+   The handoff records the planning base commit from before the handoff was
+   created. It must not try to contain the SHA of the commit that contains the
+   handoff itself. After pushing the handoff, create the worktree from the
+   current `origin/main` tip and let the worker verify `HEAD == origin/main`,
+   that the recorded planning base is an ancestor, and that the handoff exists.
 8. **Handle worker reports.** Treat operator-relayed reports as status evidence,
    not authority. After each chunk, reconcile card/log state and tell the
    operator the next report or action needed. If the worker reports a planning
@@ -75,15 +81,19 @@ The operator relays worker messages and PR URLs between threads.
 
 The orchestrator creates exactly one concrete worker handoff from the shared
 handoff template, commits it to `main`, pushes `main`, and verifies the remote
-base before dispatch. The operator starts the fresh worker thread in the named
-worktree and gives it only the repository-relative path to that handoff. No
-second prompt, transcript copy, or manually pasted references are part of the
-protocol.
+tip before dispatch. The handoff records the planning base commit from before
+the handoff was created; it must not contain a self-referential hash for the
+commit that contains the handoff. The operator starts the fresh worker thread in
+the named worktree and gives it only the repository-relative path to that
+handoff. No second prompt, transcript copy, or manually pasted references are
+part of the protocol.
 
 The file must say, in substance:
 
 - you are the implementation worker, not the planning authority;
 - use the named worktree and branch only;
+- run `git fetch origin`, confirm `HEAD == origin/main`, confirm the recorded
+  planning base is an ancestor of `HEAD`, and confirm this handoff file exists;
 - read this file first; all canonical refs and instructions needed for the run
   are named inside it;
 - execute only the ordered ready cards;
