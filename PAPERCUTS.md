@@ -7,6 +7,27 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 
 <!-- Keep entries short. Append newest entries at the top. Do not include secrets. -->
 
+- **2026-08-17 — installed-skill audit discoverability:** `SKILL.md`, the
+  router, and normalize-docs mode do not name `effigy
+  check:agent-instructions` or contract 003, so the Poodle consumer review
+  required searching the Northstar source checkout; impact is that an agent
+  will not discover the review process without an operator hint; plausible fix
+  is to route AGENTS review requests explicitly from normalize-docs; affected
+  surfaces are the installed Northstar skill and normalize-docs reference.
+
+- **2026-08-17 — agent-instruction audit target bridge scope:** auditing
+  `../poodle/AGENTS.md` still checked Northstar's root/template Claude bridges
+  and reported both OK while Poodle's bridge lacked exact `@AGENTS.md`; impact
+  is a false-green consumer bridge result; plausible fix is to derive the
+  bridge from each target root or accept explicit bridge paths; affected
+  surface is `scripts/check-northstar-agent-instructions.rhai`.
+
+- **2026-08-17 — agent-instruction audit byte metric:** the audit reports
+  `text.len()` as bytes, but Poodle's Unicode-bearing `AGENTS.md` measured 5,413
+  bytes with `wc -c` while the audit reported 5,397; impact is understated byte
+  and approximate-token evidence; plausible fix is to count encoded bytes;
+  affected surface is `scripts/check-northstar-agent-instructions.rhai`.
+
 - **2026-08-16 — path-only worker handoff resolution:** the fresh worker's first
   relative `read_file` lookup resolved under `/Users/tom` instead of the named
   worktree and required repository search to recover the handoff path; impact is
@@ -45,4 +66,3 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
   impact is noisy diff validation; plausible fix is to use ordinary newline style
   or exclude intentional Markdown hard breaks from the check; affected surface is
   `bundle-docs/research/master-index.md`.
-
