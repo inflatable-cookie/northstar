@@ -136,6 +136,47 @@ single-repo planning lane like this one.
   - the next planning checkpoint is explicit rather than deferred until the
     current card finishes
 
+### Readiness-map and decision-record contract
+
+Readiness mapping uses a bounded destination subdirectory under `docs/specs/`.
+For `<destination-slug>`, the map is
+`docs/specs/<destination-slug>/README.md`; records are
+`docs/specs/<destination-slug>/decisions/<decision-id>-<slug>.md`. Both are
+Markdown with YAML frontmatter and explicit relative links.
+
+The map frontmatter requires:
+
+- `kind: readiness-map`
+- stable `id`, human-readable `title`, `destination`, and `owner`
+- `status: active|cleared|paused`
+- `master_spec` and `roadmap` links to the governing spec and current roadmap lane
+
+The map body requires `## Destination`, `## Decision index`, `## Current frontier`,
+and `## Readiness gate`. The map is an index and summary surface.
+It links each record and may summarise state or blockers, but canonical decision
+rationale appears once in the linked record.
+
+Each decision record frontmatter requires:
+
+- stable `id` and `kind: decision|research|prototype|task`
+- `mode: operator|research|prototype|task`
+- `status: open|in-progress|resolved|out-of-scope`
+- `title`, `owner`, and `authority`
+- `blocked_by`, containing stable decision IDs or an empty list
+- exactly one of `resolution_evidence` or `accepted_uncertainty` when `status`
+  is `resolved`
+
+IDs are stable lowercase kebab-case values, unique within the destination. The
+record filename starts with the exact ID and then a descriptive slug. Relative
+links stay inside the destination subtree or target named canonical docs
+surfaces: the governing spec, architecture, contract, roadmap, or log.
+
+`kind`, `mode`, and `authority` remain separate fields. Operator-owned decisions
+cannot be resolved by agent inference; research, prototype, and task records
+provide their distinct evidence or execution context and do not grant operator
+authority. The map is plan-only: `status: cleared` does not override the normal
+spec, promotion, roadmap, or operator-owned readiness gates.
+
 ### Continuation envelope
 
 - Treat auto-continuation as a bounded envelope, not an open-ended permission.

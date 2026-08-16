@@ -1,6 +1,6 @@
 # 075 - Define Readiness Map File Contract
 
-Status: ready
+Status: complete
 Owner: repo maintainers
 Updated: 2026-08-16
 Master spec refs: `docs/specs/027-northstar-native-pre-execution-discovery.md`
@@ -124,6 +124,28 @@ surfaces such as the governing spec, architecture, contract, roadmap, or log.
 - stop if the map would duplicate canonical decision rationale;
 - stop if the layout or format requires another operator-owned choice;
 - stop if promotion would contradict the existing docs spine or working rules.
+
+## Resolution
+
+Promoted the readiness-map and decision-record contract into:
+
+- `docs/architecture/system-architecture.md` — destination layout, artifact
+  roles, link boundary, stable IDs, and map/record relationship;
+- `docs/contracts/001-working-rules.md` — required frontmatter, index sections,
+  state vocabulary, dependency references, authority boundary, and plan-only
+  gate;
+- `docs/specs/027-northstar-native-pre-execution-discovery.md` — exact Batch
+  26.1 contract and resolved placement/representation decisions.
+
+The dependent `g02.026/076` checker remains planned and cannot start until this
+contract is reviewed and merged. No checker, router, skill, template, or
+production-code surface changed.
+
+## Validation Evidence
+
+- `git diff --check` — passed.
+- `effigy qa` — Northstar bundle checks and repo contract checks passed.
+- `effigy qa:docs` — Northstar repo contract checks passed.
 
 ## Continuation Envelope
 

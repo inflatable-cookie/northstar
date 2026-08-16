@@ -84,17 +84,37 @@ The workflow must use existing docs authority surfaces:
 - evidence under `docs/logs/`;
 - thread continuation under `docs/handoffs/`.
 
-The map is an index. A decision has one canonical record. The map may summarise
-and link a decision, but must not become a second copy of its rationale.
+### Batch 26.1 readiness-map contract
 
-Each decision record must expose enough structured state to calculate readiness:
+For a bounded destination named `<destination-slug>`, use:
 
-- kind: `decision`, `research`, `prototype`, or `task`;
-- mode: `operator`, `research`, `prototype`, or `task`;
-- status: `open`, `in-progress`, `resolved`, or `out-of-scope`;
-- explicit `blocked_by` references;
-- authority/owner;
-- resolution evidence or an explicit accepted-uncertainty note.
+```text
+docs/specs/<destination-slug>/README.md
+docs/specs/<destination-slug>/decisions/<decision-id>-<slug>.md
+```
+
+The map is Markdown with YAML frontmatter containing `kind: readiness-map`,
+stable `id`, `title`, `destination`, `owner`, `status`, `master_spec`, and
+`roadmap`. Map status is `active`, `cleared`, or `paused`. Its required index
+sections are `## Destination`, `## Decision index`, `## Current frontier`, and
+`## Readiness gate`. The decision index links each record and may summarise
+state or blockers; it does not duplicate canonical rationale.
+
+Each decision record is Markdown with YAML frontmatter containing stable `id`,
+`kind: decision|research|prototype|task`,
+`mode: operator|research|prototype|task`,
+`status: open|in-progress|resolved|out-of-scope`, `title`, `owner`, `authority`,
+and `blocked_by`. `blocked_by` uses stable decision IDs and is empty when there
+are no blockers. A resolved record exposes exactly one of
+`resolution_evidence` or `accepted_uncertainty`.
+
+Map and record IDs are stable lowercase kebab-case values, unique within the
+destination. A record filename begins with its exact ID followed by a
+human-readable slug. Relative links stay inside the destination subtree or
+point to named canonical docs surfaces: the governing spec, architecture,
+contract, roadmap, or log. The map is an index, not a second rationale store;
+operator-owned decisions cannot be resolved by agent inference; and research,
+prototype, and task records remain distinct from operator decisions.
 
 ## Operating model
 
@@ -200,10 +220,23 @@ messaging.
 ## Resolved decisions for Batch 26.1
 
 - Readiness maps and their canonical decision records use bounded destination
-  subdirectories under `docs/specs/`.
-- The repository-native representation is Markdown with YAML frontmatter and
-  explicit relative links; the map is an index and decision rationale remains
-  in one canonical linked record.
+  subdirectories under `docs/specs/`:
+  `docs/specs/<destination-slug>/README.md` and
+  `docs/specs/<destination-slug>/decisions/<decision-id>-<slug>.md`.
+- Both surfaces use Markdown with YAML frontmatter and explicit relative links.
+- The map frontmatter requires `kind: readiness-map`, stable `id`, `title`,
+  `destination`, `owner`, `status: active|cleared|paused`, `master_spec`, and
+  `roadmap`; its required sections are `Destination`, `Decision index`,
+  `Current frontier`, and `Readiness gate`.
+- Decision records require stable `id`, `kind`, `mode`, `status`, `title`,
+  `owner`, `authority`, and `blocked_by`; resolved records expose exactly one
+  of `resolution_evidence` or `accepted_uncertainty`.
+- IDs are stable lowercase kebab-case values unique within the destination;
+  `blocked_by` uses those IDs; links stay inside the destination subtree or
+  target named canonical docs surfaces.
+- The map is an index and summary surface, not a second rationale store.
+  Operator-owned decisions cannot be resolved by agent inference, and research,
+  prototype, and task records remain distinct from operator decisions.
 
 ## Open questions
 
@@ -213,6 +246,6 @@ messaging.
 
 ## Next task
 
-Implement `g02.026/075` to promote the exact readiness-map and decision-record
-file contract. Keep `g02.026/076` planned until that contract and its validation
-command are merged.
+Review and merge `g02.026/075` through the worker/PR loop. Keep
+`g02.026/076` planned until the promoted contract and its exact validation
+command are present in the merged canonical surfaces.
