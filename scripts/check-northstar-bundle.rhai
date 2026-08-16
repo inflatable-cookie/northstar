@@ -20,6 +20,7 @@ fn require_heading(root, file, heading) {
 let required_files = [
     "README.md",
     "AGENTS.md",
+    ".agents.local.env.example",
     "PAPERCUTS.md",
     "effigy.toml",
     "bundle-docs/README.md",
@@ -42,6 +43,7 @@ let required_files = [
     "template-bundle/contracts/README.md",
     "template-bundle/contracts/001-contract-template.md",
     "template-bundle/contracts/001-working-rules-template.md",
+    "template-bundle/contracts/002-agent-local-paths-template.md",
     "template-bundle/logs/README.md",
     "template-bundle/research/master-index.md",
     "template-bundle/research/README.md",

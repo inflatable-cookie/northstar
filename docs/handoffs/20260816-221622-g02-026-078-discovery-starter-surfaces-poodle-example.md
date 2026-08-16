@@ -3,7 +3,7 @@ title: g02.026/078 discovery starter surfaces and Poodle example worker handoff
 kind: northstar-handoff
 handoff_mode: worker-pr-loop
 handoff: single-file-path-only
-status: ready-to-launch
+status: paused
 owner: repo maintainers
 created: 2026-08-16
 updated: 2026-08-16
@@ -46,14 +46,15 @@ unchanged.
 - **Planning checkout:** clean and synchronized before handoff creation
 - **Planning artifacts included at the base:** card `g02.026/078`, Batch 26.3
   checkpoint log, Poodle-first decision log, active spec/roadmap updates
-- **Worker branch:** `dogfood/g02-026-078-discovery-starters`
-- **Worker worktree:** `/tmp/northstar-worker-g02-026-078-discovery-starters`
-- **Worktree creation command:**
-  `git worktree add -b dogfood/g02-026-078-discovery-starters /tmp/northstar-worker-g02-026-078-discovery-starters "$(git rev-parse origin/main)"`
+- **Worker branch:** not launched; the prepared branch is no longer an active lane
+- **Worker worktree:** resolve only from the target repository's `.agents.local.env`
+- **Worktree creation command:** not applicable until the operator has supplied
+  `AGENTS_WORKTREE_CONTAINER_DIR`
 - **Worker worktree policy:** use the named clean non-`main` worktree when it
-  matches; otherwise create a unique temporary worktree/branch from
-  `origin/main` before editing. Never clean, reset, stash over, or discard a
-  dirty/shared checkout.
+  matches. If a manual worktree is required, read `.agents.local.env`, ask the
+  operator for `AGENTS_WORKTREE_CONTAINER_DIR` when absent, and create the lane
+  below that container. Never guess `/tmp`, use `TMPDIR`, or clean, reset, stash
+  over, or discard a dirty/shared checkout.
 - **Active spec lane:** `docs/specs/027-northstar-native-pre-execution-discovery.md`
 - **Roadmap milestone:** `docs/roadmaps/g02/026-add-northstar-native-pre-execution-discovery.md`
 - **Ready cards, in order:** `g02.026/078`
@@ -149,8 +150,10 @@ Please keep this run inside the named runway:
 Start by reading this handoff from the top. Before broad repository reads, run
 the startup worktree-safety preflight in `## Completion Protocol`. Verify the
 current context is a clean, dedicated, non-`main` worktree matching this handoff.
-If it is not, do not edit it: create and record a unique temporary worktree and
-branch from pushed `origin/main`, then continue only from that fallback. Read
+If it is not, do not edit it: read `.agents.local.env` and require
+`AGENTS_WORKTREE_CONTAINER_DIR`; ask the operator before creating the file or
+worktree, then create and record a unique worktree and branch under that
+container from pushed `origin/main`. Never fall back to `/tmp` or `TMPDIR`. Read
 `AGENTS.md`, the active milestone, card 078, the governing spec/contracts, and
 the named Poodle source files read-only.
 
@@ -166,13 +169,16 @@ required checks, commit, push, and open a reviewable PR. Do not merge.
    `git rev-parse --show-toplevel`, `git branch --show-current`,
    `git status --porcelain`, and `git worktree list --porcelain`.
 2. Run `git fetch origin`. Use the named worktree only if its root/path and
-   branch match `/tmp/northstar-worker-g02-026-078-discovery-starters` /
+   branch match the operator-selected local worktree /
    `dogfood/g02-026-078-discovery-starters`, its status is empty, its branch is
    not `main`, and its `HEAD` is `origin/main`.
-3. If any condition fails, do not edit the current checkout. Create a unique
-   temporary worktree and branch from pushed `origin/main`, record the actual
-   path and branch, and run all subsequent commands there. Never clean, reset,
-   stash-over, or discard the original checkout's dirty state.
+3. If any condition fails, do not edit the current checkout. Read
+   `.agents.local.env` and require `AGENTS_WORKTREE_CONTAINER_DIR`; ask the
+   operator if it is absent. Then create a unique worktree and branch under
+   that container from pushed `origin/main`, record the actual path and branch,
+   and run all subsequent commands there. Never use `/tmp` or `TMPDIR`, and
+   never clean, reset, stash-over, or discard the original checkout's dirty
+   state.
 4. From the selected worktree, confirm `git rev-parse HEAD` equals
    `git rev-parse origin/main`, confirm
    `git merge-base --is-ancestor d112c1830d7d09e5038b6c1ce336405da0d8d8cd HEAD`

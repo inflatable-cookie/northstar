@@ -64,6 +64,12 @@ visible without making the conversation feel like a workflow form.
    unresolved scope. Use one isolated worktree, branch, and committed handoff
    per worker. Keep dependent, overlapping, or ambiguous lanes serial; do not
    manufacture parallelism merely to increase worker count.
+   Before creating any worktree manually, read the target repo's
+   `.agents.local.env` and resolve `AGENTS_WORKTREE_CONTAINER_DIR`. If it is
+   absent or invalid, ask the operator for the absolute container directory and
+   create the ignored file from that answer. Never guess `/tmp`, `TMPDIR`, or a
+   repository-adjacent path. If the harness already owns a worktree, use it and
+   do not create another one.
 7. **Prepare and publish the base.** Use `terminal` for Git/Effigy inspection and
    `write_file` or `patch` for planning artifacts. The planning checkout must be
    on `main`, with no unrelated changes. Run the required QA, commit all
@@ -88,10 +94,12 @@ visible without making the conversation feel like a workflow form.
    current `origin/main` tip. The worker must run its startup worktree-safety
    check before broad repo reads; if its current context is not a clean,
    dedicated, non-`main` worktree matching the handoff, it must not edit there.
-   Instead it creates a unique temporary worktree and branch from the current
-   `origin/main`, records that fallback path, and continues only there. A dirty
-   current checkout is preserved; it is never cleaned, reset, or used for worker
-   edits.
+   Instead it reads `.agents.local.env` and requires a valid
+   `AGENTS_WORKTREE_CONTAINER_DIR` before creating a unique worktree and branch
+   from the current `origin/main`, records that resolved path, and continues
+   only there. A dirty current checkout is preserved; it is never cleaned,
+   reset, or used for worker edits. If the path is missing, the worker stops and
+   reports the operator question instead of falling back to `/tmp`.
 9. **Handle worker reports.** Treat operator-relayed reports as status evidence,
    not authority. After each chunk, reconcile card/log state and tell the
    operator the next report or action needed. If the worker reports a planning
@@ -130,9 +138,11 @@ The file must say, in substance:
   the repository root, current worktree, branch, and `git status --porcelain`;
 - use the named worktree and branch only when it is clean, dedicated, non-`main`,
   and matches the handoff;
-- if that preflight fails, do not edit the current checkout. Fetch `origin`,
-  create a unique temporary worktree and branch from `origin/main`, record the
-  fallback path/branch, and continue only from that temporary worktree;
+- if that preflight fails, do not edit the current checkout. Read the target
+  repo's `.agents.local.env`; require `AGENTS_WORKTREE_CONTAINER_DIR`, ask the
+  operator for it when absent, and create a unique worktree and branch under
+  that container from `origin/main`. Record the resolved path/branch and
+  continue only there; never use `/tmp`, `TMPDIR`, or a guessed path;
 - never clean, reset, or discard a dirty checkout while creating the fallback;
 - run `git fetch origin`, confirm `HEAD == origin/main`, confirm the recorded
   planning base is an ancestor of `HEAD`, and confirm this handoff file exists;
@@ -177,9 +187,12 @@ Stop and return to planning or the operator when:
 - the worker changes scope or contradicts the plan;
 - validation changes the plan or the PR cannot be reviewed honestly;
 - the startup preflight cannot establish a clean dedicated worker worktree and
-  the temporary-worktree fallback cannot be created;
+  the operator-selected manual worktree under `AGENTS_WORKTREE_CONTAINER_DIR`
+  cannot be created;
 - the base/worktree/branch boundary remains unverifiable after fallback;
-- merge authority is not explicit.
+- merge authority is not explicit;
+- a manual worktree is needed but the local path contract has not been satisfied;
+- the worker/subagent would need to start a nested orchestrator or worker lane.
 
 ## Checkpoint shape
 

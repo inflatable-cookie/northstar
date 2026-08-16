@@ -16,6 +16,7 @@ Updated: 2026-08-16
 | Contract | Boundary | Owning surface | Dependent roadmaps | Status |
 | --- | --- | --- | --- | --- |
 | `001-working-rules` | compact delivery grammar, papercuts feedback loop, done-ness, guardrail pack, spec-hygiene rule, currentness-surface rules, autonomy rules, orchestrator/worker boundary, worktree isolation, PR review and merge gates, and the live ready-state/closeout rules for the repo | `docs/`, `bundle-docs/`, `template-bundle/`, `skills/`, `scripts/` | `g01.001` through `g02.025` where directly applicable | active |
+| `002-agent-local-paths` | ignored path registry, manual worktree container selection, harness-vs-manual ownership, and nested-agent stop boundary | `AGENTS.md`, `docs/contracts/`, `template-bundle/`, `skills/`, `docs/handoffs/` | orchestrator/worker launches and any manual worktree lane | active |
 
 ## Missing or Pending Contracts
 

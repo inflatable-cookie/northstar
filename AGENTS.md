@@ -19,6 +19,28 @@ Scope: whole `northstar/` repository.
   options rather than silently narrowing behavior.
 - Keep AGENTS content lean: scope, hard rules, validation, links.
 
+## Local Agent Paths and Worktrees
+
+- `.agents.local.env.example` documents the supported local path keys.
+- `.agents.local.env` is the ignored, path-only local registry; never commit it
+  and never put credentials, secrets, or commands in it.
+- Prefer a harness-managed worktree, scratch location, or artifact location when
+  one is supplied. Do not create a second manual location around it.
+- Before creating a worktree manually, read `.agents.local.env` and require a
+  valid absolute `AGENTS_WORKTREE_CONTAINER_DIR`.
+- If the file or key is absent, stop and ask: “What absolute directory should
+  this repository use as its manual worktree container? I will store it in
+  untracked `.agents.local.env` as `AGENTS_WORKTREE_CONTAINER_DIR=...` and use a
+  separate subdirectory per repository and lane.” Do not guess, use `/tmp`, use
+  `TMPDIR`, or create a repository-child/sibling worktree first.
+- After the operator answers, create the local file, validate/create the
+  container, and use `<container>/<repository-slug>-<lane-slug>` for manual
+  worktrees. If validation fails, stop and report the boundary failure.
+- A worker or subagent must not start a second orchestrator workflow or create a
+  nested worktree when a parent harness/orchestrator already owns the lane.
+
+The durable details live in `docs/contracts/002-agent-local-paths.md`.
+
 ## Effigy-First Execution
 
 - Start with `effigy tasks`.

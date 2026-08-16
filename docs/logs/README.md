@@ -56,3 +56,4 @@ Use logs as the third step in closeout:
 - `2026-08/16-215610-pre-execution-discovery-routes-worker-pr-closeout.md`
 - `2026-08/16-220832-change-dogfood-sequence-poodle-first.md`
 - `2026-08/16-221512-batch-26-3-starter-surface-planning-checkpoint.md`
+- `2026-08/16-223757-add-agent-local-path-registry.md`

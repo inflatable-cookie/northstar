@@ -25,6 +25,19 @@ The boundary is intentional:
 - `docs/logs/README.md`
 - `docs/policy/internal-writing-style.md`
 
+### Local agent paths
+
+The tracked `.agents.local.env.example` and ignored `.agents.local.env` provide
+the repository-local path registry for agents. The file is path-only, never a
+credential store. `AGENTS_WORKTREE_CONTAINER_DIR` is required before an agent
+creates a worktree manually; `AGENTS_SCRATCH_DIR` and `AGENTS_ARTIFACT_DIR` are
+optional. Prefer harness-managed locations. If a manual worktree is needed and
+the key is absent, ask the operator for an absolute container directory, create
+the ignored file from that answer, and stop rather than guessing `/tmp`,
+`TMPDIR`, or a repository-adjacent path.
+
+See `docs/contracts/002-agent-local-paths.md` for the full contract.
+
 Seed root `PAPERCUTS.md` from `assets/templates/PAPERCUTS.md` during adopt or
 upgrade, before release-candidate / exact-SHA preparation. Do not add it during
 tag closeout after a clean-tree release SHA is already green — that dirties the

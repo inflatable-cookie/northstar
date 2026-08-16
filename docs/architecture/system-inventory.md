@@ -24,6 +24,7 @@ skills.
 | `docs/handoffs/` | fresh-thread coordination surface | handoff/orchestrator mode | timestamped takeover notes | handoff contract and templates |
 | `scripts/` and `effigy` checks | validation surface | repo maintainers | repo integrity and enforcement hooks | `scripts/check-northstar-repo-contract.rhai`, roadmap evidence requirements |
 | root `PAPERCUTS.md` | agent feedback surface | executing agents + repo maintainers | owning repository root | `bundle-docs/papercuts.md`, agent templates, working rules |
+| `.agents.local.env` | local path registry | operator + agents | ignored machine-local paths only | `docs/contracts/002-agent-local-paths.md`, `.agents.local.env.example`, `AGENTS.md` |
 | orchestrator thread | conversational planning and review surface | repo maintainers / operator | active Northstar lane | `skills/northstar/references/modes/orchestrator.md`, active spec/roadmap/contract |
 | worker thread/worktree | bounded implementation surface | worker agent | assigned ready cards and branch | one committed handoff per worker lane under `docs/handoffs/`, `AGENTS.md`, batch cards, tests, commits, startup worktree-safety preflight |
 | PR review boundary | delivery and merge-control surface | orchestrator + operator | worker branch against prepared base | PR metadata, diff, checks, provider review record (formal review or comment), closeout log |
@@ -38,7 +39,7 @@ skills.
 | Validation loop | roadmap/log state | `effigy qa`, `effigy qa:docs` | `001-working-rules` | Validation evidence is required for closure |
 | Papercut feedback | agent execution | maintenance triage and normal planning surfaces | `bundle-docs/papercuts.md`, `001-working-rules` | Notes are captured at encounter time and promoted only after triage |
 | Orchestrator planning | operator conversation + canonical planning spine | per-worker handoffs under `docs/handoffs/` | `026-orchestrator-thread-and-worker-pr-loop` | Questions settle intent before cards are marked ready |
-| Worker execution | per-worker handoff + startup worktree-safety preflight + ready cards | worker branch/worktree and evidence | `001-working-rules`, active batch cards | Worker uses a temporary worktree from pushed `origin/main` when its starting context is unsuitable |
+| Worker execution | per-worker handoff + startup worktree-safety preflight + ready cards | worker branch/worktree and evidence | `001-working-rules`, `002-agent-local-paths`, active batch cards | Worker uses the harness worktree or the operator-selected `AGENTS_WORKTREE_CONTAINER_DIR` when its starting context is unsuitable |
 | PR review and merge | worker branch/PR | orchestrator verdict + operator-authorised merge | `001-working-rules`, active cards | Review uses diff/check evidence and a provider review record; same-identity GitHub runs use PR comments; merge is separate from PR creation |
 
 ## Validation Surfaces

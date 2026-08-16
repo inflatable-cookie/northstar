@@ -33,6 +33,11 @@ For first-time users: start with `minimal/`, then add optional folders as needed
 - `handoffs/`
 - `policy/`
 
+The top-level agent starter also includes `.agents.local.env.example`. Copy it
+to the ignored `.agents.local.env` only when an agent needs local paths. Manual
+worktree creation requires `AGENTS_WORKTREE_CONTAINER_DIR` from that file;
+harness-managed worktrees do not.
+
 ## Standard docs spines
 
 Baseline Northstar repos should use:

@@ -112,7 +112,20 @@ cards, one committed worker handoff per worker lane under `docs/handoffs/`, push
 authority surface. A worker launch is valid only after the planning checkout has
 published `main` and the operator has a repository-relative handoff path to give
 the new thread. The worker must then verify its startup worktree safety or create
-a temporary worktree from pushed `origin/main` before editing.
+a worktree under the operator-selected `AGENTS_WORKTREE_CONTAINER_DIR` from
+pushed `origin/main` before editing.
+
+## Local agent path registry
+
+Repositories may keep machine-specific agent paths in ignored
+`.agents.local.env`, copied from tracked `.agents.local.env.example`. The file is
+path-only and is not a credential store. `AGENTS_WORKTREE_CONTAINER_DIR` is the
+only required key for manual worktree creation; harness-managed worktrees do not
+need it. Agents ask the operator for the absolute container directory before
+creating the file or any manual worktree, then use one repository/lane
+subdirectory below it. `/tmp`, `TMPDIR`, guessed siblings, and repository-child
+worktrees are not valid fallbacks. A worker/subagent must not create a nested
+orchestrator lane when a parent harness already owns the worktree.
 
 ## Invariants
 
@@ -133,8 +146,9 @@ a temporary worktree from pushed `origin/main` before editing.
   copied private context is required.
 - A worker must quickly verify that its current context is a clean, dedicated,
   non-`main` worktree matching the handoff before broad reads or edits. If not,
-  it creates a unique temporary worktree and branch from pushed `origin/main`,
-  records the fallback path, and works only there. It never cleans, resets, or
+  it reads `.agents.local.env`, requires `AGENTS_WORKTREE_CONTAINER_DIR`, and
+  creates a unique worktree and branch under that container from pushed
+  `origin/main`, recording the resolved path. It never cleans, resets, or
   discards a dirty checkout.
 - Orchestrator and worker threads must use separate worktree/branch boundaries;
   a worker may not edit the orchestrator's planning checkout.

@@ -11,6 +11,8 @@ surface the repo needs.
 Use these top-level repo templates from this skill for the non-docs surfaces:
 
 - `AGENTS.md`
+- `.agents.local.env.example` (tracked path registry example; the real
+  `.agents.local.env` is ignored and created only when local paths are needed)
 - `CLAUDE.md.template` (optional)
 - `PAPERCUTS.md` (seed on adopt/upgrade before exact-SHA / clean-tree release
   prep; do not introduce it during tag closeout after CI is green on a pinned

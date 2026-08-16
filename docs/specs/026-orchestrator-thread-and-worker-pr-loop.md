@@ -6,7 +6,7 @@ Created: 2026-08-16
 Updated: 2026-08-16
 Related research: `bundle-docs/research/translation-memos/northstar-orchestrator-thread.md`
 Governing architecture: `docs/architecture/system-architecture.md`
-Governing contract: `docs/contracts/001-working-rules.md`
+Governing contracts: `docs/contracts/001-working-rules.md`, `docs/contracts/002-agent-local-paths.md`
 
 ## Problem
 
@@ -41,8 +41,9 @@ instructions and canonical references. The worker owns only the ready cards
 named in that file. At startup, it quickly verifies that its current context is
 a clean, dedicated, non-`main` worktree matching the handoff. If the harness or
 operator did not provide one, or the context is dirty/incorrect, the worker
-creates a unique temporary worktree and branch from pushed `origin/main`, records
-that fallback, and continues only there without cleaning or discarding the
+reads `.agents.local.env` and requires `AGENTS_WORKTREE_CONTAINER_DIR` before
+creating a unique worktree and branch from pushed `origin/main`, records that
+resolved path, and continues only there without cleaning or discarding the
 original checkout. It can execute several bounded cards in one thread, reports
 after each meaningful chunk, updates execution evidence, and stops whenever the
 contract says planning or operator intent is required. When the assigned runway
@@ -146,10 +147,11 @@ canonical refs. The handoff may point at canonical repository files, but it is
 the only external handoff artifact. Before broad repo reads or editing, the
 worker runs the startup worktree-safety preflight. It uses the named worktree
 only when the current root/path and branch match, `git status --porcelain` is
-empty, the branch is not `main`, and `HEAD == origin/main`. Otherwise it creates
-a unique temporary worktree and branch from pushed `origin/main`, records the
-actual path and branch, and continues only there. A dirty original checkout is
-never cleaned, reset, or discarded. From the selected worktree, the worker then
+empty, the branch is not `main`, and `HEAD == origin/main`. Otherwise it reads
+`.agents.local.env`, requires `AGENTS_WORKTREE_CONTAINER_DIR`, and creates a
+unique worktree and branch under that container from pushed `origin/main`,
+records the actual path and branch, and continues only there. A dirty original
+checkout is never cleaned, reset, or discarded. From the selected worktree, the worker then
 confirms the recorded planning base is an ancestor of `HEAD` and the handoff
 file exists at `HEAD`.
 
@@ -166,7 +168,7 @@ the seven core handoff sections, add the worker/PR flow inside
 The file must contain or point to all information required for execution:
 
 - planning base commit, remote-tip verification, worker branch, and worktree command;
-- startup worktree-safety preflight and temporary-worktree fallback instructions;
+- startup worktree-safety preflight and local-path manual-worktree instructions;
 - active vision/architecture/contract refs;
 - active master spec and roadmap milestone;
 - ordered ready batch cards and allowed runway length;
@@ -248,8 +250,8 @@ The initial Northstar dogfood must prove:
 - the worker handoff path can be handed to a fresh thread without private chat
   context;
 - the worker remains in a clean dedicated worktree and branch, or safely creates a
-  temporary worktree from pushed `origin/main` when the harness context is not
-  suitable;
+  worktree under the operator-selected `AGENTS_WORKTREE_CONTAINER_DIR` from
+  pushed `origin/main` when the harness context is not suitable;
 - the worker never edits `main` or discards dirty state while selecting its
   worktree;
 - the worker completes at least one bounded card and reports evidence;

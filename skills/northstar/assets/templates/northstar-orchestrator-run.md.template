@@ -38,8 +38,10 @@ Here is the state the worker is inheriting:
 - **Worker worktree:** `{{WORKTREE_PATH}}`
 - **Worktree creation command:** `{{WORKTREE_COMMAND}}`
 - **Worker worktree policy:** use the named clean non-`main` worktree when it
-  matches; otherwise create a unique temporary worktree/branch from
-  `origin/main` before editing.
+  matches; otherwise read `.agents.local.env`, require
+  `AGENTS_WORKTREE_CONTAINER_DIR`, and create a unique worktree/branch under
+  that container from `origin/main` before editing. Ask the operator first if
+  the file or key is absent; never use `/tmp`, `TMPDIR`, or a guessed path.
 - **Active spec lane:** `{{SPEC_REF}}`
 - **Roadmap milestone:** `{{ROADMAP_REF}}`
 - **Ready cards, in order:** `{{CARD_REFS}}`
@@ -68,7 +70,7 @@ Please keep this run inside the named runway:
   scope; if shared mutable scope or a hidden dependency appears, stop and report
   it through the operator.
 - Work only in the selected clean worker worktree: prefer
-  `{{WORKTREE_PATH}}` / `{{WORKER_BRANCH}}`, or use the recorded temporary
+  `{{WORKTREE_PATH}}` / `{{WORKER_BRANCH}}`, or use the recorded local-path
   fallback created by the startup preflight. Never edit the orchestrator's
   planning checkout or an unrelated dirty checkout.
 - Do not merge the PR. Merge remains a separate operator-authorised action.
@@ -87,8 +89,10 @@ Please keep this run inside the named runway:
 Start by reading this handoff from the top. Before broad repository reads, run the
 startup worktree-safety preflight in `## Completion Protocol`. Verify the current
 context is a clean, dedicated, non-`main` worktree matching the handoff. If it is
-not, do not edit it: create and record a unique temporary worktree and branch from
-pushed `origin/main`, then continue only from that fallback. Read `AGENTS.md`,
+not, do not edit it: read `.agents.local.env`, require a valid
+`AGENTS_WORKTREE_CONTAINER_DIR`, ask the operator if it is absent, then create
+and record a unique worktree and branch under that container from pushed
+`origin/main`. Never fall back to `/tmp` or `TMPDIR`. Read `AGENTS.md`,
 the active milestone, each assigned card, and the canonical architecture/contracts
 from the selected worker worktree.
 
@@ -108,12 +112,13 @@ natural and useful; you do not need to repeat this whole file back.
 2. Run `git fetch origin`. Use the named worktree only if its root/path and
    branch match `{{WORKTREE_PATH}}` / `{{WORKER_BRANCH}}`, its status is empty,
    its branch is not `main`, and its `HEAD` is `origin/main`.
-3. If any condition fails, do not edit the current checkout. Create a unique
-   temporary worktree and branch from pushed `origin/main`, for example:
-   `TEMP_SUFFIX="$(date +%Y%m%d%H%M%S)-$$"; TEMP_WORKTREE="${TMPDIR:-/tmp}/northstar-worker-${TEMP_SUFFIX}"; TEMP_BRANCH="{{WORKER_BRANCH}}-tmp-${TEMP_SUFFIX}"; git worktree add -b "$TEMP_BRANCH" "$TEMP_WORKTREE" "$(git rev-parse origin/main)"`
-   Record the actual fallback path and branch, and run all subsequent commands
-   from that selected worktree. Never clean, reset, stash-over, or discard the
-   original checkout's dirty state.
+3. If any condition fails, do not edit the current checkout. Read
+   `.agents.local.env` and require `AGENTS_WORKTREE_CONTAINER_DIR`; if it is
+   absent, ask the operator before creating the file or worktree. Then create a
+   unique worktree and branch under that container from pushed `origin/main`,
+   record the actual path and branch, and run all subsequent commands there.
+   Never use `/tmp`, `TMPDIR`, or a guessed path; never clean, reset, stash-over,
+   or discard the original checkout's dirty state.
 4. From the selected worktree, confirm `git rev-parse HEAD` equals
    `git rev-parse origin/main`, confirm
    `git merge-base --is-ancestor {{BASE_REF}} HEAD` succeeds, and confirm this
