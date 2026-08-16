@@ -31,9 +31,10 @@ and orchestrator closeout.
 
 ## Scope
 
-- choose one bounded docs or low-risk maintenance lane
-- prepare a clean base and dedicated worktree
-- use the packet and worker prompt without private-context transfer
+- prepare and publish `main` with the planning artifacts;
+- create one mandatory run file and commit/push it on `main`;
+- create a fresh worker thread in a dedicated worktree from pushed `main`;
+- give the worker only the repository-relative run-file path;
 - exercise approval or requested-changes review
 - measure elapsed time, rework, review cycles, validation, and relay burden
 - do not add automatic cross-session messaging or CI workflows
@@ -42,16 +43,23 @@ and orchestrator closeout.
 
 1. Select a low-risk ready card and record why it is suitable.
 2. Start the orchestrator mode and complete the question/plan/base checks.
-3. Fill the packet and create a fresh worker thread in its own worktree.
-4. Relay at least one worker chunk report; reconcile card/log state.
-5. Receive the PR URL; review diff, checks, and canonical-plan fit.
-6. Request changes or approve/merge with explicit operator authorisation.
-7. Close the card, milestone, log, and front-door next-task state.
-8. Record measured friction and adapter observations.
+3. Commit and push the planning artifacts to `main`.
+4. Create the single run file, commit and push it to `main`, and verify local
+   `HEAD` equals `origin/main`.
+5. Create the worker branch/worktree from pushed `main` and give the new worker
+   thread only the repository-relative run-file path.
+6. Relay at least one worker chunk report; reconcile card/log state.
+7. Receive the PR URL; review diff, checks, and canonical-plan fit.
+8. Request changes or approve/merge with explicit operator authorisation.
+9. Close the card, milestone, log, and front-door next-task state.
+10. Record measured friction and adapter observations.
 
 ## Acceptance Criteria
 
-- worker reads the packet and canonical refs without a transcript copy
+- planning and roadmap artifacts are committed and pushed to `main` before dispatch
+- the run file is committed and pushed to `main` before dispatch
+- worker reads the run file from its repository-relative path without any other
+  prompt, transcript copy, or manually copied refs
 - worker never edits the planning checkout
 - at least one bounded chunk is reported with real validation evidence
 - worker opens a PR against the prepared base
@@ -61,7 +69,8 @@ and orchestrator closeout.
 
 ## Evidence Required
 
-- packet path or chat prompt
+- single run-file path
+- pushed main commit and remote verification
 - worktree and branch refs
 - worker report(s)
 - PR URL and review verdict

@@ -39,18 +39,20 @@ The operator relays worker messages and PR URLs between threads.
    Mark a card `ready` only when the existing Northstar rubric is satisfied:
    bounded scope, current governing refs, acceptance, validation, evidence, stop
    conditions, and explicit continuation state.
-6. **Prepare the base.** Use `terminal` for Git/Effigy inspection and `write_file`
-   or `patch` for planning artifacts. Confirm the planning checkout has no
-   unrelated changes, the base ref is explicit, the planning artifacts are
-   committed or otherwise available to the worker, and required QA has passed.
-   Never mix worker implementation edits into the planning checkout.
-7. **Emit the worker packet.** Fill
-   `assets/templates/northstar-orchestrator-run.md.template` when a durable
-   artifact is useful, and provide a concise prompt that points the worker at
-   the packet, active milestone, cards, and governing refs. Include the exact
-   worktree/branch, assigned runway, model capability profile, report cadence,
-   stop rules, and PR completion contract. Do not paste whole documents into the
-   prompt.
+6. **Prepare and publish the base.** Use `terminal` for Git/Effigy inspection and
+   `write_file` or `patch` for planning artifacts. The planning checkout must be
+   on `main`, with no unrelated changes. Run the required QA, commit all
+   planning and roadmap artifacts to `main`, push `main`, and verify that the
+   local `HEAD` equals `origin/main`. Do not dispatch a worker from unpushed or
+   merely local planning state. Never mix worker implementation edits into the
+   planning checkout.
+7. **Create the single-file handoff.** Fill
+   `assets/templates/northstar-orchestrator-run.md.template` into one concrete
+   repository-relative file under `docs/logs/YYYY-MM/`. The file is mandatory,
+   must be committed and pushed on `main`, and must contain the complete worker
+   instructions, refs, runway, base verification, worktree/branch command,
+   reporting rules, stop conditions, and PR contract. Give the new worker thread
+   only this file path. Do not provide a second prompt or require copied context.
 8. **Handle worker reports.** Treat operator-relayed reports as status evidence,
    not authority. After each chunk, reconcile card/log state and tell the
    operator the next report or action needed. If the worker reports a planning
@@ -66,13 +68,20 @@ The operator relays worker messages and PR URLs between threads.
     task. If the lane continues, identify the next ready card; if it ends, name
     the next planning checkpoint.
 
-## Worker prompt contract
+## Worker file contract
 
-The prompt given to the fresh worker must say, in substance:
+The orchestrator creates exactly one concrete run file from the packet template,
+commits it to `main`, pushes `main`, and verifies the remote base before dispatch.
+The operator starts the fresh worker thread in the named worktree and gives it
+only the repository-relative path to that file. No second prompt, transcript
+copy, or manually pasted references are part of the protocol.
+
+The file must say, in substance:
 
 - you are the implementation worker, not the planning authority;
 - use the named worktree and branch only;
-- read the packet and canonical refs before editing;
+- read this file first; all canonical refs and instructions needed for the run
+  are named inside it;
 - execute only the ordered ready cards;
 - report meaningful chunks through the operator with changed files, validation,
   remaining cards, and blockers;
@@ -82,8 +91,11 @@ The prompt given to the fresh worker must say, in substance:
 - finish the assigned runway with a pushed branch and a reviewable PR;
 - do not merge or invent a new architecture.
 
-A ready-to-copy packet is available at
-`assets/templates/northstar-orchestrator-run.md.template`.
+The only external worker handoff is the packet path, for example:
+
+```text
+Read and follow `docs/logs/YYYY-MM/DD-HHMMSS-topic-orchestrator-run.md`.
+```
 
 ## Model routing
 

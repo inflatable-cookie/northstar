@@ -307,22 +307,25 @@ following authority split:
   action is desired.
 
 The repository is the durable communication boundary. A worker must be able to
-re-enter from the launch packet, `AGENTS.md`, canonical refs, cards, commits,
+re-enter from the single run file, `AGENTS.md`, canonical refs, cards, commits,
 tests, and PR metadata; private conversation history is not required authority.
 
 Before a worker starts:
 
-- the base ref is explicit and the planning checkout is clean or its exception
-  is recorded;
-- the worker has a separate worktree and branch; it must not edit the
-  orchestrator's planning checkout;
-- every assigned card is already ready, ordered, and inside the continuation
-  envelope;
-- the packet names scope, acceptance, validation, evidence, stop conditions,
-  report cadence, and PR base/head expectations.
+- the planning checkout is on `main` and has no unrelated changes;
+- required QA has passed;
+- all planning and roadmap artifacts are committed to `main`;
+- one concrete run file is committed to `main`;
+- `main` is pushed and local `HEAD` equals `origin/main`;
+- the worker receives only the repository-relative run-file path;
+- the worker has a separate worktree and branch created from pushed `main`;
 
 During execution:
 
+- every assigned card is already ready, ordered, and inside the continuation
+  envelope;
+- the run file names scope, acceptance, validation, evidence, stop conditions,
+  report cadence, and PR base/head expectations;
 - the worker reports after meaningful chunks with changed surfaces, validation,
   remaining cards, blockers, and new risks;
 - the worker stops on a planning gap, contract contradiction, unresolved product

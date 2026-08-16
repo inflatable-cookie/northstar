@@ -58,4 +58,4 @@ creating a second installable Northstar skill.
 
 ## Next Task
 
-Complete `g02.025/071`: add the worker launch packet and PR review contract.
+Complete `g02.025/071`: add the single-file worker handoff and PR review contract.

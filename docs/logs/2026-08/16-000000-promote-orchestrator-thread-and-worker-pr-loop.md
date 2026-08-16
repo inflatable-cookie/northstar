@@ -11,10 +11,11 @@ Research: `bundle-docs/research/translation-memos/northstar-orchestrator-thread.
 - reviewed current official Codex, Claude Code, OpenCode, and GitHub review
   workflows and translated only durable, provider-neutral lessons;
 - promoted an explicit orchestrator/worker/worktree/PR topology into architecture;
-- extended the working-rules contract with authority, packet, chunk-reporting,
+- extended the working-rules contract with authority, single-file handoff,
+  commit/push-before-dispatch, chunk-reporting,
   stop, PR-review, requested-changes, and merge-boundary rules;
 - added the internal `orchestrator` mode to the single public `northstar` skill;
-- added a reusable `northstar-orchestrator-run.md.template` launch packet;
+- added a reusable `northstar-orchestrator-run.md.template` single-file handoff;
 - created g02.025 and marked its design/contract cards complete, with the real
   dogfood card ready and deliberately not auto-started.
 
@@ -58,6 +59,15 @@ Recorded one actionable root-queue entry for Markdown hard-break whitespace in
 - negative-path parity probe: removing the orchestrator mode produced the expected
   non-zero `missing: references/modes/orchestrator.md` failure;
 - therefore the source feature is implemented, distributed, and parity-proven.
+
+
+## Follow-up protocol clarification
+
+The launch contract is intentionally stricter than the initial design: the
+orchestrator publishes planning state on `main`, creates one concrete run file,
+commits and pushes that file, verifies `HEAD == origin/main`, creates the worker
+worktree from that pushed commit, and gives the worker only the run-file path.
+The worker does not receive a second prompt or copied transcript context.
 
 
 ## Next task

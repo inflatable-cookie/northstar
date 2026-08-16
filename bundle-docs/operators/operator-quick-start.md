@@ -56,7 +56,12 @@ to pick one mode:
 - “Replan this after the contract change” -> `northstar` (replan-after-change)
 - “Refocus this project under Northstar” -> `northstar` (refocus-drifted-project)
 - “Turn this memo into contracts” -> `northstar` (research)
-- “Create an orchestrator runway and worker PR loop” -> `northstar` (orchestrator mode)
+- **Create an orchestrator runway and worker PR loop** -> `northstar` (orchestrator mode)
+
+In this mode, the orchestrator commits and pushes the planning state and one
+run file to `main` before dispatch. The new worker thread receives only the
+repository-relative path to that run file; no second prompt or copied context is
+needed.
 - “Create a handoff for the next thread” -> `northstar` (handoff mode)
 
 If humans are going to reuse the same opener across multiple threads, use:
