@@ -49,5 +49,6 @@ integrity using the promoted Batch 26.1 file contract.
 
 ## Next Task
 
-Remain queued behind `g02.026/075`. Mark ready only after the promoted contract
-and exact command surface are present in canonical files.
+Prepare this card by defining the exact Effigy-native checker command, targeted
+test command, and ready-state evidence. Mark it ready only after those surfaces
+are explicit and the implementation boundary remains read-only and fail-closed.
