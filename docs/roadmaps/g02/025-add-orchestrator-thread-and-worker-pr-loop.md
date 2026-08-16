@@ -35,7 +35,7 @@ resulting PR without depending on private cross-thread history.
 
 ### Batch 25.2 - Add The Worker Packet And PR Review Contract
 
-- [x] define packet fields and worker prompt contract
+- [x] define the single-file handoff fields and worker file contract
 - [x] define chunk reporting, stop, review, merge, and closeout rules
 - [x] add a copy-ready packet template
 

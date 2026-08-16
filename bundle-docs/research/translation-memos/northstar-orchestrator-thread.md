@@ -90,8 +90,9 @@ should:
    architecture, or prioritisation are explicit;
 2. promote settled outcomes into architecture and contracts before execution;
 3. compile a multi-card roadmap runway and mark only genuinely ready cards;
-4. prepare a clean main-branch boundary and emit a small, file-referential worker
-   launch packet;
+4. prepare a clean `main` boundary, commit and push the planning state, then
+   create one self-contained run file whose repository-relative path is the only
+   worker handoff;
 5. leave implementation to one fresh worker thread in one dedicated worktree;
 6. receive operator-relayed progress and the final PR URL;
 7. review the PR against the canonical plan, request changes or approve it, and
@@ -139,6 +140,8 @@ write-heavy agents in one lane merely because a provider can spawn them.
   checkout must not be used for implementation.
 - The worker must finish with a reviewable PR, evidence, and explicit unresolved
   items, not only a chat summary.
+- Before dispatch, planning state and the single run file must be committed and
+  pushed on `main`; the worker receives only the repository-relative file path.
 - The orchestrator must review the diff and checks against canonical refs before
   approving or requesting changes.
 - The first dogfood run should measure elapsed time, worker rework, PR review
@@ -155,5 +158,5 @@ procedure is in `skills/northstar/references/modes/orchestrator.md`.
 ## Next task
 
 Dogfood the mode on one bounded, low-risk lane using a fresh worker thread and an
-isolated worktree; record where the packet, reporting cadence, or PR review gate
-still needs tightening.
+isolated worktree; record where the run-file path, reporting cadence, or PR review
+gate still needs tightening.

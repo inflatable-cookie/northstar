@@ -9,12 +9,14 @@ Auto-start next card: no
 
 ## Objective
 
-Give the orchestrator a compact, durable launch packet and define the worker,
-reporting, PR review, merge, and closeout boundaries.
+Give the orchestrator one compact, durable, committed run file and define the
+worker, reporting, PR review, merge, and closeout boundaries.
 
 ## Scope
 
-- packet fields and worker prompt
+- one committed run-file path is the only external worker handoff
+- the worker can re-enter from that path and canonical refs alone
+- the worker has an explicit worktree, branch, pushed base, runway, and PR contract
 - chunk reporting and stop conditions
 - PR evidence and review outcomes
 - operator-mediated relay and merge authorisation
@@ -22,8 +24,9 @@ reporting, PR review, merge, and closeout boundaries.
 
 ## Acceptance Criteria
 
-- a fresh worker can re-enter from canonical refs and the packet alone
-- the worker has an explicit worktree, branch, base, runway, and PR contract
+- a fresh worker can re-enter from the repository-relative run-file path alone
+- the run file is committed on pushed `main` before the worker starts
+- the worker has an explicit worktree, branch, pushed base, runway, and PR contract
 - the orchestrator reviews the diff/checks rather than trusting narrative
 - requested changes can return to the same worker branch
 - merge is a separate authorised action
@@ -57,9 +60,9 @@ reporting, PR review, merge, and closeout boundaries.
 
 ## Completion Notes
 
-Added the worker packet template and promoted the execution/review boundaries.
-The first dogfood remains intentionally separate so the design is tested before
-more adapter automation is added.
+Added the single-file worker handoff template and promoted the execution/review
+boundaries. The first dogfood remains intentionally separate so the design is
+tested before more adapter automation is added.
 
 ## Next Task
 

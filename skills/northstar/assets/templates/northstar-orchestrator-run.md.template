@@ -2,9 +2,18 @@
 title: {{TOPIC}} orchestrator run
 status: ready-to-launch
 owner: {{OWNER}}
-updated: {{YYYY-MM-DD}}
 kind: orchestrator-run
+handoff: single-file-path-only
+base_required: pushed-main
+updated: {{YYYY-MM-DD}}
 ---
+
+## Handoff Rule
+
+This file is the complete worker handoff. The operator must give the new worker
+thread only this repository-relative path. Do not copy another prompt, transcript,
+summary, or list of refs. The file is committed to `main` and pushed before the
+worker worktree is created; all relative paths resolve from the repository root.
 
 ## Intent Summary
 
@@ -22,11 +31,15 @@ kind: orchestrator-run
 ## Prepared Base
 
 - Repository: {{REPOSITORY}}
+- Planning branch: `main`
 - Base ref: {{BASE_REF}}
+- Pushed main commit: {{PUSHED_MAIN_COMMIT}}
+- Remote verification: {{LOCAL_HEAD_EQUALS_ORIGIN_MAIN}}
 - Planning checkout status: {{CLEAN_OR_EXPLICIT_EXCEPTION}}
-- Planning artifacts available at base: {{COMMITTED_REF_OR_OPERATOR_STEP}}
+- Planning artifacts available at base: {{COMMITTED_REF}}
 - Worker branch: {{WORKER_BRANCH}}
 - Worker worktree: {{WORKTREE_PATH}}
+- Worktree creation command: {{WORKTREE_COMMAND}}
 
 ## Worker Runway
 
@@ -36,12 +49,12 @@ kind: orchestrator-run
 - Tool/runtime restrictions: {{RESTRICTIONS_OR_NONE}}
 - Report after: {{MEANINGFUL_CHUNK_DEFINITION}}
 
-## Worker Prompt
+## Worker Instructions
 
-You are the implementation worker for the Northstar lane named above. Work only
-in `{{WORKTREE_PATH}}` on `{{WORKER_BRANCH}}`. Read this packet, the active
-milestone, every assigned card, `AGENTS.md`, and the governing refs before
-editing.
+You are the implementation worker for the Northstar lane named above. This file
+is your complete handoff. Work only in `{{WORKTREE_PATH}}` on `{{WORKER_BRANCH}}`.
+Read this file, the active milestone, every assigned card, `AGENTS.md`, and the
+governing refs before editing.
 
 Execute the ready cards in order. Do not invent architecture, change contracts,
 expand scope, or use another worktree. After each meaningful chunk, report through
