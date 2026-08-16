@@ -39,42 +39,49 @@ The operator relays worker messages and PR URLs between threads.
    Mark a card `ready` only when the existing Northstar rubric is satisfied:
    bounded scope, current governing refs, acceptance, validation, evidence, stop
    conditions, and explicit continuation state.
-6. **Prepare and publish the base.** Use `terminal` for Git/Effigy inspection and
+6. **Assess parallel lanes before dispatch.** Inspect the active roadmap runway
+   for multiple independent, bounded ready lanes that can run at the same time.
+   Offer parallel worker-thread prompts when lanes have no shared mutable files,
+   no ordering or data dependencies, no overlapping authority decisions, and no
+   unresolved scope. Use one isolated worktree, branch, and committed handoff
+   per worker. Keep dependent, overlapping, or ambiguous lanes serial; do not
+   manufacture parallelism merely to increase worker count.
+7. **Prepare and publish the base.** Use `terminal` for Git/Effigy inspection and
    `write_file` or `patch` for planning artifacts. The planning checkout must be
    on `main`, with no unrelated changes. Run the required QA, commit all
    planning and roadmap artifacts to `main`, push `main`, and verify that the
    local `HEAD` equals `origin/main`. Do not dispatch a worker from unpushed or
    merely local planning state. Never mix worker implementation edits into the
    planning checkout.
-7. **Write the handoff file.** Reuse the handoff flow: fill
+8. **Write the handoff file(s).** Reuse the handoff flow: fill
    `assets/templates/northstar-orchestrator-run.md.template` into one concrete
-   worker handoff under `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md`. The file must
-   keep the seven core handoff sections and add worker-mode/PR instructions
-   inside `## Completion Protocol`. It is mandatory, must be committed and
-   pushed on `main`, and must contain the complete worker instructions, refs,
-   runway, planning base verification, worktree/branch command, reporting rules,
-   stop conditions, and PR contract. Give the new worker thread only this file's
-   repository-relative path. Do not provide a second prompt or require copied
-   context.
+   worker handoff under `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md` per approved
+   parallel lane. Each file must keep the seven core handoff sections and add
+   worker-mode/PR instructions inside `## Completion Protocol`. Every handoff is
+   mandatory, must be committed and pushed on `main`, and must contain the
+   complete worker instructions, refs, runway, planning base verification,
+   worktree/branch command, reporting rules, stop conditions, and PR contract.
+   Give each worker thread only its own handoff's repository-relative path. Do
+   not provide a second prompt or require copied context.
 
-   The handoff records the planning base commit from before the handoff was
+   Each handoff records the planning base commit from before the handoff was
    created. It must not try to contain the SHA of the commit that contains the
-   handoff itself. After pushing the handoff, create the worktree from the
-   current `origin/main` tip and let the worker verify `HEAD == origin/main`,
-   that the recorded planning base is an ancestor, and that the handoff exists.
-8. **Handle worker reports.** Treat operator-relayed reports as status evidence,
+   handoff itself. After pushing the handoff set, create each worktree from the
+   current `origin/main` tip and let every worker verify `HEAD == origin/main`,
+   that its recorded planning base is an ancestor, and that its handoff exists.
+9. **Handle worker reports.** Treat operator-relayed reports as status evidence,
    not authority. After each chunk, reconcile card/log state and tell the
    operator the next report or action needed. If the worker reports a planning
    gap or scope change, pause and repair the canonical planning surfaces before
    giving permission to continue.
-9. **Review the PR.** On the PR URL, inspect metadata, commits, diff, checks, and
+10. **Review the PR.** On the PR URL, inspect metadata, commits, diff, checks, and
    changed files against the spec, milestone, cards, and contracts. Review
    independently of the worker narrative. Record an evidence-backed verdict in
    the provider's review surface. If the orchestrator and worker share a GitHub
    identity, formal self-approval is unavailable: post the verdict as a PR
    comment and treat that comment as the canonical review record. Leave precise
    comments when changes are needed.
-10. **Merge and close out.** Merge only after the operator authorises that merge
+11. **Merge and close out.** Merge only after the operator authorises that merge
     action and the review/check gate is satisfied. Then update card, milestone,
     log, front-door currentness, continuation/pause state, and the single next
     task. If the lane continues, identify the next ready card; if it ends, name
@@ -83,13 +90,15 @@ The operator relays worker messages and PR URLs between threads.
 ## Worker file contract
 
 The orchestrator creates exactly one concrete worker handoff from the shared
-handoff template, commits it to `main`, pushes `main`, and verifies the remote
-tip before dispatch. The handoff records the planning base commit from before
-the handoff was created; it must not contain a self-referential hash for the
-commit that contains the handoff. The operator starts the fresh worker thread in
-the named worktree and gives it only the repository-relative path to that
-handoff. No second prompt, transcript copy, or manually pasted references are
-part of the protocol.
+handoff template per worker lane, commits it to `main`, pushes `main`, and
+verifies the remote tip before dispatch. When independent roadmap lanes are
+approved for parallel execution, create one such handoff per lane; never merge
+multiple lane instructions into an ambiguous shared prompt. The handoff records
+the planning base commit from before the handoff was created; it must not contain
+a self-referential hash for the commit that contains the handoff. The operator
+starts each fresh worker thread in its named worktree and gives it only the
+repository-relative path to that handoff. No second prompt, transcript copy, or
+manually pasted references are part of the protocol.
 
 The file must say, in substance:
 
