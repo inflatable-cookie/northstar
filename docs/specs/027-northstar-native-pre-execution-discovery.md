@@ -1,0 +1,213 @@
+# 027 - Northstar Native Pre-Execution Discovery
+
+Status: active
+Owner: repo maintainers
+Created: 2026-08-16
+Updated: 2026-08-16
+Related research: `bundle-docs/research/translation-memos/matt-pocock-skills-audit-to-northstar.md`
+Governing architecture: `docs/architecture/system-architecture.md`
+Governing contract: `docs/contracts/001-working-rules.md`
+
+## Problem
+
+Northstar has a strong docs spine and an increasingly strict execution boundary,
+but a material project can still move from a broad idea to a plausible spec before
+its destination, domain language, architecture, decision dependencies, and
+operator-owned intent are genuinely settled.
+
+The resulting code is often not wrong in a local sense. It is premature: the
+project starts building while important decisions are still hidden in conversation,
+assumed from context, or left to the worker. Northstar needs a deliberate
+pre-execution discovery phase that is deeper than ordinary planning but remains
+inside the existing repository authority model.
+
+## Destination
+
+Provide a Northstar-native workflow for taking a new or materially ambiguous
+project from an unbounded idea to a bounded, decision-backed spec without using an
+external issue tracker and without allowing the discovery map to authorise its own
+execution.
+
+## Goals
+
+- define a docs-native readiness map for work larger than one planning session;
+- make destination, scope, unresolved decisions, dependencies, and accepted
+  uncertainty explicit;
+- add a reusable intent-rounds question mechanism;
+- distinguish facts the environment can answer from decisions the operator owns;
+- support research, decision prototypes, and operator questionnaires as distinct
+  routes;
+- preserve one canonical decision record instead of duplicating decisions across
+  maps, prompts, specs, and handoffs;
+- compile a cleared map into the existing spec, promotion, roadmap, and batch-card
+  chain;
+- add deterministic checks for dependency integrity, frontier calculation, and
+  plan-only boundaries;
+- add an architecture-refocus review for active code and seams;
+- improve operator comprehension with a small non-mutating reframe route;
+- keep the entire protocol provider-neutral and starter-bundle friendly.
+
+## Non-goals
+
+- another public installable Northstar skill;
+- reuse of external skill names or tracker terminology as Northstar concepts;
+- replacing the existing vision, architecture, contracts, specs, roadmaps, logs, or
+  handoff surfaces;
+- automatic cross-session messaging;
+- parallel write-heavy agents in one active lane;
+- a permanent report for every architecture scan;
+- implementation directly from an uncleared readiness map;
+- treating the agent's own map notes as authority to weaken plan-only mode.
+
+## Northstar vocabulary
+
+Use these names in the Northstar workflow and starter surfaces:
+
+| Term | Meaning |
+| --- | --- |
+| Readiness mapping | Multi-session discovery of decisions required before a bounded destination can enter execution planning. |
+| Intent rounds | Breadth-first questions over the current decision frontier. |
+| Project language | Controlled vocabulary, authority terms, and rejected ambiguities for the project. |
+| Decision prototype | Throwaway evidence used to settle a question conversation cannot settle. |
+| Architecture refocus | Active-lane architecture review that produces candidates without editing code. |
+| Reframe | Clearer restatement of the previous message using project language. |
+
+## Artifact model
+
+The workflow must use existing docs authority surfaces:
+
+- active readiness map and linked decisions under `docs/specs/`;
+- research findings under the project's research surface when research is needed;
+- durable structure under `docs/architecture/`;
+- durable policy and boundary rules under `docs/contracts/`;
+- executable plans under `docs/roadmaps/` and batch cards;
+- evidence under `docs/logs/`;
+- thread continuation under `docs/handoffs/`.
+
+The map is an index. A decision has one canonical record. The map may summarise
+and link a decision, but must not become a second copy of its rationale.
+
+Each decision record must expose enough structured state to calculate readiness:
+
+- kind: `decision`, `research`, `prototype`, or `task`;
+- mode: `operator`, `research`, `prototype`, or `task`;
+- status: `open`, `in-progress`, `resolved`, or `out-of-scope`;
+- explicit `blocked_by` references;
+- authority/owner;
+- resolution evidence or an explicit accepted-uncertainty note.
+
+## Operating model
+
+1. Inspect repository authority, current docs posture, and existing project language.
+2. Establish a bounded destination and success conditions.
+3. Run intent rounds to expose independent unknowns.
+4. Resolve facts through repository inspection, deterministic commands, or bounded
+   research; do not ask the operator questions the environment can answer.
+5. Ask the operator to resolve operator-owned decisions. Recommendations are
+   allowed; silent substitution is not.
+6. Record every material decision once and recompute the open frontier.
+7. Route unresolved questions to research, decision prototypes, or questionnaires
+   when conversation alone is the wrong instrument.
+8. Stop early when the destination has no material fog and ordinary planning is
+   sufficient.
+9. When the frontier is clear, produce or update the master spec and promote
+   durable outcomes before compiling the roadmap.
+10. Mark only cards that satisfy the existing ready-state rubric as executable.
+
+## Plan-only authority
+
+Readiness mapping is plan-only by construction. The map cannot override that rule.
+The agent must not:
+
+- edit production code;
+- mark an operator-owned decision resolved without operator evidence;
+- turn a research result into an implementation instruction without promotion;
+- create a ready card while an unresolved decision or intent checkpoint governs its
+  scope;
+- treat a map note, conversation summary, or worker preference as an authority
+  change.
+
+The only transition into implementation planning is an explicit operator-owned
+readiness decision represented in the repository by the resulting spec and its
+promotion/roadmap state.
+
+## Frontier rules
+
+A decision is on the frontier when it is open, not out-of-scope, not claimed by an
+active planning session, and every blocking decision is resolved. A research item
+may be delegated when it has a complete question and source boundary. An
+operator-owned or prototype-owned decision remains blocked until the live exchange
+or evidence round returns.
+
+The first implementation should calculate the frontier deterministically from
+repository files. It must report missing references, cycles, orphan decisions, and
+invalid states rather than guessing.
+
+## Architecture refocus
+
+Architecture refocus is a separate planning route, not an implementation route. It
+should scope itself to an active lane or named area, inspect current architecture,
+contracts, tests, recent changes, and papercuts, then produce a small candidate set.
+The initial report is ephemeral by default. A selected candidate enters readiness
+mapping, research, a decision prototype, or a normal spec only when it earns that
+promotion.
+
+The default output must be Markdown or self-contained HTML. It must not require a
+network-loaded CDN to be useful or verifiable.
+
+## Reframe
+
+Reframe is a non-mutating communication route. It restates the previous message in
+clearer language, uses the project's project-language terms, identifies a missing
+premise when possible, and does not change planning state or silently alter scope.
+
+## Handoff integration
+
+The existing durable handoff contract remains authoritative. Add only optional
+fields for:
+
+- handoff purpose: fresh thread, new harness, new worktree, side task, or operator
+  takeover;
+- target outcome for the next session;
+- suggested Northstar mode or references.
+
+Do not replace `docs/handoffs/` with temporary transit files or automatic provider
+messaging.
+
+## Acceptance criteria
+
+- a new readiness map can be created under the existing docs spine without an
+  external tracker;
+- the map and decision records use the Northstar vocabulary above;
+- frontier output is deterministic and detects invalid dependency state;
+- operator-owned decisions cannot be silently resolved by the agent;
+- a no-fog project exits without a heavyweight map;
+- a cleared map compiles into a normal Northstar spec and roadmap path;
+- architecture refocus produces no code changes and is offline-safe;
+- reframe changes no repository state;
+- handoff additions preserve the current worker/PR contract;
+- starter templates and checks remain copy-ready;
+- one dogfood run measures planning revisions, reopened decisions, implementation
+  rework, and operator correction burden.
+
+## Planned batches
+
+1. Define the readiness-map and decision-record contract plus deterministic checks.
+2. Add intent rounds, project language, decision-prototype, and questionnaire routes.
+3. Add the routed Northstar procedures and starter-bundle templates.
+4. Add architecture refocus and reframe, then dogfood the complete flow.
+
+## Open questions
+
+- Should decision records remain flat under `docs/specs/` or use a bounded
+  destination subdirectory?
+- Which repository-native file format gives the clearest frontier output without
+  introducing a second planning database?
+- How much of project language belongs in a glossary versus architecture or
+  contract ownership records?
+- Which first consumer project will provide the strongest pre-execution test?
+
+## Next task
+
+After `g02.025` orchestrator dogfood closeout, define the readiness-map file
+contract and deterministic frontier checks as the first `g02.026` batch.
