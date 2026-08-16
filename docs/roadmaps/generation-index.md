@@ -77,6 +77,7 @@ sequence.
 ## Next Task
 
 No blocking roadmap milestone is open. `g02.025` is complete after the
-orchestrator/worker dogfood and closeout; `g02.026/075` is now complete after
-its contract PR and merge. Prepare `g02.026/076` by defining the exact
-frontier-check command and ready-state evidence before implementation.
+orchestrator/worker dogfood and closeout; `g02.026/075` is complete after
+its contract PR and merge. `g02.026/076` is ready for execution through the
+worker/PR loop with its exact frontier-check command and ready-state evidence
+now explicit.
