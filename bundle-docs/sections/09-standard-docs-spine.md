@@ -18,9 +18,11 @@ Every normal Northstar repo should have:
 - `docs/contracts/`
 - `docs/roadmaps/`
 - `docs/logs/`
+- `docs/handoffs/` -- friendly, timestamped notes for genuine fresh-thread takeovers
 
 This is the smallest standard spine that still gives a repo clear direction,
-realized structure, hard rules, execution sequencing, and evidence.
+realized structure, hard rules, execution sequencing, evidence, and a dependable
+place for fresh-thread handoffs.
 
 ## Stricter Spine
 
@@ -53,6 +55,7 @@ Northstar framework.
   changes before promotion.
 - `roadmaps/` sequence approved work from the canonical surfaces.
 - `logs/` capture batch-level evidence and decisions.
+- `handoffs/` hold friendly, timestamped notes for genuine thread takeovers.
 
 ## Nested Docs-Authority Repos
 
@@ -138,6 +141,7 @@ The template bundle should make both modes copy-ready:
 
 - the baseline spine should be obvious from the section layout
 - the stricter spine should have concrete starter files, not just doctrine
+- `handoffs/README.md` is the copy-ready home for fresh-thread notes
 - nested docs-authority repos should have an explicit native Effigy starter,
   not only prose about adapting the root-owned one
 

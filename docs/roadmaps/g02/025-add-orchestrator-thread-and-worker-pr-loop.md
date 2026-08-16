@@ -20,7 +20,7 @@ resulting PR without depending on private cross-thread history.
 
 - [x] promote the orchestrator/worker/PR boundary into architecture and contract
 - [x] add the internal `orchestrator` mode to the single public skill
-- [x] add a reusable worker launch-packet template
+- [x] add a reusable worker handoff extension of the core handoff template
 - [ ] prove the loop with one bounded low-risk lane
 - [ ] measure relay burden, worker rework, review cycles, and validation success
 - [x] refresh the installed skill and prove source/install parity
@@ -37,7 +37,7 @@ resulting PR without depending on private cross-thread history.
 
 - [x] define the single-file handoff fields and worker file contract
 - [x] define chunk reporting, stop, review, merge, and closeout rules
-- [x] add a copy-ready packet template
+- [x] add a copy-ready worker handoff template
 
 ### Batch 25.3 - Dogfood And Measure The Loop
 
@@ -52,7 +52,7 @@ resulting PR without depending on private cross-thread history.
 - [x] repair or adapt the parity checker to the supported Effigy runtime
 - [x] refresh the installed skill from source through the documented path
 - [x] prove source/install file-set and content parity
-- [x] confirm a fresh session loads the new mode and packet template
+- [x] confirm a fresh session loads the new mode and worker handoff template
 
 ## Acceptance Criteria
 

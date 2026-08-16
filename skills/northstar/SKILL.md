@@ -34,10 +34,10 @@ is not a contract gap by itself.
 - **Research:** promoted decisions in architecture/contracts, not stranded memos.
 - **Recovery:** trustworthy planning surfaces and canonical refs restored.
 - **Normalize:** baseline or strict spine installed/maintained; Effigy-first QA.
-- **Orchestrator:** question-led planning, one pushed run-file handoff, bounded PR review loop.
-- **Handoff:** seven-section brief for another thread (plus any consumer
-  trailing headings the target docs policy requires); not a substitute for
-  log/roadmap closeout.
+- **Orchestrator:** question-led planning, one pushed worker handoff under `docs/handoffs/`, bounded PR review loop.
+- **Handoff:** a human-friendly seven-section file under `docs/handoffs/`, with
+  an absolute path returned to the operator; not a substitute for log/roadmap
+  closeout.
 
 ## Operator summary (all modes)
 
@@ -75,7 +75,8 @@ Northstar source repo, expanded doctrine lives at
 - Setup/templates: [`assets/templates/`](./assets/templates/)
 - Papercuts starter: `assets/templates/PAPERCUTS.md`
 - Handoff template: [`assets/templates/northstar-handoff.md.template`](./assets/templates/northstar-handoff.md.template)
-- Orchestrator run packet: [`assets/templates/northstar-orchestrator-run.md.template`](./assets/templates/northstar-orchestrator-run.md.template)
+- Orchestrator worker handoff extension: [`assets/templates/northstar-orchestrator-run.md.template`](./assets/templates/northstar-orchestrator-run.md.template)
+- Handoff directory: `docs/handoffs/`
 - Handoff contract: [`references/handoff-contract.md`](./references/handoff-contract.md)
 
 ## Do not

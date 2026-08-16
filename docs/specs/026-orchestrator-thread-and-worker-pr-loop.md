@@ -29,9 +29,10 @@ feature in the planning checkout once the worker boundary is declared.
 
 The operator creates a fresh worker thread in a dedicated worktree from the
 pushed `main` commit. The orchestrator has already committed and pushed the
-planning artifacts and one concrete run file. The worker receives only the
-repository-relative path to that file; the file contains the complete worker
-instructions and canonical references. The worker owns only the ready cards
+planning artifacts and one concrete worker handoff under `docs/handoffs/`. The
+worker receives only the repository-relative path to that handoff; the file
+contains the complete worker instructions and canonical references. The worker
+owns only the ready cards
 named in that file. It can execute several bounded cards in one thread, reports
 after each meaningful chunk, updates execution evidence, and stops whenever the
 contract says planning or operator intent is required. When the assigned runway
@@ -72,11 +73,11 @@ line-specific or card-specific comments, or pause with a named planning gap.
 
 ## State model
 
-Use these states in the single run file or log when the run spans turns:
+Use these states in the worker handoff or log when the run spans turns:
 
 - `discovery` — questions and edge cases are still being surfaced;
 - `planning` — spec/architecture/contracts/roadmap are being aligned;
-- `ready-to-launch` — base and cards are ready; the single run-file path can be
+- `ready-to-launch` — base and cards are ready; the worker-handoff path can be
   handed to a worker;
 - `worker-in-flight` — worker is executing the assigned runway;
 - `awaiting-review` — worker has opened a PR and returned evidence;
@@ -92,23 +93,26 @@ The orchestrator/worker boundary is a strict sequence:
 2. put the planning checkout on `main` and remove unrelated changes;
 3. run required QA;
 4. commit all planning and roadmap artifacts to `main`;
-5. create one concrete run file from the packet template under
-   `docs/logs/YYYY-MM/`;
-6. commit that run file to `main`, push `main`, and verify local `HEAD` equals
+5. create one concrete worker handoff from
+   `skills/northstar/assets/templates/northstar-orchestrator-run.md.template`
+   under `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md`;
+6. commit that handoff to `main`, push `main`, and verify local `HEAD` equals
    `origin/main`;
 7. create the worker branch/worktree from that pushed commit;
-8. give the worker thread only the repository-relative run-file path.
+8. give the worker thread only the repository-relative handoff path.
 
 The worker must not require a separately copied prompt, transcript, or list of
-canonical refs. The run file may point at canonical repository files, but it is
+canonical refs. The handoff may point at canonical repository files, but it is
 the only external handoff artifact.
 
 ## Required single-file handoff
 
-The orchestrator must create one concrete run file from
+The orchestrator must create one concrete worker handoff from
 `skills/northstar/assets/templates/northstar-orchestrator-run.md.template` before
-the worker starts. It must be committed to `main`, pushed, and verified against
-`origin/main`. The worker receives only its repository-relative path.
+the worker starts. It must preserve the seven core handoff sections, add the
+worker/PR flow inside `## Completion Protocol`, be committed to `main`, pushed,
+and verified against `origin/main`. The worker receives only its repository-
+relative path.
 
 The file must contain or point to all information required for execution:
 
@@ -124,7 +128,7 @@ The file must contain or point to all information required for execution:
 
 ## Worker protocol
 
-1. Read the supplied repository-relative run-file path first. Verify the
+1. Read the supplied repository-relative handoff path first. Verify the
    worktree, branch, pushed base ref, clean starting state, and loaded repo
    instructions before editing.
 2. Read the active milestone, every assigned card, and governing refs.
@@ -180,7 +184,7 @@ are adapters that may improve ergonomics but must not change the protocol.
 
 The initial Northstar dogfood must prove:
 
-- the single run-file path can be handed to a fresh thread without private chat
+- the worker handoff path can be handed to a fresh thread without private chat
   context;
 - the worker remains in the dedicated worktree and branch;
 - the worker completes at least one bounded card and reports evidence;
@@ -206,7 +210,8 @@ rollout defaults.
 
 Durable role and boundary rules are promoted into the live architecture and
 working-rules contract. This spec remains active until the dogfood evidence
-settles the run-file placement, adapter defaults, and review-cycle ergonomics.
+settles the worker-handoff placement, adapter defaults, and review-cycle
+ergonomics.
 
 ## Next task
 

@@ -59,10 +59,14 @@ to pick one mode:
 - **Create an orchestrator runway and worker PR loop** -> `northstar` (orchestrator mode)
 
 In this mode, the orchestrator commits and pushes the planning state and one
-run file to `main` before dispatch. The new worker thread receives only the
-repository-relative path to that run file; no second prompt or copied context is
-needed.
+worker handoff under `docs/handoffs/` before dispatch. The new worker thread
+receives only the repository-relative path to that handoff; no second prompt or
+copied context is needed.
 - “Create a handoff for the next thread” -> `northstar` (handoff mode)
+
+Handoff mode writes a plain-spoken note to `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md`
+and returns its absolute path. The operator should pass that path to the next
+thread rather than copying the whole note into chat.
 
 If humans are going to reuse the same opener across multiple threads, use:
 

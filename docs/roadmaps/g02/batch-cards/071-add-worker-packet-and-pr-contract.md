@@ -9,12 +9,12 @@ Auto-start next card: no
 
 ## Objective
 
-Give the orchestrator one compact, durable, committed run file and define the
-worker, reporting, PR review, merge, and closeout boundaries.
+Give the orchestrator one compact, durable, committed worker handoff and define
+the worker, reporting, PR review, merge, and closeout boundaries.
 
 ## Scope
 
-- one committed run-file path is the only external worker handoff
+- one committed worker-handoff path is the only external worker handoff
 - the worker can re-enter from that path and canonical refs alone
 - the worker has an explicit worktree, branch, pushed base, runway, and PR contract
 - chunk reporting and stop conditions
@@ -24,8 +24,8 @@ worker, reporting, PR review, merge, and closeout boundaries.
 
 ## Acceptance Criteria
 
-- a fresh worker can re-enter from the repository-relative run-file path alone
-- the run file is committed on pushed `main` before the worker starts
+- a fresh worker can re-enter from the repository-relative worker-handoff path alone
+- the handoff is committed on pushed `main` before the worker starts
 - the worker has an explicit worktree, branch, pushed base, runway, and PR contract
 - the orchestrator reviews the diff/checks rather than trusting narrative
 - requested changes can return to the same worker branch
@@ -35,7 +35,7 @@ worker, reporting, PR review, merge, and closeout boundaries.
 
 - active spec
 - working-rules contract update
-- packet template
+- worker handoff template
 - operator quick-start update
 - `effigy qa`
 - `effigy qa:docs`
@@ -55,7 +55,7 @@ worker, reporting, PR review, merge, and closeout boundaries.
 
 ## Stop Conditions
 
-- stop if packet duplication becomes a second planning authority
+- stop if handoff duplication becomes a second planning authority
 - stop if PR review or merge semantics cannot be kept provider-neutral
 
 ## Completion Notes

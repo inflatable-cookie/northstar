@@ -44,7 +44,7 @@ compatibility aliases.
 
 | Mode file | Use when |
 | --- | --- |
-| `orchestrator.md` | Question-led planning, one pushed run-file handoff, bounded PR review loop |
+| `orchestrator.md` | Question-led planning, one pushed worker handoff under `docs/handoffs/`, bounded PR review loop |
 | `normalize-docs.md` | Bootstrap, migrate, or ongoing docs-spine hygiene |
 | `plan-from-scratch.md` | Planning coverage still missing |
 | `shape-with-specs-and-promote.md` | Provisional spec lane before promotion |

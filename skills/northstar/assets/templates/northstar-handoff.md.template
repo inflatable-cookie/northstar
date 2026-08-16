@@ -1,8 +1,11 @@
 ---
 title: {{TOPIC}} handoff
+kind: northstar-handoff
 status: active
 owner: {{OWNER}}
+created: {{YYYY-MM-DD}}
 updated: {{YYYY-MM-DD}}
+handoff_path: {{ABSOLUTE_HANDOFF_PATH}}
 tags: [coordination, handoff]
 ---
 
@@ -16,60 +19,55 @@ tags: [coordination, handoff]
 
 ## Current State
 
-- Done so far: {{WHAT_IS_ALREADY_TRUE_NOW}}
-- Still open: {{WHAT_THE_NEXT_THREAD_NEEDS_TO_CONTINUE}}
-- Active spec lane: {{ACTIVE_SPEC_LANE_OR_NONE}}
-- Canonical refs: {{CANONICAL_PROMOTED_REFS}}
-- Remaining continuation envelope: {{IN_BOUNDS_NEXT_CARD_OR_STOP_SIGNAL}}
-- Lane budget / pause signal: {{LANE_BUDGET_OR_PAUSE_SIGNAL}}
-- Key files:
+Here is the short version of where things stand:
+
+- **Done:** {{WHAT_IS_ALREADY_TRUE_NOW}}
+- **Still open:** {{WHAT_THE_NEXT_THREAD_NEEDS_TO_CONTINUE}}
+- **Active spec lane:** {{ACTIVE_SPEC_LANE_OR_NONE}}
+- **Current batch card:** {{CURRENT_BATCH_CARD_OR_NONE}}
+- **Canonical refs:** {{CANONICAL_PROMOTED_REFS}}
+- **Remaining continuation envelope:** {{IN_BOUNDS_NEXT_CARD_OR_STOP_SIGNAL}}
+- **Lane budget / pause signal:** {{LANE_BUDGET_OR_PAUSE_SIGNAL}}
+- **Key files:**
   - {{ABSOLUTE_PATH_ONE}}
   - {{ABSOLUTE_PATH_TWO}}
 
 ## Boundaries
 
-- Stay within {{ACTIVE_ROADMAP_OR_CONTRACT_SCOPE}}
-- Do not {{EXPLICIT_OUT_OF_SCOPE_BOUNDARY}}
-- Follow repo constraints from [AGENTS.md]({{ABSOLUTE_AGENTS_PATH}})
+Please keep the next pass within these boundaries:
+
+- **In scope:** {{ACTIVE_ROADMAP_OR_CONTRACT_SCOPE}}
+- **Out of scope:** {{EXPLICIT_OUT_OF_SCOPE_BOUNDARY}}
+- **Repo constraints:** Follow `{{ABSOLUTE_AGENTS_PATH}}` and the canonical
+  architecture/contracts named above.
 
 ## Important Context
 
-- Planning lineage: {{ACTIVE_VISION_ROADMAP_LOG_CONTEXT}}
-- Spec-to-canonical relationship: {{HOW_SPEC_RELATES_TO_ARCHITECTURE_AND_CONTRACTS}}
-- Decisions and preferences: {{NON_OBVIOUS_DECISIONS_OR_USER_PREFERENCES}}
-- Open tensions: {{KNOWN_RISKS_AMBIGUITIES_OR_JUDGMENT_CALLS}}
+- **Planning lineage:** {{ACTIVE_VISION_ROADMAP_LOG_CONTEXT}}
+- **How the plan fits the system:** {{HOW_SPEC_RELATES_TO_ARCHITECTURE_AND_CONTRACTS}}
+- **Decisions and preferences:** {{NON_OBVIOUS_DECISIONS_OR_USER_PREFERENCES}}
+- **Open tensions:** {{KNOWN_RISKS_AMBIGUITIES_OR_JUDGMENT_CALLS}}
 
 ## Suggested Next Move
 
-{{FIRST_STEP_FOR_THE_NEXT_THREAD}}
+Start here: {{FIRST_STEP_FOR_THE_NEXT_THREAD}}
+
+Take a moment to read the named canonical files before changing anything. If
+one of the open questions changes the shape of the work, pause and bring that
+question back rather than quietly choosing for the user.
 
 ## Completion Protocol
 
-Use this section only when a fresh-thread boundary is genuinely required. If
-the same thread can continue after compaction, prefer normal closeout and do
-not create a handoff.
+This handoff exists because another thread genuinely needs to take over. Before
+you finish, please:
 
 1. Confirm the current batch card already reflects the stopping point.
-2. Confirm the roadmap and log surfaces already reflect the outcome of this batch.
-3. Confirm whether any continuation envelope remains in-bounds or whether a
-   stop signal exhausted it.
-4. Confirm the lane budget or explicit pause signal for this stopping point.
-5. Confirm that another thread truly needs to take over and that low context or
-   compaction alone is not the reason this handoff exists.
-6. Record unresolved risks or blockers explicitly.
-7. Leave one clear next task for the following thread.
+2. Confirm the roadmap and log surfaces already reflect what actually happened.
+3. Say whether another in-bounds card remains or the continuation envelope is
+   exhausted;
+4. Record the lane budget or pause signal for this stopping point;
+5. Call out unresolved risks or blockers plainly;
+6. Leave one clear next task for the following thread.
 
-<!--
-Consumer trailing sections (optional): keep the seven core sections above
-first and in order. Append headings the consumer's docs policy requires on
-handoff logs. Jetstream's report-policy gate requires both of the following;
-omit them in repos that do not.
--->
-
-## Vision Target Delta
-
-{{HOW_THIS_HANDOFF_MOVES_OR_PRESERVES_THE_VISION_TARGET_OR_DELETE_SECTION}}
-
-## Next Task
-
-{{SINGLE_CLEAR_NEXT_TASK_FOR_THE_FOLLOWING_THREAD_OR_DELETE_SECTION}}
+If the same thread can continue after compaction, do not create another handoff
+just for that reason.

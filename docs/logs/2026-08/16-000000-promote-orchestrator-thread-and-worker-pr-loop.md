@@ -64,10 +64,11 @@ Recorded one actionable root-queue entry for Markdown hard-break whitespace in
 ## Follow-up protocol clarification
 
 The launch contract is intentionally stricter than the initial design: the
-orchestrator publishes planning state on `main`, creates one concrete run file,
-commits and pushes that file, verifies `HEAD == origin/main`, creates the worker
-worktree from that pushed commit, and gives the worker only the run-file path.
-The worker does not receive a second prompt or copied transcript context.
+orchestrator publishes planning state on `main`, creates one concrete worker
+handoff under `docs/handoffs/`, commits and pushes that handoff, verifies
+`HEAD == origin/main`, creates the worker worktree from that pushed commit, and
+gives the worker only the handoff path. The worker does not receive a second
+prompt or copied transcript context.
 
 
 ## Next task

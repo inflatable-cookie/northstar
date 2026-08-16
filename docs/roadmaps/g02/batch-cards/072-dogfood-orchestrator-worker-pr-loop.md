@@ -26,15 +26,15 @@ and orchestrator closeout.
 ## Lane Runway Context
 
 - Higher-level lane owner: prove the new execution boundary before adding adapters
-- Next likely transition: choose adapter/default packet persistence from evidence
+- Next likely transition: choose adapter/default worker-handoff persistence from evidence
 - Next planning checkpoint: after the first PR review cycle
 
 ## Scope
 
 - prepare and publish `main` with the planning artifacts;
-- create one mandatory run file and commit/push it on `main`;
+- create one mandatory worker handoff under `docs/handoffs/` and commit/push it on `main`;
 - create a fresh worker thread in a dedicated worktree from pushed `main`;
-- give the worker only the repository-relative run-file path;
+- give the worker only the repository-relative handoff path;
 - exercise approval or requested-changes review
 - measure elapsed time, rework, review cycles, validation, and relay burden
 - do not add automatic cross-session messaging or CI workflows
@@ -44,10 +44,10 @@ and orchestrator closeout.
 1. Select a low-risk ready card and record why it is suitable.
 2. Start the orchestrator mode and complete the question/plan/base checks.
 3. Commit and push the planning artifacts to `main`.
-4. Create the single run file, commit and push it to `main`, and verify local
-   `HEAD` equals `origin/main`.
+4. Create the single worker handoff under `docs/handoffs/`, commit and push it to
+   `main`, and verify local `HEAD` equals `origin/main`.
 5. Create the worker branch/worktree from pushed `main` and give the new worker
-   thread only the repository-relative run-file path.
+   thread only the repository-relative handoff path.
 6. Relay at least one worker chunk report; reconcile card/log state.
 7. Receive the PR URL; review diff, checks, and canonical-plan fit.
 8. Request changes or approve/merge with explicit operator authorisation.
@@ -57,8 +57,8 @@ and orchestrator closeout.
 ## Acceptance Criteria
 
 - planning and roadmap artifacts are committed and pushed to `main` before dispatch
-- the run file is committed and pushed to `main` before dispatch
-- worker reads the run file from its repository-relative path without any other
+- the worker handoff is committed and pushed to `main` before dispatch
+- worker reads the handoff from its repository-relative path without any other
   prompt, transcript copy, or manually copied refs
 - worker never edits the planning checkout
 - at least one bounded chunk is reported with real validation evidence
@@ -69,7 +69,7 @@ and orchestrator closeout.
 
 ## Evidence Required
 
-- single run-file path
+- single worker-handoff path under `docs/handoffs/`
 - pushed main commit and remote verification
 - worktree and branch refs
 - worker report(s)
@@ -100,5 +100,5 @@ and orchestrator closeout.
 
 ## Next Task
 
-After closeout, decide whether to add a provider adapter, revise packet placement,
-or keep the manual operator-mediated path as the default.
+After closeout, decide whether to add a provider adapter, revise worker-handoff
+placement, or keep the manual operator-mediated path as the default.

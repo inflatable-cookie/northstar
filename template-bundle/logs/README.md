@@ -26,7 +26,8 @@ Use logs as the third step in closeout, not the first:
 5. record whether the continuation envelope still holds or a stop signal
    exhausted it
 6. record the lane budget state and pause signal when the run paused cleanly
-7. create or update a handoff only if another thread needs to continue
+7. create or update a handoff under `docs/handoffs/` only if another thread
+   genuinely needs to continue
 8. refresh the roadmap front doors with one explicit next-task pointer
 
 ## Continuation note
@@ -80,6 +81,12 @@ Use that pattern for the end-of-turn closeout message, not every short reply.
 - `YYYY-MM/05-130000-example-rollover-decision-g02.md`
 - `YYYY-MM/06-140000-example-contract-delta-g02-platform-reset.md`
 - `YYYY-MM/07-150000-example-first-batch-g02-001.md`
+
+## Handoff convention
+
+When a fresh thread needs to take over, write the note under
+`docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md`. Keep logs for evidence and handoffs
+for human-friendly re-entry.
 
 ## Templates
 

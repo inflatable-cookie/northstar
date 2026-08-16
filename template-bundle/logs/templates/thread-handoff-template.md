@@ -1,6 +1,9 @@
 # Handoff: <Topic>
 
-**Type: TEMPLATE** -- Copy and fill in when creating continuation briefs.
+**Type: TEMPLATE** -- New handoffs should be written by the installed Northstar
+handoff mode under `docs/handoffs/` with a filename like
+`YYYYMMDD-HHMMSS-<slug>.md`. This older bundle template is retained as a
+reference for the same core content.
 
 Status: active
 Created: YYYY-MM-DD

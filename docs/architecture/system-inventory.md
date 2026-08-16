@@ -21,10 +21,11 @@ skills.
 | `template-bundle/` | product artifact | repo maintainers | copy-ready downstream docs bundle | `docs/specs/archive/001-northstar-delivery-layer.md`, `docs/roadmaps/g01/001-enact-northstar-on-northstar.md` |
 | `skills/` | automation surface | repo maintainers | installable agent workflows and published distribution | `docs/contracts/001-working-rules.md`, `bundle-docs/skills/README.md`, `scripts/check-northstar-skill-install.rhai` |
 | `docs/` | live planning surface | repo maintainers | Northstar's own planning and execution state | all files in this repo-local docs spine |
+| `docs/handoffs/` | fresh-thread coordination surface | handoff/orchestrator mode | timestamped takeover notes | handoff contract and templates |
 | `scripts/` and `effigy` checks | validation surface | repo maintainers | repo integrity and enforcement hooks | `scripts/check-northstar-repo-contract.rhai`, roadmap evidence requirements |
 | root `PAPERCUTS.md` | agent feedback surface | executing agents + repo maintainers | owning repository root | `bundle-docs/papercuts.md`, agent templates, working rules |
 | orchestrator thread | conversational planning and review surface | repo maintainers / operator | active Northstar lane | `skills/northstar/references/modes/orchestrator.md`, active spec/roadmap/contract |
-| worker thread/worktree | bounded implementation surface | worker agent | assigned ready cards and branch | single committed run file, `AGENTS.md`, batch cards, tests, commits |
+| worker thread/worktree | bounded implementation surface | worker agent | assigned ready cards and branch | single committed handoff under `docs/handoffs/`, `AGENTS.md`, batch cards, tests, commits |
 | PR review boundary | delivery and merge-control surface | orchestrator + operator | worker branch against prepared base | PR metadata, diff, checks, review verdict, closeout log |
 
 ## Interfaces and Dependencies
@@ -36,8 +37,8 @@ skills.
 | Spec-to-roadmap execution | `docs/specs/` | `docs/roadmaps/`, `docs/logs/` | `001-working-rules` | Batch cards are the detailed execution unit |
 | Validation loop | roadmap/log state | `effigy qa`, `effigy qa:docs` | `001-working-rules` | Validation evidence is required for closure |
 | Papercut feedback | agent execution | maintenance triage and normal planning surfaces | `bundle-docs/papercuts.md`, `001-working-rules` | Notes are captured at encounter time and promoted only after triage |
-| Orchestrator planning | operator conversation + canonical planning spine | single pushed run-file handoff | `026-orchestrator-thread-and-worker-pr-loop` | Questions settle intent before cards are marked ready |
-| Worker execution | single run-file path + ready cards | worker branch/worktree and evidence | `001-working-rules`, active batch cards | Worker stops rather than infers missing behavior |
+| Orchestrator planning | operator conversation + canonical planning spine | single pushed worker handoff under `docs/handoffs/` | `026-orchestrator-thread-and-worker-pr-loop` | Questions settle intent before cards are marked ready |
+| Worker execution | single worker-handoff path + ready cards | worker branch/worktree and evidence | `001-working-rules`, active batch cards | Worker stops rather than infers missing behavior |
 | PR review and merge | worker branch/PR | orchestrator verdict + operator-authorised merge | `001-working-rules`, active cards | Review uses diff/check evidence; merge is separate from PR creation |
 
 ## Validation Surfaces
@@ -51,7 +52,7 @@ skills.
 | Papercut loop | root queue, doctrine, templates, skill instruction, and QA coverage | repo maintainers | ready |
 | Published skill parity | Skills CLI update path, global install inspection, and source checker | repo maintainers | ready; 32-file parity proven |
 | Consumer papercut proof | real consumer queue entry and manual triage boundary | repo maintainers + consumer owner | observed |
-| Orchestrator mode | single committed run file, fresh worker worktree, chunk report, PR, review, and closeout evidence | repo maintainers + operator | designed; dogfood pending |
+| Orchestrator mode | single committed handoff under `docs/handoffs/`, fresh worker worktree, chunk report, PR, review, and closeout evidence | repo maintainers + operator | designed; dogfood pending |
 | Model-efficiency comparison | measured role routing, rework, review cycles, and relay burden | repo maintainers | pending dogfood |
 
 ## Planning Gaps
@@ -61,7 +62,7 @@ skills.
 - `skills/` do not yet consistently emit master specs, batch cards, and
   autonomy envelopes by default.
 - The live repo pilot has not yet proven a longer autonomous multi-card run.
-- The single-file run handoff and PR loop have not yet been proven in a real fresh
+- The single-file handoff and PR loop have not yet been proven in a real fresh
   worker thread/worktree; adapter and persistence defaults remain open.
 - The new source skill is distributed to the installed skill copy and the
   32-file parity check now passes.
