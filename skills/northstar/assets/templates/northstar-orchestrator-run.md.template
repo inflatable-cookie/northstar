@@ -42,6 +42,8 @@ Here is the state the worker is inheriting:
 - **Ready cards, in order:** `{{CARD_REFS}}`
 - **Allowed runway:** `{{ASSIGNED_RUNWAY}}`
 - **Remaining card budget:** `{{CARD_COUNT_OR_TIME_BOUND}}`
+- **Dispatch topology:** `{{SERIAL_OR_PARALLEL_LANE_PLAN}}`
+- **Parallel safety check:** `{{NO_SHARED_MUTABLE_SCOPE_OR_OTHER_REASON_SERIAL}}`
 - **Canonical refs:** {{ARCHITECTURE_REFS}}; {{CONTRACT_REFS}}
 - **Model capability profile:** `{{WORKER_PROFILE}}`
 - **Tool/runtime restrictions:** `{{RESTRICTIONS_OR_NONE}}`
@@ -59,6 +61,9 @@ Please keep this run inside the named runway:
 - **Out of scope:** `{{EXPLICIT_OUT_OF_SCOPE_BOUNDARY}}`
 - Do not invent architecture, change contracts, widen the roadmap, or choose an
   unresolved product/API/persistence/security decision.
+- This handoff represents one worker lane. Do not edit another lane's assigned
+  scope; if shared mutable scope or a hidden dependency appears, stop and report
+  it through the operator.
 - Work only in `{{WORKTREE_PATH}}` on `{{WORKER_BRANCH}}`. Do not edit the
   orchestrator's planning checkout.
 - Do not merge the PR. Merge remains a separate operator-authorised action.
