@@ -96,6 +96,8 @@ fn required_files() {
         "scripts/check-northstar-repo-contract.rhai",
         "scripts/check-northstar-posture-advisory.rhai",
         "scripts/check-northstar-skill-install.rhai",
+        "scripts/check-northstar-readiness-map.rhai",
+        "scripts/test-northstar-readiness-map.rhai",
         "template-bundle/README.md",
         "template-bundle/specs/archive/README.md",
         "template-bundle/contracts/001-working-rules-template.md",
@@ -123,6 +125,7 @@ fn required_files() {
         "skills/northstar/assets/templates/effigy.native.toml.template",
         "skills/northstar/assets/templates/northstar-handoff.md.template",
         "scripts/lib/northstar-repo-contract-data.rhai",
+        "scripts/lib/northstar-readiness-map.rhai",
     ]
 }
 
@@ -211,6 +214,8 @@ fn required_content() {
         ["bundle-docs/skills/README.md", "effigy check:skill-install", "skills distribution parity command"],
         ["scripts/README.md", "check:posture-advisory", "scripts README posture advisory task"],
         ["scripts/README.md", "[northstar:advisory]", "scripts README advisory prefix"],
+        ["scripts/README.md", "effigy check:readiness-map", "scripts README readiness-map checker command"],
+        ["scripts/README.md", "effigy test:readiness-map", "scripts README readiness-map fixture command"],
         ["docs/contracts/001-working-rules.md", "### Ready-state rubric", "working-rules readiness heading"],
         ["docs/contracts/001-working-rules.md", "### Continuation envelope", "working-rules continuation heading"],
         ["docs/contracts/001-working-rules.md", "### Lane budget and pause signals", "working-rules lane-budget heading"],
@@ -258,6 +263,9 @@ fn required_content() {
         ["effigy.toml", "\"check:posture-advisory\" = [{ rhai = \"scripts/check-northstar-posture-advisory.rhai\" }]", "Rhai posture advisory checker task"],
         ["effigy.toml", "check:skill-install", "Rhai skill parity task"],
         ["effigy.toml", "scripts/check-northstar-skill-install.rhai", "Rhai skill parity script"],
+        ["effigy.toml", "\"check:readiness-map\" = [{ rhai = \"scripts/check-northstar-readiness-map.rhai\" }]", "Rhai readiness-map checker task"],
+        ["effigy.toml", "\"test:readiness-map\" = [{ rhai = \"scripts/test-northstar-readiness-map.rhai\" }]", "Rhai readiness-map fixture task"],
+        ["effigy.toml", "\"qa:docs\" = [{ task = \"check:repo-contract\" }, { task = \"check:readiness-map\" }, { task = \"test:readiness-map\" }]", "readiness-map docs QA wiring"],
         ["skills/northstar/references/handoff-contract.md", "remaining continuation envelope", "handoff contract continuation state"],
         ["skills/northstar/assets/templates/northstar-handoff.md.template", "Lane budget / pause signal", "handoff template lane-budget state"],
         ["template-bundle/logs/templates/thread-handoff-template.md", "Remaining continuation envelope", "bundle handoff continuation state"],
