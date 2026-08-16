@@ -57,6 +57,25 @@ boundary is checked before Effigy’s native link validator runs.
 skill boundary. Every local Markdown link under `skills/northstar/` must resolve
 inside that folder; escaping or missing targets fail QA.
 
+## Readiness-map frontier (`check:readiness-map`)
+
+The readiness-map checker is read-only and fail-closed. It scans live readiness
+maps under `docs/specs/` by default, or one positional destination/fixture root.
+It reports missing references, orphan records, dependency cycles, invalid states,
+and a deterministic open frontier without resolving operator-owned decisions.
+
+```bash
+effigy check:readiness-map
+effigy check:readiness-map scripts/fixtures/readiness-map/valid
+effigy test:readiness-map
+effigy qa:docs
+```
+
+The fixture test covers valid, missing-reference, cycle, orphan, and
+operator-blocked cases without network, database, provider, or external tracker
+access. A repository with no live readiness maps passes with deterministic
+zero-map output.
+
 ## Posture advisory (`check:posture-advisory`)
 
 Non-blocking checks for common **declared vs actual** drift in Northstar-shaped
