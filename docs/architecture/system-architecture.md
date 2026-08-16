@@ -73,7 +73,10 @@ and the operator has a repository-relative handoff path to give the new thread.
 - Orchestrator and worker threads must use separate worktree/branch boundaries;
   a worker may not edit the orchestrator's planning checkout.
 - A worker's completion authority is a reviewable PR plus evidence, not a chat
-  claim. The orchestrator reviews the diff and checks against canonical refs.
+  claim. The orchestrator reviews the diff and checks against canonical refs and
+  records the verdict in the provider review surface; same-identity GitHub runs
+  use a PR comment because formal self-approval is unavailable.
+- Merge remains a separate operator-authorized action.
 - Provider-native subagents, session messaging, and hosted agents are optional
   adapters, not Northstar protocol dependencies.
 - Papercuts remain an observation queue, not a competing planning authority or
