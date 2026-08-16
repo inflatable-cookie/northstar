@@ -50,6 +50,7 @@ rollover signal.
 - `023-add-papercuts-feedback-loop.md`
 - `024-harden-skill-distribution-and-consumer-papercut-proof.md`
 - `025-add-orchestrator-thread-and-worker-pr-loop.md`
+- `026-add-northstar-native-pre-execution-discovery.md` (queued behind `g02.025`)
 
 ## Next Task
 
