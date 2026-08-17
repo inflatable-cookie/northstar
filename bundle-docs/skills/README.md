@@ -20,7 +20,7 @@ The one installable skill also exposes thin explicit command adapters under
 | Command | Scope |
 | --- | --- |
 | `/northstar-atlas` | Long-horizon strategic runway and multi-horizon planning |
-| `/northstar-reframe` | Non-mutating request restatement |
+| `/come-again` | Standalone request restatement |
 | `/northstar-agents-review` | AGENTS/CLAUDE instruction-surface review |
 | `/northstar-readiness-review` | Existing planning-state readiness review |
 | `/northstar-architecture-refocus` | Bounded architecture refocus |

@@ -148,6 +148,13 @@ This scenario demonstrates a meaningful scale difference from
 strategic bets, dependencies, and promotion map. It did not collapse into a
 currentness report or a task queue.
 
+## Subsequent command naming
+
+The runtime discovery list above is historical evidence from before the standalone
+request-restatement adapter was renamed. Its current explicit command is
+`/come-again`; the underlying Northstar route remains the Reframe route and the
+natural-language `northstar reframe` trigger remains available.
+
 The evidence is sufficient to continue shaping the route, but not sufficient to
 claim final validation. Operator confirmation and a non-Northstar scenario
 remain open before treating `/northstar-atlas` as a stable public command.

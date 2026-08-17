@@ -53,7 +53,8 @@ multi-horizon runway. A memorable explicit command must not conceal that gap.
 
 - add `/northstar-atlas` only after Batch 28.2 demonstrates the contract;
 - add the five thin utility adapters for reframe, AGENTS review, readiness review,
-  architecture refocus, and refresh, alongside Atlas;
+  architecture refocus, and refresh, alongside Atlas (six command adapters in
+  total);
 - add one deterministic command-surface checker and installed-tree parity
   evidence;
 - retire the copied-sounding `northstar wayfinder` alias while retaining

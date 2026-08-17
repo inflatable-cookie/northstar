@@ -39,7 +39,7 @@ let root = path::join(repo_root, "skills/northstar");
 require(fs::is_dir(root), "missing skills/northstar directory");
 
 let commands = [
-    ["northstar-reframe", "commands/northstar-reframe/SKILL.md", "references/modes/pre-execution-discovery.md"],
+    ["come-again", "commands/come-again/SKILL.md", "references/modes/pre-execution-discovery.md"],
     ["northstar-agents-review", "commands/northstar-agents-review/SKILL.md", "references/modes/agent-instruction-review.md"],
     ["northstar-readiness-review", "commands/northstar-readiness-review/SKILL.md", "references/modes/planning-readiness-review.md"],
     ["northstar-architecture-refocus", "commands/northstar-architecture-refocus/SKILL.md", "references/modes/architecture-refocus.md"],
@@ -117,6 +117,7 @@ let all_skill_text = "";
 for file in fs::list_recursive(root) {
     all_skill_text += fs::read_file(file);
 }
+require(!all_skill_text.contains("northstar-reframe"), "retired Northstar-prefixed reframe name remains in installable skill tree");
 require(!all_skill_text.contains("northstar wayfinder"), "retired natural-language Wayfinder alias remains in installable skill tree");
 require(!all_skill_text.contains("northstar-wayfinder"), "retired slash Wayfinder alias remains in installable skill tree");
 

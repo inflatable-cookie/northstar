@@ -2,11 +2,11 @@
 
 > **For Hermes:** Use this plan task-by-task; keep the canonical Northstar router and mode files as the only procedure authority.
 
-**Goal:** Publish a small set of explicit `/northstar-*` skill entrypoints that select specific Northstar routes without duplicating the router, inflating the always-loaded skill index, or loading unrelated modes.
+**Goal:** Publish a small set of explicit slash-command entrypoints, including standalone `/come-again` and specific `/northstar-*` routes, that select canonical routes without duplicating the router, inflating the always-loaded skill index, or loading unrelated modes.
 
 **Architecture:** Keep one published Northstar skill artifact at `skills/northstar/`. Add thin nested command adapters under `skills/northstar/commands/<command>/SKILL.md`. Hermes recursively discovers `SKILL.md` files outside support directories, so these adapters become native slash skills while remaining inside the existing parity/distribution boundary. Each adapter loads the canonical Northstar router first and exactly one mode file second; it contains no copied mode procedure.
 
-**Context budget:** Hermes truncates each visible skill description to 60 characters and loads the full skill body only when a slash skill is invoked. The recommended first wave adds five descriptions totaling about 260 characters before list formatting (roughly a small tens-of-tokens index cost), while the full router/mode content is paid only for the selected command.
+**Context budget:** Hermes truncates each visible skill description to 60 characters and loads the full skill body only when a slash skill is invoked. The six command descriptions plus the main description remain within the measured command-surface budget, while the full router/mode content is paid only for the selected command.
 
 ---
 
@@ -73,16 +73,14 @@ that does not yet exist.
 
 | Slash skill | Canonical route | Why it earns an explicit command | Cost / boundary |
 | --- | --- | --- | --- |
-| `/northstar-reframe` | `pre-execution-discovery.md` → Reframe route | Frequent, tiny, highly predictable, and useful when natural-language intent is unclear | Read-only; lowest context and side-effect risk |
+| `/come-again` | `pre-execution-discovery.md` → Reframe route | Standalone, frequent, tiny, highly predictable, and useful when natural-language intent is unclear | Read-only; lowest context and side-effect risk |
 | `/northstar-agents-review` | `agent-instruction-review.md` | A distinct, repeatable audit with a clear target and output contract | Read-only docs audit; no production code or worker setup |
 | `/northstar-readiness-review` | `planning-readiness-review.md` | A useful planning-health gate, explicitly smaller than Atlas | Read-only; routes onward but does not authorize execution |
 | `/northstar-architecture-refocus` | `architecture-refocus.md` | Named bounded architecture review; explicit scope helps prevent a broad codebase scan | Read-only; requires one subsystem, seam, lane, or package |
 | `/northstar-refresh` | `project-refresh.md` | Broad maintenance pass is materially different from a narrow review | Read-only-first; bounded docs repair only where the mode allows it |
 | `/northstar-atlas` | `atlas.md` | The genuinely iconic, strategic planning entrypoint | Plan-only; internal scale validation passed, broader validation remains |
 
-Use the `northstar-` prefix for collision avoidance and discoverability. Keep
-natural-language triggers in the main skill as fallback, but treat the slash
-entrypoints as the explicit, low-ambiguity path.
+Use the `northstar-` prefix for Northstar-specific commands. Keep `/come-again` standalone because the capability is generic, while retaining natural-language triggers in the main skill as fallback.
 
 ### Second wave — consider after first-wave evidence
 
@@ -161,7 +159,7 @@ open validation work.
 ### Task 3: Add the thin command adapters
 
 **Create:**
-- `skills/northstar/commands/northstar-reframe/SKILL.md`
+- `skills/northstar/commands/come-again/SKILL.md`
 - `skills/northstar/commands/northstar-agents-review/SKILL.md`
 - `skills/northstar/commands/northstar-readiness-review/SKILL.md`
 - `skills/northstar/commands/northstar-architecture-refocus/SKILL.md`
@@ -234,7 +232,7 @@ Add a documented local E2E verification path using the installed Hermes runtime:
 
 1. update or mirror the Northstar artifact into a temporary/profile skill home;
 2. run `/reload-skills`;
-3. verify the six commands — `/northstar-reframe`,
+3. verify the six commands — `/come-again`,
    `/northstar-agents-review`, `/northstar-readiness-review`,
    `/northstar-architecture-refocus`, `/northstar-refresh`, and
    `/northstar-atlas` — appear in slash completion;

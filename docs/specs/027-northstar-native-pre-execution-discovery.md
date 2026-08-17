@@ -44,7 +44,7 @@ execution.
 - add deterministic checks for dependency integrity, frontier calculation, and
   plan-only boundaries;
 - [x] add an architecture-refocus review for active code and seams;
-- [ ] improve operator comprehension with a small non-mutating reframe route;
+- [x] improve operator comprehension with a small non-mutating reframe route;
 - keep the entire protocol provider-neutral and starter-bundle friendly.
 
 ## Non-goals
