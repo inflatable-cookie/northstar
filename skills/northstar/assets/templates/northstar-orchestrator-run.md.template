@@ -2,6 +2,8 @@
 title: {{TOPIC}} worker handoff
 kind: northstar-handoff
 handoff_mode: worker-pr-loop
+worker_mode: implementation
+dispatch_authority: orchestrator
 handoff: single-file-path-only
 status: ready-to-launch
 owner: {{OWNER}}
@@ -33,6 +35,8 @@ Here is the state the worker is inheriting:
 - **Planning base commit:** `{{BASE_REF}}`
 - **Pushed main verification:** `{{REMOTE_VERIFICATION}}`
 - **Planning checkout:** `{{CLEAN_OR_EXPLICIT_EXCEPTION}}`
+- **Worker mode:** implementation worker dispatched by the orchestrator; this
+  handoff activates the worker-only worktree preflight.
 - **Planning artifacts included at the base:** `{{COMMITTED_REF}}`
 - **Worker branch:** `{{WORKER_BRANCH}}`
 - **Worker worktree:** `{{WORKTREE_PATH}}`
@@ -91,8 +95,9 @@ Please keep this run inside the named runway:
 
 ## Suggested Next Move
 
-Start by reading this handoff from the top. Before broad repository reads, run the
-quick startup worktree-safety preflight in `## Completion Protocol`. If the
+This handoff explicitly activates worker mode. Start by reading it from the top.
+Before broad repository reads, run the quick startup worktree-safety preflight in
+`## Completion Protocol`. If the
 current context is a clean, dedicated, non-`main` registered worktree, it is the
 launcher-provided worktree: use it immediately, record its actual path/branch,
 and do not compare its generated path/branch with this handoff or create another
@@ -113,7 +118,9 @@ natural and useful; you do not need to repeat this whole file back.
 
 ### Before you start
 
-1. Read this handoff path, then run one quick read-only safety probe before
+1. Read this handoff path. Its `worker_mode: implementation` and
+   `dispatch_authority: orchestrator` metadata activate worker mode. Then run one
+   quick read-only safety probe before
    broad repository reads:
    `git rev-parse --show-toplevel`, `git branch --show-current`,
    `git status --porcelain`, and `git worktree list --porcelain`.

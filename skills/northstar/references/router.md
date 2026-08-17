@@ -135,9 +135,24 @@ Choose one:
 
 ## Worker startup fast path
 
-When the thread is an implementation worker receiving a handoff, or the
-launcher has already supplied a worktree, do not perform the normal shared reads
-first. Run one quick read-only probe from the current context:
+This fast path applies **only** to worker mode. Activate worker mode by first
+reading the repository-relative handoff path supplied by the orchestrator and
+confirming its frontmatter declares:
+
+```yaml
+handoff_mode: worker-pr-loop
+worker_mode: implementation
+dispatch_authority: orchestrator
+```
+
+Normal-mode agents, planning/orchestrator threads, review threads, and agents
+that merely happen to be inside a worktree do not run this probe and do not
+inspect `.agents.local.env` for worker purposes. Do not infer worker mode from a
+branch name, filesystem path, or harness presence. If the dispatch metadata is
+absent, stop the worker launch and report the missing handoff boundary.
+
+After worker mode is activated, before broad repository reads, run one quick
+read-only probe from the current context:
 
 ```sh
 git rev-parse --show-toplevel

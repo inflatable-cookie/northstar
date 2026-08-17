@@ -18,7 +18,7 @@ than in tracked docs, shell history, or ad hoc prompts.
 
 - `.agents.local.env.example` is tracked and documents supported keys.
 - `.agents.local.env` is local-only, ignored by Git, and created on first need.
-- `AGENTS.md` references this contract and the first-use procedure.
+- `AGENTS.md` references this contract for orchestrator-dispatched worker mode.
 
 ## Supported keys
 
@@ -32,7 +32,7 @@ This file is path-only. Never put API keys, tokens, passwords, credentials,
 connection strings, or commands in it. Read simple `KEY=VALUE` entries as data;
 do not execute or `source` the file.
 
-## First-use procedure
+## Worker-mode first-use procedure
 
 - Prefer a harness-managed worktree or artifact location when one is supplied.
   A clean, dedicated, non-`main` worktree registered by Git in the current

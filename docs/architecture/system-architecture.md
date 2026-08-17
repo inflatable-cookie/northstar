@@ -115,7 +115,10 @@ cards, one committed worker handoff per worker lane under `docs/handoffs/`, push
 `main`, commits, validation, and PR review. Private model conversation is not an
 authority surface. A worker launch is valid only after the planning checkout has
 published `main` and the operator has a repository-relative handoff path to give
-the new thread. The worker must then run a quick startup worktree check. It reuses
+the new thread. The handoff must declare `handoff_mode: worker-pr-loop`,
+`worker_mode: implementation`, and `dispatch_authority: orchestrator`; those
+fields activate worker mode. Only then does the worker run a quick startup
+worktree check. Normal-mode agents and the orchestrator do not run this check. It reuses
 a clean, dedicated, non-`main` registered current worktree supplied by the
 harness; only an unusable current context may proceed to a named worktree or a
 worktree under the operator-selected `AGENTS_WORKTREE_CONTAINER_DIR` from pushed

@@ -23,9 +23,10 @@ script and not a secret store.
 - `.agents.local.env` is local-only, ignored by Git, and created on first need.
 - `AGENTS.md` is the required discovery point for the contract.
 
-Agents must read `.agents.local.env` when a task needs a local path. They must
-not require it during normal harness-managed operation when the harness already
-provides a valid worktree or artifact location.
+Worker-mode agents must read `.agents.local.env` when a worker task needs a
+manual local path. Normal-mode agents must not inspect or require it merely
+because the repository supports worker lanes. A valid harness-provided worker
+location is sufficient and does not require this file.
 
 ## Supported keys
 
@@ -39,7 +40,7 @@ Only path-valued, namespaced `AGENTS_*` keys belong in this file. Do not put API
 keys, tokens, passwords, credentials, connection strings, or arbitrary commands
 in it. Read `KEY=VALUE` entries as data; never execute or `source` the file.
 
-## First-use procedure
+## Worker-mode first-use procedure
 
 1. Prefer the worktree, scratch area, or artifact location supplied by the
    harness. A clean, dedicated, non-`main` worktree registered by Git in the
@@ -66,7 +67,7 @@ in it. Read `KEY=VALUE` entries as data; never execute or `source` the file.
    boundary failure. Do not fall back to `TMPDIR`, `/tmp`, or another guessed
    location.
 
-## Nested-agent boundary
+## Worker-mode nested-agent boundary
 
 A worker or subagent must not start a second orchestrator workflow, dispatch a
 new worker, or create a nested worktree unless the operator explicitly assigned

@@ -12,14 +12,10 @@ Scope: whole `northstar/` repository.
   staged migration or breaking choice is needed, stop and ask the operator.
   After 1.0, preserve stable user-visible contracts by default and surface any
   unavoidable break with impact and options.
-- Prefer the existing harness-managed lane and worktree. A clean, dedicated,
-  non-`main` registered current worktree is authoritative even when its
-  generated path or branch differs from a handoff placeholder; use it and do
-  not create another. A worker or subagent must not create a nested
-  orchestrator/worktree lane.
-- Manual worktrees require an absolute `AGENTS_WORKTREE_CONTAINER_DIR` from
-  ignored `.agents.local.env`; never guess a path, use `/tmp`/`TMPDIR`, or create
-  a repository-child worktree. Read `docs/contracts/002-agent-local-paths.md`.
+- In this repo, normal-mode agents use the current checkout and follow the
+  task's canonical docs. Worker mode is activated only by an explicit
+  orchestrator-dispatched handoff; read that handoff for its worker execution
+  contract instead of inferring worker mode from a path, branch, or harness.
 - Do not edit `.github/workflows/` or run release mutations without an explicit
   operator request.
 

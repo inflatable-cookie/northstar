@@ -59,8 +59,9 @@ runtimes impose different context limits.
 A compact root `AGENTS.md` should normally contain, in roughly this order:
 
 1. repository identity and scope;
-2. a small set of non-negotiable safety, authority, compatibility, and worktree
-   boundaries;
+2. a small set of non-negotiable safety, authority, and compatibility
+   boundaries, plus a concise pointer to any genuinely always-loaded worker
+   boundary;
 3. verified orientation and validation commands;
 4. a minimal canonical-surface map;
 5. stop/escalate rules;
@@ -78,6 +79,7 @@ needed every turn:
 - completed work, historical rationale, or roadmap narrative;
 - full command inventories and optional selectors;
 - detailed procedures already owned by a skill, contract, or guide;
+- worker-mode worktree procedures that do not apply on normal turns;
 - duplicated writing-style, papercut, handoff, or local-path procedures;
 - large examples, transcripts, or troubleshooting catalogues;
 - provider-specific instructions that do not apply across agents.

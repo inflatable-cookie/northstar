@@ -30,11 +30,13 @@ When the target is the Northstar source repo, also read
 `bundle-docs/protocol-kernel.md`. Its absence is normal in consumer repos and
 is not a contract gap by itself.
 
-Worker startup is intentionally light: before `effigy tasks`, `effigy doctor`,
-or broad repository reads, run the router's four-command worktree probe. Reuse a
-clean, dedicated, non-`main` registered launcher worktree even when its generated
-path or branch differs from a handoff placeholder; never create a second one for
-that reason.
+Worker mode is explicit, not a default startup step. It is active only when an
+orchestrator dispatches a thread with a repository-relative handoff whose
+frontmatter declares `handoff_mode: worker-pr-loop`, `worker_mode: implementation`,
+and `dispatch_authority: orchestrator`. Normal planning, review, discovery,
+readiness, and orchestrator threads do not run a worktree probe or inspect
+`.agents.local.env` merely because worker support exists. Once worker mode is
+activated, follow the router's lightweight four-command worktree fast path.
 
 ## Outcomes by mode
 

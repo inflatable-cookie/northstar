@@ -21,8 +21,24 @@ Every handoff must include these sections in this order:
 7. `## Completion Protocol`
 
 A worker handoff uses the same seven sections. It adds its worker-mode and PR
-instructions as subsections inside `## Completion Protocol`; it does not invent a
-second handoff structure.
+instructions as subsections inside `## Completion Protocol`; it does not invent
+a second handoff structure.
+
+### Worker-mode activation
+
+A worker handoff must declare all three frontmatter fields:
+
+```yaml
+handoff_mode: worker-pr-loop
+worker_mode: implementation
+dispatch_authority: orchestrator
+```
+
+These fields explicitly activate worker mode. The worktree preflight applies
+only after a worker thread has received and read this orchestrator-dispatched
+handoff. Normal-mode agents, planning/orchestrator threads, and agents that
+merely happen to be in a worktree must not perform the worker preflight or
+inspect worker-local path configuration.
 
 ### Consumer trailing sections
 

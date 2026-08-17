@@ -142,7 +142,11 @@ The orchestrator/worker boundary is a strict sequence:
    under `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md` per approved worker lane;
 7. commit the handoff set to `main`, push `main`, and verify local `HEAD` equals
    `origin/main`;
-8. record the intended worker branch/worktree in each handoff. Let the launch
+8. set `handoff_mode: worker-pr-loop`, `worker_mode: implementation`, and
+   `dispatch_authority: orchestrator` in each handoff. These fields explicitly
+   activate worker mode; normal-mode agents and the orchestrator do not run the
+   worker worktree preflight. Then record the intended worker branch/worktree in
+   each handoff. Let the launch
    harness create the worktree when it owns the worker start; create a manual
    worktree only when no harness-provided worktree exists and the local-path
    contract is satisfied. Do not try to include any handoff commit's own SHA in
@@ -152,8 +156,9 @@ The orchestrator/worker boundary is a strict sequence:
 
 The worker must not require a separately copied prompt, transcript, or list of
 canonical refs. The handoff may point at canonical repository files, but it is
-the only external handoff artifact. Before broad repo reads or editing, the
-worker runs one quick startup worktree-safety preflight. If the current root is a
+the only external handoff artifact. After reading a handoff with the explicit
+worker-mode metadata, and before broad repo reads or editing, the worker runs one
+quick startup worktree-safety preflight. If the current root is a
 registered worktree, `git status --porcelain` is empty, and the branch is not
 `main`, it reuses that launcher-provided worktree regardless of generated path or
 branch-name differences from the handoff, records the actual path and branch, and
@@ -176,7 +181,9 @@ the seven core handoff sections, add the worker/PR flow inside
 `## Completion Protocol`, be committed to `main`, pushed, and verified against
 `origin/main`. Each worker receives only its own repository-relative path.
 
-The file must contain or point to all information required for execution:
+The file must contain or point to all information required for execution. Its
+frontmatter must include `handoff_mode: worker-pr-loop`,
+`worker_mode: implementation`, and `dispatch_authority: orchestrator`:
 
 - planning base commit, remote-tip verification, worker branch, and worktree command;
 - startup worktree-safety preflight and local-path manual-worktree instructions;
@@ -191,8 +198,9 @@ The file must contain or point to all information required for execution:
 
 ## Worker protocol
 
-1. Read the supplied repository-relative handoff path first. Before broad repo
-   reads, run the startup worktree-safety preflight: identify the repository
+1. Read the supplied repository-relative handoff path first and verify its
+   worker-mode metadata. Only then, before broad repo reads, run the startup
+   worktree-safety preflight: identify the repository
    root, current worktree, branch, and `git status --porcelain`.
 2. If the current context is a clean, dedicated, non-`main` registered worktree,
    use it as the harness-provided worktree even when its generated path or branch

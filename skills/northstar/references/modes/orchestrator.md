@@ -83,7 +83,11 @@ visible without making the conversation feel like a workflow form.
    `assets/templates/northstar-orchestrator-run.md.template` into one concrete
    worker handoff under `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md` per approved
    parallel lane. Each file must keep the seven core handoff sections and add
-   worker-mode/PR instructions inside `## Completion Protocol`. Every handoff is
+   explicit worker-mode/PR instructions inside `## Completion Protocol`. Every
+   worker handoff must declare `handoff_mode: worker-pr-loop`,
+   `worker_mode: implementation`, and `dispatch_authority: orchestrator` in its
+   frontmatter. This metadata is what activates worker mode; a normal thread
+   must not infer it from a worktree, branch, or launch harness. Every handoff is
    mandatory, must be committed and pushed on `main`, and must contain the
    complete worker instructions, refs, runway, planning base verification,
    worktree/branch command, reporting rules, stop conditions, and PR contract.
@@ -95,8 +99,9 @@ visible without making the conversation feel like a workflow form.
    handoff itself. Record the intended worker branch/worktree in the handoff;
    let the launch harness create it when it owns the worker start, and create a
    manual worktree only when no harness-provided worktree exists and the local
-   path contract is satisfied. The worker must run a quick startup worktree-safety
-   check before broad repo reads. First inspect the current context. If it is a
+   path contract is satisfied. The worker, and only the worker after reading
+   this handoff, must run a quick startup worktree-safety check before broad repo
+   reads. First inspect the current context. If it is a
    clean, dedicated, non-`main` registered worktree supplied by the launcher,
    use it immediately even when its generated path or branch differs from the
    handoff placeholders; record the actual path/branch and do not create another
@@ -139,7 +144,10 @@ manually pasted references are part of the protocol.
 
 The file must say, in substance:
 
+- worker mode is active because this handoff was dispatched by an orchestrator;
 - you are the implementation worker, not the planning authority;
+- normal-mode worktree rules do not apply; do not infer worker mode from a path,
+  branch, or harness without this handoff;
 - before broad repo reads, run one quick read-only preflight identifying the
   repository root, current worktree registration, branch, and
   `git status --porcelain`;

@@ -7,6 +7,14 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 
 <!-- Keep entries short. Append newest entries at the top. Do not include secrets. -->
 
+- **2026-08-17 — worker preflight was advertised as a normal-mode rule:** a
+  consumer AGENTS audit treated Effigy orientation followed by a worktree check
+  as the universal startup order; impact was unnecessary worktree concern for
+  normal agents and a misleading Bovine finding; plausible fix is to activate
+  the four-command preflight only from an orchestrator-dispatched handoff with
+  explicit worker-mode metadata; affected surfaces are root AGENTS templates,
+  the Northstar router, orchestrator mode, and handoff contracts.
+
 - **2026-08-17 — harness worktree path mismatch duplicated a worker checkout:**
   t3code launched a clean registered worktree under `~/.t3/worktrees`, but the
   worker preflight treated its generated path/branch as invalid because they did

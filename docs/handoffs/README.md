@@ -47,7 +47,10 @@ The generic handoff should be a friendly, timestamped note written like a
 thoughtful teammate: clear, warm, plain-spoken, and honest about uncertainty.
 Worker handoffs use the same seven sections and add their worktree, runway,
 reporting, validation, PR flow, and startup worktree-safety/fallback instructions
-inside `Completion Protocol`.
+inside `Completion Protocol`. Their frontmatter must explicitly declare
+`handoff_mode: worker-pr-loop`, `worker_mode: implementation`, and
+`dispatch_authority: orchestrator`. Those fields activate worker mode; normal
+agents do not perform the worktree preflight.
 
 ## Relationship to logs
 

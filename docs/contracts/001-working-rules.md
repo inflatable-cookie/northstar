@@ -391,6 +391,12 @@ or overlapping authority decisions, and each lane has its own ready cards,
 validation, evidence, stop conditions, worktree, branch, and handoff. Otherwise
 keep the run serial and record the dependency or ambiguity.
 
+The following worker-start conditions apply only after a worker thread has been
+explicitly dispatched by the orchestrator with a handoff declaring
+`handoff_mode: worker-pr-loop`, `worker_mode: implementation`, and
+`dispatch_authority: orchestrator`. They do not apply to normal-mode agents,
+planning/orchestrator threads, or review threads.
+
 Before a worker starts:
 
 - the planning checkout is on `main` and has no unrelated changes;
