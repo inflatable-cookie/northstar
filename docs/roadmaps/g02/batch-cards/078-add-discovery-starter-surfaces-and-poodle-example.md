@@ -33,7 +33,7 @@ spec and roadmap work without granting the map execution authority.
 - Higher-level lane owner: `g02.026` Northstar-native pre-execution discovery.
 - Next likely cards or milestone transitions after this one: consume
   operator-provided feedback from live use of the complete discovery flow;
-  architecture refocus is now implemented, while reframe remains pending.
+  architecture refocus and reframe are now implemented.
 - Next planning checkpoint: after the operator supplies feedback, review planning revisions,
   reopened decisions, implementation rework, and operator correction burden
   before Batch 26.4.

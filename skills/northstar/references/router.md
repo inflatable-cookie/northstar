@@ -83,7 +83,9 @@ routes that precede ordinary planning:
 - intent rounds over the current frontier;
 - destination-local project language;
 - a decision prototype;
-- an operator questionnaire for an unresolved decision.
+- an operator questionnaire for an unresolved decision;
+- `northstar reframe` or a request to restate the current message in project
+  language.
 
 This is an internal mode of the single public `northstar` skill. It is
 provider-neutral, plan-only, and non-mutating by default; it cannot clear a map,
@@ -93,7 +95,8 @@ make a card ready, or replace normal spec, promotion, roadmap, or operator gates
 worker/worktree preparation, or PR review around a readiness/discovery lane,
 choose **Orchestrator** mode even when the request also mentions readiness or
 discovery; treat discovery as the Orchestrator's planning lane. Direct
-readiness, intent, project-language, decision-prototype, or questionnaire
+readiness, intent, project-language, decision-prototype, questionnaire, or
+reframe
 requests without that orchestrator/worker/worktree/PR language remain
 **Pre-execution discovery**.
 

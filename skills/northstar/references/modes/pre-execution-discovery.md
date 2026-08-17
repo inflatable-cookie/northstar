@@ -1,8 +1,8 @@
 # Pre-execution discovery mode
 
 Use this internal mode when the request is about readiness mapping, intent
-rounds, project language, decision prototypes, or questionnaires before ordinary
-Northstar planning begins. It is a procedure inside the single public
+rounds, project language, decision prototypes, questionnaires, or reframe before
+ordinary Northstar planning begins. It is a procedure inside the single public
 `northstar` skill, not a second installable skill or an execution permission.
 
 ## Authority and posture
@@ -72,6 +72,36 @@ entry to hide a destination-specific decision.
 If the map does not identify a project-language surface, record that missing
 contract as a planning gap rather than inventing an ungoverned glossary path.
 
+## Reframe route
+
+Use the reframe route for `northstar reframe`, “restate that in project
+language”, or an equivalent request to make the current message clearer without
+advancing the work. Reframe is a communication aid, not a planning or execution
+route.
+
+Read the most recent operator message and any explicitly identified project
+language or governing context. Return a compact result with:
+
+- **Reframed request:** the clearest faithful restatement;
+- **Explicit:** what the operator has actually requested or decided;
+- **Still open:** uncertainty, scope, or authority that remains unresolved;
+- **Boundary:** what the reframe does not authorize;
+- **Suggested route:** only when a route is already evident from the request,
+  and never as a silent transition.
+
+The route must preserve the operator's intent, uncertainty, terms, and authority.
+It must not invent facts, turn a preference into a decision, add acceptance
+criteria, widen scope, create a plan, or imply approval. If the message is already
+clear, say so and return the smallest useful restatement. If no project language
+surface is available, use neutral language and identify that limitation rather
+than manufacturing a glossary.
+
+Reframe is read-only and non-mutating by default. It does not write a readiness
+map, decision record, spec, roadmap, handoff, papercut, or code change. If the
+operator separately asks to record the result, route that request through the
+canonical planning surface; do not treat the reframe itself as evidence or
+authority.
+
 ## Decision-prototype route
 
 Use a decision prototype when conversation and repository facts cannot settle a
@@ -125,8 +155,9 @@ This mode must never:
   spec, promotion, roadmap, validation, or operator gates;
 - turn prototype evidence or questionnaire material into a silent operator
   decision;
-- expand into starter templates, architecture refocus, reframe, consumer-repo
-  dogfood, or changes to the worker/PR contract.
+- expand into starter templates, architecture refocus, consumer-repo dogfood, or
+  changes to the worker/PR contract. Reframe may clarify a request but may not
+  silently become any of those routes.
 
 Stop and return to planning or the operator when the frontier is invalid, a
 canonical link or authority is missing, the question exceeds the bounded route,

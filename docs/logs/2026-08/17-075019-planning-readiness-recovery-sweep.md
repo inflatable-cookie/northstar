@@ -38,7 +38,7 @@ state were not rewritten. Current front doors now distinguish historical
 ## Repairs
 
 - Marked the architecture-refocus portion of Batch 26.4 complete while leaving
-  reframe and operator feedback intake pending.
+  reframe and operator feedback intake pending at the time of this sweep.
 - Reconciled `g02.026`, Batch 26.3, card 078, and `g02.027/079` status across
   specs, milestones, generation front doors, and the contract index.
 - Updated the inventory and instruction-surface records to current 38-file
@@ -54,8 +54,9 @@ state were not rewritten. Current front doors now distinguish historical
 - Card `g02.026/078` is ready but deferred.
 - Operator-provided live dogfood feedback remains the next evidence input;
   Northstar does not select or dispatch the consumer run.
-- The non-mutating reframe route remains unimplemented.
-- Template-bundle promotion, reframe, and feedback intake remain pending.
+- The non-mutating reframe route was pending at the time of this sweep and was
+  implemented in the follow-up route change.
+- Template-bundle promotion and feedback intake remain pending.
 
 ## Validation
 

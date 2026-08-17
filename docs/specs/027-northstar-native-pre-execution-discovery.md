@@ -207,15 +207,16 @@ messaging.
 - reframe changes no repository state;
 - handoff additions preserve the current worker/PR contract;
 - starter templates and checks remain copy-ready;
-- one dogfood run measures planning revisions, reopened decisions, implementation
-  rework, and operator correction burden.
+- operator-provided live-use evidence measures planning revisions, reopened
+  decisions, implementation rework, and operator correction burden.
 
 ## Planned batches
 
 1. Define the readiness-map and decision-record contract plus deterministic checks.
 2. Add intent rounds, project language, decision-prototype, and questionnaire routes.
 3. Add the routed Northstar procedures and starter-bundle templates.
-4. Add architecture refocus and reframe, then dogfood the complete flow.
+4. Add architecture refocus and reframe, then consume operator-provided feedback
+   from live use of the complete flow.
 
 ## Resolved decisions for Batch 26.1
 
@@ -325,10 +326,12 @@ be presented as new Batch 26.3 failures.
 
 ## Current implementation state
 
-The architecture-refocus portion of Batch 26.4 is implemented as the
-read-only, offline-safe `northstar architecture refocus` route. It produces
-candidate improvements without editing production code or granting execution
-authority. The reframe route remains pending. Live dogfooding is an operator-owned
+The architecture-refocus and reframe portions of Batch 26.4 are implemented.
+Architecture refocus is the read-only, offline-safe `northstar architecture
+refocus` route. It produces candidate improvements without editing production
+code or granting execution authority. Reframe is the concise, read-only
+`northstar reframe` route; it restates the current request without adding
+decisions, scope, or authorization. Live dogfooding is an operator-owned
 activity; Northstar consumes its feedback rather than scheduling it.
 
 ## Next task
@@ -337,4 +340,4 @@ The Batch 26.3 starter-surface planning checkpoint is complete. Card
 `g02.026/078` remains ready but deferred. Its `g15.006` material is a historical
 worked example. When the operator brings live dogfood feedback into Northstar,
 record or promote that evidence through the normal planning surfaces. Keep
-reframe and consumer-dogfood orchestration out of card 078.
+consumer-dogfood orchestration out of card 078.

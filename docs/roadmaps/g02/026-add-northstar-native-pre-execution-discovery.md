@@ -11,8 +11,8 @@ Research refs: `bundle-docs/research/translation-memos/matt-pocock-skills-audit-
 Governing refs: `docs/architecture/system-architecture.md`, `docs/contracts/001-working-rules.md`
 Planning state: Batch 26.1 contract and checker complete; Batch 26.2 route
 implementation complete; Batch 26.3 planning checkpoint complete with card 078
-ready but deferred; the architecture-refocus portion of Batch 26.4 is complete
-and reframe/dogfood remain pending
+ready but deferred; the architecture-refocus and reframe portions of Batch 26.4
+are complete and operator-feedback intake remains pending
 
 ## Problem
 
@@ -29,7 +29,7 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 - [ ] add starter templates
 - [x] add deterministic frontier checks
 - [x] add architecture refocus as a bounded planning route
-- [ ] add reframe as a bounded communication route
+- [x] add reframe as a bounded communication route
 - [ ] preserve the current durable handoff and worker/PR contract
 - [ ] incorporate operator-provided live dogfood feedback from a new or materially
       ambiguous project
@@ -62,7 +62,7 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 ### Batch 26.4 - Add architecture refocus, reframe, and feedback intake
 
 - [x] add active-lane architecture refocus with offline-safe output;
-- add non-mutating reframe behaviour;
+- [x] add non-mutating reframe behaviour;
 - refine handoff purpose and next-session metadata;
 - incorporate operator-provided dogfood feedback and record measured friction
   before broader promotion; Northstar does not dispatch the consumer run.
@@ -91,8 +91,7 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 
 ## Next task
 
-Card `g02.026/078` remains ready but deferred. Reframe remains the next
-unresolved route. When the operator supplies live dogfood feedback, promote the
-useful evidence through the normal research, papercut, contract, spec, or
-roadmap surfaces. Northstar does not prepare or dispatch a Poodle/Figmatic
-dogfood handoff.
+Card `g02.026/078` remains ready but deferred. When the operator supplies live
+dogfood feedback, promote the useful evidence through the normal research,
+papercut, contract, spec, or roadmap surfaces. Northstar does not prepare or
+dispatch a Poodle/Figmatic dogfood handoff.

@@ -27,7 +27,8 @@ No active contract gaps are blocking the current `g02` lane.
 
 `g01.001`, `g01.002`, `g01.003`, and `g02.001` through `g02.025` are complete.
 `g02.026` remains active: cards 075, 076, and 077 are complete, card 078 is
-ready but deferred, and the architecture-refocus part of Batch 26.4 is complete.
+ready but deferred, and the architecture-refocus and reframe parts of Batch 26.4
+are complete.
 `g02.027/079` is complete; its operator-provided feedback measurement remains
 pending. The generation remains open and no separate contract gap blocks the
 current planning lane. Northstar consumes live consumer feedback supplied by the

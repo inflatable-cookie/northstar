@@ -53,7 +53,7 @@ rollover signal.
 - `025-add-orchestrator-thread-and-worker-pr-loop.md`
 - `026-add-northstar-native-pre-execution-discovery.md` (active; Batches 26.1 and
   26.2 complete, the Batch 26.3 checkpoint complete, `g02.026/078` ready but
-  deferred, and the architecture-refocus part of Batch 26.4 complete)
+  deferred, and the architecture-refocus and reframe parts of Batch 26.4 complete)
 - `027-optimize-agent-instruction-surfaces.md` (active; implementation complete,
   Batch 27.3 consumer measurement pending)
 
@@ -64,8 +64,8 @@ consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and
 `g02.026/077` are complete.
 The Batch 26.2 planning and route implementation are complete. The Batch 26.3
 starter-surface planning checkpoint is complete and `g02.026/078` remains ready
-but deferred. The architecture-refocus part of Batch 26.4 is complete; reframe
-and feedback intake remain pending. The current Northstar task `g02.027/079`
+but deferred. The architecture-refocus and reframe parts of Batch 26.4 are
+complete; feedback intake remains pending. The current Northstar task `g02.027/079`
 is complete. The remaining Batch 27.3 measurement uses feedback from the
 operator's live dogfooding of the optimized surface; its research memo is
 `bundle-docs/research/translation-memos/agent-instruction-surface-optimization.md`.

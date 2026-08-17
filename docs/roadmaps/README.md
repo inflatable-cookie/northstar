@@ -28,7 +28,7 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02.025` is complete; batches 25.1, 25.2, 25.3, and 25.4 are complete.
 - `g02.026` is active; cards 075, 076, and 077 are complete. Batch 26.3's
   starter-surface planning checkpoint is complete and card 078 is ready but
-  deferred. The architecture-refocus part of Batch 26.4 is complete.
+  deferred. The architecture-refocus and reframe parts of Batch 26.4 are complete.
 - `g02.027` is active; research, the instruction-surface contract, and
   implementation card 079 are complete. Batch 27.3 operator-feedback measurement is
   pending.
@@ -40,5 +40,5 @@ evidence; that evidence remains the provenance for the current active lane.
 
 Use feedback from the operator's live dogfooding of the optimized instruction
 surface to record the Batch 27.3 measurement. Northstar does not dispatch or
-manage that consumer run. Card `g02.026/078` remains ready but deferred; reframe
-and feedback intake remain pending.
+manage that consumer run. Card `g02.026/078` remains ready but deferred; feedback
+intake remains pending.

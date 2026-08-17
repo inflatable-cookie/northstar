@@ -1,6 +1,6 @@
 ---
 name: northstar
-description: Use for Northstar project refresh, architecture refocus, docs-spine and AGENTS/CLAUDE instruction-surface work in this repo or a consumer project—planning, planning-readiness reviews, specs, contracts, roadmaps, research promotion, recovery after drift, ongoing normalization, and explicit AGENTS file reviews. Invoke automatically for “northstar refresh”, “northstar project refresh”, “northstar architecture refocus”, “northstar codebase architecture review”, “northstar planning readiness review”, “northstar wayfinder”, “northstar AGENTS file review”, plan, roadmap, contract, spec, research, recover, refocus, sweep, normalize/migrate/setup, readiness mapping, intent rounds, project language, decision prototypes, questionnaires, or explicit orchestrator-thread language. Handoff or continuation brief only when the user explicitly asks for a handoff, fresh thread, or spin-off—not for bare continue or context limits alone.
+description: Use for Northstar project refresh, architecture refocus, reframe, docs-spine and AGENTS/CLAUDE instruction-surface work in this repo or a consumer project—planning, planning-readiness reviews, specs, contracts, roadmaps, research promotion, recovery after drift, ongoing normalization, and explicit AGENTS file reviews. Invoke automatically for “northstar refresh”, “northstar project refresh”, “northstar architecture refocus”, “northstar codebase architecture review”, “northstar reframe”, “restate that in project language”, “northstar planning readiness review”, “northstar wayfinder”, “northstar AGENTS file review”, plan, roadmap, contract, spec, research, recover, refocus, sweep, normalize/migrate/setup, readiness mapping, intent rounds, project language, decision prototypes, questionnaires, or explicit orchestrator-thread language. Handoff or continuation brief only when the user explicitly asks for a handoff, fresh thread, or spin-off—not for bare continue or context limits alone.
 ---
 
 # Northstar
@@ -18,9 +18,10 @@ open **one** [`references/modes/`](./references/modes/) file and follow it.
 | Handoff | User explicitly asks for a continuation brief / fresh thread |
 | Project refresh | User asks for `northstar refresh` or `northstar project refresh` to bring an existing project up to date |
 | Architecture refocus | User asks for `northstar architecture refocus` or a bounded codebase architecture improvement review |
+| Reframe | User asks for `northstar reframe` or a clearer restatement in project language |
 | Planning readiness review | User asks for `northstar planning readiness review` or the shorthand `northstar wayfinder` on an existing project |
 | Agent instruction review | User asks for a `northstar AGENTS file review`, or to review/optimize `AGENTS.md`/`CLAUDE.md` |
-| Pre-execution discovery | Readiness mapping, intent rounds, project language, decision prototypes, or questionnaires |
+| Pre-execution discovery | Readiness mapping, intent rounds, project language, decision prototypes, questionnaires, or reframe |
 | Orchestrator | User wants question-led planning plus a separate worker/PR loop |
 | Normalize docs | Bootstrap, migrate, or keep docs spine healthy over time |
 | Research | Evidence → architecture/contracts |
@@ -54,6 +55,8 @@ activated, follow the router's lightweight four-command worktree fast path.
 - **Consumer evidence:** live consumer dogfooding is operator-owned outside
   Northstar's execution loop; Northstar consumes feedback supplied in the
   conversation and does not select, dispatch, or manage consumer runs.
+- **Reframe:** a concise, read-only restatement of the current request that
+  preserves uncertainty and authority; it does not create a plan or decision.
 - **Pre-execution discovery:** frontier-based intent rounds and bounded
   project-language, prototype, and questionnaire routes; no execution authority.
 - **Research:** promoted decisions in architecture/contracts, not stranded memos.
