@@ -11,6 +11,7 @@ worked through.
 ## Active planning
 
 - [027 - Northstar Native Pre-Execution Discovery](./027-northstar-native-pre-execution-discovery.md)
+- [029 - Northstar Long-Horizon Planning](./029-northstar-long-horizon-planning.md)
 - [Related translation memo](../../bundle-docs/research/translation-memos/matt-pocock-skills-audit-to-northstar.md)
 
 ## Rules

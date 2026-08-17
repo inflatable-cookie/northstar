@@ -2,9 +2,7 @@
 
 Use this mode for an existing project when the operator wants to know whether
 its planning is coherent enough to continue, without starting implementation.
-The concise trigger is `northstar planning readiness review`. `northstar
-wayfinder` is accepted as shorthand for this route, but Northstar's durable
-artifacts and output use Northstar-native names.
+The concise trigger is `northstar planning readiness review`.
 
 ## Default posture
 

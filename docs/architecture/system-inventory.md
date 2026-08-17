@@ -51,7 +51,8 @@ skills.
 | Delivery-layer adoption | active docs spine, compact working rules, spec, roadmap, log | repo maintainers | ready |
 | Template/skill promotion | follow-on roadmap batches and logs | repo maintainers | pending |
 | Papercut loop | root queue, doctrine, templates, skill instruction, and QA coverage | repo maintainers | ready |
-| Published skill parity | Skills CLI update path, global install inspection, and source checker | repo maintainers | ready; 38-file parity proven |
+| Published skill parity | Skills CLI update path, global install inspection, and source checker | repo maintainers | ready; 45-file parity proven |
+| Explicit command surface | Six thin command adapters, canonical router/mode wiring, description budget, and retired-alias checks | repo maintainers | ready; source and installed runtime verified |
 | Consumer feedback intake | operator-provided live-use evidence and manual triage boundary | repo maintainers + operator | operator-owned |
 | Orchestrator mode | per-worker committed handoff under `docs/handoffs/`, fresh worker worktree or safe temporary fallback, startup check, chunk report, PR, provider review record, and closeout evidence | repo maintainers + operator | operator validation complete; longer multi-card evidence pending |
 | Model-efficiency comparison | measured role routing, rework, review cycles, and relay burden | repo maintainers | one operator validation measured; broader comparison pending |
@@ -66,4 +67,7 @@ skills.
 - The first per-worker handoff/PR loop is proven, including same-identity GitHub
   review comments; provider adapter and packet-persistence defaults remain open.
 - The refresh and architecture-refocus routes are distributed to both installed
-  skill copies; the 38-file parity check now passes.
+  skill copies; the six-command surface now passes source and installed parity
+  verification.
+- Atlas has been validated provisionally against Northstar itself; a non-Northstar
+  large-scale scenario and operator confirmation remain open.

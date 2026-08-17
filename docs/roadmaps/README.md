@@ -32,6 +32,10 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02.027` is active; research, the instruction-surface contract, and
   implementation card 079 are complete. Batch 27.3 operator-feedback measurement is
   pending.
+- `g02.028` is active; the Atlas route contract and provisional mode are present.
+  Northstar-scale validation, the explicit command adapter, and command-surface
+  checks are complete; a non-Northstar scenario and operator confirmation remain
+  pending.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
@@ -40,5 +44,6 @@ evidence; that evidence remains the provenance for the current active lane.
 
 Use feedback from the operator's live dogfooding of the optimized instruction
 surface to record the Batch 27.3 measurement. Northstar does not dispatch or
-manage that consumer run. Card `g02.026/078` remains ready but deferred; feedback
-intake remains pending.
+manage that consumer run. Atlas validation is the next Northstar-owned planning
+task; card `g02.026/078` remains ready but deferred. Feedback intake remains
+operator-owned and pending.

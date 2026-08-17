@@ -14,6 +14,23 @@ before loading a mode.
 | --- | --- |
 | `skills/northstar/` | Single front door for all Northstar agent work |
 
+The one installable skill also exposes thin explicit command adapters under
+`skills/northstar/commands/`:
+
+| Command | Scope |
+| --- | --- |
+| `/northstar-atlas` | Long-horizon strategic runway and multi-horizon planning |
+| `/northstar-reframe` | Non-mutating request restatement |
+| `/northstar-agents-review` | AGENTS/CLAUDE instruction-surface review |
+| `/northstar-readiness-review` | Existing planning-state readiness review |
+| `/northstar-architecture-refocus` | Bounded architecture refocus |
+| `/northstar-refresh` | Broad project planning/docs refresh |
+
+These adapters are discoverability surfaces, not separate installs or planning
+authorities. Each loads the central router and one canonical mode. Atlas is
+strategic and plan-only; readiness review is intentionally smaller and audits
+planning that already exists.
+
 ## Distribution and update
 
 The published skill is distributed through the Skills CLI. After a Northstar
@@ -54,15 +71,16 @@ compatibility aliases.
 | `refocus-drifted-project.md` | Broad drift or untrustworthy state |
 | `sweep-audit-repair.md` | Structured sweep pass |
 | `handoff.md` | User **explicitly** asks for handoff / fresh thread |
+| `atlas.md` | Shape long-horizon direction and a coarse strategic runway |
 
 Setup references live under `skills/northstar/references/setup/`.
 Templates live under `skills/northstar/assets/templates/`.
 
 ## Activation rules
 
-- **Implicit (auto-invoke):** plan, research, recover, normalize, or explicit
-  orchestrator-thread language in the user message — covered by the `northstar`
-  skill description.
+- **Implicit (auto-invoke):** plan, research, recover, normalize, explicit
+  orchestrator-thread, or long-horizon strategic-planning language in the user
+  message — covered by the `northstar` skill description.
 - **Handoff:** only when the user clearly wants a continuation brief or fresh
   thread. The router and handoff mode forbid compaction-only or bare `continue`.
 

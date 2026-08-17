@@ -57,6 +57,15 @@ boundary is checked before Effigy’s native link validator runs.
 skill boundary. Every local Markdown link under `skills/northstar/` must resolve
 inside that folder; escaping or missing targets fail QA.
 
+## Explicit command surface (`check:command-skills`)
+
+Run `effigy check:command-skills` directly or through `effigy qa:docs`.
+
+The command-surface checker validates the six thin adapters under
+`skills/northstar/commands/`: their names, description budgets, router and mode
+references, aggregate prompt footprint, retired-alias removal, and exact
+adapter count. It is included in `effigy qa:docs`.
+
 ## Readiness-map frontier (`check:readiness-map`)
 
 The readiness-map checker is read-only and fail-closed. It scans live readiness

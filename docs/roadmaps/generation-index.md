@@ -83,5 +83,6 @@ review, merge, and evidence closeout. `g02.026/077` is now complete after its
 route PR, review, merge, and closeout. The Batch 26.3 starter-surface planning checkpoint is complete and
 `g02.026/078` remains ready but deferred. The architecture-refocus and reframe
 parts of Batch 26.4 are complete. `g02.027/079` is now complete; the next measurement is the operator-provided
-feedback from live use of the optimized instruction surface. Northstar does not
-select or dispatch the consumer run.
+feedback from live use of the optimized instruction surface. `g02.028` now owns
+Atlas validation and command-surface proof. Northstar does not select or
+dispatch the consumer run.

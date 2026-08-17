@@ -16,6 +16,7 @@ single-pilot bucket.
 | Keep execution autonomy bounded by ready cards, lane budgets, pause signals, and a file-based orchestrator/worker PR boundary instead of ad-hoc continuation prompts. | active | `docs/contracts/001-working-rules.md`, `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `bundle-docs/sections/07-delivery-framework-and-autonomy.md` | operator feedback intake / Batch 26.4 checkpoint |
 | Reduce always-loaded agent context while preserving safety, authority, and common-run efficiency. | active | `docs/contracts/003-agent-instruction-surface.md`, `docs/specs/028-agent-instruction-surface-optimization.md` | Batch 27.3 operator-feedback measurement |
 | Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | pending |
+| Add a genuinely long-horizon planning route without conflating it with readiness review. | active | `docs/specs/029-northstar-long-horizon-planning.md`, `skills/northstar/references/modes/atlas.md` | Non-Northstar scenario and operator confirmation |
 
 Update this runway only when generation-level intent changes, a milestone
 materially advances or closes a goal, or rollover is being considered. Do not
@@ -56,6 +57,9 @@ rollover signal.
   deferred, and the architecture-refocus and reframe parts of Batch 26.4 complete)
 - `027-optimize-agent-instruction-surfaces.md` (active; implementation complete,
   Batch 27.3 consumer measurement pending)
+- `028-add-northstar-long-horizon-planning.md` (active; Atlas mode and router
+  contract, command adapter, source/runtime checks, and installed parity are
+  complete; broader validation remains)
 
 ## Next Task
 
@@ -66,8 +70,10 @@ The Batch 26.2 planning and route implementation are complete. The Batch 26.3
 starter-surface planning checkpoint is complete and `g02.026/078` remains ready
 but deferred. The architecture-refocus and reframe parts of Batch 26.4 are
 complete; feedback intake remains pending. The current Northstar task `g02.027/079`
-is complete. The remaining Batch 27.3 measurement uses feedback from the
-operator's live dogfooding of the optimized surface; its research memo is
+is complete. The remaining Batch 27.3 measurement uses feedback from the operator's live
+dogfooding of the optimized surface; its research memo is
 `bundle-docs/research/translation-memos/agent-instruction-surface-optimization.md`.
+Atlas validation is tracked by `g02.028`; Northstar does not select or manage the
+operator's external dogfooding.
 
 Batch cards live in `g02/batch-cards/` when strict posture uses them.
