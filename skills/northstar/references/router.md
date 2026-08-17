@@ -41,7 +41,23 @@ operator does not ask for the broader refresh.
 
 → [`modes/project-refresh.md`](./modes/project-refresh.md)
 
-## 3. Planning readiness review
+## 3. Architecture refocus
+
+Use when the operator wants a bounded review of current codebase architecture or
+an improvement loop for a named subsystem, active lane, package, service, or
+seam:
+
+- `northstar architecture refocus`;
+- `northstar codebase architecture review`;
+- improve, challenge, or reassess the architecture of a named area.
+
+Open `modes/architecture-refocus.md`. Inspect the selected area and produce a
+small evidence-backed candidate set. Do not scan the whole codebase without a
+scope, edit production code, start a worker, or promote a candidate silently.
+
+→ [`modes/architecture-refocus.md`](./modes/architecture-refocus.md)
+
+## 4. Planning readiness review
 
 Use when the operator wants to test whether an **existing project's planning is
 up to scratch** before continuing. The concise trigger is:
@@ -58,7 +74,7 @@ compilation. Do not edit production code or start a worker from this review.
 
 → [`modes/planning-readiness-review.md`](./modes/planning-readiness-review.md)
 
-## 4. Pre-execution discovery
+## 5. Pre-execution discovery
 
 Use when the request explicitly concerns readiness mapping or the discovery
 routes that precede ordinary planning:
@@ -83,7 +99,7 @@ requests without that orchestrator/worker/worktree/PR language remain
 
 → [`modes/pre-execution-discovery.md`](./modes/pre-execution-discovery.md)
 
-## 5. Orchestrator thread
+## 6. Orchestrator thread
 
 Use when the user wants Northstar to own a question-led planning conversation,
 prepare a separate worker thread/worktree, maintain a runway, or review the
@@ -92,7 +108,7 @@ still relays messages between threads.
 
 → [`modes/orchestrator.md`](./modes/orchestrator.md)
 
-## 6. Agent instruction review
+## 7. Agent instruction review
 
 Use when the user explicitly asks for an always-loaded instruction-surface
 review, especially:
@@ -107,7 +123,7 @@ Northstar's own files when the target is a consumer repository.
 
 → [`modes/agent-instruction-review.md`](./modes/agent-instruction-review.md)
 
-## 7. Normalize docs posture
+## 8. Normalize docs posture
 
 Use when the job is **repo shape and spine health** (initial or ongoing):
 
@@ -118,14 +134,14 @@ Use when the job is **repo shape and spine health** (initial or ongoing):
 
 → [`modes/normalize-docs.md`](./modes/normalize-docs.md)
 
-## 8. Research
+## 9. Research
 
 Use when **external evidence** must become architecture or contracts before
 roadmap work bets on it.
 
 → [`modes/research.md`](./modes/research.md)
 
-## 9. Recovery
+## 10. Recovery
 
 Use when planning **was valid but state is now untrustworthy**:
 
@@ -138,7 +154,7 @@ If planning coverage is **still missing**, use plan-from-scratch instead.
 → `replan-after-change.md`, `refocus-drifted-project.md`, or
 `sweep-audit-repair.md`
 
-## 10. Planning (default for implicit work)
+## 11. Planning (default for implicit work)
 
 Use when the job is **planning or sequencing** and recovery is not the main
 problem:

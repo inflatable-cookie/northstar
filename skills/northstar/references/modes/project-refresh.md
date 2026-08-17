@@ -34,9 +34,9 @@ copying their procedures.
 4. **Check architecture and authority.** Compare the current architecture and
    inventory with active repositories, services, interfaces, ownership, tests,
    validation surfaces, and recent changes. Surface missing or contradictory
-   boundaries; do not invent system behavior. A codebase architecture-improvement
-   loop is not silently substituted here: if active-code architecture review is
-   needed and no bounded route exists, report it as a follow-up gap.
+   boundaries; do not invent system behavior. Route active-code architecture
+   review to `architecture-refocus` rather than silently substituting a broad
+   refactor or pretending the architecture is repaired.
 5. **Check planning completeness.** Run the planning-readiness review over the
    active spec, readiness maps, decision records, contracts, research promotion,
    roadmap milestones, batch cards, and recent logs. Confirm that the next
@@ -81,9 +81,10 @@ Use the narrowest route that resolves the first material blocker:
    surfaces;
 3. planning-readiness review for incomplete or uncertain planning;
 4. recovery/refocus for stale or contradictory canonical state;
-5. research or pre-execution discovery for unresolved evidence or intent;
-6. roadmap compilation only when planning is already coherent;
-7. orchestrator mode only when the operator explicitly wants a worker/PR loop.
+5. architecture refocus for bounded active-code architecture pressure;
+6. research or pre-execution discovery for unresolved evidence or intent;
+7. roadmap compilation only when planning is already coherent;
+8. orchestrator mode only when the operator explicitly wants a worker/PR loop.
 
 Do not claim the project is refreshed merely because Effigy health is green. Do
 not claim planning is complete merely because files exist.

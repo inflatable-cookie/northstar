@@ -46,6 +46,8 @@ to pick one mode:
   `northstar planning readiness review`
 - Existing project, all Northstar facets need checking -> project refresh:
   `northstar refresh`
+- Active codebase seam or architecture pressure -> architecture refocus:
+  `northstar architecture refocus`
 - Sound planning; need milestones or batches -> planning: `compile-roadmaps`
 - Plan was right but changed -> recovery: `replan-after-change`
 - Drifted or messy state -> recovery: `refocus-drifted-project` or `sweep-audit-repair`
@@ -57,6 +59,7 @@ to pick one mode:
 
 - “Plan this system before we build” -> `northstar` (plan-from-scratch)
 - “Refresh this project under Northstar” -> `northstar` (project-refresh)
+- “Refocus this subsystem's architecture” -> `northstar` (architecture-refocus)
 - “Run a planning readiness review on this existing project” -> `northstar`
   (planning-readiness-review)
 - “Lay out the next few roadmaps from the current contracts” -> `northstar` (compile-roadmaps)
