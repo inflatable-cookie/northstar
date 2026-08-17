@@ -14,6 +14,27 @@ fn require(condition, message) {
     }
 }
 
+fn count_lines_containing(lines, needle) {
+    let count = 0;
+    for line in lines {
+        if line.contains(needle) {
+            count += 1;
+        }
+    }
+    count
+}
+
+fn first_line_containing(lines, needle) {
+    let index = 0;
+    for line in lines {
+        if line.contains(needle) {
+            return index;
+        }
+        index += 1;
+    }
+    -1
+}
+
 let root = path::join(repo_root, "skills/northstar");
 require(fs::is_dir(root), "missing skills/northstar directory");
 
@@ -45,13 +66,32 @@ for command in commands {
     require(fs::is_file(mode_path), "missing canonical mode: " + mode);
 
     let text = fs::read_file(full_path);
+    let lines = str::split_lines(text);
     let description = frontmatter_value(text, "description");
     require(frontmatter_value(text, "name") == name, "wrong name in " + relative);
     require(description != "", "missing description in " + relative);
     require(description.len() <= 60, "description exceeds 60 characters in " + relative);
     require(str::ends_with(description, "."), "description must end with a period in " + relative);
-    require(text.contains("references/router.md"), "adapter does not load the router: " + relative);
-    require(text.contains(mode), "adapter does not load its canonical mode: " + relative);
+    let router_hits = count_lines_containing(lines, "references/router.md");
+    let mode_hits = count_lines_containing(lines, mode);
+    let mode_reference_hits = count_lines_containing(lines, "references/modes/");
+    let router_line = first_line_containing(lines, "references/router.md");
+    let mode_line = first_line_containing(lines, mode);
+    require(router_hits == 1, "adapter must load exactly one router reference: " + relative);
+    require(mode_hits == 1, "adapter must load exactly one canonical mode reference: " + relative);
+    require(mode_reference_hits == 1, "adapter must contain exactly one mode reference: " + relative);
+    require(router_line < mode_line, "router reference must precede mode reference: " + relative);
+    require(fs::file_size(full_path) <= 1200, "adapter is too large to remain thin: " + relative);
+    require(!text.contains("## Procedure") && !text.contains("## Steps"), "adapter contains a duplicated procedure heading: " + relative);
+    require(text.contains("Do not") || text.contains("Remain") || text.contains("plan-only"), "adapter is missing an authority boundary: " + relative);
+    let previous_negative_boundary = false;
+    for line in lines {
+        let negative_boundary = regex::is_match("(?i)(do not|don't|never|remain|read-only|plan-only|operator-owned|no )", line);
+        if regex::is_match("(?i)(start|create|dispatch|authorize|merge|edit production)", line) && !negative_boundary && !previous_negative_boundary {
+            throw("[northstar:command-skills] possible unauthorized action in " + relative + ": " + line);
+        }
+        previous_negative_boundary = negative_boundary;
+    }
     require(!text.contains("northstar-wayfinder"), "retired Wayfinder alias remains in " + relative);
 
     expected_paths.push(relative);

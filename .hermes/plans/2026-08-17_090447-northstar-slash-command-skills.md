@@ -259,7 +259,7 @@ static checker for portable CI.
 Document that:
 
 - the main `northstar` skill remains the canonical planning authority;
-- the five slash adapters are thin explicit entrypoints inside that artifact;
+- the six slash adapters are thin explicit entrypoints inside that artifact;
 - published skill updates distribute adapters with the main artifact;
 - local development must mirror/check the whole `skills/northstar/` tree;
 - a new session or `/reload-skills` is required before command discovery updates;

@@ -63,8 +63,9 @@ Run `effigy check:command-skills` directly or through `effigy qa:docs`.
 
 The command-surface checker validates the six thin adapters under
 `skills/northstar/commands/`: their names, description budgets, router and mode
-references, aggregate prompt footprint, retired-alias removal, and exact
-adapter count. It is included in `effigy qa:docs`.
+references and ordering, one-mode wiring, aggregate prompt footprint,
+retired-alias removal, thin-body/procedure guards, authority boundaries, and
+exact adapter count. It is included in `effigy qa:docs`.
 
 ## Readiness-map frontier (`check:readiness-map`)
 

@@ -118,6 +118,22 @@ authority would damage the destination rather than advance it.
 - route rollout and validation → `docs/roadmaps/g02/028-add-northstar-long-horizon-planning.md`;
 - this evidence → the present log.
 
+## Runtime discovery evidence
+
+After syncing both installed copies, the Hermes runtime command
+`hermes skills list` reported these six local Northstar command skills:
+
+- `northstar-atlas`
+- `northstar-reframe`
+- `northstar-agents-review`
+- `northstar-readiness-review`
+- `northstar-architecture-refocus`
+- `northstar-refresh`
+
+This verifies recursive discovery from the installed skill tree. It does not
+claim that an explicit command was invoked end-to-end; that remains a separate
+operator-session validation step.
+
 ### Recommended next route
 
 Run Atlas once against a large non-Northstar project or portfolio supplied by the

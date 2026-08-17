@@ -8,7 +8,7 @@ Depends on: g02.026, g02.027
 Vision tags: `long-horizon-planning`, `strategic-runway`, `multi-horizon`, `northstar-atlas`
 Master spec refs: `docs/specs/029-northstar-long-horizon-planning.md`
 Governing refs: `bundle-docs/protocol-kernel.md`, `docs/vision/`, `docs/architecture/`, `docs/contracts/001-working-rules.md`
-Planning state: Atlas route contract and mode implemented provisionally; large-scale scenario validation, slash adapter, and deterministic command checks remain pending
+Planning state: Atlas route contract, mode, slash adapter, deterministic command checks, and Northstar-scale validation complete; non-Northstar validation and operator confirmation remain pending
 
 ## Problem
 
@@ -21,12 +21,12 @@ multi-horizon runway. A memorable explicit command must not conceal that gap.
 - [x] define the distinction between readiness review and long-horizon planning;
 - [x] define the Atlas route contract and plan-only authority boundary;
 - [x] implement the provisional Atlas mode and router entry;
-- [ ] validate Atlas against a genuinely large-scale planning scenario;
+- [x] validate Atlas against a genuinely large-scale planning scenario;
 - [ ] confirm the output is strategic horizon synthesis rather than a review or
       short-term roadmap;
-- [ ] add the thin `/northstar-atlas` slash adapter;
-- [ ] add deterministic command-surface and distribution checks;
-- [ ] preserve natural-language routing and the operator-owned dogfooding boundary.
+- [x] add the thin `/northstar-atlas` slash adapter;
+- [x] add deterministic command-surface and distribution checks;
+- [x] preserve natural-language routing and the operator-owned dogfooding boundary.
 
 ## Execution plan
 
@@ -53,7 +53,7 @@ multi-horizon runway. A memorable explicit command must not conceal that gap.
 
 - add `/northstar-atlas` only after Batch 28.2 demonstrates the contract;
 - add the five thin utility adapters for reframe, AGENTS review, readiness review,
-  architecture refocus, and refresh;
+  architecture refocus, and refresh, alongside Atlas;
 - add one deterministic command-surface checker and installed-tree parity
   evidence;
 - retire the copied-sounding `northstar wayfinder` alias while retaining
