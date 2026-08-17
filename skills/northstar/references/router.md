@@ -75,7 +75,7 @@ compilation. Do not edit production code or start a worker from this review.
 
 ## 5. Atlas — long-horizon planning
 
-Use Atlas when the operator wants question-led planning across a significant
+Use Atlas when the operator wants discovery-first planning across a significant
 project, product, platform, or portfolio horizon:
 
 - `northstar atlas`;
@@ -83,9 +83,14 @@ project, product, platform, or portfolio horizon:
 - a request to connect vision, architecture, contracts, generation runway, and
   meaningful roadmap horizons.
 
-Atlas is not a readiness audit and not a short-term roadmap compiler. It shapes
-strategic direction, bets, dependencies, non-goals, accepted uncertainty, and a
-coarse durable runway. It remains plan-only and operator-owned.
+Atlas is discovery-first, not prescriptive. It begins by eliciting and reflecting
+operator direction before it offers horizon models, strategic options, or a
+runway. It is not a readiness audit and not a short-term roadmap compiler. Once
+operator direction is sufficiently grounded, it can shape strategic bets,
+dependencies, non-goals, accepted uncertainty, and a coarse durable runway. It
+remains plan-only and operator-owned. If the operator does not yet know the
+project's aim, guide first-principles discovery or route away from Atlas rather
+than inventing a destination.
 
 If the request is an explicit orchestrator, worker, worktree, or PR loop, choose
 **Orchestrator** mode instead. If the request is only to test existing planning

@@ -45,7 +45,7 @@ to pick one mode:
 - Existing project, planning quality uncertain -> planning readiness review:
   `northstar planning readiness review`
 - Significant project/product/portfolio, long-horizon direction or strategic
-  runway -> Atlas: `northstar atlas`
+  discovery -> Atlas: `northstar atlas`
 - Existing project, all Northstar facets need checking -> project refresh:
   `northstar refresh`
 - Active codebase seam or architecture pressure -> architecture refocus:
@@ -67,8 +67,8 @@ to pick one mode:
 - “Restate that in project language” -> `northstar` (reframe)
 - “Run a planning readiness review on this existing project” -> `northstar`
   (planning-readiness-review)
-- “Shape the long-horizon strategic runway for this project” -> `northstar`
-  (Atlas)
+- “Shape the long-horizon direction for this project with me” -> `northstar`
+  (Atlas discovery first; do not ask Atlas to invent the strategy)
 - “Lay out the next few roadmaps from the current contracts” -> `northstar` (compile-roadmaps)
 - “Replan this after the contract change” -> `northstar` (replan-after-change)
 - “Refocus this project under Northstar” -> `northstar` (refocus-drifted-project)

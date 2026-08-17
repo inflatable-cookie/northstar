@@ -7,6 +7,15 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 
 <!-- Keep entries short. Append newest entries at the top. Do not include secrets. -->
 
+- **2026-08-17 — Atlas synthesized strategy before user discovery:** live use in
+  existing projects found that Atlas laid out what should happen before asking
+  for the operator's vision; impact was useful options arriving in the wrong
+  direction and agent-authored strategy being mistaken for discovery; plausible
+  fix is a discovery-first checkpoint with first-principles questions, an
+  explicit pause, and no synthesis until the operator supplies or confirms
+  direction; affected surfaces are the Atlas mode, router, adapter, spec,
+  roadmap, and validation log.
+
 - **2026-08-17 — consumer instruction audit depended on the Northstar source catalog:** the documented consumer command could not resolve from an installed skill because Effigy resolves Rhai tasks from the selected project/catalog root; impact was that `check:agent-instructions` worked only inside the Northstar source checkout; plausible fix is to ship a minimal skill-local Effigy catalog and shared audit helper, with the source task pointing at that same helper; parity must ignore Effigy's generated `.effigy/` receipts; affected surfaces are `skills/northstar/effigy.toml`, the installed skill helper, the root `effigy.toml`, the parity checker, and the agent-instruction review mode.
 
 - **2026-08-17 — worker preflight was advertised as a normal-mode rule:** a

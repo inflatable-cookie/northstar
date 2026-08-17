@@ -8,7 +8,7 @@ Depends on: g02.026, g02.027
 Vision tags: `long-horizon-planning`, `strategic-runway`, `multi-horizon`, `northstar-atlas`
 Master spec refs: `docs/specs/029-northstar-long-horizon-planning.md`
 Governing refs: `bundle-docs/protocol-kernel.md`, `docs/vision/`, `docs/architecture/`, `docs/contracts/001-working-rules.md`
-Planning state: Atlas route contract, mode, slash adapter, deterministic command checks, and Northstar-scale validation complete; non-Northstar validation and operator confirmation remain pending
+Planning state: Atlas route exists but requires a discovery-first behavioral correction; the canonical mode, adapter, and deterministic checks remain in place, while existing-project validation and operator confirmation remain pending
 
 ## Problem
 
@@ -42,10 +42,14 @@ multi-horizon runway. A memorable explicit command must not conceal that gap.
 ### Batch 28.2 — Validate strategic scale
 
 - choose one genuinely large project, product, platform, or portfolio scenario;
-- run Atlas against vision, architecture, contracts, generation runway, and
-  roadmap horizons;
-- record whether it surfaces strategic bets, dependencies, non-goals, accepted
-  uncertainty, and meaningful horizon transitions;
+- begin with a discovery-only turn that asks first-principles questions before
+  offering strategic options;
+- run later Atlas turns against vision, architecture, contracts, generation
+  runway, and roadmap horizons only after the operator supplies or confirms
+  direction;
+- record whether it surfaces strategic options, dependencies, non-goals,
+  accepted uncertainty, and meaningful horizon transitions without prescribing
+  an unrequested destination;
 - capture operator corrections and revise the mode contract only where evidence
   shows the route is too small, too broad, or too implementation-oriented.
 
@@ -64,9 +68,9 @@ multi-horizon runway. A memorable explicit command must not conceal that gap.
 
 - [x] readiness review is explicitly smaller than Atlas;
 - [x] Atlas is routed as a distinct, plan-only mode;
-- [x] Northstar itself produces a useful strategic horizon model in a
-      large-scale validation scenario;
-- [ ] the operator confirms the scale and usefulness of the output;
+- [x] Atlas has a discovery-first, first-principles interaction contract;
+- [ ] an existing-project run demonstrates that Atlas asks before prescribing;
+- [ ] the operator confirms the scale and usefulness of the user-guided output;
 - [x] the slash adapter loads the router and exactly one mode without duplicating
       procedure content;
 - [x] the command index remains within the agreed context budget;

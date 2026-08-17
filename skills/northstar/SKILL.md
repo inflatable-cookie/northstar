@@ -20,7 +20,7 @@ open **one** [`references/modes/`](./references/modes/) file and follow it.
 | Architecture refocus | User asks for `northstar architecture refocus` or a bounded codebase architecture improvement review |
 | Reframe | User asks for `northstar reframe` or a clearer restatement in project language |
 | Planning readiness review | User asks for `northstar planning readiness review` on an existing project |
-| Atlas | User asks for `northstar atlas` or long-horizon strategic runway planning |
+| Atlas | User asks for `northstar atlas` or discovery-first long-horizon direction |
 | Agent instruction review | User asks for a `northstar AGENTS file review`, or to review/optimize `AGENTS.md`/`CLAUDE.md` |
 | Pre-execution discovery | Readiness mapping, intent rounds, project language, decision prototypes, questionnaires, or reframe |
 | Orchestrator | User wants question-led planning plus a separate worker/PR loop |
@@ -58,9 +58,10 @@ activated, follow the router's lightweight four-command worktree fast path.
   conversation and does not select, dispatch, or manage consumer runs.
 - **Reframe:** a concise, read-only restatement of the current request that
   preserves uncertainty and authority; it does not create a plan or decision.
-- **Atlas:** question-led, plan-only long-horizon planning that connects vision,
-  architecture, contracts, generation runway, and strategic horizons; it does
-  not authorize execution.
+- **Atlas:** discovery-first, operator-guided, plan-only long-horizon planning
+  that connects vision, architecture, contracts, generation runway, and
+  strategic horizons; it does not invent the project's direction or authorize
+  execution.
 - **Pre-execution discovery:** frontier-based intent rounds and bounded
   project-language, prototype, and questionnaire routes; no execution authority.
 - **Research:** promoted decisions in architecture/contracts, not stranded memos.

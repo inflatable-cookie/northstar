@@ -1,10 +1,10 @@
 # Atlas Route Validation — Northstar Strategic Horizon
 
-Status: provisional evidence
+Status: provisional evidence — superseded by operator correction
 Date: 2026-08-17
 Route: `skills/northstar/references/modes/atlas.md`
 Scenario: Northstar itself, treated as a multi-generation planning system rather than a single implementation task
-Operator confirmation: pending
+Operator confirmation: behavioral correction received; discovery-first validation pending
 
 ## Scope
 
@@ -14,6 +14,28 @@ than the existing planning-readiness review.
 The scenario is intentionally Northstar itself because its vision, docs spine,
 architecture, contracts, generation runway, active roadmap, and operator-owned
 consumer evidence form a real cross-surface planning system.
+
+## Operator correction — discovery before synthesis
+
+Live use in existing projects found that Atlas was consistently prescriptive: it
+laid out what should happen before asking the operator for direction. That makes
+the earlier horizon synthesis useful as an example of output shape, but not as
+proof that Atlas follows the intended interaction contract.
+
+The corrected contract is discovery-first and operator-guided:
+
+- ask what the project is for, who it serves, what future state matters, and what
+  constraints or non-goals shape the aim;
+- treat existing documents as evidence to test, not permission to extend the
+  strategy;
+- pause after the first-principles questions and wait for the operator's
+  guidance;
+- offer options only after direction is supplied or confirmed;
+- if the operator does not know the aim, guide first-principles thinking or say
+  Atlas is premature rather than inventing a destination.
+
+The next validation must test the first-turn behavior in an existing project and
+must demonstrate that Atlas asks before prescribing.
 
 ## Evidence read
 
@@ -136,17 +158,19 @@ operator-session validation step.
 
 ### Recommended next route
 
-Run Atlas once against a large non-Northstar project or portfolio supplied by the
-operator. Compare whether it synthesizes horizons, bets, dependencies,
-non-goals, and accepted uncertainty rather than merely auditing existing docs.
-Then either promote Atlas to an explicit slash command or revise its contract.
+Run Atlas first as a discovery-only pass against an existing project supplied by
+the operator. Verify that it asks first-principles questions, pauses for user
+direction, and does not prescribe a destination. Only then test option comparison
+and horizon synthesis against a large non-Northstar project or portfolio.
 
 ## Assessment
 
 This scenario demonstrates a meaningful scale difference from
-`planning-readiness-review`: Atlas produced a destination, multi-horizon model,
-strategic bets, dependencies, and promotion map. It did not collapse into a
-currentness report or a task queue.
+`planning-readiness-review`: the historical run produced a destination,
+multi-horizon model, strategic bets, dependencies, and promotion map. However,
+because it did so before obtaining operator direction, it does not validate the
+corrected Atlas interaction contract and must not be treated as a successful
+behavioral proof.
 
 ## Subsequent command naming
 

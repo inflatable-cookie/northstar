@@ -40,16 +40,28 @@ waterfall, or granting execution authority.
 
 ## Route contract
 
-Atlas begins by naming a strategic destination and why the question is large
-horizon. It then reads the available canonical surfaces and separates:
+Atlas is a user-guided discovery route before it is a strategy-synthesis route.
+It begins by identifying the target, scale, and strategic question without
+answering the question on the operator's behalf. It reads the available
+canonical surfaces for context, vocabulary, constraints, and contradictions,
+then asks a small first-principles question set.
+
+The first Atlas turn must stop at a discovery checkpoint. It must not invent a
+destination, preferred horizon model, strategic bets, or runway merely because
+repository evidence is incomplete. If the operator does not yet know the aim,
+Atlas should guide first-principles thinking or route to pre-execution discovery;
+it should not manufacture a plausible strategy.
+
+After the operator supplies or confirms enough direction, Atlas separates:
 
 - direction and strategic constraints from realization details;
+- operator-stated direction from agent-generated options;
 - existing evidence from recommendations;
 - operator-owned decisions from repository-answerable facts;
 - durable horizons from short-term task queues;
 - accepted uncertainty from missing planning.
 
-The route produces a bounded horizon model containing:
+Only then may the route produce a bounded horizon model containing:
 
 - destination and long-horizon outcomes;
 - strategic constraints, non-goals, and rollover conditions;
@@ -98,13 +110,16 @@ planning gap.
 
 - [x] a dedicated Atlas mode exists and is distinct from planning readiness;
 - [x] the mode names the long-horizon scale test and canonical required reads;
-- [x] the mode produces a horizon model rather than a currentness report;
+- [x] the mode defines a discovery-first checkpoint before strategic synthesis;
+- [x] the mode explicitly requires first-principles guidance when the operator
+      does not yet know the project's aim;
+- [x] the mode produces a horizon model rather than a currentness report once
+      operator direction is sufficiently grounded;
 - [x] the mode defines promotion destinations and adjacent-route boundaries;
 - [x] the mode is plan-only and operator-owned;
-- [x] Northstar itself provides a real large-scale scenario demonstrating useful
-      horizon synthesis;
+- [ ] an existing-project run demonstrates that Atlas asks before prescribing;
 - [ ] an operator confirms that the output is strategic rather than a roadmap
-      review or implementation plan;
+      review, implementation plan, or agent-authored strategy;
 - [x] the route is covered by a thin explicit slash adapter;
 - [x] the route has deterministic contract and distribution checks.
 

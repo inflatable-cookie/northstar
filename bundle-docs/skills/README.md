@@ -19,7 +19,7 @@ The one installable skill also exposes thin explicit command adapters under
 
 | Command | Scope |
 | --- | --- |
-| `/northstar-atlas` | Long-horizon strategic runway and multi-horizon planning |
+| `/northstar-atlas` | User-guided long-horizon discovery, options, and multi-horizon planning |
 | `/come-again` | Standalone request restatement |
 | `/northstar-agents-review` | AGENTS/CLAUDE instruction-surface review |
 | `/northstar-readiness-review` | Existing planning-state readiness review |
@@ -84,7 +84,7 @@ compatibility aliases.
 | `refocus-drifted-project.md` | Broad drift or untrustworthy state |
 | `sweep-audit-repair.md` | Structured sweep pass |
 | `handoff.md` | User **explicitly** asks for handoff / fresh thread |
-| `atlas.md` | Shape long-horizon direction and a coarse strategic runway |
+| `atlas.md` | User-guided long-horizon direction and a coarse strategic runway |
 
 Setup references live under `skills/northstar/references/setup/`.
 Templates live under `skills/northstar/assets/templates/`.

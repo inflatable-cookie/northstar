@@ -69,5 +69,6 @@ skills.
 - The refresh and architecture-refocus routes are distributed to both installed
   skill copies; the six-command surface now passes source and installed parity
   verification.
-- Atlas has been validated provisionally against Northstar itself; a non-Northstar
-  large-scale scenario and operator confirmation remain open.
+- Atlas has a discovery-first contract now, but existing-project behavioral
+  validation is still open because earlier runs were prescriptive rather than
+  operator-guided.
