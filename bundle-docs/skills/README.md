@@ -48,9 +48,22 @@ source checkout can verify a specific install with:
 effigy check:skill-install /path/to/installed/northstar
 ```
 
-The parity checker is source-repo Effigy tooling. A direct `rsync -a --delete` from
-`skills/northstar/` is reserved for local development before the change is
-published. Restart agent sessions after an update.
+The parity checker compares the distributable skill payload and ignores Effigy's
+runtime receipts under `.effigy/`; those receipts are not part of the installed
+skill. A direct `rsync -a --delete` from `skills/northstar/` is reserved for local
+development before the change is published. Restart agent sessions after an
+update.
+
+The installed skill also carries a minimal Effigy catalog for the consumer-safe,
+read-only agent-instruction audit. When a consumer repository has no local
+`check:agent-instructions` task, select the installed skill explicitly:
+
+```bash
+effigy --repo /path/to/installed/northstar northstar/check:agent-instructions /path/to/project
+```
+
+This is an execution surface inside the one skill artifact, not a second public
+install or a replacement for the source repository's full QA catalog.
 
 Retired top-level skills (`northstar-setup`, `northstar-plan`,
 `northstar-recover`, `northstar-research`, `northstar-handoff`) were merged

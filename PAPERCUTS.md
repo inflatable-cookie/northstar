@@ -7,6 +7,8 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 
 <!-- Keep entries short. Append newest entries at the top. Do not include secrets. -->
 
+- **2026-08-17 — consumer instruction audit depended on the Northstar source catalog:** the documented consumer command could not resolve from an installed skill because Effigy resolves Rhai tasks from the selected project/catalog root; impact was that `check:agent-instructions` worked only inside the Northstar source checkout; plausible fix is to ship a minimal skill-local Effigy catalog and shared audit helper, with the source task pointing at that same helper; parity must ignore Effigy's generated `.effigy/` receipts; affected surfaces are `skills/northstar/effigy.toml`, the installed skill helper, the root `effigy.toml`, the parity checker, and the agent-instruction review mode.
+
 - **2026-08-17 — worker preflight was advertised as a normal-mode rule:** a
   consumer AGENTS audit treated Effigy orientation followed by a worktree check
   as the universal startup order; impact was unnecessary worktree concern for

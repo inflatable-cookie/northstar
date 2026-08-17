@@ -46,10 +46,17 @@ rsync -a --delete skills/northstar/ /path/to/installed/northstar/
 Restart agent sessions after updating an installed skill so they reload the
 new instructions.
 
-The parity, bundle, posture, and repo-contract checks are Effigy-native Rhai
-tasks. The repo-contract data lives in
-`scripts/lib/northstar-repo-contract-data.rhai`, and its portable Markdown link
-boundary is checked before Effigy’s native link validator runs.
+The published skill also carries a minimal Effigy catalog for the consumer-safe
+agent-instruction audit. When the target repository has no local task, select the
+installed skill directory explicitly:
+
+```bash
+effigy --repo /path/to/installed/northstar northstar/check:agent-instructions /path/to/project
+```
+
+This catalog is intentionally narrower than the Northstar source repository's
+full QA catalog. It exists so the audit helper resolves from the installed skill
+rather than incorrectly depending on the Northstar source checkout.
 
 ## Repo contract (`qa:docs`)
 
@@ -98,8 +105,8 @@ advisory heuristics, not semantic verdicts, and the task never edits files.
 effigy check:agent-instructions
 effigy check:agent-instructions AGENTS.md
 effigy check:agent-instructions skills/northstar/assets/templates/AGENTS.md
-# from the Northstar catalog, audit a consumer repository instead:
-effigy northstar/check:agent-instructions /path/to/project
+# from an installed Northstar skill, audit a consumer repository instead:
+effigy --repo /path/to/installed/northstar northstar/check:agent-instructions /path/to/project
 ```
 
 ## Posture advisory (`check:posture-advisory`)

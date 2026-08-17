@@ -19,16 +19,23 @@ This is a docs-only, bounded, target-repository-aware review. Do not start a wor
    effigy check:agent-instructions
    ```
 
-   When reviewing a consumer repository from the Northstar catalog, use the
-   target-root form so the audit does not inspect Northstar's own files:
+   If the target is the Northstar source repository, this uses the source
+   catalog's task, which points at the shared helper shipped in the skill.
+
+   When reviewing a consumer repository and no target-local task exists, resolve
+   the installed Northstar skill directory and select its bundled Effigy catalog:
 
    ```bash
-   effigy northstar/check:agent-instructions /absolute/path/to/target-repo
+   effigy --repo /absolute/path/to/installed/northstar northstar/check:agent-instructions /absolute/path/to/target-repo
    ```
 
-3. If the audit task is unavailable, perform the same read-only measurements and
-   content classification with repository tools. Do not silently substitute the
-   Northstar source repository as the target.
+   The installed catalog contains only this consumer-safe, read-only audit; it
+   does not make the rest of Northstar's source-repository QA tasks available.
+
+3. If neither a target-local task nor the installed Northstar catalog is
+   available, perform the same read-only measurements and content classification
+   with repository tools. Do not silently substitute the Northstar source
+   repository as the target.
 4. Read `docs/contracts/003-agent-instruction-surface.md` when the target has
    Northstar's contract, or apply its six root-content classes: identity,
    boundaries, verified common commands, minimal orientation, stop rules, and

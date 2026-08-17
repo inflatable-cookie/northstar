@@ -19,16 +19,24 @@ let target_files = [];
 let source_digests = #{};
 let target_digests = #{};
 
+fn is_runtime_state(relative) {
+    str::starts_with(relative, ".effigy/")
+}
+
 for file in fs::list_recursive(source_root) {
     let relative = str::replace(file, source_prefix, "");
-    source_files.push(relative);
-    source_digests[relative] = fs::sha256(file);
+    if !is_runtime_state(relative) {
+        source_files.push(relative);
+        source_digests[relative] = fs::sha256(file);
+    }
 }
 
 for file in fs::list_recursive(target_root) {
     let relative = str::replace(file, target_prefix, "");
-    target_files.push(relative);
-    target_digests[relative] = fs::sha256(file);
+    if !is_runtime_state(relative) {
+        target_files.push(relative);
+        target_digests[relative] = fs::sha256(file);
+    }
 }
 
 source_files.sort();

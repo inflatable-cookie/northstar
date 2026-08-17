@@ -1,0 +1,8 @@
+[manifest]
+minimum_effigy_version = "0.7.0"
+
+[catalog]
+alias = "northstar"
+
+[tasks]
+"check:agent-instructions" = [{ rhai = "scripts/check-agent-instructions.rhai" }]
