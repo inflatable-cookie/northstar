@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-08-16
+Updated: 2026-08-17
 Architecture refs: docs/architecture/system-architecture.md
 
 ## Coverage Summary
@@ -51,7 +51,7 @@ skills.
 | Delivery-layer adoption | active docs spine, compact working rules, spec, roadmap, log | repo maintainers | ready |
 | Template/skill promotion | follow-on roadmap batches and logs | repo maintainers | pending |
 | Papercut loop | root queue, doctrine, templates, skill instruction, and QA coverage | repo maintainers | ready |
-| Published skill parity | Skills CLI update path, global install inspection, and source checker | repo maintainers | ready; 32-file parity proven |
+| Published skill parity | Skills CLI update path, global install inspection, and source checker | repo maintainers | ready; 38-file parity proven |
 | Consumer papercut proof | real consumer queue entry and manual triage boundary | repo maintainers + consumer owner | observed |
 | Orchestrator mode | per-worker committed handoff under `docs/handoffs/`, fresh worker worktree or safe temporary fallback, startup check, chunk report, PR, provider review record, and closeout evidence | repo maintainers + operator | dogfood complete; longer multi-card evidence pending |
 | Model-efficiency comparison | measured role routing, rework, review cycles, and relay burden | repo maintainers | one dogfood measured; broader comparison pending |
@@ -65,5 +65,5 @@ skills.
 - The live repo pilot has not yet proven a longer autonomous multi-card run.
 - The first per-worker handoff/PR loop is proven, including same-identity GitHub
   review comments; provider adapter and packet-persistence defaults remain open.
-- The new source skill is distributed to the installed skill copy and the
-  32-file parity check now passes.
+- The refresh and architecture-refocus routes are distributed to both installed
+  skill copies; the 38-file parity check now passes.

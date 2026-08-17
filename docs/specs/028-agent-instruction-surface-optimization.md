@@ -1,9 +1,9 @@
 # 028 - Agent Instruction Surface Optimization
 
-Status: active
+Status: active — source implementation complete; consumer measurement pending
 Owner: repo maintainers
 Created: 2026-08-16
-Updated: 2026-08-16
+Updated: 2026-08-17
 Related research: `bundle-docs/research/translation-memos/agent-instruction-surface-optimization.md`
 Governing architecture: `docs/architecture/system-architecture.md`
 Governing contract: `docs/contracts/003-agent-instruction-surface.md`
@@ -39,8 +39,8 @@ The feature has three parts:
    copy-ready template, preserving all important boundaries and moving detail to
    canonical contracts, skills, guides, or nested files.
 
-The audit is advisory and explainable. It never edits files or silently weakens
-policy. Northstar's soft root target is 100 non-blank lines / 12 KiB, with an
+The read-only audit is advisory and explainable. It never edits files or silently
+weakens policy. Northstar's soft root target is 100 non-blank lines / 12 KiB, with an
 advisory warning at 150 lines / 20 KiB.
 
 ## Non-goals
@@ -105,5 +105,8 @@ advisory warning at 150 lines / 20 KiB.
 
 ## Next task
 
-Implement the read-only audit and compact the Northstar source/template
-instruction surfaces. Do not modify Poodle or Figmatic as part of this card.
+Use the optimized surface in the later Poodle-first consumer dogfood and record
+the Batch 27.3 measurement. Select the live Poodle destination from Poodle's
+current generation index at handoff time; do not use the historical `g15.006`
+example as a live target. Do not modify Poodle or Figmatic as part of the
+implementation phase of this spec.

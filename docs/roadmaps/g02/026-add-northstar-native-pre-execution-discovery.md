@@ -3,14 +3,16 @@
 Status: active
 Owner: repo maintainers
 Created: 2026-08-16
+Updated: 2026-08-17
 Depends on: g02.025
 Vision tags: `pre-execution-discovery`, `readiness-mapping`, `intent-rounds`, `docs-native-planning`
 Master spec refs: `docs/specs/027-northstar-native-pre-execution-discovery.md`
 Research refs: `bundle-docs/research/translation-memos/matt-pocock-skills-audit-to-northstar.md`
 Governing refs: `docs/architecture/system-architecture.md`, `docs/contracts/001-working-rules.md`
 Planning state: Batch 26.1 contract and checker complete; Batch 26.2 route
-implementation complete; Batch 26.3 requires a starter-surface planning
-checkpoint
+implementation complete; Batch 26.3 planning checkpoint complete with card 078
+ready but deferred; the architecture-refocus portion of Batch 26.4 is complete
+and reframe/dogfood remain pending
 
 ## Problem
 
@@ -26,7 +28,8 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 - [ ] compile a cleared map into the normal spec/promotion/roadmap chain
 - [ ] add starter templates
 - [x] add deterministic frontier checks
-- [ ] add architecture refocus and reframe as bounded planning/communication routes
+- [x] add architecture refocus as a bounded planning route
+- [ ] add reframe as a bounded communication route
 - [ ] preserve the current durable handoff and worker/PR contract
 - [ ] dogfood the complete flow on a new or materially ambiguous project
 
@@ -57,7 +60,7 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 
 ### Batch 26.4 - Add architecture refocus, reframe, and dogfood
 
-- add active-lane architecture refocus with offline-safe output;
+- [x] add active-lane architecture refocus with offline-safe output;
 - add non-mutating reframe behaviour;
 - refine handoff purpose and next-session metadata;
 - run one complete dogfood and record measured friction before broader promotion.
@@ -71,7 +74,7 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 - [ ] operator-owned decisions cannot be resolved by agent-authored notes;
 - [ ] the no-fog early exit works on a small change;
 - [ ] the cleared-map promotion path leaves coherent spec, roadmap, and log state;
-- [ ] architecture refocus is read-only and offline-safe;
+- [x] architecture refocus is read-only and offline-safe;
 - [ ] handoff additions preserve the single-file worker boundary;
 - [ ] dogfood evidence measures planning revisions, reopened decisions, rework, and
       operator correction burden.
@@ -86,7 +89,9 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 
 ## Next task
 
-Execute `g02.026/078` through the isolated worker/PR loop. After its reviewed
-merge and closeout, prepare the separate clean Poodle dogfood handoff for
-`g15.006`. Figmatic remains the later dogfood target after its direct
-interactive bug-fixing work returns to the orchestrator flow.
+Card `g02.026/078` remains ready but deferred. Before preparing a real Poodle
+dogfood handoff, inspect Poodle's current generation index and select the
+destination that is actually current; do not dispatch against the historical
+`g15.006` example. Reframe and the complete dogfood remain the next unresolved
+Batch 26.4 work. Figmatic remains later while its direct interactive bug-fixing
+work continues.

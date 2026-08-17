@@ -3,7 +3,7 @@
 Status: active
 Owner: repo maintainers
 Created: 2026-08-16
-Updated: 2026-08-16
+Updated: 2026-08-17
 Related research: `bundle-docs/research/translation-memos/matt-pocock-skills-audit-to-northstar.md`
 Governing architecture: `docs/architecture/system-architecture.md`
 Governing contract: `docs/contracts/001-working-rules.md`
@@ -43,8 +43,8 @@ execution.
   chain;
 - add deterministic checks for dependency integrity, frontier calculation, and
   plan-only boundaries;
-- add an architecture-refocus review for active code and seams;
-- improve operator comprehension with a small non-mutating reframe route;
+- [x] add an architecture-refocus review for active code and seams;
+- [ ] improve operator comprehension with a small non-mutating reframe route;
 - keep the entire protocol provider-neutral and starter-bundle friendly.
 
 ## Non-goals
@@ -285,11 +285,11 @@ spec, promotion, roadmap, or operator gates.
 
 ## Resolved decisions for Batch 26.3
 
-The starter-surface worked example targets Poodle's ready card
+The starter-surface worked example uses Poodle's historical card
 `g15.006 — React Mirror Implementation and Gallery Closure`. It is a bounded,
-repository-backed example of the discovery and promotion path, not a change to
-the Poodle repository. The Poodle dogfood runs separately after the starter
-surfaces are implemented, reviewed, and merged.
+repository-backed example of the discovery and promotion path, not a live
+dogfood target or a change to the Poodle repository. Poodle's current generation
+state must be inspected again when a real dogfood handoff is prepared.
 
 The example's destination-local project language includes:
 
@@ -320,9 +320,17 @@ The Poodle example must show this path without applying it to Poodle. Poodle's
 existing Effigy doctor findings are baseline board-health findings and must not
 be presented as new Batch 26.3 failures.
 
+## Current implementation state
+
+The architecture-refocus portion of Batch 26.4 is implemented as the
+read-only, offline-safe `northstar architecture refocus` route. It produces
+candidate improvements without editing production code or granting execution
+authority. The reframe route and complete consumer dogfood remain pending.
+
 ## Next task
 
-The Batch 26.3 starter-surface planning checkpoint is complete. Execute
-`g02.026/078` through the isolated worker/PR loop. After its reviewed merge and
-closeout, prepare the separate clean Poodle dogfood handoff for `g15.006`.
-Keep architecture refocus, reframe, and Figmatic dogfooding out of card 078.
+The Batch 26.3 starter-surface planning checkpoint is complete. Card
+`g02.026/078` remains ready but deferred. Its `g15.006` material is a historical
+worked example; before any real Poodle dogfood handoff, select and verify the
+current destination from Poodle's canonical generation index. Keep reframe and
+Figmatic dogfooding out of card 078.

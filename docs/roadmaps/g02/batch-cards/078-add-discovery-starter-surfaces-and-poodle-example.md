@@ -2,7 +2,7 @@
 
 Status: ready
 Owner: repo maintainers
-Updated: 2026-08-16
+Updated: 2026-08-17
 Master spec refs: `docs/specs/027-northstar-native-pre-execution-discovery.md`
 Governing refs: `docs/contracts/001-working-rules.md`,
 `skills/northstar/references/modes/pre-execution-discovery.md`,
@@ -31,10 +31,11 @@ spec and roadmap work without granting the map execution authority.
 ## Lane Runway Context
 
 - Higher-level lane owner: `g02.026` Northstar-native pre-execution discovery.
-- Next likely cards or milestone transitions after this one: dogfood the complete
-  discovery flow on Poodle `g15.006`; later add architecture refocus, reframe,
-  and the Figmatic dogfood after its direct interactive bug-fixing work returns
-  to the orchestrator flow.
+- Next likely cards or milestone transitions after this one: select a current
+  Poodle destination from Poodle's generation index and dogfood the complete
+  discovery flow; architecture refocus is now implemented, while reframe and
+  the Figmatic dogfood remain later work after its direct interactive bug-fixing
+  work returns to the orchestrator flow.
 - Next planning checkpoint: after the Poodle dogfood, review planning revisions,
   reopened decisions, implementation rework, and operator correction burden
   before Batch 26.4.
@@ -173,12 +174,15 @@ state, and which baseline findings were pre-existing.
       blockers or limits.
 - [ ] Record whether the continuation envelope still holds or the handoff pause
       signal fired.
-- [ ] Create the separate Poodle dogfood handoff only after this card is merged
-      and the Poodle clean-tree preflight passes.
+- [ ] Create the separate Poodle dogfood handoff only after this card is merged,
+      the current Poodle destination is selected from its canonical generation
+      index, and the Poodle clean-tree preflight passes.
 - [ ] Leave one explicit next task in the highest-authority active surface.
 
 ## Next Task
 
 Run card 078 through the isolated worker/PR loop. After its merge and closeout,
-prepare the separate clean Poodle dogfood handoff for `g15.006`; do not dispatch
-Figmatic until its direct interactive bug-fixing phase is complete.
+prepare the separate clean Poodle dogfood handoff for the current destination
+selected from Poodle's canonical generation index; do not dispatch against the
+historical `g15.006` example or dispatch Figmatic until its direct interactive
+bug-fixing phase is complete.

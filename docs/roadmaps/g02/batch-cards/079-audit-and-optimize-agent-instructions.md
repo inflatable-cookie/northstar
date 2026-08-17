@@ -2,7 +2,7 @@
 
 Status: complete
 Owner: repo maintainers
-Updated: 2026-08-16
+Updated: 2026-08-17
 Master spec refs: `docs/specs/028-agent-instruction-surface-optimization.md`
 Governing refs: `docs/contracts/003-agent-instruction-surface.md`,
 `docs/architecture/system-architecture.md`,
@@ -98,7 +98,7 @@ Implemented directly on Northstar's source branch:
 - compacted the source and copy-ready `AGENTS.md` files;
 - added the root and copy-ready one-line `CLAUDE.md` bridge;
 - updated indexes, contract inventories, and setup guidance;
-- refreshed both installed skill copies and proved 34-file parity.
+- refreshed both installed skill copies and proved 38-file parity.
 
 The source root fell from 95 to 43 non-blank lines and from 5,690 to 2,619
 bytes. The template fell from 100 to 35 non-blank lines and from 5,203 to 1,707
