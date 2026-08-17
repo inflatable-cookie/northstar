@@ -1,6 +1,6 @@
 # 028 - Agent Instruction Surface Optimization
 
-Status: active — source implementation complete; consumer measurement pending
+Status: active — source implementation complete; operator feedback measurement pending
 Owner: repo maintainers
 Created: 2026-08-16
 Updated: 2026-08-17
@@ -105,8 +105,7 @@ advisory warning at 150 lines / 20 KiB.
 
 ## Next task
 
-Use the optimized surface in the later Poodle-first consumer dogfood and record
-the Batch 27.3 measurement. Select the live Poodle destination from Poodle's
-current generation index at handoff time; do not use the historical `g15.006`
-example as a live target. Do not modify Poodle or Figmatic as part of the
-implementation phase of this spec.
+Use feedback from the operator's live use of the optimized surface and record the
+Batch 27.3 measurement. Northstar does not select or dispatch a consumer target;
+it consumes evidence supplied in this conversation. Do not modify consumer
+repositories as part of the implementation phase of this spec.

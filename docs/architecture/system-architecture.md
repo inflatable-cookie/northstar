@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-08-16
+Updated: 2026-08-17
 Vision refs: docs/vision/001-northstar-delivery-vision.md
 
 ## Top-Level Stack
@@ -37,6 +37,10 @@ Vision refs: docs/vision/001-northstar-delivery-vision.md
   planning spine rather than by ad hoc repo edits.
 - published skill propagation and source/install parity should remain explicit
   so multi-harness installs do not depend on manual operator memory.
+- Live consumer dogfooding is operator-owned outside Northstar's execution loop;
+  consumer feedback enters Northstar through the operator as evidence,
+  papercuts, research, or planning input. Northstar does not select, dispatch,
+  or manage consumer runs.
 
 ## Readiness-mapping artifact contract
 

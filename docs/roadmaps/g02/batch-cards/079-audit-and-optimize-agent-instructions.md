@@ -17,8 +17,9 @@ Auto-start next card: no
 - [x] No unresolved intent checkpoint governs the card.
 - [x] Consumer repositories are explicitly out of scope.
 
-Implementation and closeout are complete; the later consumer measurement phase
-remains in the milestone rather than in this implementation card.
+Implementation and closeout are complete; the later operator-feedback
+measurement phase remains in the milestone rather than in this implementation
+card.
 
 ## Objective
 
@@ -107,5 +108,5 @@ bytes. Full evidence is in
 
 ## Next task
 
-Use the optimized surface in the later Poodle-first consumer dogfood. Do not
-touch Figmatic while its direct interactive bug-fixing work continues.
+Consume feedback from the operator's live use of the optimized surface. This
+card does not select, dispatch, or manage a Poodle or Figmatic dogfood run.

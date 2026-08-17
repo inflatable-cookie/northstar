@@ -240,11 +240,13 @@ messaging.
 
 ## Resolved decisions for Batch 26.2
 
-The first dogfood sequence is now **Poodle, then Figmatic**. Poodle is the next
-available dogfood target; Figmatic is temporarily reserved for direct interactive
-bug fixing and will return to the orchestrator flow afterwards. Poodle provides
-the larger cross-runtime contract and vocabulary test, while Figmatic remains the
-stronger later test of an actively ambiguous product boundary.
+Northstar does not own a consumer-dogfood sequence. The operator dogfoods live
+outside Northstar's execution loop and brings the resulting feedback into this
+conversation as evidence, papercuts, or planning input. Northstar may inspect
+consumer-repository evidence that the operator cites, but it does not select
+consumer targets, prepare dogfood handoffs, dispatch consumer workers, or manage
+Poodle/Figmatic execution from this lane. Earlier Poodle/Figmatic sequencing
+notes are historical and do not govern current planning.
 
 Project language is local by default:
 
@@ -288,8 +290,9 @@ spec, promotion, roadmap, or operator gates.
 The starter-surface worked example uses Poodle's historical card
 `g15.006 — React Mirror Implementation and Gallery Closure`. It is a bounded,
 repository-backed example of the discovery and promotion path, not a live
-dogfood target or a change to the Poodle repository. Poodle's current generation
-state must be inspected again when a real dogfood handoff is prepared.
+dogfood target or a change to the Poodle repository. It does not create or
+require a live consumer handoff; operator feedback is brought into Northstar
+separately when it is useful evidence.
 
 The example's destination-local project language includes:
 
@@ -325,12 +328,13 @@ be presented as new Batch 26.3 failures.
 The architecture-refocus portion of Batch 26.4 is implemented as the
 read-only, offline-safe `northstar architecture refocus` route. It produces
 candidate improvements without editing production code or granting execution
-authority. The reframe route and complete consumer dogfood remain pending.
+authority. The reframe route remains pending. Live dogfooding is an operator-owned
+activity; Northstar consumes its feedback rather than scheduling it.
 
 ## Next task
 
 The Batch 26.3 starter-surface planning checkpoint is complete. Card
 `g02.026/078` remains ready but deferred. Its `g15.006` material is a historical
-worked example; before any real Poodle dogfood handoff, select and verify the
-current destination from Poodle's canonical generation index. Keep reframe and
-Figmatic dogfooding out of card 078.
+worked example. When the operator brings live dogfood feedback into Northstar,
+record or promote that evidence through the normal planning surfaces. Keep
+reframe and consumer-dogfood orchestration out of card 078.

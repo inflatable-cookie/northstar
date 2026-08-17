@@ -51,6 +51,9 @@ activated, follow the router's lightweight four-command worktree fast path.
   repair and one routed next step; no worker/worktree startup.
 - **Architecture refocus:** bounded, evidence-led architecture improvement
   candidates with explicit promotion routes; no production-code edits.
+- **Consumer evidence:** live consumer dogfooding is operator-owned outside
+  Northstar's execution loop; Northstar consumes feedback supplied in the
+  conversation and does not select, dispatch, or manage consumer runs.
 - **Pre-execution discovery:** frontier-based intent rounds and bounded
   project-language, prototype, and questionnaire routes; no execution authority.
 - **Research:** promoted decisions in architecture/contracts, not stranded memos.

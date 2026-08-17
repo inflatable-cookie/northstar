@@ -108,8 +108,8 @@ remove policy.
 - Produce a compact candidate preserving all safety and authority rules.
 - Check every link and command named by the candidate.
 - Run Northstar docs/bundle/doctor QA and installed-skill parity.
-- Use one later consumer dogfood to measure whether agents ask fewer setup or
-  navigation questions without losing important boundaries.
+- Use operator-provided feedback from live use to measure whether agents ask
+  fewer setup or navigation questions without losing important boundaries.
 
 ## 7) Promotion target
 

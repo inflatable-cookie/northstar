@@ -1,7 +1,7 @@
 # Planning Readiness Recovery Sweep
 
 Date: 2026-08-17 07:50 BST
-Status: planning drift repaired; consumer dogfood destination selection remains pending
+Status: planning drift repaired; operator feedback intake remains pending
 Related routes: `northstar planning readiness review`, `sweep-audit-repair`
 Related commits: `5457af9` architecture-refocus loop; current recovery sweep
 
@@ -11,7 +11,7 @@ This sweep repaired Northstar's own planning state after the refresh and
 architecture-refocus routes were implemented. It covered the active `g02`
 roadmap, pre-execution-discovery spec and milestone, instruction-surface spec and
 card, contract index, system inventory, generation front doors, and the current
-Poodle planning evidence used by the dogfood references.
+operator-feedback boundary.
 
 No worker, worktree, consumer-repository edit, production-code edit, or roadmap
 execution was started.
@@ -26,36 +26,36 @@ execution was started.
   32-file/34-file parity, while the current installed copies proved 38 files.
 - The contract index retained an older `g02.025` readiness paragraph and old
   dogfood-card references.
-- Active Northstar surfaces treated Poodle `g15.006` as a future live dogfood
-  target. Poodle's canonical current state now records `g15.001`–`g15.006`
-  complete, `g15.014` in flight, and `g15.007` ready in parallel.
+- Active Northstar surfaces treated a Northstar-managed Poodle dogfood target as
+  pending. The operator clarified that live dogfooding happens outside the
+  Northstar execution loop and that feedback supplied here is the evidence.
 - The graph index was stale after the new route commits.
 
 Historical logs and handoffs that accurately describe their earlier planning
 state were not rewritten. Current front doors now distinguish historical
-`g15.006` example material from live dogfood destination selection.
+`g15.006` example material from operator-provided live feedback.
 
 ## Repairs
 
 - Marked the architecture-refocus portion of Batch 26.4 complete while leaving
-  reframe and complete consumer dogfood pending.
+  reframe and operator feedback intake pending.
 - Reconciled `g02.026`, Batch 26.3, card 078, and `g02.027/079` status across
   specs, milestones, generation front doors, and the contract index.
 - Updated the inventory and instruction-surface records to current 38-file
   installed-skill parity.
-- Preserved Poodle `g15.006` as a historical worked example only.
-- Changed live dogfood guidance to require selecting the current Poodle
-  destination from Poodle's canonical generation index at handoff time.
+- Preserved Poodle `g15.006` as a historical worked example only; live consumer
+  execution remains outside Northstar's loop.
+- Changed live dogfood guidance to consume operator-provided feedback rather than
+  selecting a Poodle/Figmatic destination or preparing a handoff.
 - Refreshed the derived Effigy graph index.
 
 ## Remaining state
 
 - Card `g02.026/078` is ready but deferred.
-- The live Poodle destination must be selected when the dogfood handoff is
-  prepared; Northstar does not silently choose between Poodle's currently ready
-  and in-flight lanes.
+- Operator-provided live dogfood feedback remains the next evidence input;
+  Northstar does not select or dispatch the consumer run.
 - The non-mutating reframe route remains unimplemented.
-- Template-bundle promotion and complete discovery dogfood remain pending.
+- Template-bundle promotion, reframe, and feedback intake remain pending.
 
 ## Validation
 
@@ -71,6 +71,6 @@ state were not rewritten. Current front doors now distinguish historical
 
 ## Next task
 
-Prepare the separate Poodle dogfood planning handoff only after selecting and
-verifying the current destination from Poodle's canonical generation index. Do
-not dispatch against the historical `g15.006` example or start Figmatic work.
+Bring live dogfood feedback into Northstar when useful, then promote it through
+the normal research, papercut, contract, spec, or roadmap surfaces. Do not
+create a consumer dogfood handoff or start Figmatic work from Northstar.

@@ -82,7 +82,6 @@ contract PR and merge; and `g02.026/076` is complete after its checker PR,
 review, merge, and evidence closeout. `g02.026/077` is now complete after its
 route PR, review, merge, and closeout. The Batch 26.3 starter-surface planning checkpoint is complete and
 `g02.026/078` remains ready but deferred. The architecture-refocus part of Batch
-26.4 is complete. `g02.027/079` is now complete; the next measurement is the
-later Poodle-first consumer dogfood using the optimized instruction surface,
-with the live Poodle destination selected from Poodle's current generation
-index rather than the historical `g15.006` example.
+26.4 is complete. `g02.027/079` is now complete; the next measurement is the operator-provided
+feedback from live use of the optimized instruction surface. Northstar does not
+select or dispatch the consumer run.

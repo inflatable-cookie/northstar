@@ -24,4 +24,5 @@ Use this folder for ready execution cards that sit under an active master spec.
 
 `g02.027/079` is complete: the always-loaded instruction audit and Northstar
 source/template compaction are closed out. `g02.026/078` remains ready but
-deferred until the Poodle dogfood provides evidence for the starter surfaces.
+deferred until operator-provided live feedback supplies evidence for the starter
+surfaces. Northstar does not dispatch the consumer run.

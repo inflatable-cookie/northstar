@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-08-16
+Updated: 2026-08-17
 Depends on: docs/architecture/system-architecture.md
 Authority owners: repo maintainers
 Affects: bundle-docs, template-bundle, skills, docs, scripts
@@ -77,6 +77,11 @@ single-repo planning lane like this one.
   normal maintenance and promote repeated or material items as appropriate.
 - Do not record ordinary one-off failures, external blockers, sensitive data, or
   duplicate open entries. Full detail lives in `bundle-docs/papercuts.md`.
+
+- Live consumer-repository dogfooding is operator-owned and external to
+  Northstar's execution loop. Northstar consumes feedback supplied by the
+  operator as evidence or planning input; it does not select consumer targets,
+  create dogfood handoffs, dispatch consumer workers, or manage those runs.
 
 ### Execution guardrail pack
 

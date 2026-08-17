@@ -1,6 +1,6 @@
 # 027 - Optimize Always-Loaded Agent Instruction Surfaces
 
-Status: active — implementation complete; consumer measurement pending
+Status: active — implementation complete; operator feedback measurement pending
 Owner: repo maintainers
 Created: 2026-08-16
 Depends on: `g02.026` planning surfaces
@@ -25,7 +25,7 @@ procedural dump.
 - [x] compact the copy-ready `AGENTS.md` template;
 - [x] provide a minimal Claude Code bridge that imports `@AGENTS.md`;
 - [x] prove command, link, docs, doctor, and skill-parity validation;
-- [ ] measure one later consumer run for context pollution and missed guidance.
+- [ ] measure operator-provided live use for context pollution and missed guidance.
 
 ## Execution plan
 
@@ -44,9 +44,9 @@ procedural dump.
 - [x] add and validate the source/template Claude bridges;
 - [x] validate the final diff and parity.
 
-### Batch 27.3 — Dogfood and measure
+### Batch 27.3 — Feedback intake and measure
 
-- [ ] use the optimized surface in one direct consumer dogfood;
+- [ ] consume operator-provided feedback from live use of the optimized surface;
 - [ ] record repeated questions, missed boundaries, setup failures, and
       unnecessary exploration;
 - [ ] adjust the contract only from measured evidence.
@@ -67,5 +67,6 @@ Implementation closeout for `g02.027/079`: `docs/logs/2026-08/16-233931-optimize
 
 ## Next task
 
-Use the optimized surface in the later Poodle-first consumer dogfood and record
-Batch 27.3 measurements. Keep Figmatic deferred.
+Consume operator-provided feedback from live use of the optimized surface and
+record Batch 27.3 measurements. Northstar does not dispatch or manage a Poodle
+or Figmatic dogfood run.

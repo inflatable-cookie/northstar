@@ -18,8 +18,8 @@ Auto-start next card: no
 - [x] Acceptance criteria, validation, and evidence requirements are explicit.
 - [x] No unresolved planning gap still governs this card.
 - [x] No unresolved intent checkpoint still governs this card.
-- [x] The next transition is deliberately not auto-started: Poodle dogfood is a
-      separate consumer-repository activity.
+- [x] The next transition is deliberately not auto-started: live consumer use is
+      operator-owned and Northstar does not dispatch a consumer run.
 
 ## Objective
 
@@ -31,12 +31,10 @@ spec and roadmap work without granting the map execution authority.
 ## Lane Runway Context
 
 - Higher-level lane owner: `g02.026` Northstar-native pre-execution discovery.
-- Next likely cards or milestone transitions after this one: select a current
-  Poodle destination from Poodle's generation index and dogfood the complete
-  discovery flow; architecture refocus is now implemented, while reframe and
-  the Figmatic dogfood remain later work after its direct interactive bug-fixing
-  work returns to the orchestrator flow.
-- Next planning checkpoint: after the Poodle dogfood, review planning revisions,
+- Next likely cards or milestone transitions after this one: consume
+  operator-provided feedback from live use of the complete discovery flow;
+  architecture refocus is now implemented, while reframe remains pending.
+- Next planning checkpoint: after the operator supplies feedback, review planning revisions,
   reopened decisions, implementation rework, and operator correction burden
   before Batch 26.4.
 
@@ -68,13 +66,14 @@ spec and roadmap work without granting the map execution authority.
 - Update template-bundle, operator/setup, and pre-execution-discovery guidance
   so the starter surfaces are discoverable from the existing single public
   `northstar` skill and docs spine.
-- Record the Poodle dogfood target and the baseline posture observed during
-  planning; do not modify `/Users/tom/Dev/projects/poodle` in this card.
+- Record any operator-provided consumer feedback and the baseline posture
+  observed during planning; do not select a consumer target or modify
+  `/Users/tom/Dev/projects/poodle` in this card.
 
 ### Explicitly out of scope
 
 - no changes to Poodle source, contracts, roadmap status, or readiness state;
-- no Figmatic dogfood or Figmatic repository changes;
+- no consumer-dogfood dispatch or Figmatic repository changes;
 - no architecture refocus or reframe route;
 - no second public skill or external tracker;
 - no automatic map clearing, spec promotion, card readiness, or worker dispatch;
@@ -96,7 +95,7 @@ spec and roadmap work without granting the map execution authority.
 5. Run the narrow fixture/checker commands, then the full docs/bundle QA and
    installed-skill parity checks where the touched surfaces require them.
 6. Record the exact changed files, validation, remaining baseline findings, and
-   the separate Poodle dogfood handoff in the batch log.
+   any operator-provided consumer feedback in the batch log.
 
 ## Acceptance Criteria
 
@@ -131,18 +130,18 @@ spec and roadmap work without granting the map execution authority.
 ## Continuation Envelope
 
 - Auto-start next card: no
-- In-bounds next card: none; consumer dogfood crosses into Poodle and needs its
-  own explicit handoff and clean-repository preflight
+- In-bounds next card: none; consumer use is operator-owned and any feedback
+  returns here as evidence rather than a Northstar-managed handoff
 - Remaining ready chain after this card: 0
 - Transition proof required before the next task: merged starter surfaces,
-  example validation, and an explicit Poodle dogfood handoff
+  example validation, and an operator-provided feedback intake point
 
 ## Lane Budget
 
 - Current card ends budgeted run: yes
-- Further operator decision required after this card: yes — whether to launch the
-  Poodle dogfood handoff after the implementation PR is reviewed and merged
-- Pause signal if run stops here: handoff-required
+- Further operator decision required after this card: yes — which supplied
+  feedback, if any, should be promoted into the planning spine
+- Pause signal if run stops here: operator-feedback-required
 
 ## Stop Conditions
 
@@ -174,15 +173,12 @@ state, and which baseline findings were pre-existing.
       blockers or limits.
 - [ ] Record whether the continuation envelope still holds or the handoff pause
       signal fired.
-- [ ] Create the separate Poodle dogfood handoff only after this card is merged,
-      the current Poodle destination is selected from its canonical generation
-      index, and the Poodle clean-tree preflight passes.
+- [ ] Record operator-provided consumer feedback after this card is merged;
+      Northstar does not create a dogfood handoff or select the consumer target.
 - [ ] Leave one explicit next task in the highest-authority active surface.
 
 ## Next Task
 
 Run card 078 through the isolated worker/PR loop. After its merge and closeout,
-prepare the separate clean Poodle dogfood handoff for the current destination
-selected from Poodle's canonical generation index; do not dispatch against the
-historical `g15.006` example or dispatch Figmatic until its direct interactive
-bug-fixing phase is complete.
+consume any operator-provided live feedback through the normal planning surfaces;
+do not create a consumer dogfood handoff or dispatch Figmatic.

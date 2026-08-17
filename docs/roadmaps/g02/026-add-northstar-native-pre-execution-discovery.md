@@ -31,7 +31,8 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 - [x] add architecture refocus as a bounded planning route
 - [ ] add reframe as a bounded communication route
 - [ ] preserve the current durable handoff and worker/PR contract
-- [ ] dogfood the complete flow on a new or materially ambiguous project
+- [ ] incorporate operator-provided live dogfood feedback from a new or materially
+      ambiguous project
 
 ## Execution plan
 
@@ -58,12 +59,13 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 - update setup, operator, and template-bundle guidance;
 - add QA coverage for the new files and states.
 
-### Batch 26.4 - Add architecture refocus, reframe, and dogfood
+### Batch 26.4 - Add architecture refocus, reframe, and feedback intake
 
 - [x] add active-lane architecture refocus with offline-safe output;
 - add non-mutating reframe behaviour;
 - refine handoff purpose and next-session metadata;
-- run one complete dogfood and record measured friction before broader promotion.
+- incorporate operator-provided dogfood feedback and record measured friction
+  before broader promotion; Northstar does not dispatch the consumer run.
 
 ## Acceptance criteria
 
@@ -76,8 +78,8 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 - [ ] the cleared-map promotion path leaves coherent spec, roadmap, and log state;
 - [x] architecture refocus is read-only and offline-safe;
 - [ ] handoff additions preserve the single-file worker boundary;
-- [ ] dogfood evidence measures planning revisions, reopened decisions, rework, and
-      operator correction burden.
+- [ ] operator-provided dogfood evidence measures planning revisions, reopened
+      decisions, rework, and operator correction burden.
 
 ## Stop conditions
 
@@ -89,9 +91,8 @@ uncertainty using the existing docs spine rather than an external issue tracker.
 
 ## Next task
 
-Card `g02.026/078` remains ready but deferred. Before preparing a real Poodle
-dogfood handoff, inspect Poodle's current generation index and select the
-destination that is actually current; do not dispatch against the historical
-`g15.006` example. Reframe and the complete dogfood remain the next unresolved
-Batch 26.4 work. Figmatic remains later while its direct interactive bug-fixing
-work continues.
+Card `g02.026/078` remains ready but deferred. Reframe remains the next
+unresolved route. When the operator supplies live dogfood feedback, promote the
+useful evidence through the normal research, papercut, contract, spec, or
+roadmap surfaces. Northstar does not prepare or dispatch a Poodle/Figmatic
+dogfood handoff.
