@@ -19,7 +19,24 @@ ordinary continuation:
 
 → [`modes/handoff.md`](./modes/handoff.md)
 
-## 2. Pre-execution discovery
+## 2. Planning readiness review
+
+Use when the operator wants to test whether an **existing project's planning is
+up to scratch** before continuing. The concise trigger is:
+
+- `northstar planning readiness review`;
+- `northstar wayfinder` as a shorthand alias only.
+
+Start with a read-only planning-gate sweep. Inspect the current architecture,
+inventory, repo authority, contracts, active roadmap, logs, research promotion,
+and any readiness map. Classify the project as incomplete, drifted, materially
+ambiguous, or coherent, then route to exactly one next mode: strict planning,
+recovery/refocus, pre-execution discovery, architecture refocus, or roadmap
+compilation. Do not edit production code or start a worker from this review.
+
+→ [`modes/planning-readiness-review.md`](./modes/planning-readiness-review.md)
+
+## 3. Pre-execution discovery
 
 Use when the request explicitly concerns readiness mapping or the discovery
 routes that precede ordinary planning:
@@ -44,7 +61,7 @@ requests without that orchestrator/worker/worktree/PR language remain
 
 → [`modes/pre-execution-discovery.md`](./modes/pre-execution-discovery.md)
 
-## 3. Orchestrator thread
+## 4. Orchestrator thread
 
 Use when the user wants Northstar to own a question-led planning conversation,
 prepare a separate worker thread/worktree, maintain a runway, or review the
@@ -53,7 +70,7 @@ still relays messages between threads.
 
 → [`modes/orchestrator.md`](./modes/orchestrator.md)
 
-## 4. Agent instruction review
+## 5. Agent instruction review
 
 Use when the user explicitly asks for an always-loaded instruction-surface
 review, especially:
@@ -68,7 +85,7 @@ Northstar's own files when the target is a consumer repository.
 
 → [`modes/agent-instruction-review.md`](./modes/agent-instruction-review.md)
 
-## 5. Normalize docs posture
+## 6. Normalize docs posture
 
 Use when the job is **repo shape and spine health** (initial or ongoing):
 
@@ -79,14 +96,14 @@ Use when the job is **repo shape and spine health** (initial or ongoing):
 
 → [`modes/normalize-docs.md`](./modes/normalize-docs.md)
 
-## 6. Research
+## 7. Research
 
 Use when **external evidence** must become architecture or contracts before
 roadmap work bets on it.
 
 → [`modes/research.md`](./modes/research.md)
 
-## 7. Recovery
+## 8. Recovery
 
 Use when planning **was valid but state is now untrustworthy**:
 
@@ -99,7 +116,7 @@ If planning coverage is **still missing**, use plan-from-scratch instead.
 → `replan-after-change.md`, `refocus-drifted-project.md`, or
 `sweep-audit-repair.md`
 
-## 8. Planning (default for implicit work)
+## 9. Planning (default for implicit work)
 
 Use when the job is **planning or sequencing** and recovery is not the main
 problem:
