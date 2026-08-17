@@ -99,7 +99,7 @@ Keep `tasks.health` seconds-scale. Never set `health = qa`.
 
 | Skill | When to Use |
 |-------|-------------|
-| `northstar` | All Northstar work: plan, normalize/migrate docs, recover, research; handoff only when explicitly requested (see skill router) |
+| `northstar` | All Northstar work: refresh, plan, normalize/migrate docs, recover, research; handoff only when explicitly requested (see skill router) |
 
 ## Next Steps
 

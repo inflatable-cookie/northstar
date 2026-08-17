@@ -44,6 +44,8 @@ to pick one mode:
 - No real planning yet -> planning: `plan-from-scratch`
 - Existing project, planning quality uncertain -> planning readiness review:
   `northstar planning readiness review`
+- Existing project, all Northstar facets need checking -> project refresh:
+  `northstar refresh`
 - Sound planning; need milestones or batches -> planning: `compile-roadmaps`
 - Plan was right but changed -> recovery: `replan-after-change`
 - Drifted or messy state -> recovery: `refocus-drifted-project` or `sweep-audit-repair`
@@ -54,6 +56,7 @@ to pick one mode:
 ## If You Want Clear Prompting, Say It Plainly
 
 - “Plan this system before we build” -> `northstar` (plan-from-scratch)
+- “Refresh this project under Northstar” -> `northstar` (project-refresh)
 - “Run a planning readiness review on this existing project” -> `northstar`
   (planning-readiness-review)
 - “Lay out the next few roadmaps from the current contracts” -> `northstar` (compile-roadmaps)

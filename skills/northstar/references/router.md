@@ -19,7 +19,29 @@ ordinary continuation:
 
 → [`modes/handoff.md`](./modes/handoff.md)
 
-## 2. Planning readiness review
+## 2. Project refresh
+
+Use when the operator wants one broad pass over an **existing project's current
+Northstar state**, rather than one narrow review:
+
+- `northstar refresh`;
+- `northstar project refresh`;
+- refresh, bring up to date, or check every Northstar facet.
+
+This is normal mode. Do not run worker-mode worktree preflight, inspect
+worker-local path configuration, start an orchestrator, or create a worker from
+this route. Open `modes/project-refresh.md`; it checks instruction surfaces,
+docs structure, architecture/authority, planning readiness, currentness,
+validation, and distribution, then reuses one narrower route for the first
+material blocker.
+
+**Precedence:** An explicit worker/PR/orchestrator request wins. A specific
+AGENTS review, planning-readiness review, or discovery request wins when the
+operator does not ask for the broader refresh.
+
+→ [`modes/project-refresh.md`](./modes/project-refresh.md)
+
+## 3. Planning readiness review
 
 Use when the operator wants to test whether an **existing project's planning is
 up to scratch** before continuing. The concise trigger is:
@@ -36,7 +58,7 @@ compilation. Do not edit production code or start a worker from this review.
 
 → [`modes/planning-readiness-review.md`](./modes/planning-readiness-review.md)
 
-## 3. Pre-execution discovery
+## 4. Pre-execution discovery
 
 Use when the request explicitly concerns readiness mapping or the discovery
 routes that precede ordinary planning:
@@ -61,7 +83,7 @@ requests without that orchestrator/worker/worktree/PR language remain
 
 → [`modes/pre-execution-discovery.md`](./modes/pre-execution-discovery.md)
 
-## 4. Orchestrator thread
+## 5. Orchestrator thread
 
 Use when the user wants Northstar to own a question-led planning conversation,
 prepare a separate worker thread/worktree, maintain a runway, or review the
@@ -70,7 +92,7 @@ still relays messages between threads.
 
 → [`modes/orchestrator.md`](./modes/orchestrator.md)
 
-## 5. Agent instruction review
+## 6. Agent instruction review
 
 Use when the user explicitly asks for an always-loaded instruction-surface
 review, especially:
@@ -85,7 +107,7 @@ Northstar's own files when the target is a consumer repository.
 
 → [`modes/agent-instruction-review.md`](./modes/agent-instruction-review.md)
 
-## 6. Normalize docs posture
+## 7. Normalize docs posture
 
 Use when the job is **repo shape and spine health** (initial or ongoing):
 
@@ -96,14 +118,14 @@ Use when the job is **repo shape and spine health** (initial or ongoing):
 
 → [`modes/normalize-docs.md`](./modes/normalize-docs.md)
 
-## 7. Research
+## 8. Research
 
 Use when **external evidence** must become architecture or contracts before
 roadmap work bets on it.
 
 → [`modes/research.md`](./modes/research.md)
 
-## 8. Recovery
+## 9. Recovery
 
 Use when planning **was valid but state is now untrustworthy**:
 
@@ -116,7 +138,7 @@ If planning coverage is **still missing**, use plan-from-scratch instead.
 → `replan-after-change.md`, `refocus-drifted-project.md`, or
 `sweep-audit-repair.md`
 
-## 9. Planning (default for implicit work)
+## 10. Planning (default for implicit work)
 
 Use when the job is **planning or sequencing** and recovery is not the main
 problem:
