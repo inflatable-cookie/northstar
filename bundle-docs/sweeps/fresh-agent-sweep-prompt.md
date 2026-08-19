@@ -29,7 +29,12 @@ Execution requirements:
    directs otherwise.
 5. Update references in the same batch as moves/renames.
 6. Keep canonical structure, naming, and content contracts compliant.
-7. Keep optional add-on folders (`research`, `schemas`, `templates`, `diagrams`, `specs`) absent unless explicitly needed by current project docs; if `docs/research/` is canonical, keep it Northstar-compliant instead of deleting it.
+7. Read `docs/triage/` early. Capture useful observations that are not resolved
+   in the current pass using `YYYYMMDD-HHMMSS-<slug>.md`, then promote, merge,
+   or remove notes during cleanup. Keep optional add-on folders (`research`,
+   `schemas`, `templates`, `diagrams`, `specs`) absent unless explicitly needed
+   by current project docs; if `docs/research/` is canonical, keep it
+   Northstar-compliant instead of deleting it.
 8. Treat missing planning coverage, missing repo authority, and missing contracts as planning gaps; stop roadmap execution until those gaps are closed.
 9. Add one batch log in docs/logs/YYYY-MM/ summarizing the sweep work.
 

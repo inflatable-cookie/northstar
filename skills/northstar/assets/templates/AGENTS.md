@@ -13,6 +13,8 @@ file focused on orchestration and point to the nested docs-authority repository.
   contract instead of inferring worker mode from a path, branch, or harness.
 - If planning authority does not settle the next direction, stop and ask. Keep
   continuation inside the current bounded lane.
+- When planning or docs work surfaces unresolved threads, inspect `docs/triage/`
+  and treat its notes as leads to promote or remove, never as execution authority.
 - Do not run release mutations or change CI/workflow files without an explicit
   request.
 
@@ -32,6 +34,7 @@ different repository. Do not add package scripts that merely re-export Effigy.
 - `docs/README.md`
 - `docs/roadmaps/README.md`
 - `docs/logs/README.md`
+- `docs/triage/README.md`
 - `docs/contracts/001-working-rules.md`
 - `docs/contracts/002-agent-local-paths.md`
 - `docs/contracts/003-agent-instruction-surface.md`

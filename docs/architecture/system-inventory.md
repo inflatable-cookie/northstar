@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-08-17
+Updated: 2026-08-19
 Architecture refs: docs/architecture/system-architecture.md
 
 ## Coverage Summary
@@ -22,6 +22,7 @@ skills.
 | `skills/` | automation surface | repo maintainers | installable agent workflows and published distribution | `docs/contracts/001-working-rules.md`, `bundle-docs/skills/README.md`, `scripts/check-northstar-skill-install.rhai` |
 | `docs/` | live planning surface | repo maintainers | Northstar's own planning and execution state | all files in this repo-local docs spine |
 | `docs/handoffs/` | fresh-thread coordination surface | handoff/orchestrator mode | timestamped takeover notes | handoff contract and templates |
+| `docs/triage/` | temporary conversational capture surface | orchestrator/refresh/cleanup modes | timestamped non-authoritative notes | triage contract, refresh lifecycle, cleanup route |
 | `scripts/` and `effigy` checks | validation surface | repo maintainers | repo integrity and enforcement hooks | `scripts/check-northstar-repo-contract.rhai`, roadmap evidence requirements |
 | root `PAPERCUTS.md` | agent feedback surface | executing agents + repo maintainers | owning repository root | `bundle-docs/papercuts.md`, agent templates, working rules |
 | `.agents.local.env` | local path registry | operator + agents | ignored machine-local paths only | `docs/contracts/002-agent-local-paths.md`, `.agents.local.env.example`, `AGENTS.md` |
@@ -39,6 +40,8 @@ skills.
 | Validation loop | roadmap/log state | `effigy qa`, `effigy qa:docs` | `001-working-rules` | Validation evidence is required for closure |
 | Papercut feedback | agent execution | maintenance triage and normal planning surfaces | `bundle-docs/papercuts.md`, `001-working-rules` | Notes are captured at encounter time and promoted only after triage |
 | Orchestrator planning | operator conversation + canonical planning spine | per-worker handoffs under `docs/handoffs/` | `026-orchestrator-thread-and-worker-pr-loop` | Questions settle intent before cards are marked ready |
+| Conversational triage | operator conversation + agent observations | canonical docs or explicit removal | `030-conversational-triage-and-docs-cleanup` | Capture before deep dives; never execute directly from a note |
+| Docs cleanup | `/docs` inventory and classification | reworked canonical docs or operator question | `030-conversational-triage-and-docs-cleanup` | Inspect content and references before any move or removal |
 | Worker execution | explicit worker-mode handoff + startup worktree-safety preflight + ready cards | worker branch/worktree and evidence | `001-working-rules`, `002-agent-local-paths`, active batch cards | Only an orchestrator-dispatched worker uses the harness worktree or the operator-selected `AGENTS_WORKTREE_CONTAINER_DIR` when its starting context is unsuitable |
 | PR review and merge | worker branch/PR | orchestrator verdict + operator-authorised merge | `001-working-rules`, active cards | Review uses diff/check evidence and a provider review record; same-identity GitHub runs use PR comments; merge is separate from PR creation |
 
@@ -52,7 +55,8 @@ skills.
 | Template/skill promotion | follow-on roadmap batches and logs | repo maintainers | pending |
 | Papercut loop | root queue, doctrine, templates, skill instruction, and QA coverage | repo maintainers | ready |
 | Published skill parity | Skills CLI update path, global install inspection, and source checker | repo maintainers | ready; 47-file parity proven |
-| Explicit command surface | Six thin command adapters, canonical router/mode wiring, description budget, and retired-alias checks | repo maintainers | ready; source and installed discovery verified |
+| Explicit command surface | Seven thin command adapters, canonical router/mode wiring, description budget, and retired-alias checks | repo maintainers | ready; source and installed discovery verified |
+| Triage lifecycle | `docs/triage/` anchors, timestamped naming, orchestrator/refresh capture, and cleanup dispositions | repo maintainers | ready; live operator feedback pending |
 | Consumer feedback intake | operator-provided live-use evidence and manual triage boundary | repo maintainers + operator | operator-owned |
 | Orchestrator mode | per-worker committed handoff under `docs/handoffs/`, fresh worker worktree or safe temporary fallback, startup check, chunk report, PR, provider review record, and closeout evidence | repo maintainers + operator | operator validation complete; longer multi-card evidence pending |
 | Model-efficiency comparison | measured role routing, rework, review cycles, and relay burden | repo maintainers | one operator validation measured; broader comparison pending |
@@ -66,8 +70,8 @@ skills.
 - The live repo pilot has not yet proven a longer autonomous multi-card run.
 - The first per-worker handoff/PR loop is proven, including same-identity GitHub
   review comments; provider adapter and packet-persistence defaults remain open.
-- The refresh and architecture-refocus routes are distributed to both installed
-  skill copies; the six-command surface now passes source and installed parity
+- The refresh, orchestrator, and cleanup routes are distributed to the installed
+  skill copy; the seven-command surface now passes source and installed parity
   verification.
 - Atlas has a discovery-first contract now, but existing-project behavioral
   validation is still open because earlier runs were prescriptive rather than

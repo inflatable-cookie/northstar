@@ -131,6 +131,8 @@ Baseline docs spine:
 - `contracts` define durable behavioral rules and important boundaries
 - `roadmaps` define milestone queue and execution batches
 - `logs` record meaningful evidence and decisions
+- `triage` holds temporary timestamped capture notes; it is not execution
+  authority and must be promoted, merged, or removed over time
 
 Do not collapse all three into a single generic planning note.
 

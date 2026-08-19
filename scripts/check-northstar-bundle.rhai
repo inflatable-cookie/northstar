@@ -47,6 +47,7 @@ let required_files = [
     "template-bundle/contracts/002-agent-local-paths-template.md",
     "template-bundle/contracts/003-agent-instruction-surface-template.md",
     "template-bundle/logs/README.md",
+    "template-bundle/triage/README.md",
     "template-bundle/research/master-index.md",
     "template-bundle/research/README.md",
     "template-bundle/research/research-to-architecture-crossref.md",
@@ -71,6 +72,7 @@ let required_files = [
     "template-bundle/specs/batch-cards/README.md",
     "template-bundle/vision/README.md",
     "template-bundle/vision/001-project-vision-blueprint-template.md",
+    "template-bundle/minimal/triage/README.md",
 ];
 
 for file in required_files {

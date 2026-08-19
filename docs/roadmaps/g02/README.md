@@ -17,6 +17,7 @@ single-pilot bucket.
 | Reduce always-loaded agent context while preserving safety, authority, and common-run efficiency. | active | `docs/contracts/003-agent-instruction-surface.md`, `docs/specs/028-agent-instruction-surface-optimization.md` | Batch 27.3 operator-feedback measurement |
 | Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | pending |
 | Add a genuinely long-horizon planning route without conflating it with readiness review. | active | `docs/specs/029-northstar-long-horizon-planning.md`, `skills/northstar/references/modes/atlas.md` | Non-Northstar scenario and operator confirmation |
+| Preserve useful conversational context and keep `/docs` drift recoverable without blind deletion. | active | `docs/specs/030-conversational-triage-and-docs-cleanup.md`, `docs/contracts/001-working-rules.md`, `skills/northstar/references/modes/cleanup-docs.md` | live triage and cleanup feedback |
 
 Update this runway only when generation-level intent changes, a milestone
 materially advances or closes a goal, or rollover is being considered. Do not
@@ -60,6 +61,8 @@ rollover signal.
 - `028-add-northstar-long-horizon-planning.md` (active; Atlas mode and router
   contract, command adapter, source/runtime checks, and installed parity are
   complete; broader validation remains)
+- `029-add-conversational-triage-and-docs-cleanup.md` (active; implementation
+  and deterministic validation are complete; live operator usage remains)
 
 ## Next Task
 
@@ -75,5 +78,8 @@ dogfooding of the optimized surface; its research memo is
 `bundle-docs/research/translation-memos/agent-instruction-surface-optimization.md`.
 Atlas validation is tracked by `g02.028`; Northstar does not select or manage the
 operator's external dogfooding.
+The current Northstar-owned implementation lane `g02.029/082` is complete; use
+the new triage capture and cleanup route in live conversation before retiring
+its spec.
 
 Batch cards live in `g02/batch-cards/` when strict posture uses them.

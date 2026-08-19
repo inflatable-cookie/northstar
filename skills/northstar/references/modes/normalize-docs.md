@@ -23,7 +23,10 @@ effigy doctor
 effigy test --plan
 ```
 
-Read `README.md`, `AGENTS.md`, `docs/README.md`, `docs/roadmaps/generation-index.md`.
+Read `README.md`, `AGENTS.md`, `docs/README.md`, `docs/roadmaps/generation-index.md`,
+and `docs/triage/` when it exists. Keep triage notes in the standard timestamped
+format and route unclear docs outliers to `cleanup-docs` rather than deleting
+them during normalization.
 Optional: `effigy check:posture-advisory` after structural edits.
 
 ## Workflow
@@ -58,6 +61,7 @@ Optional: `effigy check:posture-advisory` after structural edits.
 ## Required outputs (when applicable)
 
 - `README.md`, `AGENTS.md`, `PAPERCUTS.md`, `effigy.toml`, `docs/README.md`,
+  `docs/triage/README.md`,
   vision/roadmaps/logs front doors, `docs/policy/internal-writing-style.md`
 - Strict: guardrails, contract index, working rules, specs README + archive,
   batch-card templates under active `gNN/`

@@ -7,6 +7,14 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 
 <!-- Keep entries short. Append newest entries at the top. Do not include secrets. -->
 
+- **2026-08-19 — duplicated spine lists made a broad docs patch brittle:** the
+  triage rollout touched several intentionally mirrored structure summaries and
+  one large patch failed on stale surrounding context; impact was avoidable
+  edit/retry churn and a higher chance of inconsistent copy-ready references;
+  plausible fix is to centralize or mechanically validate the spine enumeration
+  while keeping summaries concise; affected surfaces are `bundle-docs/`,
+  `template-bundle/`, `README.md`, and docs-structure checks.
+
 - **2026-08-17 — Atlas synthesized strategy before user discovery:** live use in
   existing projects found that Atlas laid out what should happen before asking
   for the operator's vision; impact was useful options arriving in the wrong

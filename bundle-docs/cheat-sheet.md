@@ -13,6 +13,7 @@ One-page reference for naming, formats, and conventions.
 | Architecture | `<slug>.md` | `system-architecture.md` |
 | Specs | `NNN-<slug>.md` | `012-rate-limiting.md` |
 | Batch cards | `NNN-<slug>.md` | `034-apply-contract.md` |
+| Triage notes | `YYYYMMDD-HHMMSS-<slug>.md` | `20260819-084500-capture-open-question.md` |
 
 ## Reference Keys
 
@@ -39,6 +40,7 @@ docs/
 │   └── generation-index.md
 ├── logs/
 │   └── YYYY-MM/
+├── triage/           (temporary capture notes)
 ├── policy/
 ├── research/          (optional)
 ├── schemas/           (optional)
@@ -66,6 +68,7 @@ docs/
 7. One active generation in sequential mode; parallel mode allows multiple
 8. Backlog lives only at `roadmaps/backlog/`
 9. Clean migrations only: move, update refs, remove legacy in one batch
+10. Triage notes are temporary: promote, merge, or remove them during refresh or cleanup
 
 ## Papercuts
 

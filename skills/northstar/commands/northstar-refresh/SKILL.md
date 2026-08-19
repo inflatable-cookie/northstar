@@ -14,5 +14,8 @@ Thin explicit entrypoint for the canonical project-refresh route.
 4. Treat the text after `/northstar-refresh` as the existing project or refresh
    scope.
 
-Remain read-only unless the operator explicitly authorizes bounded documentation
-repair. Do not start workers, create worktrees, authorize execution, or merge.
+Remain read-only for canonical documentation repair unless the operator
+explicitly authorizes it. Creating or updating lightweight `docs/triage/` capture
+notes is part of the refresh routine and does not require separate repair
+authorization. Do not start workers, create worktrees, authorize execution, or
+merge.

@@ -151,7 +151,24 @@ Northstar's own files when the target is a consumer repository.
 
 → [`modes/agent-instruction-review.md`](./modes/agent-instruction-review.md)
 
-## 9. Normalize docs posture
+## 9. Docs cleanup
+
+Use when the operator wants an active inventory of files or folders under
+`/docs` that do not fit Northstar, with clear drift reworked into canonical
+homes rather than blindly purged:
+
+- `northstar cleanup`;
+- `northstar docs cleanup`;
+- inspect, classify, normalize, or prune an existing `/docs` tree.
+
+This is a docs-only maintenance route. Inspect unfamiliar paths and their
+references before proposing a move or removal. Ask the operator whenever the
+destination, ownership, meaning, or deletion consequence is uncertain. Include
+`docs/triage/` in the inventory and give every triage note a disposition.
+
+→ [`modes/cleanup-docs.md`](./modes/cleanup-docs.md)
+
+## 10. Normalize docs posture
 
 Use when the job is **repo shape and spine health** (initial or ongoing):
 
@@ -162,14 +179,14 @@ Use when the job is **repo shape and spine health** (initial or ongoing):
 
 → [`modes/normalize-docs.md`](./modes/normalize-docs.md)
 
-## 10. Research
+## 11. Research
 
 Use when **external evidence** must become architecture or contracts before
 roadmap work bets on it.
 
 → [`modes/research.md`](./modes/research.md)
 
-## 11. Recovery
+## 12. Recovery
 
 Use when planning **was valid but state is now untrustworthy**:
 
@@ -182,7 +199,7 @@ If planning coverage is **still missing**, use plan-from-scratch instead.
 → `replan-after-change.md`, `refocus-drifted-project.md`, or
 `sweep-audit-repair.md`
 
-## 12. Planning (default for implicit work)
+## 13. Planning (default for implicit work)
 
 Use when the job is **planning or sequencing** and recovery is not the main
 problem:

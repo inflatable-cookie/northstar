@@ -12,8 +12,8 @@ If you are:
 The doctrine itself lives in `sections/`.
 The main current sections are vision, architecture, roadmaps, logs, research,
 strict planning gates, the delivery/autonomy layer, the specs-promotion
-model, the standard docs spine, the automation runtime policy, and the
-agent-facing papercuts feedback loop.
+model, the standard docs spine, the automation runtime policy, the
+agent-facing papercuts feedback loop, and conversational triage capture.
 
 For a **single-page map** of canonical homes (what to copy vs what to link),
 read [`protocol-kernel.md`](./protocol-kernel.md) first.
@@ -63,7 +63,8 @@ Full doctrine: [`sections/07-delivery-framework-and-autonomy.md`](./sections/07-
 ## Useful Entry Points
 
 - New to the system: [`visual-map.md`](./visual-map.md) → [`protocol-kernel.md`](./protocol-kernel.md) → [`glossary.md`](./glossary.md) → [`cheat-sheet.md`](./cheat-sheet.md)
-- Audit or migration work: [`sweeps/README.md`](./sweeps/README.md)
+- Audit or migration work: [`sweeps/README.md`](./sweeps/README.md) or the
+  `northstar-cleanup` route
 - Operator workflow: [`operators/README.md`](./operators/README.md)
 - Operator-stack maintenance: [`maintenance/README.md`](./maintenance/README.md)
 - Agent skills (installable): [`skills/README.md`](./skills/README.md)

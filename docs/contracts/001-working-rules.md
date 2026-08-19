@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-08-17
+Updated: 2026-08-19
 Depends on: docs/architecture/system-architecture.md
 Authority owners: repo maintainers
 Affects: bundle-docs, template-bundle, skills, docs, scripts
@@ -82,6 +82,30 @@ single-repo planning lane like this one.
   Northstar's execution loop. Northstar consumes feedback supplied by the
   operator as evidence or planning input; it does not select consumer targets,
   create dogfood handoffs, dispatch consumer workers, or manage those runs.
+
+### Triage capture and cleanup
+
+- `docs/triage/` is a standard temporary capture buffer for observations, ideas,
+  plans, and questions surfaced during agent/operator conversation.
+- Triage notes use the handoff filename shape
+  `YYYYMMDD-HHMMSS-<slug>.md`. Their Markdown body is intentionally flexible;
+  triage is for fast capture, not premature schema.
+- Orchestrator and refresh runs should capture useful unresolved threads before
+  following one branch deeply, then inspect triage at meaningful checkpoints.
+- Creating or updating a lightweight triage note is an allowed capture write;
+  canonical promotion, rework, and removal still require the route's normal
+  authorization boundary.
+- Triage is not execution authority. Promote durable content into the normal
+  architecture, contract, spec, roadmap, research, or log surface before using
+  it to authorize work.
+- Refresh and cleanup must give each note a disposition: promote or rework it,
+  merge it, keep it explicitly open, or remove it when implemented, superseded,
+  or no longer useful.
+- Keeping a note explicitly open is an interim state, not a permanent home; give
+  it a next check or owner when possible, then promote, implement, or remove it.
+- Never delete an unclassified note or docs path based on age or filename alone.
+  Ask the operator when the destination, ownership, meaning, or removal
+  consequence is uncertain.
 
 ### Execution guardrail pack
 

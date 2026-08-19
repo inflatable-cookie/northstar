@@ -48,6 +48,8 @@ to pick one mode:
   discovery -> Atlas: `northstar atlas`
 - Existing project, all Northstar facets need checking -> project refresh:
   `northstar refresh`
+- `/docs` has unexplained or legacy files/folders -> docs cleanup:
+  `northstar cleanup` (inspect first; ask before uncertain rework or removal)
 - Active codebase seam or architecture pressure -> architecture refocus:
   `northstar architecture refocus`
 - A request needs clearer shared wording without advancing the work -> reframe:
@@ -74,6 +76,11 @@ to pick one mode:
 - “Refocus this project under Northstar” -> `northstar` (refocus-drifted-project)
 - “Turn this memo into contracts” -> `northstar` (research)
 - **Create an orchestrator runway and worker PR loop** -> `northstar` (orchestrator mode)
+
+During an orchestrator or refresh conversation, ask the agent to check
+`docs/triage/` for open capture notes. Useful unresolved observations should be
+written there before the agent follows one branch deeply; refresh and cleanup
+should give each note a disposition.
 
 In this mode, the orchestrator commits and pushes the planning state and one
 worker handoff under `docs/handoffs/` before dispatch. The new worker thread

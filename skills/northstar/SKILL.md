@@ -24,6 +24,7 @@ open **one** [`references/modes/`](./references/modes/) file and follow it.
 | Agent instruction review | User asks for a `northstar AGENTS file review`, or to review/optimize `AGENTS.md`/`CLAUDE.md` |
 | Pre-execution discovery | Readiness mapping, intent rounds, project language, decision prototypes, questionnaires, or reframe |
 | Orchestrator | User wants question-led planning plus a separate worker/PR loop |
+| Docs cleanup | User wants `/docs` files and folders inspected and reworked to fit Northstar |
 | Normalize docs | Bootstrap, migrate, or keep docs spine healthy over time |
 | Research | Evidence → architecture/contracts |
 | Recovery | Drifted or changed planning state |
@@ -92,6 +93,12 @@ for the operator to think aloud and redirect the conversation. Keep the planning
 and authority boundaries firm without making the conversation feel like a
 workflow form.
 
+When an orchestrator or refresh conversation surfaces a useful observation,
+idea, plan, or question that will not be resolved immediately, capture it in a
+timestamped `docs/triage/` note before following one branch deeply. Use natural
+topic shifts and checkpoints to keep the record current; do not rely on the
+final summary to reconstruct every discarded thread.
+
 
 ## Papercuts loop (required during execution)
 
@@ -129,6 +136,7 @@ Northstar source repo, expanded doctrine lives at
 - Handoff template: [`assets/templates/northstar-handoff.md.template`](./assets/templates/northstar-handoff.md.template)
 - Orchestrator worker handoff extension: [`assets/templates/northstar-orchestrator-run.md.template`](./assets/templates/northstar-orchestrator-run.md.template)
 - Handoff directory: `docs/handoffs/`
+- Triage directory: `docs/triage/`
 - Handoff contract: [`references/handoff-contract.md`](./references/handoff-contract.md)
 
 ## Do not

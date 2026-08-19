@@ -18,7 +18,7 @@ release candidate is already pinned.
 
 | What you need | Copy this | Contents |
 |--------------|-----------|----------|
-| Minimal viable setup, no examples | `minimal/` | 5 core folders, READMEs only |
+| Minimal viable setup, no examples | `minimal/` | 7 core folders, READMEs only |
 | Full bundle with examples and templates | this directory | Core + optional add-ons + specimens |
 
 For first-time users: start with `minimal/`, then add optional folders as needed.
@@ -31,6 +31,7 @@ For first-time users: start with `minimal/`, then add optional folders as needed
 - `roadmaps/`
 - `logs/`
 - `handoffs/`
+- `triage/`
 - `policy/`
 
 The top-level agent starter also includes `.agents.local.env.example`. Copy it
@@ -49,9 +50,11 @@ Baseline Northstar repos should use:
 - `roadmaps/`
 - `logs/`
 - `handoffs/`
+- `triage/`
 
 That baseline mode is enough for normal routing, clear active-lane tracking,
-friendly fresh-thread takeovers, and shorter bounded work.
+friendly fresh-thread takeovers, lightweight conversational capture, and shorter
+bounded work.
 
 Stricter repos should keep the baseline spine and also use:
 

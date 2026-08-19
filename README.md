@@ -16,6 +16,8 @@ Core flow:
 4. When external comparison matters, synthesize it in `research` before locking new bets.
 5. Execute short-term work in generation-keyed `roadmaps` only after planning gates are satisfied.
 6. Record outcomes in month-segmented `logs`.
+7. Capture unresolved conversational observations in timestamped `docs/triage/`
+   notes, then promote or remove them during refresh and cleanup.
 
 ## What You Get In This Repo
 
@@ -74,14 +76,14 @@ repository.
 
 | Situation | Start With | Command |
 |-----------|-----------|---------|
-| Simple project, small team, clear scope | Minimal starter (5 folders, no examples) | `rsync -a template-bundle/minimal/ /path/to/your-project/docs/` |
+| Simple project, small team, clear scope | Minimal starter (7 core folders, no examples) | `rsync -a template-bundle/minimal/ /path/to/your-project/docs/` |
 | Want examples and templates | Full template bundle | `rsync -a template-bundle/ /path/to/your-project/docs/` |
 | Existing project, needs audit | Sweep pack | See [Migrate section](#migrate-an-existing-project) |
 
 ### Baseline vs Strict
 
 **Baseline posture** -- use for most projects:
-- `vision/`, `architecture/`, `contracts/`, `roadmaps/`, `logs/`, `handoffs/`
+- `vision/`, `architecture/`, `contracts/`, `roadmaps/`, `logs/`, `handoffs/`, `triage/`
 - Enough for normal routing, clear active-lane tracking, and dependable fresh-thread handoffs
 
 **Strict posture** -- add when execution spans high-risk boundaries or needs longer autonomous runs:
@@ -103,7 +105,10 @@ repository.
 5. Log each completed batch in `docs/logs/YYYY-MM/` using `DD-HHMMSS-<slug>.md`.
 6. Create a handoff under `docs/handoffs/` only when another thread genuinely
    needs to take over.
-7. Delete unused add-on folders after copying the bundle; keep only the ones the project actually needs (`docs/research/`, `docs/schemas/`, `docs/templates/`, `docs/diagrams/`, `docs/specs/`).
+7. Capture unresolved observations in `docs/triage/YYYYMMDD-HHMMSS-<slug>.md`
+   before following one conversational branch deeply; refresh and cleanup
+   should give each note a disposition.
+8. Delete unused add-on folders after copying the bundle; keep only the ones the project actually needs (`docs/research/`, `docs/schemas/`, `docs/templates/`, `docs/diagrams/`, `docs/specs/`).
 
 ## Migrate An Existing Project
 
@@ -132,12 +137,14 @@ repository.
 - Logs file format: `docs/logs/YYYY-MM/DD-HHMMSS-<slug>.md`
 - Handoffs folder format: `docs/handoffs/`
 - Handoff file format: `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md`
+- Triage folder format: `docs/triage/`
+- Triage file format: `docs/triage/YYYYMMDD-HHMMSS-<slug>.md`
 - Backlog lives only at `docs/roadmaps/backlog/`
 - Decision records live in logs by default, not a separate `decisions/` root
 - Research promotes through `specimen-dossiers` -> `value-tracks` -> `translation-memos` before architecture or roadmap commitments
 - Execution must stop when a required repo, interface, or contract surface is unplanned; record a planning gap instead of inferring missing behavior
 - Mature research areas should expose navigation and promotion artifacts such as a master index, research-to-architecture crossref, and implementation gap log
-- Optional folders (`research`, `schemas`, `templates`, `diagrams`, `specs`) are add-on only and should be kept only when actively used
+- Triage is a standard temporary capture buffer; optional folders (`research`, `schemas`, `templates`, `diagrams`, `specs`) are add-on only and should be kept only when actively used
 
 ## Where To Start
 

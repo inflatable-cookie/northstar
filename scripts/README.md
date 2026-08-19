@@ -68,11 +68,12 @@ inside that folder; escaping or missing targets fail QA.
 
 Run `effigy check:command-skills` directly or through `effigy qa:docs`.
 
-The command-surface checker validates the six thin adapters under
+The command-surface checker validates the seven thin adapters under
 `skills/northstar/commands/`: their names, description budgets, router and mode
 references and ordering, one-mode wiring, aggregate prompt footprint,
 retired-alias removal, thin-body/procedure guards, authority boundaries, and
-exact adapter count. It is included in `effigy qa:docs`.
+exact adapter count. The set includes `/northstar-cleanup` for safe inspection
+and reworking of `/docs` drift. It is included in `effigy qa:docs`.
 
 ## Readiness-map frontier (`check:readiness-map`)
 

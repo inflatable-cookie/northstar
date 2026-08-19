@@ -1,7 +1,7 @@
 # Standard Docs Spine
 
 Status: active
-Updated: 2026-04-08
+Updated: 2026-08-19
 
 ## Purpose
 
@@ -19,10 +19,11 @@ Every normal Northstar repo should have:
 - `docs/roadmaps/`
 - `docs/logs/`
 - `docs/handoffs/` -- friendly, timestamped notes for genuine fresh-thread takeovers
+- `docs/triage/` -- lightweight, timestamped capture notes awaiting promotion or removal
 
 This is the smallest standard spine that still gives a repo clear direction,
-realized structure, hard rules, execution sequencing, evidence, and a dependable
-place for fresh-thread handoffs.
+realized structure, hard rules, execution sequencing, evidence, conversational
+capture, and a dependable place for fresh-thread handoffs.
 
 ## Stricter Spine
 
@@ -56,6 +57,8 @@ Northstar framework.
 - `roadmaps/` sequence approved work from the canonical surfaces.
 - `logs/` capture batch-level evidence and decisions.
 - `handoffs/` hold friendly, timestamped notes for genuine thread takeovers.
+- `triage/` holds temporary conversational observations, ideas, plans, and
+  questions. It is a capture buffer, not an execution authority.
 
 ## Nested Docs-Authority Repos
 
@@ -142,6 +145,8 @@ The template bundle should make both modes copy-ready:
 - the baseline spine should be obvious from the section layout
 - the stricter spine should have concrete starter files, not just doctrine
 - `handoffs/README.md` is the copy-ready home for fresh-thread notes
+- `triage/README.md` is the copy-ready home for temporary capture notes; notes
+  use `YYYYMMDD-HHMMSS-<slug>.md`, matching handoffs
 - nested docs-authority repos should have an explicit native Effigy starter,
   not only prose about adapting the root-owned one
 

@@ -40,6 +40,9 @@ logs/
 handoffs/
   └─ YYYYMMDD-HHMMSS-<slug>.md   friendly fresh-thread notes
 
+triage/
+  └─ YYYYMMDD-HHMMSS-<slug>.md   temporary conversational capture notes
+
 PAPERCUTS.md
   └─ agent-observed friction, triaged later into the docs spine
 ```
@@ -56,6 +59,8 @@ contracts
 roadmaps
   ↓
 logs (evidence)
+
+Unresolved conversation threads → triage (capture) → canonical docs or removal
 ```
 
 ## Decision: Baseline or Strict?

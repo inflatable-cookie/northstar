@@ -18,6 +18,8 @@ to adopt.
 - [specs/025-skill-distribution-and-consumer-papercut-proof.md](./specs/025-skill-distribution-and-consumer-papercut-proof.md)
 - [specs/026-orchestrator-thread-and-worker-pr-loop.md](./specs/026-orchestrator-thread-and-worker-pr-loop.md)
 - [specs/028-agent-instruction-surface-optimization.md](./specs/028-agent-instruction-surface-optimization.md)
+- [specs/030-conversational-triage-and-docs-cleanup.md](./specs/030-conversational-triage-and-docs-cleanup.md)
+- [triage/README.md](./triage/README.md)
 - [roadmaps/generation-index.md](./roadmaps/generation-index.md)
 - [handoffs/README.md](./handoffs/README.md)
 - [PAPERCUTS.md](../PAPERCUTS.md) — agent-observed execution friction
@@ -32,6 +34,8 @@ to adopt.
 - `roadmaps/` sequences contract-backed work into milestones
 - `logs/` records completed batch evidence and decisions
 - `handoffs/` stores friendly, timestamped notes for genuine fresh-thread takeovers
+- `triage/` stores lightweight, timestamped capture notes until their useful
+  content is promoted, merged, or removed
 
 ## Current posture
 
@@ -49,3 +53,5 @@ Northstar system:
 - work should not be called done without real evidence
 - agents should be able to continue through ready batch cards without needing
   repeated "continue" prompts from the operator
+- unresolved conversational observations should be captured in `triage/` before
+  a deeper branch is pursued, then managed during refresh and cleanup

@@ -36,14 +36,16 @@ Roadmaps sequence contract-backed work for Northstar itself.
   Northstar-scale validation, the explicit command adapter, and command-surface
   checks are complete; a non-Northstar scenario and operator confirmation remain
   pending.
+- `g02.029` is active; triage capture, refresh management, the docs-cleanup route,
+  copy-ready surfaces, and deterministic checks are complete. Live operator usage
+  feedback remains pending.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Use feedback from the operator's live dogfooding of the optimized instruction
-surface to record the Batch 27.3 measurement. Northstar does not dispatch or
-manage that consumer run. Atlas validation is the next Northstar-owned planning
-task; card `g02.026/078` remains ready but deferred. Feedback intake remains
-operator-owned and pending.
+Use the new `docs/triage/` capture behavior in a real refresh or orchestrator
+conversation, then record operator feedback before archiving spec 030. Atlas
+validation and optimized-instruction feedback remain separate operator-owned
+follow-ups; Northstar does not select or dispatch those runs.

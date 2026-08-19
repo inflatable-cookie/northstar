@@ -1,7 +1,7 @@
 # Northstar Protocol Kernel
 
 Status: active  
-Updated: 2026-05-19
+Updated: 2026-08-19
 
 One-page map of **what counts as the protocol**, **where normative detail
 lives**, and **how surfaces should relate**. Use this before pasting long
@@ -11,8 +11,10 @@ excerpts of doctrine into skills, contracts, or operator prompts.
 
 Northstar is a **docs spine + execution grammar**: direction in `vision/`,
 shape in `architecture/`, durable rules in `contracts/`, time-ordered work in
-`roadmaps/`, evidence in `logs/`. Optional `research/` and provisional `specs/`
-feed promotion into architecture and contracts before execution bets on them.
+`roadmaps/`, evidence in `logs/`, and a temporary capture buffer in `triage/`.
+Optional `research/` and provisional `specs/` feed promotion into architecture
+and contracts before execution bets on them. Triage notes are not execution
+authority; they are promoted, merged, or removed during maintenance.
 
 Full picture: [visual-map.md](./visual-map.md) and [glossary.md](./glossary.md).
 
@@ -39,6 +41,7 @@ contracts).
 | Spec lifecycle and archive | [sections/08-specs-and-promotion.md](./sections/08-specs-and-promotion.md) + [template-bundle/specs/README.md](../template-bundle/specs/README.md) | `docs/specs/` + `docs/specs/archive/` in the installed repo |
 | Automation defaults | [sections/10-automation-runtime-policy.md](./sections/10-automation-runtime-policy.md) | `AGENTS.md` / Effigy config in each repo |
 | Agent execution feedback | [papercuts.md](./papercuts.md) | root `PAPERCUTS.md` + agent contract |
+| Conversational capture and pruning | [sections/09-standard-docs-spine.md](./sections/09-standard-docs-spine.md) | `docs/triage/README.md` + refresh/cleanup modes |
 
 **Northstar maintainers:** the live repo may tighten wording in
 `docs/contracts/001-working-rules.md`, but expanded checklists should stay in

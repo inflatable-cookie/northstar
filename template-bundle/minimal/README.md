@@ -8,7 +8,7 @@ Copy these folders into your project's `docs/` directory and delete anything you
 
 ## What Is Here
 
-Six core folders, no examples, no optional add-ons.
+Seven core folders, no examples, no optional add-ons.
 
 ```
 docs/
@@ -30,7 +30,9 @@ docs/
 │   ├── README.md
 │   └── YYYY-MM/
 │       └── .gitkeep
-└── handoffs/
+├── handoffs/
+│   └── README.md
+└── triage/
     └── README.md
 ```
 
@@ -43,6 +45,8 @@ docs/
 5. Create the first roadmap milestone only after contracts exist.
 6. Add logs per completed batch.
 7. Create a handoff only when another thread genuinely needs to take over.
+8. Capture unresolved observations in `docs/triage/YYYYMMDD-HHMMSS-<slug>.md`;
+   refresh or cleanup should promote, merge, or remove each note over time.
 
 ## Naming Conventions
 
@@ -52,6 +56,7 @@ docs/
 - Roadmaps: `docs/roadmaps/gNN/NNN-<slug>.md`
 - Logs: `docs/logs/YYYY-MM/DD-HHMMSS-<slug>.md`
 - Handoffs: `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md`
+- Triage: `docs/triage/YYYYMMDD-HHMMSS-<slug>.md`
 
 ## When to Expand
 

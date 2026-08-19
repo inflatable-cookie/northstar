@@ -25,6 +25,7 @@ The one installable skill also exposes thin explicit command adapters under
 | `/northstar-readiness-review` | Existing planning-state readiness review |
 | `/northstar-architecture-refocus` | Bounded architecture refocus |
 | `/northstar-refresh` | Broad project planning/docs refresh |
+| `/northstar-cleanup` | Inspect and safely rework `/docs` drift |
 
 These adapters are discoverability surfaces, not separate installs or planning
 authorities. Each loads the central router and one canonical mode. Atlas is
@@ -75,6 +76,7 @@ compatibility aliases.
 | Mode file | Use when |
 | --- | --- |
 | `orchestrator.md` | Question-led planning, one pushed worker handoff under `docs/handoffs/`, bounded PR review loop |
+| `cleanup-docs.md` | Inventory `/docs`, rehome clear drift, and disposition triage notes without blind deletion |
 | `normalize-docs.md` | Bootstrap, migrate, or ongoing docs-spine hygiene |
 | `plan-from-scratch.md` | Planning coverage still missing |
 | `shape-with-specs-and-promote.md` | Provisional spec lane before promotion |
@@ -96,6 +98,9 @@ Templates live under `skills/northstar/assets/templates/`.
   message — covered by the `northstar` skill description.
 - **Handoff:** only when the user clearly wants a continuation brief or fresh
   thread. The router and handoff mode forbid compaction-only or bare `continue`.
+- **Triage:** orchestrator and refresh conversations capture unresolved useful
+  threads in `docs/triage/YYYYMMDD-HHMMSS-<slug>.md`; cleanup and refresh promote,
+  merge, or remove them over time.
 
 ## Structural rules
 

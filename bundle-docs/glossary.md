@@ -30,10 +30,16 @@ One-page reference for terms used across Northstar docs.
 : Friendly, timestamped notes that let another thread or person take over. They
   live in `docs/handoffs/` and do not replace batch logs.
 
+**Triage notes**
+: Lightweight, timestamped Markdown capture notes for observations, ideas,
+  plans, and questions that are not yet settled. They live in `docs/triage/`,
+  are not execution authority, and must be promoted, merged, or removed over
+  time.
+
 ## Posture and Adoption
 
 **Baseline**
-: The standard six-folder spine: `vision/`, `architecture/`, `contracts/`, `roadmaps/`, `logs/`, and `handoffs/`. Enough for normal routing, clear active-lane tracking, and dependable fresh-thread takeovers.
+: The standard seven-folder spine: `vision/`, `architecture/`, `contracts/`, `roadmaps/`, `logs/`, `handoffs/`, and `triage/`. Enough for normal routing, clear active-lane tracking, conversational capture, and dependable fresh-thread takeovers.
 
 **Strict**
 : Baseline plus additional guardrails: `contracts/contract-index.md`, `contracts/001-working-rules-template.md`, `architecture/product-guardrails.md`, `specs/`. Used when execution spans high-risk boundaries or needs longer autonomous runs.
@@ -142,6 +148,7 @@ One-page reference for terms used across Northstar docs.
 | Roadmaps | Executable milestones | `docs/roadmaps/gNN/` |
 | Logs | Evidence | `docs/logs/YYYY-MM/` |
 | Handoffs | Coordination | `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md` |
+| Triage notes | Temporary capture | `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` |
 | Backlog | Deferred work | `docs/roadmaps/backlog/` |
 | Policy | Repo-local rules | `docs/policy/` |
 

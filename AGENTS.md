@@ -16,6 +16,8 @@ Scope: whole `northstar/` repository.
   task's canonical docs. Worker mode is activated only by an explicit
   orchestrator-dispatched handoff; read that handoff for its worker execution
   contract instead of inferring worker mode from a path, branch, or harness.
+- When planning or docs work surfaces unresolved threads, inspect `docs/triage/`
+  and treat its notes as leads to promote or remove, never as execution authority.
 - Do not edit `.github/workflows/` or run release mutations without an explicit
   operator request.
 

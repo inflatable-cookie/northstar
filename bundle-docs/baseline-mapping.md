@@ -1,7 +1,7 @@
 # Baseline Mapping
 
 Status: active
-Updated: 2026-03-07
+Updated: 2026-08-19
 
 ## Purpose
 
@@ -15,6 +15,7 @@ Record explicit Northstar deviations to avoid accidental drift.
 - `docs/research/` (when comparative/source-backed work is a durable need)
 - `docs/roadmap/`
 - `docs/logs/`
+- `docs/triage/` (temporary conversational capture when an agent needs to preserve unresolved threads)
 
 ## Adopted patterns
 
@@ -23,6 +24,8 @@ Record explicit Northstar deviations to avoid accidental drift.
 - Research as an optional synthesis layer for comparative/source-backed learning before architecture or roadmap commitments.
 - Roadmaps as milestone files with executable task lists and acceptance criteria.
 - Logs as dated evidence artifacts tied to roadmap batches.
+- Triage as a lightweight, timestamped capture buffer whose contents are
+  promoted, merged, or removed during refresh and cleanup.
 
 ## Northstar changes
 

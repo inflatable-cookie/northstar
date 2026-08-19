@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-08-17
+Updated: 2026-08-19
 Vision refs: docs/vision/001-northstar-delivery-vision.md
 
 ## Top-Level Stack
@@ -31,6 +31,9 @@ Vision refs: docs/vision/001-northstar-delivery-vision.md
   changes.
 - Roadmaps in `docs/roadmaps/` sequence approved work.
 - Logs in `docs/logs/` provide batch-level evidence.
+- Temporary observations and unresolved conversational threads land in
+  `docs/triage/` before they are promoted into canonical planning surfaces or
+  removed during refresh/cleanup.
 - Agents append execution friction to root `PAPERCUTS.md`; maintenance promotes
   repeated or material items into the normal planning spine.
 - `bundle-docs/`, `template-bundle/`, and `skills/` should be updated from this
@@ -175,6 +178,9 @@ orchestrator lane when a parent harness already owns the worktree.
   adapters, not Northstar protocol dependencies.
 - Papercuts remain an observation queue, not a competing planning authority or
   automatic work queue.
+- Triage notes remain a temporary capture buffer, not a competing planning
+  authority or automatic work queue; every note needs a promote, merge, open,
+  or remove disposition over time.
 
 ## Performance and Reliability Constraints
 
