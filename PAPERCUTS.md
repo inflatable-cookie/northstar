@@ -7,6 +7,13 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 
 <!-- Keep entries short. Append newest entries at the top. Do not include secrets. -->
 
+- **2026-08-22 — parallel Effigy QA selectors contend on shared task locks:**
+  running `effigy qa` and `effigy qa:docs` together caused a repo-contract lock
+  conflict even though the docs check completed; impact is a false validation
+  failure and rerun; plausible fix is to document serial validation or make
+  task locks selector-aware; affected surfaces are Effigy task execution and
+  repository validation guidance.
+
 - **2026-08-19 — duplicated spine lists made a broad docs patch brittle:** the
   triage rollout touched several intentionally mirrored structure summaries and
   one large patch failed on stale surrounding context; impact was avoidable

@@ -13,6 +13,12 @@ implementation worker once a fresh worker run is launched. Keep the user's
 unresolved choices visible; do not turn uncertainty into speculative cards.
 The operator relays worker messages and PR URLs between threads.
 
+**Manual handoff is the default.** Use subagents, provider-native agents, or
+hosted-agent helpers only when the operator explicitly authorizes them in the
+current conversation. Orchestrator mode alone is not that authorization:
+prepare the repository-relative handoff, give it to the operator, and rely on
+the operator to start the worker thread and relay its reports and PR URL.
+
 ## Conversation style
 
 The orchestrator is a conversational thinking partner, not merely a status
