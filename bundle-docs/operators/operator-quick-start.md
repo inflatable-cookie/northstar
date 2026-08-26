@@ -64,6 +64,9 @@ to pick one mode:
   quality; the agent installs missing activation, then continues the task
 - Explicit Rust worktree or whole-repository audit-and-repair ->
   `/northstar-rust-audit worktree` or `/northstar-rust-audit repository`
+- Explicit TypeScript/Svelte worktree or whole-repository audit-and-repair ->
+  `/northstar-typescript-audit worktree` or
+  `/northstar-typescript-audit repository`
 
 ## If You Want Clear Prompting, Say It Plainly
 
@@ -83,6 +86,10 @@ to pick one mode:
   `/northstar-rust-audit worktree`
 - “Audit and fix this entire Rust repository” ->
   `/northstar-rust-audit repository`
+- “Audit and fix the current TypeScript/Svelte tranche with no slop” ->
+  `/northstar-typescript-audit worktree`
+- “Audit and fix this entire TypeScript/Svelte repository” ->
+  `/northstar-typescript-audit repository`
 - **Create an orchestrator runway and worker PR loop** -> `northstar` (orchestrator mode)
 
 Rust activation is agent-installed and repository-owned. The agent discovers
@@ -91,6 +98,13 @@ contracts, and asks only when repository policy such as MSRV or exclusions is
 unresolved. Only `strict` is production-valid. Ordinary and high-assurance
 profiles, a combined default, observable compaction resilience, and
 certification remain unsupported.
+
+TypeScript/Svelte activation is also agent-installed, but only after an explicit
+audit request. The agent discovers root and nested package ownership, resolves
+Svelte 5 and SvelteKit 2 overlays per owning package, and installs no
+dependencies. Everyday TypeScript authoring, deferred toolchain/testing rules,
+unsupported framework versions, slop-only mutation, and certification remain
+unavailable.
 
 During an orchestrator or refresh conversation, ask the agent to check
 `docs/triage/` for open capture notes. Useful unresolved observations should be

@@ -54,6 +54,27 @@ explicit toolchain paths and stops when repository-owned MSRV or exclusion
 policy is genuinely unresolved. Northstar's Rust 1.95 benchmark floor is never
 used as the consumer MSRV.
 
+### Optional strict TypeScript/Svelte explicit audit
+
+TypeScript/Svelte quality is another optional scoped activation inside the same
+installed Northstar skill. It is explicit-audit-only: ordinary TypeScript or
+Svelte coding does not activate it. On an explicit worktree or repository audit,
+the agent runs the skill-local `northstar/typescript-quality:setup` task at the
+narrowest package-owning scope. Humans do not copy its activation or profile
+templates.
+
+Setup discovers root packages, declared workspaces, and independent nested
+packages, then resolves Svelte 5 and SvelteKit 2 only where the owning package
+and semantic source surface support them. It installs no dependencies and
+preserves existing valid instructions and contracts. Unregistered packages,
+unsupported framework versions, and unresolved ownership fail closed or remain
+reported limitations.
+
+The public explicit entrypoint is `/northstar-typescript-audit` with `worktree`
+or `repository` scope. Only `strict` is production-valid. Everyday TypeScript
+authoring, deferred toolchain/testing rules, blanket fixing, slop-only mutation,
+and certification claims remain unsupported.
+
 ## Standard docs spines
 
 Baseline Northstar repos should use:

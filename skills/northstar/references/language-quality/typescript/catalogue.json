@@ -1,0 +1,506 @@
+{
+  "schema_version": "1.0.0",
+  "language": "typescript",
+  "workflow": "explicit_audit_repair",
+  "production_profiles": ["strict"],
+  "supported_overlays": ["base", "svelte", "sveltekit"],
+  "rules": [
+    {
+      "id": "TS-READ-001",
+      "title": "Keep design direct, proportionate, and legible",
+      "category": "human_quality",
+      "overlay": "base",
+      "maturity": "approved",
+      "decidability": "partially_decidable",
+      "dimensions": ["architecture", "human_quality"],
+      "applicability": "All in-scope TypeScript source and tests.",
+      "strict_enforcement": "required",
+      "requirement": "Code must use the simplest design that preserves its governing invariants. Every abstraction, wrapper, branch, generic, and indirection must own a present responsibility.",
+      "rationale": "Speculative or pass-through machinery hides intent, enlarges the change surface, and makes locally simple behavior harder to verify.",
+      "provenance": [
+        {
+          "authority": "Google TypeScript Style Guide",
+          "maturity": "independent",
+          "revision": "live-guide-reviewed-2026-08-26",
+          "url": "https://google.github.io/styleguide/tsguide.html",
+          "upstream_rules": ["clarity", "prefer simpler constructs"]
+        }
+      ],
+      "audit_procedure": [
+        "Trace each abstraction through its callers, invariants, and present change pressure.",
+        "Require a named policy, boundary, lifecycle, substitution, or evidence role for every non-trivial layer.",
+        "Report pass-through and speculative structure only when removing it preserves a clearer contract; do not use size or style preference as the finding."
+      ],
+      "mechanical_enforcement": [
+        {
+          "evidence_class": "source_review",
+          "check": "caller and responsibility trace",
+          "role": "evidence",
+          "caveat": "A detector or complexity threshold cannot decide whether an abstraction owns real policy."
+        }
+      ],
+      "remediation": {
+        "default_authority": "review_required",
+        "action_overrides": [],
+        "guidance": "Remove or flatten machinery only after checking callers, exported contracts, error behavior, and lifecycle ownership."
+      },
+      "deviation": {
+        "allowed": true,
+        "required_evidence": ["named responsibility", "why a simpler shape is insufficient", "focused preservation evidence"]
+      },
+      "completion_evidence": ["abstraction responsibility ledger", "final-diff readability review", "focused behavior preservation"]
+    },
+    {
+      "id": "TS-EVIDENCE-001",
+      "title": "Preserve type evidence",
+      "category": "type_safety",
+      "overlay": "base",
+      "maturity": "approved",
+      "decidability": "partially_decidable",
+      "dimensions": ["correctness_assurance", "architecture", "human_quality"],
+      "applicability": "Assertions, generics, casts, non-null assertions, and boundary adapters.",
+      "strict_enforcement": "mandatory",
+      "requirement": "Every claimed type must be supported by local static or runtime evidence. Chained assertions, widening through unknown, unjustified non-null assertions, and unconstrained generic escape hatches are prohibited.",
+      "rationale": "Assertions suppress the compiler without proving the runtime fact. Laundered uncertainty turns type checking into documentation rather than assurance.",
+      "provenance": [
+        {
+          "authority": "Google TypeScript Style Guide",
+          "maturity": "independent",
+          "revision": "live-guide-reviewed-2026-08-26",
+          "url": "https://google.github.io/styleguide/tsguide.html",
+          "upstream_rules": ["type assertions", "non-null assertions"]
+        },
+        {
+          "authority": "anti-slop",
+          "maturity": "experimental",
+          "revision": "6d538555cb151d4121ed51a27db81890eacf8ae9",
+          "url": "https://github.com/dmmulroy/anti-slop/tree/6d538555cb151d4121ed51a27db81890eacf8ae9",
+          "upstream_rules": ["unsafe type assertions"]
+        }
+      ],
+      "audit_procedure": [
+        "Inventory casts, non-null assertions, assertion functions, and generic defaults or constraints that can erase evidence.",
+        "For each claim, identify the local narrowing, parser, invariant, or construction path that proves it.",
+        "Report only claims whose evidence is absent or weaker than the asserted type; do not replace useful unknown with any."
+      ],
+      "mechanical_enforcement": [
+        {
+          "evidence_class": "lint",
+          "check": "repository-owned rules for unnecessary, unsafe, and non-null assertions",
+          "role": "candidate",
+          "caveat": "Lint availability and configuration are repository evidence; source review decides whether the assertion is justified."
+        }
+      ],
+      "remediation": {
+        "default_authority": "review_required",
+        "action_overrides": [],
+        "guidance": "Replace the assertion with narrowing, validation, a stronger generic constraint, or a construction invariant proven at the use site."
+      },
+      "deviation": {
+        "allowed": true,
+        "required_evidence": ["exact claimed runtime fact", "why local proof cannot be expressed", "boundary or invariant owner"]
+      },
+      "completion_evidence": ["assertion inventory", "local evidence for retained claims", "type-check evidence when available"]
+    },
+    {
+      "id": "TS-BOUNDARY-001",
+      "title": "Narrow external uncertainty at the boundary",
+      "category": "boundary_safety",
+      "overlay": "base",
+      "maturity": "approved",
+      "decidability": "partially_decidable",
+      "dimensions": ["correctness_assurance", "architecture"],
+      "applicability": "Network, storage, environment, message, catch, parser, and interoperability boundaries.",
+      "strict_enforcement": "mandatory",
+      "requirement": "Externally supplied values must enter as unknown or an equally honest boundary type and be validated before domain use. Record checks must distinguish named-field objects from null and arrays when the domain requires a record.",
+      "rationale": "Static annotations do not validate runtime input. Boundary parsing prevents malformed data and accidental array acceptance from contaminating trusted domain code.",
+      "provenance": [
+        {
+          "authority": "TypeScript Handbook",
+          "maturity": "official",
+          "revision": "live-handbook-reviewed-2026-08-26",
+          "url": "https://www.typescriptlang.org/docs/handbook/2/narrowing.html",
+          "upstream_rules": ["narrowing", "unknown"]
+        },
+        {
+          "authority": "ECMAScript specification",
+          "maturity": "official",
+          "revision": "ECMA-262-2026-draft-reviewed-2026-08-26",
+          "url": "https://tc39.es/ecma262/multipage/abstract-operations.html#sec-isarray",
+          "upstream_rules": ["IsArray"]
+        }
+      ],
+      "audit_procedure": [
+        "Inventory external inputs and trace them to the first trusted domain operation.",
+        "Verify structural and semantic validation occurs before use and does not rely on an assertion-only parser.",
+        "Check object guards reject null and arrays whenever the intended domain shape is a named-field record."
+      ],
+      "mechanical_enforcement": [
+        {
+          "evidence_class": "source_review",
+          "check": "boundary-to-domain value trace",
+          "role": "enforce",
+          "caveat": "Compiler success cannot establish the shape of runtime data."
+        }
+      ],
+      "remediation": {
+        "default_authority": "review_required",
+        "action_overrides": [],
+        "guidance": "Add the narrowest parser or guard at the owning boundary, preserve useful diagnostics, and keep validated domain types downstream."
+      },
+      "deviation": {
+        "allowed": true,
+        "required_evidence": ["trusted producer contract", "integrity mechanism", "failure behavior", "recheck trigger"]
+      },
+      "completion_evidence": ["external-boundary inventory", "validation-path review", "malformed-input preservation evidence"]
+    },
+    {
+      "id": "TS-ASYNC-001",
+      "title": "Make asynchronous ownership and lifecycle explicit",
+      "category": "async_correctness",
+      "overlay": "base",
+      "maturity": "approved",
+      "decidability": "partially_decidable",
+      "dimensions": ["correctness_assurance", "architecture"],
+      "applicability": "Promises, tasks, callbacks, streams, timers, subscriptions, and cancellation.",
+      "strict_enforcement": "mandatory",
+      "requirement": "Asynchronous work must be awaited, returned, deliberately detached with observed failure, or owned by a cancellation and cleanup lifecycle. Shutdown and supersession must not leave unowned work or resources.",
+      "rationale": "Floating work loses failures, races teardown, and makes observable behavior depend on process timing rather than an explicit owner.",
+      "provenance": [
+        {
+          "authority": "typescript-eslint",
+          "maturity": "independent",
+          "revision": "live-rule-reviewed-2026-08-26",
+          "url": "https://typescript-eslint.io/rules/no-floating-promises/",
+          "upstream_rules": ["no-floating-promises"]
+        }
+      ],
+      "audit_procedure": [
+        "Trace every spawned promise, timer, subscription, stream, and callback to its owner.",
+        "Verify failures are observed and deliberate detachment is visible rather than accidental.",
+        "Inspect cancellation, supersession, component or service teardown, and shutdown for cleanup races and stale writes."
+      ],
+      "mechanical_enforcement": [
+        {
+          "evidence_class": "lint",
+          "check": "repository-owned no-floating-promises equivalent",
+          "role": "evidence",
+          "caveat": "A lint does not prove cleanup, cancellation, or lifecycle ownership and may be unavailable."
+        }
+      ],
+      "remediation": {
+        "default_authority": "review_required",
+        "action_overrides": [],
+        "guidance": "Assign one visible owner, preserve rejection paths, and add bounded cleanup without changing product timing or retry policy."
+      },
+      "deviation": {
+        "allowed": true,
+        "required_evidence": ["named lifecycle owner", "failure observation", "shutdown or cleanup behavior"]
+      },
+      "completion_evidence": ["async ownership trace", "failure-path review", "cleanup or cancellation preservation evidence"]
+    },
+    {
+      "id": "TS-ERR-001",
+      "title": "Keep failures contextual and observable",
+      "category": "error_handling",
+      "overlay": "base",
+      "maturity": "approved",
+      "decidability": "partially_decidable",
+      "dimensions": ["correctness_assurance", "architecture", "human_quality"],
+      "applicability": "Throws, catches, results, retries, logging, and boundary translation.",
+      "strict_enforcement": "required",
+      "requirement": "Thrown values must be Error objects or repository-defined typed failures. Caught unknown values must be narrowed, context must be added once at the owning boundary, and discarded failures must belong to explicit bounded control flow.",
+      "rationale": "String throws, swallowed failures, duplicated logging, and context loss prevent callers and operators from understanding or recovering from faults.",
+      "provenance": [
+        {
+          "authority": "typescript-eslint",
+          "maturity": "independent",
+          "revision": "live-rule-reviewed-2026-08-26",
+          "url": "https://typescript-eslint.io/rules/only-throw-error/",
+          "upstream_rules": ["only-throw-error"]
+        }
+      ],
+      "audit_procedure": [
+        "Trace throw, catch, retry, log, and translation paths across their owning boundary.",
+        "Distinguish bounded probes and deliberate fallback from swallowed failures.",
+        "Inspect string or arbitrary throws, lost causes, duplicate logging, unbounded retry, and success returned after failure."
+      ],
+      "mechanical_enforcement": [
+        {
+          "evidence_class": "lint",
+          "check": "repository-owned only-throw-error equivalent",
+          "role": "candidate",
+          "caveat": "Lint evidence cannot decide boundary ownership, retry policy, or whether failure context was preserved."
+        }
+      ],
+      "remediation": {
+        "default_authority": "review_required",
+        "action_overrides": [
+          {
+            "action": "change_error_contract",
+            "authority": "operator_decision",
+            "reason": "Changing public error shapes, retry policy, status mapping, or user-visible failure behavior changes a caller or product contract."
+          }
+        ],
+        "guidance": "Preserve the public failure contract, retain the original cause, and add context at one owning boundary."
+      },
+      "deviation": {
+        "allowed": true,
+        "required_evidence": ["failure classification", "boundary owner", "observability path", "bounded fallback or retry rationale"]
+      },
+      "completion_evidence": ["failure-path trace", "retained-cause review", "focused error-behavior preservation"]
+    },
+    {
+      "id": "TS-ARCH-001",
+      "title": "Respect package and dependency boundaries",
+      "category": "architecture",
+      "overlay": "base",
+      "maturity": "approved",
+      "decidability": "partially_decidable",
+      "dimensions": ["architecture", "human_quality"],
+      "applicability": "Imports, exports, package entry points, workspace edges, and dependency injection.",
+      "strict_enforcement": "required",
+      "requirement": "Dependencies must flow through owned public seams in the repository-defined direction. Deep imports, cycles, leaking internals, and policy placed outside its owning package require explicit architectural justification.",
+      "rationale": "Visible boundaries keep change impact local. Reaching through internals or reversing dependency direction couples callers to implementation details and makes package contracts unreliable.",
+      "provenance": [
+        {
+          "authority": "TypeScript Handbook",
+          "maturity": "official",
+          "revision": "live-handbook-reviewed-2026-08-26",
+          "url": "https://www.typescriptlang.org/docs/handbook/project-references.html",
+          "upstream_rules": ["project references", "composite projects"]
+        }
+      ],
+      "audit_procedure": [
+        "Build a package and import view for the selected audit scope and its direct dependencies.",
+        "Compare imports and exports with repository entry points, ownership, and declared dependency direction.",
+        "Report deep imports, cycles, leaking internals, or misplaced policy only when the owning architecture makes the violation determinate."
+      ],
+      "mechanical_enforcement": [
+        {
+          "evidence_class": "compiler",
+          "check": "repository-owned project-reference or module-boundary evidence",
+          "role": "candidate",
+          "caveat": "Compilation cannot prove the intended architecture and evidence may be unavailable."
+        }
+      ],
+      "remediation": {
+        "default_authority": "review_required",
+        "action_overrides": [
+          {
+            "action": "change_public_package_contract",
+            "authority": "operator_decision",
+            "reason": "Adding or removing public exports, changing package ownership, or reversing dependency direction changes architecture outside bounded repair."
+          }
+        ],
+        "guidance": "Repair imports within an existing owned seam. Stop before inventing a new public API or changing package ownership."
+      },
+      "deviation": {
+        "allowed": true,
+        "required_evidence": ["named architecture boundary", "reason the public seam is insufficient", "owner and recheck trigger"]
+      },
+      "completion_evidence": ["package/import view", "boundary-owner evidence", "affected-call-path validation"]
+    },
+    {
+      "id": "SVELTE-REACT-001",
+      "title": "Keep reactive computation pure and lifecycle explicit",
+      "category": "reactivity",
+      "overlay": "svelte",
+      "maturity": "approved",
+      "decidability": "partially_decidable",
+      "dimensions": ["correctness_assurance", "architecture", "human_quality"],
+      "applicability": "Svelte 5 runes code. Older or unresolved Svelte versions make this overlay unavailable rather than changing the rule semantics.",
+      "strict_enforcement": "required",
+      "requirement": "Derived state must remain pure. Effects must own a real reactive transition or external synchronization, must not hide ordinary data flow, and must clean up every resource they create.",
+      "rationale": "Effects used as general computation obscure dependencies, create cycles and stale state, and make server and client behavior difficult to reason about.",
+      "provenance": [
+        {
+          "authority": "Svelte documentation: $derived",
+          "maturity": "official",
+          "revision": "Svelte-5-docs-reviewed-2026-08-26",
+          "url": "https://svelte.dev/docs/svelte/$derived",
+          "upstream_rules": ["$derived", "$derived.by"]
+        },
+        {
+          "authority": "Svelte documentation: $effect",
+          "maturity": "official",
+          "revision": "Svelte-5-docs-reviewed-2026-08-26",
+          "url": "https://svelte.dev/docs/svelte/$effect",
+          "upstream_rules": ["$effect", "teardown"]
+        }
+      ],
+      "audit_procedure": [
+        "Confirm the package resolves supported Svelte 5 semantics before applying the overlay.",
+        "Start with compiler reactivity warnings and captured initial values, then classify each effect by reactive purpose.",
+        "Inspect effect writes, async tracking, teardown, cycles, stale captures, and server-render assumptions."
+      ],
+      "mechanical_enforcement": [
+        {
+          "evidence_class": "framework",
+          "check": "repository-owned Svelte compiler diagnostics",
+          "role": "evidence",
+          "caveat": "Compiler success cannot prove that an effect is necessary or that external resources are fully owned."
+        }
+      ],
+      "remediation": {
+        "default_authority": "review_required",
+        "action_overrides": [],
+        "guidance": "Move pure computation to derived state or direct code; retain effects only for genuine reactive synchronization with bounded teardown."
+      },
+      "deviation": {
+        "allowed": true,
+        "required_evidence": ["effect purpose", "dependency and write set", "resource teardown", "why derived or direct code is insufficient"]
+      },
+      "completion_evidence": ["effect purpose inventory", "compiler diagnostics when available", "reactive and teardown preservation evidence"]
+    },
+    {
+      "id": "SVELTE-A11Y-001",
+      "title": "Treat accessibility as correctness",
+      "category": "accessibility",
+      "overlay": "svelte",
+      "maturity": "approved",
+      "decidability": "partially_decidable",
+      "dimensions": ["correctness_assurance", "human_quality"],
+      "applicability": "Rendered Svelte markup and interactive component behavior under supported Svelte 5 semantics.",
+      "strict_enforcement": "mandatory",
+      "requirement": "Interactive markup must use appropriate semantics and provide equivalent keyboard, focus, label, and announcement behavior. Accessibility diagnostics and suppressions must be resolved against actual interaction behavior.",
+      "rationale": "An interaction that cannot be perceived or operated by supported users is incorrect even when its visual happy path works.",
+      "provenance": [
+        {
+          "authority": "Svelte compiler warnings",
+          "maturity": "official",
+          "revision": "Svelte-5-docs-reviewed-2026-08-26",
+          "url": "https://svelte.dev/docs/svelte/compiler-warnings",
+          "upstream_rules": ["a11y compiler warnings"]
+        }
+      ],
+      "audit_procedure": [
+        "Confirm the package resolves supported Svelte 5 semantics before applying the overlay.",
+        "Collect compiler and repository lint accessibility diagnostics and inspect every suppression in scope.",
+        "Review semantic element choice, keyboard operation, focus order and restoration, accessible naming, state, and announcements that tools cannot prove."
+      ],
+      "mechanical_enforcement": [
+        {
+          "evidence_class": "framework",
+          "check": "Svelte accessibility compiler diagnostics",
+          "role": "enforce",
+          "caveat": "Diagnostics cover known static patterns, not complete keyboard, focus, naming, or announcement behavior."
+        }
+      ],
+      "remediation": {
+        "default_authority": "review_required",
+        "action_overrides": [],
+        "guidance": "Prefer native semantics and preserve the component's intended interaction while correcting keyboard, focus, name, role, state, or announcement behavior."
+      },
+      "deviation": {
+        "allowed": true,
+        "required_evidence": ["specific diagnostic or behavior", "equivalent accessible interaction", "review owner", "recheck trigger"]
+      },
+      "completion_evidence": ["diagnostic and suppression review", "interaction behavior review", "focused accessibility preservation evidence"]
+    },
+    {
+      "id": "SVELTE-SSR-001",
+      "title": "Isolate request state and server-only data",
+      "category": "server_boundary",
+      "overlay": "sveltekit",
+      "maturity": "approved",
+      "decidability": "partially_decidable",
+      "dimensions": ["correctness_assurance", "architecture"],
+      "applicability": "SvelteKit 2 routes, hooks, load functions, server modules, and shared libraries. Older or unresolved versions make this overlay unavailable.",
+      "strict_enforcement": "mandatory",
+      "requirement": "Mutable request state must be isolated per request, load functions must remain free of shared-state side effects, and server-only data must not enter client-reachable import or serialization graphs.",
+      "rationale": "Shared server state can leak data across users. Client-reachable secrets and server modules break the trust boundary even when tests or development builds appear safe.",
+      "provenance": [
+        {
+          "authority": "SvelteKit state management",
+          "maturity": "official",
+          "revision": "SvelteKit-2-docs-reviewed-2026-08-26",
+          "url": "https://svelte.dev/docs/kit/state-management",
+          "upstream_rules": ["avoid shared state on the server", "no side-effects in load"]
+        },
+        {
+          "authority": "SvelteKit server-only modules",
+          "maturity": "official",
+          "revision": "SvelteKit-2-docs-reviewed-2026-08-26",
+          "url": "https://svelte.dev/docs/kit/server-only-modules",
+          "upstream_rules": ["server-only modules", "private environment variables"]
+        }
+      ],
+      "audit_procedure": [
+        "Confirm the package resolves supported SvelteKit 2 semantics before applying the overlay.",
+        "Trace module-level mutable state through hooks, loads, actions, endpoints, and request locals.",
+        "Trace server-only imports and serialized values into client-reachable graphs, including paths hidden by test-only conditions."
+      ],
+      "mechanical_enforcement": [
+        {
+          "evidence_class": "framework",
+          "check": "repository-owned SvelteKit build or check diagnostics outside test mode",
+          "role": "evidence",
+          "caveat": "Framework checks do not prove request isolation and startup or routing failure is unavailable evidence, never a pass."
+        }
+      ],
+      "remediation": {
+        "default_authority": "review_required",
+        "action_overrides": [
+          {
+            "action": "change_request_or_serialization_contract",
+            "authority": "operator_decision",
+            "reason": "Changing authentication, request ownership, persistence, or public serialized data changes a product or security contract."
+          }
+        ],
+        "guidance": "Move mutable state to request-owned context and keep secrets behind server-only modules without changing authentication or serialization contracts."
+      },
+      "deviation": {
+        "allowed": true,
+        "required_evidence": ["state or data owner", "request-isolation proof", "client reachability analysis", "security review owner"]
+      },
+      "completion_evidence": ["request-state inventory", "client import and serialization trace", "non-test framework evidence when available"]
+    },
+    {
+      "id": "TS-SLOP-001",
+      "title": "Record generated-looking indirection without rewrite authority",
+      "category": "experimental_human_quality",
+      "overlay": "base",
+      "maturity": "experimental",
+      "decidability": "undecidable",
+      "dimensions": ["human_quality"],
+      "applicability": "Pass-through wrappers, speculative helpers, redundant prose, and abstractions without visibly owned policy.",
+      "strict_enforcement": "evaluation_only",
+      "requirement": "Suspected slop must be recorded as a non-failing evaluation signal. It cannot establish a violation, authorize mutation, or substitute for an independently assessed normative rule.",
+      "rationale": "Generated-looking patterns are useful review prompts but are too contextual and subjective to justify repairs on their own.",
+      "provenance": [
+        {
+          "authority": "anti-slop adoption report",
+          "maturity": "experimental",
+          "revision": "issue-21-reviewed-2026-08-26",
+          "url": "https://github.com/dmmulroy/anti-slop/issues/21",
+          "upstream_rules": ["adoption feedback", "false-positive calibration"]
+        }
+      ],
+      "audit_procedure": [
+        "Record every suspected candidate in a separate evaluation ledger with location and observed pattern.",
+        "Give each candidate a disposition of retain, corroborated, or not actionable.",
+        "Assess corroborated candidates independently under a named normative rule before creating a finding or repair plan.",
+        "Never fail the audit, widen scope, or mutate code from this rule alone."
+      ],
+      "mechanical_enforcement": [
+        {
+          "evidence_class": "source_review",
+          "check": "anti-slop-inspired candidate scan",
+          "role": "candidate",
+          "caveat": "The signal is experimental and has no independent finding or repair authority."
+        }
+      ],
+      "remediation": {
+        "default_authority": "report_only",
+        "action_overrides": [],
+        "guidance": "Do not remediate under TS-SLOP-001. Cite a separate approved rule and its authority or retain the code."
+      },
+      "deviation": {
+        "allowed": false,
+        "required_evidence": []
+      },
+      "completion_evidence": ["complete evaluation candidate ledger", "independent normative assessment for every corroborated candidate"]
+    }
+  ]
+}

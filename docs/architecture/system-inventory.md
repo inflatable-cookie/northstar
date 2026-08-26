@@ -20,7 +20,7 @@ skills.
 | `bundle-docs/` | doctrine surface | repo maintainers | reusable Northstar doctrine | `system-architecture.md`, `docs/contracts/001-working-rules.md` |
 | `template-bundle/` | product artifact | repo maintainers | copy-ready downstream docs bundle | `docs/specs/archive/001-northstar-delivery-layer.md`, `docs/roadmaps/g01/001-enact-northstar-on-northstar.md` |
 | `skills/` | automation surface | repo maintainers | installable agent workflows and published distribution | `docs/contracts/001-working-rules.md`, `bundle-docs/skills/README.md`, `scripts/check-northstar-skill-install.rhai` |
-| language quality packs | automation surface | repo maintainers | optional language-specific authoring and audit workflows | source translation memo, `docs/specs/031-rust-quality-authoring-and-audit.md`, `004-language-quality-pack`, Effigy selectors |
+| language quality packs | automation surface | repo maintainers | optional language-specific authoring and audit workflows | source translation memos, specs 031-032, `004-language-quality-pack`, Effigy selectors |
 | consumer language-quality profile | contract and policy surface | consumer maintainers | selected assurance profile, toolchain/MSRV, exclusions, deviations, and project architecture | repository-local configuration governed by `004-language-quality-pack` |
 | `docs/` | live planning surface | repo maintainers | Northstar's own planning and execution state | all files in this repo-local docs spine |
 | `docs/handoffs/` | fresh-thread coordination surface | handoff/orchestrator mode | timestamped takeover notes | handoff contract and templates |
@@ -46,8 +46,8 @@ skills.
 | Docs cleanup | `/docs` inventory and classification | reworked canonical docs or operator question | `030-conversational-triage-and-docs-cleanup` | Inspect content and references before any move or removal |
 | Worker execution | explicit worker-mode handoff + startup worktree-safety preflight + ready cards | worker branch/worktree and evidence | `001-working-rules`, `002-agent-local-paths`, active batch cards | Only an orchestrator-dispatched worker uses the harness worktree or the operator-selected `AGENTS_WORKTREE_CONTAINER_DIR` when its starting context is unsuitable |
 | PR review and merge | worker branch/PR | orchestrator verdict + operator-authorised merge | `001-working-rules`, active cards | Review uses diff/check evidence and a provider review record; same-identity GitHub runs use PR comments; merge is separate from PR creation |
-| Everyday language quality | scoped instructions + shared catalogue + consumer profile | current changed tranche and closeout evidence | `031-rust-quality-authoring-and-audit`, `004-language-quality-pack` | Compact authoring projection re-enters at task start and batch exit |
-| Explicit language audit and repair | explicit operator request + resolved worktree or repository scope | findings, bounded repairs, deviations, and validation evidence | `031-rust-quality-authoring-and-audit`, `004-language-quality-pack` | Uses the same catalogue and profile as everyday authoring; preserves dirty state |
+| Rust everyday language quality | scoped instructions + Rust catalogue + consumer profile | current changed tranche and closeout evidence | `031-rust-quality-authoring-and-audit`, `004-language-quality-pack` | Compact Rust projection re-enters at task start and batch exit; TypeScript everyday remains unavailable |
+| Explicit language audit and repair | explicit operator request + resolved worktree or repository scope | findings, bounded repairs, deviations, and validation evidence | specs 031-032, `004-language-quality-pack` | Rust and TypeScript use package-specific catalogues, strict profiles, finding-first records, and dirty-state preservation |
 
 ## Validation Surfaces
 
@@ -58,14 +58,15 @@ skills.
 | Delivery-layer adoption | active docs spine, compact working rules, spec, roadmap, log | repo maintainers | ready |
 | Template/skill promotion | copy-ready skill assets, operator docs, roadmap batches, and logs | repo maintainers | ready |
 | Papercut loop | root queue, doctrine, templates, skill instruction, and QA coverage | repo maintainers | ready |
-| Published skill parity | Skills CLI update path, global install inspection, and source checker | repo maintainers | ready; 76-file parity proven |
-| Explicit command surface | Eight thin command adapters, canonical router/mode wiring, description budget, and retired-alias checks | repo maintainers | ready; source and installed discovery verified |
+| Published skill parity | Skills CLI update path, global install inspection, and source checker | repo maintainers | ready; 93-file parity proven |
+| Explicit command surface | Nine thin command adapters, canonical router/mode wiring, description budget, and retired-alias checks | repo maintainers | ready; source and installed discovery verified |
 | Triage lifecycle | `docs/triage/` anchors, timestamped naming, orchestrator/refresh capture, and cleanup dispositions | repo maintainers | ready; live operator feedback pending |
 | Consumer feedback intake | operator-provided live-use evidence and manual triage boundary | repo maintainers + operator | operator-owned |
 | Orchestrator mode | per-worker committed handoff under `docs/handoffs/`, fresh worker worktree or safe temporary fallback, startup check, chunk report, PR, provider review record, and closeout evidence | repo maintainers + operator | operator validation complete; longer multi-card evidence pending |
 | Model-efficiency comparison | measured role routing, rework, review cycles, and relay burden | repo maintainers | one operator validation measured; broader comparison pending |
 | Rust quality production foundation | seven-rule catalogue, five JSON schemas, two strict checked projections, two routed modes, thin audit adapter, and skill-local Rhai setup/record/check tasks | repo maintainers | ready and distributed; strict-only, agent-owned activation, 76-file installed parity proven |
 | Rust quality prototype | representative rule catalogue, audit and authoring benchmark corpora, blinded subject/coordinator/reviewer packets, projections, deterministic case-local result recorder, result scorer, false-positive and churn measures, context-retention test | repo maintainers + operator | retained evidence infrastructure; strict everyday and explicit-audit tracks eligible; compaction unproven |
+| TypeScript/Svelte explicit-audit foundation | nine normative rules, one evaluation-only signal, strict checked projection, conditional Svelte/SvelteKit overlays, thin explicit adapter, and skill-local Rhai setup/record/check tasks | repo maintainers | ready and distributed; explicit-only, agent-owned activation, 93-file combined installed parity proven |
 
 ## Planning Gaps
 
@@ -76,9 +77,9 @@ skills.
 - The live repo pilot has not yet proven a longer autonomous multi-card run.
 - The first per-worker handoff/PR loop is proven, including same-identity GitHub
   review comments; provider adapter and packet-persistence defaults remain open.
-- The refresh, orchestrator, cleanup, and Rust audit routes are distributed to
-  the installed skill copy; the eight-command surface now passes source and installed parity
-  verification.
+- The refresh, orchestrator, cleanup, Rust audit, and TypeScript/Svelte audit
+  routes are distributed to the installed skill copy; the nine-command surface
+  now passes source and installed parity verification.
 - Atlas has a discovery-first contract now, but existing-project behavioral
   validation is still open because earlier runs were prescriptive rather than
   operator-guided.
@@ -95,3 +96,6 @@ skills.
   cards 083 through 088 are complete: the runtime boundary, shared production
   foundation, both routed workflows, deterministic recording, production
   evidence, copy-ready setup, and installed distribution are proven.
+- Roadmap `g02.031` and cards 089 through 093 are complete. Revision S passes
+  `3/3` production subjects and blind reviewers; the exact explicit-only
+  TypeScript/Svelte payload is distributed with 93-file source/install parity.

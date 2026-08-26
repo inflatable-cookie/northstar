@@ -1,6 +1,6 @@
 ---
 name: northstar
-description: Northstar planning, docs, and strict Rust quality.
+description: Northstar docs, plans, and code quality.
 ---
 
 # Northstar
@@ -15,6 +15,7 @@ open **one** [`references/modes/`](./references/modes/) file and follow it.
 
 | Mode | When |
 | --- | --- |
+| TypeScript/Svelte explicit audit | User explicitly requests a TypeScript or Svelte quality audit, no-slop pass, or audit-and-fix action |
 | Rust explicit audit | User explicitly requests a Rust quality audit, no-slop pass, or audit-and-fix action |
 | Handoff | User explicitly asks for a continuation brief / fresh thread |
 | Project refresh | User asks for `northstar refresh` or `northstar project refresh` to bring an existing project up to date |
@@ -49,6 +50,10 @@ activated, follow the router's lightweight four-command worktree fast path.
 
 - **Planning:** coherent architecture/contracts/roadmaps; no invented system
   behavior; ready cards only when rubric satisfied.
+- **TypeScript/Svelte explicit audit:** package- and overlay-resolved scope,
+  deterministic finding-first records, authority-bounded repair, dirty-state
+  preservation, and repository-owned tool evidence. Ordinary coding never
+  activates it.
 - **Rust explicit audit:** resolved worktree or repository scope, deterministic
   finding-first records, authority-bounded repair waves, preservation proof,
   and repository-native validation. It never activates from ordinary coding.

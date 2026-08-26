@@ -15,6 +15,7 @@ worked through.
 - [030 - Conversational Triage And Docs Cleanup](./030-conversational-triage-and-docs-cleanup.md)
 - [Related translation memo](../../bundle-docs/research/translation-memos/matt-pocock-skills-audit-to-northstar.md)
 - [Rust quality translation memo](../../bundle-docs/research/translation-memos/rust-quality-skills-and-audit.md)
+- [TypeScript/Svelte quality translation memo](../../bundle-docs/research/translation-memos/typescript-quality-and-svelte-overlay.md)
 
 ## Rules
 
@@ -49,6 +50,9 @@ worked through.
 - [031 - Rust Quality Authoring And Audit](./031-rust-quality-authoring-and-audit.md)
   — durable behavior is in contract 004 and system architecture; retained here
   for the production-evidence history.
+- [032 - TypeScript And Svelte Explicit Audit](./032-typescript-svelte-explicit-audit.md)
+  — the explicit-only route is distributed; retained for the revision-S
+  production-evidence history.
 
 ## Archive layout
 

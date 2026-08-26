@@ -47,6 +47,7 @@ let commands = [
     ["northstar-cleanup", "commands/northstar-cleanup/SKILL.md", "references/modes/cleanup-docs.md"],
     ["northstar-atlas", "commands/northstar-atlas/SKILL.md", "references/modes/atlas.md"],
     ["northstar-rust-audit", "commands/northstar-rust-audit/SKILL.md", "references/modes/rust-quality-audit.md"],
+    ["northstar-typescript-audit", "commands/northstar-typescript-audit/SKILL.md", "references/modes/typescript-quality-audit.md"],
 ];
 
 let aggregate_description_chars = 0;
@@ -114,6 +115,13 @@ for relative in actual_command_files {
     require(expected_paths.contains(relative), "unexpected command adapter: " + relative);
 }
 require(aggregate_description_chars <= 460, "command descriptions exceed 460 aggregate characters");
+
+let typescript_policy = fs::read_file(path::join(
+    root,
+    "commands/northstar-typescript-audit/agents/openai.yaml",
+));
+require(typescript_policy.contains("allow_implicit_invocation: false"),
+    "TypeScript audit adapter must remain explicit-only");
 
 let all_skill_text = "";
 for file in fs::list_recursive(root) {

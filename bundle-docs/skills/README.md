@@ -27,6 +27,7 @@ The one installable skill also exposes thin explicit command adapters under
 | `/northstar-refresh` | Broad project planning/docs refresh |
 | `/northstar-cleanup` | Inspect and safely rework `/docs` drift |
 | `/northstar-rust-audit` | Explicit worktree or repository Rust quality audit-and-repair |
+| `/northstar-typescript-audit` | Explicit worktree or repository TypeScript/Svelte audit-and-repair |
 
 These adapters are discoverability surfaces, not separate installs or planning
 authorities. Each loads the central router and one canonical mode. Atlas is
@@ -57,8 +58,8 @@ development before the change is published. Restart agent sessions after an
 update.
 
 The installed skill also carries a minimal Effigy catalog for consumer-safe
-checks and Rust activation/recording. It validates the agent-instruction surface
-and inert Rust quality package. When a consumer repository has no local
+checks plus Rust and TypeScript quality activation/recording. It validates the
+agent-instruction surface and inert language-quality packages. When a consumer repository has no local
 `check:agent-instructions` task, select the installed skill explicitly:
 
 ```bash
@@ -73,6 +74,12 @@ agent instructions:
 
 ```bash
 effigy --repo /path/to/installed/northstar northstar/check:rust-quality
+```
+
+TypeScript catalogue and strict-audit parity is checked the same way:
+
+```bash
+effigy --repo /path/to/installed/northstar northstar/check:typescript-quality
 ```
 
 ### Agent-owned strict Rust activation
@@ -106,6 +113,33 @@ The audit records findings before mutation and preserves unrelated dirty state.
 It does not authorize ordinary or high-assurance profiles, unsafe/FFI repair,
 blanket fixing, or certification claims.
 
+### Agent-owned TypeScript/Svelte explicit audit activation
+
+TypeScript and Svelte activate only for an explicit quality audit, no-slop pass,
+or audit-and-fix request. Ordinary TypeScript coding does not load the catalogue
+or audit procedure. The agent chooses the narrowest package-owning scope and
+runs:
+
+```bash
+effigy --repo /path/to/installed/northstar \
+  northstar/typescript-quality:setup apply /absolute/path/to/project [scope-directory]
+```
+
+Setup discovers root packages, declared workspaces, independent nested packages,
+and package-local Svelte 5/SvelteKit 2 evidence. It installs no dependencies,
+preserves valid instructions and contracts, and fails closed on malformed or
+conflicting setup. Explicit audit then uses:
+
+```text
+/northstar-typescript-audit repository
+/northstar-typescript-audit worktree
+```
+
+Only strict explicit audit is production-valid. Everyday TypeScript authoring,
+older or unresolved framework overlays, Deno-only/source-only roots, deferred
+toolchain/testing rules, slop-only mutation, and certification claims remain
+unavailable.
+
 Retired top-level skills (`northstar-setup`, `northstar-plan`,
 `northstar-recover`, `northstar-research`, `northstar-handoff`) were merged
 into internal **modes** under `skills/northstar/references/modes/`. No
@@ -129,6 +163,7 @@ compatibility aliases.
 | `atlas.md` | User-guided long-horizon direction and a coarse strategic runway |
 | `rust-quality-authoring.md` | Self-activating ordinary Rust writing, review, or refactoring |
 | `rust-quality-audit.md` | Explicit Rust worktree or repository audit-and-repair |
+| `typescript-quality-audit.md` | Explicit TypeScript/Svelte worktree or repository audit-and-repair |
 
 Setup references live under `skills/northstar/references/setup/`.
 Templates live under `skills/northstar/assets/templates/`.
@@ -148,6 +183,9 @@ Templates live under `skills/northstar/assets/templates/`.
   audit-and-fix request. It loads the audit projection and deterministic record
   contract on demand, resolves worktree or repository scope, and cannot
   activate from ordinary coding.
+- **TypeScript/Svelte explicit audit:** only for an explicit quality audit,
+  no-slop pass, or audit-and-fix request. It resolves package-local overlays and
+  cannot activate from ordinary coding; no everyday TypeScript projection ships.
 - **Triage:** orchestrator and refresh conversations capture unresolved useful
   threads in `docs/triage/YYYYMMDD-HHMMSS-<slug>.md`; cleanup and refresh promote,
   merge, or remove them over time.

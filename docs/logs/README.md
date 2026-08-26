@@ -67,3 +67,15 @@ Use logs as the third step in closeout:
 - `2026-08/25-184420-pause-rust-production-evidence-on-authority.md`
 - `2026-08/25-185548-correct-rust-foreign-error-authority.md`
 - `2026-08/26-083100-run-rust-quality-production-evidence.md`
+- `2026-08/26-111421-seed-typescript-quality-research.md`
+- `2026-08/26-153133-promote-typescript-audit-planning.md`
+- `2026-08/26-153445-prove-typescript-audit-production-boundary.md`
+- `2026-08/26-154530-promote-typescript-audit-catalogue.md`
+- `2026-08/26-160119-add-typescript-explicit-audit.md`
+- `2026-08/26-163706-halt-typescript-production-evidence.md`
+- `2026-08/26-165801-halt-typescript-production-evidence-o.md`
+- `2026-08/26-173000-halt-typescript-production-evidence-p.md`
+- `2026-08/26-173152-halt-typescript-production-evidence-q.md`
+- `2026-08/26-174510-halt-typescript-production-evidence-r.md`
+- `2026-08/26-181000-pass-typescript-production-evidence-s.md`
+- `2026-08/26-184827-promote-and-distribute-typescript-audit.md`

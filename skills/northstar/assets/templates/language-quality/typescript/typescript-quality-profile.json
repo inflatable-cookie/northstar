@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0.0",
+  "language": "typescript",
+  "workflow": "explicit_audit_repair",
+  "profile": "strict",
+  "packages": [],
+  "unregistered_candidates": [],
+  "evidence_selectors": {
+    "compiler": [],
+    "framework": [],
+    "lint": [],
+    "test": []
+  },
+  "exclusions": {
+    "generated": [],
+    "vendored": [],
+    "fixtures": [],
+    "documentation": [],
+    "build_output": []
+  },
+  "deviations_file": "docs/contracts/typescript-quality-deviations.json",
+  "when_unresolved": "stop"
+}

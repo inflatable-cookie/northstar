@@ -18,7 +18,7 @@ single-pilot bucket.
 | Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | pending |
 | Add a genuinely long-horizon planning route without conflating it with readiness review. | active | `docs/specs/029-northstar-long-horizon-planning.md`, `skills/northstar/references/modes/atlas.md` | Non-Northstar scenario and operator confirmation |
 | Preserve useful conversational context and keep `/docs` drift recoverable without blind deletion. | active | `docs/specs/030-conversational-triage-and-docs-cleanup.md`, `docs/contracts/001-working-rules.md`, `skills/northstar/references/modes/cleanup-docs.md` | live triage and cleanup feedback |
-| Raise language-code quality through compact everyday guidance and an explicit evidence-bound audit without creating a second standard or installable skill. | complete | `docs/contracts/004-language-quality-pack.md`, `docs/specs/031-rust-quality-authoring-and-audit.md` | operator-provided live-use feedback |
+| Raise language-code quality through evidence-bound routed workflows without creating a second standard or installable skill. | active | `docs/contracts/004-language-quality-pack.md`, `docs/specs/031-rust-quality-authoring-and-audit.md`, `docs/specs/032-typescript-svelte-explicit-audit.md` | operator-provided live-use feedback |
 
 Update this runway only when generation-level intent changes, a milestone
 materially advances or closes a goal, or rollover is being considered. Do not
@@ -67,6 +67,8 @@ rollover signal.
 - `030-ship-rust-quality-authoring-and-audit.md` (complete; cards 083-088,
   production evidence, agent-owned activation, published install, and 76-file
   parity proven)
+- `031-ship-typescript-svelte-explicit-audit.md` (complete; cards 089-093,
+  revision-S evidence, 93-file parity, and everyday workflow unavailable)
 
 ## Next Task
 
@@ -85,5 +87,10 @@ operator's external dogfooding.
 The Rust quality implementation lane `g02.030` is complete. Triage, Atlas,
 instruction-surface feedback, and Rust live-use feedback remain
 independent operator-owned follow-ups.
+`g02.031` is complete. Revision S passed `3/3` production subjects and blind reviewers:
+`30/30` primary findings, `96/96` review dimensions, and `24/24` accepted
+repairs. Card 093 distributed the exact payload with 93-file source/install
+parity. Everyday TypeScript remains unavailable; accept operator-provided
+live-use feedback without dispatching a consumer audit.
 
 Batch cards live in `g02/batch-cards/` when strict posture uses them.

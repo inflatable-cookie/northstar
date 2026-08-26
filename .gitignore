@@ -8,3 +8,6 @@
 
 # Rust/Cargo compiler output
 target/
+
+# Prototype JavaScript dependencies
+node_modules/

@@ -4,6 +4,15 @@
 then open only that mode file under `references/modes/` (plus mode-specific
 refs under `references/setup/` or `references/handoff-contract.md`).
 
+## TypeScript/Svelte explicit audit-and-repair (explicit only)
+
+Use only when the operator explicitly requests a TypeScript or Svelte quality
+audit, no-slop pass, whole-codebase review, or audit-and-fix action. Resolve
+`worktree` or `repository` scope and package-local Svelte overlays. It never
+activates from ordinary TypeScript or Svelte coding.
+
+→ [`modes/typescript-quality-audit.md`](./modes/typescript-quality-audit.md)
+
 ## Rust explicit audit-and-repair (explicit only)
 
 Use only when the operator explicitly requests a Rust quality audit, no-slop

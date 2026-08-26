@@ -28,3 +28,7 @@ repository activation and passes 76-file source/install parity.
 `g02.026/078` remains ready but deferred until operator-provided live feedback
 supplies evidence for the starter surfaces. Northstar does not dispatch the
 consumer run.
+`g02.031/089-093` are complete. Revision S passed `3/3` production subjects and
+blind reviewers after revisions N-R halted unscored. Card 093 distributed the
+exact payload with 93-file parity. The lane is closed; accept operator-provided
+live-use feedback without dispatching a consumer audit.

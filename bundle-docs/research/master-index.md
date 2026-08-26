@@ -1,7 +1,7 @@
 # Northstar Active Systems Research - Master Index
 
 Status: Active
-Last Updated: 2026-08-25
+Last Updated: 2026-08-26
 
 ## Research Overview
 
@@ -51,6 +51,7 @@ Project-facing recommendations:
 - [Agent Instruction Surface Optimization](translation-memos/agent-instruction-surface-optimization.md) - Evidence-backed rules for compact always-loaded agent instructions
 - [Matt Pocock Skills Audit To Northstar](translation-memos/matt-pocock-skills-audit-to-northstar.md) - Translation of external skill-design evidence into Northstar constraints
 - [Rust Quality Authoring And Audit](translation-memos/rust-quality-skills-and-audit.md) - Source-backed two-track Rust quality model
+- [TypeScript Quality And Svelte Overlay](translation-memos/typescript-quality-and-svelte-overlay.md) - Source-backed TypeScript pack with conditional Svelte and SvelteKit rules
 
 ### Specifications
 Technical specifications for tools and formats:
@@ -60,6 +61,7 @@ Technical specifications for tools and formats:
 ### Prototypes
 
 - [Rust Quality Prototype](prototypes/rust-quality/README.md) - Seven-rule shared catalogue, ten-case seed corpus, generated workflow views, and executable scorer
+- [TypeScript Quality Prototype](prototypes/typescript-quality/README.md) - Thirteen-rule research catalogue with TypeScript, Svelte, and SvelteKit benchmark seeds
 
 ## Quick Answers
 
@@ -93,6 +95,12 @@ independent of workflow choice.
 
 See the [Rust quality translation memo](translation-memos/rust-quality-skills-and-audit.md).
 
+For TypeScript, keep Svelte and SvelteKit as conditional overlays in the same
+catalogue and audit. Route them by dependency, version, package, and file
+ownership. Do not duplicate the base TypeScript standard in a separate skill.
+
+See the [TypeScript and Svelte translation memo](translation-memos/typescript-quality-and-svelte-overlay.md).
+
 ## Release and changelog research status
 
 | Phase | Status | Notes |
@@ -114,6 +122,17 @@ See the [Rust quality translation memo](translation-memos/rust-quality-skills-an
 | Benchmark | Required tracks eligible | Production K makes explicit audit eligible at `3/3`; production M makes everyday authoring eligible at `3/3` with frozen churn and blind-review gates |
 | Contract | Complete | Six normative rules promoted; strict selected; `004-language-quality-pack` active |
 | Implementation | Complete | `g02.030/083-088` proved the boundary, production foundation, routed workflows, both production tracks, and exact published-install parity |
+
+## TypeScript quality research status
+
+| Phase | Status | Notes |
+| --- | --- | --- |
+| Source gathering | Initial complete | TypeScript, typed linting, Oxlint, anti-slop, NASA, Svelte, and SvelteKit sources reviewed |
+| Translation memo | Seed ready | One TypeScript pack with conditional Svelte and SvelteKit overlays recommended |
+| Rule prototype | Promoted subset | Nine source-local rules are normative for explicit audit; one slop signal is evaluation-only; three package-context candidates remain research-only |
+| Benchmark | Explicit audit eligible; everyday authoring ineligible | Three repair pairs passed 27/27 claims, 96/96 review dimensions, and 24/24 accept decisions; authoring revision 2 stopped after two overall guided losses |
+| Contract | Explicit audit promoted | Contract 004 owns nine strict source-local rules plus one evaluation-only signal; everyday, toolchain, and testing remain unavailable |
+| Implementation | Distributed | Revision S passed `3/3` copied-payload subjects and blind reviewers; card 093 distributed the exact payload with 93-file source/install parity |
 
 ## Handoff to Implementation
 
@@ -153,6 +172,8 @@ When synthesizing:
 4. What's the minimum viable implementation to validate the boundary?
 5. Which Rust rules improve benchmark code without noisy rewrites?
 6. Which rules belong in ordinary, strict, and high-assurance profiles?
+7. Which TypeScript rules improve human review outcomes without type-lint noise?
+8. How should mixed TypeScript, Svelte, and SvelteKit packages resolve overlays at monorepo scale?
 
 ## Next Tasks
 
@@ -164,3 +185,8 @@ See the [translation memo](translation-memos/northstar-effigy-boundary.md) for r
 For Rust quality, collect operator-provided live-use feedback. Observable
 compaction remains a separate evidence gap; Northstar does not dispatch a
 consumer run.
+
+For TypeScript quality, accept operator-provided live-use feedback. The
+explicit-only route is distributed; everyday authoring remains unavailable.
+Treat package-backed toolchain/test evidence as a separate later research lane.
+Northstar does not dispatch a consumer audit.

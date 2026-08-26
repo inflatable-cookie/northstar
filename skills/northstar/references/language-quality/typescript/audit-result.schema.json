@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://northstar.invalid/schemas/typescript-quality-audit-result.v1.json",
+  "title": "Northstar TypeScript quality audit result",
+  "type": "object",
+  "required": ["schema_version", "audit_id", "workflow", "profile", "scope", "catalogue_sha256", "units", "findings", "repairs", "deviations", "changed_scope", "validation", "preservation", "remaining_limitations"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "audit_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "workflow": { "const": "explicit_audit_repair" },
+    "profile": { "const": "strict" },
+    "scope": { "enum": ["worktree", "repository"] },
+    "catalogue_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "units": { "type": "array", "minItems": 1, "items": { "type": "object" } },
+    "findings": { "type": "array", "items": { "type": "object" } },
+    "repairs": { "type": "array", "items": { "type": "object" } },
+    "deviations": { "type": "array", "items": { "$ref": "#/$defs/deviation" } },
+    "changed_scope": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/relativePath" } },
+    "validation": { "type": "array", "items": { "type": "object" } },
+    "preservation": { "$ref": "#/$defs/preservation" },
+    "remaining_limitations": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "fingerprint": { "type": "string", "pattern": "^(?:[a-f0-9]{64}|missing)$" },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "preservedFile": {
+      "type": "object",
+      "required": ["file", "initial_fingerprint", "final_fingerprint"],
+      "properties": {
+        "file": { "$ref": "#/$defs/relativePath" },
+        "initial_fingerprint": { "$ref": "#/$defs/fingerprint" },
+        "final_fingerprint": { "$ref": "#/$defs/fingerprint" }
+      },
+      "additionalProperties": false
+    },
+    "preservation": {
+      "type": "object",
+      "required": ["verified", "unrelated_dirty_files", "scope_extensions"],
+      "properties": {
+        "verified": { "const": true },
+        "unrelated_dirty_files": { "type": "array", "items": { "$ref": "#/$defs/preservedFile" } },
+        "scope_extensions": { "type": "array", "items": { "type": "object" } }
+      },
+      "additionalProperties": false
+    },
+    "deviation": {
+      "type": "object",
+      "required": ["rule_id", "scope", "reason", "evidence", "accepted_by", "recheck"],
+      "properties": {
+        "rule_id": { "type": "string", "pattern": "^(TS|SVELTE)-[A-Z]+-[0-9]{3}$" },
+        "scope": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/relativePath" } },
+        "reason": { "type": "string", "minLength": 1 },
+        "evidence": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "accepted_by": { "type": "string", "minLength": 1 },
+        "recheck": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    }
+  }
+}

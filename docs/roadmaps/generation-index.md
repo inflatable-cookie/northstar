@@ -76,8 +76,7 @@ sequence.
 
 ## Next Task
 
-The prior statement `No blocking roadmap milestone is open` is superseded by
-the contract-backed Rust quality lane below.
+No blocking roadmap milestone is open.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed
@@ -87,3 +86,7 @@ with agent-owned activation.
 instruction-surface, Atlas, triage/cleanup, and Rust live-use measurements
 require operator-provided evidence. Northstar does not select or dispatch those
 consumer runs.
+`g02.031` is complete. Cards `g02.031/089-093` distributed the explicit-only
+TypeScript/Svelte audit with revision-S production evidence and 93-file
+source/install parity. Everyday TypeScript remains unavailable. Accept
+operator-provided live-use feedback; do not dispatch a consumer audit.

@@ -42,12 +42,17 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02.030` is complete; revisions K and M provide valid 3/3 production
   evidence for explicit audit and everyday authoring, and card 088 proves
   agent-owned activation and published 76-file source/install parity.
+- `g02.031` is complete; cards 089-093 froze the boundary, promoted and
+  implemented the explicit route, passed revision-S production evidence, and
+  distributed the exact 93-file payload:
+  `30/30` primary findings, `96/96` blind dimensions, and `24/24` accepted
+  repairs.
+  Everyday TypeScript authoring remains unavailable.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-No Northstar-owned Rust implementation card remains. Triage, Atlas,
-optimized-instruction feedback, and Rust live-use feedback are separate
-operator-owned follow-ups; Northstar does not select or dispatch those runs.
+The TypeScript/Svelte implementation lane is complete. Accept operator-provided
+live-use feedback; Northstar does not dispatch consumer audits.

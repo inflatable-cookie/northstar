@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-08-25
+Updated: 2026-08-26
 Vision refs: docs/vision/001-northstar-delivery-vision.md
 
 ## Top-Level Stack
@@ -72,6 +72,74 @@ Compiler, lint, test, analysis, and benchmark results are evidence. They do not
 prove architecture quality, certify a system, or turn a coding skill into a
 safety case.
 
+### Conditional framework overlays
+
+A language pack may project conditional framework rules from the same catalogue
+and workflows. Repository dependencies and configuration identify candidates;
+framework version plus an owned semantic surface resolve applicability.
+Dependency presence alone does not activate an application overlay. Root and
+declared-workspace ownership keep ancestor configs out of fixtures,
+documentation examples, generated output, and vendored resources. The everyday
+route loads only the base projection plus the overlay needed by the current
+path. Explicit audit resolves all applicable overlays once and reports them
+with scope. Overlays do not get parallel standards, profiles, or top-level audit
+commands.
+
+TypeScript is the second production pack. Svelte belongs inside it as a
+framework overlay; SvelteKit is a narrower sub-overlay for routes, server state,
+load functions, and server/client import boundaries. A future visual-design or
+copy-quality system would be a separate concern, not a Svelte coding overlay.
+
+Its first production lane is explicit audit only. Nine source-local rules have
+replicated research repair evidence; one slop signal remains evaluation-only.
+Everyday authoring failed its no-regression gate and is unavailable. Toolchain
+and testing rules remain unpromoted pending package-backed evidence. This split
+does not create a second catalogue or command family: the existing Northstar
+skill router loads TypeScript detail only after explicit audit intent, then
+resolves Svelte and SvelteKit overlays by owning package, version, and path.
+
+The production boundary must remain consumer-runtime-neutral. Northstar may use
+its skill-local Effigy/Rhai substrate for setup, recording, and deterministic
+checks, while repository-owned TypeScript, framework, lint, and test selectors
+remain external evidence. The pack must not require Bun, Node, npm, pnpm, or a
+Northstar source checkout merely to resolve scope and record an audit.
+
+### TypeScript explicit-audit production boundary
+
+Card `g02.031/089` selects a TypeScript-specific Effigy/Rhai implementation at
+minimum Effigy `0.8.4`. It preserves the Rust recorder's finding-first,
+case-local lifecycle without extracting a shared core from the stable Rust
+implementation. Production surfaces are frozen as:
+
+| Surface | Canonical path |
+| --- | --- |
+| catalogue, schemas, and strict audit projection | `skills/northstar/references/language-quality/typescript/` |
+| explicit audit mode | `skills/northstar/references/modes/typescript-quality-audit.md` |
+| setup, recorder, and package check | `skills/northstar/scripts/typescript-quality-setup.rhai`, `typescript-quality-recorder.rhai`, `check-typescript-quality.rhai` |
+| thin explicit adapter | `skills/northstar/commands/northstar-typescript-audit/SKILL.md` |
+| copy-ready activation and profile templates | `skills/northstar/assets/templates/language-quality/typescript/` |
+
+The consumer profile and deviations live at
+`docs/contracts/typescript-quality-profile.json` and
+`docs/contracts/typescript-quality-deviations.json`; evidence lives below
+`.effigy/typescript-quality/audits/<audit-id>/`. A root package owns itself and
+declared workspaces while reporting other nested manifests. Without a root
+package, discovered subpackage manifests are independent owning roots. This
+supports mixed repositories without assuming TypeScript lives at the root.
+
+The initial boundary supports package-json ownership, Svelte 5, and SvelteKit
+2. Deno-only/source-only roots and older or unresolved framework overlays remain
+unsupported or degraded rather than silently misclassified. Repository-owned
+compiler, framework, lint, and test routes are recorded as separate evidence
+classes; unavailable routing or startup is not a source pass.
+
+Revision S passed three copied-payload subjects and blind reviewers with
+`30/30` primary findings, `96/96` review dimensions, and `24/24` accepted
+repairs. The frozen payload is distributed inside the single 93-file Northstar
+install with exact source parity. Its minimal installed Effigy catalogue exposes
+only package checks, setup, recorder self-tests, recorders, and the shared
+agent-instruction check; it does not expose Northstar's source QA board.
+
 ### Rust production boundary
 
 Rust quality ships inside the existing `skills/northstar/` artifact. It does
@@ -108,8 +176,9 @@ unsettled policy instead of guessing a version. Case-local evidence lives under
 `<target>/.effigy/rust-quality/audits/<audit-id>/`; aggregate results derive
 from those records rather than agent-written summary state.
 
-The published `northstar` install contains this full boundary as one 76-file
-artifact. Its minimal Effigy catalogue exposes only
+The Rust boundary was first distributed in a 76-file `northstar` artifact and
+remains unchanged inside the current 93-file combined install. Its minimal
+Effigy catalogue exposes
 `northstar/check:agent-instructions`, `northstar/check:rust-quality`,
 `northstar/rust-quality:setup`, `northstar/test:rust-quality-setup`,
 `northstar/test:rust-quality-recorder`, and `northstar/rust-quality:record`.

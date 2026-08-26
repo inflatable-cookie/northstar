@@ -7,6 +7,75 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 
 <!-- Keep entries short. Append newest entries at the top. Do not include secrets. -->
 
+- **2026-08-26 — skill-creator validator lacks executable mode:** the documented
+  direct `quick_validate.py` invocation returned permission denied even though
+  the script is readable and works through `python3`; impact is a misleading
+  validation failure during skill distribution; plausible fix is to ship the
+  script executable or document interpreter invocation; affected surface is
+  the system `skill-creator` package.
+
+- **2026-08-26 — production qualifier created generated output before its
+  discovery snapshot:** the TypeScript audit self-test wrote
+  `subject-notes.md` before recorder initialization while the live subject
+  created it afterward; impact was a false-green qualifier and a wasted
+  576-second frozen replicate, followed by the inverse mismatch when the live
+  subject created the note first; fixed in revision S by qualifying both valid
+  orderings and treating the note as optional scope but mandatory final output;
+  affected surfaces are the production answer key, preparer, verifier, and
+  deterministic harness.
+
+- **2026-08-26 — exact rule-label recall penalized equivalent defect repair:**
+  two isolated production audits made the same parser correction, but one used
+  boundary plus readability labels and the other used boundary alone; impact
+  was a second 467-second frozen cohort halt despite full physical defect
+  coverage; plausible fix is exact primary-defect recall with a bounded valid
+  corroborating-label set; affected surfaces are overlapping partially
+  decidable rules and production evidence scoring.
+
+- **2026-08-26 — single-rule fixture labels hid valid cross-rule findings:** a
+  production whole-repository audit correctly applied boundary and readability
+  rules to an error-labelled parser fixture, but the exact precision oracle
+  allowed only the error rule; impact was a 589-second frozen cohort failure
+  after otherwise valid work; plausible fix is a cross-rule answer-key review
+  over every defective and clean case before freeze; affected surfaces are
+  multi-rule audit benchmarks and exact precision gates.
+
+- **2026-08-26 — trial oracles enforced unstated implementation choices:** early
+  TypeScript trials required a TCP port range, input identity, and exact
+  `aria-label` markup that their subject contracts did not state; the authoring
+  oracle also confused rule signals with mechanical behavior; impact was three
+  false trial failures after valid work; fixed locally by aligning contracts,
+  separating behavior gates from comparison signals, and binding verifier
+  hashes; plausible systemic fix is a contract-to-oracle coverage check before
+  launch; affected surfaces are protected-behaviour and paired authoring trials.
+
+- **2026-08-26 — Bun frozen install succeeds without an existing lock:** the
+  TypeScript repair corpus ran `bun install --frozen-lockfile` before its first
+  lock existed; Bun installed dependencies successfully but wrote no lock;
+  impact is a plausible false reproducibility claim; plausible fix is to require
+  lock presence before frozen installation and use an explicit lock-generation
+  step for a new fixture; affected surfaces are TypeScript benchmark setup and
+  future dependency-backed evidence packets.
+
+- **2026-08-26 — nested container task fails from its documented package cwd:**
+  Acowtancy's `cattle-grid/check` failed as local `effigy check` because the
+  nested catalog declares `run_in = "container"` without its own target, while
+  root-qualified selector passed through workspace ownership; built-in nested
+  test routes then ran host-side and bypassed that container declaration;
+  impact is false tooling failure and brittle language-pack evidence;
+  plausible fix is to make nested catalogs inherit the owning workspace target
+  for both named and built-in selectors, or expose one authoritative
+  root-qualified route; affected surfaces are Effigy nested catalog routing
+  and mixed-workspace audit discovery.
+
+- **2026-08-26 — research route names a missing playbook:** the Northstar
+  research mode requires `docs/research/research-to-implementation-playbook.md`,
+  but neither that path nor a bundle-docs equivalent exists in the source repo;
+  impact is a failed required read and ambiguity about the promotion workflow;
+  plausible fix is to add the canonical playbook or update the mode to the
+  actual authority; affected surfaces are the research mode and research front
+  doors.
+
 - **2026-08-25 — skill description budget is enforced only at closeout:** the
   Rust activation text passed skill validation but failed the later command
   surface check because the main description exceeded 60 characters; impact is

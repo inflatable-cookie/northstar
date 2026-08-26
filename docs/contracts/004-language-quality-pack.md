@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-08-25
+Updated: 2026-08-26
 Depends on: `docs/contracts/001-working-rules.md`,
 `docs/contracts/003-agent-instruction-surface.md`
 Affects: language-quality catalogues, scoped authoring skills, explicit audit
@@ -19,7 +19,9 @@ preference from becoming unsupervised rewrite authority.
 
 The first pack is Rust. Its initial production-valid profile is `strict`.
 Ordinary and high-assurance profiles remain modelled catalogue inputs, not
-validated production claims.
+validated production claims. The initial TypeScript catalogue is also strict,
+but only its explicit audit-and-repair workflow is eligible for production
+implementation. TypeScript everyday authoring remains unavailable.
 
 ## Stable workflow names and triggers
 
@@ -36,6 +38,11 @@ The two contract-level workflow names are:
 A product may expose a thin command adapter, but command spelling is an
 implementation detail. It must route to these workflows without creating a
 third standard or making explicit audit implicit.
+
+Workflow availability is evidence-gated per language pack. A pack may validate
+and expose one workflow while the other remains unavailable; it must report
+that split plainly and must not synthesize the unavailable projection from the
+shared catalogue. The initial TypeScript pack follows this partial boundary.
 
 ## One catalogue, projected views
 
@@ -66,6 +73,40 @@ Enforcement levels mean:
 Lifecycle maturity and enforcement are separate. Only approved normative
 rules may fail a production workflow. Prototype or experimental records may
 contribute evaluation-only candidates.
+
+## Conditional framework overlays
+
+A language pack may contain framework overlays when framework semantics add
+rules to the owning language. An overlay stays in the same versioned catalogue
+or a mechanically checked catalogue extension. It uses the same profile,
+finding, authority, deviation, evidence, and workflow contracts as the base
+language. It does not create a separate top-level skill or audit command unless
+its lifecycle and authority genuinely differ.
+
+Activation is evidence-based and scoped. Repository-owned signals identify the
+framework and version; file and package ownership identify where its rules
+apply. Dependency presence alone is insufficient for an application overlay:
+an owned semantic surface such as framework source, routes, hooks, or server
+modules must also establish applicability. Root or declared-workspace ownership
+must prevent ancestor configs from leaking rules into fixtures, documentation
+examples, generated output, or vendored resources. Unregistered nested packages
+are reported for policy resolution, not silently included or discarded.
+
+An overlay may tighten a base rule or add a framework concern, but it must not
+silently replace or weaken an applicable base mandatory rule. Framework presets
+and third-party detectors are evidence inputs, not catalogue authority.
+
+The repository owns framework-version policy. A pack must distinguish versions
+whose semantics differ and must not force a migration to make a rule apply.
+Adding or upgrading a framework, compiler, runtime, module mode, or strictness
+policy requires operator authority unless the repository has already recorded
+that decision.
+
+The TypeScript pack follows this shape: Svelte is a conditional
+TypeScript overlay and SvelteKit is its narrower server/application overlay.
+Visual-design or copy-quality standards are outside this coding-quality
+boundary. Overlay activation remains package- and path-scoped even though the
+initial production workflow is explicit audit only.
 
 ## Initial Rust strict catalogue
 
@@ -102,11 +143,55 @@ report-only. This contract does not activate high-assurance unsafe repair.
 The Rust 1.95 benchmark floor is evidence infrastructure, not a Northstar MSRV.
 The consumer repository owns its declared compiler floor.
 
+## Initial TypeScript strict explicit-audit catalogue
+
+The first promoted TypeScript catalogue contains nine normative rules and one
+experimental input. It is valid only for explicit audit-and-repair:
+
+| Rule | Overlay | Strict level | Default remediation authority |
+| --- | --- | --- | --- |
+| `TS-READ-001` | base | required | `review_required` |
+| `TS-EVIDENCE-001` | base | mandatory | `review_required` |
+| `TS-BOUNDARY-001` | base | mandatory | `review_required` |
+| `TS-ASYNC-001` | base | mandatory | `review_required` |
+| `TS-ERR-001` | base | required | `review_required` |
+| `TS-ARCH-001` | base | required | `review_required` |
+| `SVELTE-REACT-001` | Svelte | required | `review_required` |
+| `SVELTE-A11Y-001` | Svelte | mandatory | `review_required` |
+| `SVELTE-SSR-001` | SvelteKit | mandatory | `review_required` |
+| `TS-SLOP-001` | base | evaluation only | `report_only` |
+
+`TS-SLOP-001` never authorizes mutation. It may corroborate an independently
+actionable normative finding but cannot fail an audit by itself. Production
+evidence records its candidate identity and count as measurement only; no
+expected candidate count is a conformance gate. Unknown evaluation rules and
+mutation justified only by an evaluation signal remain invalid.
+
+Repository-scope evidence distinguishes discovery-time inputs, generated audit
+outputs, and tool runtime state. Every discovered input needs exact unit
+ownership. A generated required output may be included when it exists at
+recorder initialization, but its creation order cannot decide conformance.
+Finalized audit records remain evidence; disposable graph and diagnostic-report
+state does not enter the consumer file-set claim.
+
+`TS-TOOLCHAIN-001`, `TS-TEST-001`, and `SVELTE-TEST-001` remain research
+candidates. Source-only review could not determine them without owning package,
+runtime, and test context. Production catalogues and projections must omit them
+until package-backed evidence earns separate promotion.
+
+The research cohort validates finding precision and bounded repair for the nine
+normative source-local rules. Revision S separately validates the copied
+production payload across three isolated subjects and blind reviewers. Exact
+93-file source/install parity validates distribution of that payload. Neither
+cohort validates everyday authoring, package-manager portability, or the
+deferred toolchain and testing rules.
+
 ## Profile resolution
 
-The consumer repository owns its selected profile. The initial Rust pack
-exposes only `strict` as production-valid, so activation must resolve visibly
-to `strict` or stop on an unsupported selection. It must not silently downgrade
+The consumer repository owns its selected profile. The initial Rust pack and
+TypeScript explicit-audit pack expose only `strict` as production-valid, so
+activation must resolve visibly to `strict` or stop on an unsupported
+selection. It must not silently downgrade
 to ordinary, upgrade to high assurance, or infer a different profile from the
 workflow.
 
@@ -118,15 +203,19 @@ wording or more lints is insufficient.
 ## Agent-owned activation
 
 Repository activation is part of the installed language pack, not a manual
-operator installation procedure. When Northstar is requested for Rust work and
-the scoped instruction block, profile, or deviations file is missing, the agent
-runs the skill-local setup task before editing or auditing code.
+operator installation procedure. When Northstar is requested for in-scope
+language work and the scoped instruction block, profile, or deviations file is
+missing, the agent runs that pack's skill-local setup task before editing or
+auditing code.
 
-Setup must be deterministic and idempotent. It discovers Cargo manifests and
-explicit toolchain files, appends a marked compact activation block without
-overwriting existing instructions, creates only missing contract files, and
-preserves an existing valid profile or deviations file byte-for-byte. It fails
-closed on conflicting or malformed existing setup.
+Setup must be deterministic and idempotent. It discovers language packages,
+framework overlays, and explicit toolchain files, appends a marked compact
+activation block at the narrowest owning scope without overwriting existing
+instructions, creates only missing contract files, and preserves an existing
+valid profile or deviations file byte-for-byte. It fails closed on conflicting
+or malformed existing setup. The Rust implementation discovers Cargo manifests
+and explicit Rust toolchain files; later packs need equivalent evidence for
+their ecosystems rather than assuming source lives at repository root.
 
 Automation does not transfer repository policy ownership to Northstar. The
 agent asks the operator only when policy cannot be recovered from the
@@ -166,6 +255,13 @@ because the repository contains more Rust.
 Explicit audit first resolves scope and snapshots existing dirty state. It then
 runs distinct correctness and assurance, architecture, and human-quality
 passes. Mechanical tools provide evidence; they do not replace source review.
+
+Mechanical evidence records the owning selector, actual execution environment,
+exit status, warnings, and startup or collection failures. A zero exit status
+with applicable warnings is not clean evidence. A routing, configuration, or
+runner-startup failure is unavailable evidence, not a source pass or source
+failure. Compiler, framework checker, lint, and tests remain distinct evidence
+classes; one does not silently substitute for another.
 
 Findings are recorded before mutation. Repair proceeds in coherent, reviewable
 waves. Each wave stays within the finding's authority, preserves protected
@@ -223,8 +319,31 @@ hash, findings and dispositions, deviations, changed scope, repository-native
 validation, and remaining limitations. Explicit audit also reports scope
 widening, preservation, and repair waves.
 
+Candidate promotion evidence keeps subject, coordinator answer key, and blind
+reviewer surfaces separate through enforced filesystem, container, or remote
+workspace isolation. A fresh context governed only by instructions is useful
+rehearsal, not independent evidence. Reviewers do not score their own work or
+see track identity, rule IDs, expected dispositions, references, or prior
+scores before returning their review.
+
+Finding precision and repair quality are separate gates. A finding may enter
+independent disposition from an isolated source specimen. A repair trial also
+requires explicit protected behaviour, sufficient package or framework
+context, repository-owned validation, bounded change scope, recorded authority,
+and a blind baseline-versus-repair review. A cosmetic snippet rewrite without
+those conditions is not repair evidence.
+
+Production audit scoring is defect-first when approved partially decidable
+rules overlap. The frozen answer key names required primary rule/file findings
+and may name optional same-file corroborating rules with explicit primary
+prerequisites. A pass requires every primary finding, rejects every finding
+outside those two sets, and never allows corroboration to replace primary
+recall, widen repair authority, or weaken locality and preservation gates.
+
 The initial Rust evidence validates strict everyday authoring and strict
-explicit audit separately. It does not validate the combined workflow as the
+explicit audit separately. TypeScript revision S validates only the nine-rule
+strict explicit repair surface, and the 93-file install matches that evidenced
+payload. Neither evidence set validates the combined workflow as the
 default, observable context-compaction resilience, ordinary or high-assurance
 activation, certification, NASA compliance, a safety-integrity level, or a
 safety case.

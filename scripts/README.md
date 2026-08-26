@@ -68,6 +68,17 @@ effigy --repo /path/to/installed/northstar \
 `northstar/test:rust-quality-setup` proves install, preservation, repeat-run
 idempotency, and fail-closed conflicts on disposable repositories.
 
+TypeScript/Svelte explicit-audit activation uses the same agent-owned boundary:
+
+```bash
+effigy --repo /path/to/installed/northstar \
+  northstar/typescript-quality:setup apply /absolute/path/to/project [scope-directory]
+```
+
+`northstar/test:typescript-quality-setup` proves rootless nested packages,
+workspace ownership, conditional overlays, preservation, idempotency, and
+fail-closed conflicts. It installs no project dependencies.
+
 ## Repo contract (`qa:docs`)
 
 `check:repo-contract` validates required Northstar surfaces and the installable
@@ -78,13 +89,14 @@ inside that folder; escaping or missing targets fail QA.
 
 Run `effigy check:command-skills` directly or through `effigy qa:docs`.
 
-The command-surface checker validates the eight thin adapters under
+The command-surface checker validates the nine thin adapters under
 `skills/northstar/commands/`: their names, description budgets, router and mode
 references and ordering, one-mode wiring, aggregate prompt footprint,
 retired-alias removal, thin-body/procedure guards, authority boundaries, and
 exact adapter count. The set includes `/northstar-cleanup` for safe inspection
-and reworking of `/docs` drift plus `/northstar-rust-audit` for explicit Rust
-audit-and-repair. It is included in `effigy qa:docs`.
+and reworking of `/docs` drift, `/northstar-rust-audit` for explicit Rust audit,
+and explicit-only `/northstar-typescript-audit` for TypeScript/Svelte. It is
+included in `effigy qa:docs`.
 
 ## Readiness-map frontier (`check:readiness-map`)
 

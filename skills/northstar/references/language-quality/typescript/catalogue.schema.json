@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://northstar.invalid/schemas/typescript-quality-rule-catalogue.v1.json",
+  "title": "Northstar TypeScript and Svelte quality rule catalogue",
+  "type": "object",
+  "required": ["schema_version", "language", "workflow", "production_profiles", "supported_overlays", "rules"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "language": { "const": "typescript" },
+    "workflow": { "const": "explicit_audit_repair" },
+    "production_profiles": {
+      "type": "array",
+      "prefixItems": [{ "const": "strict" }],
+      "items": false
+    },
+    "supported_overlays": {
+      "type": "array",
+      "prefixItems": [{ "const": "base" }, { "const": "svelte" }, { "const": "sveltekit" }],
+      "items": false
+    },
+    "rules": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": { "$ref": "#/$defs/rule" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "rule": {
+      "type": "object",
+      "required": [
+        "id", "title", "category", "overlay", "maturity", "decidability",
+        "dimensions", "applicability", "strict_enforcement", "requirement",
+        "rationale", "provenance", "audit_procedure", "mechanical_enforcement",
+        "remediation", "deviation", "completion_evidence"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^(TS|SVELTE)-[A-Z]+-[0-9]{3}$" },
+        "title": { "type": "string", "minLength": 1 },
+        "category": { "type": "string", "minLength": 1 },
+        "overlay": { "enum": ["base", "svelte", "sveltekit"] },
+        "maturity": { "enum": ["approved", "experimental"] },
+        "decidability": { "enum": ["decidable", "partially_decidable", "undecidable"] },
+        "dimensions": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["correctness_assurance", "architecture", "human_quality"] }
+        },
+        "applicability": { "type": "string", "minLength": 1 },
+        "strict_enforcement": { "enum": ["mandatory", "required", "evaluation_only"] },
+        "requirement": { "type": "string", "minLength": 1 },
+        "rationale": { "type": "string", "minLength": 1 },
+        "provenance": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["authority", "maturity", "revision", "url", "upstream_rules"],
+            "properties": {
+              "authority": { "type": "string", "minLength": 1 },
+              "maturity": { "enum": ["official", "independent", "experimental"] },
+              "revision": { "type": "string", "minLength": 1 },
+              "url": { "type": "string", "format": "uri" },
+              "upstream_rules": { "type": "array", "items": { "type": "string" } }
+            },
+            "additionalProperties": false
+          }
+        },
+        "audit_procedure": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "mechanical_enforcement": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["evidence_class", "check", "role", "caveat"],
+            "properties": {
+              "evidence_class": { "enum": ["compiler", "framework", "lint", "test", "source_review"] },
+              "check": { "type": "string", "minLength": 1 },
+              "role": { "enum": ["enforce", "evidence", "candidate"] },
+              "caveat": { "type": "string", "minLength": 1 }
+            },
+            "additionalProperties": false
+          }
+        },
+        "remediation": {
+          "type": "object",
+          "required": ["default_authority", "action_overrides", "guidance"],
+          "properties": {
+            "default_authority": { "enum": ["review_required", "report_only", "operator_decision"] },
+            "action_overrides": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["action", "authority", "reason"],
+                "properties": {
+                  "action": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+                  "authority": { "enum": ["review_required", "report_only", "operator_decision"] },
+                  "reason": { "type": "string", "minLength": 1 }
+                },
+                "additionalProperties": false
+              }
+            },
+            "guidance": { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": false
+        },
+        "deviation": {
+          "type": "object",
+          "required": ["allowed", "required_evidence"],
+          "properties": {
+            "allowed": { "type": "boolean" },
+            "required_evidence": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+          },
+          "additionalProperties": false
+        },
+        "completion_evidence": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": false
+    }
+  }
+}

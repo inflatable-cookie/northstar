@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://northstar.invalid/schemas/typescript-quality-audit-manifest.v1.json",
+  "title": "Northstar TypeScript quality audit manifest",
+  "type": "object",
+  "required": ["schema_version", "audit_id", "workflow", "profile", "scope", "target_root", "catalogue_sha256", "initial_state", "policy_snapshot", "units"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "audit_id": { "$ref": "#/$defs/id" },
+    "workflow": { "const": "explicit_audit_repair" },
+    "profile": { "const": "strict" },
+    "scope": { "enum": ["worktree", "repository"] },
+    "target_root": { "type": "string", "minLength": 1 },
+    "catalogue_sha256": { "$ref": "#/$defs/sha256" },
+    "initial_state": { "$ref": "#/$defs/initialState" },
+    "policy_snapshot": { "$ref": "#/$defs/policySnapshot" },
+    "units": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/unit" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "fingerprint": { "type": "string", "pattern": "^(?:[a-f0-9]{64}|missing)$" },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "dirtyFile": {
+      "type": "object",
+      "required": ["file", "states", "baseline_fingerprint"],
+      "properties": {
+        "file": { "$ref": "#/$defs/relativePath" },
+        "states": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["staged", "unstaged", "untracked"] }
+        },
+        "baseline_fingerprint": { "$ref": "#/$defs/fingerprint" }
+      },
+      "additionalProperties": false
+    },
+    "excludedFile": {
+      "type": "object",
+      "required": ["file", "reason"],
+      "properties": {
+        "file": { "$ref": "#/$defs/relativePath" },
+        "reason": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "initialState": {
+      "type": "object",
+      "required": ["dirty_files", "in_scope_files", "excluded_dirty_files", "scope_evidence"],
+      "properties": {
+        "dirty_files": { "type": "array", "items": { "$ref": "#/$defs/dirtyFile" } },
+        "in_scope_files": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/relativePath" } },
+        "excluded_dirty_files": { "type": "array", "items": { "$ref": "#/$defs/excludedFile" } },
+        "scope_evidence": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": false
+    },
+    "policySnapshot": {
+      "type": "object",
+      "required": ["profile_file", "profile_sha256", "deviations_file", "deviations_sha256", "deviations"],
+      "properties": {
+        "profile_file": { "$ref": "#/$defs/relativePath" },
+        "profile_sha256": { "$ref": "#/$defs/sha256" },
+        "deviations_file": { "$ref": "#/$defs/relativePath" },
+        "deviations_sha256": { "$ref": "#/$defs/sha256" },
+        "deviations": { "type": "array", "items": { "type": "object" } }
+      },
+      "additionalProperties": false
+    },
+    "unit": {
+      "type": "object",
+      "required": ["unit_id", "primary_file", "owned_files", "baseline_sha256"],
+      "properties": {
+        "unit_id": { "$ref": "#/$defs/id" },
+        "primary_file": { "$ref": "#/$defs/relativePath" },
+        "owned_files": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/relativePath" }
+        },
+        "baseline_sha256": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "$ref": "#/$defs/fingerprint" }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
+

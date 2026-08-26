@@ -18,7 +18,7 @@ Updated: 2026-08-26
 | `001-working-rules` | compact delivery grammar, papercuts feedback loop, triage capture/cleanup, done-ness, guardrail pack, spec-hygiene rule, currentness-surface rules, autonomy rules, orchestrator/worker boundary, worktree isolation, PR review and merge gates, and the live ready-state/closeout rules for the repo | `docs/`, `bundle-docs/`, `template-bundle/`, `skills/`, `scripts/` | `g01.001` through `g02.029` where directly applicable | active |
 | `002-agent-local-paths` | ignored path registry, manual worktree container selection, harness-vs-manual ownership, and nested-agent stop boundary | `AGENTS.md`, `docs/contracts/`, `template-bundle/`, `skills/`, `docs/handoffs/` | orchestrator/worker launches and any manual worktree lane | active |
 | `003-agent-instruction-surface` | always-loaded versus scoped/on-demand instruction content, root-file review budget, precedence, and read-only audit boundary | `AGENTS.md`, `docs/contracts/`, `template-bundle/`, `skills/`, `scripts/` | `g02.027` and future consumer adoption | active |
-| `004-language-quality-pack` | shared language-rule catalogue, everyday and explicit-audit workflows, scope resolution, remediation authority, assurance profiles, deviations, and completion evidence | `docs/contracts/`, language-quality catalogues, `skills/`, Effigy selectors, consumer profiles | `g02.030` (complete) | active |
+| `004-language-quality-pack` | shared language-rule catalogue, conditional framework overlays, independently gated everyday and explicit-audit workflows, scope resolution, remediation authority, assurance profiles, deviations, and completion evidence | `docs/contracts/`, language-quality catalogues, `skills/`, Effigy selectors, consumer profiles | `g02.030` (complete), `g02.031` (complete) | active |
 
 ## Roadmap Readiness
 
@@ -33,3 +33,9 @@ have passed. Roadmap `g02.030` is complete through card 088; production
 revisions K and M pass both required tracks and the 76-file published install
 matches source. Northstar consumes live consumer feedback
 supplied by the operator rather than selecting or dispatching a dogfood target.
+TypeScript/Svelte explicit-audit research now supports nine normative rules and
+one evaluation-only signal. Roadmap `g02.031` is complete: cards 089-093 froze
+the boundary, promoted and implemented the explicit route, passed revision-S
+production evidence, and proved exact 93-file source/install parity.
+Everyday TypeScript authoring and package-context toolchain/testing rules remain
+unavailable.

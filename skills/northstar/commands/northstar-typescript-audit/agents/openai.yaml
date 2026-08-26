@@ -1,0 +1,6 @@
+interface:
+  display_name: "Northstar TypeScript Audit"
+  short_description: "Audit and repair TypeScript/Svelte quality."
+  default_prompt: "Use $northstar-typescript-audit to audit and repair the requested TypeScript or Svelte scope."
+policy:
+  allow_implicit_invocation: false

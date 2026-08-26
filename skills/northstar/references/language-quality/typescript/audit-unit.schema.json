@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://northstar.invalid/schemas/typescript-quality-audit-unit.v1.json",
+  "title": "Northstar TypeScript quality case-local audit unit",
+  "type": "object",
+  "required": ["schema_version", "audit_id", "unit_id", "phase", "owned_files", "baseline_sha256", "findings", "repair_plans", "repairs", "validation", "scope_extensions"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "audit_id": { "$ref": "#/$defs/id" },
+    "unit_id": { "$ref": "#/$defs/id" },
+    "phase": { "enum": ["assessed", "completed"] },
+    "owned_files": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/relativePath" }
+    },
+    "baseline_sha256": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "$ref": "#/$defs/fingerprint" }
+    },
+    "findings": { "type": "array", "items": { "$ref": "#/$defs/finding" } },
+    "repair_plans": { "type": "array", "items": { "$ref": "#/$defs/repairPlan" } },
+    "repairs": { "type": "array", "items": { "$ref": "#/$defs/repair" } },
+    "validation": { "type": "array", "items": { "$ref": "#/$defs/validation" } },
+    "scope_extensions": { "type": "array", "items": { "$ref": "#/$defs/scopeExtension" } }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "fingerprint": { "type": "string", "pattern": "^(?:[a-f0-9]{64}|missing)$" },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "authority": { "enum": ["review_required", "report_only", "operator_decision"] },
+    "location": {
+      "type": "object",
+      "required": ["file"],
+      "properties": {
+        "file": { "$ref": "#/$defs/relativePath" },
+        "symbol": { "type": "string", "minLength": 1 },
+        "line_span": {
+          "type": "array",
+          "prefixItems": [{ "type": "integer", "minimum": 1 }, { "type": "integer", "minimum": 1 }],
+          "items": false
+        }
+      },
+      "anyOf": [{ "required": ["symbol"] }, { "required": ["line_span"] }],
+      "additionalProperties": false
+    },
+    "finding": {
+      "type": "object",
+      "required": ["rule_id", "maturity", "enforcement", "confidence", "action", "authority", "location", "evidence", "disposition"],
+      "properties": {
+        "rule_id": { "type": "string", "pattern": "^(TS|SVELTE)-[A-Z]+-[0-9]{3}$" },
+        "maturity": { "enum": ["approved", "experimental"] },
+        "enforcement": { "enum": ["mandatory", "required", "evaluation_only"] },
+        "confidence": { "enum": ["high", "medium", "low"] },
+        "action": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "authority": { "$ref": "#/$defs/authority" },
+        "location": { "$ref": "#/$defs/location" },
+        "evidence": { "type": "string", "minLength": 1 },
+        "disposition": { "enum": ["repair_planned", "reported", "deviation", "operator_decision"] }
+      },
+      "additionalProperties": false
+    },
+    "repairPlan": {
+      "type": "object",
+      "required": ["rule_id", "action", "authority", "owned_files", "preserved_behavior"],
+      "properties": {
+        "rule_id": { "type": "string", "pattern": "^(TS|SVELTE)-[A-Z]+-[0-9]{3}$" },
+        "action": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "authority": { "const": "review_required" },
+        "owned_files": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/relativePath" } },
+        "preserved_behavior": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+      },
+      "additionalProperties": false
+    },
+    "repair": {
+      "type": "object",
+      "required": ["rule_id", "action", "authority", "status", "changed_files"],
+      "properties": {
+        "rule_id": { "type": "string", "pattern": "^(TS|SVELTE)-[A-Z]+-[0-9]{3}$" },
+        "action": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "authority": { "const": "review_required" },
+        "status": { "enum": ["applied", "not_applied"] },
+        "changed_files": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/relativePath" } }
+      },
+      "additionalProperties": false
+    },
+    "validation": {
+      "type": "object",
+      "required": ["evidence_class", "selector", "package_cwd", "environment", "status", "exit_status", "diagnostics", "warning_count", "failure_stage"],
+      "properties": {
+        "evidence_class": { "enum": ["compiler", "framework", "lint", "test"] },
+        "selector": { "type": "string", "minLength": 1 },
+        "package_cwd": { "$ref": "#/$defs/relativePath" },
+        "environment": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["passed", "failed", "unavailable"] },
+        "exit_status": { "type": ["integer", "null"] },
+        "diagnostics": { "type": "array", "items": { "type": "string" } },
+        "warning_count": { "type": "integer", "minimum": 0 },
+        "failure_stage": { "enum": ["none", "routing", "startup", "configuration", "collection", "source"] }
+      },
+      "additionalProperties": false
+    },
+    "scopeExtension": {
+      "type": "object",
+      "required": ["files", "reason", "recorded_before_mutation"],
+      "properties": {
+        "files": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/relativePath" } },
+        "reason": { "type": "string", "minLength": 1 },
+        "recorded_before_mutation": { "const": true }
+      },
+      "additionalProperties": false
+    }
+  }
+}

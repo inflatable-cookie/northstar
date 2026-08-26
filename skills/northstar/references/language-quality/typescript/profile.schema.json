@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://northstar.invalid/schemas/typescript-quality-profile.v1.json",
+  "title": "Northstar TypeScript and Svelte quality consumer profile",
+  "type": "object",
+  "required": [
+    "schema_version", "language", "workflow", "profile", "packages",
+    "unregistered_candidates", "evidence_selectors", "exclusions",
+    "deviations_file", "when_unresolved"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "language": { "const": "typescript" },
+    "workflow": { "const": "explicit_audit_repair" },
+    "profile": { "const": "strict" },
+    "packages": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": ["root", "manifest", "ownership", "typescript_evidence", "overlays", "version_evidence"],
+        "properties": {
+          "root": { "$ref": "#/$defs/relativePath" },
+          "manifest": { "$ref": "#/$defs/relativePath" },
+          "ownership": { "enum": ["root_workspace", "workspace_member", "independent_root"] },
+          "typescript_evidence": {
+            "type": "object",
+            "required": ["status", "sources"],
+            "properties": {
+              "status": { "enum": ["supported", "unavailable"] },
+              "sources": { "$ref": "#/$defs/pathList" }
+            },
+            "additionalProperties": false
+          },
+          "overlays": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "enum": ["base", "svelte", "sveltekit"] }
+          },
+          "version_evidence": {
+            "type": "object",
+            "required": ["svelte", "sveltekit"],
+            "properties": {
+              "svelte": { "$ref": "#/$defs/versionEvidence" },
+              "sveltekit": { "$ref": "#/$defs/versionEvidence" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "unregistered_candidates": { "$ref": "#/$defs/pathList" },
+    "evidence_selectors": {
+      "type": "object",
+      "required": ["compiler", "framework", "lint", "test"],
+      "properties": {
+        "compiler": { "$ref": "#/$defs/stringList" },
+        "framework": { "$ref": "#/$defs/stringList" },
+        "lint": { "$ref": "#/$defs/stringList" },
+        "test": { "$ref": "#/$defs/stringList" }
+      },
+      "additionalProperties": false
+    },
+    "exclusions": {
+      "type": "object",
+      "required": ["generated", "vendored", "fixtures", "documentation", "build_output"],
+      "properties": {
+        "generated": { "$ref": "#/$defs/pathList" },
+        "vendored": { "$ref": "#/$defs/pathList" },
+        "fixtures": { "$ref": "#/$defs/pathList" },
+        "documentation": { "$ref": "#/$defs/pathList" },
+        "build_output": { "$ref": "#/$defs/pathList" }
+      },
+      "additionalProperties": false
+    },
+    "deviations_file": { "$ref": "#/$defs/relativePath" },
+    "when_unresolved": { "const": "stop" }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "pathList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/relativePath" }
+    },
+    "stringList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "versionEvidence": {
+      "type": "object",
+      "required": ["status", "version", "source"],
+      "properties": {
+        "status": { "enum": ["supported", "absent", "unresolved", "unsupported"] },
+        "version": { "type": ["string", "null"] },
+        "source": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    }
+  }
+}
