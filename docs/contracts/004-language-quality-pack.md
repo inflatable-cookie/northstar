@@ -115,6 +115,25 @@ and catalogue promotion. High assurance also needs risk-selected verification,
 traceability, independent review, and pinned operation contracts; stricter
 wording or more lints is insufficient.
 
+## Agent-owned activation
+
+Repository activation is part of the installed language pack, not a manual
+operator installation procedure. When Northstar is requested for Rust work and
+the scoped instruction block, profile, or deviations file is missing, the agent
+runs the skill-local setup task before editing or auditing code.
+
+Setup must be deterministic and idempotent. It discovers Cargo manifests and
+explicit toolchain files, appends a marked compact activation block without
+overwriting existing instructions, creates only missing contract files, and
+preserves an existing valid profile or deviations file byte-for-byte. It fails
+closed on conflicting or malformed existing setup.
+
+Automation does not transfer repository policy ownership to Northstar. The
+agent asks the operator only when policy cannot be recovered from the
+repository, such as an undeclared effective MSRV or an uncertain generated or
+vendored exclusion. It must not ask the operator to copy templates or fill
+mechanically discoverable paths.
+
 ## Scope resolution
 
 Worktree scope includes staged, unstaged, and relevant untracked language

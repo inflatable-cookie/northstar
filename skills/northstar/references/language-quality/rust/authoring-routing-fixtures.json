@@ -4,6 +4,7 @@
     {
       "id": "activated-write-rust",
       "rust_scope_active": true,
+      "northstar_requested": false,
       "rust_task": true,
       "explicit_audit": false,
       "expected_route": "rust_quality_authoring"
@@ -11,6 +12,7 @@
     {
       "id": "activated-review-rust-diff",
       "rust_scope_active": true,
+      "northstar_requested": false,
       "rust_task": true,
       "explicit_audit": false,
       "expected_route": "rust_quality_authoring"
@@ -18,6 +20,7 @@
     {
       "id": "explicit-worktree-audit",
       "rust_scope_active": true,
+      "northstar_requested": false,
       "rust_task": true,
       "explicit_audit": true,
       "expected_route": "rust_quality_audit"
@@ -25,6 +28,7 @@
     {
       "id": "explicit-no-slop-pass",
       "rust_scope_active": true,
+      "northstar_requested": false,
       "rust_task": true,
       "explicit_audit": true,
       "expected_route": "rust_quality_audit"
@@ -32,13 +36,23 @@
     {
       "id": "explicit-audit-without-everyday-activation",
       "rust_scope_active": false,
+      "northstar_requested": false,
       "rust_task": true,
       "explicit_audit": true,
       "expected_route": "rust_quality_audit"
     },
     {
-      "id": "unactivated-rust-repository",
+      "id": "northstar-requested-unactivated-rust",
       "rust_scope_active": false,
+      "northstar_requested": true,
+      "rust_task": true,
+      "explicit_audit": false,
+      "expected_route": "rust_quality_authoring"
+    },
+    {
+      "id": "unactivated-rust-without-northstar-request",
+      "rust_scope_active": false,
+      "northstar_requested": false,
       "rust_task": true,
       "explicit_audit": false,
       "expected_route": "other_router"
@@ -46,6 +60,7 @@
     {
       "id": "activated-docs-task",
       "rust_scope_active": true,
+      "northstar_requested": false,
       "rust_task": false,
       "explicit_audit": false,
       "expected_route": "other_router"

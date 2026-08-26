@@ -23,7 +23,7 @@ open **one** [`references/modes/`](./references/modes/) file and follow it.
 | Planning readiness review | User asks for `northstar planning readiness review` on an existing project |
 | Atlas | User asks for `northstar atlas` or discovery-first long-horizon direction |
 | Agent instruction review | User asks for a `northstar AGENTS file review`, or to review/optimize `AGENTS.md`/`CLAUDE.md` |
-| Rust everyday authoring | An applicable repository instruction activates Northstar Rust quality and the task writes, reviews, or refactors Rust without requesting an audit |
+| Rust everyday authoring | Northstar is requested for ordinary Rust work, or an applicable repository instruction already activates Rust quality |
 | Pre-execution discovery | Readiness mapping, intent rounds, project language, decision prototypes, questionnaires, or reframe |
 | Orchestrator | User wants question-led planning plus a separate worker/PR loop |
 | Docs cleanup | User wants `/docs` files and folders inspected and reworked to fit Northstar |
@@ -71,8 +71,9 @@ activated, follow the router's lightweight four-command worktree fast path.
 - **Pre-execution discovery:** frontier-based intent rounds and bounded
   project-language, prototype, and questionnaire routes; no execution authority.
 - **Research:** promoted decisions in architecture/contracts, not stranded memos.
-- **Rust everyday authoring:** strict, profile-resolved guidance for the current
-  Rust task and changed tranche; no wider audit authority.
+- **Rust everyday authoring:** agent-installed activation plus strict,
+  profile-resolved guidance for the current Rust task and changed tranche; no
+  wider audit authority.
 - **Recovery:** trustworthy planning surfaces and canonical refs restored.
 - **Normalize:** baseline or strict spine installed/maintained; Effigy-first QA.
 - **Orchestrator:** question-led planning, one pushed worker handoff under `docs/handoffs/`, bounded PR review loop.

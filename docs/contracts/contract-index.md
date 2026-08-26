@@ -30,6 +30,6 @@ are complete.
 pending. The generation remains open and no separate contract gap blocks that
 existing planning lane. The Rust quality catalogue review and contract gate
 have passed. Roadmap `g02.030` is complete through card 088; production
-revisions K and M pass both required tracks and the 75-file published install
+revisions K and M pass both required tracks and the 76-file published install
 matches source. Northstar consumes live consumer feedback
 supplied by the operator rather than selecting or dispatching a dogfood target.

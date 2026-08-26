@@ -23,8 +23,8 @@ Use this folder for ready execution cards that sit under an active master spec.
 ## Next Task
 
 `g02.030/083-088` are complete. Revisions K and M provide valid 3/3 production
-evidence for explicit audit and everyday authoring; the published skill passes
-75-file source/install parity.
+evidence for explicit audit and everyday authoring; the published skill owns
+repository activation and passes 76-file source/install parity.
 `g02.026/078` remains ready but deferred until operator-provided live feedback
 supplies evidence for the starter surfaces. Northstar does not dispatch the
 consumer run.

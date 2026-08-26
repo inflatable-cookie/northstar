@@ -58,6 +58,16 @@ This catalog is intentionally narrower than the Northstar source repository's
 full QA catalog. It exists so the audit helper resolves from the installed skill
 rather than incorrectly depending on the Northstar source checkout.
 
+Rust activation is also skill-local and agent-owned:
+
+```bash
+effigy --repo /path/to/installed/northstar \
+  northstar/rust-quality:setup apply /absolute/path/to/project [scope-directory]
+```
+
+`northstar/test:rust-quality-setup` proves install, preservation, repeat-run
+idempotency, and fail-closed conflicts on disposable repositories.
+
 ## Repo contract (`qa:docs`)
 
 `check:repo-contract` validates required Northstar surfaces and the installable

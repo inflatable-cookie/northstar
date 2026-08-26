@@ -43,15 +43,16 @@ harness-managed worktrees do not. Install `AGENTS.md` and the one-line
 ### Optional strict Rust quality activation
 
 Rust quality is an optional scoped activation supplied by the single installed
-Northstar skill, not a second docs bundle or installable skill. Copy the three
-files from `skills/northstar/assets/templates/language-quality/rust/`: place its
-`AGENTS.md` at the narrowest Rust-owning directory and place the profile and
-deviations JSON files in `docs/contracts/`.
+Northstar skill, not a second docs bundle or installable skill. The agent runs
+the installed `northstar/rust-quality:setup` task when Rust authoring or audit
+first needs activation. Humans do not copy the Rust assets or populate
+discoverable paths.
 
-Keep the profile at production-valid `strict`. Replace the empty Cargo-manifest,
-toolchain-policy, generated, and vendored lists with repository-owned inputs;
-unresolved MSRV remains a stop. Record accepted exceptions in the deviations
-file. Do not infer Northstar's Rust 1.95 benchmark floor as the consumer MSRV.
+The task installs a marked scoped instruction block, strict profile, and
+deviations contract while preserving existing files. It discovers Cargo and
+explicit toolchain paths and stops when repository-owned MSRV or exclusion
+policy is genuinely unresolved. Northstar's Rust 1.95 benchmark floor is never
+used as the consumer MSRV.
 
 ## Standard docs spines
 

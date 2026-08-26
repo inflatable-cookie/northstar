@@ -58,13 +58,13 @@ skills.
 | Delivery-layer adoption | active docs spine, compact working rules, spec, roadmap, log | repo maintainers | ready |
 | Template/skill promotion | copy-ready skill assets, operator docs, roadmap batches, and logs | repo maintainers | ready |
 | Papercut loop | root queue, doctrine, templates, skill instruction, and QA coverage | repo maintainers | ready |
-| Published skill parity | Skills CLI update path, global install inspection, and source checker | repo maintainers | ready; 75-file parity proven |
+| Published skill parity | Skills CLI update path, global install inspection, and source checker | repo maintainers | ready; 76-file parity proven |
 | Explicit command surface | Eight thin command adapters, canonical router/mode wiring, description budget, and retired-alias checks | repo maintainers | ready; source and installed discovery verified |
 | Triage lifecycle | `docs/triage/` anchors, timestamped naming, orchestrator/refresh capture, and cleanup dispositions | repo maintainers | ready; live operator feedback pending |
 | Consumer feedback intake | operator-provided live-use evidence and manual triage boundary | repo maintainers + operator | operator-owned |
 | Orchestrator mode | per-worker committed handoff under `docs/handoffs/`, fresh worker worktree or safe temporary fallback, startup check, chunk report, PR, provider review record, and closeout evidence | repo maintainers + operator | operator validation complete; longer multi-card evidence pending |
 | Model-efficiency comparison | measured role routing, rework, review cycles, and relay burden | repo maintainers | one operator validation measured; broader comparison pending |
-| Rust quality production foundation | seven-rule catalogue, five JSON schemas, two strict checked projections, two routed modes, thin audit adapter, and skill-local Rhai checks | repo maintainers | ready and distributed; strict-only, 75-file installed parity proven |
+| Rust quality production foundation | seven-rule catalogue, five JSON schemas, two strict checked projections, two routed modes, thin audit adapter, and skill-local Rhai setup/record/check tasks | repo maintainers | ready and distributed; strict-only, agent-owned activation, 76-file installed parity proven |
 | Rust quality prototype | representative rule catalogue, audit and authoring benchmark corpora, blinded subject/coordinator/reviewer packets, projections, deterministic case-local result recorder, result scorer, false-positive and churn measures, context-retention test | repo maintainers + operator | retained evidence infrastructure; strict everyday and explicit-audit tracks eligible; compaction unproven |
 
 ## Planning Gaps

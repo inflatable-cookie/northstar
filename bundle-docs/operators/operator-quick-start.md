@@ -60,8 +60,8 @@ to pick one mode:
 - Research -> contracts/architecture -> `research`
 - Bootstrap, migrate, or spine hygiene -> `normalize-docs`
 - **Explicit** continuation brief / fresh thread -> `handoff` only (not bare `continue`)
-- Rust quality during ordinary coding -> install the scoped Rust activation
-  template and strict repository profile, then use normal coding prompts
+- Rust quality during ordinary coding -> ask Northstar to use strict Rust
+  quality; the agent installs missing activation, then continues the task
 - Explicit Rust worktree or whole-repository audit-and-repair ->
   `/northstar-rust-audit worktree` or `/northstar-rust-audit repository`
 
@@ -85,12 +85,12 @@ to pick one mode:
   `/northstar-rust-audit repository`
 - **Create an orchestrator runway and worker PR loop** -> `northstar` (orchestrator mode)
 
-Rust activation is repository-owned. Copy the scoped `AGENTS.md`, strict
-profile, and deviations templates from
-`skills/northstar/assets/templates/language-quality/rust/`; declare the real
-MSRV/toolchain sources and generated or vendored exclusions. Only `strict` is
-production-valid. Ordinary and high-assurance profiles, a combined default,
-observable compaction resilience, and certification remain unsupported.
+Rust activation is agent-installed and repository-owned. The agent discovers
+Cargo and explicit toolchain paths, preserves existing instructions and
+contracts, and asks only when repository policy such as MSRV or exclusions is
+unresolved. Only `strict` is production-valid. Ordinary and high-assurance
+profiles, a combined default, observable compaction resilience, and
+certification remain unsupported.
 
 During an orchestrator or refresh conversation, ask the agent to check
 `docs/triage/` for open capture notes. Useful unresolved observations should be

@@ -13,11 +13,13 @@ authoring and never activates from ordinary coding alone.
 
 → [`modes/rust-quality-audit.md`](./modes/rust-quality-audit.md)
 
-## Rust everyday authoring (repository-activated)
+## Rust everyday authoring (self-activating)
 
-Use when an applicable target-repository instruction activates Northstar Rust
-quality and the task writes, reviews, or refactors Rust. The repository profile
-must resolve to production-valid `strict`.
+Use when Northstar is requested for ordinary Rust writing, review, or
+refactoring, or when applicable target-repository instructions already activate
+Northstar Rust quality. If activation is missing, the mode installs it from the
+loaded skill before editing. The repository profile must then resolve to
+production-valid `strict`.
 
 Do **not** use this route for a requested quality audit, no-slop pass, whole
 codebase review, or audit-and-fix tranche. Select the explicit audit route for

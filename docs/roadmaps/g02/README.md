@@ -65,7 +65,8 @@ rollover signal.
 - `029-add-conversational-triage-and-docs-cleanup.md` (active; implementation
   and deterministic validation are complete; live operator usage remains)
 - `030-ship-rust-quality-authoring-and-audit.md` (complete; cards 083-088,
-  production evidence, published install, and 75-file parity proven)
+  production evidence, agent-owned activation, published install, and 76-file
+  parity proven)
 
 ## Next Task
 

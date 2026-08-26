@@ -425,7 +425,8 @@ loads, and start/closeout re-entry. Card 086 added explicit audit routing,
 finding-first repair waves, and deterministic dirty-state-preserving records.
 Card 087 is complete: production revision K passes explicit audit 3/3 and
 production revision M passes everyday authoring 3/3 under frozen blind-review
-and churn gates. Card 088 distributed the exact 75-file source payload through
-the configured published install and closed source/install parity. Compaction
+and churn gates. Card 088 distributed the payload, then incorporated
+operator feedback by making repository activation an agent-owned idempotent
+setup task. The resulting 76-file published install matches source. Compaction
 resilience, ordinary-profile validation, and high-assurance validation remain
 outside the production claim.

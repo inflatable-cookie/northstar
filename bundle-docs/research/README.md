@@ -78,4 +78,5 @@ deterministic case-local result construction removed cross-case bookkeeping
 drift. Both required tracks are eligible. The seven-rule catalogue is promoted
 and contract 004 is active. Roadmap `g02.030` is complete; cards 083-088 proved
 the boundary, promoted the production foundation, added both routed workflows,
-passed both production tracks, and distributed the exact 75-file payload.
+passed both production tracks, and distributed the 76-file payload with
+agent-owned activation.

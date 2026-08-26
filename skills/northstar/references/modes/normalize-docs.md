@@ -49,6 +49,10 @@ Optional: `effigy check:posture-advisory` after structural edits.
    adopt/upgrade — before release-candidate / exact-SHA prep, not during tag
    closeout after a green clean-tree SHA. Verify native Effigy with
    `effigy docs --help` before assuming compat mode.
+   For Rust quality activation, do not hand-copy the three Rust assets. Run the
+   loaded skill's `northstar/rust-quality:setup apply <absolute-target-root>
+   [scope-directory]`; let it preserve existing files and discover Cargo and
+   toolchain paths. Ask only for repository policy the task cannot recover.
 6. Runtime stack: Effigy first; TypeScript+Bun for repo scripts; bash/python
    only by exception. When wiring `effigy.toml`, keep `tasks.health` cheap
    (seconds-scale). Never alias `health` to `qa` — doctor runs health during

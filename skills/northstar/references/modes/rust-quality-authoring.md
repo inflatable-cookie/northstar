@@ -1,23 +1,34 @@
 # Rust Quality Everyday Authoring
 
-Use only for ordinary Rust writing, review, or refactoring in a repository whose
-applicable instructions activate Northstar Rust quality. This mode guides the
-current task; it does not authorize an audit of the worktree or repository.
+Use only for ordinary Rust writing, review, or refactoring when Northstar is
+requested or applicable repository instructions already activate Rust quality.
+This mode guides the current task; it does not authorize an audit of the
+worktree or repository.
 
 ## Resolve before editing
 
-1. Read the applicable repository instructions and
-   `docs/contracts/rust-quality-profile.json`. Require language `rust` and
-   profile `strict`; stop if the file is absent, unsupported, or ambiguous.
-2. Read the declared Cargo manifests and explicit toolchain policy paths.
+1. Check for the marked Rust activation block in the applicable `AGENTS.md`,
+   `docs/contracts/rust-quality-profile.json`, and
+   `docs/contracts/rust-quality-deviations.json`. If any are missing, choose the
+   narrowest directory that owns the Rust source, manifests, tests, and related
+   docs, then run
+   `effigy --repo <installed-northstar> northstar/rust-quality:setup apply <absolute-target-root> <scope-directory>`.
+   The setup task discovers Cargo and toolchain files, preserves existing
+   instructions and contracts, and is idempotent. Do not ask the operator to
+   copy templates or populate mechanically discoverable paths.
+2. Read the installed activation and profile. Require language `rust` and
+   profile `strict`; stop if an existing file is unsupported or ambiguous.
+   Ask the operator only when repository policy cannot be recovered, such as a
+   missing effective MSRV or an uncertain generated/vendor exclusion.
+3. Read the declared Cargo manifests and explicit toolchain policy paths.
    Resolve the effective MSRV per package. Never infer a universal version;
    stop on a version-sensitive choice when policy is unsettled.
-3. Read `docs/contracts/rust-quality-deviations.json` plus relevant project
+4. Read `docs/contracts/rust-quality-deviations.json` plus relevant project
    architecture and error/API policy. Existing deviations are evidence, not
    permission to broaden their scope.
-4. Capture initial repository state and the files the task may change. Preserve
+5. Capture initial repository state and the files the task may change. Preserve
    pre-existing and unrelated work.
-5. Use `effigy tasks` when repository-native validation selectors are unknown.
+6. Use `effigy tasks` when repository-native validation selectors are unknown.
    Do not invent a universal Cargo command graph.
 
 ## Load only applicable rules

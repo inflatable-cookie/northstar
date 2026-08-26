@@ -27,9 +27,16 @@ lane without overstating assurance.
 The promoted command is `/northstar-rust-audit`; its source is
 `skills/northstar/commands/northstar-rust-audit/SKILL.md`. Distribution must
 include the frozen `references/language-quality/rust/` payload, both Rust modes,
-the two Rhai scripts, and the three skill-local selectors
-`northstar/check:rust-quality`, `northstar/test:rust-quality-recorder`, and
+the three Rhai scripts, and the five Rust skill-local selectors
+`northstar/check:rust-quality`, `northstar/rust-quality:setup`,
+`northstar/test:rust-quality-setup`,
+`northstar/test:rust-quality-recorder`, and
 `northstar/rust-quality:record`.
+
+Post-closeout operator feedback corrected the activation owner: setup is a
+deterministic agent action inside the installed skill, not a human template-copy
+procedure. This correction does not change the evidenced catalogue, projections,
+assurance profile, or repair authority.
 
 ## Implementation Steps
 
@@ -45,6 +52,8 @@ the two Rhai scripts, and the three skill-local selectors
       explicit audit adapter.
 - [x] Copy-ready setup declares strict profile resolution and repository-owned
       MSRV, exclusions, and deviations.
+- [x] Missing Rust activation is installed by the agent through an idempotent,
+      preservation-safe skill-local task; humans supply only unresolved policy.
 - [x] Deterministic checks reject catalogue drift and command duplication.
 - [x] Full source/install parity and repository QA pass.
 - [x] Documentation states that ordinary, high assurance, combined-default, and

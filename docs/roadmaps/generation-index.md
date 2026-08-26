@@ -81,8 +81,8 @@ the contract-backed Rust quality lane below.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed
-workflows, passed both production tracks, and distributed the exact 75-file
-payload.
+workflows, passed both production tracks, and distributed the 76-file payload
+with agent-owned activation.
 `g02.026/078` remains ready but deferred. The remaining
 instruction-surface, Atlas, triage/cleanup, and Rust live-use measurements
 require operator-provided evidence. Northstar does not select or dispatch those

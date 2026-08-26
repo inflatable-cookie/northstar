@@ -82,7 +82,7 @@ not create a second installable skill. The production surfaces are:
 | catalogue, schemas, and checked projections | `skills/northstar/references/language-quality/rust/` |
 | everyday mode | `skills/northstar/references/modes/rust-quality-authoring.md` |
 | explicit audit mode | `skills/northstar/references/modes/rust-quality-audit.md` |
-| recorder and package check | `skills/northstar/scripts/rust-quality-recorder.rhai`, `skills/northstar/scripts/check-rust-quality.rhai` |
+| setup, recorder, and package check | `skills/northstar/scripts/rust-quality-setup.rhai`, `skills/northstar/scripts/rust-quality-recorder.rhai`, `skills/northstar/scripts/check-rust-quality.rhai` |
 | thin explicit adapter | `skills/northstar/commands/northstar-rust-audit/SKILL.md` |
 | copy-ready activation and profile templates | `skills/northstar/assets/templates/language-quality/rust/` |
 
@@ -97,17 +97,21 @@ their baseline. `extend` widens unit and plan ownership before mutation.
 cross-unit mutation, changed policy, and edits to excluded pre-existing dirty
 files.
 
-Consumers select `strict` in `docs/contracts/rust-quality-profile.json`, keep
-accepted deviations in `docs/contracts/rust-quality-deviations.json`, and own
-all exclusion and compatibility inputs. The recorder resolves effective MSRV
+The agent installs missing Rust activation through
+`northstar/rust-quality:setup`, choosing the narrowest Rust-owning instruction
+scope and discovering Cargo and explicit toolchain files. The task preserves
+existing instructions and valid contracts and is byte-idempotent. Consumers
+still own `strict` profile policy, accepted deviations, exclusions, and all
+compatibility inputs. The recorder resolves effective MSRV
 from repository Cargo manifests and explicit toolchain policy. It reports an
 unsettled policy instead of guessing a version. Case-local evidence lives under
 `<target>/.effigy/rust-quality/audits/<audit-id>/`; aggregate results derive
 from those records rather than agent-written summary state.
 
-The published `northstar` install contains this full boundary as one 75-file
+The published `northstar` install contains this full boundary as one 76-file
 artifact. Its minimal Effigy catalogue exposes only
 `northstar/check:agent-instructions`, `northstar/check:rust-quality`,
+`northstar/rust-quality:setup`, `northstar/test:rust-quality-setup`,
 `northstar/test:rust-quality-recorder`, and `northstar/rust-quality:record`.
 Rust activation remains scoped and profile-driven, so the catalogue does not
 enter general agent context unless the router selects a Rust mode.

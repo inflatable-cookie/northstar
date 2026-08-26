@@ -11,11 +11,15 @@ authoring projection.
 
 ## Resolve before mutation
 
-1. Read applicable repository instructions,
+1. Check for the marked Rust activation block in the applicable `AGENTS.md`,
    `docs/contracts/rust-quality-profile.json`, and
-   `docs/contracts/rust-quality-deviations.json`. Require production-valid
-   `strict`. Resolve every declared Cargo manifest, toolchain policy path,
-   exclusion, and effective MSRV. Stop on unresolved version policy.
+   `docs/contracts/rust-quality-deviations.json`. If any are missing, choose the
+   narrowest Rust-owning directory and run
+   `effigy --repo <installed-northstar> northstar/rust-quality:setup apply <absolute-target-root> <scope-directory>`.
+   Do not ask the operator to copy templates or populate discoverable paths.
+   Then require production-valid `strict` and resolve every declared Cargo
+   manifest, toolchain policy path, exclusion, and effective MSRV. Stop only on
+   unresolved repository policy or conflicting existing setup.
 2. Resolve scope from explicit intent:
    - **worktree** for current, uncommitted, staged, unstaged, tranche, or diff
      requests;

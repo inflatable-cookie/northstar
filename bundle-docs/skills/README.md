@@ -56,9 +56,9 @@ skill. A direct `rsync -a --delete` from `skills/northstar/` is reserved for loc
 development before the change is published. Restart agent sessions after an
 update.
 
-The installed skill also carries a minimal Effigy catalog for consumer-safe,
-read-only checks. It currently validates the agent-instruction surface and the
-inert Rust quality package. When a consumer repository has no local
+The installed skill also carries a minimal Effigy catalog for consumer-safe
+checks and Rust activation/recording. It validates the agent-instruction surface
+and inert Rust quality package. When a consumer repository has no local
 `check:agent-instructions` task, select the installed skill explicitly:
 
 ```bash
@@ -75,23 +75,26 @@ agent instructions:
 effigy --repo /path/to/installed/northstar northstar/check:rust-quality
 ```
 
-### Activate strict Rust quality in a repository
+### Agent-owned strict Rust activation
 
-Copy the three files under
-`skills/northstar/assets/templates/language-quality/rust/` into the consumer
-repository:
+The operator does not copy or configure template files. When Northstar is
+requested for Rust work, the agent checks the target repository and runs:
 
-- place the scoped `AGENTS.md` at the narrowest directory that owns the Rust
-  source, manifests, tests, and related docs;
-- copy `rust-quality-profile.json` and `rust-quality-deviations.json` to
-  `docs/contracts/`;
-- fill the profile's Cargo-manifest and toolchain-policy paths, generated and
-  vendored exclusions, and deviation file. Keep `when_unresolved` set to
-  `stop`.
+```bash
+effigy --repo /path/to/installed/northstar \
+  northstar/rust-quality:setup apply /absolute/path/to/project [scope-directory]
+```
+
+The agent chooses the narrowest Rust-owning scope. The setup task discovers
+Cargo manifests and explicit toolchain files, appends a marked compact block to
+an existing `AGENTS.md` without replacing it, creates only missing profile and
+deviation contracts, and is byte-idempotent. Existing valid contracts remain
+unchanged. Conflicts fail closed.
 
 Only `strict` is production-valid. The repository owns its MSRV, exclusions,
 architecture, and accepted deviations; Northstar does not infer or replace
-them. Ordinary Rust work then routes through the compact authoring mode. An
+them. The agent asks only when that policy is not recoverable from repository
+state. Ordinary Rust work then routes through the compact authoring mode. An
 explicit whole-codebase or current-worktree audit uses:
 
 ```text
@@ -124,7 +127,7 @@ compatibility aliases.
 | `sweep-audit-repair.md` | Structured sweep pass |
 | `handoff.md` | User **explicitly** asks for handoff / fresh thread |
 | `atlas.md` | User-guided long-horizon direction and a coarse strategic runway |
-| `rust-quality-authoring.md` | Repository-activated ordinary Rust writing, review, or refactoring |
+| `rust-quality-authoring.md` | Self-activating ordinary Rust writing, review, or refactoring |
 | `rust-quality-audit.md` | Explicit Rust worktree or repository audit-and-repair |
 
 Setup references live under `skills/northstar/references/setup/`.

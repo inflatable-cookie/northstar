@@ -154,5 +154,5 @@ revision F made everyday authoring eligible and research revision M made strict
 explicit audit eligible. Production revision K then passed explicit audit 3/3;
 production revision M passed everyday authoring 3/3 with all churn ratios below
 the frozen ceiling. Strict unsafe findings remain report-only. Contract 004 and
-roadmap `g02.030` is complete through card 088 with exact 75-file
-source/install parity. Compaction resilience remains unproven.
+roadmap `g02.030` is complete through card 088 with agent-owned activation and
+exact 76-file source/install parity. Compaction resilience remains unproven.

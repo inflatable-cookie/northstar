@@ -273,7 +273,7 @@ fn route_authoring_case(item) {
     if item["explicit_audit"] && item["rust_task"] {
         return "rust_quality_audit";
     }
-    if item["rust_scope_active"] && item["rust_task"] {
+    if (item["rust_scope_active"] || item["northstar_requested"]) && item["rust_task"] {
         return "rust_quality_authoring";
     }
     "other_router"
@@ -286,10 +286,10 @@ fn validate_authoring_routes(skill_root) {
     ));
     require(fixtures["schema_version"] == "1.0.0", "unsupported authoring routing fixture schema");
     require_array(fixtures["cases"], "authoring routing cases");
-    require(fixtures["cases"].len() == 7, "Rust routing fixtures must contain seven cases");
+    require(fixtures["cases"].len() == 8, "Rust routing fixtures must contain eight cases");
     let ids = [];
     for item in fixtures["cases"] {
-        for key in ["id", "rust_scope_active", "rust_task", "explicit_audit", "expected_route"] {
+        for key in ["id", "rust_scope_active", "northstar_requested", "rust_task", "explicit_audit", "expected_route"] {
             require_key(item, key, "authoring routing case");
         }
         require(!ids.contains(item["id"]), "duplicate authoring routing case: " + item["id"]);
@@ -299,6 +299,9 @@ fn validate_authoring_routes(skill_root) {
 }
 
 fn authoring_workflow_action(item) {
+    if item["stage"] == "start" && !item["activation_present"] {
+        return "install_activation";
+    }
     if !item["profile_resolved"] {
         return "stop_before_edit";
     }
@@ -324,11 +327,11 @@ fn validate_authoring_workflow(skill_root) {
     ));
     require(fixtures["schema_version"] == "1.0.0", "unsupported authoring workflow fixture schema");
     require_array(fixtures["cases"], "authoring workflow cases");
-    require(fixtures["cases"].len() == 6, "authoring workflow fixtures must contain six cases");
+    require(fixtures["cases"].len() == 7, "authoring workflow fixtures must contain seven cases");
     let ids = [];
     for item in fixtures["cases"] {
         for key in [
-            "id", "stage", "profile_resolved", "native_selector_known",
+            "id", "stage", "activation_present", "profile_resolved", "native_selector_known",
             "requested_scope", "deviation_needed", "expected_action",
         ] {
             require_key(item, key, "authoring workflow case");
@@ -373,7 +376,7 @@ fn validate_activation_surface(repo_root, skill_root) {
     let mode = fs::read_file(path::join(skill_root, "references/modes/rust-quality-authoring.md"));
     let scoped = fs::read_file(path::join(skill_root, "assets/templates/language-quality/rust/AGENTS.md"));
 
-    require(router.contains("Rust everyday authoring (repository-activated)"), "router lacks repository-activated Rust route");
+    require(router.contains("Rust everyday authoring (self-activating)"), "router lacks self-activating Rust route");
     require(router.contains("Rust explicit audit-and-repair (explicit only)"), "router lacks explicit Rust audit route");
     require(router.contains("never activates from ordinary coding alone"), "router permits implicit Rust audit");
     require(router.contains("modes/rust-quality-authoring.md"), "router does not select Rust authoring mode");
@@ -381,6 +384,8 @@ fn validate_activation_surface(repo_root, skill_root) {
     require(mode.contains("Do not load `strict-audit.json`"), "authoring mode can load the audit projection");
     require(mode.contains("Re-entry at task start and coherent batch closeout"), "authoring mode lacks re-entry contract");
     require(scoped.contains("never route it through everyday authoring"), "scoped activation blurs audit intent");
+    require(scoped.contains("northstar:rust-quality:start") && scoped.contains("northstar:rust-quality:end"),
+        "scoped activation lacks idempotent setup markers");
     require(fs::is_file(path::join(skill_root, "references/modes/rust-quality-audit.md")), "missing explicit Rust audit mode");
     require(fs::is_file(path::join(skill_root, "references/language-quality/rust/audit-recording.md")), "missing Rust audit recorder contract");
     require(fs::file_size(path::join(skill_root, "assets/templates/language-quality/rust/AGENTS.md")) <= 12288,
@@ -397,6 +402,26 @@ fn validate_activation_surface(repo_root, skill_root) {
         require(active_profile == template_profile, "Northstar Rust profile drifted from copy-ready template");
         require(active_deviations == template_deviations, "Northstar Rust deviations drifted from copy-ready template");
     }
+}
+
+fn validate_setup_surface(skill_root) {
+    let setup_path = path::join(skill_root, "scripts/rust-quality-setup.rhai");
+    require(fs::is_file(setup_path), "missing Rust quality setup task");
+    let setup = fs::read_file(setup_path);
+    let authoring = fs::read_file(path::join(skill_root, "references/modes/rust-quality-authoring.md"));
+    let audit = fs::read_file(path::join(skill_root, "references/modes/rust-quality-audit.md"));
+    let catalog = fs::read_file(path::join(skill_root, "effigy.toml"));
+    require(catalog.contains("rust-quality:setup") && catalog.contains("test:rust-quality-setup"),
+        "skill-local catalog lacks Rust setup selectors");
+    require(authoring.contains("northstar/rust-quality:setup apply"),
+        "authoring mode does not self-activate missing setup");
+    require(audit.contains("northstar/rust-quality:setup apply"),
+        "audit mode does not self-activate missing setup");
+    require(setup.contains("repeat setup was not idempotent") &&
+        setup.contains("setup overwrote existing AGENTS instructions"),
+        "Rust setup lacks preservation and idempotency proof");
+    require(!setup.contains("process::") && !setup.contains("command::"),
+        "Rust setup can launch a subprocess");
 }
 
 fn validate_audit_surface(skill_root) {
@@ -499,6 +524,7 @@ validate_authoring_references(catalogue, skill_root);
 validate_authoring_routes(skill_root);
 validate_authoring_workflow(skill_root);
 validate_activation_surface(repo_root, skill_root);
+validate_setup_surface(skill_root);
 validate_audit_surface(skill_root);
 
 for filename in [
@@ -518,4 +544,4 @@ for filename in ["catalogue.json", "strict-authoring.json", "strict-audit.json"]
 }
 
 self_test(catalogue_path);
-log("Northstar Rust quality package: OK (7 rules, strict-only, 7 negative paths, 7 Rust routes, 6 authoring workflow cases)");
+log("Northstar Rust quality package: OK (7 rules, strict-only, 7 negative paths, 8 Rust routes, 7 authoring workflow cases, self-activating setup)");

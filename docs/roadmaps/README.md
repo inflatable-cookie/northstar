@@ -41,7 +41,7 @@ Roadmaps sequence contract-backed work for Northstar itself.
   feedback remains pending.
 - `g02.030` is complete; revisions K and M provide valid 3/3 production
   evidence for explicit audit and everyday authoring, and card 088 proves
-  published 75-file source/install parity.
+  agent-owned activation and published 76-file source/install parity.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.

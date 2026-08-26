@@ -4,6 +4,7 @@
     {
       "id": "start-resolved-profile",
       "stage": "start",
+      "activation_present": true,
       "profile_resolved": true,
       "native_selector_known": true,
       "requested_scope": "task_tranche",
@@ -13,6 +14,7 @@
     {
       "id": "start-unresolved-profile",
       "stage": "start",
+      "activation_present": true,
       "profile_resolved": false,
       "native_selector_known": true,
       "requested_scope": "task_tranche",
@@ -22,6 +24,7 @@
     {
       "id": "discover-native-validation",
       "stage": "start",
+      "activation_present": true,
       "profile_resolved": true,
       "native_selector_known": false,
       "requested_scope": "task_tranche",
@@ -31,6 +34,7 @@
     {
       "id": "closeout-changed-tranche",
       "stage": "closeout",
+      "activation_present": true,
       "profile_resolved": true,
       "native_selector_known": true,
       "requested_scope": "task_tranche",
@@ -40,6 +44,7 @@
     {
       "id": "closeout-record-deviation",
       "stage": "closeout",
+      "activation_present": true,
       "profile_resolved": true,
       "native_selector_known": true,
       "requested_scope": "task_tranche",
@@ -49,11 +54,22 @@
     {
       "id": "reject-unrelated-scope",
       "stage": "closeout",
+      "activation_present": true,
       "profile_resolved": true,
       "native_selector_known": true,
       "requested_scope": "unrelated_repository_code",
       "deviation_needed": false,
       "expected_action": "reject_unrelated_scope"
+    },
+    {
+      "id": "start-missing-activation",
+      "stage": "start",
+      "activation_present": false,
+      "profile_resolved": false,
+      "native_selector_known": true,
+      "requested_scope": "task_tranche",
+      "deviation_needed": false,
+      "expected_action": "install_activation"
     }
   ]
 }
