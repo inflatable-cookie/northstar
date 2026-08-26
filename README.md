@@ -27,8 +27,9 @@ Core flow:
 - [`docs/`](./docs/) is the live Northstar planning spine for building and
   extending Northstar itself.
 - [`skills/northstar/`](./skills/northstar/) -- single installable agent skill;
-  routes internally to plan, research, recovery, docs normalization, and
-  explicit handoff modes (see [`references/router.md`](./skills/northstar/references/router.md)).
+  routes internally to plan, research, recovery, docs normalization, compact
+  Rust authoring, explicit Rust audit, and handoff modes (see
+  [`references/router.md`](./skills/northstar/references/router.md)).
 - [`bundle-docs/skills/README.md`](./bundle-docs/skills/README.md) describes
   skill architecture.
 - [`PAPERCUTS.md`](./PAPERCUTS.md) is the live agent-observed friction queue;

@@ -76,7 +76,6 @@ subjects and six blind reviews. Everyday authoring is eligible; combined is not
 the default. Revision M then passed all three explicit-audit runs after
 deterministic case-local result construction removed cross-case bookkeeping
 drift. Both required tracks are eligible. The seven-rule catalogue is promoted
-and contract 004 is active. Roadmap `g02.030` is compiled; cards 083-086 proved
-the boundary, promoted the production foundation, and added both routed
-workflows. Revisions K and M pass both production tracks; card 087 is complete
-and card 088 is ready.
+and contract 004 is active. Roadmap `g02.030` is complete; cards 083-088 proved
+the boundary, promoted the production foundation, added both routed workflows,
+passed both production tracks, and distributed the exact 75-file payload.

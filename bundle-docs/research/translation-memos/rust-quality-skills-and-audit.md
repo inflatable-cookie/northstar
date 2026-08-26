@@ -1,8 +1,8 @@
 # Translation Memo: Rust Quality Authoring And Audit
 
-Status: promoted — contract 004 and roadmap `g02.030` active
+Status: promoted — contract 004 active; roadmap `g02.030` complete
 Owner: repo maintainers
-Last updated: 2026-08-25
+Last updated: 2026-08-26
 Related track: language-specific coding quality packs
 Promotion targets: `docs/architecture/system-architecture.md`,
 `docs/specs/031-rust-quality-authoring-and-audit.md`, and
@@ -353,21 +353,23 @@ operator accepted the initial rule promotion and contract 004 is active.
 
 - `architecture` — promoted shared catalogue, two workflow tracks, assurance
   profile axis, and Northstar/Effigy/repository authority split;
-- `active spec` — source curation, rule schema, benchmark, scope resolver,
-  and prototype behaviour;
+- `retired spec` — source curation, rule schema, benchmark, scope resolver,
+  and prototype behaviour retained for evidence history;
 - `contract 004` — active mandatory behaviour, explicit triggers, repair
   authority, profile, deviation, and evidence semantics;
-- `roadmap g02.030` — active production-boundary, implementation, evidence, and
-  distribution sequence;
+- `roadmap g02.030` — completed production-boundary, implementation, evidence,
+  and distribution sequence;
 - `watch only` — changing consortium drafts, upcoming Clippy safety-critical
   lints, and certification-tooling claims.
 
-## 8) Open decisions
+## 8) Remaining evidence gaps
 
-- Final public name and whether the explicit audit gets a thin command adapter.
 - Future ordinary and high-assurance rule membership and validation.
-- Final Effigy selector names and how non-Effigy consumer repositories adapt.
-- Whether future evidence promotes any `stopslop`-derived rule beyond evaluation.
+- Non-Effigy consumer adaptation; the production path requires Effigy.
+- Whether future evidence promotes any `stopslop`-derived rule beyond
+  evaluation-only/report-only.
+- Observable context-compaction resilience and operator-provided live-use
+  feedback.
 - How audit findings and accepted deviations are serialized for machine use.
 - Which high-assurance techniques are required by risk class rather than merely
   available.

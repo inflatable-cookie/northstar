@@ -1,9 +1,9 @@
 # 031 - Rust Quality Authoring And Audit
 
-Status: active — production foundation promoted; everyday authoring next
+Status: retired-in-place — promoted and distributed
 Owner: repo maintainers
 Created: 2026-08-24
-Updated: 2026-08-25
+Updated: 2026-08-26
 Depends on: `docs/contracts/003-agent-instruction-surface.md`
 Research ref: `bundle-docs/research/translation-memos/rust-quality-skills-and-audit.md`
 Prototype ref: `bundle-docs/research/prototypes/rust-quality/README.md`
@@ -425,6 +425,7 @@ loads, and start/closeout re-entry. Card 086 added explicit audit routing,
 finding-first repair waves, and deterministic dirty-state-preserving records.
 Card 087 is complete: production revision K passes explicit audit 3/3 and
 production revision M passes everyday authoring 3/3 under frozen blind-review
-and churn gates. Card 088 is ready but has not started. Compaction
+and churn gates. Card 088 distributed the exact 75-file source payload through
+the configured published install and closed source/install parity. Compaction
 resilience, ordinary-profile validation, and high-assurance validation remain
 outside the production claim.

@@ -105,6 +105,13 @@ unsettled policy instead of guessing a version. Case-local evidence lives under
 `<target>/.effigy/rust-quality/audits/<audit-id>/`; aggregate results derive
 from those records rather than agent-written summary state.
 
+The published `northstar` install contains this full boundary as one 75-file
+artifact. Its minimal Effigy catalogue exposes only
+`northstar/check:agent-instructions`, `northstar/check:rust-quality`,
+`northstar/test:rust-quality-recorder`, and `northstar/rust-quality:record`.
+Rust activation remains scoped and profile-driven, so the catalogue does not
+enter general agent context unless the router selects a Rust mode.
+
 ## Readiness-mapping artifact contract
 
 Readiness mapping is a plan-only index for a bounded destination. It does not
@@ -261,5 +268,5 @@ orchestrator lane when a parent harness already owns the worktree.
 - `g01.001` uses this architecture to enact Northstar on Northstar and pilot
   the delivery layer inside this repo.
 - `docs/contracts/004-language-quality-pack.md` governs the first language
-  quality pack. Roadmap `g02.030` sequences production-boundary proof,
+  quality pack. Completed roadmap `g02.030` records production-boundary proof,
   implementation, fresh evidence, and distribution.

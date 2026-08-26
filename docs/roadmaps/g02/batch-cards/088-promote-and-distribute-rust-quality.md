@@ -1,6 +1,6 @@
 # 088 - Promote And Distribute Rust Quality
 
-Status: ready
+Status: complete
 Owner: repo maintainers
 Updated: 2026-08-26
 Master spec refs: `docs/specs/031-rust-quality-authoring-and-audit.md`
@@ -41,15 +41,15 @@ the two Rhai scripts, and the three skill-local selectors
 
 ## Acceptance Criteria
 
-- [ ] One installed `northstar` skill exposes compact Rust authoring and the
+- [x] One installed `northstar` skill exposes compact Rust authoring and the
       explicit audit adapter.
-- [ ] Copy-ready setup declares strict profile resolution and repository-owned
+- [x] Copy-ready setup declares strict profile resolution and repository-owned
       MSRV, exclusions, and deviations.
-- [ ] Deterministic checks reject catalogue drift and command duplication.
-- [ ] Full source/install parity and repository QA pass.
-- [ ] Documentation states that ordinary, high assurance, combined-default, and
+- [x] Deterministic checks reject catalogue drift and command duplication.
+- [x] Full source/install parity and repository QA pass.
+- [x] Documentation states that ordinary, high assurance, combined-default, and
       observable-compaction claims remain unsupported.
-- [ ] Spec 031 is archived or retired only after every durable outcome and
+- [x] Spec 031 is archived or retired only after every durable outcome and
       remaining evidence gap has a canonical home.
 
 ## Validation
@@ -78,5 +78,5 @@ the closeout log.
 
 ## Next Task
 
-After implementation closeout, seek operator-provided live-use feedback; do not
-dispatch a consumer run from Northstar.
+The implementation lane is complete. Seek operator-provided live-use feedback;
+do not dispatch a consumer run from Northstar.

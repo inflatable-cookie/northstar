@@ -1,6 +1,6 @@
 # 030 - Ship Rust Quality Authoring And Audit
 
-Status: active — production tracks evidenced; distribution ready
+Status: complete
 Owner: repo maintainers
 Created: 2026-08-25
 Depends on: `g02.027`, contract `004-language-quality-pack`
@@ -9,13 +9,13 @@ Master spec refs: `docs/specs/031-rust-quality-authoring-and-audit.md`
 Governing refs: `docs/contracts/004-language-quality-pack.md`,
 `docs/contracts/003-agent-instruction-surface.md`,
 `docs/architecture/system-architecture.md`
-Planning state: cards 083-087 complete; card 088 ready
+Planning state: cards 083-088 complete
 
 ## Problem
 
-Northstar has promoted the strict Rust catalogue and both routed workflows
-inside the single installable skill. The remaining gap is fresh blinded
-production-payload evidence before distribution claims are updated.
+Northstar has promoted and distributed the strict Rust catalogue and both
+routed workflows inside the single installable skill. Fresh blinded production
+evidence and exact source/install parity support the bounded claims below.
 
 ## Goals
 
@@ -26,7 +26,7 @@ production-payload evidence before distribution claims are updated.
 - [x] add explicitly triggered worktree/repository audit-and-repair;
 - [x] preserve action-specific remediation authority and dirty worktree state;
 - [x] prove blinded production-pack behavior before distribution;
-- [ ] prove source and installed distribution parity before claiming
+- [x] prove source and installed distribution parity before claiming
       availability.
 
 ## Non-Goals
@@ -89,7 +89,7 @@ Card: `g02.030/086`.
       required tracks;
 - [x] reject false-positive, authority, locality, preservation, churn, or review
       regression;
-- [ ] update doctrine, templates, checks, installed parity, and operator docs
+- [x] update doctrine, templates, checks, installed parity, and operator docs
       only after the production evidence gate passes.
 
 Cards: `g02.030/087`, `g02.030/088`.
@@ -109,21 +109,19 @@ Cards: `g02.030/087`, `g02.030/088`.
 - [x] Dirty user state and unrelated code remain untouched.
 - [x] Fresh production-pack evidence passes the frozen track gates and blind
       review.
-- [ ] Source and installed skill payloads pass parity and repository QA.
+- [x] Source and installed skill payloads pass parity and repository QA.
 
 ## Lane Runway
 
 - Generation goal: extend the reusable Northstar skill with source-backed
   language quality without expanding always-loaded context or creating a second
   authority.
-- Immediate card: `g02.030/088` is ready after revisions K and M passed the
-  explicit-audit and everyday-authoring production gates respectively.
-- Continuation envelope: exhausted. Card 088 does not auto-start.
-- Lane budget: card 087 is complete; another operator continuation is required
-  before distribution work.
-- Pause signal: `budget-exhausted` after successful card-087 evidence closeout.
-- Planning checkpoint: review the frozen production boundary, then activate the
-  implementation chain in bounded groups of at most three ready cards.
+- Immediate card: none; cards 083 through 088 are complete.
+- Continuation envelope: closed.
+- Lane budget: complete.
+- Pause signal: `lane-complete` after source/install parity and repository QA.
+- Planning checkpoint: closed after the frozen production boundary, evidence,
+  and distribution all passed.
 
 ## Risks And Mitigations
 
@@ -148,5 +146,5 @@ Cards: `g02.030/087`, `g02.030/088`.
 
 ## Next Task
 
-Execute `g02.030/088` only after fresh operator continuation. Promote and verify
-the evidenced payload without expanding its assurance claims.
+The lane is complete. Seek operator-provided live-use feedback without
+dispatching a consumer run or expanding the supported assurance claims.

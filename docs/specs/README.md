@@ -13,7 +13,6 @@ worked through.
 - [027 - Northstar Native Pre-Execution Discovery](./027-northstar-native-pre-execution-discovery.md)
 - [029 - Northstar Long-Horizon Planning](./029-northstar-long-horizon-planning.md)
 - [030 - Conversational Triage And Docs Cleanup](./030-conversational-triage-and-docs-cleanup.md)
-- [031 - Rust Quality Authoring And Audit](./031-rust-quality-authoring-and-audit.md)
 - [Related translation memo](../../bundle-docs/research/translation-memos/matt-pocock-skills-audit-to-northstar.md)
 - [Rust quality translation memo](../../bundle-docs/research/translation-memos/rust-quality-skills-and-audit.md)
 
@@ -44,6 +43,12 @@ worked through.
 - Prefer `docs/specs/archive/` over indefinite in-place accumulation once a
   closed planning artifact no longer governs live work.
 - Keep the archive lean and do not treat it as a second live planning surface.
+
+## Retired in place
+
+- [031 - Rust Quality Authoring And Audit](./031-rust-quality-authoring-and-audit.md)
+  — durable behavior is in contract 004 and system architecture; retained here
+  for the production-evidence history.
 
 ## Archive layout
 

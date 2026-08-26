@@ -75,6 +75,34 @@ agent instructions:
 effigy --repo /path/to/installed/northstar northstar/check:rust-quality
 ```
 
+### Activate strict Rust quality in a repository
+
+Copy the three files under
+`skills/northstar/assets/templates/language-quality/rust/` into the consumer
+repository:
+
+- place the scoped `AGENTS.md` at the narrowest directory that owns the Rust
+  source, manifests, tests, and related docs;
+- copy `rust-quality-profile.json` and `rust-quality-deviations.json` to
+  `docs/contracts/`;
+- fill the profile's Cargo-manifest and toolchain-policy paths, generated and
+  vendored exclusions, and deviation file. Keep `when_unresolved` set to
+  `stop`.
+
+Only `strict` is production-valid. The repository owns its MSRV, exclusions,
+architecture, and accepted deviations; Northstar does not infer or replace
+them. Ordinary Rust work then routes through the compact authoring mode. An
+explicit whole-codebase or current-worktree audit uses:
+
+```text
+/northstar-rust-audit repository
+/northstar-rust-audit worktree
+```
+
+The audit records findings before mutation and preserves unrelated dirty state.
+It does not authorize ordinary or high-assurance profiles, unsafe/FFI repair,
+blanket fixing, or certification claims.
+
 Retired top-level skills (`northstar-setup`, `northstar-plan`,
 `northstar-recover`, `northstar-research`, `northstar-handoff`) were merged
 into internal **modes** under `skills/northstar/references/modes/`. No

@@ -18,7 +18,7 @@ single-pilot bucket.
 | Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | pending |
 | Add a genuinely long-horizon planning route without conflating it with readiness review. | active | `docs/specs/029-northstar-long-horizon-planning.md`, `skills/northstar/references/modes/atlas.md` | Non-Northstar scenario and operator confirmation |
 | Preserve useful conversational context and keep `/docs` drift recoverable without blind deletion. | active | `docs/specs/030-conversational-triage-and-docs-cleanup.md`, `docs/contracts/001-working-rules.md`, `skills/northstar/references/modes/cleanup-docs.md` | live triage and cleanup feedback |
-| Raise language-code quality through compact everyday guidance and an explicit evidence-bound audit without creating a second standard or installable skill. | active | `docs/contracts/004-language-quality-pack.md`, `docs/specs/031-rust-quality-authoring-and-audit.md` | `g02.030/088` promote and distribute evidenced tracks |
+| Raise language-code quality through compact everyday guidance and an explicit evidence-bound audit without creating a second standard or installable skill. | complete | `docs/contracts/004-language-quality-pack.md`, `docs/specs/031-rust-quality-authoring-and-audit.md` | operator-provided live-use feedback |
 
 Update this runway only when generation-level intent changes, a milestone
 materially advances or closes a goal, or rollover is being considered. Do not
@@ -64,8 +64,8 @@ rollover signal.
   complete; broader validation remains)
 - `029-add-conversational-triage-and-docs-cleanup.md` (active; implementation
   and deterministic validation are complete; live operator usage remains)
-- `030-ship-rust-quality-authoring-and-audit.md` (active; cards 083-087
-  complete; revisions K and M prove both tracks; card 088 ready)
+- `030-ship-rust-quality-authoring-and-audit.md` (complete; cards 083-088,
+  production evidence, published install, and 75-file parity proven)
 
 ## Next Task
 
@@ -81,10 +81,8 @@ dogfooding of the optimized surface; its research memo is
 `bundle-docs/research/translation-memos/agent-instruction-surface-optimization.md`.
 Atlas validation is tracked by `g02.028`; Northstar does not select or manage the
 operator's external dogfooding.
-The current Northstar-owned lane is `g02.030/088`, now ready after fresh blinded
-production evidence passed both Rust tracks. It requires fresh operator
-continuation and has not started. Triage,
-Atlas, and instruction-surface feedback remain
-operator-owned follow-ups and do not block this card.
+The Rust quality implementation lane `g02.030` is complete. Triage, Atlas,
+instruction-surface feedback, and Rust live-use feedback remain
+independent operator-owned follow-ups.
 
 Batch cards live in `g02/batch-cards/` when strict posture uses them.

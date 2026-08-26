@@ -113,7 +113,7 @@ See the [Rust quality translation memo](translation-memos/rust-quality-skills-an
 | Rule prototype | Seed ready | Seven sourced rules exercise authoring, audit, provenance, profiles, remediation, and deviation fields |
 | Benchmark | Required tracks eligible | Production K makes explicit audit eligible at `3/3`; production M makes everyday authoring eligible at `3/3` with frozen churn and blind-review gates |
 | Contract | Complete | Six normative rules promoted; strict selected; `004-language-quality-pack` active |
-| Implementation | Distribution ready | `g02.030/083-087` proved the boundary, production foundation, routed workflows, and both production tracks; `g02.030/088` is ready |
+| Implementation | Complete | `g02.030/083-088` proved the boundary, production foundation, routed workflows, both production tracks, and exact published-install parity |
 
 ## Handoff to Implementation
 
@@ -161,5 +161,6 @@ See the [translation memo](translation-memos/northstar-effigy-boundary.md) for r
 2. Release phase contract prototype
 3. README generation prototype
 
-For Rust quality, execute `g02.030/088` only after fresh operator continuation.
-Observable compaction remains a separate evidence gap.
+For Rust quality, collect operator-provided live-use feedback. Observable
+compaction remains a separate evidence gap; Northstar does not dispatch a
+consumer run.

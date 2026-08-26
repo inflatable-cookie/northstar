@@ -60,6 +60,10 @@ to pick one mode:
 - Research -> contracts/architecture -> `research`
 - Bootstrap, migrate, or spine hygiene -> `normalize-docs`
 - **Explicit** continuation brief / fresh thread -> `handoff` only (not bare `continue`)
+- Rust quality during ordinary coding -> install the scoped Rust activation
+  template and strict repository profile, then use normal coding prompts
+- Explicit Rust worktree or whole-repository audit-and-repair ->
+  `/northstar-rust-audit worktree` or `/northstar-rust-audit repository`
 
 ## If You Want Clear Prompting, Say It Plainly
 
@@ -75,7 +79,18 @@ to pick one mode:
 - “Replan this after the contract change” -> `northstar` (replan-after-change)
 - “Refocus this project under Northstar” -> `northstar` (refocus-drifted-project)
 - “Turn this memo into contracts” -> `northstar` (research)
+- “Audit and fix the current Rust tranche with no slop” ->
+  `/northstar-rust-audit worktree`
+- “Audit and fix this entire Rust repository” ->
+  `/northstar-rust-audit repository`
 - **Create an orchestrator runway and worker PR loop** -> `northstar` (orchestrator mode)
+
+Rust activation is repository-owned. Copy the scoped `AGENTS.md`, strict
+profile, and deviations templates from
+`skills/northstar/assets/templates/language-quality/rust/`; declare the real
+MSRV/toolchain sources and generated or vendored exclusions. Only `strict` is
+production-valid. Ordinary and high-assurance profiles, a combined default,
+observable compaction resilience, and certification remain unsupported.
 
 During an orchestrator or refresh conversation, ask the agent to check
 `docs/triage/` for open capture notes. Useful unresolved observations should be

@@ -149,10 +149,10 @@ Primary test data:
 
 ## Active translation tracks
 
-Rust quality implementation is evidenced but not yet distributed. Research
+Rust quality implementation is evidenced and distributed. Research
 revision F made everyday authoring eligible and research revision M made strict
 explicit audit eligible. Production revision K then passed explicit audit 3/3;
 production revision M passed everyday authoring 3/3 with all churn ratios below
 the frozen ceiling. Strict unsafe findings remain report-only. Contract 004 and
-roadmap `g02.030` are active; cards 083-087 are complete and card 088 is ready.
-Compaction resilience remains unproven.
+roadmap `g02.030` is complete through card 088 with exact 75-file
+source/install parity. Compaction resilience remains unproven.

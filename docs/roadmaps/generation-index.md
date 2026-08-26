@@ -79,11 +79,11 @@ sequence.
 The prior statement `No blocking roadmap milestone is open` is superseded by
 the contract-backed Rust quality lane below.
 
-`g02.030` is the active Northstar-owned milestone. Cards `g02.030/083-086`
-proved the Effigy-native boundary, promoted the shared production foundation,
-and added both routed workflows. Revisions K and M pass both production tracks;
-card 087 is complete and card 088 is ready but has not started.
+`g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
+boundary, promoted the shared production foundation, added both routed
+workflows, passed both production tracks, and distributed the exact 75-file
+payload.
 `g02.026/078` remains ready but deferred. The remaining
-instruction-surface, Atlas, and triage/cleanup measurements require
-operator-provided live-use evidence and are separate from card 087. Northstar does
-not select or dispatch those consumer runs.
+instruction-surface, Atlas, triage/cleanup, and Rust live-use measurements
+require operator-provided evidence. Northstar does not select or dispatch those
+consumer runs.

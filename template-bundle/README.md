@@ -40,6 +40,19 @@ worktree creation requires `AGENTS_WORKTREE_CONTAINER_DIR` from that file;
 harness-managed worktrees do not. Install `AGENTS.md` and the one-line
 `CLAUDE.md` bridge (`@AGENTS.md`) together.
 
+### Optional strict Rust quality activation
+
+Rust quality is an optional scoped activation supplied by the single installed
+Northstar skill, not a second docs bundle or installable skill. Copy the three
+files from `skills/northstar/assets/templates/language-quality/rust/`: place its
+`AGENTS.md` at the narrowest Rust-owning directory and place the profile and
+deviations JSON files in `docs/contracts/`.
+
+Keep the profile at production-valid `strict`. Replace the empty Cargo-manifest,
+toolchain-policy, generated, and vendored lists with repository-owned inputs;
+unresolved MSRV remains a stop. Record accepted exceptions in the deviations
+file. Do not infer Northstar's Rust 1.95 benchmark floor as the consumer MSRV.
+
 ## Standard docs spines
 
 Baseline Northstar repos should use:

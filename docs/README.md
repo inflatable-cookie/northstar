@@ -20,7 +20,6 @@ to adopt.
 - [specs/026-orchestrator-thread-and-worker-pr-loop.md](./specs/026-orchestrator-thread-and-worker-pr-loop.md)
 - [specs/028-agent-instruction-surface-optimization.md](./specs/028-agent-instruction-surface-optimization.md)
 - [specs/030-conversational-triage-and-docs-cleanup.md](./specs/030-conversational-triage-and-docs-cleanup.md)
-- [specs/031-rust-quality-authoring-and-audit.md](./specs/031-rust-quality-authoring-and-audit.md)
 - [triage/README.md](./triage/README.md)
 - [roadmaps/generation-index.md](./roadmaps/generation-index.md)
 - [handoffs/README.md](./handoffs/README.md)

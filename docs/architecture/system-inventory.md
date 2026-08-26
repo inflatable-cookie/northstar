@@ -56,15 +56,15 @@ skills.
 | Repo contract integrity | `effigy qa` | repo maintainers | ready |
 | Bundle docs integrity | `effigy qa:docs` | repo maintainers | ready |
 | Delivery-layer adoption | active docs spine, compact working rules, spec, roadmap, log | repo maintainers | ready |
-| Template/skill promotion | follow-on roadmap batches and logs | repo maintainers | pending |
+| Template/skill promotion | copy-ready skill assets, operator docs, roadmap batches, and logs | repo maintainers | ready |
 | Papercut loop | root queue, doctrine, templates, skill instruction, and QA coverage | repo maintainers | ready |
-| Published skill parity | Skills CLI update path, global install inspection, and source checker | repo maintainers | ready; 47-file parity proven |
-| Explicit command surface | Seven thin command adapters, canonical router/mode wiring, description budget, and retired-alias checks | repo maintainers | ready; source and installed discovery verified |
+| Published skill parity | Skills CLI update path, global install inspection, and source checker | repo maintainers | ready; 75-file parity proven |
+| Explicit command surface | Eight thin command adapters, canonical router/mode wiring, description budget, and retired-alias checks | repo maintainers | ready; source and installed discovery verified |
 | Triage lifecycle | `docs/triage/` anchors, timestamped naming, orchestrator/refresh capture, and cleanup dispositions | repo maintainers | ready; live operator feedback pending |
 | Consumer feedback intake | operator-provided live-use evidence and manual triage boundary | repo maintainers + operator | operator-owned |
 | Orchestrator mode | per-worker committed handoff under `docs/handoffs/`, fresh worker worktree or safe temporary fallback, startup check, chunk report, PR, provider review record, and closeout evidence | repo maintainers + operator | operator validation complete; longer multi-card evidence pending |
 | Model-efficiency comparison | measured role routing, rework, review cycles, and relay burden | repo maintainers | one operator validation measured; broader comparison pending |
-| Rust quality production foundation | seven-rule catalogue, five JSON schemas, two strict checked projections, skill-local Rhai package check | repo maintainers | ready; strict-only, 58-file isolated install parity proven, router context unchanged |
+| Rust quality production foundation | seven-rule catalogue, five JSON schemas, two strict checked projections, two routed modes, thin audit adapter, and skill-local Rhai checks | repo maintainers | ready and distributed; strict-only, 75-file installed parity proven |
 | Rust quality prototype | representative rule catalogue, audit and authoring benchmark corpora, blinded subject/coordinator/reviewer packets, projections, deterministic case-local result recorder, result scorer, false-positive and churn measures, context-retention test | repo maintainers + operator | retained evidence infrastructure; strict everyday and explicit-audit tracks eligible; compaction unproven |
 
 ## Planning Gaps
@@ -76,8 +76,8 @@ skills.
 - The live repo pilot has not yet proven a longer autonomous multi-card run.
 - The first per-worker handoff/PR loop is proven, including same-identity GitHub
   review comments; provider adapter and packet-persistence defaults remain open.
-- The refresh, orchestrator, and cleanup routes are distributed to the installed
-  skill copy; the seven-command surface now passes source and installed parity
+- The refresh, orchestrator, cleanup, and Rust audit routes are distributed to
+  the installed skill copy; the eight-command surface now passes source and installed parity
   verification.
 - Atlas has a discovery-first contract now, but existing-project behavioral
   validation is still open because earlier runs were prescriptive rather than
@@ -91,7 +91,7 @@ skills.
   contract promotion are complete. Production K passes explicit audit 3/3 and
   production M passes everyday authoring 3/3; an observable compaction boundary
   still precedes stress claims.
-- Contract `004-language-quality-pack` and roadmap `g02.030` are active. Cards
-  083 through 086 proved the runtime boundary, promoted the shared production
-  foundation, and added both routed production workflows plus deterministic
-  audit recording. Card 087 is complete and card 088 is ready.
+- Contract `004-language-quality-pack` remains active. Roadmap `g02.030` and
+  cards 083 through 088 are complete: the runtime boundary, shared production
+  foundation, both routed workflows, deterministic recording, production
+  evidence, copy-ready setup, and installed distribution are proven.
