@@ -7,6 +7,53 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 
 <!-- Keep entries short. Append newest entries at the top. Do not include secrets. -->
 
+- **2026-08-25 — skill description budget is enforced only at closeout:** the
+  Rust activation text passed skill validation but failed the later command
+  surface check because the main description exceeded 60 characters; impact is
+  late rewrite churn on discoverability metadata; plausible fix is to include
+  the description-length assertion in skill-local validation or document the
+  cap beside the frontmatter; affected surfaces are `skills/northstar/SKILL.md`
+  and the command-skill checker.
+
+- **2026-08-25 — Effigy/Rhai complexity limit lacks decomposition guidance:** a
+  bounded recorder self-test failed at parse time with `Expression exceeds
+  maximum complexity` before any case ran; impact is trial-and-error splitting
+  for otherwise ordinary deterministic task scripts; plausible fix is to expose
+  the configured limit and a function-level remediation hint in the error or
+  Rhai guide; affected surfaces are Effigy-native validators and skill-local
+  self-tests.
+
+- **2026-08-25 — Seatbelt packet isolation denies `/dev/null` redirects:** the
+  Rust audit recorder initially suppressed successful `jq` validation through
+  `/dev/null`, but the write-denying subject profile blocks that device; impact
+  is that an otherwise valid packet-local checker can fail only under the real
+  evidence boundary; plausible fix is to make the profile's device policy
+  explicit or keep packet helpers free of `/dev/null` redirects; affected
+  surfaces are isolated subject/reviewer profiles and packet-local tooling.
+
+- **2026-08-25 — zsh `path` loop variable destroys command lookup:** an archive
+  verification loop used `path` for a manifest field, which overwrote zsh's
+  special `$path` array and made `shasum` and `awk` disappear mid-loop; impact
+  was a false validation failure after the prototype checks passed; plausible
+  fix is to reserve shell-special names and use task-qualified variables such
+  as `relative_path`; affected surfaces are ad hoc zsh validation snippets and
+  future archive-verification helpers.
+
+- **2026-08-25 — Rust evidence aggregate self-test hard-coded historical counts:**
+  the focused revision G preparer and review tests passed with three audit arms
+  and three reviews while `trial-runner.sh self-test` still reported nine and
+  six; impact is misleading closeout evidence despite correct underlying checks;
+  plausible fix is to derive or update aggregate labels with cohort shape;
+  affected surface is the Rust quality prototype self-test summary.
+
+- **2026-08-24 — macOS trial isolation needs canonical paths and a private Codex home:**
+  Seatbelt resolved `/tmp` as `/private/tmp`, while ephemeral Codex still needed
+  writable runtime state; impact was two false startup failures before any
+  subject work; plausible fix is a checked launcher that canonicalizes every
+  deny path, provisions a per-arm runtime home, and probes read/write boundaries
+  before timing starts; affected surfaces are the Rust quality independent-trial
+  launcher and future language-pack evidence runners.
+
 - **2026-08-22 — parallel Effigy QA selectors contend on shared task locks:**
   running `effigy qa` and `effigy qa:docs` together caused a repo-contract lock
   conflict even though the docs check completed; impact is a false validation
@@ -99,11 +146,13 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
   to make provenance a structured field rather than a prose contains-check;
   affected surface is `docs/roadmaps/README.md`.
 
-- **2026-08-16 — roadmap currentness check:** the docs QA contains-check still
-  requires the historical completion phrase `` `g02.024` is complete `` after a
-  next-task rewrite; impact is that legitimate currentness edits fail QA;
-  plausible fix is to assert structured status instead of stale prose; affected
-  surface is `docs/roadmaps/g02/README.md`.
+- **2026-08-16 — roadmap currentness check:** docs QA contains-checks still
+  require historical prose such as `` `g02.024` is complete `` and `No blocking
+  roadmap milestone is open` after the active lane changes; impact is that
+  truthful currentness edits fail QA or must retain explicitly superseded text;
+  plausible fix is to assert structured milestone/card status instead of stale
+  prose; affected surfaces are `docs/roadmaps/g02/README.md` and
+  `docs/roadmaps/generation-index.md`.
 
 - **2026-08-16 — research index hard-break whitespace:** `git diff --check`
   flags Markdown hard-break spaces on a metadata line when that line is edited;

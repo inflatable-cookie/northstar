@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-08-19
+Updated: 2026-08-25
 
 ## Coverage Rules
 
@@ -18,10 +18,7 @@ Updated: 2026-08-19
 | `001-working-rules` | compact delivery grammar, papercuts feedback loop, triage capture/cleanup, done-ness, guardrail pack, spec-hygiene rule, currentness-surface rules, autonomy rules, orchestrator/worker boundary, worktree isolation, PR review and merge gates, and the live ready-state/closeout rules for the repo | `docs/`, `bundle-docs/`, `template-bundle/`, `skills/`, `scripts/` | `g01.001` through `g02.029` where directly applicable | active |
 | `002-agent-local-paths` | ignored path registry, manual worktree container selection, harness-vs-manual ownership, and nested-agent stop boundary | `AGENTS.md`, `docs/contracts/`, `template-bundle/`, `skills/`, `docs/handoffs/` | orchestrator/worker launches and any manual worktree lane | active |
 | `003-agent-instruction-surface` | always-loaded versus scoped/on-demand instruction content, root-file review budget, precedence, and read-only audit boundary | `AGENTS.md`, `docs/contracts/`, `template-bundle/`, `skills/`, `scripts/` | `g02.027` and future consumer adoption | active |
-
-## Missing or Pending Contracts
-
-No active contract gaps are blocking the current `g02` lane.
+| `004-language-quality-pack` | shared language-rule catalogue, everyday and explicit-audit workflows, scope resolution, remediation authority, assurance profiles, deviations, and completion evidence | `docs/contracts/`, language-quality catalogues, `skills/`, Effigy selectors, consumer profiles | `g02.030` | active |
 
 ## Roadmap Readiness
 
@@ -30,6 +27,8 @@ No active contract gaps are blocking the current `g02` lane.
 ready but deferred, and the architecture-refocus and reframe parts of Batch 26.4
 are complete.
 `g02.027/079` is complete; its operator-provided feedback measurement remains
-pending. The generation remains open and no separate contract gap blocks the
-current planning lane. Northstar consumes live consumer feedback supplied by the
-operator rather than selecting or dispatching a dogfood target.
+pending. The generation remains open and no separate contract gap blocks that
+existing planning lane. The Rust quality catalogue review and contract gate
+have passed. Roadmap `g02.030` is active with cards 083-087 complete; production
+revisions K and M pass both required tracks and card 088 is ready. Northstar consumes live consumer feedback
+supplied by the operator rather than selecting or dispatching a dogfood target.

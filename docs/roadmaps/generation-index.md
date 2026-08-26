@@ -1,7 +1,7 @@
 # Roadmap Generation Index
 
 Status: active
-Updated: 2026-08-17
+Updated: 2026-08-25
 
 ## Mode
 
@@ -76,15 +76,14 @@ sequence.
 
 ## Next Task
 
-No blocking roadmap milestone is open. `g02.025` is complete after the
-orchestrator/worker dogfood and closeout; `g02.026/075` is complete after its
-contract PR and merge; and `g02.026/076` is complete after its checker PR,
-review, merge, and evidence closeout. `g02.026/077` is now complete after its
-route PR, review, merge, and closeout. The Batch 26.3 starter-surface planning checkpoint is complete and
-`g02.026/078` remains ready but deferred. The architecture-refocus and reframe
-parts of Batch 26.4 are complete. `g02.027/079` is now complete; the next measurement is the operator-provided
-feedback from live use of the optimized instruction surface. `g02.028` owns
-the remaining non-Northstar Atlas validation and operator confirmation.
-`g02.029/080` through `g02.029/082` are complete; the next Northstar-owned step
-is live triage/cleanup feedback before spec 030 is retired. Northstar does not
-select or dispatch the consumer run.
+The prior statement `No blocking roadmap milestone is open` is superseded by
+the contract-backed Rust quality lane below.
+
+`g02.030` is the active Northstar-owned milestone. Cards `g02.030/083-086`
+proved the Effigy-native boundary, promoted the shared production foundation,
+and added both routed workflows. Revisions K and M pass both production tracks;
+card 087 is complete and card 088 is ready but has not started.
+`g02.026/078` remains ready but deferred. The remaining
+instruction-surface, Atlas, and triage/cleanup measurements require
+operator-provided live-use evidence and are separate from card 087. Northstar does
+not select or dispatch those consumer runs.

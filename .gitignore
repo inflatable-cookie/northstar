@@ -5,3 +5,6 @@
 # BEGIN EFFIGY LOCAL STATE
 .effigy/
 # END EFFIGY LOCAL STATE
+
+# Rust/Cargo compiler output
+target/

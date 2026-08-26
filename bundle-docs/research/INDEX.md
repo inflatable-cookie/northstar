@@ -1,11 +1,11 @@
 # Northstar Active Systems Research - Complete Index
 
-**Status**: Research complete, ready for implementation  
-**Location**: `bundle-docs/research/`  
+**Status**: Release/changelog research ready; later translation tracks active
+**Location**: `bundle-docs/research/`
 
 ---
 
-## For Implementation (Start Here)
+## Release and changelog implementation (start here)
 
 | Document | Purpose | Read Time |
 |----------|---------|-----------|
@@ -53,6 +53,13 @@
 - `translation-memos/northstar-effigy-integration.md` - Integration strategy
 - `translation-memos/ai-agent-release-playbook.md` - AI agent playbook
 - `translation-memos/changelog-library-placement.md` - Library placement
+- `translation-memos/northstar-orchestrator-thread.md` - Orchestrator, worker, and PR boundary
+- `translation-memos/agent-instruction-surface-optimization.md` - Compact instruction-surface evidence
+- `translation-memos/matt-pocock-skills-audit-to-northstar.md` - External skill-design translation
+- `translation-memos/rust-quality-skills-and-audit.md` - Two-track Rust coding-quality model
+
+### Prototypes
+- `prototypes/rust-quality/README.md` - Rust rule catalogue, benchmark corpus, and scoring protocol
 
 ### Meta
 - `README.md` - Research overview and scope
@@ -124,13 +131,14 @@ Primary test data:
 | Source hubs | 5 |
 | Specimen dossiers | 5 |
 | Value tracks | 2 |
-| Translation memos | 4 |
+| Translation memos | 8 |
+| Prototype documentation/data/fixtures/results | 4771 |
 | Meta | 4 |
-| **Total** | **24** |
+| **Total** | **4799** |
 
 ---
 
-## Next Step
+## Release and changelog next step
 
 1. Read `handoff/QUICK_START.md` (5 minutes)
 2. Create `effigy/crates/changelog/`
@@ -138,3 +146,13 @@ Primary test data:
 4. Test against `effigy/CHANGELOG.md`
 
 **Ready for implementation.**
+
+## Active translation tracks
+
+Rust quality implementation is evidenced but not yet distributed. Research
+revision F made everyday authoring eligible and research revision M made strict
+explicit audit eligible. Production revision K then passed explicit audit 3/3;
+production revision M passed everyday authoring 3/3 with all churn ratios below
+the frozen ceiling. Strict unsafe findings remain report-only. Contract 004 and
+roadmap `g02.030` are active; cards 083-087 are complete and card 088 is ready.
+Compaction resilience remains unproven.

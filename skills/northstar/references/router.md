@@ -4,6 +4,27 @@
 then open only that mode file under `references/modes/` (plus mode-specific
 refs under `references/setup/` or `references/handoff-contract.md`).
 
+## Rust explicit audit-and-repair (explicit only)
+
+Use only when the operator explicitly requests a Rust quality audit, no-slop
+pass, whole-codebase review, or audit-and-fix action. Resolve `worktree` or
+`repository` scope. Explicit audit intent takes precedence over everyday Rust
+authoring and never activates from ordinary coding alone.
+
+→ [`modes/rust-quality-audit.md`](./modes/rust-quality-audit.md)
+
+## Rust everyday authoring (repository-activated)
+
+Use when an applicable target-repository instruction activates Northstar Rust
+quality and the task writes, reviews, or refactors Rust. The repository profile
+must resolve to production-valid `strict`.
+
+Do **not** use this route for a requested quality audit, no-slop pass, whole
+codebase review, or audit-and-fix tranche. Select the explicit audit route for
+that intent.
+
+→ [`modes/rust-quality-authoring.md`](./modes/rust-quality-authoring.md)
+
 ## 1. Handoff (explicit only)
 
 Use **only** when the user clearly wants a **fresh-thread artifact**, not

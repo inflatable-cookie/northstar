@@ -1,8 +1,11 @@
 [manifest]
-minimum_effigy_version = "0.7.0"
+minimum_effigy_version = "0.8.4"
 
 [catalog]
 alias = "northstar"
 
 [tasks]
 "check:agent-instructions" = [{ rhai = "scripts/check-agent-instructions.rhai" }]
+"check:rust-quality" = [{ rhai = "scripts/check-rust-quality.rhai" }]
+"rust-quality:record" = [{ rhai = "scripts/rust-quality-recorder.rhai" }]
+"test:rust-quality-recorder" = [{ task = "rust-quality:record self-test" }]

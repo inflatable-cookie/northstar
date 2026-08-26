@@ -11,6 +11,11 @@ Examples:
 
 ## Rule
 
-Use this folder sparingly. For Northstar's live repo pilot, one compact
-working-rules contract is enough for now. Add more contracts only when a seam
-or boundary genuinely needs an independent reference surface.
+Use this folder sparingly. Keep the general delivery rules compact, and add a
+separate contract only when a seam or boundary genuinely needs an independent
+reference surface.
+
+`rust-quality-profile.json` and `rust-quality-deviations.json` are consumer
+configuration governed by contract 004, not separate contracts. Their
+copy-ready source is under
+`skills/northstar/assets/templates/language-quality/rust/`.

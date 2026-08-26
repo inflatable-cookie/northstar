@@ -1,6 +1,6 @@
 ---
 name: northstar
-description: Northstar strategic planning, docs, and review workflows.
+description: Northstar planning, docs, and strict Rust quality.
 ---
 
 # Northstar
@@ -15,6 +15,7 @@ open **one** [`references/modes/`](./references/modes/) file and follow it.
 
 | Mode | When |
 | --- | --- |
+| Rust explicit audit | User explicitly requests a Rust quality audit, no-slop pass, or audit-and-fix action |
 | Handoff | User explicitly asks for a continuation brief / fresh thread |
 | Project refresh | User asks for `northstar refresh` or `northstar project refresh` to bring an existing project up to date |
 | Architecture refocus | User asks for `northstar architecture refocus` or a bounded codebase architecture improvement review |
@@ -22,6 +23,7 @@ open **one** [`references/modes/`](./references/modes/) file and follow it.
 | Planning readiness review | User asks for `northstar planning readiness review` on an existing project |
 | Atlas | User asks for `northstar atlas` or discovery-first long-horizon direction |
 | Agent instruction review | User asks for a `northstar AGENTS file review`, or to review/optimize `AGENTS.md`/`CLAUDE.md` |
+| Rust everyday authoring | An applicable repository instruction activates Northstar Rust quality and the task writes, reviews, or refactors Rust without requesting an audit |
 | Pre-execution discovery | Readiness mapping, intent rounds, project language, decision prototypes, questionnaires, or reframe |
 | Orchestrator | User wants question-led planning plus a separate worker/PR loop |
 | Docs cleanup | User wants `/docs` files and folders inspected and reworked to fit Northstar |
@@ -47,6 +49,9 @@ activated, follow the router's lightweight four-command worktree fast path.
 
 - **Planning:** coherent architecture/contracts/roadmaps; no invented system
   behavior; ready cards only when rubric satisfied.
+- **Rust explicit audit:** resolved worktree or repository scope, deterministic
+  finding-first records, authority-bounded repair waves, preservation proof,
+  and repository-native validation. It never activates from ordinary coding.
 - **Planning readiness review:** read-only verdict on whether an existing
   project's planning is incomplete, drifted, materially ambiguous, or coherent,
   with one routed next step.
@@ -66,6 +71,8 @@ activated, follow the router's lightweight four-command worktree fast path.
 - **Pre-execution discovery:** frontier-based intent rounds and bounded
   project-language, prototype, and questionnaire routes; no execution authority.
 - **Research:** promoted decisions in architecture/contracts, not stranded memos.
+- **Rust everyday authoring:** strict, profile-resolved guidance for the current
+  Rust task and changed tranche; no wider audit authority.
 - **Recovery:** trustworthy planning surfaces and canonical refs restored.
 - **Normalize:** baseline or strict spine installed/maintained; Effigy-first QA.
 - **Orchestrator:** question-led planning, one pushed worker handoff under `docs/handoffs/`, bounded PR review loop.

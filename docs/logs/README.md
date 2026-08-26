@@ -59,3 +59,11 @@ Use logs as the third step in closeout:
 - `2026-08/16-223757-add-agent-local-path-registry.md`
 - `2026-08/16-233931-optimize-agent-instruction-surface.md`
 - `2026-08/19-085645-add-triage-and-docs-cleanup.md`
+- `2026-08/25-164300-compile-rust-quality-roadmap.md`
+- `2026-08/25-172511-prove-rust-quality-production-boundary.md`
+- `2026-08/25-174148-promote-rust-quality-catalogue.md`
+- `2026-08/25-180448-add-rust-everyday-authoring.md`
+- `2026-08/25-183304-add-rust-explicit-audit.md`
+- `2026-08/25-184420-pause-rust-production-evidence-on-authority.md`
+- `2026-08/25-185548-correct-rust-foreign-error-authority.md`
+- `2026-08/26-083100-run-rust-quality-production-evidence.md`

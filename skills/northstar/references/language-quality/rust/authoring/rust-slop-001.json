@@ -1,0 +1,51 @@
+{
+  "id": "RUST-SLOP-001",
+  "title": "Reject pass-through wrappers without an independent responsibility",
+  "maturity": "prototype",
+  "enforcement": "evaluation_only",
+  "dimensions": [
+    "architecture",
+    "human_quality"
+  ],
+  "applicability": {
+    "crate_kinds": [
+      "all"
+    ],
+    "triggers": [
+      "function whose sole operation forwards the same arguments to another function"
+    ],
+    "rust_release": "repository MSRV and newer"
+  },
+  "requirement": "A pass-through wrapper should exist only when it owns a stable API boundary, visibility boundary, substitution seam, policy, instrumentation point, type translation, or another named responsibility.",
+  "authoring_projection": [
+    "Before adding a forwarding function, name the boundary or policy it owns.",
+    "Call the underlying operation directly when the wrapper has no independent responsibility."
+  ],
+  "mechanical_enforcement": [
+    {
+      "tool": "stopslop",
+      "check": "SLOP039",
+      "role": "candidate",
+      "caveat": "The syntax detector cannot identify stable façades or architectural seams and must never auto-delete a wrapper."
+    }
+  ],
+  "remediation": {
+    "default_authority": "report_only",
+    "action_overrides": [],
+    "guidance": "This experimental candidate never authorizes mutation. Preserve a justified façade and record its responsibility. Delete a wrapper only when an independent normative rule supplies repair authority after caller and boundary review."
+  },
+  "deviation": {
+    "allowed": true,
+    "required_evidence": [
+      "named independent responsibility",
+      "caller and visibility review",
+      "why direct use would weaken the boundary"
+    ]
+  },
+  "completion_evidence": [
+    "candidate list",
+    "classification for each candidate",
+    "no automatic repair",
+    "false-positive measurement"
+  ]
+}

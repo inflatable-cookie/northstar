@@ -1,17 +1,20 @@
 # Northstar Active Systems Research
 
-Purpose: research the evolution of Northstar from a static documentation template system to a more active stance with reusable tooling for release management, changelog handling, documentation coverage, and README generation.
+Purpose: research the evolution of Northstar from a static documentation
+template system to a more active stance with reusable operational tooling and
+source-backed coding-quality workflows.
 
 ## Scope
 
-This research initiative covers four feature areas:
+This research initiative covers five feature areas:
 
 1. **Reusable Release Management** - Systems for automating version bumps, releases, and publication
 2. **Changelog Handler System** - Tools for updating, formatting, and maintaining changelogs
 3. **Documentation Coverage Checks** - Validating completeness and consistency of documentation
 4. **Standardised README Generation** - Template-driven README creation and maintenance
+5. **Language-Specific Coding Quality** - Shared standards for everyday authoring and explicit audit-and-repair
 
-## Refined Direction
+## Release and changelog refined direction
 
 Based on analysis of Effigy's existing system and researched tools:
 
@@ -38,6 +41,8 @@ Based on analysis of Effigy's existing system and researched tools:
 - How can we support user-defined templates without becoming a mess of configuration?
 - What tooling is needed to support AI agent release execution?
 - How do we preserve human control while automating the tedious parts?
+- How should one source-backed coding standard serve compact everyday guidance
+  and an explicit codebase audit without drifting into two rule sets?
 
 ## Structure
 
@@ -45,6 +50,7 @@ Based on analysis of Effigy's existing system and researched tools:
 - `specimen-dossiers/` - Detailed studies of specific tools and systems
 - `value-tracks/` - Cross-specimen syntheses by problem area
 - `translation-memos/` - Project-facing recommendations
+- `prototypes/` - Bounded evidence artifacts used after translation and before contracts
 
 ## Research Principles
 
@@ -62,6 +68,15 @@ This research uses the same promotion rules but adds a specific constraint:
 - Any recommendation must explicitly address the Northstar/Effigy boundary question
 - Template flexibility must be demonstrated with concrete examples, not assumed
 
-## Next Task
+## Next tasks
 
-Read the source hubs to understand the landscape, then review specimen dossiers for detailed comparisons.
+Use `master-index.md` to enter the relevant research track. The Rust quality
+track completed its independent smoke and a valid revision F cohort with nine
+subjects and six blind reviews. Everyday authoring is eligible; combined is not
+the default. Revision M then passed all three explicit-audit runs after
+deterministic case-local result construction removed cross-case bookkeeping
+drift. Both required tracks are eligible. The seven-rule catalogue is promoted
+and contract 004 is active. Roadmap `g02.030` is compiled; cards 083-086 proved
+the boundary, promoted the production foundation, and added both routed
+workflows. Revisions K and M pass both production tracks; card 087 is complete
+and card 088 is ready.

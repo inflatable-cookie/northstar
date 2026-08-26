@@ -46,6 +46,7 @@ let commands = [
     ["northstar-refresh", "commands/northstar-refresh/SKILL.md", "references/modes/project-refresh.md"],
     ["northstar-cleanup", "commands/northstar-cleanup/SKILL.md", "references/modes/cleanup-docs.md"],
     ["northstar-atlas", "commands/northstar-atlas/SKILL.md", "references/modes/atlas.md"],
+    ["northstar-rust-audit", "commands/northstar-rust-audit/SKILL.md", "references/modes/rust-quality-audit.md"],
 ];
 
 let aggregate_description_chars = 0;
@@ -112,7 +113,7 @@ require(actual_command_files.len() == commands.len(), "unexpected command adapte
 for relative in actual_command_files {
     require(expected_paths.contains(relative), "unexpected command adapter: " + relative);
 }
-require(aggregate_description_chars <= 400, "command descriptions exceed 400 aggregate characters");
+require(aggregate_description_chars <= 460, "command descriptions exceed 460 aggregate characters");
 
 let all_skill_text = "";
 for file in fs::list_recursive(root) {

@@ -13,7 +13,9 @@ worked through.
 - [027 - Northstar Native Pre-Execution Discovery](./027-northstar-native-pre-execution-discovery.md)
 - [029 - Northstar Long-Horizon Planning](./029-northstar-long-horizon-planning.md)
 - [030 - Conversational Triage And Docs Cleanup](./030-conversational-triage-and-docs-cleanup.md)
+- [031 - Rust Quality Authoring And Audit](./031-rust-quality-authoring-and-audit.md)
 - [Related translation memo](../../bundle-docs/research/translation-memos/matt-pocock-skills-audit-to-northstar.md)
+- [Rust quality translation memo](../../bundle-docs/research/translation-memos/rust-quality-skills-and-audit.md)
 
 ## Rules
 

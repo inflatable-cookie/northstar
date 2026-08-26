@@ -1,5 +1,5 @@
 [manifest]
-minimum_effigy_version = "0.7.0"
+minimum_effigy_version = "0.8.4"
 
 [catalog]
 alias = "northstar"
@@ -14,9 +14,12 @@ setup = ["health"]
 "check:skill-install" = [{ rhai = "scripts/check-northstar-skill-install.rhai" }]
 "check:readiness-map" = [{ rhai = "scripts/check-northstar-readiness-map.rhai" }]
 "check:agent-instructions" = [{ rhai = "skills/northstar/scripts/check-agent-instructions.rhai" }]
+"check:rust-quality" = [{ rhai = "skills/northstar/scripts/check-rust-quality.rhai" }]
+"rust-quality:record" = [{ rhai = "skills/northstar/scripts/rust-quality-recorder.rhai" }]
+"test:rust-quality-recorder" = [{ task = "rust-quality:record self-test" }]
 "check:command-skills" = [{ rhai = "scripts/check-northstar-command-skills.rhai" }]
 "test:readiness-map" = [{ rhai = "scripts/test-northstar-readiness-map.rhai" }]
 "qa:docs" = [{ task = "check:repo-contract" }, { task = "check:readiness-map" }, { task = "test:readiness-map" }, { task = "check:command-skills" }]
 health = [{ task = "check:bundle" }]
-validate = [{ task = "check:bundle" }]
+validate = [{ task = "check:bundle" }, { task = "check:rust-quality" }, { task = "test:rust-quality-recorder" }]
 qa = [{ task = "validate" }, { task = "qa:docs" }]

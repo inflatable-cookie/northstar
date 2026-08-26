@@ -26,6 +26,7 @@ The one installable skill also exposes thin explicit command adapters under
 | `/northstar-architecture-refocus` | Bounded architecture refocus |
 | `/northstar-refresh` | Broad project planning/docs refresh |
 | `/northstar-cleanup` | Inspect and safely rework `/docs` drift |
+| `/northstar-rust-audit` | Explicit worktree or repository Rust quality audit-and-repair |
 
 These adapters are discoverability surfaces, not separate installs or planning
 authorities. Each loads the central router and one canonical mode. Atlas is
@@ -55,8 +56,9 @@ skill. A direct `rsync -a --delete` from `skills/northstar/` is reserved for loc
 development before the change is published. Restart agent sessions after an
 update.
 
-The installed skill also carries a minimal Effigy catalog for the consumer-safe,
-read-only agent-instruction audit. When a consumer repository has no local
+The installed skill also carries a minimal Effigy catalog for consumer-safe,
+read-only checks. It currently validates the agent-instruction surface and the
+inert Rust quality package. When a consumer repository has no local
 `check:agent-instructions` task, select the installed skill explicitly:
 
 ```bash
@@ -65,6 +67,13 @@ effigy --repo /path/to/installed/northstar northstar/check:agent-instructions /p
 
 This is an execution surface inside the one skill artifact, not a second public
 install or a replacement for the source repository's full QA catalog.
+
+Rust catalogue and projection parity is checked without loading those files as
+agent instructions:
+
+```bash
+effigy --repo /path/to/installed/northstar northstar/check:rust-quality
+```
 
 Retired top-level skills (`northstar-setup`, `northstar-plan`,
 `northstar-recover`, `northstar-research`, `northstar-handoff`) were merged
@@ -87,6 +96,8 @@ compatibility aliases.
 | `sweep-audit-repair.md` | Structured sweep pass |
 | `handoff.md` | User **explicitly** asks for handoff / fresh thread |
 | `atlas.md` | User-guided long-horizon direction and a coarse strategic runway |
+| `rust-quality-authoring.md` | Repository-activated ordinary Rust writing, review, or refactoring |
+| `rust-quality-audit.md` | Explicit Rust worktree or repository audit-and-repair |
 
 Setup references live under `skills/northstar/references/setup/`.
 Templates live under `skills/northstar/assets/templates/`.
@@ -98,6 +109,14 @@ Templates live under `skills/northstar/assets/templates/`.
   message — covered by the `northstar` skill description.
 - **Handoff:** only when the user clearly wants a continuation brief or fresh
   thread. The router and handoff mode forbid compaction-only or bare `continue`.
+- **Rust everyday authoring:** only when applicable repository instructions
+  activate the strict Rust profile and the task writes, reviews, or refactors
+  Rust. The mode loads individual rule references by trigger. Explicit audit or
+  no-slop intent is reserved for the audit route and cannot fall back here.
+- **Rust explicit audit:** only for an explicit quality audit, no-slop pass, or
+  audit-and-fix request. It loads the audit projection and deterministic record
+  contract on demand, resolves worktree or repository scope, and cannot
+  activate from ordinary coding.
 - **Triage:** orchestrator and refresh conversations capture unresolved useful
   threads in `docs/triage/YYYYMMDD-HHMMSS-<slug>.md`; cleanup and refresh promote,
   merge, or remove them over time.

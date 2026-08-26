@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-08-19
+Updated: 2026-08-25
 Architecture refs: docs/architecture/system-architecture.md
 
 ## Coverage Summary
@@ -20,6 +20,8 @@ skills.
 | `bundle-docs/` | doctrine surface | repo maintainers | reusable Northstar doctrine | `system-architecture.md`, `docs/contracts/001-working-rules.md` |
 | `template-bundle/` | product artifact | repo maintainers | copy-ready downstream docs bundle | `docs/specs/archive/001-northstar-delivery-layer.md`, `docs/roadmaps/g01/001-enact-northstar-on-northstar.md` |
 | `skills/` | automation surface | repo maintainers | installable agent workflows and published distribution | `docs/contracts/001-working-rules.md`, `bundle-docs/skills/README.md`, `scripts/check-northstar-skill-install.rhai` |
+| language quality packs | automation surface | repo maintainers | optional language-specific authoring and audit workflows | source translation memo, `docs/specs/031-rust-quality-authoring-and-audit.md`, `004-language-quality-pack`, Effigy selectors |
+| consumer language-quality profile | contract and policy surface | consumer maintainers | selected assurance profile, toolchain/MSRV, exclusions, deviations, and project architecture | repository-local configuration governed by `004-language-quality-pack` |
 | `docs/` | live planning surface | repo maintainers | Northstar's own planning and execution state | all files in this repo-local docs spine |
 | `docs/handoffs/` | fresh-thread coordination surface | handoff/orchestrator mode | timestamped takeover notes | handoff contract and templates |
 | `docs/triage/` | temporary conversational capture surface | orchestrator/refresh/cleanup modes | timestamped non-authoritative notes | triage contract, refresh lifecycle, cleanup route |
@@ -44,6 +46,8 @@ skills.
 | Docs cleanup | `/docs` inventory and classification | reworked canonical docs or operator question | `030-conversational-triage-and-docs-cleanup` | Inspect content and references before any move or removal |
 | Worker execution | explicit worker-mode handoff + startup worktree-safety preflight + ready cards | worker branch/worktree and evidence | `001-working-rules`, `002-agent-local-paths`, active batch cards | Only an orchestrator-dispatched worker uses the harness worktree or the operator-selected `AGENTS_WORKTREE_CONTAINER_DIR` when its starting context is unsuitable |
 | PR review and merge | worker branch/PR | orchestrator verdict + operator-authorised merge | `001-working-rules`, active cards | Review uses diff/check evidence and a provider review record; same-identity GitHub runs use PR comments; merge is separate from PR creation |
+| Everyday language quality | scoped instructions + shared catalogue + consumer profile | current changed tranche and closeout evidence | `031-rust-quality-authoring-and-audit`, `004-language-quality-pack` | Compact authoring projection re-enters at task start and batch exit |
+| Explicit language audit and repair | explicit operator request + resolved worktree or repository scope | findings, bounded repairs, deviations, and validation evidence | `031-rust-quality-authoring-and-audit`, `004-language-quality-pack` | Uses the same catalogue and profile as everyday authoring; preserves dirty state |
 
 ## Validation Surfaces
 
@@ -60,6 +64,8 @@ skills.
 | Consumer feedback intake | operator-provided live-use evidence and manual triage boundary | repo maintainers + operator | operator-owned |
 | Orchestrator mode | per-worker committed handoff under `docs/handoffs/`, fresh worker worktree or safe temporary fallback, startup check, chunk report, PR, provider review record, and closeout evidence | repo maintainers + operator | operator validation complete; longer multi-card evidence pending |
 | Model-efficiency comparison | measured role routing, rework, review cycles, and relay burden | repo maintainers | one operator validation measured; broader comparison pending |
+| Rust quality production foundation | seven-rule catalogue, five JSON schemas, two strict checked projections, skill-local Rhai package check | repo maintainers | ready; strict-only, 58-file isolated install parity proven, router context unchanged |
+| Rust quality prototype | representative rule catalogue, audit and authoring benchmark corpora, blinded subject/coordinator/reviewer packets, projections, deterministic case-local result recorder, result scorer, false-positive and churn measures, context-retention test | repo maintainers + operator | retained evidence infrastructure; strict everyday and explicit-audit tracks eligible; compaction unproven |
 
 ## Planning Gaps
 
@@ -76,3 +82,16 @@ skills.
 - Atlas has a discovery-first contract now, but existing-project behavioral
   validation is still open because earlier runs were prescriptive rather than
   operator-guided.
+- The Rust quality pack has a seven-rule catalogue, ten-case audit corpus, five
+  bounded authoring tasks, isolated subject and blind-review paths, exact
+  finding locality, and deterministic case-local result assembly. Revision F
+  makes everyday authoring eligible and rejects combined as the default for
+  lack of paired improvement. Revision M makes strict explicit audit eligible
+  at `3/3`. Strict unsafe repair remains report-only. Catalogue review and
+  contract promotion are complete. Production K passes explicit audit 3/3 and
+  production M passes everyday authoring 3/3; an observable compaction boundary
+  still precedes stress claims.
+- Contract `004-language-quality-pack` and roadmap `g02.030` are active. Cards
+  083 through 086 proved the runtime boundary, promoted the shared production
+  foundation, and added both routed production workflows plus deterministic
+  audit recording. Card 087 is complete and card 088 is ready.

@@ -1,0 +1,58 @@
+{
+  "id": "RUST-ERR-001",
+  "title": "Represent recoverable failure explicitly",
+  "maturity": "approved",
+  "enforcement": "required",
+  "dimensions": [
+    "correctness_assurance",
+    "architecture",
+    "human_quality"
+  ],
+  "applicability": {
+    "crate_kinds": [
+      "all"
+    ],
+    "triggers": [
+      "fallible operations, untrusted input, external boundaries, unwrap, expect, panic, indexing"
+    ],
+    "rust_release": "repository MSRV and newer"
+  },
+  "requirement": "Recoverable failures must be represented with Result, Option, or a repository-defined equivalent. Panics and panic-capable convenience operations are reserved for proven programming errors or explicit termination policy, with the invariant made visible.",
+  "authoring_projection": [
+    "Classify each new failure as recoverable, programmer error, or process-fatal policy before choosing Result, Option, assertion, or panic.",
+    "At external and untrusted-input boundaries, propagate contextual errors instead of unwrap or expect."
+  ],
+  "mechanical_enforcement": [
+    {
+      "tool": "clippy",
+      "check": "selective clippy::unwrap_used, clippy::expect_used, clippy::panic, and clippy::indexing_slicing",
+      "role": "evidence",
+      "caveat": "Tests, const contexts, poisoned locks, and proven invariants require repository-specific policy; do not enable the restriction group wholesale."
+    }
+  ],
+  "remediation": {
+    "default_authority": "review_required",
+    "action_overrides": [
+      {
+        "action": "change_foreign_error_policy",
+        "authority": "operator_decision",
+        "reason": "Defining or changing foreign error signaling, sentinel values, out-parameters, callbacks, or ABI status semantics changes the caller contract."
+      }
+    ],
+    "guidance": "Propagate or translate recoverable errors with context. Retain a panic only when the violated programming invariant and termination intent are explicit."
+  },
+  "deviation": {
+    "allowed": true,
+    "required_evidence": [
+      "failure classification",
+      "stated invariant or termination policy",
+      "reachability analysis",
+      "test evidence"
+    ]
+  },
+  "completion_evidence": [
+    "panic-capable site review for changed scope",
+    "boundary error-path tests",
+    "recorded retained-panic rationale"
+  ]
+}

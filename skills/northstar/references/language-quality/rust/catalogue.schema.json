@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://northstar.invalid/schemas/rust-quality-rule-catalogue.v1.json",
+  "title": "Northstar Rust quality rule catalogue",
+  "type": "object",
+  "required": ["schema_version", "language", "schema_provenance", "modelled_profiles", "production_profiles", "rules"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "language": { "const": "rust" },
+    "schema_provenance": {
+      "type": "object",
+      "required": ["authority", "revision", "url", "borrowed_concepts"],
+      "properties": {
+        "authority": { "type": "string", "minLength": 1 },
+        "revision": { "type": "string", "minLength": 1 },
+        "url": { "type": "string", "format": "uri" },
+        "borrowed_concepts": { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+      },
+      "additionalProperties": false
+    },
+    "modelled_profiles": {
+      "type": "array",
+      "prefixItems": [
+        { "const": "ordinary" },
+        { "const": "strict" },
+        { "const": "high_assurance" }
+      ],
+      "items": false
+    },
+    "production_profiles": {
+      "type": "array",
+      "prefixItems": [{ "const": "strict" }],
+      "items": false
+    },
+    "rules": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/rule" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "profileLevel": {
+      "enum": ["mandatory", "required", "advisory", "disapplied", "evaluation_only"]
+    },
+    "rule": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "category",
+        "maturity",
+        "decidability",
+        "dimensions",
+        "applicability",
+        "enforcement_by_profile",
+        "requirement",
+        "rationale",
+        "provenance",
+        "authoring_projection",
+        "audit_procedure",
+        "mechanical_enforcement",
+        "remediation",
+        "deviation",
+        "completion_evidence"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^RUST-[A-Z]+-[0-9]{3}$" },
+        "title": { "type": "string", "minLength": 1 },
+        "category": { "enum": ["mandatory", "required", "advisory", "disapplied"] },
+        "maturity": { "enum": ["prototype", "approved", "retired"] },
+        "decidability": { "enum": ["decidable", "partially_decidable", "undecidable"] },
+        "dimensions": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "enum": ["correctness_assurance", "architecture", "human_quality"] },
+          "uniqueItems": true
+        },
+        "applicability": {
+          "type": "object",
+          "required": ["crate_kinds", "triggers", "rust_release"],
+          "properties": {
+            "crate_kinds": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+            "triggers": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+            "rust_release": { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": false
+        },
+        "enforcement_by_profile": {
+          "type": "object",
+          "required": ["ordinary", "strict", "high_assurance"],
+          "properties": {
+            "ordinary": { "$ref": "#/$defs/profileLevel" },
+            "strict": { "$ref": "#/$defs/profileLevel" },
+            "high_assurance": { "$ref": "#/$defs/profileLevel" }
+          },
+          "additionalProperties": false
+        },
+        "requirement": { "type": "string", "minLength": 1 },
+        "rationale": { "type": "string", "minLength": 1 },
+        "provenance": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["authority", "maturity", "revision", "url", "upstream_rules"],
+            "properties": {
+              "authority": { "type": "string", "minLength": 1 },
+              "maturity": { "enum": ["official", "approved", "draft", "independent", "experimental"] },
+              "revision": { "type": "string", "minLength": 1 },
+              "url": { "type": "string", "format": "uri" },
+              "upstream_rules": { "type": "array", "items": { "type": "string" } }
+            },
+            "additionalProperties": false
+          }
+        },
+        "authoring_projection": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "audit_procedure": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+        "mechanical_enforcement": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["tool", "check", "role", "caveat"],
+            "properties": {
+              "tool": { "type": "string" },
+              "check": { "type": "string" },
+              "role": { "enum": ["enforce", "evidence", "candidate"] },
+              "caveat": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        },
+        "remediation": {
+          "type": "object",
+          "required": ["default_authority_by_profile", "action_overrides", "guidance"],
+          "properties": {
+            "default_authority_by_profile": {
+              "$ref": "#/$defs/profileAuthorities"
+            },
+            "action_overrides": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["action", "authority_by_profile", "reason"],
+                "properties": {
+                  "action": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+                  "authority_by_profile": { "$ref": "#/$defs/profileAuthorities" },
+                  "reason": { "type": "string", "minLength": 1 }
+                },
+                "additionalProperties": false
+              }
+            },
+            "guidance": { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": false
+        },
+        "deviation": {
+          "type": "object",
+          "required": ["allowed", "required_evidence"],
+          "properties": {
+            "allowed": { "type": "boolean" },
+            "required_evidence": { "type": "array", "items": { "type": "string" } }
+          },
+          "additionalProperties": false
+        },
+        "completion_evidence": { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+      },
+      "additionalProperties": false
+    },
+    "remediationAuthority": {
+      "enum": ["safe_automatic", "review_required", "report_only", "operator_decision"]
+    },
+    "profileAuthorities": {
+      "type": "object",
+      "required": ["ordinary", "strict", "high_assurance"],
+      "properties": {
+        "ordinary": { "$ref": "#/$defs/remediationAuthority" },
+        "strict": { "$ref": "#/$defs/remediationAuthority" },
+        "high_assurance": { "$ref": "#/$defs/remediationAuthority" }
+      },
+      "additionalProperties": false
+    }
+  }
+}

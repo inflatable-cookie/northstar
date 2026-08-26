@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-08-19
+Updated: 2026-08-25
 Vision refs: docs/vision/001-northstar-delivery-vision.md
 
 ## Top-Level Stack
@@ -44,6 +44,66 @@ Vision refs: docs/vision/001-northstar-delivery-vision.md
   consumer feedback enters Northstar through the operator as evidence,
   papercuts, research, or planning input. Northstar does not select, dispatch,
   or manage consumer runs.
+
+## Language quality packs
+
+Northstar may extend `skills/` with optional language quality packs. Rust is the
+first planned pack. Contract
+[`004-language-quality-pack`](../contracts/004-language-quality-pack.md) governs
+the shared catalogue, profiles, authority, deviations, and evidence. Each pack
+has two workflow projections:
+
+- everyday authoring uses a compact, path-scoped activation, loads detailed
+  rules only for relevant domains, and rechecks the changed tranche at exit;
+- explicit audit-and-repair runs only on operator request, resolves either
+  worktree or repository scope, and repairs findings in reviewable waves.
+
+Workflow and assurance are separate axes; both workflows consume one profile
+from the same catalogue. The initial Rust pack validates only `strict`.
+Ordinary and high assurance remain modelled but cannot be activated as validated
+production profiles. Northstar owns the reusable rule schema, provenance,
+deviation, and workflow contracts. Effigy resolves scope and orchestrates
+repository-native tools. The consumer repository owns its profile, toolchain
+and MSRV, exclusions, project architecture, and accepted deviations. The agent
+preserves dirty state and stops when repair needs a breaking or architectural
+decision not already authorised.
+
+Compiler, lint, test, analysis, and benchmark results are evidence. They do not
+prove architecture quality, certify a system, or turn a coding skill into a
+safety case.
+
+### Rust production boundary
+
+Rust quality ships inside the existing `skills/northstar/` artifact. It does
+not create a second installable skill. The production surfaces are:
+
+| Surface | Canonical path |
+| --- | --- |
+| catalogue, schemas, and checked projections | `skills/northstar/references/language-quality/rust/` |
+| everyday mode | `skills/northstar/references/modes/rust-quality-authoring.md` |
+| explicit audit mode | `skills/northstar/references/modes/rust-quality-audit.md` |
+| recorder and package check | `skills/northstar/scripts/rust-quality-recorder.rhai`, `skills/northstar/scripts/check-rust-quality.rhai` |
+| thin explicit adapter | `skills/northstar/commands/northstar-rust-audit/SKILL.md` |
+| copy-ready activation and profile templates | `skills/northstar/assets/templates/language-quality/rust/` |
+
+The recorder is Effigy-native Rhai and requires Effigy `>=0.8.4`. It launches
+no language runtime, Git process, shell utility, or package manager. An
+installed skill invokes it as
+`effigy --repo <installed-northstar> northstar/rust-quality:record <operation>`.
+The record lifecycle is `init`, `assess`, `extend`, `complete`, and `finalize`.
+`assess` binds findings and allowed repair plans while owned files still match
+their baseline. `extend` widens unit and plan ownership before mutation.
+`complete` attributes the post-mutation state, and `finalize` rejects hidden or
+cross-unit mutation, changed policy, and edits to excluded pre-existing dirty
+files.
+
+Consumers select `strict` in `docs/contracts/rust-quality-profile.json`, keep
+accepted deviations in `docs/contracts/rust-quality-deviations.json`, and own
+all exclusion and compatibility inputs. The recorder resolves effective MSRV
+from repository Cargo manifests and explicit toolchain policy. It reports an
+unsettled policy instead of guessing a version. Case-local evidence lives under
+`<target>/.effigy/rust-quality/audits/<audit-id>/`; aggregate results derive
+from those records rather than agent-written summary state.
 
 ## Readiness-mapping artifact contract
 
@@ -152,6 +212,12 @@ orchestrator lane when a parent harness already owns the worktree.
 - Material delivery work should flow through contracts, master specs, batch
   cards, roadmaps, and logs rather than jumping straight from idea to edits.
 - The public skill surface should remain small and deliberately routed.
+- Everyday authoring and explicit audit-and-repair must not drift into separate
+  rule catalogues or conflicting quality standards.
+- Write-heavy repository-wide repair requires explicit operator intent and
+  bounded, reviewable repair waves.
+- Language quality packs must not claim certification, standards compliance, or
+  a safety integrity level from tool success alone.
 - Before dispatch, the planning checkout must publish canonical planning state
   and one concrete worker handoff per approved worker lane under
   `docs/handoffs/` on `main`; local-only state is not a valid worker base.
@@ -194,3 +260,6 @@ orchestrator lane when a parent harness already owns the worktree.
 
 - `g01.001` uses this architecture to enact Northstar on Northstar and pilot
   the delivery layer inside this repo.
+- `docs/contracts/004-language-quality-pack.md` governs the first language
+  quality pack. Roadmap `g02.030` sequences production-boundary proof,
+  implementation, fresh evidence, and distribution.

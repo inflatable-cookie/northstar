@@ -1,0 +1,59 @@
+{
+  "schema_version": "1.0.0",
+  "cases": [
+    {
+      "id": "start-resolved-profile",
+      "stage": "start",
+      "profile_resolved": true,
+      "native_selector_known": true,
+      "requested_scope": "task_tranche",
+      "deviation_needed": false,
+      "expected_action": "begin_task"
+    },
+    {
+      "id": "start-unresolved-profile",
+      "stage": "start",
+      "profile_resolved": false,
+      "native_selector_known": true,
+      "requested_scope": "task_tranche",
+      "deviation_needed": false,
+      "expected_action": "stop_before_edit"
+    },
+    {
+      "id": "discover-native-validation",
+      "stage": "start",
+      "profile_resolved": true,
+      "native_selector_known": false,
+      "requested_scope": "task_tranche",
+      "deviation_needed": false,
+      "expected_action": "discover_effigy_tasks"
+    },
+    {
+      "id": "closeout-changed-tranche",
+      "stage": "closeout",
+      "profile_resolved": true,
+      "native_selector_known": true,
+      "requested_scope": "task_tranche",
+      "deviation_needed": false,
+      "expected_action": "review_changed_tranche"
+    },
+    {
+      "id": "closeout-record-deviation",
+      "stage": "closeout",
+      "profile_resolved": true,
+      "native_selector_known": true,
+      "requested_scope": "task_tranche",
+      "deviation_needed": true,
+      "expected_action": "record_deviation"
+    },
+    {
+      "id": "reject-unrelated-scope",
+      "stage": "closeout",
+      "profile_resolved": true,
+      "native_selector_known": true,
+      "requested_scope": "unrelated_repository_code",
+      "deviation_needed": false,
+      "expected_action": "reject_unrelated_scope"
+    }
+  ]
+}

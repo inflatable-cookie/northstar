@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://northstar.invalid/schemas/rust-quality-profile.v1.json",
+  "title": "Northstar Rust quality consumer profile",
+  "type": "object",
+  "required": ["schema_version", "language", "profile", "msrv", "exclusions", "deviations_file"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "language": { "const": "rust" },
+    "profile": { "const": "strict" },
+    "msrv": {
+      "type": "object",
+      "required": ["source", "cargo_manifests", "toolchain_policy_paths", "when_unresolved"],
+      "properties": {
+        "source": { "const": "repository_policy" },
+        "cargo_manifests": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/relativePath" }
+        },
+        "toolchain_policy_paths": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/relativePath" }
+        },
+        "when_unresolved": { "const": "stop" }
+      },
+      "additionalProperties": false
+    },
+    "exclusions": {
+      "type": "object",
+      "required": ["generated", "vendored"],
+      "properties": {
+        "generated": { "$ref": "#/$defs/pathList" },
+        "vendored": { "$ref": "#/$defs/pathList" }
+      },
+      "additionalProperties": false
+    },
+    "deviations_file": { "$ref": "#/$defs/relativePath" }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "pathList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/relativePath" }
+    }
+  }
+}

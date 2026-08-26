@@ -39,13 +39,15 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02.029` is active; triage capture, refresh management, the docs-cleanup route,
   copy-ready surfaces, and deterministic checks are complete. Live operator usage
   feedback remains pending.
+- `g02.030` is active; revisions K and M provide valid 3/3 production evidence
+  for explicit audit and everyday authoring. Card 087 is complete and card 088
+  is ready for promotion and distribution.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Use the new `docs/triage/` capture behavior in a real refresh or orchestrator
-conversation, then record operator feedback before archiving spec 030. Atlas
-validation and optimized-instruction feedback remain separate operator-owned
+Execute `g02.030/088` only after fresh operator continuation. Triage,
+Atlas, and optimized-instruction feedback remain separate operator-owned
 follow-ups; Northstar does not select or dispatch those runs.
