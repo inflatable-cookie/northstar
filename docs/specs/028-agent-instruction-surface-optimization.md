@@ -1,9 +1,9 @@
 # 028 - Agent Instruction Surface Optimization
 
-Status: active — source implementation complete; operator feedback measurement pending
+Status: complete
 Owner: repo maintainers
 Created: 2026-08-16
-Updated: 2026-08-17
+Updated: 2026-08-27
 Related research: `bundle-docs/research/translation-memos/agent-instruction-surface-optimization.md`
 Governing architecture: `docs/architecture/system-architecture.md`
 Governing contract: `docs/contracts/003-agent-instruction-surface.md`
@@ -16,28 +16,32 @@ generated runner guidance, local-path instructions, writing style, papercuts,
 and navigation. That increases context cost and makes it harder to tell which
 sentences are truly binding for the current task.
 
-Northstar needs a repeatable way to audit and compact the always-loaded surface
-without deleting useful safety, authority, or validation guidance.
+Northstar needs a repeatable way to audit and improve the always-loaded surface
+without deleting useful identity, intent, safety, authority, or validation
+guidance. Operator feedback showed that a classification-and-compaction lens is
+not sufficient: a short file can still be sterile, hard to internalise, and weak
+at transferring project judgment.
 
 ## Goal
 
-Make `AGENTS.md` a small, high-signal instruction contract. Keep every-turn
-facts and boundaries in the root file; move scoped, procedural, historical, and
-on-demand material to the canonical surface that owns it. Provide a read-only
-audit that makes the trade-offs visible before any rewrite.
+Make `AGENTS.md` a high-signal, human instruction contract. It should orient the
+agent, communicate what must stay true and why, distinguish hard boundaries from
+defaults and taste, and provide reliable mechanics. Move scoped, procedural,
+historical, and on-demand material to its canonical owner without optimizing
+for smallness at the expense of judgment.
 
 ## Design
 
 The feature has three parts:
 
-1. **Content contract:** classify instruction text as every-turn, verified common
-   command/orientation, minimal pointer, scoped rule, procedure, history, or
-   local preference.
+1. **Content contract:** define the reader journey and classify instruction text
+   by the decision it improves: orientation, preservation intent, local
+   judgment, sharp edge, completeness, mechanics, or on-demand detail.
 2. **Read-only audit:** report size, section shape, approximate token cost,
    references, duplicate candidates, command candidates, and budget warnings.
-3. **Compaction pass:** review and rewrite the Northstar source `AGENTS.md` and
-   copy-ready template, preserving all important boundaries and moving detail to
-   canonical contracts, skills, guides, or nested files.
+3. **Semantic review and rewrite:** map each section's intent, flow, tone, force,
+   and decision value before rewriting the Northstar source `AGENTS.md` and
+   copy-ready template.
 
 The read-only audit is advisory and explainable. It never edits files or silently
 weakens policy. Northstar's soft root target is 100 non-blank lines / 12 KiB, with an
@@ -68,12 +72,14 @@ advisory warning at 150 lines / 20 KiB.
 ## Acceptance criteria
 
 - the audit reports line, byte, and approximate token measurements;
-- the audit identifies likely scoped/procedural/history/duplicate content without
-  claiming semantic certainty it cannot prove;
+- the deterministic check identifies mechanical placement/freshness leads
+  without claiming semantic certainty it cannot prove;
+- the review skill assesses section intent, reader flow, tone, force, causal
+  clarity, completion coverage, and decision usefulness;
 - the source repository and copy-ready starter both provide a minimal Claude
   bridge containing `@AGENTS.md`;
-- the source and template root files contain only every-turn content plus short
-  canonical pointers;
+- the source and template root files contain every-turn judgment and boundaries
+  plus short canonical pointers;
 - detailed local-path, papercut, writing-style, Effigy, and orchestrator rules
   remain available from their owning surfaces;
 - all retained commands are verified or clearly labelled conditional;
@@ -105,7 +111,6 @@ advisory warning at 150 lines / 20 KiB.
 
 ## Next task
 
-Use feedback from the operator's live use of the optimized surface and record the
-Batch 27.3 measurement. Northstar does not select or dispatch a consumer target;
-it consumes evidence supplied in this conversation. Do not modify consumer
-repositories as part of the implementation phase of this spec.
+No blocking work remains. Consume later operator-provided feedback as new
+evidence; do not select, dispatch, or modify a consumer repository from this
+spec.

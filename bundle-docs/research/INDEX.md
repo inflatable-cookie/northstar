@@ -55,11 +55,10 @@
 - `translation-memos/changelog-library-placement.md` - Library placement
 - `translation-memos/northstar-orchestrator-thread.md` - Orchestrator, worker, and PR boundary
 - `translation-memos/agent-instruction-surface-optimization.md` - Compact instruction-surface evidence
+- `translation-memos/intentful-agent-instructions.md` - Human, intent-led instruction review
 - `translation-memos/matt-pocock-skills-audit-to-northstar.md` - External skill-design translation
 - `translation-memos/rust-quality-skills-and-audit.md` - Two-track Rust coding-quality model
-
-### Prototypes
-- `prototypes/rust-quality/README.md` - Rust rule catalogue, benchmark corpus, and scoring protocol
+- `translation-memos/typescript-quality-and-svelte-overlay.md` - TypeScript quality with Svelte overlays
 
 ### Meta
 - `README.md` - Research overview and scope
@@ -131,10 +130,9 @@ Primary test data:
 | Source hubs | 5 |
 | Specimen dossiers | 5 |
 | Value tracks | 2 |
-| Translation memos | 8 |
-| Prototype documentation/data/fixtures/results | 4771 |
+| Translation memos | 10 |
 | Meta | 4 |
-| **Total** | **4799** |
+| **Total** | **30** |
 
 ---
 

@@ -14,7 +14,7 @@ single-pilot bucket.
 | Keep learning from operator-provided consumer feedback before treating stricter posture as settled doctrine. | active | `docs/contracts/001-working-rules.md`, `docs/specs/012-consumer-repo-autonomy-proof-and-adoption.md`, `docs/specs/013-stricter-consumer-repo-autonomy-adoption.md` | pending |
 | Harden setup, nested-authority adoption, and posture classification so downstream repos can install the spine without hand adaptation. | active | `docs/specs/020-formalize-nested-docs-authority-setup.md`, `docs/specs/022-formalize-repo-posture-classification.md` | pending |
 | Keep execution autonomy bounded by ready cards, lane budgets, pause signals, and a file-based orchestrator/worker PR boundary instead of ad-hoc continuation prompts. | active | `docs/contracts/001-working-rules.md`, `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `bundle-docs/sections/07-delivery-framework-and-autonomy.md` | operator feedback intake / Batch 26.4 checkpoint |
-| Reduce always-loaded agent context while preserving safety, authority, and common-run efficiency. | active | `docs/contracts/003-agent-instruction-surface.md`, `docs/specs/028-agent-instruction-surface-optimization.md` | Batch 27.3 operator-feedback measurement |
+| Keep always-loaded agent context useful, human, and bounded while preserving safety, authority, and project intent. | complete | `docs/contracts/003-agent-instruction-surface.md`, `docs/specs/028-agent-instruction-surface-optimization.md` | accept later operator feedback |
 | Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | pending |
 | Add a genuinely long-horizon planning route without conflating it with readiness review. | active | `docs/specs/029-northstar-long-horizon-planning.md`, `skills/northstar/references/modes/atlas.md` | Non-Northstar scenario and operator confirmation |
 | Preserve useful conversational context and keep `/docs` drift recoverable without blind deletion. | active | `docs/specs/030-conversational-triage-and-docs-cleanup.md`, `docs/contracts/001-working-rules.md`, `skills/northstar/references/modes/cleanup-docs.md` | live triage and cleanup feedback |
@@ -57,8 +57,8 @@ rollover signal.
 - `026-add-northstar-native-pre-execution-discovery.md` (active; Batches 26.1 and
   26.2 complete, the Batch 26.3 checkpoint complete, `g02.026/078` ready but
   deferred, and the architecture-refocus and reframe parts of Batch 26.4 complete)
-- `027-optimize-agent-instruction-surfaces.md` (active; implementation complete,
-  Batch 27.3 consumer measurement pending)
+- `027-optimize-agent-instruction-surfaces.md` (complete; card 101 applied the
+  intent-led operator-feedback correction)
 - `028-add-northstar-long-horizon-planning.md` (active; Atlas mode and router
   contract, command adapter, source/runtime checks, and installed parity are
   complete; broader validation remains)
@@ -83,15 +83,13 @@ consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and
 The Batch 26.2 planning and route implementation are complete. The Batch 26.3
 starter-surface planning checkpoint is complete and `g02.026/078` remains ready
 but deferred. The architecture-refocus and reframe parts of Batch 26.4 are
-complete; feedback intake remains pending. The current Northstar task `g02.027/079`
-is complete. The remaining Batch 27.3 measurement uses feedback from the operator's live
-dogfooding of the optimized surface; its research memo is
-`bundle-docs/research/translation-memos/agent-instruction-surface-optimization.md`.
+complete; feedback intake remains pending. The instruction-surface lane
+`g02.027` is complete: card 101 used operator feedback and the T3 Code example
+to replace the over-compact review model with an intent-led one.
 Atlas validation is tracked by `g02.028`; Northstar does not select or manage the
 operator's external dogfooding.
-The Rust quality implementation lane `g02.030` is complete. Triage, Atlas,
-instruction-surface feedback, and Rust live-use feedback remain
-independent operator-owned follow-ups.
+The Rust quality implementation lane `g02.030` is complete. Triage, Atlas, and
+Rust live-use feedback remain independent operator-owned follow-ups.
 `g02.031` is complete. Revision S passed `3/3` production subjects and blind reviewers:
 `30/30` primary findings, `96/96` review dimensions, and `24/24` accepted
 repairs. Card 093 distributed the exact payload with 93-file source/install

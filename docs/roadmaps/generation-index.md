@@ -82,10 +82,10 @@ No blocking roadmap milestone is open.
 boundary, promoted the shared production foundation, added both routed
 workflows, passed both production tracks, and distributed the 76-file payload
 with agent-owned activation.
-`g02.026/078` remains ready but deferred. The remaining
-instruction-surface, Atlas, triage/cleanup, and Rust live-use measurements
-require operator-provided evidence. Northstar does not select or dispatch those
-consumer runs.
+`g02.026/078` remains ready but deferred. The instruction-surface lane is
+complete after card 101; Atlas, triage/cleanup, and language-quality live-use
+measurements still require operator-provided evidence. Northstar does not
+select or dispatch those consumer runs.
 `g02.031` is complete. Cards `g02.031/089-093` distributed the explicit-only
 TypeScript/Svelte audit with revision-S production evidence and 93-file
 source/install parity. Everyday TypeScript remains unavailable. Accept

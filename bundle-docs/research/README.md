@@ -50,7 +50,6 @@ Based on analysis of Effigy's existing system and researched tools:
 - `specimen-dossiers/` - Detailed studies of specific tools and systems
 - `value-tracks/` - Cross-specimen syntheses by problem area
 - `translation-memos/` - Project-facing recommendations
-- `prototypes/` - Bounded evidence artifacts used after translation and before contracts
 
 ## Research Principles
 

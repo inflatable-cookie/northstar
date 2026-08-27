@@ -49,6 +49,7 @@ Project-facing recommendations:
 - [Changelog Library Placement](translation-memos/changelog-library-placement.md) - Where the changelog parser library should live
 - [Northstar Orchestrator Thread](translation-memos/northstar-orchestrator-thread.md) - Evidence-backed split between conversational planning, worker execution, and PR review
 - [Agent Instruction Surface Optimization](translation-memos/agent-instruction-surface-optimization.md) - Evidence-backed rules for compact always-loaded agent instructions
+- [Intentful Agent Instructions](translation-memos/intentful-agent-instructions.md) - T3 Code lessons for human, judgment-bearing instruction surfaces
 - [Matt Pocock Skills Audit To Northstar](translation-memos/matt-pocock-skills-audit-to-northstar.md) - Translation of external skill-design evidence into Northstar constraints
 - [Rust Quality Authoring And Audit](translation-memos/rust-quality-skills-and-audit.md) - Source-backed two-track Rust quality model
 - [TypeScript Quality And Svelte Overlay](translation-memos/typescript-quality-and-svelte-overlay.md) - Source-backed TypeScript pack with conditional Svelte and SvelteKit rules
@@ -57,11 +58,6 @@ Project-facing recommendations:
 Technical specifications for tools and formats:
 - [Northstar Changelog Profile](specifications/northstar-changelog-profile.md) - Strict, parseable Keep a Changelog profile
 - [Changelog Formatter](specifications/changelog-formatter-spec.md) - Changelog formatting and validation tool spec
-
-### Prototypes
-
-- [Rust Quality Prototype](prototypes/rust-quality/README.md) - Seven-rule shared catalogue, ten-case seed corpus, generated workflow views, and executable scorer
-- [TypeScript Quality Prototype](prototypes/typescript-quality/README.md) - Thirteen-rule research catalogue with TypeScript, Svelte, and SvelteKit benchmark seeds
 
 ## Quick Answers
 

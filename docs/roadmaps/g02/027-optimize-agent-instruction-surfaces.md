@@ -1,6 +1,6 @@
 # 027 - Optimize Always-Loaded Agent Instruction Surfaces
 
-Status: active — implementation complete; operator feedback measurement pending
+Status: complete
 Owner: repo maintainers
 Created: 2026-08-16
 Depends on: `g02.026` planning surfaces
@@ -25,7 +25,7 @@ procedural dump.
 - [x] compact the copy-ready `AGENTS.md` template;
 - [x] provide a minimal Claude Code bridge that imports `@AGENTS.md`;
 - [x] prove command, link, docs, doctor, and skill-parity validation;
-- [ ] measure operator-provided live use for context pollution and missed guidance.
+- [x] measure operator-provided live use for context pollution and missed guidance.
 
 ## Execution plan
 
@@ -46,10 +46,15 @@ procedural dump.
 
 ### Batch 27.3 — Feedback intake and measure
 
-- [ ] consume operator-provided feedback from live use of the optimized surface;
-- [ ] record repeated questions, missed boundaries, setup failures, and
+- [x] consume operator-provided feedback from live use of the optimized surface;
+- [x] record repeated questions, missed boundaries, setup failures, and
       unnecessary exploration;
-- [ ] adjust the contract only from measured evidence.
+- [x] adjust the contract only from measured evidence.
+
+Batch 27.3 used the operator's T3 Code comparison to correct an over-compact,
+classification-led review model. Card 101 and
+`docs/logs/2026-08/27-160408-make-agent-instruction-reviews-intentful.md` carry
+the implementation and evidence.
 
 Implementation closeout for `g02.027/079`: `docs/logs/2026-08/16-233931-optimize-agent-instruction-surface.md`.
 
@@ -67,6 +72,5 @@ Implementation closeout for `g02.027/079`: `docs/logs/2026-08/16-233931-optimize
 
 ## Next task
 
-Consume operator-provided feedback from live use of the optimized surface and
-record Batch 27.3 measurements. Northstar does not dispatch or manage a Poodle
-or Figmatic dogfood run.
+No blocking work remains. Accept further operator-provided feedback without
+dispatching or managing a consumer run.

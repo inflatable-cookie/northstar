@@ -29,9 +29,9 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02.026` is active; cards 075, 076, and 077 are complete. Batch 26.3's
   starter-surface planning checkpoint is complete and card 078 is ready but
   deferred. The architecture-refocus and reframe parts of Batch 26.4 are complete.
-- `g02.027` is active; research, the instruction-surface contract, and
-  implementation card 079 are complete. Batch 27.3 operator-feedback measurement is
-  pending.
+- `g02.027` is complete; card 101 used operator feedback to make the review
+  intent-led, human, and evidence-backed without turning size into a quality
+  score.
 - `g02.028` is active; the Atlas route contract and provisional mode are present.
   Northstar-scale validation, the explicit command adapter, and command-surface
   checks are complete; a non-Northstar scenario and operator confirmation remain

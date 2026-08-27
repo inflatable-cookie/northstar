@@ -39,9 +39,6 @@ fn audit_file(target_root, relative_path) {
     procedural += count_matching(lines, "(?i)(use `effigy)");
     let historical = count_matching(lines, "(?i)(status:|updated:|completed|current lane)");
     historical += count_matching(lines, "(?i)(next task|resolution|history|roadmap)");
-    let conversational = count_matching(lines, "(?i)(normal replies|human conversational)");
-    conversational += count_matching(lines, "(?i)(make it easy for the operator|tone|reporting rule)");
-
     let summary = "[northstar:agent-instructions] " + relative_path;
     summary += ": non_blank=" + non_blank;
     summary += " bytes=" + bytes;
@@ -50,6 +47,12 @@ fn audit_file(target_root, relative_path) {
     summary += " links=" + links;
     summary += " fenced_blocks=" + (fenced_blocks / 2);
     log(summary);
+
+    for line in lines {
+        if regex::is_match("^#{1,6} ", line) {
+            log("[northstar:agent-instructions] section: " + line);
+        }
+    }
 
     if non_blank > 100 {
         log_warn("[northstar:agent-instructions] " + relative_path + ": above Northstar target of 100 non-blank lines (" + non_blank + ")");
@@ -64,16 +67,13 @@ fn audit_file(target_root, relative_path) {
         log_warn("[northstar:agent-instructions] " + relative_path + ": above advisory threshold of 20 KiB");
     }
     if scoped > 0 {
-        log_warn("[northstar:agent-instructions] " + relative_path + ": " + scoped + " line(s) may be scoped/local rather than root-level; review manually");
+        log("[northstar:agent-instructions] " + relative_path + ": placement_leads=" + scoped + " (review scoped/local references in context)");
     }
     if procedural > 0 {
-        log_warn("[northstar:agent-instructions] " + relative_path + ": " + procedural + " line(s) may be procedural; prefer a contract, guide, or skill when not needed every turn");
+        log("[northstar:agent-instructions] " + relative_path + ": procedure_leads=" + procedural + " (review whether each procedure is needed on common turns)");
     }
     if historical > 0 {
-        log_warn("[northstar:agent-instructions] " + relative_path + ": " + historical + " line(s) may be historical/current-state content; review for staleness");
-    }
-    if conversational > 0 {
-        log_warn("[northstar:agent-instructions] " + relative_path + ": " + conversational + " line(s) may be conversational/reporting guidance rather than repository contract");
+        log("[northstar:agent-instructions] " + relative_path + ": freshness_leads=" + historical + " (review current-state or historical references for staleness)");
     }
 }
 
@@ -116,4 +116,5 @@ for bridge in bridges {
     audit_claude_bridge(target_root, bridge);
 }
 
-log("Northstar agent-instruction audit complete (advisory; no files changed)");
+log("Northstar agent-instruction measurements complete (advisory; no files changed)");
+log("Review meaning, reader flow, tone, force, and decision usefulness with the Northstar AGENTS review mode; the checker does not judge prose.");

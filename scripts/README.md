@@ -147,11 +147,12 @@ zero-map output.
 
 ## Agent-instruction audit (`check:agent-instructions`)
 
-The read-only agent-instruction audit measures root or supplied `AGENTS.md`
-files and prints line, byte, approximate-token, heading, link, and code-block
-counts. It also reports transparent review signals for likely scoped,
-procedural, historical, conversational, or over-budget content. Signals are
-advisory heuristics, not semantic verdicts, and the task never edits files.
+The read-only agent-instruction checker measures root or supplied `AGENTS.md`
+files and prints line, byte, approximate-token, section, link, and code-block
+evidence. It also exposes transparent placement, procedure, freshness, and
+budget leads. These are inputs to the Northstar review mode, which assesses
+meaning, reader flow, tone, force, and decision usefulness. The checker does
+not judge prose and never edits files.
 
 ```bash
 effigy check:agent-instructions

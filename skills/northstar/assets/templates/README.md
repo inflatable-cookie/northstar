@@ -25,6 +25,12 @@ Use these top-level repo templates from this skill for the non-docs surfaces:
 - `effigy.native.toml.template`
 - `effigy.compat.toml.template`
 
+Tailor `AGENTS.md` during adoption. Replace its opening prompt and commented
+review prompts with the target project's real identity, preservation
+invariants, sharp edges, and completion lens; remove the comments. Do not ship
+the generic prompts as if they were project guidance, and do not erase an
+existing useful project voice when merging the Northstar boundaries.
+
 For stricter repos, also copy the bundle's working-rules and specs surfaces:
 
 - `docs/contracts/001-working-rules.md`

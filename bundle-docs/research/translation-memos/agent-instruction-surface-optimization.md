@@ -1,6 +1,6 @@
 # Translation Memo: Always-Loaded Agent Instruction Surface
 
-Status: proposed
+Status: promoted; refined by `intentful-agent-instructions.md`
 Owner: repo maintainers
 Last updated: 2026-08-16
 Related track: Northstar agent-run efficiency and instruction-surface design
@@ -69,10 +69,16 @@ handbook. Keep only these classes in the root file:
 5. stop/escalate rules for ambiguity, missing authority, or unsafe context;
 6. pointers to detailed contracts, skills, and path-scoped instructions.
 
-Move detailed procedures, rationale, history, examples, full generated tool
-contracts, optional workflows, and conversational style guidance to their
-canonical references. Keep nested instruction files for path-specific rules and
-skills for task-specific procedures.
+Move detailed procedures, extended rationale, history, large examples, full
+generated tool contracts, and optional workflows to their canonical references.
+Retain concise causal explanation, project voice, and engineering taste when
+they materially improve common decisions. Keep nested instruction files for
+path-specific rules and skills for task-specific procedures.
+
+The later T3 Code review in
+[`intentful-agent-instructions.md`](./intentful-agent-instructions.md) corrects
+the risk of treating compactness and classification as sufficient measures of
+instruction quality.
 
 Northstar should add a read-only audit that reports instruction size, content
 classification, reference health, duplication candidates, and likely stale
