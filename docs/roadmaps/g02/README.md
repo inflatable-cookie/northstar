@@ -18,7 +18,7 @@ single-pilot bucket.
 | Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | pending |
 | Add a genuinely long-horizon planning route without conflating it with readiness review. | active | `docs/specs/029-northstar-long-horizon-planning.md`, `skills/northstar/references/modes/atlas.md` | Non-Northstar scenario and operator confirmation |
 | Preserve useful conversational context and keep `/docs` drift recoverable without blind deletion. | active | `docs/specs/030-conversational-triage-and-docs-cleanup.md`, `docs/contracts/001-working-rules.md`, `skills/northstar/references/modes/cleanup-docs.md` | live triage and cleanup feedback |
-| Raise language-code quality through evidence-bound routed workflows without creating a second standard or installable skill. | active | `docs/contracts/004-language-quality-pack.md`, Rust/TypeScript translation memos, specs 031-033 | operator-provided live-use feedback |
+| Raise language-code quality through evidence-bound routed workflows without creating a second standards authority or always-loaded rule dump. | active | `docs/contracts/004-language-quality-pack.md`, Rust/TypeScript translation memos, specs 031-033 | operator-provided live-use feedback |
 
 Update this runway only when generation-level intent changes, a milestone
 materially advances or closes a goal, or rollover is being considered. Do not
@@ -71,6 +71,9 @@ rollover signal.
   revision-S evidence, 93-file parity, and everyday workflow unavailable)
 - `032-strengthen-rust-audit-tool-enforcement.md` (complete; cards 094-099,
   revision-E production proof, and 120-file configured parity)
+- `033-apply-language-quality-live-use-corrections.md` (complete; card 100,
+  explicit adapter activation, TypeScript retained findings, and pinned Rust
+  forwarder evidence)
 
 ## Next Task
 
@@ -103,6 +106,10 @@ Card 097 qualified 14 finite detector candidates without adding a rule, custom
 detector, or repair authority. Card 098 passed revision E across three isolated
 subjects and three blind reviews. Card 099 distributed the exact 120-file
 payload and closed `g02.032`.
+Jetstream PR 2 then supplied mixed-repository live-use evidence. Card 100 fixed
+all three blocking findings: full-depth adapter installation, an honest
+TypeScript retained disposition, and agent-owned pinned forwarder scanning.
+Roadmap `g02.033` is complete.
 
 No blocking roadmap milestone is open. Accept operator-provided live-use
 feedback; Northstar does not dispatch consumer audits.

@@ -52,6 +52,9 @@ Roadmaps sequence contract-backed work for Northstar itself.
   Rust v2 lifecycle, immutable evidence, compact closeout, and finite detector
   qualification, passed revision-E production evidence, and distributed the
   exact 120-file payload.
+- `g02.033` is complete; card 100 applied Jetstream live-use corrections for
+  explicit adapter installation, honest TypeScript retained findings, and
+  pinned Rust forwarder scanning.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.

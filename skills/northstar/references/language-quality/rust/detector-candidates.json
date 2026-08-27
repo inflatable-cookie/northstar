@@ -294,7 +294,7 @@
         "churn": "revision M exact scope gate passed",
         "blind_review": "revision M reviewers accepted manual candidate dispositions"
       },
-      "rationale": "Existing evidence supports a total candidate ledger, not automatic deletion or normative promotion. No custom Rust detector is added."
+      "rationale": "The pinned scanner is captured by the Cargo-native evidence adapter and supports a total candidate ledger across its declared path coverage, not automatic deletion or normative promotion."
     },
     {
       "id": "unfinished-macros",

@@ -328,7 +328,9 @@ Authority values mean:
 
 - `report_only`: classify and explain; do not mutate for this rule;
 - `review_required`: a bounded repair is allowed when the agent can show the
-  rule, evidence, preserved behavior, and reviewable diff;
+  rule, evidence, preserved behavior, and reviewable diff; an auditor may retain
+  the finding as `reported` without a plan or mutation when repair or proof is
+  unavailable;
 - `operator_decision`: stop before mutation and present the decision and impact.
 
 An action-specific override wins over a rule's default authority. No tool,

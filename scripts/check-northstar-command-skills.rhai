@@ -140,6 +140,16 @@ let typescript_policy = fs::read_file(path::join(
 require(typescript_policy.contains("allow_implicit_invocation: false"),
     "TypeScript audit adapter must remain explicit-only");
 
+let distribution = fs::read_file(path::join(repo_root, "bundle-docs/skills/README.md"));
+require(distribution.contains("/tree/main/skills/northstar") &&
+    distribution.contains("--full-depth --skill '*' --agent codex -g -y") &&
+    distribution.contains("Do not use `--all`"),
+    "published installation does not discover and install nested adapters");
+require(distribution.contains("`northstar-rust-audit`") &&
+    distribution.contains("`northstar-typescript-audit`") &&
+    distribution.contains("top-level-only install is incomplete"),
+    "published installation does not require explicit audit entrypoints");
+
 let all_skill_text = "";
 for file in fs::list_recursive(root) {
     if is_text_skill_surface(root, file) {

@@ -1,6 +1,8 @@
 # Skill Architecture
 
-Northstar exposes **one installable agent skill**: `northstar`.
+Northstar ships **one distributable skill package**. It installs the `northstar`
+front door plus thin named adapters so explicit commands are activatable across
+agent harnesses.
 
 Human operators use [`protocol-kernel.md`](../protocol-kernel.md), the
 [visual map](../visual-map.md), and [operator quick start](../operators/operator-quick-start.md).
@@ -10,12 +12,11 @@ before loading a mode.
 
 ## Public surface
 
-| Install | Role |
+| Source | Role |
 | --- | --- |
-| `skills/northstar/` | Single front door for all Northstar agent work |
+| `skills/northstar/` | One package containing the front door, modes, tools, and adapters |
 
-The one installable skill also exposes thin explicit command adapters under
-`skills/northstar/commands/`:
+The package exposes thin explicit command adapters under `commands/`:
 
 | Command | Scope |
 | --- | --- |
@@ -29,23 +30,39 @@ The one installable skill also exposes thin explicit command adapters under
 | `/northstar-rust-audit` | Explicit worktree or repository Rust quality audit-and-repair |
 | `/northstar-typescript-audit` | Explicit worktree or repository TypeScript/Svelte audit-and-repair |
 
-These adapters are discoverability surfaces, not separate installs or planning
-authorities. Each loads the central router and one canonical mode. Atlas is
-strategic and plan-only; readiness review is intentionally smaller and audits
-planning that already exists.
+The Skills CLI installs each adapter as a named skill entry because nested files
+inside `northstar` are not independently activatable. They remain adapters, not
+separate standards or planning authorities. Each loads the central router and
+one canonical mode. Atlas is strategic and plan-only; readiness review is
+intentionally smaller and audits planning that already exists.
 
 ## Distribution and update
 
-The published skill is distributed through the Skills CLI. After a Northstar
-release or published source update:
+Install the published package at full depth so every named adapter is surfaced:
 
 ```bash
-npx skills update northstar -g -y
+npx skills add https://github.com/inflatable-cookie/northstar/tree/main/skills/northstar \
+  --full-depth --skill '*' --agent codex -g -y
 npx skills list -g --json
 ```
 
-`skills list` shows the configured source and installed agent targets. A
-source checkout can verify a specific install with:
+Replace `codex` with the current harness's Skills CLI agent ID, or pass several
+IDs after `--agent`. Do not use `--all`: that targets every supported harness,
+not every skill in this package.
+
+After a published source update, rerun the same full-depth command. Updating
+only `northstar` leaves separately installed adapters stale.
+
+```bash
+npx skills add https://github.com/inflatable-cookie/northstar/tree/main/skills/northstar \
+  --full-depth --skill '*' --agent codex -g -y
+npx skills list -g --json
+```
+
+The first list must include `northstar`, `northstar-rust-audit`, and
+`northstar-typescript-audit`; a top-level-only install is incomplete. `skills
+list` also shows the configured source and installed agent targets. A source
+checkout can verify the main payload with:
 
 ```bash
 effigy check:skill-install /path/to/installed/northstar
@@ -71,8 +88,8 @@ agent-instruction surface and inert language-quality packages. When a consumer r
 effigy --repo /path/to/installed/northstar northstar/check:agent-instructions /path/to/project
 ```
 
-This is an execution surface inside the one skill artifact, not a second public
-install or a replacement for the source repository's full QA catalog.
+This is an execution surface inside the one package, not a second standards
+authority or a replacement for the source repository's full QA catalog.
 
 Rust catalogue and projection parity is checked without loading those files as
 agent instructions:

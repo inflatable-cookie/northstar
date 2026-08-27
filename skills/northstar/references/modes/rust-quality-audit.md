@@ -8,7 +8,7 @@ Load the strict audit projection at
 `../language-quality/rust/strict-audit.json` and the recorder contract at
 `../language-quality/rust/audit-recording.md`. Follow
 `../language-quality/rust/tool-bootstrap.md` to ensure the current Cargo-native
-tool without human installation. Load
+tool and pinned audit scanner without human installation. Load
 `../language-quality/rust/evidence-collection.md` only when resolving or
 collecting mechanical evidence. Do not load the everyday authoring projection.
 

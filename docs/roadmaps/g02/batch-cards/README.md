@@ -36,3 +36,6 @@ Rust audit v2 roadmap `g02.032` is complete. Cards 094-099 implemented the
 Cargo-native lifecycle, immutable evidence, compact closeout, and finite
 detector qualification, passed revision-E production evidence, and distributed
 the exact 120-file payload.
+Jetstream live-use correction roadmap `g02.033` is complete. Card 100 repaired
+explicit adapter installation, TypeScript retained findings, and Rust forwarder
+scanner evidence without widening repair authority or everyday context.

@@ -3,8 +3,8 @@
 Use this mode when the user wants Northstar to act as the conversational owner
 of a material lane: ask questions, explore edge cases, maintain the planning
 runway, prepare a separate worker thread/worktree, and review the worker's PR.
-This is an internal mode of the single public `northstar` skill, not a second
-installable skill.
+This is an internal mode of the single public `northstar` authority. Its thin
+named adapter does not define a second procedure or standard.
 
 ## Operating posture
 

@@ -21,6 +21,7 @@
     "clippy::unwrap_used": {"catalogue_evidence": ["RUST-ERR-001"], "qualification": "retain_manual"},
     "missing_debug_implementations": {"catalogue_evidence": ["RUST-API-001"], "qualification": "promote_evidence"},
     "rustdoc::broken_intra_doc_links": {"catalogue_evidence": ["RUST-API-001"], "qualification": "promote_evidence"},
-    "rustdoc::private_intra_doc_links": {"catalogue_evidence": ["RUST-API-001"], "qualification": "promote_evidence"}
+    "rustdoc::private_intra_doc_links": {"catalogue_evidence": ["RUST-API-001"], "qualification": "promote_evidence"},
+    "stopslop::SLOP039": {"catalogue_evidence": ["RUST-SLOP-001"], "qualification": "evaluation_only"}
   }
 }

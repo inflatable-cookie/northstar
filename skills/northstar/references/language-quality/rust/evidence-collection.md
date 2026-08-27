@@ -17,7 +17,7 @@ Each request supplies:
 - human-readable `selector`, repository-relative `package_cwd`, and concrete
   `environment`;
 - `execution.kind: command` with exact `program`, argument array, and `format`
-  (`cargo_json` or `generic`); or
+  (`cargo_json`, `stopslop_json`, or `generic`); or
 - `execution.kind: unavailable` with `failure_stage` and diagnostics, or
   `execution.kind: unrun` with a reason.
 
@@ -59,3 +59,34 @@ Compact evidence also carries the distinct mapping dispositions seen in each
 record.
 Raw artifacts remain outside the worktree under Git metadata. This operation
 does not initialize or load an audit ledger.
+
+## Exact-forwarder candidate scan
+
+For `RUST-SLOP-001`, use the verified audit-only scanner from
+`tool-bootstrap.md` as a `scanner` request. Run it from the resolved audit root:
+
+```json
+{
+  "evidence_id": "forwarders-<unit-id>",
+  "unit_id": "<unit-id>",
+  "evidence_class": "scanner",
+  "selector": "stopslop 0.5.1 SLOP039",
+  "origin": "agent_resolved",
+  "package_cwd": ".",
+  "environment": "<actual audit environment>",
+  "execution": {
+    "kind": "command",
+    "program": "<absolute-scanner-root>/bin/stopslop",
+    "args": ["--no-config", "--select", "SLOP039", "--format", "json", "<owned-rust-path>..."],
+    "format": "stopslop_json"
+  }
+}
+```
+
+The adapter maps `SLOP039` to evaluation-only `RUST-SLOP-001` evidence and
+retains raw output. Submit one request per unit with its complete owned Rust
+path set. Record every returned candidate, then classify its actual
+responsibility manually. stopslop excludes test-like, generated, and vendored
+paths; include those exclusions in the coverage statement and add manually
+identified in-scope candidates to the same ledger. A missing scanner is an
+explicit limitation, not clean evidence.

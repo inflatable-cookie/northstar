@@ -106,7 +106,8 @@ Starting a new project?
 
 ## Skill Surface
 
-One installable skill: **`northstar`**. Internal modes (not separate installs):
+One distributable package with **`northstar`** as its front door. Thin named
+adapters make explicit commands activatable; canonical modes remain internal:
 
 | Mode | Use when |
 |------|----------|

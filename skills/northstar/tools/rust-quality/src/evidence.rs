@@ -362,7 +362,7 @@ fn validate_plan(
         } = &request.execution
         {
             require_text(program, "evidence.program_empty")?;
-            if !matches!(format.as_str(), "cargo_json" | "generic") {
+            if !matches!(format.as_str(), "cargo_json" | "generic" | "stopslop_json") {
                 return Err(format!("evidence.format_invalid: {format}"));
             }
         }
@@ -554,6 +554,9 @@ fn parse_diagnostics(
     mapping: &Mapping,
 ) -> Vec<Diagnostic> {
     let mut diagnostics = Vec::new();
+    if format == "stopslop_json" {
+        return parse_stopslop_diagnostics(stdout, stderr, mapping);
+    }
     if format == "cargo_json" {
         for line in String::from_utf8_lossy(stdout).lines() {
             let Ok(value) = serde_json::from_str::<Value>(line) else {
@@ -599,6 +602,57 @@ fn parse_diagnostics(
             });
         }
     }
+    diagnostics
+}
+
+fn parse_stopslop_diagnostics(stdout: &[u8], stderr: &[u8], mapping: &Mapping) -> Vec<Diagnostic> {
+    let Ok(values) = serde_json::from_slice::<Vec<Value>>(stdout) else {
+        return vec![Diagnostic {
+            level: "warning".to_owned(),
+            message: "stopslop emitted invalid JSON evidence".to_owned(),
+            identifier: None,
+            catalogue_evidence: Vec::new(),
+            mapping_disposition: None,
+        }];
+    };
+    let mut diagnostics: Vec<_> = values
+        .into_iter()
+        .map(|value| {
+            let code = value["code"].as_str().unwrap_or("unknown");
+            let identifier = format!("stopslop::{code}");
+            let mapped = mapping.mappings.get(&identifier);
+            let path = value["path"].as_str().unwrap_or("unknown path");
+            let line = value["line"].as_u64().unwrap_or(0);
+            let column = value["col"].as_u64().unwrap_or(0);
+            let message = value["message"].as_str().unwrap_or("stopslop finding");
+            Diagnostic {
+                level: if value["tier"] == "A" {
+                    "error"
+                } else {
+                    "warning"
+                }
+                .to_owned(),
+                message: format!("{path}:{line}:{column}: {message}"),
+                identifier: Some(identifier),
+                catalogue_evidence: mapped
+                    .map(|item| item.catalogue_evidence.clone())
+                    .unwrap_or_default(),
+                mapping_disposition: mapped.map(|item| item.qualification.clone()),
+            }
+        })
+        .collect();
+    diagnostics.extend(
+        String::from_utf8_lossy(stderr)
+            .lines()
+            .filter(|line| !line.trim().is_empty())
+            .map(|line| Diagnostic {
+                level: "warning".to_owned(),
+                message: line.to_owned(),
+                identifier: None,
+                catalogue_evidence: Vec::new(),
+                mapping_disposition: None,
+            }),
+    );
     diagnostics
 }
 
@@ -770,4 +824,57 @@ fn digest(bytes: &[u8]) -> String {
 
 fn slash(path: &Path) -> String {
     path.to_string_lossy().replace('\\', "/")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{mapping, parse_diagnostics};
+
+    #[test]
+    fn maps_stopslop_forwarders_to_evaluation_only_evidence() {
+        let output = br#"[{"code":"SLOP039","tier":"B","path":"src/lib.rs","line":4,"col":1,"message":"`wrapper` only forwards to `inner`"}]"#;
+        let diagnostics = parse_diagnostics(
+            "stopslop_json",
+            output,
+            &[],
+            &mapping().expect("valid diagnostic mapping"),
+        );
+        assert_eq!(diagnostics.len(), 1);
+        assert_eq!(diagnostics[0].level, "warning");
+        assert_eq!(
+            diagnostics[0].identifier.as_deref(),
+            Some("stopslop::SLOP039")
+        );
+        assert_eq!(diagnostics[0].catalogue_evidence, ["RUST-SLOP-001"]);
+        assert_eq!(
+            diagnostics[0].mapping_disposition.as_deref(),
+            Some("evaluation_only")
+        );
+    }
+
+    #[test]
+    fn rejects_malformed_stopslop_output_as_warning_evidence() {
+        let diagnostics = parse_diagnostics(
+            "stopslop_json",
+            b"not-json",
+            &[],
+            &mapping().expect("valid diagnostic mapping"),
+        );
+        assert_eq!(diagnostics.len(), 1);
+        assert_eq!(diagnostics[0].level, "warning");
+        assert!(diagnostics[0].message.contains("invalid JSON"));
+    }
+
+    #[test]
+    fn retains_stopslop_stderr_as_warning_evidence() {
+        let diagnostics = parse_diagnostics(
+            "stopslop_json",
+            b"[]",
+            b"stopslop: warning: dead suppression\n",
+            &mapping().expect("valid diagnostic mapping"),
+        );
+        assert_eq!(diagnostics.len(), 1);
+        assert_eq!(diagnostics[0].level, "warning");
+        assert!(diagnostics[0].message.contains("dead suppression"));
+    }
 }

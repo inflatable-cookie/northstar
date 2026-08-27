@@ -38,8 +38,9 @@ evidence, action, confidence, disposition, and effective authority, then record
 the complete unit assessment before mutation.
 
 - `report_only`: report; no repair plan.
-- `review_required`: create a bounded plan with owned files and protected
-  behavior, then repair only under that plan.
+- `review_required`: use `repair_planned` only with a bounded plan, owned files,
+  protected behavior, and viable validation. Use `reported` to retain an honest
+  finding without mutation when repair or proof is unavailable.
 - `operator_decision`: record the stop; do not mutate.
 - deviation: require an exact repository-owned accepted record.
 - `TS-SLOP-001`: evaluation-only/report-only. Maintain a total candidate ledger

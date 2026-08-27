@@ -144,7 +144,7 @@ routes that precede ordinary planning:
 - `northstar reframe` or a request to restate the current message in project
   language.
 
-This is an internal mode of the single public `northstar` skill. It is
+This is an internal mode of the single public `northstar` authority. It is
 provider-neutral, plan-only, and non-mutating by default; it cannot clear a map,
 make a card ready, or replace normal spec, promotion, roadmap, or operator gates.
 
@@ -163,7 +163,7 @@ requests without that orchestrator/worker/worktree/PR language remain
 
 Use when the user wants Northstar to own a question-led planning conversation,
 prepare a separate worker thread/worktree, maintain a runway, or review the
-worker's PR. This is an internal mode of the single public skill; the operator
+worker's PR. This is an internal mode of the single public authority; the operator
 still relays messages between threads.
 
 → [`modes/orchestrator.md`](./modes/orchestrator.md)

@@ -542,6 +542,12 @@ fn validate_audit_surface(skill_root) {
         bootstrap.contains("source_payload_sha256") &&
         bootstrap.contains("Never add") && bootstrap.contains("cache `bin`") && bootstrap.contains("`PATH`"),
         "Rust tool bootstrap lacks locked payload-addressed installation");
+    require(bootstrap.contains("cargo install --locked --offline stopslop --version 0.5.1") &&
+        bootstrap.contains("stopslop 0.5.1") && bootstrap.contains("audit-only"),
+        "Rust audit scanner lacks pinned agent-owned installation");
+    require(evidence.contains("stopslop_json") && evidence.contains("SLOP039") &&
+        evidence.contains("explicit limitation, not clean evidence"),
+        "Rust evidence contract lacks captured forwarder scanning");
     for file in ["Cargo.toml", "Cargo.lock", "build.rs", "assets/diagnostic-mapping.json", "src/evidence.rs", "src/lib.rs", "src/main.rs", "src/ledger.rs", "src/lifecycle.rs", "src/plan.rs", "tests/cli.rs", "tests/detectors.rs", "tests/fixtures/detectors/invalid/Cargo.toml", "tests/fixtures/detectors/valid/Cargo.toml", "tests/fixtures/detectors/exceptions/Cargo.toml"] {
         require(fs::is_file(path::join(tool_root, file)), "Rust quality tool payload is missing " + file);
     }
@@ -556,6 +562,10 @@ fn validate_audit_surface(skill_root) {
     }
     require(!catalog.contains("rust-quality:record") && !catalog.contains("test:rust-quality-recorder"),
         "removed Effigy-hosted Rust recorder remains routed");
+    let mapping = json::read_file(path::join(tool_root, "assets/diagnostic-mapping.json"));
+    require(mapping["mappings"].contains("stopslop::SLOP039") &&
+        mapping["mappings"]["stopslop::SLOP039"]["qualification"] == "evaluation_only",
+        "Rust evidence adapter does not map the forwarder scanner conservatively");
     require(adapter.contains("Thin explicit entrypoint"), "Rust audit adapter duplicates procedure");
     require(!adapter.contains("## Procedure") && !adapter.contains("## Steps"), "Rust audit adapter contains procedure");
     require(fs::file_size(mode_path) <= 12288, "Rust audit mode exceeds on-demand context budget");

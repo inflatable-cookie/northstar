@@ -22,7 +22,9 @@ dirty files itself.
 `action`, exact `location` (file plus symbol or one-based line span), evidence,
 and disposition. The recorder derives maturity, enforcement, and authority.
 Plans require a matching `repair_planned` finding, owned files, and non-empty
-`preserved_behavior`.
+`preserved_behavior`. A `review_required` finding may instead use `reported`
+when the auditor retains it without mutation; it has no repair plan and is
+carried into `remaining_limitations`.
 
 `extend <target-root> <audit-id> <extension.json>` adds files before mutation.
 It requires a reason and may include findings, plans, and `plan_extensions` for

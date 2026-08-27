@@ -352,8 +352,8 @@ fn normalize_finding(input, owned_files, catalogue, deviations) {
     } else if authority == "operator_decision" {
         require(disposition == "operator_decision", "operator-owned finding must stop before mutation: " + input["rule_id"]);
     } else {
-        require(disposition == "repair_planned" || disposition == "deviation",
-            "review-required finding needs repair or accepted deviation: " + input["rule_id"]);
+        require(disposition == "repair_planned" || disposition == "reported" || disposition == "deviation",
+            "review-required finding needs repair, retained report, or accepted deviation: " + input["rule_id"]);
     }
     if disposition == "deviation" {
         require(deviation_covers(deviations, input["rule_id"], location["file"]),
@@ -751,6 +751,9 @@ fn finding_limitation(finding) {
     if finding["disposition"] == "operator_decision" {
         return "operator decision required: " + rule_id + "/" + finding["action"] + " at " + file;
     }
+    if finding["disposition"] == "reported" {
+        return "review-required finding retained without mutation: " + rule_id + "/" + finding["action"] + " at " + file;
+    }
     ""
 }
 
@@ -1143,6 +1146,25 @@ fn test_positive_operator_stop(catalogue, catalogue_path) {
         "public error contract stop was not reported");
 }
 
+fn test_positive_review_required_report(catalogue, catalogue_path) {
+    let target = new_test_target("review-required-report");
+    init_single_test(target, catalogue_path, "worktree", [], []);
+    assess_unit(target, "audit", #{
+        unit_id: "unit-lib",
+        findings: [test_finding("TS-READ-001", "simplify_control_flow", "reported", "src/lib.ts")],
+        repair_plans: [],
+    }, catalogue);
+    complete_unit(target, "audit", #{ unit_id: "unit-lib", repairs: [], validation: [] }, catalogue);
+    let result = finalize_audit(target, "audit");
+    require(result["findings"][0]["disposition"] == "reported",
+        "review-required retained finding lost its disposition");
+    require(result["changed_scope"].len() == 0,
+        "review-required retained finding attributed mutation");
+    require(result["remaining_limitations"].len() == 1 &&
+        result["remaining_limitations"][0].contains("retained without mutation"),
+        "review-required retained finding was not reported as a limitation");
+}
+
 fn test_init_rejections(catalogue_path) {
     let unsupported = new_test_target("unsupported");
     let units = [test_unit("unit-lib", "src/lib.ts", ["src/lib.ts"])];
@@ -1294,13 +1316,14 @@ if args.len() == 1 && args[0] == "self-test" {
     test_positive_repair_and_extension(catalogue, catalogue_path);
     test_positive_repository_scope(catalogue, catalogue_path);
     test_positive_operator_stop(catalogue, catalogue_path);
+    test_positive_review_required_report(catalogue, catalogue_path);
     test_init_rejections(catalogue_path);
     test_authority_rejections(catalogue, catalogue_path);
     test_cross_unit_rejection(catalogue, catalogue_path);
     test_temporal_rejections(catalogue, catalogue_path);
     test_validation_and_preservation_rejections(catalogue, catalogue_path);
     test_unavailable_tool_evidence(catalogue, catalogue_path);
-    log("TypeScript quality recorder: OK (4 positive paths, 11 negative paths)");
+    log("TypeScript quality recorder: OK (5 positive paths, 11 negative paths)");
 } else if args.len() == 3 && args[0] == "init" {
     let root = init_audit(args[1], json::read_file(args[2]), catalogue_path);
     log("TypeScript quality audit initialized: " + root);

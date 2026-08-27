@@ -94,3 +94,7 @@ Rust v2 live-use research is promoted. Roadmap `g02.032` is complete; cards
 094-099 implemented the Cargo-native lifecycle, immutable mechanical evidence,
 compact closeout, detector qualification, revision-E production proof, and
 exact 120-file configured distribution.
+Jetstream live-use corrections are complete under `g02.033/100`: explicit
+adapters install at full depth, TypeScript may retain review-required findings
+honestly, and Rust captures pinned `stopslop` forwarder evidence without adding
+repair authority or everyday context.

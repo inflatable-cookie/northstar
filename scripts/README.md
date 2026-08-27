@@ -32,16 +32,34 @@ cohorts remain outside the repository.
 
 ## Installed skill parity
 
-After a published Northstar skill change, update the configured global install
-with the Skills CLI:
+Install the package at full depth so the front door and explicit adapters become
+separate activatable skill entries:
 
 ```bash
-npx skills update northstar -g -y
+npx skills add https://github.com/inflatable-cookie/northstar/tree/main/skills/northstar \
+  --full-depth --skill '*' --agent codex -g -y
+npx skills list -g --json
+```
+
+Replace `codex` with the current harness's Skills CLI agent ID, or pass several
+IDs after `--agent`. `--all` is intentionally absent because it targets every
+supported harness.
+
+After a published Northstar skill change, rerun the full-depth install. A named
+`skills update northstar` refreshes only the front door, not sibling adapters.
+
+```bash
+npx skills add https://github.com/inflatable-cookie/northstar/tree/main/skills/northstar \
+  --full-depth --skill '*' --agent codex -g -y
 npx skills list -g --json
 effigy check:skill-install /path/to/installed/northstar
 ```
 
-`npx skills update` follows the configured published source. It cannot see
+An install is incomplete unless `skills list` includes `northstar`,
+`northstar-rust-audit`, and `northstar-typescript-audit`. The adapters delegate
+to the main payload; they do not duplicate its standards or audit procedure.
+
+The Skills CLI follows the configured published source. It cannot see
 uncommitted or unpushed changes in this checkout. During local skill
 development, a direct sync is appropriate; keep it out of the published
 operator path:

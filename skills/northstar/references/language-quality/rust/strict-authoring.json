@@ -370,7 +370,7 @@
       "requirement": "A pass-through wrapper should exist only when it owns a stable API boundary, visibility boundary, substitution seam, policy, instrumentation point, type translation, or another named responsibility.",
       "mechanical_enforcement": [
         {
-          "tool": "stopslop",
+          "tool": "stopslop 0.5.1",
           "check": "SLOP039",
           "role": "candidate",
           "caveat": "The syntax detector cannot identify stable façades or architectural seams and must never auto-delete a wrapper."
