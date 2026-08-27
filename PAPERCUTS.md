@@ -7,6 +7,13 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 
 <!-- Keep entries short. Append newest entries at the top. Do not include secrets. -->
 
+- **2026-08-27 — install parity counted the Rust tool's build cache (resolved):**
+  agent-owned Cargo bootstrap can leave `tools/rust-quality/target/` inside an
+  installed skill, and the parity checker treated those ignored artifacts as
+  payload drift; impact was a huge false failure after a valid published
+  install; fixed by excluding that one declared Cargo cache alongside Effigy
+  receipts; affected surface was `scripts/check-northstar-skill-install.rhai`.
+
 - **2026-08-26 — docs QA traverses ignored Rust build output (resolved):** adding a
   skill-shipped Cargo crate left its ignored `target/` directory beneath the
   installed-payload source, and docs QA tried to decode a fingerprint artifact

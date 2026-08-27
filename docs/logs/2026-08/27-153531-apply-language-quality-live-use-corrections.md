@@ -13,7 +13,9 @@ Status: complete
 - taught the Cargo-native Rust evidence engine to parse scanner JSON, retain raw
   output, and map `SLOP039` to evaluation-only `RUST-SLOP-001` evidence;
 - kept the scanner outside everyday Rust activation and preserved the existing
-  routed, on-demand context boundary.
+  routed, on-demand context boundary;
+- excluded the Rust tool's declared Cargo build cache from source/install
+  parity after the published install exposed generated-state drift.
 
 ## Evidence
 

@@ -20,7 +20,8 @@ let source_digests = #{};
 let target_digests = #{};
 
 fn is_runtime_state(relative) {
-    str::starts_with(relative, ".effigy/")
+    str::starts_with(relative, ".effigy/") ||
+        str::starts_with(relative, "tools/rust-quality/target/")
 }
 
 for file in fs::list_recursive(source_root) {

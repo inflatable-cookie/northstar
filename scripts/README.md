@@ -71,6 +71,9 @@ rsync -a --delete skills/northstar/ /path/to/installed/northstar/
 Restart agent sessions after updating an installed skill so they reload the
 new instructions.
 
+Install parity ignores only skill-local runtime state: `.effigy/` receipts and
+the Cargo build cache at `tools/rust-quality/target/`.
+
 The published skill also carries a minimal Effigy catalog for the consumer-safe
 agent-instruction audit. When the target repository has no local task, select the
 installed skill directory explicitly:

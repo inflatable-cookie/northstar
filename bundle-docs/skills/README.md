@@ -68,11 +68,11 @@ checkout can verify the main payload with:
 effigy check:skill-install /path/to/installed/northstar
 ```
 
-The parity checker compares the distributable skill payload and ignores Effigy's
-runtime receipts under `.effigy/`; those receipts are not part of the installed
-skill. A direct `rsync -a --delete` from `skills/northstar/` is reserved for local
-development before the change is published. Restart agent sessions after an
-update.
+The parity checker compares the distributable skill payload and ignores Effigy
+receipts under `.effigy/` plus Cargo build output under
+`tools/rust-quality/target/`; neither is part of the installed skill. A direct
+`rsync -a --delete` from `skills/northstar/` is reserved for local development
+before the change is published. Restart agent sessions after an update.
 
 The current configured development install contains 120 source-identical files.
 Rust v2 replaces the skill-local Rhai recorder with the Cargo-native engine;
