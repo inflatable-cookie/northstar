@@ -24,8 +24,7 @@ through its absolute path without global PATH changes.
 - format, test, and strict Clippy passed on Rust 1.97.1 and the declared 1.95.0
   floor;
 - locked managed installation and absolute invocation passed;
-- report:
-  `bundle-docs/research/prototypes/rust-quality/rust-v2-boundary-report-2026-08-26-b.md`.
+- this closeout is the retained governing boundary decision.
 
 ## Next
 

@@ -80,8 +80,7 @@ recorder before any production mode or command is scaffolded.
 
 ## Evidence
 
-See `docs/logs/2026-08/25-172511-prove-rust-quality-production-boundary.md` and
-`bundle-docs/research/prototypes/rust-quality/production-boundary/README.md`.
+See `docs/logs/2026-08/25-172511-prove-rust-quality-production-boundary.md`.
 
 ## Stop Conditions
 

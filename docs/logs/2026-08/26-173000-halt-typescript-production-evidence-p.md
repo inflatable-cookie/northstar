@@ -12,8 +12,6 @@ later replicate ran. The result is unscored and distribution remains blocked.
 
 ## Evidence
 
-- bounded report:
-  `bundle-docs/research/prototypes/typescript-quality/production-evidence-report-2026-08-26-p.md`;
 - subject: `subject-9b1daf113ff2`, `570s`, 28 tool invocations;
 - `10/10` primary findings, one admissible corroborating finding, exact repair
   scope, clean controls, and protected behavior;

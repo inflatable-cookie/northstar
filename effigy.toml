@@ -22,7 +22,7 @@ setup = ["health"]
 "test:typescript-quality-recorder" = [{ task = "typescript-quality:record self-test" }]
 "rust-quality:setup" = [{ rhai = "skills/northstar/scripts/rust-quality-setup.rhai" }]
 "test:rust-quality-setup" = [{ task = "rust-quality:setup self-test" }]
-"test:rust-v2-production-harness" = "bundle-docs/research/prototypes/rust-quality/v2-production/self-test.sh"
+"test:rust-v2-production-harness" = "scripts/tests/rust-quality-production/self-test.sh"
 "check:command-skills" = [{ rhai = "scripts/check-northstar-command-skills.rhai" }]
 "test:readiness-map" = [{ rhai = "scripts/test-northstar-readiness-map.rhai" }]
 "qa:docs" = [{ task = "check:repo-contract" }, { task = "check:readiness-map" }, { task = "test:readiness-map" }, { task = "check:command-skills" }]

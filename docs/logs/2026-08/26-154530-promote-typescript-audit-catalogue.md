@@ -21,8 +21,8 @@ recorder, installed selector, or distribution surface changed.
 
 ## Evidence
 
-- `production-catalogue-report-2026-08-26-l.md` records the rule inventory,
-  provenance boundary, hashes, seven negative paths, and claim limits.
+- this closeout records the rule inventory, provenance boundary, hashes, seven
+  negative paths, and claim limits;
 - `effigy check:typescript-quality` passes catalogue, projection, schemas, and
   templates.
 - `effigy qa:docs`, `effigy qa`, and `git diff --check` are the batch closeout

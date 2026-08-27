@@ -6,7 +6,7 @@ Updated: 2026-08-26
 Master spec refs: `docs/specs/032-typescript-svelte-explicit-audit.md`
 Roadmap ref: `g02.031`
 Governing refs: `docs/contracts/004-language-quality-pack.md`, card 091,
-`bundle-docs/research/prototypes/typescript-quality/independent-audit-protocol.md`
+`docs/specs/032-typescript-svelte-explicit-audit.md`
 Auto-start next card: no
 
 ## Objective
@@ -57,9 +57,10 @@ production catalogue, the fixture's protected behavior, and its frozen
 reference repair. The answer key was incomplete across applicable rules.
 
 No review or later replicate ran. Revision N is unscored and must not be tuned
-or reused. See `production-evidence-report-2026-08-26-n.md`. Card 093 remains
-pending. Resume only with an explicit new revision after cross-rule answer-key
-qualification.
+or reused. See
+`docs/logs/2026-08/26-163706-halt-typescript-production-evidence.md`. Card 093
+remains pending. Resume only with an explicit new revision after cross-rule
+answer-key qualification.
 
 ## Paused attempt — revision O
 
@@ -73,7 +74,7 @@ The exact occurrence gate cannot currently distinguish missed defect coverage
 from bounded overlapping classification. No review or later replicate ran.
 Revision O is unscored and must not be tuned or reused. Resume only after an
 operator decision on primary-defect recall plus admissible corroborating labels.
-See `production-evidence-report-2026-08-26-o.md`.
+See `docs/logs/2026-08/26-165801-halt-typescript-production-evidence-o.md`.
 
 ## Paused attempt — revision P
 
@@ -109,7 +110,7 @@ evaluation measurement, then failed because the oracle required generated
 discovery. The deterministic self-test masked the defect by creating the note
 before recorder initialization. No reviewer or later replicate ran. Revision Q
 is unscored and must not be tuned or reused. See
-`production-evidence-report-2026-08-26-q.md`.
+`docs/logs/2026-08/26-173152-halt-typescript-production-evidence-q.md`.
 
 ## Paused attempt — revision R
 
@@ -125,7 +126,8 @@ in the discovered repository scope. The verifier rejected that additional
 ownership even though every frozen input was covered. Inspection also exposed
 normal Effigy graph and doctor-report state not represented in the exact final-
 file oracle. No reviewer or later replicate ran. Revision R is unscored and must
-not be tuned or reused. See `production-evidence-report-2026-08-26-r.md`.
+not be tuned or reused. See
+`docs/logs/2026-08/26-174510-halt-typescript-production-evidence-r.md`.
 
 ## Revision S gate
 
@@ -142,7 +144,7 @@ Passed `3/3`: `30/30` primary findings, exact normative precision, `9/9` clean
 controls, protected behavior, exact repair scope, `96/96` blind review
 dimensions, and `24/24` accepted repairs. Three exact 181-file archives exclude
 private and disposable runtime state. See
-`production-evidence-report-2026-08-26-s.md`.
+`docs/logs/2026-08/26-181000-pass-typescript-production-evidence-s.md`.
 
 ## Next task
 

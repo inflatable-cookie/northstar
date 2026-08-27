@@ -16,8 +16,6 @@ The result is not production evidence and distribution remains blocked.
 
 ## Evidence
 
-- bounded failure report:
-  `bundle-docs/research/prototypes/typescript-quality/production-evidence-report-2026-08-26-o.md`;
 - subject: `subject-77cedcb7cf0c`, `codex-cli/gpt-5.6-sol`, high reasoning,
   CLI `0.149.1`, `467s`, 36 tool invocations;
 - all eight defective files changed, all three clean controls remained

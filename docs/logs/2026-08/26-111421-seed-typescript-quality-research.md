@@ -165,17 +165,17 @@ through a contract-backed roadmap card.
 
 ## Validation
 
-- `bun bundle-docs/research/prototypes/typescript-quality/check.ts` — pass: 13
+- prototype catalogue check — pass: 13
   rules, 14 benchmark cases, and 8 repair cases;
-- `bun bundle-docs/research/prototypes/typescript-quality/scope-discovery-self-test.ts`
+- scope-discovery self-test
   — pass: ownership, overlays, versions, exclusions, and degraded
   evidence;
-- `bun bundle-docs/research/prototypes/typescript-quality/blind-review-self-test.ts`
+- blind-review self-test
   — pass: 11 cases, 16 claims, separation, overwrite refusal, enforced
   isolation, completed assessment, and tamper rejection;
-- `bun bundle-docs/research/prototypes/typescript-quality/isolated-reviewer-self-test.ts`
+- isolated-reviewer self-test
   — pass: eight Seatbelt paths plus mock launch and assessment;
-- `bun bundle-docs/research/prototypes/typescript-quality/verify-blind-review-archive.ts`
+- blind-review archive verification
   — pass: `packet-f23d78a09201`, 26 files, exact set and hashes, no excluded
   runtime state;
 - repair fixture frozen install, strict TypeScript typecheck, and verifier —

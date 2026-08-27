@@ -41,9 +41,9 @@ nested package, and no-selector cases plus full package and repository QA.
 
 ## Evidence
 
-Report D records supported evidence classes, selector resolution, normalized
-examples, negative paths, context-size measurements, and unsupported tools:
-`bundle-docs/research/prototypes/rust-quality/rust-v2-mechanical-evidence-report-2026-08-26-d.md`.
+The retained closeout records supported evidence classes, selector resolution,
+normalized examples, negative paths, context-size measurements, and unsupported
+tools: `docs/logs/2026-08/26-230000-add-rust-mechanical-evidence-adapters.md`.
 
 ## Stop conditions
 

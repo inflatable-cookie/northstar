@@ -6,7 +6,8 @@ Created: 2026-08-24
 Updated: 2026-08-26
 Depends on: `docs/contracts/003-agent-instruction-surface.md`
 Research ref: `bundle-docs/research/translation-memos/rust-quality-skills-and-audit.md`
-Prototype ref: `bundle-docs/research/prototypes/rust-quality/README.md`
+Qualification evidence:
+`docs/logs/2026-08/26-083100-run-rust-quality-production-evidence.md`
 Promotion targets: `docs/architecture/system-architecture.md`,
 `docs/contracts/004-language-quality-pack.md`, Rust quality skill pack, and
 Effigy selectors
@@ -366,9 +367,8 @@ tracks and the initial catalogue decision.
 
 ## Contract gate
 
-The accepted initial catalogue decision is recorded in
-`bundle-docs/research/prototypes/rust-quality/catalogue-promotion-review-2026-08-25.md`.
-It promotes six normative rules, retains evaluation-only `RUST-SLOP-001`, and
+The accepted initial catalogue decision promotes six normative rules, retains
+evaluation-only `RUST-SLOP-001`, and
 selects the validated strict profile. The catalogue now has action-specific
 MSRV remediation authority and report-only slop remediation.
 

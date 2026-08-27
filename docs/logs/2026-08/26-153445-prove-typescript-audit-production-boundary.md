@@ -29,7 +29,6 @@ surface overlays, not repository-wide switches.
 
 ## Evidence
 
-- `production-boundary-report-2026-08-26-k.md`;
 - rootless and declared-workspace scope-discovery self-test;
 - copied-skill Rhai boundary probe with `PATH=/bin`;
 - public `init -> assess -> complete -> finalize` lifecycle;

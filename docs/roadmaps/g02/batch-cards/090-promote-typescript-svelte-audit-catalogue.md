@@ -56,7 +56,7 @@ Record rule inventory, provenance, hashes, negative paths, and claim limits.
 
 ## Completion evidence
 
-- `bundle-docs/research/prototypes/typescript-quality/production-catalogue-report-2026-08-26-l.md`
+- `docs/logs/2026-08/26-154530-promote-typescript-audit-catalogue.md`
 - `effigy check:typescript-quality`
 
 ## Next task

@@ -23,6 +23,13 @@ effigy qa
 Scripts remain implementation detail until the helper flow is stable enough to
 expose as a first-class Effigy task.
 
+## Production qualification regression
+
+`scripts/tests/rust-quality-production/` retains the compact deterministic
+Rust v2 qualification harness after the disposable research corpus was
+retired. Run it through `effigy test:rust-v2-production-harness`; runtime
+cohorts remain outside the repository.
+
 ## Installed skill parity
 
 After a published Northstar skill change, update the configured global install

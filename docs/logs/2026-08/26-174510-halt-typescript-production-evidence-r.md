@@ -13,8 +13,6 @@ unscored and distribution remains blocked.
 
 ## Evidence
 
-- bounded report:
-  `bundle-docs/research/prototypes/typescript-quality/production-evidence-report-2026-08-26-r.md`;
 - subject: `subject-741faed3e94c`, `595s`, 35 tool invocations;
 - exact repair scope, `10/10` primary findings, one non-failing evaluation
   candidate, and all three controls unchanged;

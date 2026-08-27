@@ -86,5 +86,5 @@ Card 090 is ready. Do not auto-start it.
 - standalone copied-skill Rhai lifecycle and seven negative paths passed with
   Bun, Node, package managers, `jq`, Git, and Northstar checkout unavailable to
   the recorder;
-- bounded report:
-  `bundle-docs/research/prototypes/typescript-quality/production-boundary-report-2026-08-26-k.md`.
+- retained closeout:
+  `docs/logs/2026-08/26-153445-prove-typescript-audit-production-boundary.md`.

@@ -25,10 +25,6 @@ Status: complete
 - Rust package check, repository QA, docs QA, posture advisory, skill
   validation, and diff validation recorded in the governing report.
 
-## Research record
-
-`bundle-docs/research/prototypes/rust-quality/rust-v2-scope-ledger-report-2026-08-26-c.md`
-
 ## Next task
 
 Execute ready card `g02.032/096` as a separate bounded batch. It adds mechanical

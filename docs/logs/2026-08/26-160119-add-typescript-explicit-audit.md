@@ -22,7 +22,6 @@ not clean; pre-source tool failures remain unavailable with diagnostics.
 
 ## Evidence
 
-- `production-route-report-2026-08-26-m.md`;
 - setup: mixed workspace, rootless packages, overlay locality, preservation,
   idempotency, and two negative paths;
 - recorder: four positive and eleven negative paths;

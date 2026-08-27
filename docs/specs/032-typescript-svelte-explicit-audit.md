@@ -7,7 +7,8 @@ Updated: 2026-08-26
 Depends on: `docs/contracts/003-agent-instruction-surface.md`,
 `docs/contracts/004-language-quality-pack.md`
 Research ref: `bundle-docs/research/translation-memos/typescript-quality-and-svelte-overlay.md`
-Prototype ref: `bundle-docs/research/prototypes/typescript-quality/README.md`
+Qualification evidence:
+`docs/logs/2026-08/26-181000-pass-typescript-production-evidence-s.md`
 Promotion targets: `docs/architecture/system-architecture.md`, TypeScript
 quality catalogue, explicit audit mode, thin command adapter, skill-local
 Effigy selectors, and installed-skill parity

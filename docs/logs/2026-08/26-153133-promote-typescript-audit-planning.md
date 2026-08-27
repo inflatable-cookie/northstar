@@ -28,7 +28,6 @@ catalogue promotion, implementation, production evidence, and distribution.
 - finding packet `packet-c78dafc9e234`;
 - repair trials `repair-afbc0a90e9c4`, `repair-8d018643f556`, and
   `repair-1fb99929cbe9`;
-- `bundle-docs/research/prototypes/typescript-quality/calibration-report-2026-08-26-j.md`;
 - `docs/specs/032-typescript-svelte-explicit-audit.md`;
 - `docs/roadmaps/g02/031-ship-typescript-svelte-explicit-audit.md`.
 

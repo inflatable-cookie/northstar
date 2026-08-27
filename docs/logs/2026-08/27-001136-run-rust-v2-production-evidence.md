@@ -24,9 +24,12 @@ Status: complete
 - payload SHA-256 remained
   `dab44a149ee02bc17777e575f42b8857685031a2e0ee21cbc66a981624ff471f`.
 
-## Research record
+## Claim boundary
 
-`bundle-docs/research/prototypes/rust-quality/rust-v2-production-evidence-report-2026-08-27-e.md`
+This qualifies the distributed audit mechanism, not a consumer system or a
+safety certification. The degraded subject retained failed strict-Clippy
+evidence, an unavailable optional scanner, and unresolved raw-pointer contract
+work as explicit limitations rather than converting them into a clean pass.
 
 ## Validation
 

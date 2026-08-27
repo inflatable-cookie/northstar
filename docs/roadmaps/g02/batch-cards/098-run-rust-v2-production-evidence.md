@@ -41,8 +41,9 @@ docs QA, posture advisory, and diff validation.
 Revision E passed `3/3` deterministic subjects and `3/3` packet-only blind
 reviews with exact `4/4` primary findings, `18/18` rule verdicts, `9/9`
 attestations, no review concerns, and an unchanged production payload. Revisions
-A-D remain immutable halted or rejected evidence. See
-`bundle-docs/research/prototypes/rust-quality/rust-v2-production-evidence-report-2026-08-27-e.md`.
+A-D were immutable halted or rejected evidence before the disposable cohort
+corpus was retired. See
+`docs/logs/2026-08/27-001136-run-rust-v2-production-evidence.md`.
 
 ## Stop conditions
 

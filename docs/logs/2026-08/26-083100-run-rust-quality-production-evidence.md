@@ -20,21 +20,17 @@ envelope is exhausted and the lane pause signal is `budget-exhausted`.
   seven authorized repairs per run, exact preservation, no regressions;
 - everyday authoring: production revision M, 3/3, churn `0.975`, `1.097`, and
   `1.143`, no residuals/regressions/scope widening, 5/5 blind scores;
-- immutable archives:
-  `bundle-docs/research/prototypes/rust-quality/trial-results/2026-08-26-cohort-production-k`
-  and `2026-08-26-cohort-production-m`;
-- bounded reports:
-  `production-evidence-report-2026-08-26-k.md` and
-  `production-evidence-report-2026-08-26-m.md`;
+- immutable production-K and production-M archives were frozen and scored
+  before the disposable cohort corpus was retired;
 - revision M raw manifest:
   `b5084114aad6705968045cc8efcbbc04321953574b0d824ad2124f2d0d74143e`;
 - revision M decision:
   `a23c6c38fef03449c6c2f5bf6de23c74638d6187ed972a70f843918d13ec728c`.
 
-Revision L halted unscored after the CLI auto-updated mid-cohort. Its archive is
-retained at `trial-results/2026-08-26-cohort-production-l`. Both isolated
-runners now fail before model launch when the live CLI, model, or reasoning
-differs from the frozen cohort cell.
+Revision L halted unscored after the CLI auto-updated mid-cohort. Its frozen
+archive was retired with the disposable corpus. Both isolated runners now fail
+before model launch when the live CLI, model, or reasoning differs from the
+frozen cohort cell.
 
 ## Claim Boundary
 

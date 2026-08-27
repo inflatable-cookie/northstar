@@ -6,7 +6,7 @@ Updated: 2026-08-26
 Master spec refs: `docs/specs/033-rust-audit-v2-tool-enforcement.md`
 Roadmap ref: `g02.032`
 Governing refs: `docs/contracts/004-language-quality-pack.md`, card 094,
-`bundle-docs/research/prototypes/rust-quality/rust-v2-boundary-report-2026-08-26-b.md`
+`docs/specs/033-rust-audit-v2-tool-enforcement.md`
 Auto-start next card: no
 
 ## Ready-state checks

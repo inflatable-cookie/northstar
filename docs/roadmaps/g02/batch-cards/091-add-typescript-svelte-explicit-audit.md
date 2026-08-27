@@ -52,7 +52,7 @@ hashes, and remaining production-evidence limits.
 
 ## Completion evidence
 
-- `bundle-docs/research/prototypes/typescript-quality/production-route-report-2026-08-26-m.md`
+- `docs/logs/2026-08/26-160119-add-typescript-explicit-audit.md`
 - focused source and copied-skill selectors with `PATH=/bin`
 
 ## Next task

@@ -96,5 +96,5 @@ Card 095 is ready with the frozen interfaces. Do not auto-start it.
   PATH mutation;
 - retained report A's ledger, attestation, evidence, detector-authority,
   structured-limitation, and context-budget semantics;
-- bounded report:
-  `bundle-docs/research/prototypes/rust-quality/rust-v2-boundary-report-2026-08-26-b.md`.
+- retained decision:
+  `docs/logs/2026-08/26-211937-replace-rust-v2-boundary-with-cargo.md`.

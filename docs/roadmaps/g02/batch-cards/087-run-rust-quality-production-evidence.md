@@ -6,7 +6,7 @@ Updated: 2026-08-26
 Master spec refs: `docs/specs/031-rust-quality-authoring-and-audit.md`
 Roadmap ref: `g02.030`
 Governing refs: `docs/contracts/004-language-quality-pack.md`,
-`bundle-docs/research/prototypes/rust-quality/independent-trial-protocol.md`
+`docs/specs/031-rust-quality-authoring-and-audit.md`
 Auto-start next card: no
 
 ## Ready-State Checks
@@ -116,14 +116,8 @@ attempt exists to reuse.
 - The K-to-M installed audit-effective surface is identical: root/router,
   explicit-audit mode, strict-audit projection, recording contract, recorder,
   and catalogue after removing authoring projections.
-- Immutable archives:
-  `trial-results/2026-08-26-cohort-production-k`,
-  `trial-results/2026-08-26-cohort-production-l`, and
-  `trial-results/2026-08-26-cohort-production-m`.
-- Bounded reports:
-  `production-evidence-report-2026-08-26-k.md`,
-  `production-evidence-report-2026-08-26-l.md`, and
-  `production-evidence-report-2026-08-26-m.md`.
+- The K, halted-L, and M cohorts were frozen and scored before their disposable
+  archives and reports were retired after promotion.
 
 Card 087 is complete. Its continuation envelope and lane budget are exhausted;
 card 088 is ready but does not auto-start.

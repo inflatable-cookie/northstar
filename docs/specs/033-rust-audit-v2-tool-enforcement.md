@@ -8,7 +8,7 @@ Depends on: `docs/contracts/003-agent-instruction-surface.md`,
 `docs/contracts/004-language-quality-pack.md`
 Research refs:
 `bundle-docs/research/translation-memos/rust-quality-skills-and-audit.md`,
-`bundle-docs/research/prototypes/rust-quality/live-use-report-2026-08-26-convergence.md`
+`docs/logs/2026-08/26-190000-record-convergence-rust-audit.md`
 Implementation precedent: [dmmulroy/anti-slop](https://github.com/dmmulroy/anti-slop)
 Promotion targets: skill-shipped Rust CLI, Rust quality schemas, recorder,
 checked projections, focused tests, production evidence, and installed parity
@@ -155,6 +155,6 @@ Northstar does not dispatch or mutate an operator consumer repository.
 Card 094 first proved and then rejected a three-task Effigy/Rhai split after
 operator review exposed its cross-root execution mismatch. The corrected card
 freezes a Cargo-native, skill-shipped binary, managed bootstrap, semantic record
-shapes, failure codes, and context budgets. The governing evidence report is
-`bundle-docs/research/prototypes/rust-quality/rust-v2-boundary-report-2026-08-26-b.md`;
-report A is retained as superseded research.
+shapes, failure codes, and context budgets. The governing decision is recorded
+in `docs/logs/2026-08/26-211937-replace-rust-v2-boundary-with-cargo.md`; the
+rejected Effigy-hosted alternative was retired with the prototype corpus.

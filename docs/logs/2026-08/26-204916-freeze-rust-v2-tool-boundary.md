@@ -30,9 +30,9 @@ production Rust payload remains unchanged.
 
 ## Evidence
 
-`bundle-docs/research/prototypes/rust-quality/rust-v2-boundary-report-2026-08-26-a.md`
-records runtime alternatives, schemas, failure semantics, hashes, fixtures,
-limits, and context measurements.
+This closeout records the runtime alternatives, schemas, failure semantics,
+fixtures, limits, and context measurements. The rejected Effigy-hosted
+prototype was retired after the Cargo-native boundary replaced it.
 
 ## Next task
 

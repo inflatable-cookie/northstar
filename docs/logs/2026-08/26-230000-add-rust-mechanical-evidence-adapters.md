@@ -26,10 +26,6 @@ Status: complete
 - locked offline install and exact payload verification pass;
 - Rust package check and repository QA are recorded in report D.
 
-## Research record
-
-`bundle-docs/research/prototypes/rust-quality/rust-v2-mechanical-evidence-report-2026-08-26-d.md`
-
 ## Next task
 
 Execute ready card `g02.032/097` as a separate bounded batch. Qualify detector

@@ -18,8 +18,6 @@ result is not production evidence and distribution remains blocked.
 
 ## Evidence
 
-- bounded failure report:
-  `bundle-docs/research/prototypes/typescript-quality/production-evidence-report-2026-08-26-n.md`;
 - subject: `subject-42a52e2bef2a` on `codex-cli/gpt-5.6-sol`, high reasoning,
   CLI `0.149.1`, `589s`, 30 tool invocations;
 - exact seeded recall was complete; the rejected additions were

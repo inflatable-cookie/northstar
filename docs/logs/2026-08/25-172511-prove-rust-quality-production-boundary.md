@@ -58,9 +58,9 @@ production `extend` operation for justified scope widening before mutation.
 
 ## Evidence
 
-`bundle-docs/research/prototypes/rust-quality/production-boundary/` contains the
-candidate matrix, standalone fixture, Rhai recorder probe, and shell
-orchestration. The probe passed one positive and seven negative paths:
+The retired prototype contained the candidate matrix, standalone fixture, Rhai
+recorder probe, and shell orchestration. The probe passed one positive and
+seven negative paths:
 
 - unsupported profile;
 - cross-unit evidence;
@@ -77,12 +77,8 @@ the installed-skill copy and emitted a non-empty aggregate result.
 
 ## Validation
 
-- `bash -n .../production-boundary/self-test.sh` — passed;
-- `shellcheck .../production-boundary/self-test.sh` — passed;
-- `.../production-boundary/self-test.sh` — passed;
-- prototype `trial-runner.sh check` — passed, including the Rust `1.95` evidence
-  matrix and current-toolchain compilation;
-- prototype `trial-runner.sh self-test` — passed;
+- prototype syntax, shell analysis, boundary, runner, Rust `1.95` matrix, and
+  current-toolchain checks passed before the disposable harness was retired;
 - `git diff --check` — passed;
 - `effigy qa:docs` — passed;
 - `effigy qa` — passed;
