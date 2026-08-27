@@ -23,6 +23,20 @@ fn valid_authority(value) {
         value == "operator_decision" || value == "safe_automatic"
 }
 
+fn valid_candidate_disposition(value) {
+    value == "promote_enforcement" || value == "promote_evidence" ||
+        value == "evaluation_only" || value == "retain_manual" || value == "reject"
+}
+
+fn valid_decidability(value) {
+    value == "decidable" || value == "partially_decidable" || value == "meaning_dependent"
+}
+
+fn valid_false_positive_class(value) {
+    value == "none_observed" || value == "configuration" ||
+        value == "documented_upstream" || value == "repository_policy" || value == "semantic"
+}
+
 fn find_rule(catalogue, rule_id) {
     for rule in catalogue["rules"] {
         if rule["id"] == rule_id {
@@ -168,6 +182,83 @@ fn validate_catalogue(catalogue) {
     let msrv_override = msrv_rule["remediation"]["action_overrides"][0];
     require(msrv_override["action"] == "change_version_policy", "MSRV policy action drifted");
     require(msrv_override["authority_by_profile"]["strict"] == "operator_decision", "MSRV policy mutation requires operator decision");
+}
+
+fn find_candidate_for_diagnostic(candidates, diagnostic) {
+    for candidate in candidates {
+        if candidate["diagnostics"].contains(diagnostic) {
+            return candidate;
+        }
+    }
+    throw("mapped diagnostic has no candidate: " + diagnostic);
+}
+
+fn require_promoted_mapping(mappings, diagnostic) {
+    require(mappings.contains(diagnostic), "promoted diagnostic omitted from mapping");
+}
+
+fn validate_detector_candidates(catalogue, candidates, mapping) {
+    require(candidates["schema_version"] == "northstar.rust-quality.detector-candidates.v1",
+        "unsupported detector candidate schema");
+    require(candidates["language"] == "rust", "detector candidate language must be rust");
+    require_array(candidates["toolchains"], "detector candidate toolchains");
+    require(candidates["toolchains"].len() >= 2, "detector candidates require two toolchains");
+    require_array(candidates["candidates"], "detector candidates");
+    require(candidates["candidates"].len() == 14, "detector candidate set must remain finite at fourteen");
+
+    let ids = [];
+    for candidate in candidates["candidates"] {
+        for key in [
+            "id", "concern", "diagnostics", "decidability", "false_positive_class",
+            "disposition", "target_rules", "detector_authority", "provenance",
+            "applicability", "evidence", "rationale",
+        ] {
+            require_key(candidate, key, "detector candidate");
+        }
+        require(!ids.contains(candidate["id"]), "duplicate detector candidate: " + candidate["id"]);
+        ids.push(candidate["id"]);
+        require(valid_decidability(candidate["decidability"]), "invalid candidate decidability: " + candidate["id"]);
+        require(valid_false_positive_class(candidate["false_positive_class"]), "invalid false-positive class: " + candidate["id"]);
+        require(valid_candidate_disposition(candidate["disposition"]), "invalid candidate disposition: " + candidate["id"]);
+        require(candidate["detector_authority"] == "none", "detector grants repair authority: " + candidate["id"]);
+        require_array(candidate["diagnostics"], candidate["id"] + " diagnostics");
+        require_array(candidate["target_rules"], candidate["id"] + " target rules");
+        for rule_id in candidate["target_rules"] {
+            find_rule(catalogue, rule_id);
+        }
+        require_array(candidate["provenance"], candidate["id"] + " provenance");
+        require(candidate["provenance"].len() > 0, candidate["id"] + " lacks provenance");
+        require(candidate["applicability"].len() > 0, candidate["id"] + " lacks applicability");
+        for field in ["invalid_fixture", "valid_fixture", "exception_fixture", "repair", "preservation", "churn", "blind_review"] {
+            require(candidate["evidence"][field].len() > 0, candidate["id"] + " lacks " + field + " evidence");
+        }
+        if candidate["disposition"] == "promote_enforcement" || candidate["disposition"] == "promote_evidence" {
+            require(candidate["diagnostics"].len() > 0, "promoted candidate lacks diagnostics: " + candidate["id"]);
+            require(candidate["target_rules"].len() > 0, "promoted candidate lacks target rules: " + candidate["id"]);
+        }
+    }
+
+    require(mapping["schema_version"] == "northstar.rust-quality.diagnostic-mapping.v2",
+        "unsupported diagnostic mapping schema");
+    require(mapping["role"] == "evidence_only", "diagnostic mapping may not grant finding authority");
+    for diagnostic in mapping["mappings"].keys() {
+        let item = mapping["mappings"][diagnostic];
+        require(valid_candidate_disposition(item["qualification"]), "invalid mapping qualification: " + diagnostic);
+        require(item["qualification"] != "reject", "rejected candidate entered diagnostic mapping: " + diagnostic);
+        require_array(item["catalogue_evidence"], diagnostic + " catalogue evidence");
+        require(item["catalogue_evidence"].len() > 0, "mapped diagnostic lacks catalogue evidence: " + diagnostic);
+        let candidate = find_candidate_for_diagnostic(candidates["candidates"], diagnostic);
+        require(candidate["disposition"] == item["qualification"], "mapping disposition drifted: " + diagnostic);
+        require(candidate["target_rules"] == item["catalogue_evidence"], "mapping target rules drifted: " + diagnostic);
+    }
+    let mappings = mapping["mappings"];
+    for candidate in candidates["candidates"] {
+        if candidate["disposition"] == "promote_enforcement" || candidate["disposition"] == "promote_evidence" {
+            for diagnostic in candidate["diagnostics"] {
+                require_promoted_mapping(mappings, diagnostic);
+            }
+        }
+    }
 }
 
 fn projected_overrides(remediation) {
@@ -427,12 +518,16 @@ fn validate_setup_surface(skill_root) {
 fn validate_audit_surface(skill_root) {
     let mode_path = path::join(skill_root, "references/modes/rust-quality-audit.md");
     let recording_path = path::join(skill_root, "references/language-quality/rust/audit-recording.md");
-    let recorder_path = path::join(skill_root, "scripts/rust-quality-recorder.rhai");
+    let evidence_path = path::join(skill_root, "references/language-quality/rust/evidence-collection.md");
+    let bootstrap_path = path::join(skill_root, "references/language-quality/rust/tool-bootstrap.md");
+    let tool_root = path::join(skill_root, "tools/rust-quality");
     let adapter_path = path::join(skill_root, "commands/northstar-rust-audit/SKILL.md");
     let mode = fs::read_file(mode_path);
     let recording = fs::read_file(recording_path);
-    let recorder = fs::read_file(recorder_path);
+    let evidence = fs::read_file(evidence_path);
+    let bootstrap = fs::read_file(bootstrap_path);
     let adapter = fs::read_file(adapter_path);
+    let catalog = fs::read_file(path::join(skill_root, "effigy.toml"));
 
     require(mode.contains("Use only when the operator explicitly requests"), "Rust audit mode is not explicit-only");
     require(mode.contains("three distinct passes"), "Rust audit mode lacks separate review passes");
@@ -440,21 +535,48 @@ fn validate_audit_surface(skill_root) {
     require(mode.contains("rejects hidden mutation"), "Rust audit mode lacks deterministic final assembly");
     require(mode.contains("Format only files already") && mode.contains("byte-for-byte identical"),
         "Rust audit mode permits broad formatting or weak preservation");
-    require(recording.contains("init <target-root>") && recording.contains("assess <target-root>") &&
-        recording.contains("extend <target-root>") && recording.contains("complete <target-root>") &&
-        recording.contains("finalize <target-root>"), "Rust recording contract lacks an operation");
+    for operation in ["inspect", "plan", "init", "assess", "extend", "collect", "complete", "finalize"] {
+        require(recording.contains("<tool> " + operation), "Rust recording contract lacks " + operation);
+    }
+    require(bootstrap.contains("cargo install --locked --offline --path") &&
+        bootstrap.contains("source_payload_sha256") &&
+        bootstrap.contains("Never add") && bootstrap.contains("cache `bin`") && bootstrap.contains("`PATH`"),
+        "Rust tool bootstrap lacks locked payload-addressed installation");
+    for file in ["Cargo.toml", "Cargo.lock", "build.rs", "assets/diagnostic-mapping.json", "src/evidence.rs", "src/lib.rs", "src/main.rs", "src/ledger.rs", "src/lifecycle.rs", "src/plan.rs", "tests/cli.rs", "tests/detectors.rs", "tests/fixtures/detectors/invalid/Cargo.toml", "tests/fixtures/detectors/valid/Cargo.toml", "tests/fixtures/detectors/exceptions/Cargo.toml"] {
+        require(fs::is_file(path::join(tool_root, file)), "Rust quality tool payload is missing " + file);
+    }
+    let cargo_manifest = fs::read_file(path::join(tool_root, "Cargo.toml"));
+    require(cargo_manifest.contains("rust-version = \"1.95\"") &&
+        cargo_manifest.contains("unsafe_code = \"forbid\"") &&
+        cargo_manifest.contains("pedantic = \"deny\""),
+        "Rust quality tool floor or lint posture drifted");
+    let tool = fs::read_file(path::join(tool_root, "src/main.rs"));
+    for operation in ["inspect", "plan", "validate-ledger", "init", "assess", "extend", "collect", "complete", "finalize", "closeout", "verify-install"] {
+        require(tool.contains(operation), "Rust quality tool lacks " + operation);
+    }
+    require(!catalog.contains("rust-quality:record") && !catalog.contains("test:rust-quality-recorder"),
+        "removed Effigy-hosted Rust recorder remains routed");
     require(adapter.contains("Thin explicit entrypoint"), "Rust audit adapter duplicates procedure");
     require(!adapter.contains("## Procedure") && !adapter.contains("## Steps"), "Rust audit adapter contains procedure");
-    require(!recorder.contains("process::") && !recorder.contains("command::"), "Rust recorder can launch a subprocess");
     require(fs::file_size(mode_path) <= 12288, "Rust audit mode exceeds on-demand context budget");
     require(fs::file_size(recording_path) <= 12288, "Rust recording contract exceeds on-demand context budget");
+    require(fs::file_size(evidence_path) <= 8192, "Rust evidence contract exceeds on-demand context budget");
+    require(fs::file_size(bootstrap_path) <= 8192, "Rust tool bootstrap exceeds on-demand context budget");
     require(fs::file_size(adapter_path) <= 1200, "Rust audit adapter exceeds thin-adapter budget");
 
     let manifest_schema = json::read_file(path::join(skill_root, "references/language-quality/rust/audit-manifest.schema.json"));
     let result_schema = json::read_file(path::join(skill_root, "references/language-quality/rust/audit-result.schema.json"));
-    require(manifest_schema["required"].contains("initial_state"), "audit manifest does not bind dirty state");
-    require(manifest_schema["required"].contains("policy_snapshot"), "audit manifest does not bind repository policy");
-    require(result_schema["required"].contains("preservation"), "audit result does not prove preservation");
+    require(manifest_schema["required"].contains("baseline_sha256"), "audit manifest does not bind file state");
+    require(manifest_schema["required"].contains("policy_sha256"), "audit manifest does not bind policy");
+    require(result_schema["required"].contains("changed_files"), "audit result lacks mutation attribution");
+    require(result_schema["required"].contains("limitations"), "audit result lacks structured limitations");
+    let evidence_schema = json::read_file(path::join(skill_root, "references/language-quality/rust/audit-evidence.schema.json"));
+    require(evidence_schema["properties"]["status"]["enum"].contains("warning"),
+        "Rust evidence treats warning-bearing success as clean");
+    require(evidence.contains("does not discover") && evidence.contains("universal command graph") &&
+        evidence.contains("does not initialize or load an audit ledger") &&
+        evidence.contains("evidence-only"),
+        "Rust evidence boundary permits invented routing, everyday ledger load, or remediation authority");
 }
 
 fn expect_rejection(label, catalogue, expected) {
@@ -510,6 +632,34 @@ fn self_test(catalogue_path) {
     expect_rejection("unpinned provenance", unpinned, "unpinned provenance");
 }
 
+fn expect_candidate_rejection(label, catalogue, candidates, mapping, expected) {
+    let rejected = false;
+    try {
+        validate_detector_candidates(catalogue, candidates, mapping);
+    } catch (error) {
+        rejected = true;
+        require(error.to_string().contains(expected), label + " rejected for wrong reason: " + error);
+    }
+    require(rejected, label + " unexpectedly passed");
+}
+
+fn detector_self_test(catalogue, candidate_path, mapping_path) {
+    let authority = json::read_file(candidate_path);
+    authority["candidates"][0]["detector_authority"] = "safe_automatic";
+    expect_candidate_rejection("detector authority", catalogue, authority, json::read_file(mapping_path), "grants repair authority");
+
+    let rejected_mapping = json::read_file(mapping_path);
+    rejected_mapping["mappings"]["clippy::too_many_arguments"] = #{
+        catalogue_evidence: ["RUST-READ-001"],
+        qualification: "reject",
+    };
+    expect_candidate_rejection("rejected mapping", catalogue, json::read_file(candidate_path), rejected_mapping, "rejected candidate entered");
+
+    let drifted_mapping = json::read_file(mapping_path);
+    drifted_mapping["mappings"]["missing_debug_implementations"]["qualification"] = "promote_enforcement";
+    expect_candidate_rejection("mapping disposition", catalogue, json::read_file(candidate_path), drifted_mapping, "mapping disposition drifted");
+}
+
 let skill_root = repo_root;
 if fs::is_dir(path::join(repo_root, "skills/northstar/references/language-quality/rust")) {
     skill_root = path::join(repo_root, "skills/northstar");
@@ -518,6 +668,11 @@ let payload_root = path::join(skill_root, "references/language-quality/rust");
 let catalogue_path = path::join(payload_root, "catalogue.json");
 let catalogue = json::read_file(catalogue_path);
 validate_catalogue(catalogue);
+let candidate_path = path::join(payload_root, "detector-candidates.json");
+let mapping_path = path::join(skill_root, "tools/rust-quality/assets/diagnostic-mapping.json");
+let candidates = json::read_file(candidate_path);
+let mapping = json::read_file(mapping_path);
+validate_detector_candidates(catalogue, candidates, mapping);
 require_projection(catalogue, "everyday_authoring", skill_root, "references/language-quality/rust/strict-authoring.json");
 require_projection(catalogue, "explicit_audit_repair", skill_root, "references/language-quality/rust/strict-audit.json");
 validate_authoring_references(catalogue, skill_root);
@@ -533,6 +688,9 @@ for filename in [
     "references/language-quality/rust/audit-manifest.schema.json",
     "references/language-quality/rust/audit-unit.schema.json",
     "references/language-quality/rust/audit-result.schema.json",
+    "references/language-quality/rust/audit-evidence.schema.json",
+    "references/language-quality/rust/closeout.schema.json",
+    "references/language-quality/rust/detector-candidates.schema.json",
 ] {
     validate_schema_file(skill_root, filename);
 }
@@ -544,4 +702,5 @@ for filename in ["catalogue.json", "strict-authoring.json", "strict-audit.json"]
 }
 
 self_test(catalogue_path);
-log("Northstar Rust quality package: OK (7 rules, strict-only, 7 negative paths, 8 Rust routes, 7 authoring workflow cases, self-activating setup)");
+detector_self_test(catalogue, candidate_path, mapping_path);
+log("Northstar Rust quality package: OK (7 rules, 14 qualified detector candidates, strict-only, 10 negative paths, 8 Rust routes, 7 authoring workflow cases, self-activating setup)");

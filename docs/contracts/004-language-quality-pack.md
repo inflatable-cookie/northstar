@@ -143,6 +143,21 @@ report-only. This contract does not activate high-assurance unsafe repair.
 The Rust 1.95 benchmark floor is evidence infrastructure, not a Northstar MSRV.
 The consumer repository owns its declared compiler floor.
 
+Revision-E production evidence validates the v2 explicit-audit lifecycle across
+worktree and repository scope, a nested mixed workspace, degraded evidence,
+authorized repair, retained report-only work, and blind review. This validates
+the frozen payload for distribution; it does not turn tool evidence into a
+certification claim or expand audit authority.
+
+The v2 detector ledger qualifies exact upstream diagnostics as enforcement or
+evidence signals only under these existing rules. It adds no normative rule.
+Unsafe structure and await-held guards are enforcement signals; public
+`Debug`, incompatible MSRV items, and broken rustdoc links are evidence
+signals. Contextual panic, cancellation, documentation, testing, architecture,
+complexity, residue, and unfinished-code concerns remain evaluation-only,
+manual, or rejected as recorded in the checked ledger. Diagnostic output never
+creates a finding, plan, deviation, or repair authority.
+
 ## Initial TypeScript strict explicit-audit catalogue
 
 The first promoted TypeScript catalogue contains nine normative rules and one
@@ -239,6 +254,15 @@ or overwrite unrelated work. A repository-wide request does not authorize a
 blanket rewrite, unrelated formatting, blanket automatic fixing, a breaking
 interface change, or architecture replacement based on taste.
 
+Worktree resolution must be anchor-based. Every initial assessment file is a
+dirty language file or names its exact dirty anchor and direct relation, such
+as owning manifest, caller, implementation, focused test, or governed
+documentation. Read-only context is distinct from mutable ownership. If no
+relevant dirty language anchor exists, the agent asks whether repository scope
+is intended; it must not silently turn a worktree request into a repository
+audit. Only repository scope may claim full package, target, feature, API, and
+risk-boundary coverage.
+
 ## Everyday authoring
 
 Everyday authoring uses a compact path-scoped projection. It re-enters at task
@@ -255,6 +279,20 @@ because the repository contains more Rust.
 Explicit audit first resolves scope and snapshots existing dirty state. It then
 runs distinct correctness and assurance, architecture, and human-quality
 passes. Mechanical tools provide evidence; they do not replace source review.
+
+Every assessed unit records exactly one verdict for every applicable normative
+rule: `pass`, `finding`, `not_applicable`, or `degraded`. A verdict names the
+inspected surfaces and concise evidence. `not_applicable` binds the catalogue's
+applicability condition; `degraded` names missing evidence and blocks a clean
+claim for that rule. A finding verdict links the unit-local finding and its
+disposition. Finalization rejects missing, duplicate, contradictory, or
+evidence-free verdicts.
+
+Each unit also records non-empty attestations for correctness and assurance,
+architecture, and human quality. These are proof of the required passes, not a
+second rule catalogue. A mechanical command may support an attestation but
+cannot replace source or direct-call-path evidence where the applicable rule
+requires judgment.
 
 Mechanical evidence records the owning selector, actual execution environment,
 exit status, warnings, and startup or collection failures. A zero exit status
@@ -319,6 +357,13 @@ hash, findings and dispositions, deviations, changed scope, repository-native
 validation, and remaining limitations. Explicit audit also reports scope
 widening, preservation, and repair waves.
 
+Remaining limitations are structured evidence, not summary-only prose. They
+include degraded rule verdicts, report-only or retained findings, unresolved
+policy, operator decisions, unavailable external services, and unrun applicable
+selectors. The human report may compress that list but must not add or omit a
+material limitation. A completed audit with degraded evidence may still report
+bounded repairs; it cannot call the degraded rule or affected scope clean.
+
 Candidate promotion evidence keeps subject, coordinator answer key, and blind
 reviewer surfaces separate through enforced filesystem, container, or remote
 workspace isolation. A fresh context governed only by instructions is useful
@@ -347,6 +392,16 @@ payload. Neither evidence set validates the combined workflow as the
 default, observable context-compaction resilience, ordinary or high-assurance
 activation, certification, NASA compliance, a safety-integrity level, or a
 safety case.
+
+Convergence live use validates that v1 can find and repair feature compilation
+and public-API defects. It does not validate repository-wide recall: the record
+had no rule-by-rule or review-dimension attestations and silently widened a
+`worktree` scope to 174 files. Revision E supplies the required fresh v2
+evidence for anchor-based scope and complete unit-rule attestations, and the
+exact 120-file payload is now distributed to the configured install. Candidate
+panic/invariant, cancellation, documentation, testing, architecture/cohesion,
+and complexity rules remain research-only until their own precision, repair,
+preservation, and blind-review gates pass.
 
 Production implementation requires roadmap cards derived from this contract.
 The skill and Effigy selectors must not be scaffolded directly from the

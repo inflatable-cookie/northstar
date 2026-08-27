@@ -60,9 +60,9 @@
       "mechanical_enforcement": [
         {
           "tool": "clippy",
-          "check": "clippy::complexity plus a repository-selected cognitive-complexity threshold",
-          "role": "evidence",
-          "caveat": "Lint success cannot prove that an abstraction is justified or readable."
+          "check": "clippy::complexity plus evaluation-only clippy::cognitive_complexity, clippy::too_many_lines, and clippy::type_complexity leads",
+          "role": "candidate",
+          "caveat": "Threshold lints cannot prove that an abstraction is justified or readable and grant no conformance or repair authority."
         }
       ],
       "remediation": {
@@ -131,6 +131,12 @@
           "check": "missing_debug_implementations",
           "role": "evidence",
           "caveat": "The lint does not decide redaction or which other traits are semantically correct."
+        },
+        {
+          "tool": "rustdoc",
+          "check": "rustdoc::broken_intra_doc_links and rustdoc::private_intra_doc_links",
+          "role": "evidence",
+          "caveat": "Link resolution is mechanical under a fixed rustdoc configuration; the intended API target remains a human decision."
         }
       ],
       "remediation": {
@@ -198,6 +204,12 @@
           "check": "selective clippy::unwrap_used, clippy::expect_used, clippy::panic, and clippy::indexing_slicing",
           "role": "evidence",
           "caveat": "Tests, const contexts, poisoned locks, and proven invariants require repository-specific policy; do not enable the restriction group wholesale."
+        },
+        {
+          "tool": "clippy",
+          "check": "evaluation-only clippy::missing_errors_doc and clippy::missing_panics_doc",
+          "role": "candidate",
+          "caveat": "These diagnose absent sections, not complete or correct failure contracts, and grant no repair authority."
         }
       ],
       "remediation": {
@@ -277,7 +289,7 @@
       "mechanical_enforcement": [
         {
           "tool": "rustc and clippy",
-          "check": "unsafe_op_in_unsafe_fn, clippy::undocumented_unsafe_blocks, clippy::missing_safety_doc",
+          "check": "rustc E0133 from unsafe_op_in_unsafe_fn, clippy::undocumented_unsafe_blocks, and clippy::missing_safety_doc",
           "role": "enforce",
           "caveat": "A present comment may still be wrong; soundness requires manual invariant review and proportionate dynamic evidence."
         }
@@ -337,7 +349,7 @@
       "mechanical_enforcement": [
         {
           "tool": "clippy",
-          "check": "clippy::await_holding_lock",
+          "check": "clippy::await_holding_lock and clippy::await_holding_refcell_ref",
           "role": "enforce",
           "caveat": "Explicit drop may produce a known false positive; use lexical scope and manually review state-consistency effects."
         }
@@ -400,6 +412,12 @@
           "check": "build and test matrix at package rust-version; optional cargo-msrv evidence",
           "role": "enforce",
           "caveat": "The newest local compiler cannot prove compatibility with the declared minimum."
+        },
+        {
+          "tool": "clippy",
+          "check": "clippy::incompatible_msrv",
+          "role": "evidence",
+          "caveat": "The lint catches known item stabilization mismatches but does not replace a minimum-toolchain build or decide version policy."
         }
       ],
       "remediation": {
@@ -478,6 +496,12 @@
           "check": "SLOP039",
           "role": "candidate",
           "caveat": "The syntax detector cannot identify stable façades or architectural seams and must never auto-delete a wrapper."
+        },
+        {
+          "tool": "clippy",
+          "check": "clippy::todo and clippy::unimplemented",
+          "role": "candidate",
+          "caveat": "These locate unfinished macros but cannot decide whether a deliberate scaffold is in scope; they grant no repair authority."
         }
       ],
       "remediation": {

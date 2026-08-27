@@ -2,7 +2,6 @@
   "id": "RUST-READ-001",
   "title": "Keep control flow direct and proportionate",
   "maturity": "approved",
-  "enforcement": "required",
   "dimensions": [
     "architecture",
     "human_quality"
@@ -17,25 +16,14 @@
     "rust_release": "repository MSRV and newer"
   },
   "requirement": "Changed code must use the simplest control flow and abstraction shape that preserves the governing invariants. Every additional branch, layer, wrapper, generic, or indirection must carry a concrete responsibility.",
-  "authoring_projection": [
-    "State the invariant before adding a branch or abstraction.",
-    "Prefer a direct implementation when an extra layer has no independent policy, boundary, substitution, or evidence role.",
-    "Re-read the final diff for nested control flow and machinery that can be removed without hiding intent.",
-    "At closeout, account for every changed line and public trait implementation against requested behavior, a governing invariant, or necessary diagnostics. Remove optional derives, convenience surface, formatting-only churn, and boilerplate that the task or repository contract does not require."
-  ],
   "mechanical_enforcement": [
     {
       "tool": "clippy",
-      "check": "clippy::complexity plus a repository-selected cognitive-complexity threshold",
-      "role": "evidence",
-      "caveat": "Lint success cannot prove that an abstraction is justified or readable."
+      "check": "clippy::complexity plus evaluation-only clippy::cognitive_complexity, clippy::too_many_lines, and clippy::type_complexity leads",
+      "role": "candidate",
+      "caveat": "Threshold lints cannot prove that an abstraction is justified or readable and grant no conformance or repair authority."
     }
   ],
-  "remediation": {
-    "default_authority": "review_required",
-    "action_overrides": [],
-    "guidance": "Flatten control flow or remove machinery only after checking callers, public contracts, and the responsibility the structure may encode."
-  },
   "deviation": {
     "allowed": true,
     "required_evidence": [
@@ -48,5 +36,17 @@
     "final-diff human-quality review",
     "complexity evidence where configured",
     "recorded rationale for retained non-obvious structure"
+  ],
+  "enforcement": "required",
+  "remediation": {
+    "default_authority": "review_required",
+    "action_overrides": [],
+    "guidance": "Flatten control flow or remove machinery only after checking callers, public contracts, and the responsibility the structure may encode."
+  },
+  "authoring_projection": [
+    "State the invariant before adding a branch or abstraction.",
+    "Prefer a direct implementation when an extra layer has no independent policy, boundary, substitution, or evidence role.",
+    "Re-read the final diff for nested control flow and machinery that can be removed without hiding intent.",
+    "At closeout, account for every changed line and public trait implementation against requested behavior, a governing invariant, or necessary diagnostics. Remove optional derives, convenience surface, formatting-only churn, and boilerplate that the task or repository contract does not require."
   ]
 }

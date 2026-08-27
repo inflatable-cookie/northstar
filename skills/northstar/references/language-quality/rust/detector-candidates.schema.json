@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://northstar.invalid/schemas/rust-quality-detector-candidates.v1.json",
+  "title": "Northstar Rust detector qualification ledger",
+  "type": "object",
+  "required": ["schema_version", "language", "qualified_on", "toolchains", "candidates"],
+  "properties": {
+    "schema_version": { "const": "northstar.rust-quality.detector-candidates.v1" },
+    "language": { "const": "rust" },
+    "qualified_on": { "type": "string", "format": "date" },
+    "toolchains": { "type": "array", "minItems": 2, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+    "candidates": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/candidate" } }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "candidate": {
+      "type": "object",
+      "required": ["id", "concern", "diagnostics", "decidability", "false_positive_class", "disposition", "target_rules", "detector_authority", "provenance", "applicability", "evidence", "rationale"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+        "concern": { "type": "string", "minLength": 1 },
+        "diagnostics": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "decidability": { "enum": ["decidable", "partially_decidable", "meaning_dependent"] },
+        "false_positive_class": { "enum": ["none_observed", "configuration", "documented_upstream", "repository_policy", "semantic"] },
+        "disposition": { "enum": ["promote_enforcement", "promote_evidence", "evaluation_only", "retain_manual", "reject"] },
+        "target_rules": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^RUST-[A-Z]+-[0-9]{3}$" } },
+        "detector_authority": { "const": "none" },
+        "provenance": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/source" } },
+        "applicability": { "type": "string", "minLength": 1 },
+        "evidence": { "$ref": "#/$defs/evidence" },
+        "rationale": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "required": ["authority", "revision", "url"],
+      "properties": {
+        "authority": { "type": "string", "minLength": 1 },
+        "revision": { "type": "string", "minLength": 1 },
+        "url": { "type": "string", "format": "uri" }
+      },
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "object",
+      "required": ["invalid_fixture", "valid_fixture", "exception_fixture", "repair", "preservation", "churn", "blind_review"],
+      "properties": {
+        "invalid_fixture": { "type": "string", "minLength": 1 },
+        "valid_fixture": { "type": "string", "minLength": 1 },
+        "exception_fixture": { "type": "string", "minLength": 1 },
+        "repair": { "type": "string", "minLength": 1 },
+        "preservation": { "type": "string", "minLength": 1 },
+        "churn": { "type": "string", "minLength": 1 },
+        "blind_review": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    }
+  }
+}

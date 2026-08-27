@@ -32,3 +32,7 @@ consumer run.
 blind reviewers after revisions N-R halted unscored. Card 093 distributed the
 exact payload with 93-file parity. The lane is closed; accept operator-provided
 live-use feedback without dispatching a consumer audit.
+Rust audit v2 roadmap `g02.032` is complete. Cards 094-099 implemented the
+Cargo-native lifecycle, immutable evidence, compact closeout, and finite
+detector qualification, passed revision-E production evidence, and distributed
+the exact 120-file payload.

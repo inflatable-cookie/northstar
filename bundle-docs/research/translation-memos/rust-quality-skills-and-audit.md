@@ -1,8 +1,8 @@
 # Translation Memo: Rust Quality Authoring And Audit
 
-Status: promoted — contract 004 active; roadmap `g02.030` complete
+Status: promoted — v2 revision E distributed
 Owner: repo maintainers
-Last updated: 2026-08-26
+Last updated: 2026-08-27
 Related track: language-specific coding quality packs
 Promotion targets: `docs/architecture/system-architecture.md`,
 `docs/specs/031-rust-quality-authoring-and-audit.md`, and
@@ -364,6 +364,8 @@ operator accepted the initial rule promotion and contract 004 is active.
 
 ## 8) Remaining evidence gaps
 
+- Recorder proof that every applicable rule and review dimension was assessed.
+- Deterministic separation of worktree anchors from repository-wide inventory.
 - Future ordinary and high-assurance rule membership and validation.
 - Non-Effigy consumer adaptation; the production path requires Effigy.
 - Whether future evidence promotes any `stopslop`-derived rule beyond
@@ -374,7 +376,66 @@ operator accepted the initial rule promotion and contract 004 is active.
 - Which high-assurance techniques are required by risk class rather than merely
   available.
 
-## 9) Sources
+## 9) Convergence live-use evidence
+
+The first operator-provided consumer audit exposed a recall-proof gap after
+making useful repairs. Its finalized record owned 174 files across six units
+but emitted only seven findings from three rule IDs. Unit records carried
+findings and command evidence, not an assessment for each applicable rule or
+for the correctness, architecture, and human-quality passes. Absence of a
+finding therefore did not prove review. The audit also declared `worktree`
+scope while inventorying the entire repository; only activation files were
+dirty when recording began.
+
+The correction is structural, not a longer prompt. A v2 recorder must require
+one verdict for every `unit × applicable normative rule`: `pass`, `finding`,
+`not_applicable`, or `degraded`, with inspected surfaces and evidence. Each unit
+must also attest the three review dimensions. Finalization rejects missing,
+duplicate, contradictory, or evidence-free verdicts. A degraded verdict blocks
+a clean claim for that rule without automatically authorizing repair.
+
+Worktree audits must start from dirty language anchors. Read-only context names
+its exact anchor and relation; repair widening still uses the existing `extend`
+boundary. No relevant dirty anchor means the agent asks for repository scope
+instead of silently scanning everything. Only repository scope may claim full
+package, target, feature, API, and risk-boundary coverage.
+
+NASA's current assurance guidance reinforces objective, complete evidence and
+project-selected standards rather than a universal style score. Official Rust
+guidance supports several v2 research candidates: panic/error/safety
+documentation, meaningful error types, declared `rust-version`, focused unit
+and integration tests, unsafe invariant containment, and async cancellation
+safety. Complexity and coverage are risk evidence with repository-owned
+thresholds; they are not automatic rewrite authority.
+
+The TypeScript tooling comparison added an implementation lesson. Northstar's
+TypeScript recorder already treats compiler, framework, lint, and test evidence
+as structured classes with explicit failure stages. `dmmulroy/anti-slop` makes
+narrow source rules executable as vendored, fixture-tested Oxlint AST rules;
+its skill installs and configures the tool rather than asking the model to
+remember the rules, and its development check keeps canonical source and skill
+assets identical. Rust v2 now applies that enforcement shape to precise
+upstream diagnostics without copying TypeScript opinions or mechanizing
+semantic judgment.
+
+The detailed observation is
+[`live-use-report-2026-08-26-convergence.md`](../prototypes/rust-quality/live-use-report-2026-08-26-convergence.md).
+
+Card 097 applied that tool-first shape to a finite Rust set. Fourteen
+candidates now have checked dispositions and dual-toolchain fixtures. Five
+exact upstream diagnostic groups strengthen evidence under existing catalogue
+rules. Four remain evaluation-only, four remain manual, and architecture is
+rejected as a detector. No custom detector was warranted: the remaining gaps
+are semantic, policy-owned, or already covered by upstream diagnostics. Cargo
+JSON identifies `unsafe_op_in_unsafe_fn` as `E0133`, so the mapping now uses the
+observable identifier instead of the lint name. See
+[`rust-v2-detector-qualification-report-2026-08-26-e.md`](../prototypes/rust-quality/rust-v2-detector-qualification-report-2026-08-26-e.md).
+
+Cards 098-099 passed revision-E production evidence and distributed the exact
+120-file payload to the configured global install. The two-track router remains
+progressively disclosed; no new top-level skill or assurance claim was added.
+
+## 10) Sources
 
 Sources were reviewed on 2026-08-24. Repository sources are pinned to the
 audited commit for reproducibility.
@@ -396,3 +457,11 @@ audited commit for reproducibility.
 | [SAE JA1020](https://saemobilus.sae.org/standards/ja1020_202603-safety-cybersecurity-recommendations-use-rust-language-critical-systems) | issued 2026-03-25 | high, access-limited | Rust safety argument context |
 | [NASA-STD-8739.8B](https://standards.nasa.gov/standard/NASA/NASA-STD-87398) | Revision B | high | lifecycle assurance and independent verification boundary |
 | [stopslop](https://github.com/mgiovani/stopslop/tree/bf31fd107d48028033dd869dd3ad2de2e040741a) | `bf31fd1` | experimental | deterministic agent-residue and structural heuristics |
+| [NASA SWE-961 coding standards assurance](https://swehb.nasa.gov/spaces/SITE/pages/172851848/SWE-961%2BCoding%2BStandards%2B-%2BSoftware%2BAssurance) | live on 2026-08-26 | high | objective compliance evidence and independent static analysis |
+| [NASA SWE-135 static analysis](https://swehb.nasa.gov/spaces/SWEHBVD/pages/102695494/SWE-135%2B-%2BStatic%2BAnalysis) | live on 2026-08-26 | high | defects, security, coverage, and complexity as explicit evidence classes |
+| [Rust API Guidelines checklist](https://rust-lang.github.io/api-guidelines/checklist.html) | live on 2026-08-26 | high | public documentation, failure contracts, validation, traits, and future proofing |
+| [Cargo `rust-version`](https://doc.rust-lang.org/stable/cargo/reference/rust-version.html) | stable docs on 2026-08-26 | high | explicit supported-toolchain policy and diagnostics |
+| [Rust test organization](https://doc.rust-lang.org/book/ch11-03-test-organization.html) | stable docs on 2026-08-26 | high | distinct unit and integration evidence roles |
+| [Rustonomicon: working with unsafe](https://doc.rust-lang.org/stable/nomicon/working-with-unsafe.html) | stable docs on 2026-08-26 | high | non-local unsafe invariants and privacy containment |
+| [Tokio `select!` cancellation safety](https://docs.rs/tokio/latest/tokio/macro.select.html#cancellation-safety) | Tokio 1.53.1 docs on 2026-08-26 | high when Tokio applies | cancellation-loss analysis at await points |
+| [dmmulroy/anti-slop](https://github.com/dmmulroy/anti-slop) | `main` reviewed 2026-08-26 | independent implementation precedent | vendored fixture-tested AST rules, agent-owned installation, and canonical-source/skill-asset parity |

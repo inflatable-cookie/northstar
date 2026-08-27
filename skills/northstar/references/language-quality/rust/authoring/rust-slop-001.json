@@ -2,7 +2,6 @@
   "id": "RUST-SLOP-001",
   "title": "Reject pass-through wrappers without an independent responsibility",
   "maturity": "prototype",
-  "enforcement": "evaluation_only",
   "dimensions": [
     "architecture",
     "human_quality"
@@ -17,23 +16,20 @@
     "rust_release": "repository MSRV and newer"
   },
   "requirement": "A pass-through wrapper should exist only when it owns a stable API boundary, visibility boundary, substitution seam, policy, instrumentation point, type translation, or another named responsibility.",
-  "authoring_projection": [
-    "Before adding a forwarding function, name the boundary or policy it owns.",
-    "Call the underlying operation directly when the wrapper has no independent responsibility."
-  ],
   "mechanical_enforcement": [
     {
       "tool": "stopslop",
       "check": "SLOP039",
       "role": "candidate",
       "caveat": "The syntax detector cannot identify stable façades or architectural seams and must never auto-delete a wrapper."
+    },
+    {
+      "tool": "clippy",
+      "check": "clippy::todo and clippy::unimplemented",
+      "role": "candidate",
+      "caveat": "These locate unfinished macros but cannot decide whether a deliberate scaffold is in scope; they grant no repair authority."
     }
   ],
-  "remediation": {
-    "default_authority": "report_only",
-    "action_overrides": [],
-    "guidance": "This experimental candidate never authorizes mutation. Preserve a justified façade and record its responsibility. Delete a wrapper only when an independent normative rule supplies repair authority after caller and boundary review."
-  },
   "deviation": {
     "allowed": true,
     "required_evidence": [
@@ -47,5 +43,15 @@
     "classification for each candidate",
     "no automatic repair",
     "false-positive measurement"
+  ],
+  "enforcement": "evaluation_only",
+  "remediation": {
+    "default_authority": "report_only",
+    "action_overrides": [],
+    "guidance": "This experimental candidate never authorizes mutation. Preserve a justified façade and record its responsibility. Delete a wrapper only when an independent normative rule supplies repair authority after caller and boundary review."
+  },
+  "authoring_projection": [
+    "Before adding a forwarding function, name the boundary or policy it owns.",
+    "Call the underlying operation directly when the wrapper has no independent responsibility."
   ]
 }

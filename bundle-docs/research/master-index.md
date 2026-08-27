@@ -116,12 +116,12 @@ See the [TypeScript and Svelte translation memo](translation-memos/typescript-qu
 
 | Phase | Status | Notes |
 | --- | --- | --- |
-| Source gathering | Complete | Skills, engineering guidance, assurance sources, and experimental tooling reviewed |
-| Translation memo | Complete | Two-track model and authority split promoted |
-| Rule prototype | Seed ready | Seven sourced rules exercise authoring, audit, provenance, profiles, remediation, and deviation fields |
-| Benchmark | Required tracks eligible | Production K makes explicit audit eligible at `3/3`; production M makes everyday authoring eligible at `3/3` with frozen churn and blind-review gates |
-| Contract | Complete | Six normative rules promoted; strict selected; `004-language-quality-pack` active |
-| Implementation | Complete | `g02.030/083-088` proved the boundary, production foundation, routed workflows, both production tracks, and exact published-install parity |
+| Source gathering | v2 refresh complete | Convergence live use plus current NASA, Rust, Cargo, Clippy, Rustonomicon, and Tokio guidance reviewed |
+| Translation memo | v2 strengthening promoted | Anchor-based scope and complete unit-rule/dimension attestations selected |
+| Rule prototype | v2 distributed | Six normative rules and one evaluation signal remain live; 14 candidates are dispositioned without a new rule or custom detector |
+| Benchmark | v1 tracks eligible; v2 revision E passed | Production K/M remain valid for v1; v2 passed three isolated subjects and blind reviews after A-D hardened the harness |
+| Contract | v2 recorder boundary promoted | Contract 004 now forbids silent scope widening and empty-finding-as-review claims |
+| Implementation | v2 distributed | `g02.032/094-099` added the Cargo-native lifecycle, immutable evidence, compact closeout, checked detector qualification, revision-E production proof, and exact 120-file configured parity |
 
 ## TypeScript quality research status
 
@@ -182,9 +182,14 @@ See the [translation memo](translation-memos/northstar-effigy-boundary.md) for r
 2. Release phase contract prototype
 3. README generation prototype
 
-For Rust quality, collect operator-provided live-use feedback. Observable
-compaction remains a separate evidence gap; Northstar does not dispatch a
-consumer run.
+For Rust quality, operator-provided Convergence evidence has been accepted and
+promoted into the v2 recorder contract. Card 094 froze and proved the portable
+tool boundary, card 095 scope/ledger enforcement, card 096 mechanical evidence
+adapters, and card 097 finite detector qualification. Card 098 passed revision
+E across three isolated subjects and three blind reviews; card 099 distributed
+the exact 120-file payload and closed the lane.
+Observable compaction remains a separate evidence gap; Northstar does not
+dispatch a consumer run.
 
 For TypeScript quality, accept operator-provided live-use feedback. The
 explicit-only route is distributed; everyday authoring remains unavailable.

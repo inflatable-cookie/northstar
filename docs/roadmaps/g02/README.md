@@ -18,7 +18,7 @@ single-pilot bucket.
 | Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | pending |
 | Add a genuinely long-horizon planning route without conflating it with readiness review. | active | `docs/specs/029-northstar-long-horizon-planning.md`, `skills/northstar/references/modes/atlas.md` | Non-Northstar scenario and operator confirmation |
 | Preserve useful conversational context and keep `/docs` drift recoverable without blind deletion. | active | `docs/specs/030-conversational-triage-and-docs-cleanup.md`, `docs/contracts/001-working-rules.md`, `skills/northstar/references/modes/cleanup-docs.md` | live triage and cleanup feedback |
-| Raise language-code quality through evidence-bound routed workflows without creating a second standard or installable skill. | active | `docs/contracts/004-language-quality-pack.md`, `docs/specs/031-rust-quality-authoring-and-audit.md`, `docs/specs/032-typescript-svelte-explicit-audit.md` | operator-provided live-use feedback |
+| Raise language-code quality through evidence-bound routed workflows without creating a second standard or installable skill. | active | `docs/contracts/004-language-quality-pack.md`, Rust/TypeScript translation memos, specs 031-033 | operator-provided live-use feedback |
 
 Update this runway only when generation-level intent changes, a milestone
 materially advances or closes a goal, or rollover is being considered. Do not
@@ -69,6 +69,8 @@ rollover signal.
   parity proven)
 - `031-ship-typescript-svelte-explicit-audit.md` (complete; cards 089-093,
   revision-S evidence, 93-file parity, and everyday workflow unavailable)
+- `032-strengthen-rust-audit-tool-enforcement.md` (complete; cards 094-099,
+  revision-E production proof, and 120-file configured parity)
 
 ## Next Task
 
@@ -92,5 +94,17 @@ independent operator-owned follow-ups.
 repairs. Card 093 distributed the exact payload with 93-file source/install
 parity. Everyday TypeScript remains unavailable; accept operator-provided
 live-use feedback without dispatching a consumer audit.
+Convergence live-use evidence promoted a Rust v2 recorder boundary into contract
+004. Cards 094-095 rejected the cross-root Effigy split, froze and implemented
+a skill-shipped Cargo-native engine, and passed managed install, root/nested
+scope, complete-ledger, mutation-attribution, and deterministic-report proofs.
+Card 096 added immutable mechanical evidence and compact ledger-free closeout.
+Card 097 qualified 14 finite detector candidates without adding a rule, custom
+detector, or repair authority. Card 098 passed revision E across three isolated
+subjects and three blind reviews. Card 099 distributed the exact 120-file
+payload and closed `g02.032`.
+
+No blocking roadmap milestone is open. Accept operator-provided live-use
+feedback; Northstar does not dispatch consumer audits.
 
 Batch cards live in `g02/batch-cards/` when strict posture uses them.

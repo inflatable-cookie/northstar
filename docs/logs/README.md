@@ -79,3 +79,12 @@ Use logs as the third step in closeout:
 - `2026-08/26-174510-halt-typescript-production-evidence-r.md`
 - `2026-08/26-181000-pass-typescript-production-evidence-s.md`
 - `2026-08/26-184827-promote-and-distribute-typescript-audit.md`
+- `2026-08/26-195923-promote-rust-audit-v2-research.md`
+- `2026-08/26-201146-compile-rust-audit-v2-tooling-roadmap.md`
+- `2026-08/26-204916-freeze-rust-v2-tool-boundary.md`
+- `2026-08/26-211937-replace-rust-v2-boundary-with-cargo.md`
+- `2026-08/26-220001-enforce-rust-v2-scope-ledger.md`
+- `2026-08/26-230000-add-rust-mechanical-evidence-adapters.md`
+- `2026-08/26-234500-qualify-rust-detector-candidates.md`
+- `2026-08/27-001136-run-rust-v2-production-evidence.md`
+- `2026-08/27-091043-promote-and-distribute-rust-v2.md`

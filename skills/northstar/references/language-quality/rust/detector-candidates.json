@@ -1,0 +1,322 @@
+{
+  "schema_version": "northstar.rust-quality.detector-candidates.v1",
+  "language": "rust",
+  "qualified_on": "2026-08-26",
+  "toolchains": ["Rust 1.95.0", "Rust 1.97.1"],
+  "candidates": [
+    {
+      "id": "public-debug",
+      "concern": "Public type lacks Debug",
+      "diagnostics": ["missing_debug_implementations"],
+      "decidability": "partially_decidable",
+      "false_positive_class": "repository_policy",
+      "disposition": "promote_evidence",
+      "target_rules": ["RUST-API-001"],
+      "detector_authority": "none",
+      "provenance": [{"authority": "rustc", "revision": "stable docs and Rust 1.95/1.97", "url": "https://doc.rust-lang.org/stable/rustc/lints/listing/allowed-by-default.html#missing-debug-implementations"}],
+      "applicability": "Public types in library or public crate API surfaces; redaction and justified omission remain manual.",
+      "evidence": {
+        "invalid_fixture": "invalid fixture emits the exact diagnostic on both toolchains",
+        "valid_fixture": "derived Debug produces no candidate diagnostic",
+        "exception_fixture": "protected fields and compile-size policy cannot be decided by the lint",
+        "repair": "revision M public-type repair used the existing RUST-API-001 authority",
+        "preservation": "revision M preserved clean controls and public behavior",
+        "churn": "revision M passed its exact changed-scope gate",
+        "blind_review": "revision M blind reviewers accepted all repairs; the lint itself grants no repair"
+      },
+      "rationale": "The diagnostic precisely identifies missing Debug, but cannot choose derive, redacted manual output, or an accepted omission."
+    },
+    {
+      "id": "unsafe-structure",
+      "concern": "Unsafe operations or contracts lack explicit structural evidence",
+      "diagnostics": ["E0133", "clippy::missing_safety_doc", "clippy::undocumented_unsafe_blocks"],
+      "decidability": "partially_decidable",
+      "false_positive_class": "repository_policy",
+      "disposition": "promote_enforcement",
+      "target_rules": ["RUST-UNSAFE-001"],
+      "detector_authority": "none",
+      "provenance": [
+        {"authority": "rustc", "revision": "stable docs and Rust 1.95/1.97", "url": "https://doc.rust-lang.org/stable/rustc/lints/listing/allowed-by-default.html#unsafe-op-in-unsafe-fn"},
+        {"authority": "Clippy", "revision": "stable docs and Rust 1.95/1.97", "url": "https://rust-lang.github.io/rust-clippy/stable/index.html#missing_safety_doc"}
+      ],
+      "applicability": "Unsafe blocks, functions, traits, implementations, raw pointers, and FFI; content and soundness remain manual.",
+      "evidence": {
+        "invalid_fixture": "invalid fixture emits all three normalized identifiers",
+        "valid_fixture": "explicit unsafe block, Safety docs, and concrete comment emit none",
+        "exception_fixture": "E0133 is an error code rather than the lint name; manual source context remains required",
+        "repair": "strict repair remains report-only; no detector-authored repair was run",
+        "preservation": "revisions J-M preserved unsafe fixtures byte-for-byte",
+        "churn": "zero unsafe-boundary churn was required by the strict evidence gate",
+        "blind_review": "revision M reviewers accepted the report-only unsafe disposition"
+      },
+      "rationale": "The checks enforce visible structure. They cannot prove that the documented invariants discharge the exact unsafe operation contract."
+    },
+    {
+      "id": "await-held-guards",
+      "concern": "A lock guard or RefCell borrow crosses an await point",
+      "diagnostics": ["clippy::await_holding_lock", "clippy::await_holding_refcell_ref"],
+      "decidability": "partially_decidable",
+      "false_positive_class": "documented_upstream",
+      "disposition": "promote_enforcement",
+      "target_rules": ["RUST-ASYNC-001"],
+      "detector_authority": "none",
+      "provenance": [{"authority": "Clippy", "revision": "stable docs and Rust 1.95/1.97", "url": "https://rust-lang.github.io/rust-clippy/stable/index.html#await_holding_lock"}],
+      "applicability": "std/parking_lot lock guards and RefCell borrows live across await; cancellation and state consistency remain manual.",
+      "evidence": {
+        "invalid_fixture": "both guard diagnostics fire on both toolchains",
+        "valid_fixture": "lexical scope before await emits neither diagnostic",
+        "exception_fixture": "Clippy documents explicit-drop false positives",
+        "repair": "revision M repaired the blocking-lock case under RUST-ASYNC-001",
+        "preservation": "revision M preserved behavior and clean controls",
+        "churn": "revision M passed exact scope and churn gates",
+        "blind_review": "revision M reviewers accepted the lock-scope repair"
+      },
+      "rationale": "The live guard is a strong actionable signal, but changing lock type or state transitions still requires source review."
+    },
+    {
+      "id": "msrv-item-use",
+      "concern": "A standard-library item is newer than the configured MSRV",
+      "diagnostics": ["clippy::incompatible_msrv"],
+      "decidability": "partially_decidable",
+      "false_positive_class": "configuration",
+      "disposition": "promote_evidence",
+      "target_rules": ["RUST-MSRV-001"],
+      "detector_authority": "none",
+      "provenance": [
+        {"authority": "Cargo", "revision": "stable docs 2026-08-26", "url": "https://doc.rust-lang.org/cargo/reference/rust-version.html"},
+        {"authority": "Clippy", "revision": "stable docs and Rust 1.95/1.97", "url": "https://rust-lang.github.io/rust-clippy/stable/index.html#incompatible_msrv"}
+      ],
+      "applicability": "Packages with resolved rust-version or equivalent Clippy MSRV configuration.",
+      "evidence": {
+        "invalid_fixture": "OnceLock against rust-version 1.60 emits the diagnostic on both toolchains",
+        "valid_fixture": "Once against the same MSRV emits no diagnostic",
+        "exception_fixture": "feature-local MSRV overrides and dependencies require repository policy",
+        "repair": "detector proposes no version-policy change; equivalent replacement uses existing rule authority",
+        "preservation": "minimum-toolchain validation remains mandatory after any replacement",
+        "churn": "only the incompatible item may enter repair scope",
+        "blind_review": "no new repair class was promoted; version-policy changes remain operator decisions"
+      },
+      "rationale": "The lint is precise for known library stabilization data but does not replace an actual minimum-toolchain build or cover every dependency and language feature."
+    },
+    {
+      "id": "broken-public-doc-links",
+      "concern": "Published documentation contains an unresolved intra-doc link",
+      "diagnostics": ["rustdoc::broken_intra_doc_links", "rustdoc::private_intra_doc_links"],
+      "decidability": "decidable",
+      "false_positive_class": "none_observed",
+      "disposition": "promote_evidence",
+      "target_rules": ["RUST-API-001"],
+      "detector_authority": "none",
+      "provenance": [{"authority": "rustdoc", "revision": "stable docs and Rust 1.95/1.97", "url": "https://doc.rust-lang.org/rustdoc/lints.html#broken_intra_doc_links"}],
+      "applicability": "Public documentation built with the repository's normal rustdoc configuration.",
+      "evidence": {
+        "invalid_fixture": "broken link emits the exact rustdoc diagnostic on both toolchains",
+        "valid_fixture": "link to a public type emits no diagnostic",
+        "exception_fixture": "document-private-items changes private-link behavior and must be recorded",
+        "repair": "evidence-only; no new automatic or detector-owned repair",
+        "preservation": "a repair must preserve the intended API target and documentation meaning",
+        "churn": "only the broken link and required rename context may change",
+        "blind_review": "no normative rule or repair authority was added, so a new blind repair cohort was not claimed"
+      },
+      "rationale": "Resolution is mechanical under a fixed rustdoc configuration; the intended replacement target is still a human API decision."
+    },
+    {
+      "id": "public-failure-documentation",
+      "concern": "Public Result or panic behavior lacks Errors or Panics documentation",
+      "diagnostics": ["clippy::missing_errors_doc", "clippy::missing_panics_doc"],
+      "decidability": "partially_decidable",
+      "false_positive_class": "repository_policy",
+      "disposition": "evaluation_only",
+      "target_rules": ["RUST-ERR-001"],
+      "detector_authority": "none",
+      "provenance": [{"authority": "Clippy", "revision": "stable docs and Rust 1.95/1.97", "url": "https://rust-lang.github.io/rust-clippy/stable/index.html#missing_errors_doc"}],
+      "applicability": "Public functions in documented API surfaces; generated, private, and intentionally opaque APIs need policy.",
+      "evidence": {
+        "invalid_fixture": "both diagnostics fire on the invalid public API fixture",
+        "valid_fixture": "complete Errors and Panics sections emit neither diagnostic",
+        "exception_fixture": "panic detection is incomplete and local expect/allow annotations may encode proven invariants",
+        "repair": "no independent documentation-repair cohort exists",
+        "preservation": "error contracts must be traced before documentation changes",
+        "churn": "not measured independently",
+        "blind_review": "not independently reviewed"
+      },
+      "rationale": "Useful evidence, but incomplete panic discovery and absent repair review block normative promotion."
+    },
+    {
+      "id": "panic-capable-operations",
+      "concern": "Production code uses unwrap, expect, panic, or unchecked indexing",
+      "diagnostics": ["clippy::unwrap_used", "clippy::expect_used", "clippy::panic", "clippy::indexing_slicing"],
+      "decidability": "meaning_dependent",
+      "false_positive_class": "semantic",
+      "disposition": "retain_manual",
+      "target_rules": ["RUST-ERR-001"],
+      "detector_authority": "none",
+      "provenance": [{"authority": "Clippy", "revision": "stable docs and Rust 1.95/1.97", "url": "https://rust-lang.github.io/rust-clippy/stable/index.html#unwrap_used"}],
+      "applicability": "Leads in production paths; tests, consts, poisoned locks, bounds, and proven invariants require classification.",
+      "evidence": {
+        "invalid_fixture": "restriction lints identify syntax but not recoverability",
+        "valid_fixture": "absence does not prove explicit failure semantics",
+        "exception_fixture": "tracked exception fixture triggers on caller-established bounds, an invariant expect, and test setup",
+        "repair": "revision M repair required call-path and input-boundary judgment",
+        "preservation": "revision M protected behavior and clean controls",
+        "churn": "revision M rejected unrelated changes",
+        "blind_review": "revision M reviewed the contextual repair, not lint output alone"
+      },
+      "rationale": "These remain selective search leads. Enabling the restriction group or treating each hit as a finding would be noisy."
+    },
+    {
+      "id": "async-cancellation-safety",
+      "concern": "Cancellation at an await point loses data or leaves inconsistent state",
+      "diagnostics": [],
+      "decidability": "meaning_dependent",
+      "false_positive_class": "semantic",
+      "disposition": "retain_manual",
+      "target_rules": ["RUST-ASYNC-001"],
+      "detector_authority": "none",
+      "provenance": [{"authority": "Tokio", "revision": "1.53.1 docs reviewed 2026-08-26", "url": "https://docs.rs/tokio/latest/tokio/macro.select.html#cancellation-safety"}],
+      "applicability": "Async operations that can be dropped at suspension, especially select loops and stateful I/O.",
+      "evidence": {
+        "invalid_fixture": "no syntax-only fixture can establish lost semantic state",
+        "valid_fixture": "API-specific cancellation contracts and state flow are required",
+        "exception_fixture": "the same await syntax is safe or unsafe depending on the future's contract",
+        "repair": "not run",
+        "preservation": "requires operation-specific behavioral tests",
+        "churn": "not measurable without a concrete operation",
+        "blind_review": "not eligible without a concrete repair cohort"
+      },
+      "rationale": "Cancellation safety is an operation contract and state-machine property, not a general AST pattern."
+    },
+    {
+      "id": "documentation-completeness",
+      "concern": "Public API or crate documentation is absent",
+      "diagnostics": ["missing_docs", "rustdoc::missing_crate_level_docs"],
+      "decidability": "partially_decidable",
+      "false_positive_class": "repository_policy",
+      "disposition": "retain_manual",
+      "target_rules": ["RUST-API-001"],
+      "detector_authority": "none",
+      "provenance": [{"authority": "rustdoc", "revision": "stable docs and Rust 1.95/1.97", "url": "https://doc.rust-lang.org/rustdoc/lints.html#missing_docs"}],
+      "applicability": "Repository-selected public library and application API surfaces.",
+      "evidence": {
+        "invalid_fixture": "the lint detects absence only",
+        "valid_fixture": "present text can still be useless or wrong",
+        "exception_fixture": "binaries, generated bindings, and deliberately hidden surfaces differ by policy",
+        "repair": "not independently qualified",
+        "preservation": "API meaning must be reviewed",
+        "churn": "blanket enablement can create broad comment churn",
+        "blind_review": "not independently reviewed"
+      },
+      "rationale": "Documentation scope and quality remain repository-owned and meaning-dependent."
+    },
+    {
+      "id": "test-adequacy",
+      "concern": "Risk-bearing behavior lacks sufficient focused tests",
+      "diagnostics": [],
+      "decidability": "meaning_dependent",
+      "false_positive_class": "repository_policy",
+      "disposition": "retain_manual",
+      "target_rules": [],
+      "detector_authority": "none",
+      "provenance": [{"authority": "The Rust Book", "revision": "stable docs 2026-08-26", "url": "https://doc.rust-lang.org/book/ch11-03-test-organization.html"}],
+      "applicability": "Changed behavior and risk boundaries under repository-owned test policy.",
+      "evidence": {
+        "invalid_fixture": "test count cannot establish behavioral coverage",
+        "valid_fixture": "a small focused test can be sufficient",
+        "exception_fixture": "compile-fail, property, integration, and external-service evidence have different roles",
+        "repair": "requires a concrete behavior contract",
+        "preservation": "tests must verify rather than redefine behavior",
+        "churn": "repository thresholds are required",
+        "blind_review": "not eligible as a syntax detector"
+      },
+      "rationale": "Presence, count, or coverage percentage cannot decide whether the relevant behavior and failure modes are tested."
+    },
+    {
+      "id": "architecture-cohesion",
+      "concern": "Responsibilities, modules, or dependency direction are poorly shaped",
+      "diagnostics": ["clippy::too_many_arguments", "clippy::module_inception", "clippy::module_name_repetitions"],
+      "decidability": "meaning_dependent",
+      "false_positive_class": "semantic",
+      "disposition": "reject",
+      "target_rules": ["RUST-READ-001"],
+      "detector_authority": "none",
+      "provenance": [{"authority": "Clippy", "revision": "stable docs 2026-08-26", "url": "https://rust-lang.github.io/rust-clippy/stable/index.html#too_many_arguments"}],
+      "applicability": "Architecture review only.",
+      "evidence": {
+        "invalid_fixture": "no local syntax fixture establishes responsibility ownership",
+        "valid_fixture": "generated, protocol-shaped, and boundary code legitimately matches these patterns",
+        "exception_fixture": "repository architecture determines cohesion and direction",
+        "repair": "not eligible",
+        "preservation": "a detector-driven move can break public and dependency boundaries",
+        "churn": "likely broad",
+        "blind_review": "not eligible"
+      },
+      "rationale": "Local lint shape is not architecture evidence and would encourage laundering code around thresholds."
+    },
+    {
+      "id": "complexity-thresholds",
+      "concern": "Functions or types exceed generic complexity thresholds",
+      "diagnostics": ["clippy::cognitive_complexity", "clippy::too_many_lines", "clippy::type_complexity"],
+      "decidability": "meaning_dependent",
+      "false_positive_class": "configuration",
+      "disposition": "evaluation_only",
+      "target_rules": ["RUST-READ-001"],
+      "detector_authority": "none",
+      "provenance": [{"authority": "Clippy", "revision": "stable docs and Rust 1.95/1.97", "url": "https://rust-lang.github.io/rust-clippy/stable/index.html#cognitive_complexity"}],
+      "applicability": "Repository-selected trend evidence only; never an architecture verdict.",
+      "evidence": {
+        "invalid_fixture": "low configured thresholds produce all three diagnostics",
+        "valid_fixture": "threshold success does not establish readability",
+        "exception_fixture": "tracked exception fixture contains simple protocol-shaped code that triggers configured limits",
+        "repair": "no threshold-driven repair is authorized",
+        "preservation": "splitting code can hide invariants and worsen locality",
+        "churn": "threshold compliance encourages arbitrary helper churn",
+        "blind_review": "Clippy itself states cognitive complexity is not measurable by this lint"
+      },
+      "rationale": "Keep as optional trend leads. Clippy explicitly warns that cognitive_complexity is not a comprehension measure."
+    },
+    {
+      "id": "forwarder-residue",
+      "concern": "A function only forwards arguments without an independent responsibility",
+      "diagnostics": ["stopslop::SLOP039"],
+      "decidability": "meaning_dependent",
+      "false_positive_class": "semantic",
+      "disposition": "evaluation_only",
+      "target_rules": ["RUST-SLOP-001"],
+      "detector_authority": "none",
+      "provenance": [{"authority": "stopslop", "revision": "bf31fd107d48028033dd869dd3ad2de2e040741a", "url": "https://github.com/mgiovani/stopslop/tree/bf31fd107d48028033dd869dd3ad2de2e040741a"}],
+      "applicability": "Candidate inventory only; façades, visibility seams, trait adapters, and stable APIs require manual classification.",
+      "evidence": {
+        "invalid_fixture": "revision M exact-locality fixture identifies the unnecessary wrapper",
+        "valid_fixture": "revision M keeps the documented façade",
+        "exception_fixture": "public visibility alone was proven insufficient; responsibility evidence is required",
+        "repair": "the candidate never supplied repair authority",
+        "preservation": "revision M preserved the justified façade",
+        "churn": "revision M exact scope gate passed",
+        "blind_review": "revision M reviewers accepted manual candidate dispositions"
+      },
+      "rationale": "Existing evidence supports a total candidate ledger, not automatic deletion or normative promotion. No custom Rust detector is added."
+    },
+    {
+      "id": "unfinished-macros",
+      "concern": "Production code contains todo! or unimplemented! residue",
+      "diagnostics": ["clippy::todo", "clippy::unimplemented"],
+      "decidability": "partially_decidable",
+      "false_positive_class": "repository_policy",
+      "disposition": "evaluation_only",
+      "target_rules": ["RUST-SLOP-001", "RUST-ERR-001"],
+      "detector_authority": "none",
+      "provenance": [{"authority": "Clippy", "revision": "stable docs and Rust 1.95/1.97", "url": "https://rust-lang.github.io/rust-clippy/stable/index.html#todo"}],
+      "applicability": "Production paths; examples, teaching code, deliberate compile-fail tests, and staged scaffolds require policy.",
+      "evidence": {
+        "invalid_fixture": "syntax is directly detectable",
+        "valid_fixture": "absence does not prove implementation completeness",
+        "exception_fixture": "tests and intentional scaffolds can use these macros",
+        "repair": "no independent repair cohort exists",
+        "preservation": "replacement requires the missing behavior contract",
+        "churn": "not measured",
+        "blind_review": "not independently reviewed"
+      },
+      "rationale": "Useful residue evidence, but a detector cannot invent the missing behavior or classify intentional scaffolding."
+    }
+  ]
+}

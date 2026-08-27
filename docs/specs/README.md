@@ -53,6 +53,9 @@ worked through.
 - [032 - TypeScript And Svelte Explicit Audit](./032-typescript-svelte-explicit-audit.md)
   — the explicit-only route is distributed; retained for the revision-S
   production-evidence history.
+- [033 - Rust Audit V2 Tool Enforcement](./033-rust-audit-v2-tool-enforcement.md)
+  — the Cargo-native v2 route is distributed; retained for the revision-E
+  production-evidence and tool-boundary history.
 
 ## Archive layout
 

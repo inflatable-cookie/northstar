@@ -57,6 +57,11 @@ skill. A direct `rsync -a --delete` from `skills/northstar/` is reserved for loc
 development before the change is published. Restart agent sessions after an
 update.
 
+The current configured development install contains 120 source-identical files.
+Rust v2 replaces the skill-local Rhai recorder with the Cargo-native engine;
+TypeScript retains its Rhai recorder. This count is evidence for the current
+payload, not a stable public contract.
+
 The installed skill also carries a minimal Effigy catalog for consumer-safe
 checks plus Rust and TypeScript quality activation/recording. It validates the
 agent-instruction surface and inert language-quality packages. When a consumer repository has no local

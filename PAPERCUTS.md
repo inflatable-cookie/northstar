@@ -7,6 +7,25 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 
 <!-- Keep entries short. Append newest entries at the top. Do not include secrets. -->
 
+- **2026-08-26 — docs QA traverses ignored Rust build output (resolved):** adding a
+  skill-shipped Cargo crate left its ignored `target/` directory beneath the
+  installed-payload source, and docs QA tried to decode a fingerprint artifact
+  as UTF-8; impact is that validation fails after ordinary local Rust builds;
+  fixed by restricting the command-surface text scan to known text files and
+  excluding Cargo target trees; affected surface was
+  `scripts/check-northstar-command-skills.rhai`.
+
+- **2026-08-26 — Rhai Git helpers cannot inspect a foreign target root
+  (resolved by boundary redesign):**
+  skill-local audit tasks select the installed skill as `catalog_root`, so
+  `git::status()` and `git::changed_files()` inspect the skill rather than the
+  consumer root passed to the task; impact is that portable cross-repo scope
+  discovery must use a narrowly allowlisted structured `git -C <target>`
+  subprocess; plausible fix is an optional target-root argument or typed
+  read-only Git context; affected surfaces are Effigy Rhai Git helpers and
+  installed cross-repo audit tasks. Rust v2 now uses a Cargo-native binary;
+  Effigy is optional repository evidence rather than the audit host.
+
 - **2026-08-26 — skill-creator validator lacks executable mode:** the documented
   direct `quick_validate.py` invocation returned permission denied even though
   the script is readable and works through `python3`; impact is a misleading

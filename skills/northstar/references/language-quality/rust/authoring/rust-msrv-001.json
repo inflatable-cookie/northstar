@@ -2,7 +2,6 @@
   "id": "RUST-MSRV-001",
   "title": "Honour the repository-declared Rust version",
   "maturity": "approved",
-  "enforcement": "required",
   "dimensions": [
     "correctness_assurance",
     "architecture"
@@ -17,29 +16,20 @@
     "rust_release": "repository-declared rust-version or toolchain policy"
   },
   "requirement": "Code, dependencies, lints, and generated projections must compile and operate on the repository's declared minimum supported Rust version unless an explicit version-policy change is authorized.",
-  "authoring_projection": [
-    "Read rust-version and repository toolchain policy before selecting syntax, APIs, lints, or dependencies.",
-    "Treat raising the MSRV as a compatibility decision, not an incidental cleanup."
-  ],
   "mechanical_enforcement": [
     {
       "tool": "cargo and repository CI/task surface",
       "check": "build and test matrix at package rust-version; optional cargo-msrv evidence",
       "role": "enforce",
       "caveat": "The newest local compiler cannot prove compatibility with the declared minimum."
+    },
+    {
+      "tool": "clippy",
+      "check": "clippy::incompatible_msrv",
+      "role": "evidence",
+      "caveat": "The lint catches known item stabilization mismatches but does not replace a minimum-toolchain build or decide version policy."
     }
   ],
-  "remediation": {
-    "default_authority": "review_required",
-    "action_overrides": [
-      {
-        "action": "change_version_policy",
-        "authority": "operator_decision",
-        "reason": "Raising rust-version, changing edition or toolchain policy, or dropping a supported compiler changes the repository compatibility contract."
-      }
-    ],
-    "guidance": "Prefer an equivalent supported construct. Stop before raising rust-version, changing the edition, or dropping a supported toolchain."
-  },
   "deviation": {
     "allowed": true,
     "required_evidence": [
@@ -53,5 +43,21 @@
     "resolved effective MSRV",
     "minimum-toolchain build or explicit blocked evidence",
     "version-policy decision for any proposed raise"
+  ],
+  "enforcement": "required",
+  "remediation": {
+    "default_authority": "review_required",
+    "action_overrides": [
+      {
+        "action": "change_version_policy",
+        "authority": "operator_decision",
+        "reason": "Raising rust-version, changing edition or toolchain policy, or dropping a supported compiler changes the repository compatibility contract."
+      }
+    ],
+    "guidance": "Prefer an equivalent supported construct. Stop before raising rust-version, changing the edition, or dropping a supported toolchain."
+  },
+  "authoring_projection": [
+    "Read rust-version and repository toolchain policy before selecting syntax, APIs, lints, or dependencies.",
+    "Treat raising the MSRV as a compatibility decision, not an incidental cleanup."
   ]
 }

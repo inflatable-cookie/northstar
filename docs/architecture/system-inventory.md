@@ -20,7 +20,7 @@ skills.
 | `bundle-docs/` | doctrine surface | repo maintainers | reusable Northstar doctrine | `system-architecture.md`, `docs/contracts/001-working-rules.md` |
 | `template-bundle/` | product artifact | repo maintainers | copy-ready downstream docs bundle | `docs/specs/archive/001-northstar-delivery-layer.md`, `docs/roadmaps/g01/001-enact-northstar-on-northstar.md` |
 | `skills/` | automation surface | repo maintainers | installable agent workflows and published distribution | `docs/contracts/001-working-rules.md`, `bundle-docs/skills/README.md`, `scripts/check-northstar-skill-install.rhai` |
-| language quality packs | automation surface | repo maintainers | optional language-specific authoring and audit workflows | source translation memos, specs 031-032, `004-language-quality-pack`, Effigy selectors |
+| language quality packs | automation surface | repo maintainers | optional language-specific authoring and audit workflows | source translation memos, specs 031-033, `004-language-quality-pack`, Effigy selectors; Rust v2 recorder boundary promoted from live evidence |
 | consumer language-quality profile | contract and policy surface | consumer maintainers | selected assurance profile, toolchain/MSRV, exclusions, deviations, and project architecture | repository-local configuration governed by `004-language-quality-pack` |
 | `docs/` | live planning surface | repo maintainers | Northstar's own planning and execution state | all files in this repo-local docs spine |
 | `docs/handoffs/` | fresh-thread coordination surface | handoff/orchestrator mode | timestamped takeover notes | handoff contract and templates |
@@ -58,15 +58,16 @@ skills.
 | Delivery-layer adoption | active docs spine, compact working rules, spec, roadmap, log | repo maintainers | ready |
 | Template/skill promotion | copy-ready skill assets, operator docs, roadmap batches, and logs | repo maintainers | ready |
 | Papercut loop | root queue, doctrine, templates, skill instruction, and QA coverage | repo maintainers | ready |
-| Published skill parity | Skills CLI update path, global install inspection, and source checker | repo maintainers | ready; 93-file parity proven |
+| Published skill parity | Skills CLI update path, global install inspection, and source checker | repo maintainers | ready; 120-file configured parity proven |
 | Explicit command surface | Nine thin command adapters, canonical router/mode wiring, description budget, and retired-alias checks | repo maintainers | ready; source and installed discovery verified |
 | Triage lifecycle | `docs/triage/` anchors, timestamped naming, orchestrator/refresh capture, and cleanup dispositions | repo maintainers | ready; live operator feedback pending |
 | Consumer feedback intake | operator-provided live-use evidence and manual triage boundary | repo maintainers + operator | operator-owned |
 | Orchestrator mode | per-worker committed handoff under `docs/handoffs/`, fresh worker worktree or safe temporary fallback, startup check, chunk report, PR, provider review record, and closeout evidence | repo maintainers + operator | operator validation complete; longer multi-card evidence pending |
 | Model-efficiency comparison | measured role routing, rework, review cycles, and relay burden | repo maintainers | one operator validation measured; broader comparison pending |
-| Rust quality production foundation | seven-rule catalogue, five JSON schemas, two strict checked projections, two routed modes, thin audit adapter, and skill-local Rhai setup/record/check tasks | repo maintainers | ready and distributed; strict-only, agent-owned activation, 76-file installed parity proven |
+| Rust quality production foundation | seven-rule catalogue, seven JSON schemas, two strict checked projections, two routed modes, thin audit adapter, skill-local setup/check tasks, and Cargo-native audit engine | repo maintainers | v2 revision E distributed with exact 120-file configured parity |
 | Rust quality prototype | representative rule catalogue, audit and authoring benchmark corpora, blinded subject/coordinator/reviewer packets, projections, deterministic case-local result recorder, result scorer, false-positive and churn measures, context-retention test | repo maintainers + operator | retained evidence infrastructure; strict everyday and explicit-audit tracks eligible; compaction unproven |
 | TypeScript/Svelte explicit-audit foundation | nine normative rules, one evaluation-only signal, strict checked projection, conditional Svelte/SvelteKit overlays, thin explicit adapter, and skill-local Rhai setup/record/check tasks | repo maintainers | ready and distributed; explicit-only, agent-owned activation, 93-file combined installed parity proven |
+| Rust v2 tool enforcement | skill-shipped Cargo-native engine, managed bootstrap, anchor-based scope, complete unit-rule ledger, three review attestations, structured limitations, mechanical evidence adapters, detector qualification, and exact distribution parity | repo maintainers | complete; cards 094-099 passed revision-E evidence and 120-file configured parity |
 
 ## Planning Gaps
 

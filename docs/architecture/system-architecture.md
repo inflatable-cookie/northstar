@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-08-26
+Updated: 2026-08-27
 Vision refs: docs/vision/001-northstar-delivery-vision.md
 
 ## Top-Level Stack
@@ -150,40 +150,71 @@ not create a second installable skill. The production surfaces are:
 | catalogue, schemas, and checked projections | `skills/northstar/references/language-quality/rust/` |
 | everyday mode | `skills/northstar/references/modes/rust-quality-authoring.md` |
 | explicit audit mode | `skills/northstar/references/modes/rust-quality-audit.md` |
-| setup, recorder, and package check | `skills/northstar/scripts/rust-quality-setup.rhai`, `skills/northstar/scripts/rust-quality-recorder.rhai`, `skills/northstar/scripts/check-rust-quality.rhai` |
+| activation setup and package check | `skills/northstar/scripts/rust-quality-setup.rhai`, `skills/northstar/scripts/check-rust-quality.rhai` |
+| Cargo-native audit engine | `skills/northstar/tools/rust-quality/` |
 | thin explicit adapter | `skills/northstar/commands/northstar-rust-audit/SKILL.md` |
 | copy-ready activation and profile templates | `skills/northstar/assets/templates/language-quality/rust/` |
 
-The recorder is Effigy-native Rhai and requires Effigy `>=0.8.4`. It launches
-no language runtime, Git process, shell utility, or package manager. An
-installed skill invokes it as
-`effigy --repo <installed-northstar> northstar/rust-quality:record <operation>`.
-The record lifecycle is `init`, `assess`, `extend`, `complete`, and `finalize`.
-`assess` binds findings and allowed repair plans while owned files still match
-their baseline. `extend` widens unit and plan ownership before mutation.
-`complete` attributes the post-mutation state, and `finalize` rejects hidden or
-cross-unit mutation, changed policy, and edits to excluded pre-existing dirty
-files.
+Card `g02.032/095` replaces the source v1 Rhai recorder with one locked
+Cargo-native engine. The agent installs it into a payload-addressed Northstar
+cache, verifies the embedded source checksum, and invokes its absolute path.
+It does not alter global Cargo state or require a consumer Effigy catalogue.
+The earlier three-task Effigy/Rhai split is rejected research, not a
+compatibility route.
+
+The engine uses Git for repository identity, dirty state, audit-record storage,
+and file provenance. It uses Cargo's versioned CLI for recursive mixed-repo
+workspace, package, feature, target, and MSRV discovery. Worktree scope requires
+a dirty Rust anchor; repository scope requires an exact Cargo-derived coverage
+claim. Context stays read-only unless `extend` ties it to one existing repair
+plan before mutation.
+
+The record lifecycle is `inspect`, `plan`, `init`, `assess`, `extend`,
+`complete`, and `finalize`. Every assessed unit carries one verdict for each of
+the six approved normative rules plus correctness-assurance, architecture, and
+human-quality attestations. Findings, repair plans, accepted deviations,
+repository policy, fingerprints, and mutation attribution are checked. Final
+`result.json` and `report.md` derive from the same unit-local records; empty
+findings cannot imply completed review.
 
 The agent installs missing Rust activation through
 `northstar/rust-quality:setup`, choosing the narrowest Rust-owning instruction
 scope and discovering Cargo and explicit toolchain files. The task preserves
 existing instructions and valid contracts and is byte-idempotent. Consumers
 still own `strict` profile policy, accepted deviations, exclusions, and all
-compatibility inputs. The recorder resolves effective MSRV
-from repository Cargo manifests and explicit toolchain policy. It reports an
-unsettled policy instead of guessing a version. Case-local evidence lives under
-`<target>/.effigy/rust-quality/audits/<audit-id>/`; aggregate results derive
-from those records rather than agent-written summary state.
+compatibility inputs. Case-local evidence lives under the target repository's
+Git metadata at `northstar/rust-quality/audits/<audit-id>/`, so no worktree
+ignore entry is needed.
 
-The Rust boundary was first distributed in a 76-file `northstar` artifact and
-remains unchanged inside the current 93-file combined install. Its minimal
-Effigy catalogue exposes
-`northstar/check:agent-instructions`, `northstar/check:rust-quality`,
-`northstar/rust-quality:setup`, `northstar/test:rust-quality-setup`,
-`northstar/test:rust-quality-recorder`, and `northstar/rust-quality:record`.
-Rust activation remains scoped and profile-driven, so the catalogue does not
-enter general agent context unless the router selects a Rust mode.
+The Rust boundary was first distributed in a 76-file `northstar` artifact.
+Revision E is now the configured 120-file combined install with exact source
+parity. This is a local development distribution, not a published release or a
+consumer-system assurance claim.
+
+### Rust v2 frozen tool boundary
+
+Card `g02.032/094` froze the Cargo-native boundary; cards 095-099 implement and
+distribute its
+scope, ledger, lifecycle, bootstrap, deterministic report, immutable mechanical
+evidence, compact everyday closeout, detector qualification, and production
+proof in source.
+
+The binary uses Git for immutable dirty-scope evidence and Cargo's versioned CLI
+interfaces for recursive workspace, package, target, feature, and toolchain
+evidence. It owns scope validation, the complete unit-rule ledger,
+three review attestations, findings and repair authority, fingerprints, derived
+limitations, `result.json`, and deterministic `report.md`. It does not link
+Cargo internals or require a consumer Effigy catalogue.
+
+Explicit plans resolve profile, repository-task, Cargo-native, or agent-owned
+selectors and execute program/argument arrays without a shell. Raw streams live
+as hashed Git-metadata artifacts. Every unit completion cites the full immutable
+evidence inventory; diagnostics remain evidence-only.
+
+Everyday authoring may consume the compact worktree snapshot and normalized
+evidence at changed-tranche closeout. It does not initialize the full audit
+ledger or load the explicit procedure. Main skill and router byte size remain
+fixed; all new schema and tool detail stays on-demand.
 
 ## Readiness-mapping artifact contract
 

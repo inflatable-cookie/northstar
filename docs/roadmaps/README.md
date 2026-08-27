@@ -48,11 +48,15 @@ Roadmaps sequence contract-backed work for Northstar itself.
   `30/30` primary findings, `96/96` blind dimensions, and `24/24` accepted
   repairs.
   Everyday TypeScript authoring remains unavailable.
+- `g02.032` is complete; cards 094-099 implemented the corrected Cargo-native
+  Rust v2 lifecycle, immutable evidence, compact closeout, and finite detector
+  qualification, passed revision-E production evidence, and distributed the
+  exact 120-file payload.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-The TypeScript/Svelte implementation lane is complete. Accept operator-provided
-live-use feedback; Northstar does not dispatch consumer audits.
+No blocking roadmap milestone is open. Accept operator-provided live-use
+feedback; Northstar does not dispatch consumer audits.

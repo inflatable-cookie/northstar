@@ -2,7 +2,6 @@
   "id": "RUST-API-001",
   "title": "Public types implement semantically appropriate common traits",
   "maturity": "approved",
-  "enforcement": "required",
   "dimensions": [
     "architecture",
     "human_quality"
@@ -18,23 +17,20 @@
     "rust_release": "repository MSRV and newer"
   },
   "requirement": "Every public type must implement Debug unless doing so would expose protected data. Other common traits must be implemented only when their semantics are valid and useful for the type.",
-  "authoring_projection": [
-    "For each new public type, decide Debug first and then consider Clone, equality, ordering, hashing, display, default, and conversions by semantics.",
-    "Use a manual redacted Debug implementation when derived output would expose protected data."
-  ],
   "mechanical_enforcement": [
     {
       "tool": "rustc",
       "check": "missing_debug_implementations",
       "role": "evidence",
       "caveat": "The lint does not decide redaction or which other traits are semantically correct."
+    },
+    {
+      "tool": "rustdoc",
+      "check": "rustdoc::broken_intra_doc_links and rustdoc::private_intra_doc_links",
+      "role": "evidence",
+      "caveat": "Link resolution is mechanical under a fixed rustdoc configuration; the intended API target remains a human decision."
     }
   ],
-  "remediation": {
-    "default_authority": "review_required",
-    "action_overrides": [],
-    "guidance": "Add only justified derives or manual implementations; treat public trait additions as API decisions."
-  },
   "deviation": {
     "allowed": true,
     "required_evidence": [
@@ -47,5 +43,15 @@
     "public-type inventory",
     "trait-semantics review",
     "compiler or lint evidence for Debug coverage"
+  ],
+  "enforcement": "required",
+  "remediation": {
+    "default_authority": "review_required",
+    "action_overrides": [],
+    "guidance": "Add only justified derives or manual implementations; treat public trait additions as API decisions."
+  },
+  "authoring_projection": [
+    "For each new public type, decide Debug first and then consider Clone, equality, ordering, hashing, display, default, and conversions by semantics.",
+    "Use a manual redacted Debug implementation when derived output would expose protected data."
   ]
 }

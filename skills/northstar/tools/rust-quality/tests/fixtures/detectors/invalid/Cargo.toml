@@ -1,0 +1,9 @@
+[package]
+name = "northstar-detector-invalid"
+version = "0.0.0"
+edition = "2021"
+rust-version = "1.60"
+publish = false
+
+[workspace]
+

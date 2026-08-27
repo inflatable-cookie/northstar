@@ -65,8 +65,12 @@ any mutation authority.
 - Do not scan, format, lint-fix, or rewrite unrelated repository code.
 - Resolve every applicable rule as compliant, a concrete finding repaired under
   existing authority, an accepted recorded deviation, report-only, or blocked.
-- Run the repository-native focused validation first, then its normal broader
-  closeout selector when proportionate. Record selectors and outcomes.
+- At closeout only, load `../language-quality/rust/evidence-collection.md` and
+  `../language-quality/rust/tool-bootstrap.md`. Run the compact `closeout`
+  operation with explicit repository-owned selectors. It stores raw output
+  outside the worktree and returns only tranche paths, applicable rules,
+  normalized statuses, diagnostic identifiers, and limitations. Do not load
+  the audit projection or ledger.
 - Report changed scope, applicable rules, deviations or blockers, validation,
   and remaining limitations.
 

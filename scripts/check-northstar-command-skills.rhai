@@ -35,6 +35,23 @@ fn first_line_containing(lines, needle) {
     -1
 }
 
+fn is_text_skill_surface(root, file) {
+    let relative = str::replace(file, root + "/", "");
+    if str::starts_with(relative, "target/") || relative.contains("/target/") {
+        return false;
+    }
+
+    str::ends_with(relative, ".md") ||
+        str::ends_with(relative, ".yaml") ||
+        str::ends_with(relative, ".yml") ||
+        str::ends_with(relative, ".json") ||
+        str::ends_with(relative, ".toml") ||
+        str::ends_with(relative, ".rhai") ||
+        str::ends_with(relative, ".rs") ||
+        str::ends_with(relative, ".lock") ||
+        str::ends_with(relative, ".txt")
+}
+
 let root = path::join(repo_root, "skills/northstar");
 require(fs::is_dir(root), "missing skills/northstar directory");
 
@@ -125,7 +142,9 @@ require(typescript_policy.contains("allow_implicit_invocation: false"),
 
 let all_skill_text = "";
 for file in fs::list_recursive(root) {
-    all_skill_text += fs::read_file(file);
+    if is_text_skill_surface(root, file) {
+        all_skill_text += fs::read_file(file);
+    }
 }
 require(!all_skill_text.contains("northstar-reframe"), "retired Northstar-prefixed reframe name remains in installable skill tree");
 require(!all_skill_text.contains("northstar wayfinder"), "retired natural-language Wayfinder alias remains in installable skill tree");

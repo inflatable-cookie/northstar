@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://northstar.invalid/schemas/rust-quality-audit-evidence.v1.json",
+  "title": "Northstar Rust mechanical evidence record",
+  "type": "object",
+  "required": ["schema_version", "evidence_id", "evidence_class", "selector", "origin", "package_cwd", "environment", "status", "exit_status", "warning_count", "failure_stage", "diagnostics", "raw_artifacts", "record_sha256"],
+  "properties": {
+    "schema_version": { "const": "northstar.rust-quality.evidence.v1" },
+    "evidence_id": { "$ref": "#/$defs/id" },
+    "unit_id": { "$ref": "#/$defs/id" },
+    "evidence_class": { "enum": ["compiler", "lint", "docs", "test", "graph", "scanner"] },
+    "selector": { "type": "string", "minLength": 1 },
+    "origin": { "type": "string", "minLength": 1 },
+    "package_cwd": { "$ref": "#/$defs/path" },
+    "environment": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["passed", "warning", "failed", "unavailable", "unrun"] },
+    "exit_status": { "type": ["integer", "null"] },
+    "warning_count": { "type": "integer", "minimum": 0 },
+    "failure_stage": { "enum": ["none", "routing", "startup", "configuration", "collection", "source", "not_run"] },
+    "diagnostics": { "type": "array", "items": { "$ref": "#/$defs/diagnostic" } },
+    "raw_artifacts": { "type": "array", "items": { "$ref": "#/$defs/artifact" } },
+    "record_sha256": { "$ref": "#/$defs/sha256" }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$" },
+    "path": { "type": "string", "minLength": 1, "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+$" },
+    "sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "diagnostic": {
+      "type": "object",
+      "required": ["level", "message"],
+      "properties": {
+        "level": { "type": "string", "minLength": 1 },
+        "message": { "type": "string", "minLength": 1 },
+        "identifier": { "type": "string", "minLength": 1 },
+        "catalogue_evidence": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^RUST-[A-Z]+-[0-9]{3}$" } },
+        "mapping_disposition": { "enum": ["promote_enforcement", "promote_evidence", "evaluation_only", "retain_manual"] }
+      },
+      "additionalProperties": false
+    },
+    "artifact": {
+      "type": "object",
+      "required": ["stream", "path", "sha256", "bytes"],
+      "properties": {
+        "stream": { "enum": ["stdout", "stderr"] },
+        "path": { "$ref": "#/$defs/path" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "bytes": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    }
+  }
+}

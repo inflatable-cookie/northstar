@@ -1,156 +1,103 @@
 # Rust Audit Recording Contract
 
-Locate the installed `northstar` skill root, then invoke:
+First follow `tool-bootstrap.md`. In the commands below, `<tool>` is the
+verified absolute payload binary and `<repo>` is the consumer Git root. JSON
+inputs are scratch files outside the worktree. Canonical records live under
+the repository's Git metadata at:
 
 ```text
-effigy --repo <northstar-skill-root> northstar/rust-quality:record <operation> ...
+<git-path>/northstar/rust-quality/audits/<audit-id>/
 ```
 
-Records live under
-`<target>/.effigy/rust-quality/audits/<audit-id>/`. Use repository-relative file
-paths. JSON inputs are transient scratch files outside the record root; the
-recorder writes canonical manifest, unit, and result records.
+This needs no `.gitignore` entry and no consumer Effigy catalogue.
 
-## Initialize
+## Discover and freeze scope
 
 ```text
-... rust-quality:record init <target-root> <manifest-input.json>
+<tool> inspect --repo <repo> --scope <worktree|repository> --output <discovery.json>
+<tool> plan --discovery <discovery.json> --input <plan-input.json> --output <scope-plan.json>
 ```
 
-Manifest input:
+Worktree plans partition discovered dirty Rust anchors into assessed units.
+Every dirty file is owned as an anchor or related read-only context, or is
+explicitly excluded with a reason. Repository plans additionally carry exact
+Cargo-discovered workspaces, packages, targets, features, public API surfaces,
+and risk boundaries. Context relations are `owning_manifest`, `caller`,
+`implementation`, `focused_test`, `governed_documentation`,
+`architecture_contract`, or `tool_configuration`.
 
-```json
-{
-  "audit_id": "rust-audit-20260825",
-  "profile": "strict",
-  "scope": "worktree",
-  "initial_state": {
-    "dirty_files": [
-      {"file": "src/lib.rs", "states": ["staged", "unstaged"]}
-    ],
-    "in_scope_files": ["src/lib.rs"],
-    "excluded_dirty_files": [],
-    "scope_evidence": ["git status and repository scope inventory"]
-  },
-  "units": [
-    {
-      "unit_id": "core-errors",
-      "primary_file": "src/lib.rs",
-      "owned_files": ["src/lib.rs"]
-    }
-  ]
-}
-```
-
-Every dirty file must be in scope or appear in `excluded_dirty_files` with a
-non-empty reason. The initial in-scope set must exactly equal the union of
-disjoint unit ownership. The recorder reads and hashes the canonical strict
-profile and deviations file itself.
-
-## Assess
+Initialize before source assessment or mutation:
 
 ```text
-... rust-quality:record assess <target-root> <audit-id> <assessment.json>
+<tool> init --repo <repo> --discovery <discovery.json> \
+  --plan <scope-plan.json> --rules <skill>/references/language-quality/rust/strict-audit.json \
+  --profile <repo>/docs/contracts/rust-quality-profile.json \
+  --deviations <repo>/docs/contracts/rust-quality-deviations.json
 ```
 
-```json
-{
-  "unit_id": "core-errors",
-  "findings": [
-    {
-      "rule_id": "RUST-ERR-001",
-      "confidence": "high",
-      "action": "represent_failure",
-      "location": {"file": "src/lib.rs", "symbol": "parse"},
-      "evidence": "Malformed input reaches unwrap in a public path.",
-      "disposition": "repair_planned"
-    }
-  ],
-  "repair_plans": [
-    {
-      "rule_id": "RUST-ERR-001",
-      "action": "represent_failure",
-      "owned_files": ["src/lib.rs"],
-      "preserved_behavior": ["valid input returns the same parsed value"]
-    }
-  ]
-}
+Initialization reruns discovery and rejects stale state. It snapshots mutable,
+read-only, and excluded files plus the checked projection, repository profile,
+and accepted deviations. A `deviation` finding must match an accepted rule and
+file scope with non-empty owner, reason, evidence, and recheck trigger.
+
+## Assess every unit
+
+```text
+<tool> assess --repo <repo> --audit <audit-id> --input <assessment.json>
 ```
 
-Locations need a symbol or a one-based inclusive `line_span`. Dispositions are
-`repair_planned`, `reported`, `deviation`, or `operator_decision`; the recorder
-derives maturity, enforcement, and authority from the catalogue and rejects a
-mismatched disposition or unauthorized plan.
+An assessment contains exactly one verdict for each approved normative rule.
+Verdicts are `pass`, `finding`, `not_applicable`, or `degraded`; each names
+inspected surfaces and evidence. `finding` links findings, `not_applicable`
+supplies applicability evidence, and `degraded` links structured limitations.
+It also contains exactly one non-empty attestation for each dimension:
+`correctness_assurance`, `architecture`, and `human_quality`.
 
-Use action `change_foreign_error_policy` with disposition
-`operator_decision` when a repair would need new or changed foreign error
-signaling. Record the stop without a repair plan.
+Findings name `finding_id`, `rule_id`, `action`, repository-relative `file`,
+evidence, and disposition. Repair plans name `plan_id`, linked finding IDs,
+mutable owned files, and preserved behavior. The tool derives remediation
+authority from the checked projection and rejects report-only or
+operator-decision plans. Empty findings never substitute for verdicts.
 
 ## Extend before mutation
 
 ```text
-... rust-quality:record extend <target-root> <audit-id> <extension.json>
+<tool> extend --repo <repo> --audit <audit-id> --input <extension.json>
 ```
 
-```json
-{
-  "unit_id": "core-errors",
-  "files": ["tests/parse.rs"],
-  "reason": "direct regression test for the planned repair",
-  "findings": [],
-  "repair_plans": [],
-  "plan_extensions": [
-    {
-      "rule_id": "RUST-ERR-001",
-      "action": "represent_failure",
-      "files": ["tests/parse.rs"]
-    }
-  ]
-}
-```
+An extension names a unit, non-empty reason, files with anchor relations, and
+the existing repair plan that owns each file. Every extension file must be
+unowned, tied to one unit anchor, attributed to exactly one authorized plan,
+and unchanged when recorded. Extension after any audit-owned mutation fails.
 
-An extension may add independently justified findings and plans using the
-assessment shapes. `plan_extensions` widens an existing plan to the named new
-files before mutation; it cannot name an unrelated file or nonexistent plan.
-Never manufacture a finding merely to widen scope.
-
-## Complete
+## Complete a unit
 
 ```text
-... rust-quality:record complete <target-root> <audit-id> <completion.json>
+<tool> complete --repo <repo> --audit <audit-id> --input <completion.json>
 ```
 
-```json
-{
-  "unit_id": "core-errors",
-  "repairs": [
-    {
-      "rule_id": "RUST-ERR-001",
-      "action": "represent_failure",
-      "status": "applied",
-      "changed_files": ["src/lib.rs"]
-    }
-  ],
-  "validation": [
-    {
-      "selector": "effigy test:errors",
-      "status": "passed",
-      "evidence": "focused error-path tests passed"
-    }
-  ]
-}
+Supply exactly one `applied` or `not_applied` completion per repair plan.
+Applied entries name exact changed files and require non-empty passing
+mechanical evidence. First load `evidence-collection.md` and run:
+
+```text
+<tool> collect --repo <repo> --audit <audit-id> --input <evidence-plan.json>
 ```
 
-Every plan needs an `applied` or `not_applied` completion. Applied changes must
-exactly equal file changes derived from hashes, stay inside that plan's owned
-files, and have passing local validation.
+Completion names the immutable `evidence_ids`, not agent-authored pass claims.
+The tool verifies record and raw-artifact hashes. Derived fingerprints must
+equal the union of applied repair files. Read-only and excluded files must
+remain unchanged.
 
 ## Finalize
 
 ```text
-... rust-quality:record finalize <target-root> <audit-id>
+<tool> finalize --repo <repo> --audit <audit-id>
 ```
 
-Read `result.json` from the record root. Finalization is deterministic and
-refuses a second run. Restart with a new audit ID if repository policy or
-accepted deviations change during the audit.
+Finalization requires every unit assessment and completion, rechecks policy and
+fingerprints, and refuses a second run. It derives all changed files and
+limitations from unit-local records, then writes deterministic `result.json`
+and `report.md`. A retained finding, operator decision, explicit degraded
+verdict, unapplied plan, or warning/failed/unavailable/unrun evidence remains a
+structured limitation; the Markdown report is rendered from that exact list.

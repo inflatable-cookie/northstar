@@ -6,8 +6,11 @@ resolved scope. Ordinary Rust coding never selects it.
 
 Load the strict audit projection at
 `../language-quality/rust/strict-audit.json` and the recorder contract at
-`../language-quality/rust/audit-recording.md`. Do not load the everyday
-authoring projection.
+`../language-quality/rust/audit-recording.md`. Follow
+`../language-quality/rust/tool-bootstrap.md` to ensure the current Cargo-native
+tool without human installation. Load
+`../language-quality/rust/evidence-collection.md` only when resolving or
+collecting mechanical evidence. Do not load the everyday authoring projection.
 
 ## Resolve before mutation
 
@@ -26,27 +29,28 @@ authoring projection.
    - **repository** for whole repository, codebase, workspace, or all-crates
      requests.
    Ask when neither meaning is safely recoverable.
-3. Use read-only Git state to inventory staged, unstaged, deleted, and relevant
-   untracked files. Worktree scope includes relevant Rust source, manifests,
-   build files, tests, and directly affected docs. Give every dirty file an
-   in-scope or explicitly excluded disposition.
-4. For repository scope, inventory all declared workspace members, packages,
-   targets, feature surfaces, public APIs, unsafe/FFI and async boundaries,
-   tests, build files, and governed docs. Apply only repository-declared
-   generated/vendor exclusions. A repository audit is full coverage, not
-   blanket rewrite authority.
+3. Run the verified tool's `inspect` operation. It uses Git state for staged,
+   unstaged, deleted, and untracked worktree evidence and Cargo metadata for
+   nested workspaces, packages, targets, features, and MSRV declarations.
+   Worktree scope fails closed without a dirty Rust anchor.
+4. Build and run the checked `plan` operation. Give every dirty file an owned
+   anchor/context or explicitly excluded disposition. For repository scope,
+   supply the exact discovered workspace/package/target/feature inventory plus
+   explicit public API surfaces and unsafe/FFI, async, and other risk
+   boundaries. Full coverage is not blanket rewrite authority.
 5. Read project architecture and error/API policy. Record a missing foreign
    error-signaling policy as `change_foreign_error_policy`; its authority is
    `operator_decision`. Breaking API choices, architecture replacement, and
    compatibility-policy changes are also operator decisions. Record and report
    them; stop before mutation.
-6. Partition scope into non-empty assessed units with disjoint `owned_files`.
-   Capture the initial dirty state and initialize the deterministic recorder
-   before recording findings or editing files.
+6. Partition scope into non-empty assessed units with disjoint mutable anchors
+   and related read-only context. Run `init` with the discovery, scope plan, and
+   installed strict projection before recording findings or editing files.
 
-The recorder hashes scope, repository policy, accepted deviations, and all
-pre-existing dirty files. It rejects overlapping units and undisposed dirty
-files. It launches no Git, Cargo, package manager, language runtime, or shell.
+The Cargo-native engine stores case-local records in repository Git metadata.
+It hashes checked scope, policy, mutable files, context, and excluded dirty
+files. It rejects stale discovery, overlapping ownership, and undisposed dirt.
+It requires Git and Cargo but no consumer Effigy task or global PATH change.
 
 ## Assess before editing
 
@@ -82,7 +86,7 @@ unit assessment before any mutation.
 - Treat one assessed unit as one coherent repair wave. Make the smallest change
   that resolves its approved findings while preserving named behavior.
 - If a repair must include a direct caller, test, doc, or contract outside the
-  unit, run `extend` before editing. The recorder rejects late or cross-unit
+   unit, run `extend` before editing. The tool rejects late or cross-unit
   extension.
 - Never run blanket formatting, blanket lint fixing, unrelated cleanup,
   architecture replacement, or interface breakage. Format only files already
@@ -90,8 +94,9 @@ unit assessment before any mutation.
 - Units with only `report_only`, `blocked`, `retain`, deviation, or no-finding
   outcomes must remain byte-for-byte identical. Verify their initial hashes
   before completing the wave.
-- Run focused repository-native validation for the wave. Complete the unit with
-  exact changed-file attribution and validation evidence before moving on.
+- Resolve and run an explicit checked evidence plan for the wave. Complete the
+  unit with exact changed-file attribution and immutable evidence IDs before
+  moving on.
 - On failed validation, repair within existing authority or revert only the
   audit's own wave. Never discard pre-existing user work.
 
