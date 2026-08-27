@@ -74,6 +74,8 @@ rollover signal.
 - `033-apply-language-quality-live-use-corrections.md` (complete; card 100,
   explicit adapter activation, TypeScript retained findings, and pinned Rust
   forwarder evidence)
+- `034-post-direct-pr-review-findings.md` (complete; card 102, provider-recorded
+  direct review and no chat-only blocking findings)
 
 ## Next Task
 
@@ -108,6 +110,10 @@ Jetstream PR 2 then supplied mixed-repository live-use evidence. Card 100 fixed
 all three blocking findings: full-depth adapter installation, an honest
 TypeScript retained disposition, and agent-owned pinned forwarder scanning.
 Roadmap `g02.033` is complete.
+Roadmap `g02.034` is complete. Card 102 added the fresh-thread direct PR-review
+route: every blocking finding is posted on the provider review surface, with a
+canonical `Changes required` comment when same-identity formal review is
+unavailable. Chat is summary-only.
 
 No blocking roadmap milestone is open. Accept operator-provided live-use
 feedback; Northstar does not dispatch consumer audits.

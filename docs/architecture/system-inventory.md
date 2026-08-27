@@ -29,6 +29,7 @@ skills.
 | root `PAPERCUTS.md` | agent feedback surface | executing agents + repo maintainers | owning repository root | `bundle-docs/papercuts.md`, agent templates, working rules |
 | `.agents.local.env` | local path registry | operator + agents | ignored machine-local paths only | `docs/contracts/002-agent-local-paths.md`, `.agents.local.env.example`, `AGENTS.md` |
 | orchestrator thread | conversational planning and review surface | repo maintainers / operator | active Northstar lane | `skills/northstar/references/modes/orchestrator.md`, active spec/roadmap/contract |
+| direct PR review thread | provider-facing review surface | reviewer + operator | named existing PR | `skills/northstar/references/modes/pr-review.md`, applicable repo authority, provider review record |
 | `worker thread/worktree` | bounded implementation surface | worker agent | assigned ready cards and branch | one committed handoff per worker lane under `docs/handoffs/`, explicit worker-mode metadata, batch cards, tests, commits, startup worktree-safety preflight |
 | PR review boundary | delivery and merge-control surface | orchestrator + operator | worker branch against prepared base | PR metadata, diff, checks, provider review record (formal review or comment), closeout log |
 
@@ -46,6 +47,7 @@ skills.
 | Docs cleanup | `/docs` inventory and classification | reworked canonical docs or operator question | `030-conversational-triage-and-docs-cleanup` | Inspect content and references before any move or removal |
 | Worker execution | explicit worker-mode handoff + startup worktree-safety preflight + ready cards | worker branch/worktree and evidence | `001-working-rules`, `002-agent-local-paths`, active batch cards | Only an orchestrator-dispatched worker uses the harness worktree or the operator-selected `AGENTS_WORKTREE_CONTAINER_DIR` when its starting context is unsuitable |
 | PR review and merge | worker branch/PR | orchestrator verdict + operator-authorised merge | `001-working-rules`, active cards | Review uses diff/check evidence and a provider review record; same-identity GitHub runs use PR comments; merge is separate from PR creation |
+| Direct PR review | operator request + existing PR | provider review record + chat summary | `001-working-rules`, applicable PR refs | Every blocking finding is posted on the PR; same-identity fallback uses one `Changes required` comment; no branch mutation or merge authority |
 | Rust everyday language quality | scoped instructions + Rust catalogue + consumer profile | current changed tranche and closeout evidence | `031-rust-quality-authoring-and-audit`, `004-language-quality-pack` | Compact Rust projection re-enters at task start and batch exit; TypeScript everyday remains unavailable |
 | Explicit language audit and repair | explicit operator request + resolved worktree or repository scope | findings, bounded repairs, deviations, and validation evidence | specs 031-032, `004-language-quality-pack` | Rust and TypeScript use package-specific catalogues, strict profiles, finding-first records, and dirty-state preservation |
 

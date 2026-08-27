@@ -470,6 +470,21 @@ is unavailable. Merge remains a separate action requiring explicit operator
 authorisation. Requested changes return to the same worker branch when possible,
 followed by another review cycle.
 
+### Direct PR review boundary
+
+An explicit operator request to review an existing PR authorizes the review
+thread to post its verdict and review comments on that PR. It does not authorize
+branch edits, commits, pushes, merge, or unrelated provider mutations.
+
+The provider review surface is the durable review record. Every finding that
+blocks merge must be posted there with concrete evidence and a precise changed
+surface. Use a formal changes-requested review when permitted. When the reviewer
+and author share a GitHub identity, post one canonical PR comment headed
+`Changes required` instead. Chat should summarize the posted verdict and must
+not be the only home of a required change. If authentication, permissions, or a
+provider failure prevents posting, report the review as blocked rather than
+claiming a chat-only review is complete.
+
 Northstar does not require live cross-session messaging, provider subagents, or
 hosted coding agents. Those are optional adapters; they must not weaken the
 file-based planning, worktree, PR, and review boundaries.

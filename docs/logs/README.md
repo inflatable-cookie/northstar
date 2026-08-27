@@ -89,3 +89,4 @@ Use logs as the third step in closeout:
 - `2026-08/27-001136-run-rust-v2-production-evidence.md`
 - `2026-08/27-091043-promote-and-distribute-rust-v2.md`
 - `2026-08/27-160408-make-agent-instruction-reviews-intentful.md`
+- `2026-08/27-222245-post-direct-pr-review-findings.md`

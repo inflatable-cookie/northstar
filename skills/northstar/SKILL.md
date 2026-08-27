@@ -1,6 +1,6 @@
 ---
 name: northstar
-description: Northstar docs, plans, and code quality.
+description: Northstar planning, PR review, and code QA.
 ---
 
 # Northstar
@@ -26,6 +26,7 @@ open **one** [`references/modes/`](./references/modes/) file and follow it.
 | Agent instruction review | User asks for a `northstar AGENTS file review`, or to review/optimize `AGENTS.md`/`CLAUDE.md` |
 | Rust everyday authoring | Northstar is requested for ordinary Rust work, or an applicable repository instruction already activates Rust quality |
 | Pre-execution discovery | Readiness mapping, intent rounds, project language, decision prototypes, questionnaires, or reframe |
+| PR review | User asks a thread to review an existing PR |
 | Orchestrator | User wants question-led planning plus a separate worker/PR loop |
 | Docs cleanup | User wants `/docs` files and folders inspected and reworked to fit Northstar |
 | Normalize docs | Bootstrap, migrate, or keep docs spine healthy over time |
@@ -75,6 +76,8 @@ activated, follow the router's lightweight four-command worktree fast path.
   execution.
 - **Pre-execution discovery:** frontier-based intent rounds and bounded
   project-language, prototype, and questionnaire routes; no execution authority.
+- **PR review:** independent review of an existing PR with the verdict and every
+  required change posted on the provider review surface before chat summary.
 - **Research:** promoted decisions in architecture/contracts, not stranded memos.
 - **Rust everyday authoring:** agent-installed activation plus strict,
   profile-resolved guidance for the current Rust task and changed tranche; no

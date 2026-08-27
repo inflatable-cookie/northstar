@@ -159,7 +159,21 @@ requests without that orchestrator/worker/worktree/PR language remain
 
 → [`modes/pre-execution-discovery.md`](./modes/pre-execution-discovery.md)
 
-## 7. Orchestrator thread
+## 7. Direct PR review
+
+Use when the user asks the current thread to review an existing pull request,
+especially when a fresh thread receives only a PR URL or number. This route
+reviews the PR independently and publishes the verdict on the hosting
+provider. Every blocking finding must appear on the PR; chat is only the
+operator summary.
+
+An explicit request to manage the surrounding discovery, planning, worker, or
+closeout loop remains **Orchestrator** mode. A direct review request does not
+activate worker mode or the worker startup preflight.
+
+→ [`modes/pr-review.md`](./modes/pr-review.md)
+
+## 8. Orchestrator thread
 
 Use when the user wants Northstar to own a question-led planning conversation,
 prepare a separate worker thread/worktree, maintain a runway, or review the
@@ -168,7 +182,7 @@ still relays messages between threads.
 
 → [`modes/orchestrator.md`](./modes/orchestrator.md)
 
-## 8. Agent instruction review
+## 9. Agent instruction review
 
 Use when the user explicitly asks for an always-loaded instruction-surface
 review, especially:
@@ -183,7 +197,7 @@ Northstar's own files when the target is a consumer repository.
 
 → [`modes/agent-instruction-review.md`](./modes/agent-instruction-review.md)
 
-## 9. Docs cleanup
+## 10. Docs cleanup
 
 Use when the operator wants an active inventory of files or folders under
 `/docs` that do not fit Northstar, with clear drift reworked into canonical
@@ -200,7 +214,7 @@ destination, ownership, meaning, or deletion consequence is uncertain. Include
 
 → [`modes/cleanup-docs.md`](./modes/cleanup-docs.md)
 
-## 10. Normalize docs posture
+## 11. Normalize docs posture
 
 Use when the job is **repo shape and spine health** (initial or ongoing):
 
@@ -211,14 +225,14 @@ Use when the job is **repo shape and spine health** (initial or ongoing):
 
 → [`modes/normalize-docs.md`](./modes/normalize-docs.md)
 
-## 11. Research
+## 12. Research
 
 Use when **external evidence** must become architecture or contracts before
 roadmap work bets on it.
 
 → [`modes/research.md`](./modes/research.md)
 
-## 12. Recovery
+## 13. Recovery
 
 Use when planning **was valid but state is now untrustworthy**:
 
@@ -231,7 +245,7 @@ If planning coverage is **still missing**, use plan-from-scratch instead.
 → `replan-after-change.md`, `refocus-drifted-project.md`, or
 `sweep-audit-repair.md`
 
-## 13. Planning (default for implicit work)
+## 14. Planning (default for implicit work)
 
 Use when the job is **planning or sequencing** and recovery is not the main
 problem:

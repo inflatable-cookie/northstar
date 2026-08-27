@@ -55,6 +55,8 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02.033` is complete; card 100 applied Jetstream live-use corrections for
   explicit adapter installation, honest TypeScript retained findings, and
   pinned Rust forwarder scanning.
+- `g02.034` is complete; card 102 routes fresh-thread direct PR reviews to the
+  provider surface and forbids chat-only blocking findings.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.

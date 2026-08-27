@@ -98,3 +98,6 @@ Jetstream live-use corrections are complete under `g02.033/100`: explicit
 adapters install at full depth, TypeScript may retain review-required findings
 honestly, and Rust captures pinned `stopslop` forwarder evidence without adding
 repair authority or everyday context.
+Direct PR-review routing is complete under `g02.034/102`: fresh review threads
+publish their verdict and every blocking finding on the provider surface, with
+chat retained as summary only.

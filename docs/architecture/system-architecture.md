@@ -277,6 +277,10 @@ preferred split is:
 
 `operator ↔ orchestrator thread -> canonical plan/runway -> worker thread/worktree -> PR -> orchestrator review -> merge/closeout`
 
+A fresh direct-review thread uses the smaller path:
+
+`operator -> existing PR -> direct review thread -> provider review record`
+
 The orchestrator owns question-led discovery, promoted planning, ready-state,
 launch preparation, and review. Each worker owns only the assigned ready cards in
 its dedicated worktree and branch. Independent roadmap lanes may use parallel
@@ -350,6 +354,9 @@ orchestrator lane when a parent harness already owns the worktree.
   claim. The orchestrator reviews the diff and checks against canonical refs and
   records the verdict in the provider review surface; same-identity GitHub runs
   use a PR comment because formal self-approval is unavailable.
+- A direct PR-review request authorizes review mutations on the named PR only.
+  Every merge-blocking finding is posted on the provider review surface; chat
+  summarizes that record and never becomes the only home of a required change.
 - Merge remains a separate operator-authorized action.
 - Provider-native subagents, session messaging, and hosted agents are optional
   adapters, not Northstar protocol dependencies.

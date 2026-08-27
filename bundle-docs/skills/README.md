@@ -74,7 +74,7 @@ receipts under `.effigy/` plus Cargo build output under
 `rsync -a --delete` from `skills/northstar/` is reserved for local development
 before the change is published. Restart agent sessions after an update.
 
-The current configured development install contains 120 source-identical files.
+The current configured development install contains 121 source-identical files.
 Rust v2 replaces the skill-local Rhai recorder with the Cargo-native engine;
 TypeScript retains its Rhai recorder. This count is evidence for the current
 payload, not a stable public contract.
@@ -171,6 +171,7 @@ compatibility aliases.
 
 | Mode file | Use when |
 | --- | --- |
+| `pr-review.md` | Review an existing PR and post every required change on the provider review surface |
 | `orchestrator.md` | Question-led planning, one pushed worker handoff under `docs/handoffs/`, bounded PR review loop |
 | `cleanup-docs.md` | Inventory `/docs`, rehome clear drift, and disposition triage notes without blind deletion |
 | `normalize-docs.md` | Bootstrap, migrate, or ongoing docs-spine hygiene |
@@ -192,9 +193,9 @@ Templates live under `skills/northstar/assets/templates/`.
 
 ## Activation rules
 
-- **Implicit (auto-invoke):** plan, research, recover, normalize, explicit
-  orchestrator-thread, or long-horizon strategic-planning language in the user
-  message — covered by the `northstar` skill description.
+- **Implicit (auto-invoke):** plan, research, recover, normalize, direct PR
+  review, explicit orchestrator-thread, or long-horizon strategic-planning
+  language in the user message — covered by the `northstar` skill description.
 - **Handoff:** only when the user clearly wants a continuation brief or fresh
   thread. The router and handoff mode forbid compaction-only or bare `continue`.
 - **Rust everyday authoring:** only when applicable repository instructions

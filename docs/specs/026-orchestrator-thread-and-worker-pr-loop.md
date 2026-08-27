@@ -3,7 +3,7 @@
 Status: active
 Owner: repo maintainers
 Created: 2026-08-16
-Updated: 2026-08-16
+Updated: 2026-08-27
 Related research: `bundle-docs/research/translation-memos/northstar-orchestrator-thread.md`
 Governing architecture: `docs/architecture/system-architecture.md`
 Governing contracts: `docs/contracts/001-working-rules.md`, `docs/contracts/002-agent-local-paths.md`
@@ -65,6 +65,12 @@ orchestrator must post the verdict as a PR comment instead. A review comment is
 canonical review evidence in that case. Merge remains a separate,
 operator-authorized action.
 
+A fresh thread asked only to review an existing PR enters the same review
+boundary directly. It does not reconstruct or take ownership of the surrounding
+orchestrator/worker lane. The explicit review request authorizes posting the
+review on the named PR, and every merge-blocking finding must be posted there
+before chat summarizes the result.
+
 ## Goals
 
 - Keep exploratory conversation and implementation context separate while making
@@ -72,6 +78,8 @@ operator-authorized action.
 - Make the worker handoff a single committed, pushed, self-contained file path.
 - Reuse existing Northstar specs, roadmaps, batch cards, logs, and handoff rules.
 - Make worktree, branch, PR, review, stop, and merge boundaries explicit.
+- Give fresh direct-review threads a small route that publishes required changes
+  on the PR instead of leaving them only in chat.
 - Route model effort by role and risk without hard-coding provider model IDs.
 - Preserve a provider-neutral protocol while allowing Codex, Claude Code, or
   OpenCode adapters.
@@ -227,18 +235,19 @@ frontmatter must include `handoff_mode: worker-pr-loop`,
 
 ## Review protocol
 
-The orchestrator must review from the PR and canonical refs, not only from the
-worker's report:
+The orchestrator, or a fresh thread using direct PR-review mode, must review
+from the PR and canonical refs, not only from the worker's report:
 
 1. inspect PR metadata, commits, changed files, and checks;
 2. compare implementation to the active spec, milestone, cards, and contracts;
 3. check that out-of-scope files, hidden planning decisions, and missing tests are
    not smuggled into the diff;
 4. run or inspect the relevant validation independently where practical;
-5. record an evidence-backed verdict in the hosting provider's review surface;
+5. record an evidence-backed verdict in the hosting provider's review surface,
+   with every merge-blocking finding posted there rather than only in chat;
    when formal approval is unavailable because the orchestrator and worker share
-   a GitHub identity, post the verdict as a PR comment and treat that comment as
-   the canonical review record;
+   a GitHub identity, post a canonical `Changes required` PR comment for blocking
+   findings and treat that comment as the review record;
 6. merge only when checks and review are satisfactory and the operator has
    authorised the merge action;
 7. after merge, update roadmap/card/log/currentness surfaces and identify the next

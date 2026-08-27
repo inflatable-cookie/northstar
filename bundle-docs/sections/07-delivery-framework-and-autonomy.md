@@ -534,6 +534,28 @@ is already defined and permitted.
 They also should not have to re-invent the lane shape after every completed
 card because planning failed to leave a longer-horizon runway.
 
+## Direct PR review boundary
+
+When an operator asks a thread to review an existing PR, the review is not
+complete until its verdict is recorded on the hosting provider. That request
+authorizes only review mutations on the named PR: a formal review, inline review
+comments, or a top-level fallback comment. It does not authorize branch edits,
+commits, pushes, merge, or unrelated provider changes.
+
+Inspect the PR metadata, commits, changed files, diff, existing discussion, and
+checks against the applicable repository instructions and canonical refs. Every
+finding that blocks merge must appear on the provider review surface with its
+impact, evidence, precise path/line or changed surface, and resolution
+condition. Prefer one coherent changes-requested review. When reviewer and
+author share a GitHub identity and formal changes-requested review is blocked,
+post one canonical PR comment headed `Changes required` containing every
+blocking finding.
+
+Chat reports the verdict, finding count, and review link. It must not introduce
+a required change that is absent from the PR. Authentication, permission, or
+provider failure leaves the review blocked; it is not permission to claim a
+chat-only review as complete.
+
 ## Stop conditions
 
 Execution must stop and return to planning or operator review when:

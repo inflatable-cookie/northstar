@@ -170,6 +170,17 @@ informal habits.
 - Set a local upper bound for uninterrupted runs, such as a card limit or time
   limit, so autonomy remains bounded.
 
+### Direct PR review boundary
+
+- An explicit request to review an existing PR authorizes posting the review
+  and review comments on that PR, but not editing its branch or merging it.
+- Put every merge-blocking finding on the provider review surface with concrete
+  evidence and a precise changed surface. Chat is only the summary.
+- Request changes formally when permitted. If same-identity review is blocked,
+  post one canonical PR comment headed `Changes required` instead.
+- Treat authentication, permission, or posting failure as a blocked review; do
+  not claim a chat-only review is complete.
+
 ### Automation runtime policy
 
 - Prefer `effigy` when it already covers the repo operation.
