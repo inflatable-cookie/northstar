@@ -88,7 +88,7 @@ Use this when you need to programmatically pick a task to run or feed
 results into another tool.
 
 ```bash
-effigy --json tasks | jq -r '.result.payload.tasks[].name'
+effigy --json tasks | jq -r '.result.catalog_tasks[].task'
 ```
 
 Use this when another tool or agent step needs task inventory in a stable JSON

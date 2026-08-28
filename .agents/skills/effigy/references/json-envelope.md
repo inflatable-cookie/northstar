@@ -66,7 +66,7 @@ These commands produce stable JSON payloads suitable for agents to consume:
 **Pull all task names:**
 
 ```bash
-effigy --json tasks | jq -r '.result.payload.tasks[].name'
+effigy --json tasks | jq -r '.result.catalog_tasks[].task'
 ```
 
 **Find all failing doctor checks:**
