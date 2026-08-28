@@ -38,9 +38,9 @@ that worktree before the worker starts, the current launch context is authoritat
 even if the harness-generated path or branch differs from a handoff placeholder;
 the worker reuses it rather than creating a second worktree. The orchestrator has
 already committed and pushed the planning artifacts and one concrete worker
-handoff under `docs/handoffs/` per worker. The worker receives only the
-repository-relative path to that handoff; the file contains the complete worker
-instructions and canonical references. The worker owns only the ready cards
+handoff under `docs/handoffs/` per worker. The worker receives the absolute path to that
+handoff; the file contains the complete worker instructions, canonical
+references, and required sibling worktree links. The worker owns only the ready cards
 named in that file. At startup, it quickly verifies that its current context is
 a clean, dedicated, non-`main` registered worktree. If the harness did not
 provide one, or the context is `main`, dirty, unregistered, or otherwise
@@ -160,7 +160,8 @@ The orchestrator/worker boundary is a strict sequence:
    contract is satisfied. Do not try to include any handoff commit's own SHA in
    its handoff file; that would be self-referential because changing the file
    changes the commit SHA;
-9. give each worker thread only its own repository-relative handoff path.
+9. give the operator each worker's handoff as an absolute path, and list
+   required sibling worktree links (or `none`) inside the file.
 
 The worker must not require a separately copied prompt, transcript, or list of
 canonical refs. The handoff may point at canonical repository files, but it is
@@ -187,13 +188,15 @@ each worker starts. Parallel lanes therefore receive separate handoff files;
 workers must not share an ambiguous combined brief. Each handoff must preserve
 the seven core handoff sections, add the worker/PR flow inside
 `## Completion Protocol`, be committed to `main`, pushed, and verified against
-`origin/main`. Each worker receives only its own repository-relative path.
+`origin/main`. Each worker is dispatched with that file's absolute path.
 
 The file must contain or point to all information required for execution. Its
 frontmatter must include `handoff_mode: worker-pr-loop`,
 `worker_mode: implementation`, and `dispatch_authority: orchestrator`:
 
 - planning base commit, remote-tip verification, worker branch, and worktree command;
+- required sibling worktree links (absolute primary-checkout sources and
+  the link name beside the worktree) or `none`;
 - startup worktree-safety preflight and local-path manual-worktree instructions;
 - active vision/architecture/contract refs;
 - active master spec and roadmap milestone;
@@ -206,10 +209,13 @@ frontmatter must include `handoff_mode: worker-pr-loop`,
 
 ## Worker protocol
 
-1. Read the supplied repository-relative handoff path first and verify its
+1. Read the supplied handoff path first (absolute; a relative path is
+   valid only once the current root is the owning repo) and verify its
    worker-mode metadata. Only then, before broad repo reads, run the startup
    worktree-safety preflight: identify the repository
-   root, current worktree, branch, and `git status --porcelain`.
+   root, current worktree, branch, and `git status --porcelain`. After the
+   worktree is selected, create each required sibling link listed in the
+   handoff, or skip that step when the list is `none`.
 2. If the current context is a clean, dedicated, non-`main` registered worktree,
    use it as the harness-provided worktree even when its generated path or branch
    differs from the handoff; record the actual path/branch and do not create

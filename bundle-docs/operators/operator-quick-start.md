@@ -112,9 +112,9 @@ written there before the agent follows one branch deeply; refresh and cleanup
 should give each note a disposition.
 
 In this mode, the orchestrator commits and pushes the planning state and one
-worker handoff under `docs/handoffs/` before dispatch. The new worker thread
-receives only the repository-relative path to that handoff; no second prompt or
-copied context is needed.
+worker handoff under `docs/handoffs/` before dispatch. The operator receives
+the handoff's absolute path; no second prompt or copied context is needed.
+The handoff lists sibling repos to symlink beside the worker worktree.
 - “Create a handoff for the next thread” -> `northstar` (handoff mode)
 
 Handoff mode writes a plain-spoken note to `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md`

@@ -433,12 +433,18 @@ Before a worker starts:
 - all planning and roadmap artifacts are committed to `main`;
 - one concrete worker handoff for that lane is committed to `main`;
 - `main` is pushed and local `HEAD` equals `origin/main`;
-- the worker receives only that handoff's repository-relative path;
+- the operator receives that handoff's absolute path as the only dispatch
+  artifact;
+- the handoff lists required sibling worktree links (absolute primary
+  checkouts and the link name beside the worktree) or `none`;
 - the worker performs a quick startup preflight before broad reads: repository
   root, current worktree, branch, and `git status --porcelain`;
 - a clean, dedicated, non-`main` registered current worktree supplied by the
   harness is authoritative, even when its generated path or branch differs from
   the handoff; record the actual path/branch and reuse it;
+- after the worktree is selected, create each listed sibling worktree link
+  from the named absolute primary checkout; skip only when the list is
+  `none`; stop if a listed source is missing;
 - only if the current context is `main`, dirty, unregistered, or otherwise
   unsuitable does the worker consider the named handoff worktree and then create
   a unique manual worktree and branch from pushed `origin/main`, recording the

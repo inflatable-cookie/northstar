@@ -265,8 +265,8 @@ Choose one:
 ## Worker startup fast path
 
 This fast path applies **only** to worker mode. Activate worker mode by first
-reading the repository-relative handoff path supplied by the orchestrator and
-confirming its frontmatter declares:
+reading the handoff path supplied by the orchestrator — the operator-facing
+path is always absolute — and confirming its frontmatter declares:
 
 ```yaml
 handoff_mode: worker-pr-loop
@@ -298,8 +298,11 @@ Only a `main`, dirty, unregistered, or otherwise unusable current context may
 proceed to the named handoff worktree and then the manual local-path fallback.
 
 Do not run `effigy tasks`, `effigy doctor`, broad repository reads, or discovery
-commands before this decision. After the worktree is selected, read the handoff
-and continue with the normal mode-specific checks.
+commands before this decision. After the worktree is selected, create any
+**required sibling worktree links** named in the handoff (symlink each listed
+absolute source beside the worktree). If a required source is missing, stop and
+report; do not skip a catalog member. Then read the handoff and continue with
+the normal mode-specific checks.
 
 ## Posture label (all modes except handoff)
 

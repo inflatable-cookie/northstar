@@ -16,7 +16,7 @@ The operator relays worker messages and PR URLs between threads.
 **Manual handoff is the default.** Use subagents, provider-native agents, or
 hosted-agent helpers only when the operator explicitly authorizes them in the
 current conversation. Orchestrator mode alone is not that authorization:
-prepare the repository-relative handoff, give it to the operator, and rely on
+prepare the handoff, give the operator its **absolute path**, and rely on
 the operator to start the worker thread and relay its reports and PR URL.
 
 ## Conversation style
@@ -119,8 +119,11 @@ surfaces.
    mandatory, must be committed and pushed on `main`, and must contain the
    complete worker instructions, refs, runway, planning base verification,
    worktree/branch command, reporting rules, stop conditions, and PR contract.
-   Give each worker thread only its own handoff's repository-relative path. Do
-   not provide a second prompt or require copied context.
+   Give the operator each worker's handoff as an **absolute path**. Do not
+   provide only a repository-relative path, a second prompt, or copied
+   context. The handoff must list required sibling worktree links (or
+   `none`) so worktree initiation can symlink those primary checkouts
+   beside the worker worktree.
 
    Each handoff records the planning base commit from before the handoff was
    created. It must not try to contain the SHA of the commit that contains the
@@ -171,9 +174,11 @@ approved for parallel execution, create one such handoff per lane; never merge
 multiple lane instructions into an ambiguous shared prompt. The handoff records
 the planning base commit from before the handoff was created; it must not contain
 a self-referential hash for the commit that contains the handoff. The operator
-starts each fresh worker thread in its named worktree and gives it only the
-repository-relative path to that handoff. No second prompt, transcript copy, or
-manually pasted references are part of the protocol.
+starts each fresh worker thread in its named worktree and is given the
+handoff's **absolute path**. No second prompt, transcript copy, or
+manually pasted references are part of the protocol. The absolute path names
+the owning repository so dispatch cannot be read as a relative file in a
+sibling checkout.
 
 The file must say, in substance:
 
@@ -188,6 +193,11 @@ The file must say, in substance:
   treat it as the harness-provided worktree. Use it regardless of generated path
   or branch-name differences from the handoff, record the actual path/branch,
   and do not create another worktree;
+- after the worktree is selected, create each **required sibling worktree
+  link** listed in the handoff: symlink the named absolute primary checkout
+  beside the worktree (for example `../underlay`). If a listed source is
+  missing, stop and report. Do not skip a required catalog member. If the
+  list is `none`, skip this step;
 - only if the current context is `main`, dirty, unregistered, or otherwise
   unusable should the worker inspect the named handoff worktree and then use the
   target repo's `.agents.local.env` for a manual fallback. Require
@@ -210,10 +220,10 @@ The file must say, in substance:
 - finish the assigned runway with a pushed branch and a reviewable PR;
 - do not merge or invent a new architecture.
 
-The only external worker handoff is the handoff path, for example:
+The only external worker handoff is the absolute path, for example:
 
 ```text
-Read and follow `docs/handoffs/20260816-143500-soundcheck-worker.md`.
+Read and follow `/Users/tom/Dev/projects/soundcheck/docs/handoffs/20260816-143500-soundcheck-worker.md`.
 ```
 
 ## Model routing
