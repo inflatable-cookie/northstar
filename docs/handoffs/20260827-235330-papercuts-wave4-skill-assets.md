@@ -5,10 +5,10 @@ handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
 handoff: single-file-path-only
-status: ready-to-launch
+status: ready-for-review
 owner: Tom / papercuts orchestrator
 created: 2026-08-27
-updated: 2026-08-27
+updated: 2026-08-28
 handoff_path: /Users/tom/Dev/projects/northstar/docs/handoffs/20260827-235330-papercuts-wave4-skill-assets.md
 base_required: pushed-main
 tags: [coordination, handoff, worker, pr, papercuts]
@@ -43,14 +43,16 @@ before they can filter ownership.
   to that SHA before this handoff was created.
 - **Planning checkout:** clean before this handoff file was created.
 - **Worker mode:** implementation worker dispatched by the orchestrator.
-- **Worker branch:** `worker/papercuts-wave4-skill-assets`
-- **Worker worktree:** launcher first. `.agents.local.env` was absent;
-  ask before creating a manual fallback. Never use `/tmp`.
+- **Worker branch:** `t3code/follow-papercuts-wave-four-handoff` (launcher
+  worktree reused; handoff placeholder `worker/papercuts-wave4-skill-assets`
+  not recreated)
+- **Worker worktree:** `/Users/tom/.t3/worktrees/northstar/t3code-83c09327`
 - **Ready work items, in order:**
-  1. Northstar compile-roadmaps references a missing batch-card template
-  2. Effigy task-inventory JSON example uses a stale payload path — only
-     if that example is in this repo's packaged Effigy/Northstar skill
-     docs; otherwise report the owning repo
+  1. Northstar compile-roadmaps references a missing batch-card template —
+     **done:** shipped under skill assets; README + compile-roadmaps agree
+  2. Effigy task-inventory JSON example uses a stale payload path —
+     **reported:** lives only in vendored `.agents/skills/effigy/` and the
+     upstream installed Effigy skill; not edited here
 - **Out of scope:** editing consumer Underlay docs; changing compile
   semantics beyond pointing at a real template.
 - **Canonical refs:**
@@ -58,10 +60,8 @@ before they can filter ownership.
   `docs/specs/templates/batch-card-template.md`);
   `template-bundle/specs/templates/batch-card-template.md`;
   compile-roadmaps mode.
-- **Required validation:** the installed/packaged path compile-roadmaps
-  actually reads exists; README and mode agree. Skill JSON example, if
-  touched, uses `.result.catalog_tasks[]` (or the live schema).
-- **PR URL:** pending
+- **Required validation:** `effigy qa:docs` OK after the asset restore.
+- **PR URL:** pending push
 - **Merge authorisation:** absent; do not merge
 
 ## Boundaries
@@ -77,8 +77,8 @@ before they can filter ownership.
 
 ## Suggested Next Move
 
-Read this file, run the worktree preflight, then diff the assets README
-list against the files on disk.
+Orchestrator review of the PR. Separately refresh the Effigy skill upstream
+so `.result.catalog_tasks[]` replaces `.result.payload.tasks[]`.
 
 ## Completion Protocol
 
@@ -105,3 +105,13 @@ Awaiting orchestrator review. Merge is operator-authorised only.
 
 If the template already exists at the live compile-roadmaps path, close
 with evidence instead of duplicating it.
+
+### Worker evidence
+
+- Restored
+  `skills/northstar/assets/templates/docs/specs/templates/batch-card-template.md`
+  from `template-bundle/specs/templates/batch-card-template.md`.
+- Pointed assets README and compile-roadmaps at the skill-shipped path.
+- Did not edit `.agents/skills/effigy/`; live schema confirmed
+  `.result.catalog_tasks` (payload null).
+- `effigy qa:docs` passed.

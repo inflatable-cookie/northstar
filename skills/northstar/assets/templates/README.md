@@ -31,7 +31,12 @@ invariants, sharp edges, and completion lens; remove the comments. Do not ship
 the generic prompts as if they were project guidance, and do not erase an
 existing useful project voice when merging the Northstar boundaries.
 
-For stricter repos, also copy the bundle's working-rules and specs surfaces:
+For stricter repos, also copy the bundle's working-rules and specs surfaces
+from a Northstar source checkout's `template-bundle/`. When only this installed
+skill is available, compile-roadmaps and batch-card authoring can use the
+shipped copy at
+`assets/templates/docs/specs/templates/batch-card-template.md` (consumer
+destination: `docs/specs/templates/batch-card-template.md`).
 
 - `docs/contracts/001-working-rules.md`
 - `docs/specs/README.md`

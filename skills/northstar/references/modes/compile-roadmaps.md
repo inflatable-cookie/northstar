@@ -41,8 +41,11 @@ one-card-at-a-time improvisation.
    - the next few meaningful batches or milestone transitions beyond it
    - the next planning checkpoint where strategy or intent may need review
 10. For batch-card fields and ready-state checks, follow the target repo's
-   `docs/contracts/001-working-rules.md` and installed batch-card template.
-   When working in the Northstar source repo, expanded doctrine lives at
+   `docs/contracts/001-working-rules.md` and installed batch-card template
+   (`docs/specs/templates/batch-card-template.md`, or the skill-shipped copy
+   at `assets/templates/docs/specs/templates/batch-card-template.md` when the
+   consumer path is not yet installed). When working in the Northstar source
+   repo, expanded doctrine lives at
    `bundle-docs/sections/07-delivery-framework-and-autonomy.md` and maps
    through `bundle-docs/protocol-kernel.md`. Do not invent a divergent
    checklist when those source-repo surfaces are absent.
