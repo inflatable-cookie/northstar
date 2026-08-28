@@ -61,7 +61,7 @@ before they can filter ownership.
   `template-bundle/specs/templates/batch-card-template.md`;
   compile-roadmaps mode.
 - **Required validation:** `effigy qa:docs` OK after the asset restore.
-- **PR URL:** pending push
+- **PR URL:** https://github.com/inflatable-cookie/northstar/pull/6
 - **Merge authorisation:** absent; do not merge
 
 ## Boundaries
