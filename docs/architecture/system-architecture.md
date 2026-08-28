@@ -296,7 +296,7 @@ The durable boundary is the repository: architecture, contracts, specs, roadmap
 cards, one committed worker handoff per worker lane under `docs/handoffs/`, pushed
 `main`, commits, validation, and PR review. Private model conversation is not an
 authority surface. A worker launch is valid only after the planning checkout has
-published `main` and the operator has a repository-relative handoff path to give
+published `main` and the operator has the handoff's absolute path to give
 the new thread. The handoff must declare `handoff_mode: worker-pr-loop`,
 `worker_mode: implementation`, and `dispatch_authority: orchestrator`; those
 fields activate worker mode. Only then does the worker run a quick startup
@@ -339,8 +339,11 @@ orchestrator lane when a parent harness already owns the worktree.
 - Parallel worker lanes are allowed only when their scopes, dependencies, and
   authority decisions are independent; otherwise the orchestrator keeps the run
   serial and records the reason.
-- Each worker handoff is exactly one repository-relative path; no second prompt or
-  copied private context is required.
+- Each worker handoff is exactly one absolute path; no second prompt or
+  copied private context is required. The committed `HEAD` copy is
+  canonical before any sibling-path mutation. The file lists required
+  sibling worktree links or `none`; setup is create-if-absent,
+  reuse-if-already-correct, stop-on-conflict.
 - A worker must quickly verify that its current context is a clean, dedicated,
   non-`main` registered worktree before broad reads or edits. If so, it reuses
   that launcher-provided worktree regardless of handoff path/branch placeholders.

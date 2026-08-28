@@ -76,9 +76,10 @@ choice has not been made yet.”
 ## Worker handoffs
 
 The orchestrator/worktree flow reuses this exact writing flow. It uses the
-worker extension template, writes the file under `docs/handoffs/`, and gives the
-new thread only the repository-relative path to that file after the prepared
-`main` branch has been committed and pushed.
+worker extension template, writes the file under `docs/handoffs/` of the owning
+repo, and gives the operator the **absolute path** to that file after the
+prepared `main` branch has been committed and pushed. Do not dispatch with only
+a repository-relative path; that is how a worker starts in the wrong repo.
 
 The worker extension keeps the same friendly core sections, then adds inside
 `## Completion Protocol`:

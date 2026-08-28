@@ -38,9 +38,9 @@ that worktree before the worker starts, the current launch context is authoritat
 even if the harness-generated path or branch differs from a handoff placeholder;
 the worker reuses it rather than creating a second worktree. The orchestrator has
 already committed and pushed the planning artifacts and one concrete worker
-handoff under `docs/handoffs/` per worker. The worker receives only the
-repository-relative path to that handoff; the file contains the complete worker
-instructions and canonical references. The worker owns only the ready cards
+handoff under `docs/handoffs/` per worker. The worker receives the absolute path to that
+handoff; the file contains the complete worker instructions, canonical
+references, and required sibling worktree links. The worker owns only the ready cards
 named in that file. At startup, it quickly verifies that its current context is
 a clean, dedicated, non-`main` registered worktree. If the harness did not
 provide one, or the context is `main`, dirty, unregistered, or otherwise
@@ -160,7 +160,8 @@ The orchestrator/worker boundary is a strict sequence:
    contract is satisfied. Do not try to include any handoff commit's own SHA in
    its handoff file; that would be self-referential because changing the file
    changes the commit SHA;
-9. give each worker thread only its own repository-relative handoff path.
+9. give the operator each worker's handoff as an absolute path, and list
+   required sibling worktree links (or `none`) inside the file.
 
 The worker must not require a separately copied prompt, transcript, or list of
 canonical refs. The handoff may point at canonical repository files, but it is
@@ -176,8 +177,11 @@ unique manual worktree and branch under that container from pushed `origin/main`
 records the actual path and branch, and continues only there. A dirty original
 checkout is never cleaned, reset, or discarded; a dirty or `main` launcher
 checkout is reported rather than duplicated. From the selected worktree, the worker then
-confirms the recorded planning base is an ancestor of `HEAD` and the handoff
-file exists at `HEAD`.
+confirms `HEAD == origin/main`, the recorded planning base is an ancestor of
+`HEAD`, and the repository-relative handoff exists in that `HEAD`. The
+tracked blob is canonical; if the absolute dispatch file differs, the worker
+stops. Only then does it create required sibling links (create when
+absent, reuse a correct symlink, stop on conflict, never overwrite).
 
 ## Required per-worker handoff
 
@@ -187,13 +191,15 @@ each worker starts. Parallel lanes therefore receive separate handoff files;
 workers must not share an ambiguous combined brief. Each handoff must preserve
 the seven core handoff sections, add the worker/PR flow inside
 `## Completion Protocol`, be committed to `main`, pushed, and verified against
-`origin/main`. Each worker receives only its own repository-relative path.
+`origin/main`. Each worker is dispatched with that file's absolute path.
 
 The file must contain or point to all information required for execution. Its
 frontmatter must include `handoff_mode: worker-pr-loop`,
 `worker_mode: implementation`, and `dispatch_authority: orchestrator`:
 
 - planning base commit, remote-tip verification, worker branch, and worktree command;
+- required sibling worktree links (absolute primary-checkout sources and
+  the link name beside the worktree) or `none`;
 - startup worktree-safety preflight and local-path manual-worktree instructions;
 - active vision/architecture/contract refs;
 - active master spec and roadmap milestone;
@@ -206,7 +212,8 @@ frontmatter must include `handoff_mode: worker-pr-loop`,
 
 ## Worker protocol
 
-1. Read the supplied repository-relative handoff path first and verify its
+1. Read the supplied handoff path first (absolute; a relative path is
+   valid only once the current root is the owning repo) and verify its
    worker-mode metadata. Only then, before broad repo reads, run the startup
    worktree-safety preflight: identify the repository
    root, current worktree, branch, and `git status --porcelain`.
@@ -217,8 +224,14 @@ frontmatter must include `handoff_mode: worker-pr-loop`,
    the worker consider the named worktree and then create a manual worktree and
    branch from pushed `origin/main`. Never clean, reset, or discard a dirty
    checkout; report a dirty or `main` launcher checkout instead of duplicating it.
-3. From the selected worktree, confirm the recorded planning base is an ancestor
-   of `HEAD` and confirm the handoff exists before editing.
+3. From the selected worktree, confirm `HEAD == origin/main`, the recorded
+   planning base is an ancestor of `HEAD`, and the repository-relative handoff
+   exists in that `HEAD`. Load the tracked blob; stop if the absolute dispatch
+   file differs. That `HEAD` copy is canonical. Only then create each required
+   sibling link: canonicalize source and destination; create when absent;
+   reuse only a symlink that already resolves to the declared source; stop
+   on any other existing path; never delete, replace, or overwrite. Skip
+   sibling setup when the list is `none`.
 4. Read the active milestone, every assigned card, and governing refs.
 5. Run the repo's cheap orientation and relevant graph/query commands before code
    changes.

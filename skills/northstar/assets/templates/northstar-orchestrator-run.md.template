@@ -50,6 +50,13 @@ Here is the state the worker is inheriting:
   unique manual worktree/branch under that container from `origin/main`. Ask the
   operator first if the file or key is absent; never use `/tmp`, `TMPDIR`, or a
   guessed path.
+- **Required sibling worktree links:** `{{SIBLING_LINKS_OR_NONE}}`
+  List each required sibling as: link name, absolute primary-checkout
+  source, path beside this worktree (usually `../<repo>`). Write `none`
+  when the worktree has no sibling catalog or `file:` deps. Create when
+  absent; reuse only a symlink that already resolves to the declared
+  source; stop on any other existing path; never overwrite. Do not skip
+  a listed catalog member.
 - **Active spec lane:** `{{SPEC_REF}}`
 - **Roadmap milestone:** `{{ROADMAP_REF}}`
 - **Ready cards, in order:** `{{CARD_REFS}}`
@@ -138,12 +145,25 @@ natural and useful; you do not need to repeat this whole file back.
    or discard the original checkout's dirty state. If the launcher supplied a
    dirty or `main` worktree, stop and report it instead of silently creating a
    second worktree.
-4. From the selected worktree, confirm `git rev-parse HEAD` equals
+4. From the selected worktree, record this handoff's repository-relative
+   path (`docs/handoffs/...`). Confirm `git rev-parse HEAD` equals
    `git rev-parse origin/main`, confirm
-   `git merge-base --is-ancestor {{BASE_REF}} HEAD` succeeds, and confirm this
-   handoff file exists in the selected `HEAD`.
-5. Read the active milestone, assigned cards, `AGENTS.md`, and canonical refs.
-6. Run the repo's cheap orientation checks and record what you actually ran.
+   `git merge-base --is-ancestor {{BASE_REF}} HEAD` succeeds, and confirm
+   that relative path exists in the selected `HEAD`. Load the tracked
+   handoff with `git show HEAD:<relative-path>`. If the absolute dispatch
+   file is readable and differs from that tracked blob, stop and report.
+   The committed `HEAD` copy is the canonical execution input.
+5. After that check, create each required sibling worktree link from the
+   tracked handoff. Canonicalize source and destination first. Source
+   must exist as a directory. Destination is beside this worktree
+   (usually `../<repo>`). Create the symlink when the destination is
+   absent. Reuse it only when an existing symlink already resolves to
+   the declared source. Stop on a mismatched symlink, directory, or
+   file. Never delete, replace, or overwrite an existing path. If a
+   listed source is missing, stop and report. Do not skip a catalog
+   member. Skip this step only when the list is `none`.
+6. Read the active milestone, assigned cards, `AGENTS.md`, and canonical refs.
+7. Run the repo's cheap orientation checks and record what you actually ran.
 
 ### While you work
 

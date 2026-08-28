@@ -82,7 +82,16 @@ must now”, or “completion authority is granted”. Prefer “Start by checki
   - the canonical promoted refs the next thread should trust;
   - the remaining continuation envelope, if another ready card is in-bounds;
   - lane budget or pause signal when the run did not simply continue;
-  - the key files or artifacts involved, using absolute paths for local files.
+  - the key files or artifacts involved, using absolute paths for local files;
+  - for a worker handoff, **required sibling worktree links**: each sibling
+    repo the worktree needs, its absolute primary-checkout source, and the
+    link name beside the worktree (usually `../<repo>`). Write `none` when
+    there are no sibling deps. Do not treat extra-mount skip as covering
+    catalog members. Setup is: canonicalize source and destination; create
+    when absent; reuse only a symlink that already resolves to the declared
+    source; stop on any other existing path; never delete, replace, or
+    overwrite. The committed handoff in the selected `HEAD` is canonical
+    and must be verified before any sibling-path mutation.
 - `Boundaries` includes at least one explicit out-of-scope boundary and any hard
   constraints the next thread must respect.
 - `Important Context` captures roadmap/log lineage, the relationship between
@@ -131,8 +140,10 @@ the slug.
 
 The handoff skill must write the concrete file with `write_file` and verify it
 with `read_file` before reporting success. The final operator-facing response
-must include the absolute path to the created file. A chat summary alone is not
-a handoff.
+must include the **absolute path** to the created file. For a worker handoff
+that is the dispatch path: give the operator that absolute path, not a
+repository-relative path that another checkout could misread. A chat summary
+alone is not a handoff.
 
 ## Northstar alignment
 

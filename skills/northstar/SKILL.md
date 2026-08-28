@@ -40,12 +40,17 @@ When the target is the Northstar source repo, also read
 is not a contract gap by itself.
 
 Worker mode is explicit, not a default startup step. It is active only when an
-orchestrator dispatches a thread with a repository-relative handoff whose
-frontmatter declares `handoff_mode: worker-pr-loop`, `worker_mode: implementation`,
-and `dispatch_authority: orchestrator`. Normal planning, review, discovery,
-readiness, and orchestrator threads do not run a worktree probe or inspect
-`.agents.local.env` merely because worker support exists. Once worker mode is
-activated, follow the router's lightweight four-command worktree fast path.
+orchestrator dispatches a thread with a handoff whose frontmatter declares
+`handoff_mode: worker-pr-loop`, `worker_mode: implementation`, and
+`dispatch_authority: orchestrator`. Tell the operator that handoff's **absolute
+path**; that path is the only dispatch artifact. A repository-relative path is
+valid only after the current root is already the owning repository. Normal
+planning, review, discovery, readiness, and orchestrator threads do not run a
+worktree probe or inspect `.agents.local.env` merely because worker support
+exists. Once worker mode is activated, follow the router's lightweight
+four-command worktree fast path, verify the committed handoff in the selected
+`HEAD` before mutating anything, then create any sibling worktree links the
+tracked handoff lists.
 
 ## Outcomes by mode
 
