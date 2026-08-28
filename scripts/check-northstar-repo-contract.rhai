@@ -71,4 +71,13 @@ for assertion in contract::forbidden_content() {
     }
 }
 
+for pair in contract::identical_file_pairs() {
+    let canonical = path::join(repo_root, pair[0]);
+    let mirror = path::join(repo_root, pair[1]);
+    let description = pair[2];
+    if fs::sha256(canonical) != fs::sha256(mirror) {
+        throw(description + ": " + pair[0] + " != " + pair[1]);
+    }
+}
+
 log("Northstar repo contract checks: OK");

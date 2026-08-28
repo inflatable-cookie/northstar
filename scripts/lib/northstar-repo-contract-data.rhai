@@ -157,8 +157,20 @@ fn required_files() {
         "skills/northstar/assets/templates/PAPERCUTS.md",
         "skills/northstar/assets/templates/effigy.native.toml.template",
         "skills/northstar/assets/templates/northstar-handoff.md.template",
+        "skills/northstar/assets/templates/docs/specs/templates/batch-card-template.md",
+        "template-bundle/specs/templates/batch-card-template.md",
         "scripts/lib/northstar-repo-contract-data.rhai",
         "scripts/lib/northstar-readiness-map.rhai",
+    ]
+}
+
+fn identical_file_pairs() {
+    [
+        [
+            "template-bundle/specs/templates/batch-card-template.md",
+            "skills/northstar/assets/templates/docs/specs/templates/batch-card-template.md",
+            "skill-shipped batch-card template must match template-bundle canonical copy",
+        ],
     ]
 }
 
@@ -218,6 +230,12 @@ fn required_content() {
         ["template-bundle/specs/templates/batch-card-template.md", "## Continuation Envelope", "batch-card continuation section"],
         ["template-bundle/specs/templates/batch-card-template.md", "## Lane Budget", "batch-card lane-budget section"],
         ["template-bundle/specs/templates/batch-card-template.md", "## Closeout Sequence", "batch-card closeout section"],
+        ["skills/northstar/assets/templates/docs/specs/templates/batch-card-template.md", "## Ready-State Checks", "skill-shipped batch-card ready-state section"],
+        ["skills/northstar/assets/templates/docs/specs/templates/batch-card-template.md", "## Continuation Envelope", "skill-shipped batch-card continuation section"],
+        ["skills/northstar/assets/templates/docs/specs/templates/batch-card-template.md", "## Lane Budget", "skill-shipped batch-card lane-budget section"],
+        ["skills/northstar/assets/templates/docs/specs/templates/batch-card-template.md", "## Closeout Sequence", "skill-shipped batch-card closeout section"],
+        ["skills/northstar/assets/templates/README.md", "assets/templates/docs/specs/templates/batch-card-template.md", "assets README skill-shipped batch-card path"],
+        ["skills/northstar/references/modes/compile-roadmaps.md", "assets/templates/docs/specs/templates/batch-card-template.md", "compile-roadmaps skill-shipped batch-card path"],
         ["template-bundle/roadmaps/templates/roadmap-milestone-template.md", "## Execution Readiness", "roadmap readiness section"],
         ["template-bundle/logs/README.md", "## Closeout rule", "bundle logs closeout rule"],
         ["template-bundle/logs/README.md", "## Continuation note", "bundle logs continuation note"],
