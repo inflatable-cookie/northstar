@@ -10,11 +10,13 @@ Consumer papercuts showed T3 starting the wrong repo from a relative
 This is encoded in Northstar, not T3:
 
 - the operator-facing dispatch path is always the handoff's absolute path;
+- the committed handoff in the selected worktree `HEAD` is canonical and
+  is verified before any sibling-path mutation;
 - each worker handoff lists required sibling worktree links (absolute
   primary checkouts and the link name beside the worktree) or `none`;
-- after the worker accepts the worktree, it creates those symlinks and
-  stops if a listed source is missing.
+- sibling setup is create-if-absent, reuse-if-already-correct, stop-on-
+  conflict; never delete or overwrite.
 
 Changed: skill `SKILL.md`, router, handoff mode, handoff contract,
 orchestrator mode, worker handoff template, contract 001, spec 026,
-system architecture, operator quick start.
+system architecture, operator quick start, promoted orchestrator memo.

@@ -442,9 +442,15 @@ Before a worker starts:
 - a clean, dedicated, non-`main` registered current worktree supplied by the
   harness is authoritative, even when its generated path or branch differs from
   the handoff; record the actual path/branch and reuse it;
-- after the worktree is selected, create each listed sibling worktree link
-  from the named absolute primary checkout; skip only when the list is
-  `none`; stop if a listed source is missing;
+- after the worktree is selected, confirm `HEAD == origin/main`, the
+  planning base is an ancestor, and the repository-relative handoff exists
+  in that `HEAD`; load the tracked blob and stop if the absolute dispatch
+  file differs;
+- then create each listed sibling worktree link: canonicalize source and
+  destination; create when absent; reuse only a symlink that already
+  resolves to the declared source; stop on any other existing path; never
+  delete, replace, or overwrite; skip only when the list is `none`; stop
+  if a listed source is missing;
 - only if the current context is `main`, dirty, unregistered, or otherwise
   unsuitable does the worker consider the named handoff worktree and then create
   a unique manual worktree and branch from pushed `origin/main`, recording the

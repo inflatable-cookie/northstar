@@ -298,11 +298,16 @@ Only a `main`, dirty, unregistered, or otherwise unusable current context may
 proceed to the named handoff worktree and then the manual local-path fallback.
 
 Do not run `effigy tasks`, `effigy doctor`, broad repository reads, or discovery
-commands before this decision. After the worktree is selected, create any
-**required sibling worktree links** named in the handoff (symlink each listed
-absolute source beside the worktree). If a required source is missing, stop and
-report; do not skip a catalog member. Then read the handoff and continue with
-the normal mode-specific checks.
+commands before this decision. After the worktree is selected, confirm
+`HEAD == origin/main`, the planning base is an ancestor, and the
+repository-relative handoff exists in that `HEAD`. Load the tracked handoff
+from `HEAD`; if the absolute dispatch file differs, stop. That `HEAD` copy is
+canonical. Only then create **required sibling worktree links** from it:
+canonicalize source and destination; create when absent; reuse only a symlink
+that already resolves to the declared source; stop on any other existing path;
+never delete, replace, or overwrite. If a listed source is missing, stop and
+report; do not skip a catalog member. Then continue with the normal
+mode-specific checks.
 
 ## Posture label (all modes except handoff)
 

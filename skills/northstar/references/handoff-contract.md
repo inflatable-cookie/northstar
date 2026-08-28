@@ -87,7 +87,11 @@ must now”, or “completion authority is granted”. Prefer “Start by checki
     repo the worktree needs, its absolute primary-checkout source, and the
     link name beside the worktree (usually `../<repo>`). Write `none` when
     there are no sibling deps. Do not treat extra-mount skip as covering
-    catalog members.
+    catalog members. Setup is: canonicalize source and destination; create
+    when absent; reuse only a symlink that already resolves to the declared
+    source; stop on any other existing path; never delete, replace, or
+    overwrite. The committed handoff in the selected `HEAD` is canonical
+    and must be verified before any sibling-path mutation.
 - `Boundaries` includes at least one explicit out-of-scope boundary and any hard
   constraints the next thread must respect.
 - `Important Context` captures roadmap/log lineage, the relationship between

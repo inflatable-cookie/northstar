@@ -48,8 +48,9 @@ valid only after the current root is already the owning repository. Normal
 planning, review, discovery, readiness, and orchestrator threads do not run a
 worktree probe or inspect `.agents.local.env` merely because worker support
 exists. Once worker mode is activated, follow the router's lightweight
-four-command worktree fast path, then create any sibling worktree links the
-handoff lists.
+four-command worktree fast path, verify the committed handoff in the selected
+`HEAD` before mutating anything, then create any sibling worktree links the
+tracked handoff lists.
 
 ## Outcomes by mode
 

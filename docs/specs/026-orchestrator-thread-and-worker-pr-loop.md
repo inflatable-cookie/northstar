@@ -177,8 +177,11 @@ unique manual worktree and branch under that container from pushed `origin/main`
 records the actual path and branch, and continues only there. A dirty original
 checkout is never cleaned, reset, or discarded; a dirty or `main` launcher
 checkout is reported rather than duplicated. From the selected worktree, the worker then
-confirms the recorded planning base is an ancestor of `HEAD` and the handoff
-file exists at `HEAD`.
+confirms `HEAD == origin/main`, the recorded planning base is an ancestor of
+`HEAD`, and the repository-relative handoff exists in that `HEAD`. The
+tracked blob is canonical; if the absolute dispatch file differs, the worker
+stops. Only then does it create required sibling links (create when
+absent, reuse a correct symlink, stop on conflict, never overwrite).
 
 ## Required per-worker handoff
 
@@ -213,9 +216,7 @@ frontmatter must include `handoff_mode: worker-pr-loop`,
    valid only once the current root is the owning repo) and verify its
    worker-mode metadata. Only then, before broad repo reads, run the startup
    worktree-safety preflight: identify the repository
-   root, current worktree, branch, and `git status --porcelain`. After the
-   worktree is selected, create each required sibling link listed in the
-   handoff, or skip that step when the list is `none`.
+   root, current worktree, branch, and `git status --porcelain`.
 2. If the current context is a clean, dedicated, non-`main` registered worktree,
    use it as the harness-provided worktree even when its generated path or branch
    differs from the handoff; record the actual path/branch and do not create
@@ -223,8 +224,14 @@ frontmatter must include `handoff_mode: worker-pr-loop`,
    the worker consider the named worktree and then create a manual worktree and
    branch from pushed `origin/main`. Never clean, reset, or discard a dirty
    checkout; report a dirty or `main` launcher checkout instead of duplicating it.
-3. From the selected worktree, confirm the recorded planning base is an ancestor
-   of `HEAD` and confirm the handoff exists before editing.
+3. From the selected worktree, confirm `HEAD == origin/main`, the recorded
+   planning base is an ancestor of `HEAD`, and the repository-relative handoff
+   exists in that `HEAD`. Load the tracked blob; stop if the absolute dispatch
+   file differs. That `HEAD` copy is canonical. Only then create each required
+   sibling link: canonicalize source and destination; create when absent;
+   reuse only a symlink that already resolves to the declared source; stop
+   on any other existing path; never delete, replace, or overwrite. Skip
+   sibling setup when the list is `none`.
 4. Read the active milestone, every assigned card, and governing refs.
 5. Run the repo's cheap orientation and relevant graph/query commands before code
    changes.

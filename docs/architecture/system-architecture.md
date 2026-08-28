@@ -340,8 +340,10 @@ orchestrator lane when a parent harness already owns the worktree.
   authority decisions are independent; otherwise the orchestrator keeps the run
   serial and records the reason.
 - Each worker handoff is exactly one absolute path; no second prompt or
-  copied private context is required. The file lists required sibling
-  worktree links or `none`.
+  copied private context is required. The committed `HEAD` copy is
+  canonical before any sibling-path mutation. The file lists required
+  sibling worktree links or `none`; setup is create-if-absent,
+  reuse-if-already-correct, stop-on-conflict.
 - A worker must quickly verify that its current context is a clean, dedicated,
   non-`main` registered worktree before broad reads or edits. If so, it reuses
   that launcher-provided worktree regardless of handoff path/branch placeholders.

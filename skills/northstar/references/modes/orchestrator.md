@@ -193,11 +193,6 @@ The file must say, in substance:
   treat it as the harness-provided worktree. Use it regardless of generated path
   or branch-name differences from the handoff, record the actual path/branch,
   and do not create another worktree;
-- after the worktree is selected, create each **required sibling worktree
-  link** listed in the handoff: symlink the named absolute primary checkout
-  beside the worktree (for example `../underlay`). If a listed source is
-  missing, stop and report. Do not skip a required catalog member. If the
-  list is `none`, skip this step;
 - only if the current context is `main`, dirty, unregistered, or otherwise
   unusable should the worker inspect the named handoff worktree and then use the
   target repo's `.agents.local.env` for a manual fallback. Require
@@ -208,9 +203,18 @@ The file must say, in substance:
   commands before this worktree decision;
 - never clean, reset, or discard a dirty checkout while creating the fallback;
 - run `git fetch origin`, confirm `HEAD == origin/main`, confirm the recorded
-  planning base is an ancestor of `HEAD`, and confirm this handoff file exists;
-- read this file first; all canonical refs and instructions needed for the run
-  are named inside it;
+  planning base is an ancestor of `HEAD`, and confirm the repository-relative
+  handoff exists in that `HEAD`. Load the tracked blob; if the absolute
+  dispatch file differs, stop. The committed `HEAD` copy is canonical;
+- after that check, create each **required sibling worktree link** from the
+  tracked handoff. Canonicalize source and destination. Create when the
+  destination is absent. Reuse only when an existing symlink resolves to the
+  declared source. Stop on a mismatched symlink, directory, or file. Never
+  delete, replace, or overwrite. If a listed source is missing, stop and
+  report. Do not skip a required catalog member. If the list is `none`, skip
+  this step;
+- continue from the tracked handoff; all canonical refs and instructions needed
+  for the run are named inside it;
 - execute only the ordered ready cards;
 - report meaningful chunks through the operator with changed files, validation,
   remaining cards, and blockers;
