@@ -17,13 +17,13 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
   and pointing the README at that path; affected surfaces are skill assets,
   compile-roadmaps consumers, and template-bundle parity.
 
-- **2026-08-28 — vendored Effigy skill uses stale tasks JSON path:** examples
-  query `.result.payload.tasks[]` while live `effigy --json tasks` exposes
-  `.result.catalog_tasks[]`; impact is failed machine-readable task inventory
-  before ownership filtering; plausible fix is upstream Effigy skill refresh
-  (also present in the installed Effigy package); do not edit the vendored
-  copy here as the source of truth; affected surfaces are
-  `.agents/skills/effigy/SKILL.md` and its `references/` jq examples.
+- **2026-08-28 — vendored Effigy skill uses stale tasks JSON path
+  (resolved):** examples queried `.result.payload.tasks[]` while live
+  `effigy --json tasks` exposes `.result.catalog_tasks[]`; impact was failed
+  machine-readable task inventory before ownership filtering; fixed by
+  copying Effigy PR 49 (`552ef1b93283`) jq examples to
+  `.result.catalog_tasks[].task` in `.agents/skills/effigy/SKILL.md` and
+  `references/`; affected surfaces are the vendored Effigy skill examples.
 
 - **2026-08-27 — install parity counted the Rust tool's build cache (resolved):**
   agent-owned Cargo bootstrap can leave `tools/rust-quality/target/` inside an

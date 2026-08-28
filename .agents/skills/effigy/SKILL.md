@@ -121,7 +121,7 @@ Returns `effigy.command.v1` with command payload in `result` (or `error.details`
 lines — not the one-shot envelope.
 
 ```bash
-effigy --json tasks | jq -r '.result.payload.tasks[].name'
+effigy --json tasks | jq -r '.result.catalog_tasks[].task'
 ```
 
 Details: `references/json-envelope.md`.
