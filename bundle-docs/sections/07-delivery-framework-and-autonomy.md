@@ -1,7 +1,7 @@
 # 07 Delivery Framework and Autonomy
 
 Status: active
-Updated: 2026-05-19
+Updated: 2026-08-29
 
 ## Why this section matters now
 
@@ -365,6 +365,14 @@ Every ready batch card should define:
 - stop conditions
 - whether the next card should auto-start (default: yes if ready)
 
+For an issue-fix card whose root cause is not yet known, those steps define the
+bounded problem-solving loop, not a guessed patch. The card is ready when it
+states the observed failure, expected behavior, reproduction or acceptance
+evidence, scope boundaries, validation, and stop conditions. It does not need to
+preselect the root cause or exact files to edit. Inside that envelope, the worker
+may reproduce, instrument, diagnose, choose the smallest complete contract-valid repair,
+remove temporary diagnostics, and validate the result.
+
 Batch cards sit inside a larger lane runway.
 They should not be treated as the only visible planning horizon when a lane is
 large enough to justify a master spec and roadmap milestone.
@@ -404,6 +412,28 @@ A short autonomous chain is ready only when:
 - the chain stays inside the project's autonomy envelope
 
 If any of these checks fail, the work is not ready for hands-off execution.
+
+## Issue-fix dispatch rule
+
+Dispatch issue fixes by outcome, not by the first investigative step. When the
+operator reports a defect and asks for a fix, the assigned worker lane includes
+reproduction, diagnosis, implementation, cleanup of temporary instrumentation,
+validation, evidence, and a reviewable PR. Investigation is work inside that
+lane; it is not a completed deliverable by itself.
+
+An orchestrator may dispatch a diagnostics-only lane only when the operator
+explicitly asks for evidence without a fix, or when a named authority, access,
+planning, or safety blocker makes implementation impossible inside the current
+envelope. The handoff must say that the outcome is diagnostic and must not
+present temporary instrumentation or a root-cause report as completion of a fix
+lane.
+
+The worker owns bounded causal and implementation judgment inside a ready fix
+card. It should continue from diagnosis into the smallest complete contract-valid repair
+without asking the operator to approve ordinary code-level choices. It stops
+when the diagnosis reveals a material scope expansion, contract change,
+unresolved product choice, missing authority/access, or validation result that
+changes the plan.
 
 In a strict lane, the normal operator shortcut should be:
 

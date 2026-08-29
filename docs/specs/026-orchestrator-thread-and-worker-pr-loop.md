@@ -3,7 +3,7 @@
 Status: active
 Owner: repo maintainers
 Created: 2026-08-16
-Updated: 2026-08-27
+Updated: 2026-08-29
 Related research: `bundle-docs/research/translation-memos/northstar-orchestrator-thread.md`
 Governing architecture: `docs/architecture/system-architecture.md`
 Governing contracts: `docs/contracts/001-working-rules.md`, `docs/contracts/002-agent-local-paths.md`
@@ -65,6 +65,15 @@ orchestrator must post the verdict as a PR comment instead. A review comment is
 canonical review evidence in that case. Merge remains a separate,
 operator-authorized action.
 
+For a reported defect, the orchestrator dispatches the whole outcome rather
+than a diagnostic phase. The worker owns reproduction, causal investigation,
+temporary instrumentation when useful, the smallest complete contract-valid repair,
+cleanup, validation, evidence, and PR creation inside the named boundaries. The
+handoff does not need to guess the root cause or exact edit before launch. A
+diagnostics-only outcome is valid only when the operator asked for evidence
+without a fix, or when a named authority, access, planning, or safety blocker
+makes implementation unsafe or impossible inside the lane.
+
 A fresh thread asked only to review an existing PR enters the same review
 boundary directly. It does not reconstruct or take ownership of the surrounding
 orchestrator/worker lane. The explicit review request authorizes posting the
@@ -99,7 +108,7 @@ before chat summarizes the result.
 | --- | --- | --- |
 | Operator | answers unresolved questions, starts the worker thread, relays reports/PR URLs, grants merge authority | that one thread can see another thread's private history |
 | Orchestrator | discovery, intent summary, promoted planning, ready runway, per-worker handoff, PR review verdict, closeout | that a worker's narrative substitutes for diff/check evidence |
-| Worker | implementation in its worktree, bounded card execution, tests, commits, evidence, PR creation | new architecture, missing contracts, or scope expansion |
+| Worker | bounded diagnosis and implementation in its worktree, card execution, tests, commits, evidence, PR creation | new architecture, missing contracts, or scope expansion |
 
 ## Parallel lane dispatch
 
@@ -209,6 +218,9 @@ frontmatter must include `handoff_mode: worker-pr-loop`,
 - chunk-reporting cadence and operator relay rule;
 - PR base/head requirements and expected PR body contents;
 - explicit out-of-scope boundaries.
+- for an issue fix, the observed failure, expected behavior, reproduction or
+  acceptance evidence, and authority for the worker to diagnose and implement
+  the smallest complete in-bounds repair without a second dispatch.
 
 ## Worker protocol
 
@@ -235,8 +247,10 @@ frontmatter must include `handoff_mode: worker-pr-loop`,
 4. Read the active milestone, every assigned card, and governing refs.
 5. Run the repo's cheap orientation and relevant graph/query commands before code
    changes.
-6. Execute only ready cards in the stated order. Keep commits and reports aligned
-   to meaningful chunks, not arbitrary model turns.
+6. Execute only ready cards in the stated order. For an issue-fix card, continue
+   from reproduction and diagnosis into the smallest complete in-bounds repair; temporary
+   diagnostics are not completion. Keep commits and reports aligned to
+   meaningful chunks, not arbitrary model turns.
 7. After each chunk, report changed surfaces, validation, remaining cards, and
    blockers for the operator to relay. Do not require live agent-to-agent access.
 8. Stop on a planning gap, contract contradiction, unresolved product choice,
@@ -298,6 +312,8 @@ The initial Northstar dogfood must prove:
 - the worker never edits `main` or discards dirty state while selecting its
   worktree;
 - the worker completes at least one bounded card and reports evidence;
+- an issue-fix handoff carries diagnosis through implementation and does not
+  close on temporary diagnostics or a root-cause report;
 - the worker opens a reviewable PR against the prepared base;
 - the orchestrator can find at least one real issue or explicitly record a clean
   review;
@@ -325,5 +341,6 @@ ergonomics.
 
 ## Next task
 
-Dogfood one low-risk lane with a fresh worker thread, one dedicated worktree, and
-one reviewable PR. Capture the result in a batch log before adding automation.
+Use the next real reported defect as an outcome-scoped dogfood lane. Confirm the
+worker carries diagnosis through the in-bounds fix and capture elapsed time,
+relay burden, and review cycles before adding adapter automation.

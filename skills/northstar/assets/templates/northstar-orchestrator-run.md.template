@@ -79,6 +79,12 @@ Please keep this run inside the named runway:
 
 - **In scope:** `{{ASSIGNED_RUNWAY}}`
 - **Out of scope:** `{{EXPLICIT_OUT_OF_SCOPE_BOUNDARY}}`
+- **Outcome shape:** `{{FIX_OR_DIAGNOSTIC_OUTCOME}}`. For a reported issue fix,
+  this lane owns reproduction, diagnosis, the smallest complete contract-valid repair,
+  cleanup of temporary diagnostics, validation, evidence, and PR creation. Do
+  not stop at instrumentation or a root-cause report. Use `diagnostics-only`
+  only when the operator explicitly requested evidence without a fix or this
+  handoff names a blocker that prevents safe implementation.
 - Do not invent architecture, change contracts, widen the roadmap, or choose an
   unresolved product/API/persistence/security decision.
 - This handoff represents one worker lane. Do not edit another lane's assigned
@@ -169,6 +175,11 @@ natural and useful; you do not need to repeat this whole file back.
 
 - Execute the ready cards in order and keep commits aligned with meaningful
   chunks, not arbitrary model turns.
+- For an issue-fix card, use bounded causal and code-level judgment to reproduce
+  and diagnose the failure, then continue into the smallest in-scope repair.
+  Remove temporary instrumentation before review unless the governing refs
+  explicitly require it as durable observability. Diagnosis alone does not
+  complete a fix lane.
 - After each meaningful chunk, report through the operator with changed files,
   validation actually run, remaining cards, new risks, and blockers.
 - Stop and say so if a contract is missing, intent is ambiguous, scope expands,

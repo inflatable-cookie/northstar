@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-08-19
+Updated: 2026-08-29
 Depends on: docs/architecture/system-architecture.md
 Authority owners: repo maintainers
 Affects: bundle-docs, template-bundle, skills, docs, scripts
@@ -403,8 +403,8 @@ following authority split:
   promoted architecture/contracts, roadmap readiness, worker launch preparation,
   and PR review;
 - the **worker thread** owns implementation only inside its dedicated worktree
-  and branch, the assigned ready cards, tests, commits, evidence, and PR
-  creation;
+  and branch, including bounded diagnosis and implementation judgment inside
+  the assigned ready cards, tests, commits, evidence, and PR creation;
 - the **operator** answers unresolved questions, starts the separate worker
   thread, relays reports and PR URLs, and explicitly authorises merge when that
   action is desired.
@@ -463,6 +463,18 @@ During execution:
 
 - every assigned card is already ready, ordered, and inside the continuation
   envelope;
+- issue-fix dispatches are outcome-scoped: when the operator asks to fix a
+  reported defect, the same worker lane owns reproduction, diagnosis, the
+  smallest complete contract-valid repair, removal of temporary diagnostics, validation,
+  evidence, and PR creation;
+- a fix card may be ready without a known root cause or preselected edit when it
+  defines the observed failure, expected behavior, reproduction or acceptance
+  evidence, scope boundaries, validation, and stop conditions;
+- the orchestrator must not split diagnosis into a separate completed lane or
+  accept temporary instrumentation as the result of a fix dispatch. A
+  diagnostics-only lane requires an explicit operator request for evidence
+  without a fix, or a named authority, access, planning, or safety blocker that
+  makes implementation impossible inside the current envelope;
 - the worker handoff names scope, acceptance, validation, evidence, stop conditions,
   report cadence, and PR base/head expectations;
 - the worker reports after meaningful chunks with changed surfaces, validation,

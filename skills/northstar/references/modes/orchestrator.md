@@ -85,6 +85,10 @@ surfaces.
    Mark a card `ready` only when the existing Northstar rubric is satisfied:
    bounded scope, current governing refs, acceptance, validation, evidence, stop
    conditions, and explicit continuation state.
+   For a reported defect, make the card outcome-scoped. State the observed
+   failure, expected behavior, reproduction or acceptance evidence, boundaries,
+   validation, and stop conditions. Do not require a known root cause or
+   preselect the exact edit: diagnosis is part of the implementation lane.
 6. **Assess parallel lanes before dispatch.** Inspect the active roadmap runway
    for multiple independent, bounded ready lanes that can run at the same time.
    Offer parallel worker-thread prompts when lanes have no shared mutable files,
@@ -216,6 +220,10 @@ The file must say, in substance:
 - continue from the tracked handoff; all canonical refs and instructions needed
   for the run are named inside it;
 - execute only the ordered ready cards;
+- when a card assigns a reported issue fix, own the full reproduce, diagnose,
+  implement, clean up temporary diagnostics, validate, and evidence loop. Use
+  ordinary causal and code-level judgment inside the card's boundaries; do not
+  stop after diagnostics or open a diagnostics-only PR;
 - report meaningful chunks through the operator with changed files, validation,
   remaining cards, and blockers;
 - stop on missing contracts, ambiguous intent, scope expansion, or validation
@@ -229,6 +237,24 @@ The only external worker handoff is the absolute path, for example:
 ```text
 Read and follow `/Users/tom/Dev/projects/soundcheck/docs/handoffs/20260816-143500-soundcheck-worker.md`.
 ```
+
+## Issue-fix dispatch boundary
+
+When the operator reports an issue and asks for a fix, dispatch the whole
+problem as one worker lane. Investigation, temporary instrumentation, and root
+cause analysis are methods inside that lane. Completion means the smallest
+complete contract-valid fix is implemented, temporary diagnostics are removed unless
+the governing refs require durable observability, validation and evidence are
+updated, and the branch is ready for review.
+
+Use a diagnostics-only dispatch only when the operator explicitly requests
+evidence without a fix, or when a named authority, access, planning, or safety
+blocker prevents safe implementation inside the current envelope. Do not turn
+uncertainty about the root cause into a separate PR cycle. The worker may choose
+ordinary investigative and implementation details within the card; it must stop
+when the diagnosis exposes a material scope expansion, contract change,
+unresolved product choice, missing authority/access, or validation result that
+changes the plan.
 
 ## Model routing
 

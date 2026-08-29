@@ -170,6 +170,22 @@ informal habits.
 - Set a local upper bound for uninterrupted runs, such as a card limit or time
   limit, so autonomy remains bounded.
 
+### Issue-fix dispatch
+
+- Dispatch a reported defect as one outcome-scoped lane covering reproduction,
+  diagnosis, the smallest complete contract-valid repair, cleanup of temporary
+  diagnostics, validation, evidence, and a reviewable PR.
+- A fix card may be ready without a known root cause or exact edit when the
+  observed failure, expected behavior, reproduction or acceptance evidence,
+  boundaries, validation, and stop conditions are clear.
+- Let the worker make ordinary causal and code-level choices inside that
+  envelope. Stop only when diagnosis exposes a material scope, contract,
+  product-choice, access, safety, or plan change.
+- Use a diagnostics-only lane only when the operator explicitly asks for
+  evidence without a fix, or a named blocker makes safe implementation
+  impossible. Do not present temporary instrumentation as completion of a fix
+  lane.
+
 ### Direct PR review boundary
 
 - An explicit request to review an existing PR authorizes posting the review
