@@ -217,10 +217,12 @@ The file must say, in substance:
 - do not run `effigy tasks`, `effigy doctor`, broad repository reads, or discovery
   commands before this worktree decision;
 - never clean, reset, or discard a dirty checkout while creating the fallback;
-- run `git fetch origin`, confirm `HEAD == origin/main`, confirm the recorded
-  planning base is an ancestor of `HEAD`, and confirm the repository-relative
-  handoff exists in that `HEAD`. Load the tracked blob; if the absolute
-  dispatch file differs, stop. The committed `HEAD` copy is canonical;
+- run
+  `GIT_SSH_COMMAND="ssh -o ConnectTimeout=10 -o BatchMode=yes" git fetch origin`,
+  confirm `HEAD == origin/main`, confirm the recorded planning base is an
+  ancestor of `HEAD`, and confirm the repository-relative handoff exists in
+  that `HEAD`. Load the tracked blob; if the absolute dispatch file differs,
+  stop. The committed `HEAD` copy is canonical;
 - after that check, create each **required sibling worktree link** from the
   tracked handoff. Canonicalize source and destination. Create when the
   destination is absent. Reuse only when an existing symlink resolves to the

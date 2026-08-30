@@ -7,6 +7,16 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 
 <!-- Keep entries short. Append newest entries at the top. Do not include secrets. -->
 
+- **2026-08-30 — worker preflight `git fetch origin` can hang on SSH
+  (resolved):** a blocked SSH prompt left the worker startup fetch silent for
+  minutes; impact was wedged-looking probes that burned the long command
+  timeout; fixed by wrapping the worker preflight fetch with
+  `GIT_SSH_COMMAND="ssh -o ConnectTimeout=10 -o BatchMode=yes"` in the router
+  fast path, orchestrator mode, and orchestrator-run template; affected
+  surfaces are `skills/northstar/references/router.md`,
+  `skills/northstar/references/modes/orchestrator.md`, and
+  `skills/northstar/assets/templates/northstar-orchestrator-run.md.template`.
+
 - **2026-08-30 — Rust quality setup rejected absolute under-target scope
   (resolved):** `require_relative_scope` only admitted `.` or a relative
   segment path, so an absolute directory that was the target root failed
