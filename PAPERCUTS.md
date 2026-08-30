@@ -16,14 +16,16 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
   `..`, and naming that relative form in usage/errors; affected surface is
   `skills/northstar/scripts/rust-quality-setup.rhai`.
 
-- **2026-08-30 — Effigy `regex::replace` surface signature is reversed:**
-  `effigy rhai surface` documents `regex::replace(value, pattern,
-  replacement)`, but the live host and in-repo callers use
-  `(pattern, value, replacement)`; impact is silent wrong-order calls that
-  return the pattern string instead of transforming the value; plausible fix
-  is to correct the surface catalog string and add a host self-check;
-  affected surfaces are Effigy Rhai surface metadata and any new script that
-  trusts that signature.
+- **2026-08-30 — Effigy `regex::replace` surface signature is reversed
+  (resolved):** `effigy rhai surface` documented
+  `regex::replace(value, pattern, replacement)` while the live host used
+  `(pattern, value, replacement)`; impact was silent wrong-order calls that
+  returned the pattern string instead of transforming the value; fixed in
+  Effigy PR 56 (`13182d2b19eb7ff23f91f2742947bcb0514557c2`), which prints
+  `regex::replace(pattern, value, replacement)` plus the same-order
+  `is_match` / `captures` twins from sibling `effigy rhai surface`;
+  affected surfaces were Effigy Rhai surface metadata and any new script
+  that trusted the old signature.
 
 - **2026-08-28 — skill assets omitted batch-card template (resolved):** assets
   README listed `docs/specs/templates/batch-card-template.md` for stricter
