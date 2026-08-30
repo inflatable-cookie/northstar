@@ -51,10 +51,36 @@ fn discover_named_file(target_root, name) {
     found
 }
 
-fn require_relative_scope(scope) {
+fn strip_trailing_slashes(value) {
+    regex::replace("/+$", value, "")
+}
+
+fn normalize_scope_directory(target_root, scope) {
+    require(type_of(scope) == "string" && scope != "",
+        "scope directory must be repository-relative (. or crates/foo)");
+    require(!scope.contains(".."),
+        "scope directory cannot contain '..'; use repository-relative form (. or crates/foo): " + scope);
+
+    if str::starts_with(scope, "/") {
+        let root = strip_trailing_slashes(target_root);
+        let absolute = strip_trailing_slashes(scope);
+        require(root != "" && absolute != "",
+            "scope directory must be repository-relative (. or crates/foo): " + scope);
+        if absolute == root {
+            return ".";
+        }
+        let prefix = root + "/";
+        require(str::starts_with(absolute, prefix),
+            "scope directory must be under the target root; use repository-relative form (. or crates/foo): " + scope);
+        let relative = regex::replace("^" + regex::escape(prefix), absolute, "");
+        require(relative != "" && regex::is_match("^[A-Za-z0-9._-]+(/[A-Za-z0-9._-]+)*$", relative),
+            "scope directory must be repository-relative (. or crates/foo): " + scope);
+        return relative;
+    }
+
     require(scope == "." || regex::is_match("^[A-Za-z0-9._-]+(/[A-Za-z0-9._-]+)*$", scope),
-        "scope directory must be repository-relative: " + scope);
-    require(!scope.contains(".."), "scope directory cannot contain '..': " + scope);
+        "scope directory must be repository-relative (. or crates/foo): " + scope);
+    scope
 }
 
 fn validate_profile(profile) {
@@ -129,7 +155,7 @@ fn repository_declares_msrv(target_root, manifests, toolchain_paths) {
 
 fn apply_setup(skill_root, target_root, scope) {
     require(fs::is_dir(target_root), "target root is not a directory: " + target_root);
-    require_relative_scope(scope);
+    let scope = normalize_scope_directory(target_root, scope);
     let scope_root = target_root;
     if scope != "." {
         scope_root = path::join(target_root, scope);
@@ -237,7 +263,26 @@ fn self_test(skill_root) {
         "<!-- northstar:rust-quality:start -->\n");
     expect_error("partial activation", || apply_setup(skill_root, broken, "."), "incomplete Rust activation");
 
-    log("Northstar Rust quality setup self-test: OK (install, preserve, idempotency, 2 negative paths)");
+    let absolute_root = fs::make_temp_dir("northstar-rust-quality-setup-absolute-root");
+    fs::create_dir(path::join(absolute_root, "crates/app"));
+    fs::write_file(path::join(absolute_root, "Cargo.toml"),
+        "[package]\nname = \"absolute-root\"\nversion = \"0.1.0\"\nrust-version = \"1.95\"\n");
+    require(normalize_scope_directory(absolute_root, absolute_root) == ".",
+        "absolute target-root scope did not canonicalize to '.'");
+    require(normalize_scope_directory(absolute_root, path::join(absolute_root, "crates/app")) == "crates/app",
+        "absolute under-target scope did not canonicalize to relative form");
+    apply_setup(skill_root, absolute_root, absolute_root);
+    require(fs::read_file(path::join(absolute_root, "AGENTS.md")).contains("<!-- northstar:rust-quality:start -->"),
+        "absolute target-root scope did not install activation");
+
+    expect_error("escaped absolute scope",
+        || normalize_scope_directory(absolute_root, "/tmp/northstar-rust-quality-setup-outside-scope"),
+        "repository-relative form (. or crates/foo)");
+    expect_error("parent scope segment",
+        || normalize_scope_directory(absolute_root, ".."),
+        "repository-relative form (. or crates/foo)");
+
+    log("Northstar Rust quality setup self-test: OK (install, preserve, idempotency, absolute-under-target, 4 negative paths)");
 }
 
 let skill_root = repo_root;
@@ -255,5 +300,5 @@ if args.len() == 1 && args[0] == "self-test" {
     }
     apply_setup(skill_root, target_root, scope);
 } else {
-    throw("usage: rust-quality:setup self-test | apply <target-root> [scope-directory]");
+    throw("usage: rust-quality:setup self-test | apply <target-root> [scope-directory (. or crates/foo)]");
 }

@@ -7,6 +7,24 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 
 <!-- Keep entries short. Append newest entries at the top. Do not include secrets. -->
 
+- **2026-08-30 — Rust quality setup rejected absolute under-target scope
+  (resolved):** `require_relative_scope` only admitted `.` or a relative
+  segment path, so an absolute directory that was the target root failed
+  before profile discovery; impact was that consumers holding an absolute
+  repo path could not start managed Rust setup; fixed by canonicalizing
+  absolute-under-target scopes to `.` / `crates/foo`, rejecting escapes and
+  `..`, and naming that relative form in usage/errors; affected surface is
+  `skills/northstar/scripts/rust-quality-setup.rhai`.
+
+- **2026-08-30 — Effigy `regex::replace` surface signature is reversed:**
+  `effigy rhai surface` documents `regex::replace(value, pattern,
+  replacement)`, but the live host and in-repo callers use
+  `(pattern, value, replacement)`; impact is silent wrong-order calls that
+  return the pattern string instead of transforming the value; plausible fix
+  is to correct the surface catalog string and add a host self-check;
+  affected surfaces are Effigy Rhai surface metadata and any new script that
+  trusts that signature.
+
 - **2026-08-28 — skill assets omitted batch-card template (resolved):** assets
   README listed `docs/specs/templates/batch-card-template.md` for stricter
   installs, but the file lived only under `template-bundle/` and was absent
