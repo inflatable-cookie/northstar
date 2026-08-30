@@ -298,8 +298,9 @@ Only a `main`, dirty, unregistered, or otherwise unusable current context may
 proceed to the named handoff worktree and then the manual local-path fallback.
 
 Do not run `effigy tasks`, `effigy doctor`, broad repository reads, or discovery
-commands before this decision. After the worktree is selected, confirm
-`HEAD == origin/main`, the planning base is an ancestor, and the
+commands before this decision. After the worktree is selected, run
+`GIT_SSH_COMMAND="ssh -o ConnectTimeout=10 -o BatchMode=yes" git fetch origin`,
+then confirm `HEAD == origin/main`, the planning base is an ancestor, and the
 repository-relative handoff exists in that `HEAD`. Load the tracked handoff
 from `HEAD`; if the absolute dispatch file differs, stop. That `HEAD` copy is
 canonical. Only then create **required sibling worktree links** from it:

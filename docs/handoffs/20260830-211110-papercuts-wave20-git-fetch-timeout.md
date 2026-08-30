@@ -5,7 +5,7 @@ handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
 handoff: single-file-path-only
-status: ready-to-launch
+status: awaiting-review
 owner: Tom / papercuts orchestrator
 created: 2026-08-30
 updated: 2026-08-30
@@ -21,9 +21,9 @@ minutes on a blocked SSH prompt. A retry with
 `GIT_SSH_COMMAND="ssh -o ConnectTimeout=10 -o BatchMode=yes"` returned
 immediately. That fetch lives in the Northstar worker startup path.
 
-You are the Northstar implementation worker. Make the worker preflight
-fail fast on SSH. Leave the Effigy copy for a later closeout if they
-document the same wrap locally.
+The Northstar implementation worker wrapped the worker preflight fetch
+on the three named surfaces and closed the matching PAPERCUTS bullet.
+It left the Effigy copy for a later closeout.
 
 ## Why It Matters
 
@@ -34,85 +34,60 @@ Startup probes look wedged and burn a long command timeout.
 - **Repository:** `/Users/tom/Dev/projects/northstar`
 - **Planning branch:** `main`
 - **Planning base commit:** `dbc71241080a5d3aee535d1c5240845108f0fc5b`
-- **Pushed main verification:** local `HEAD` and `origin/main` both resolved
-  to that SHA before this handoff was created.
-- **Planning checkout:** clean before this handoff file was created.
-- **Worker mode:** implementation worker dispatched by the orchestrator.
-- **Worker branch:** `worker/papercuts-wave20-git-fetch-timeout`
-- **Worker worktree:** launcher first. `.agents.local.env` is absent in
-  the planning checkout; if the launcher did not supply a clean
-  dedicated non-`main` worktree, ask the operator for
-  `AGENTS_WORKTREE_CONTAINER_DIR` before creating a fallback. Never use
-  `/tmp`.
+- **Worker mode:** implementation runway complete; handoff is review-only.
+- **Actual worker branch:** `t3code/fix-git-fetch-timeout`
+- **Actual worker worktree:**
+  `/Users/tom/.t3/worktrees/northstar/t3code-d3af8f41`
 - **Required sibling worktree links:** `none`
-- **Ready work items, in order:**
-  1. Worker `git fetch origin` can hang on SSH — wrap the worker
-     preflight fetch (router worker fast path, orchestrator mode, and
-     the orchestrator-run template) with
-     `GIT_SSH_COMMAND="ssh -o ConnectTimeout=10 -o BatchMode=yes"`.
-     Keep the fetch itself. Do not change GitHub workflows. Add-and-close
-     a Northstar PAPERCUTS bullet (this repo uses bullet format).
-- **Out of scope:** editing Effigy; portfolio skill sync; GitHub
-  workflows; release mutations.
-- **Canonical refs:** `PAPERCUTS.md`;
-  `skills/northstar/references/router.md` worker startup;
-  `skills/northstar/references/modes/orchestrator.md`;
-  `assets/templates/northstar-orchestrator-run.md.template`;
-  Effigy open entry "`git fetch origin` can hang indefinitely waiting
-  on SSH".
-- **Required validation:** those three surfaces name the BatchMode
-  wrap. Do not require a live hung-SSH reproduction.
-- **PR URL:** pending
+- **Completed work:**
+  1. Wrapped worker preflight `git fetch origin` with
+     `GIT_SSH_COMMAND="ssh -o ConnectTimeout=10 -o BatchMode=yes"` in
+     `skills/northstar/references/router.md`,
+     `skills/northstar/references/modes/orchestrator.md`, and
+     `skills/northstar/assets/templates/northstar-orchestrator-run.md.template`.
+  2. Kept the fetch itself; did not change GitHub workflows.
+  3. Added-and-closed the matching bullet in `PAPERCUTS.md`.
+- **Evidence commit:** `b48e2aa61213692813ec6a552d6509bf421dea74`
+  (BatchMode wrap + papercut closeout; handoff review-state update follows).
+- **Validation evidence (orchestrator at that SHA):** all three surfaces
+  retain `git fetch origin` with the exact BatchMode/ConnectTimeout wrapper;
+  `git diff --check` passed; full `effigy qa` passed; `effigy doctor` only
+  showed the repo's existing unrelated god-files finding.
+- **Out of scope (unchanged):** editing Effigy; portfolio skill sync;
+  GitHub workflows; release mutations.
+- **PR URL:** https://github.com/inflatable-cookie/northstar/pull/12
+- **Review state:** `awaiting-review`
 - **Merge authorisation:** absent; do not merge
 
 ## Boundaries
 
-- Fail-fast fetch in worker preflight. Do not merge.
+- Do not re-dispatch or re-execute this runway. Do not edit Effigy. Do
+  not merge without operator authorisation.
 
 ## Important Context
 
-- This repo's PAPERCUTS uses bullet entries. Close in that format.
-- **Report to:** the operator.
+- This repo's PAPERCUTS uses bullet entries. Closeout used that format.
+- **Report to:** the operator / orchestrator reviewer.
 
 ## Suggested Next Move
 
-Read this file from the top. Run the worktree-safety preflight. After
-the committed `HEAD` handoff checks out, skip sibling links (`none`),
-then wrap the fetch.
+Review https://github.com/inflatable-cookie/northstar/pull/12. Confirm
+the three surfaces name the BatchMode wrap, the closed `PAPERCUTS.md`
+bullet matches, and this handoff stays `awaiting-review` (not
+`ready-to-launch`). Merge only with explicit operator authorisation.
 
 ## Completion Protocol
 
-### Before you start
+### Runway status
 
-1. Read this handoff path. Its `worker_mode: implementation` and
-   `dispatch_authority: orchestrator` metadata activate worker mode. Then
-   run `git rev-parse --show-toplevel`, `git branch --show-current`,
-   `git status --porcelain`, and `git worktree list --porcelain`.
-2. If the current root is a registered worktree, status is empty, and the
-   branch is not `main`, accept it. Record the actual path/branch.
-3. If the launcher supplied a dirty or `main` worktree, stop and report
-   it. `.agents.local.env` was absent; ask before creating a fallback.
-   Never use `/tmp`.
-4. From the selected worktree, record the repository-relative path
-   `docs/handoffs/20260830-211110-papercuts-wave20-git-fetch-timeout.md`.
-   Confirm `HEAD == origin/main`, ancestor
-   `dbc71241080a5d3aee535d1c5240845108f0fc5b`, and that relative path in
-   `HEAD`. Load
-   `git show HEAD:docs/handoffs/20260830-211110-papercuts-wave20-git-fetch-timeout.md`.
-   If the absolute dispatch file differs, stop. The `HEAD` copy is
-   canonical.
-5. Required sibling list is `none`. Skip link setup.
-6. Read `AGENTS.md` and `PAPERCUTS.md`.
-
-### When the assigned runway is complete
-
-1. Close the bullet in `PAPERCUTS.md`. Push a PR. Do not merge.
+Assigned implementation runway is complete. Do not re-run the startup
+preflight as a fresh dispatch.
 
 ### Review and merge path
 
 Awaiting orchestrator review. Merge is operator-authorised only.
 
-- **Closeout refs:** `PAPERCUTS.md`; this handoff; the PR.
+- **Closeout refs:** `PAPERCUTS.md`; this handoff; PR 12.
 
 ### Handoff closeout
 

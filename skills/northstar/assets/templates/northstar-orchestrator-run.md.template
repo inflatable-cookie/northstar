@@ -119,8 +119,9 @@ report what changed, validation run, what remains, and any planning decision.
    state. Report a launcher-supplied dirty or `main` worktree instead of creating
    another.
 4. From the selected worktree, record this handoff's repository-relative
-   path (`docs/handoffs/...`). Confirm `git rev-parse HEAD` equals
-   `git rev-parse origin/main`, confirm
+   path (`docs/handoffs/...`). Run
+   `GIT_SSH_COMMAND="ssh -o ConnectTimeout=10 -o BatchMode=yes" git fetch origin`.
+   Confirm `git rev-parse HEAD` equals `git rev-parse origin/main`, confirm
    `git merge-base --is-ancestor {{BASE_REF}} HEAD` succeeds, and confirm
    that relative path exists in the selected `HEAD`. Load the tracked
    handoff with `git show HEAD:<relative-path>`. If the absolute dispatch
