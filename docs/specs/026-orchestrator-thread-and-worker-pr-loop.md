@@ -222,6 +222,12 @@ frontmatter must include `handoff_mode: worker-pr-loop`,
   acceptance evidence, and authority for the worker to diagnose and implement
   the smallest complete in-bounds repair without a second dispatch.
 
+The handoff is a dispatch overlay, not a second execution authority. It names
+the cards, review-oracle refs, dispatch state, runtime boundaries, and PR
+contract; it does not copy full card steps, acceptance prose, or general
+doctrine. Completeness comes from a committed, resolvable authority chain plus
+the dispatch-specific state.
+
 ## Worker protocol
 
 1. Read the supplied handoff path first (absolute; a relative path is
@@ -256,9 +262,13 @@ frontmatter must include `handoff_mode: worker-pr-loop`,
 8. Stop on a planning gap, contract contradiction, unresolved product choice,
    failed validation that changes the plan, missing authority/access, or scope
    expansion. Record the stop in the card/log state.
-9. When the assigned runway is complete, run the required final checks, update
-   evidence and closeout surfaces, push the selected branch, and create a PR. Do
-   not merge.
+9. When the assigned runway is complete, run the required final checks, then
+   perform an adversarial pre-PR pass. Enumerate universal, exact, and negative
+   claims; try every named counterexample; map each review-oracle row to proof;
+   and reconcile card, roadmap, log, handoff, and front-door state. Return a new
+   product threshold, contract choice, or acceptance rule to planning.
+10. Update evidence and closeout surfaces, push the selected branch, and create
+    a PR. Do not merge.
 
 ## Review protocol
 
@@ -270,14 +280,17 @@ from the PR and canonical refs, not only from the worker's report:
 3. check that out-of-scope files, hidden planning decisions, and missing tests are
    not smuggled into the diff;
 4. run or inspect the relevant validation independently where practical;
-5. record an evidence-backed verdict in the hosting provider's review surface,
+5. classify every merge-blocking finding as `execution-miss`, `oracle-gap`,
+   `planning-change`, `validation-gap`, or `integration-drift`; return a
+   `planning-change` to canonical planning before asking the worker to revise;
+6. record an evidence-backed verdict in the hosting provider's review surface,
    with every merge-blocking finding posted there rather than only in chat;
    when formal approval is unavailable because the orchestrator and worker share
    a GitHub identity, post a canonical `Changes required` PR comment for blocking
    findings and treat that comment as the review record;
-6. merge only when checks and review are satisfactory and the operator has
+7. merge only when checks and review are satisfactory and the operator has
    authorised the merge action;
-7. after merge, update roadmap/card/log/currentness surfaces and identify the next
+8. after merge, update roadmap/card/log/currentness surfaces and identify the next
    planning or execution move.
 
 If changes are requested, the operator relays the review to the same worker
@@ -291,10 +304,11 @@ Model IDs are runtime configuration, not Northstar contract values. Select by
 capability:
 
 - frontier/high effort for the orchestrator and material review;
-- capable/medium effort for bounded implementation;
+- capable/medium effort for bounded, mechanically direct implementation;
 - fast/low effort for read-only reconnaissance and log reduction;
-- raise effort or escalate when a card touches security, persistence,
-  concurrency, public APIs, deployment, or multiple plausible designs.
+- frontier/high effort for a worker card touching security, persistence,
+  concurrency, public APIs, deployment, multi-version behavior, or multiple
+  plausible designs; pause before dispatch when its review oracle is not explicit.
 
 Use deterministic Effigy, Git, test, diff, and PR-check commands for evidence.
 Provider-native subagents, worktree managers, JSON output, resume, and PR helpers
@@ -320,8 +334,9 @@ The initial Northstar dogfood must prove:
 - the requested-changes loop or approval path is exercised;
 - roadmap, card, log, and next-task surfaces remain coherent after closeout.
 
-Record elapsed time, worker rework, number of review cycles, validation outcome,
-and operator relay burden. Do not generalise from one run without this evidence.
+Record elapsed time, worker rework, number of review cycles, finding reason
+codes, validation outcome, and operator relay burden. Raw cycle count does not
+diagnose handoff quality. Do not generalise from one run without this evidence.
 
 ## Open questions
 

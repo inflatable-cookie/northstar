@@ -76,6 +76,8 @@ rollover signal.
   forwarder evidence)
 - `034-post-direct-pr-review-findings.md` (complete; card 102, provider-recorded
   direct review and no chat-only blocking findings)
+- `035-reduce-worker-review-rework.md` (complete; card 103, review oracles,
+  reason-coded findings, risk-based workers, and compact handoffs)
 
 ## Next Task
 
@@ -114,8 +116,11 @@ Roadmap `g02.034` is complete. Card 102 added the fresh-thread direct PR-review
 route: every blocking finding is posted on the provider review surface, with a
 canonical `Changes required` comment when same-identity formal review is
 unavailable. Chat is summary-only.
+Roadmap `g02.035` is complete. Card 103 turned Figmatic and Swallowtail
+revision evidence into review oracles, a worker adversarial pass, finding reason
+codes, frontier/high routing for risky workers, and shorter dispatch overlays.
 
-No blocking roadmap milestone is open. Accept operator-provided live-use
-feedback; Northstar does not dispatch consumer audits.
+No blocking roadmap milestone is open. Gather reason-coded review evidence from
+future operator-provided runs; Northstar does not dispatch consumer audits.
 
 Batch cards live in `g02/batch-cards/` when strict posture uses them.

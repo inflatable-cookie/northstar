@@ -52,6 +52,12 @@ inside `Completion Protocol`. Their frontmatter must explicitly declare
 `dispatch_authority: orchestrator`. Those fields activate worker mode; normal
 agents do not perform the worktree preflight.
 
+Keep the handoff as a dispatch overlay. Link canonical cards, contracts, and
+review oracles; do not copy their full steps, acceptance prose, validation, or
+general doctrine. Repeat only dispatch state, worker boundaries, local runtime
+facts, the PR contract, and non-obvious tensions. If the handoff rivals its
+owning card or repeats multi-paragraph protocol text, compress it.
+
 ## Relationship to logs
 
 - `docs/logs/` records evidence and decisions from work that happened.

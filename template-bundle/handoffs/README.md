@@ -32,5 +32,11 @@ honest about what is still uncertain. Worker handoffs use the same seven section
 and add worktree, runway, reporting, validation, PR, and startup worktree-safety
 instructions inside the completion protocol.
 
+Keep the handoff as a dispatch overlay. Link canonical cards, contracts, and
+review oracles instead of copying their steps, acceptance prose, validation, or
+general doctrine. Repeat dispatch state, worker boundaries, runtime facts, the
+PR contract, and non-obvious tensions. If it rivals its owning card or repeats
+multi-paragraph protocol text, compress it; do not optimize to a hard line cap.
+
 The handoff does not replace the batch log or roadmap closeout. It points to
 those artifacts when the next thread needs them.

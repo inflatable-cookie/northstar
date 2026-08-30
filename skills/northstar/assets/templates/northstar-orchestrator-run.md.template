@@ -18,9 +18,8 @@ tags: [coordination, handoff, worker, pr]
 
 {{PLAIN_LANGUAGE_THREAD_ARC}}
 
-This is the handoff from the planning/orchestrator thread to one bounded
-implementation thread. It is written so the worker can start from this file
-without needing a copied transcript or a second prompt.
+This dispatches one bounded implementation lane. No transcript or second prompt
+is part of the authority chain.
 
 ## Why It Matters
 
@@ -41,22 +40,11 @@ Here is the state the worker is inheriting:
 - **Worker branch:** `{{WORKER_BRANCH}}`
 - **Worker worktree:** `{{WORKTREE_PATH}}`
 - **Worktree creation command:** `{{WORKTREE_COMMAND}}`
-- **Worker worktree policy:** first use the clean, dedicated, non-`main`
-  registered worktree supplied by the launcher, even if its generated path or
-  branch differs from these handoff placeholders. Record the actual path/branch
-  and never create a second worktree for that reason. If the current context is
-  unusable, use the named worktree when it matches; only then read
-  `.agents.local.env`, require `AGENTS_WORKTREE_CONTAINER_DIR`, and create a
-  unique manual worktree/branch under that container from `origin/main`. Ask the
-  operator first if the file or key is absent; never use `/tmp`, `TMPDIR`, or a
-  guessed path.
+- **Worker worktree policy:** follow `Completion Protocol`; launcher worktree
+  first, named/manual fallback only when required.
 - **Required sibling worktree links:** `{{SIBLING_LINKS_OR_NONE}}`
-  List each required sibling as: link name, absolute primary-checkout
-  source, path beside this worktree (usually `../<repo>`). Write `none`
-  when the worktree has no sibling catalog or `file:` deps. Create when
-  absent; reuse only a symlink that already resolves to the declared
-  source; stop on any other existing path; never overwrite. Do not skip
-  a listed catalog member.
+  Format each as link name, absolute primary-checkout source, and path beside
+  this worktree. Write `none` when there are no sibling dependencies.
 - **Active spec lane:** `{{SPEC_REF}}`
 - **Roadmap milestone:** `{{ROADMAP_REF}}`
 - **Ready cards, in order:** `{{CARD_REFS}}`
@@ -65,6 +53,7 @@ Here is the state the worker is inheriting:
 - **Dispatch topology:** `{{SERIAL_OR_PARALLEL_LANE_PLAN}}`
 - **Parallel safety check:** `{{NO_SHARED_MUTABLE_SCOPE_OR_OTHER_REASON_SERIAL}}`
 - **Canonical refs:** {{ARCHITECTURE_REFS}}; {{CONTRACT_REFS}}
+- **Review oracle:** `{{CARD_REVIEW_ORACLE_REFS_OR_NONE}}`
 - **Model capability profile:** `{{WORKER_PROFILE}}`
 - **Tool/runtime restrictions:** `{{RESTRICTIONS_OR_NONE}}`
 - **Required validation:** `{{CHECKS}}`
@@ -79,22 +68,17 @@ Please keep this run inside the named runway:
 
 - **In scope:** `{{ASSIGNED_RUNWAY}}`
 - **Out of scope:** `{{EXPLICIT_OUT_OF_SCOPE_BOUNDARY}}`
-- **Outcome shape:** `{{FIX_OR_DIAGNOSTIC_OUTCOME}}`. For a reported issue fix,
-  this lane owns reproduction, diagnosis, the smallest complete contract-valid repair,
-  cleanup of temporary diagnostics, validation, evidence, and PR creation. Do
-  not stop at instrumentation or a root-cause report. Use `diagnostics-only`
-  only when the operator explicitly requested evidence without a fix or this
-  handoff names a blocker that prevents safe implementation.
+- **Outcome shape:** `{{FIX_OR_DIAGNOSTIC_OUTCOME}}`. An issue-fix lane owns
+  reproduction through the smallest complete contract-valid repair, cleanup,
+  validation, evidence, and PR creation. `diagnostics-only` requires explicit
+  operator scope or a named implementation blocker.
 - Do not invent architecture, change contracts, widen the roadmap, or choose an
   unresolved product/API/persistence/security decision.
 - This handoff represents one worker lane. Do not edit another lane's assigned
   scope; if shared mutable scope or a hidden dependency appears, stop and report
   it through the operator.
-- Work only in the selected clean worker worktree: prefer the current
-  launcher-provided worktree and record its actual path/branch; otherwise use
-  `{{WORKTREE_PATH}}` / `{{WORKER_BRANCH}}`, or the recorded local-path fallback
-  created by the startup preflight. Never edit the orchestrator's planning
-  checkout or an unrelated dirty checkout.
+- Work only in the clean worker worktree selected by `Completion Protocol`.
+  Never edit the planning checkout or an unrelated dirty checkout.
 - Do not merge the PR. Merge remains a separate operator-authorised action.
 
 ## Important Context
@@ -108,49 +92,32 @@ Please keep this run inside the named runway:
 
 ## Suggested Next Move
 
-This handoff explicitly activates worker mode. Start by reading it from the top.
-Before broad repository reads, run the quick startup worktree-safety preflight in
-`## Completion Protocol`. If the
-current context is a clean, dedicated, non-`main` registered worktree, it is the
-launcher-provided worktree: use it immediately, record its actual path/branch,
-and do not compare its generated path/branch with this handoff or create another
-worktree. If it is `main`, dirty, unregistered, or otherwise unusable, use the
-named worktree if it matches; only then read `.agents.local.env`, require a valid
-`AGENTS_WORKTREE_CONTAINER_DIR`, ask the operator if it is absent, and create a
-unique manual worktree and branch under that container from pushed `origin/main`.
-Never fall back to `/tmp` or `TMPDIR`. Do not run broad repo orientation before
-this decision. Read `AGENTS.md`, the active milestone, each assigned card, and
-the canonical architecture/contracts from the selected worker worktree.
-
-Once that checks out, take the first coherent chunk. When you reach a natural
-pause, tell the operator what changed, what validation you actually ran, what
-remains, and whether anything needs a planning decision. Keep the conversation
-natural and useful; you do not need to repeat this whole file back.
+Run the `Completion Protocol` preflight before broad reads. Then read
+`AGENTS.md`, the active milestone, assigned cards, and canonical refs from the
+selected worker worktree. Start the first coherent chunk. At a natural pause,
+report what changed, validation run, what remains, and any planning decision.
 
 ## Completion Protocol
 
 ### Before you start
 
-1. Read this handoff path. Its `worker_mode: implementation` and
-   `dispatch_authority: orchestrator` metadata activate worker mode. Then run one
-   quick read-only safety probe before
-   broad repository reads:
+1. This handoff's `worker_mode: implementation` and
+   `dispatch_authority: orchestrator` activate worker mode. Before broad reads,
+   run:
    `git rev-parse --show-toplevel`, `git branch --show-current`,
    `git status --porcelain`, and `git worktree list --porcelain`.
 2. If the current root is a registered worktree, its status is empty, and its
    branch is not `main`, accept it as the launcher-provided worktree. Record its
-   actual root/branch and do not compare them with `{{WORKTREE_PATH}}` /
-   `{{WORKER_BRANCH}}` or create another worktree merely because they differ.
-3. Only if the current context is `main`, dirty, unregistered, or otherwise
-   unusable should you inspect the named worktree. If that also cannot be used,
-   read `.agents.local.env` and require `AGENTS_WORKTREE_CONTAINER_DIR`; if it is
-   absent, ask the operator before creating the file or worktree. Then create a
-   unique worktree and branch under that container from pushed `origin/main`,
-   record the actual path and branch, and run all subsequent commands there.
-   Never use `/tmp`, `TMPDIR`, or a guessed path; never clean, reset, stash-over,
-   or discard the original checkout's dirty state. If the launcher supplied a
-   dirty or `main` worktree, stop and report it instead of silently creating a
-   second worktree.
+   actual root/branch; do not compare its generated path/branch with
+   `{{WORKTREE_PATH}}` / `{{WORKER_BRANCH}}` or create another worktree merely
+   because they differ.
+3. If current context is `main`, dirty, unregistered, or unusable, inspect the
+   named worktree. If unusable, read `.agents.local.env`, require
+   `AGENTS_WORKTREE_CONTAINER_DIR`, and ask the operator when absent. Create a
+   unique worktree/branch there from pushed `origin/main`. Never use `/tmp`,
+   `TMPDIR`, or a guessed path; never clean, reset, stash-over, or discard dirty
+   state. Report a launcher-supplied dirty or `main` worktree instead of creating
+   another.
 4. From the selected worktree, record this handoff's repository-relative
    path (`docs/handoffs/...`). Confirm `git rev-parse HEAD` equals
    `git rev-parse origin/main`, confirm
@@ -159,15 +126,11 @@ natural and useful; you do not need to repeat this whole file back.
    handoff with `git show HEAD:<relative-path>`. If the absolute dispatch
    file is readable and differs from that tracked blob, stop and report.
    The committed `HEAD` copy is the canonical execution input.
-5. After that check, create each required sibling worktree link from the
-   tracked handoff. Canonicalize source and destination first. Source
-   must exist as a directory. Destination is beside this worktree
-   (usually `../<repo>`). Create the symlink when the destination is
-   absent. Reuse it only when an existing symlink already resolves to
-   the declared source. Stop on a mismatched symlink, directory, or
-   file. Never delete, replace, or overwrite an existing path. If a
-   listed source is missing, stop and report. Do not skip a catalog
-   member. Skip this step only when the list is `none`.
+5. Create required sibling links from the tracked handoff. Canonicalize source
+   and destination; require the source directory; create only when destination
+   is absent; reuse only a symlink resolving to that source. Stop on a missing
+   source, mismatch, directory, or file. Never delete, replace, overwrite, or
+   skip a listed catalog member. Skip only when the list is `none`.
 6. Read the active milestone, assigned cards, `AGENTS.md`, and canonical refs.
 7. Run the repo's cheap orientation checks and record what you actually ran.
 
@@ -189,15 +152,20 @@ natural and useful; you do not need to repeat this whole file back.
 ### When the assigned runway is complete
 
 1. Run the required final validation: `{{CHECKS}}`.
-2. Update the card/log evidence required by the runway, including the actual
+2. Try to falsify the diff against the card. Enumerate universal, exact, and
+   negative claims; exercise every review-oracle counterexample; map each row to
+   proof; and reconcile card, roadmap, log, handoff, and front-door state. Stop
+   and return any new product threshold, contract choice, or acceptance rule to
+   planning.
+3. Update the card/log evidence required by the runway, including the actual
    worktree and branch if the temporary fallback was used.
-3. Push the selected worker branch (the fallback branch if one was created).
-4. Open a reviewable PR against the current pushed `main` tip. The handoff's
+4. Push the selected worker branch (the fallback branch if one was created).
+5. Open a reviewable PR against the current pushed `main` tip. The handoff's
    `{{BASE_REF}}` is the planning base before the handoff commit, not a
    self-referential hash for the commit that contains this file.
-5. In the PR body, link the spec, milestone, cards, changed surfaces, evidence,
+6. In the PR body, link the spec, milestone, cards, changed surfaces, evidence,
    validation, and unresolved items.
-6. Report the PR URL and the evidence to the operator. Do not merge.
+7. Report the PR URL and the evidence to the operator. Do not merge.
 
 ### Review and merge path
 
@@ -209,7 +177,10 @@ surface. When the orchestrator and worker share a GitHub identity, formal
 self-approval is unavailable, so the orchestrator posts the verdict as a PR
 comment; that comment is the canonical review record. If changes are requested,
 make only those changes on this branch, push again, and report back through the
-operator. Requested changes are: `{{REQUESTED_CHANGES_OR_NONE}}`. The PR should
+operator. Blocking findings use `execution-miss`, `oracle-gap`,
+`planning-change`, `validation-gap`, or `integration-drift`; a
+`planning-change` returns to planning before revision. Requested changes are:
+`{{REQUESTED_CHANGES_OR_NONE}}`. The PR should
 link the card, milestone, spec, changed surfaces, evidence, validation, and
 unresolved items. The operator must explicitly authorise any merge.
 

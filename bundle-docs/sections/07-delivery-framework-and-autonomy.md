@@ -380,6 +380,24 @@ large enough to justify a master spec and roadmap milestone.
 If a batch card still requires material product or system decisions, it is not
 ready.
 
+## Review oracle rule
+
+A ready card needs a review oracle when acceptance depends on a high-risk seam
+or a universal, exact, or negative claim. Typical triggers are concurrency,
+lifecycle, identity, persistence, security, public APIs, deployment,
+multi-version behavior, or words such as `all`, `every`, `never`, `exact`,
+`stale`, `foreign`, and `mismatch`.
+
+Keep the oracle compact. For each exposed invariant, name:
+
+| Invariant | Adversarial counterexample | Expected failure or stop point | Required proof |
+| --- | --- | --- | --- |
+| `<claim>` | `<smallest case that would falsify it>` | `<where rejection or containment occurs>` | `<test, check, or evidence>` |
+
+The oracle operationalizes acceptance; it does not preselect the implementation.
+A card is not ready when the reviewer would have to invent a material acceptance
+condition during review.
+
 ## Ready-state rubric
 
 Treat `ready` as a real execution state, not a hopeful label.
@@ -393,6 +411,7 @@ A single batch card is ready only when all of the following are true:
   provisional planning notes
 - scope boundaries and stop conditions are explicit
 - acceptance criteria, validation, and evidence requirements are explicit
+- a review oracle is present when high-risk or universal acceptance needs one
 - no unresolved planning gap still governs the card's scope
 - no unresolved intent checkpoint still governs the card's scope
 - the next task points either to the next ready card or to the correct stop or
@@ -412,6 +431,31 @@ A short autonomous chain is ready only when:
 - the chain stays inside the project's autonomy envelope
 
 If any of these checks fail, the work is not ready for hands-off execution.
+
+## Worker pre-PR adversarial pass
+
+After normal validation and before opening or updating a PR, the worker rereads
+the diff against the card and tries to falsify it. Enumerate universal, exact,
+and negative claims; map each review-oracle row to proof; exercise the named
+counterexamples; and reconcile card, roadmap, log, handoff, and front-door state.
+If this exposes a new product threshold, contract choice, or acceptance rule,
+stop and return it to planning instead of choosing it in implementation.
+
+## Review finding classification
+
+Classify each merge-blocking finding so revision evidence distinguishes worker
+execution from planning quality:
+
+- `execution-miss`: the worker missed explicit authority or acceptance;
+- `oracle-gap`: the card did not operationalize a foreseeable counterexample;
+- `planning-change`: review introduced or changed product or contract intent;
+- `validation-gap`: required proof was absent or falsely green;
+- `integration-drift`: surrounding callers, generated state, or closeout surfaces
+  no longer agreed.
+
+A `planning-change` returns to the planning/card boundary before worker revision.
+Track codes per finding or review cycle; do not infer handoff quality from raw
+cycle count alone.
 
 ## Issue-fix dispatch rule
 

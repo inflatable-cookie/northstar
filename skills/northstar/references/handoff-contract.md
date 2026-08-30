@@ -71,6 +71,16 @@ must now”, or “completion authority is granted”. Prefer “Start by checki
 
 ## Content rules
 
+A handoff is a dispatch overlay, not a compressed copy of the planning spine.
+Link the canonical card, spec, contracts, and review oracle. Do not restate full
+steps, acceptance criteria, validation lists, or general doctrine already owned
+there. Repeat only dispatch-specific state, worker boundaries, runtime/worktree
+facts, the PR contract, and non-obvious tensions. Completeness comes from
+resolvable refs plus that state, not pasted prose.
+
+Do not impose a hard line limit. If a handoff rivals or exceeds its owning card,
+or copies multi-paragraph protocol text, treat that as a compression signal.
+
 - `What This Thread Was Doing` explains the actual arc in plain language, not
   just the task title.
 - `Why It Matters` connects the immediate work to the larger product, roadmap,

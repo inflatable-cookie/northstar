@@ -101,3 +101,7 @@ repair authority or everyday context.
 Direct PR-review routing is complete under `g02.034/102`: fresh review threads
 publish their verdict and every blocking finding on the provider surface, with
 chat retained as summary only.
+Worker-review correction is complete under `g02.035/103`: risky cards carry
+review oracles, workers try to falsify their diffs before PR creation and
+revision, review findings are reason-coded, and handoffs remain compact dispatch
+overlays rather than duplicate authority.

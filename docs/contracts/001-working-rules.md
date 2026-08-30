@@ -150,6 +150,9 @@ single-repo planning lane like this one.
   - its governing refs point at current canonical surfaces
   - its scope boundaries, acceptance criteria, validation, evidence
     requirements, and stop conditions are explicit
+  - high-risk, universal, exact, or negative acceptance includes a compact
+    review oracle: invariant, adversarial counterexample, expected failure or
+    stop point, and required proof
   - no unresolved planning gap still governs the card's scope
   - no unresolved intent checkpoint still governs the card's scope
 - A short auto-continuation chain is ready only when:
@@ -477,6 +480,8 @@ During execution:
   makes implementation impossible inside the current envelope;
 - the worker handoff names scope, acceptance, validation, evidence, stop conditions,
   report cadence, and PR base/head expectations;
+- the handoff is a dispatch overlay: it points to canonical cards and contracts
+  instead of copying their steps, acceptance prose, or general doctrine;
 - the worker reports after meaningful chunks with changed surfaces, validation,
   remaining cards, blockers, and new risks;
 - the worker stops on a planning gap, contract contradiction, unresolved product
@@ -484,6 +489,12 @@ During execution:
   changes the plan;
 - the worker may continue through in-bounds ready cards without a new operator
   prompt, but may not invent the next card or architecture.
+
+Before opening or updating a PR, the worker performs an adversarial pass over
+the diff: enumerate universal, exact, and negative claims, try the card's named
+counterexamples, map every review-oracle row to proof, and reconcile execution
+and closeout surfaces. A newly discovered product threshold, contract choice,
+or acceptance rule returns to planning.
 
 A worker completes the assigned runway with a pushed branch, evidence, and a
 reviewable PR. PR creation is not approval or merge. The orchestrator reviews the
@@ -493,6 +504,12 @@ GitHub runs, it posts that verdict as a PR comment because formal self-approval
 is unavailable. Merge remains a separate action requiring explicit operator
 authorisation. Requested changes return to the same worker branch when possible,
 followed by another review cycle.
+
+Every merge-blocking finding is classified as `execution-miss`, `oracle-gap`,
+`planning-change`, `validation-gap`, or `integration-drift`. A
+`planning-change` repairs canonical planning before implementation resumes.
+Review-cycle counts without these reasons are not evidence that the handoff was
+too short or too long.
 
 ### Direct PR review boundary
 

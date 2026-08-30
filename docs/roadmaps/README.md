@@ -57,11 +57,13 @@ Roadmaps sequence contract-backed work for Northstar itself.
   pinned Rust forwarder scanning.
 - `g02.034` is complete; card 102 routes fresh-thread direct PR reviews to the
   provider surface and forbids chat-only blocking findings.
+- `g02.035` is complete; card 103 adds review oracles, worker adversarial review,
+  finding reason codes, risk-based worker routing, and compact handoffs.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-No blocking roadmap milestone is open. Accept operator-provided live-use
-feedback; Northstar does not dispatch consumer audits.
+No blocking roadmap milestone is open. Gather reason-coded review evidence from
+future operator-provided runs; Northstar does not dispatch consumer audits.

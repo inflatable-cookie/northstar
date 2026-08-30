@@ -39,3 +39,6 @@ the exact 120-file payload.
 Jetstream live-use correction roadmap `g02.033` is complete. Card 100 repaired
 explicit adapter installation, TypeScript retained findings, and Rust forwarder
 scanner evidence without widening repair authority or everyday context.
+Worker-review correction roadmap `g02.035` is complete. Card 103 adds review
+oracles, a worker adversarial pass, reason-coded blocking findings, risk-based
+worker routing, and compact handoffs from Figmatic and Swallowtail evidence.

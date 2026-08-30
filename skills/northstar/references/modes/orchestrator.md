@@ -85,6 +85,11 @@ surfaces.
    Mark a card `ready` only when the existing Northstar rubric is satisfied:
    bounded scope, current governing refs, acceptance, validation, evidence, stop
    conditions, and explicit continuation state.
+   Add a compact review oracle when acceptance crosses concurrency, lifecycle,
+   identity, persistence, security, public API, deployment, multi-version, or a
+   universal/exact/negative claim. Name the invariant, smallest adversarial
+   counterexample, expected failure or stop point, and required proof. The
+   reviewer must not need to invent material acceptance during review.
    For a reported defect, make the card outcome-scoped. State the observed
    failure, expected behavior, reproduction or acceptance evidence, boundaries,
    validation, and stop conditions. Do not require a known root cause or
@@ -121,8 +126,11 @@ surfaces.
    frontmatter. This metadata is what activates worker mode; a normal thread
    must not infer it from a worktree, branch, or launch harness. Every handoff is
    mandatory, must be committed and pushed on `main`, and must contain the
-   complete worker instructions, refs, runway, planning base verification,
+   complete dispatch state, refs, runway, planning base verification,
    worktree/branch command, reporting rules, stop conditions, and PR contract.
+   Treat it as a dispatch overlay: point to card steps, acceptance, review
+   oracles, and general doctrine instead of copying them. If the handoff rivals
+   its owning card or repeats multi-paragraph protocol text, compress it.
    Give the operator each worker's handoff as an **absolute path**. Do not
    provide only a repository-relative path, a second prompt, or copied
    context. The handoff must list required sibling worktree links (or
@@ -157,7 +165,10 @@ surfaces.
    the provider's review surface. If the orchestrator and worker share a GitHub
    identity, formal self-approval is unavailable: post the verdict as a PR
    comment and treat that comment as the canonical review record. Leave precise
-   comments when changes are needed.
+   comments when changes are needed. Classify each blocking finding as
+   `execution-miss`, `oracle-gap`, `planning-change`, `validation-gap`, or
+   `integration-drift`. A `planning-change` pauses worker revision while the
+   orchestrator repairs canonical planning.
 11. **Merge and close out.** Before closeout, revisit the run's triage notes and
     give each one a clear disposition: promote or rework it into canonical docs,
     merge it with another note, keep it explicitly open, or remove it when it is
@@ -229,6 +240,11 @@ The file must say, in substance:
 - stop on missing contracts, ambiguous intent, scope expansion, or validation
   failure that changes the plan;
 - update execution evidence and closeout surfaces as required by the cards;
+- before PR creation or revision, try to falsify the diff: enumerate universal,
+  exact, and negative claims, exercise each review-oracle counterexample, map it
+  to proof, and reconcile card, roadmap, log, handoff, and front-door state;
+- return a newly discovered product threshold, contract choice, or acceptance
+  rule to planning instead of choosing it in implementation;
 - finish the assigned runway with a pushed branch and a reviewable PR;
 - do not merge or invent a new architecture.
 
@@ -261,10 +277,11 @@ changes the plan.
 Use role profiles, not fixed model names:
 
 - orchestrator/discovery/review: frontier model, high reasoning;
-- bounded worker: capable coding model, medium reasoning by default;
+- bounded, mechanically direct worker: capable coding model, medium reasoning;
 - reconnaissance and log reduction: fast model or deterministic command;
-- security, persistence, concurrency, public API, deployment, or ambiguous work:
-  escalate to frontier review and pause the worker if the card is not explicit.
+- security, persistence, concurrency, public API, deployment, multi-version, or
+  ambiguous work: frontier worker with high reasoning and frontier review;
+  pause before dispatch when the review oracle is not explicit.
 
 Provider-native worktrees, subagents, session messaging, JSON output, and PR
 commands are optional adapters. The protocol remains valid with manual worktree

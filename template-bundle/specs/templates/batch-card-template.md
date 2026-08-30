@@ -18,6 +18,8 @@ phrasing over polished prose.
 - [ ] Governing refs point at current canonical surfaces.
 - [ ] Scope boundaries and stop conditions are explicit.
 - [ ] Acceptance criteria, validation, and evidence requirements are explicit.
+- [ ] A review oracle is present when acceptance is high-risk, universal, exact,
+      or negative; otherwise the card says why it is not required.
 - [ ] No unresolved planning gap still governs this card.
 - [ ] No unresolved intent checkpoint still governs this card.
 - [ ] If auto-start is allowed, the continuation envelope is explicit and the
@@ -47,6 +49,16 @@ State the exact bounded outcome for this card.
 ## Acceptance Criteria
 
 - <criterion>
+
+## Review Oracle
+
+Use this for concurrency, lifecycle, identity, persistence, security, public
+API, deployment, multi-version, or universal/exact/negative acceptance. For a
+mechanically direct card with no such claim, write `Not required` and why.
+
+| Invariant | Adversarial counterexample | Expected failure or stop point | Required proof |
+| --- | --- | --- | --- |
+| <claim> | <smallest falsifying case> | <rejection/containment point> | <test/check/evidence> |
 
 ## Evidence Required
 

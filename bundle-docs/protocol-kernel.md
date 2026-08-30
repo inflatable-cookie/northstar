@@ -1,7 +1,7 @@
 # Northstar Protocol Kernel
 
 Status: active  
-Updated: 2026-08-19
+Updated: 2026-08-30
 
 One-page map of **what counts as the protocol**, **where normative detail
 lives**, and **how surfaces should relate**. Use this before pasting long
@@ -38,6 +38,8 @@ contracts).
 | --- | --- | --- |
 | Planning completeness and execution authority | [sections/06-planning-and-contract-gates.md](./sections/06-planning-and-contract-gates.md) | Same expectations; repo records gaps in its own planning files |
 | Batch cards, ready-state, closeout shape, autonomy levels, master specs | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Batch card rule**, **Ready-state rubric**, **Operator-facing summary rule**, **Autonomy support levels** | `docs/contracts/001-working-rules.md` (from [`template-bundle/contracts/001-working-rules-template.md`](../template-bundle/contracts/001-working-rules-template.md)); keep compact, point here for full enumerations |
+| Review oracles, worker adversarial pass, review finding codes | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Review oracle rule**, **Worker pre-PR adversarial pass**, **Review finding classification** | Ready card + compact repo working-rules binding |
+| Handoff content and compression | [`skills/northstar/references/handoff-contract.md`](../skills/northstar/references/handoff-contract.md) | `docs/handoffs/`; handoff points to cards and contracts instead of copying them |
 | Direct PR review and provider record | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Direct PR review boundary** | `docs/contracts/001-working-rules.md` plus the installed Northstar PR-review mode |
 | Spec lifecycle and archive | [sections/08-specs-and-promotion.md](./sections/08-specs-and-promotion.md) + [template-bundle/specs/README.md](../template-bundle/specs/README.md) | `docs/specs/` + `docs/specs/archive/` in the installed repo |
 | Automation defaults | [sections/10-automation-runtime-policy.md](./sections/10-automation-runtime-policy.md) | `AGENTS.md` / Effigy config in each repo |

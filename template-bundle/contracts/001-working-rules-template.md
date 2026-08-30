@@ -33,6 +33,19 @@ informal habits.
   bundle at `bundle-docs/sections/07-delivery-framework-and-autonomy.md`
   (heading *Batch card rule*); keep this contract aligned with that section when
   you customize wording.
+- When acceptance crosses concurrency, lifecycle, identity, persistence,
+  security, public API, deployment, multi-version, or universal/exact/negative
+  behavior, add a compact review oracle: invariant, adversarial counterexample,
+  expected failure or stop point, and required proof. Do not preselect the edit.
+- Before PR creation or revision, the worker tries to falsify the diff against
+  that oracle and returns newly discovered product or contract choices to
+  planning.
+- Worker handoffs are dispatch overlays. Point to canonical cards and contracts;
+  do not copy their steps, acceptance prose, or general doctrine.
+- Classify blocking review findings as `execution-miss`, `oracle-gap`,
+  `planning-change`, `validation-gap`, or `integration-drift`. Repair planning
+  before worker revision when the finding is `planning-change`; raw review-cycle
+  count alone does not diagnose handoff quality.
 - Each active generation README should carry a `## Generation Runway`: a short,
   coarse list of generation goals, states, governing refs, and likely next
   milestones. Use it to choose the next milestone when a lane closes instead of
