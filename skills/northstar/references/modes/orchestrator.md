@@ -67,6 +67,64 @@ owner, destination, or removal is unclear. Triage notes are not authority for
 execution until their useful content is promoted into the normal planning
 surfaces.
 
+## Conversational planning delegates
+
+When the operator explicitly asks to spin off planning for a named topic, the
+orchestrator may create a frontier planning delegate and continue unrelated
+work. This is not implementation worker mode. The delegate owns one direct
+conversation with the operator and one reviewable triage/research packet; the
+orchestrator retains canonical promotion, readiness, implementation routing, PR
+review, and merge.
+
+Use `assets/templates/northstar-discovery-delegate.md.template`. Its frontmatter
+must declare `handoff_mode: planning-delegate`,
+`planning_mode: conversational-discovery`,
+`dispatch_authority: orchestrator`, and
+`promotion_authority: orchestrator`. Commit and push the handoff on `main`
+before launch, give the operator its absolute path, and use it as the only
+initial prompt. The handoff names the topic, base, canonical context, isolated
+branch/worktree, allowed `docs/triage/` and optional `docs/research/` paths,
+required sibling links or `none`, opening questions, research boundary,
+concurrent non-overlapping work, stop conditions, validation, and planning-PR
+contract.
+
+Select a frontier/high-reasoning conversational-planning profile from current
+adapter notes. An operator-named profile wins; Sol is one possible local
+choice, not a Northstar dependency. In Paseo, create one `branch-off` worktree
+workspace from pushed `origin/main`, materialize that profile into
+`create_agent`, retain the agent/workspace IDs, and let the operator converse in
+the new thread. Before launch, verify every named sibling link exists in the
+workspace container directory and resolves to its declared primary checkout.
+Do not proxy the planning conversation or poll it. Without Paseo, the operator
+launches a manually isolated thread from the absolute handoff.
+
+The delegate records operator-confirmed decisions, its recommendations,
+alternatives, evidence, non-goals, and unresolved questions distinctly. It may
+spawn bounded read-only research subagents or advisors. They return sourced
+findings to the delegate; they do not edit, create worktrees/branches/PRs,
+contact the operator, or start nested orchestrator or implementation lanes. The
+delegate reconciles their output before writing the packet. Select research
+profiles from current notes by evidence risk: fast/low-cost for bounded source
+collection, frontier/high reasoning for ambiguous synthesis or high-stakes
+claims. Do not store those local profile names in Northstar.
+
+While the delegate is active, reserve its topic: continue only work that does
+not depend on its conclusions or mutate its named packet. When it opens a PR,
+review the exact head for fidelity to the handoff and recorded operator
+confirmations, evidence quality, scope, and clean separation of confirmed
+decisions, recommendations, and open questions. Ask the operator when decision
+ownership remains unclear; private thread history is not repository authority.
+Post requested changes and explicitly wake the same delegate. After accepted
+review, passing checks, mergeability, and no stricter rule or operator pause,
+merge without another approval prompt.
+
+Merge is intake, not promotion. Re-read the merged packet against current
+`main`, resolve drift or contradictory decisions with the operator, choose the
+canonical destinations, promote settled meaning, and remove or split resolved
+triage notes. Only after that separate promotion batch may the orchestrator
+decide readiness or dispatch implementation. Mechanical documentation
+projection may materialize the already-settled promotion, but cannot choose it.
+
 ## Mechanical documentation projection
 
 Keep discovery, planning, promotion, readiness, review-oracle design, worker
@@ -156,6 +214,9 @@ batch large enough to repay dispatch and review; keep tiny edits local.
    unresolved scope. Use one isolated worktree, branch, and committed handoff
    per worker. Keep dependent, overlapping, or ambiguous lanes serial; do not
    manufacture parallelism merely to increase worker count.
+   An operator-requested planning delegate may run beside unrelated work, but
+   reserve its topic and do not dispatch or promote work that depends on its
+   conclusions until its PR is reviewed, merged, and promoted.
    Before creating any worktree manually, read the target repo's
    `.agents.local.env` and resolve `AGENTS_WORKTREE_CONTAINER_DIR`. If it is
    absent or invalid, ask the operator for the absolute container directory and
@@ -236,8 +297,9 @@ batch large enough to repay dispatch and review; keep tiny edits local.
    - return permission requests to the operator unless existing explicit
      authority settles the exact action.
 
-   Do not invoke `/paseo-handoff`: it creates a second briefing and would compete
-   with the committed Northstar handoff. If required tools are absent, use manual
+   Do not invoke `/paseo-handoff` for a worker or planning delegate: it creates a
+   second briefing and would compete with the committed Northstar handoff. If
+   required tools are absent, use manual
    dispatch without treating `paseo.json` as a substitute runtime signal. If
    setup fails, preserve and report any created workspace or agent identity; do
    not silently retry into a duplicate worker.
@@ -264,6 +326,10 @@ batch large enough to repay dispatch and review; keep tiny edits local.
    notify on finish. If the original worker is unavailable, give the review to
    the operator for relay; do not silently create a replacement worker. A
    `planning-change` still returns to canonical planning before this follow-up.
+   For a planning-delegate PR, replace card/implementation conformance with the
+   planning-packet checks above. Requested changes still wake the originating
+   delegate; accepted merge is followed by a separate orchestrator promotion
+   batch.
 12. **Merge and close out.** Before closeout, revisit the run's triage notes and
     give each one a clear disposition: promote or rework it into canonical docs,
     merge it with another note, keep it explicitly open, or remove it when it is
@@ -381,6 +447,8 @@ changes the plan.
 Use role profiles, not fixed model names:
 
 - orchestrator/discovery/review: frontier model, high reasoning;
+- operator-facing planning delegate: frontier conversational-planning profile,
+  high reasoning; an explicitly named profile wins;
 - exact mechanical documentation projection: fast/low-cost profile, low or
   medium reasoning, with the orchestrator retaining semantic review;
 - bounded, mechanically direct worker: capable coding model, medium reasoning;
@@ -417,15 +485,19 @@ Stop and return to planning or the operator when:
 - a manual worktree is needed but the local path contract has not been satisfied;
 - control-plane launch state is ambiguous enough that retrying could create a
   duplicate workspace or worker;
-- the worker/subagent would need to start a nested orchestrator or worker lane.
+- an implementation worker or ordinary subagent would need to start a nested
+  orchestrator or worker lane. A planning delegate may use only the bounded
+  read-only research subagents defined above.
 
 ## Checkpoint shape
 
 When a summary is useful, lead it with:
 
 1. what is now true;
-2. current state (`discovery`, `planning`, `ready-to-launch`, `worker-in-flight`,
-   `awaiting-review`, `changes-requested`, `merged`, or `paused`);
+2. current state (`discovery`, `planning`, `planning-delegate-in-flight`,
+   `planning-pr-awaiting-review`, `planning-promotion`, `ready-to-launch`,
+   `worker-in-flight`, `awaiting-review`, `changes-requested`, `merged`, or
+   `paused`);
 3. the next operator action or information needed.
 
 Keep protocol detail underneath that summary. The orchestrator is successful

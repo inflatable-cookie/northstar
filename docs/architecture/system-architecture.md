@@ -277,6 +277,10 @@ preferred split is:
 
 `operator ↔ orchestrator thread -> canonical plan/runway -> worker thread/worktree -> PR -> orchestrator review -> merge/closeout`
 
+A parallel planning-only branch is:
+
+`operator ↔ planning delegate/worktree -> triage/research PR -> orchestrator review/merge -> orchestrator promotion`
+
 A fresh direct-review thread uses the smaller path:
 
 `operator -> existing PR -> direct review thread -> provider review record`
@@ -288,6 +292,13 @@ in the planning context. That subagent applies an exact brief to named docs and
 deterministic checks; it does not choose authority, invent planning, decide
 state, touch product code, or perform Git/provider mutations. The orchestrator
 reviews the resulting diff and retains semantic ownership.
+
+On explicit operator request, it may also launch one frontier planning delegate
+for a named topic. That delegate talks directly with the operator and owns only
+a bounded triage/research packet in an isolated branch. It may use read-only
+research subagents. The orchestrator reserves that topic, continues only
+non-overlapping work, reviews and merges the planning PR, then separately
+promotes its settled meaning against current `main`.
 
 Each worker owns only the assigned ready cards in its dedicated worktree and
 branch. Independent roadmap lanes may use parallel worker threads, each with its
@@ -302,7 +313,7 @@ directly without another permission prompt. Otherwise the operator relays them.
 Northstar remains independent of provider-specific session messaging either way.
 
 The durable boundary is the repository: architecture, contracts, specs, roadmap
-cards, one committed worker handoff per worker lane under `docs/handoffs/`, pushed
+cards, one committed handoff per dispatched lane under `docs/handoffs/`, pushed
 `main`, commits, validation, and PR review. Private model conversation is not an
 authority surface. A worker launch is valid only after the planning checkout has
 published `main` and the handoff's absolute path is available to the operator
@@ -342,7 +353,9 @@ need it. Agents ask the operator for the absolute container directory before
 creating the file or any manual worktree, then use one repository/lane
 subdirectory below it. `/tmp`, `TMPDIR`, guessed siblings, and repository-child
 worktrees are not valid fallbacks. A worker/subagent must not create a nested
-orchestrator lane when a parent harness already owns the worktree.
+orchestrator lane when a parent harness already owns the worktree. The only
+exception is a planning delegate's explicitly bounded read-only research
+subagent, which gets no worktree or Git/provider authority.
 
 ## Invariants
 
@@ -381,6 +394,12 @@ orchestrator lane when a parent harness already owns the worktree.
   discards a dirty checkout.
 - Orchestrator and worker threads must use separate worktree/branch boundaries;
   a worker may not edit the orchestrator's planning checkout.
+- A planning delegate uses its own branch/worktree and writes only the handoff-
+  named triage/research packet. It separates confirmed decisions from advice and
+  open questions, verifies any handoff-named sibling links in the worktree
+  container, does not promote or implement, and finishes with a PR. The
+  orchestrator reserves the topic, reviews/merges the packet, then owns a
+  separate promotion batch against current `main`.
 - A mechanical documentation projection subagent may edit only the named paths
   in the orchestrator's planning context from an exact settled brief. It is not
   worker mode, runs serially, stops on semantic ambiguity, and cannot choose
@@ -393,12 +412,13 @@ orchestrator lane when a parent harness already owns the worktree.
 - A direct PR-review request authorizes review mutations on the named PR only.
   Every merge-blocking finding is posted on the provider review surface; chat
   summarizes that record and never becomes the only home of a required change.
-- A worker never merges. The orchestrator may merge its worker PR without a
-  second operator prompt after it records an accepted review of the exact
-  current head, all required checks pass, the PR is mergeable into the intended
-  base, and no stricter repository rule or explicit operator pause applies. A
-  changed head requires another review; ambiguous merge state stops before
-  retry.
+- Workers and planning delegates never merge. The orchestrator may merge their
+  PRs without a second operator prompt after it records an accepted review of
+  the exact current head, all required checks pass, the PR is mergeable into the
+  intended base, and no stricter repository rule or explicit operator pause
+  applies. A changed head requires another review; ambiguous merge state stops
+  before retry. A merged planning packet remains non-authoritative until the
+  orchestrator promotes it.
 - Provider-native subagents, session messaging, and hosted agents are optional
   adapters, not Northstar protocol dependencies.
 - Project-root Paseo settings are optional project lifecycle configuration. They
@@ -406,9 +426,9 @@ orchestrator lane when a parent harness already owns the worktree.
   dependency, branch, commit, PR, or merge authority. Their presence does not
   prove that the current thread is running inside Paseo.
 - Injected control-plane orchestration tools authorize routine transport for
-  ready worker lanes without a second permission prompt. The orchestrator may
-  select a current role profile, create one
-  isolated worktree workspace per lane, launch the worker from the single
+  ready worker lanes and explicitly requested planning delegates without a
+  second permission prompt. The orchestrator may select a current role profile, create one
+  isolated worktree workspace per lane, launch the target from the single
   absolute handoff path, and carry notifications or follow-ups. Its IDs,
   profiles, messages, and lifecycle state are transport metadata, not planning
   or completion authority. This does not authorize unready work, material

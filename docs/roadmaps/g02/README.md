@@ -87,12 +87,14 @@ rollover signal.
 - `039-delegate-mechanical-orchestrator-documentation.md` (complete; card 107
   delegates exact documentation projection while Sol retains planning and
   semantic authority)
+- `040-delegate-conversational-feature-planning.md` (complete; card 108 adds an
+  isolated operator-facing planning delegate with orchestrator-owned promotion)
 
 ## Next Task
 
 `g02.038/106` is the next lane: finish the skill-owned Paseo lifecycle after
-the Effigy external `skill run` task runner lands. `g02.039/107` is complete;
-its bounded projection was reviewed by Sol and passed validation.
+the Effigy external `skill run` task runner lands. `g02.040/108` is complete;
+its conversational planning delegate was reviewed by Sol and passed validation.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and

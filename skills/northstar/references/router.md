@@ -48,6 +48,9 @@ ordinary continuation:
 
 - bare `continue`, "keep going", "context is full", compaction alone
 - routine batch closeout without asking for a handoff file
+- an orchestrator-owned planning delegate or implementation-worker lane; use
+  Orchestrator mode so dispatch, PR review, merge, and promotion stay attached
+  to the owning orchestrator
 
 → [`modes/handoff.md`](./modes/handoff.md)
 
@@ -176,11 +179,12 @@ activate worker mode or the worker startup preflight.
 ## 8. Orchestrator thread
 
 Use when the user wants Northstar to own a question-led planning conversation,
-prepare a separate worker thread/worktree, maintain a runway, or review the
-worker's PR. This is an internal mode of the single public authority; the operator
-relays messages between threads when no control-plane tools are available. When
-Paseo injects its orchestration tools, the mode uses them for routine dispatch
-without a separate permission prompt.
+spin off a separate operator-facing planning delegate, prepare a worker
+thread/worktree, maintain a runway, or review a lane's PR. This is an internal
+mode of the single public authority; the operator relays messages between
+threads when no control-plane tools are available. When Paseo injects its
+orchestration tools, the mode uses them for routine dispatch without a separate
+permission prompt.
 
 → [`modes/orchestrator.md`](./modes/orchestrator.md)
 
@@ -281,6 +285,10 @@ that merely happen to be inside a worktree do not run this probe and do not
 inspect `.agents.local.env` for worker purposes. Do not infer worker mode from a
 branch name, filesystem path, or harness presence. If the dispatch metadata is
 absent, stop the worker launch and report the missing handoff boundary.
+
+A planning delegate with `handoff_mode: planning-delegate` follows its own
+handoff's planning-worktree preflight. It does not activate this implementation
+worker fast path.
 
 After worker mode is activated, before broad repository reads, run one quick
 read-only probe from the current context:

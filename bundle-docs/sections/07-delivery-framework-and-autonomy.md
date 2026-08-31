@@ -608,6 +608,41 @@ is already defined and permitted.
 They also should not have to re-invent the lane shape after every completed
 card because planning failed to leave a longer-horizon runway.
 
+## Conversational planning delegation
+
+An operator may ask the orchestrator to split off a frontier, high-reasoning
+planning thread for one named topic while the orchestrator continues unrelated
+lanes. This is a planning delegate, not an implementation worker. It receives a
+committed handoff, works in an isolated branch/worktree, talks directly with the
+operator, and records a reviewable planning packet in named `docs/triage/` and
+optional `docs/research/` paths. Its handoff lists required sibling links or
+`none`; launcher lifecycle creates them in the worktree container before setup,
+and the delegate stops on missing or conflicting paths.
+
+The packet separates operator-confirmed decisions, delegate recommendations,
+alternatives, evidence, non-goals, and unresolved questions. The delegate may
+spawn bounded read-only research subagents that return sourced findings to it.
+They do not write to the repository, contact the operator, or create nested
+orchestrator/implementation lanes. The delegate does not edit product code or
+canonical planning, choose promotion destinations, decide readiness, or launch
+implementation.
+
+The orchestrator reserves the topic and continues only non-overlapping work. It
+reviews the planning PR against the original handoff, operator confirmations
+recorded in the packet, evidence, current canonical state, and exact head. If
+decision ownership is still unclear, it asks the operator rather than relying on
+private thread history. Requested changes return to the same delegate. After
+accepted review and passing checks, the orchestrator may merge without another
+operator prompt, then separately reconcile and promote settled meaning against
+current `main`. The merged packet remains non-authoritative until promotion;
+resolved triage material is removed or split in that promotion batch.
+
+Select the delegate from current frontier conversational-planning profile
+notes. A locally preferred model such as Sol is configuration, not Northstar
+doctrine. With a control plane, use one isolated branch-off workspace and the
+committed handoff as the only initial prompt. Without one, give the operator the
+absolute handoff path for a manually isolated thread.
+
 ## Mechanical documentation projection
 
 Keep high-cost frontier reasoning on discovery, planning, promotion, readiness,
@@ -633,9 +668,10 @@ to repay dispatch and review overhead; keep tiny edits local.
 
 ## Orchestrator merge authority
 
-An operator who starts a Northstar orchestrator/worker lane pre-authorizes the
-orchestrator to merge that lane's PR after independent review. This is not
-auto-merge on PR creation. Merge is allowed only when:
+An operator who starts a Northstar orchestrator-owned worker or planning-
+delegate lane pre-authorizes the orchestrator to merge that lane's PR after
+independent review. This is not auto-merge on PR creation. Merge is allowed only
+when:
 
 - the provider records an accepted orchestrator verdict for the exact current
   PR head; a same-identity provider may use the canonical review comment;
@@ -644,8 +680,8 @@ auto-merge on PR creation. Merge is allowed only when:
 - no stricter repository rule or explicit operator pause requires human action.
 
 A changed head requires another review. Ambiguous provider or merge state stops
-before retry. The worker never merges. A standalone direct-review thread does
-not inherit orchestrator merge authority.
+before retry. Workers and planning delegates never merge. A standalone direct-
+review thread does not inherit orchestrator merge authority.
 
 ## Direct PR review boundary
 

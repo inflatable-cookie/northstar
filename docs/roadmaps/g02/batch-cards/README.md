@@ -57,3 +57,6 @@ Mechanical documentation projection `g02.039/107` is complete. Sol supplied
 settled meaning, reviewed the full diff, and accepted the serial
 profile-driven projection. The next card is `g02.038/106` after Effigy's
 external `skill run` task runner lands.
+Conversational feature-planning delegation `g02.040/108` is complete. Sol
+reviewed the semantic corrections and full validation. The next card is
+`g02.038/106` after Effigy's external `skill run` task runner lands.

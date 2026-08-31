@@ -33,6 +33,15 @@ checkout. The orchestrator owns discovery, planning, architecture/contracts,
 roadmap readiness, launch preparation, and PR review. It does not implement the
 feature in the planning checkout once the worker boundary is declared.
 
+On explicit operator request, the orchestrator may split one named discovery
+topic into a frontier planning delegate while it continues unrelated work. The
+delegate receives a committed handoff, talks directly with the operator in its
+own thread, and writes only a bounded triage/research packet on an isolated
+branch. It may coordinate read-only research subagents, then opens a planning PR.
+The orchestrator reviews and merges that packet and separately promotes settled
+meaning against current `main`; the packet never becomes execution authority by
+merge alone.
+
 For each approved independent lane, the orchestrator uses a control-plane
 adapter when the current thread exposes its orchestration tools, or gives the
 operator the handoff path for manual launch. Injected Paseo tools are the
@@ -103,6 +112,8 @@ before chat summarizes the result.
   placement, notifications, and follow-ups without making it protocol authority.
 - Keep frontier reasoning on discovery, planning, review, and merge while a
   fast/low-cost subagent handles bounded mechanical documentation projection.
+- Let an operator-requested frontier planning delegate explore one topic in a
+  separate conversation while the orchestrator continues non-overlapping work.
 
 ## Non-goals
 
@@ -113,6 +124,8 @@ before chat summarizes the result.
   required checks;
 - replacing Effigy, Git, or the hosting provider's PR system;
 - a universal provider-specific command wrapper.
+- treating a planning-packet merge as canonical promotion or implementation
+  readiness.
 
 ## Roles and authority
 
@@ -120,6 +133,7 @@ before chat summarizes the result.
 | --- | --- | --- |
 | Operator | answers unresolved questions, may override the selected worker profile, starts or relays manual runs, resolves material permission requests, and may pause or override a merge | that one thread can see another thread's private history |
 | Orchestrator | discovery, intent summary, promoted planning, ready runway, per-worker handoff, optional adapter dispatch, PR review verdict, gated merge, closeout | that a worker's narrative or control-plane state substitutes for repository/diff/check evidence |
+| Planning delegate | direct operator discovery for one named topic, bounded triage/research capture, read-only research coordination, commits, and planning PR | canonical promotion, readiness, implementation, merge, or authority outside its handoff |
 | Documentation projection subagent | mechanically materializes an exact orchestrator brief into named docs and deterministic validation | planning choices, semantic promotion, readiness/completion judgment, code edits, commit/push, review, or merge |
 | Worker | bounded diagnosis and implementation in its worktree, card execution, tests, commits, evidence, PR creation | new architecture, missing contracts, or scope expansion |
 
@@ -151,6 +165,52 @@ Git mutation. Use this split for roughly three or more related projection
 surfaces, or another batch large enough to repay dispatch and review overhead;
 keep smaller edits in the orchestrator.
 
+## Conversational planning delegation
+
+The lane starts only when the operator asks the orchestrator to spin off a
+planning conversation for a named topic. The orchestrator writes
+`skills/northstar/assets/templates/northstar-discovery-delegate.md.template` to
+one concrete committed handoff under `docs/handoffs/`. Its frontmatter declares
+`handoff_mode: planning-delegate`,
+`planning_mode: conversational-discovery`,
+`dispatch_authority: orchestrator`, and
+`promotion_authority: orchestrator`. This is not worker-mode activation.
+
+The handoff fixes the topic, base SHA, canonical context, isolated branch and
+worktree, allowed triage/research paths, opening questions, research boundary,
+required sibling links or `none`, non-goals, current non-overlapping
+orchestrator work, validation, stop conditions, and PR contract. The delegate
+receives only the absolute handoff path as its initial prompt and then converses
+directly with the operator. It captures operator-confirmed decisions,
+recommendations, alternatives, evidence, non-goals, and unresolved questions
+distinctly.
+
+The delegate may spawn bounded read-only research subagents or advisors. They
+return sourced findings to the delegate and do not edit the repository, create
+worktrees/branches/PRs, contact the operator, or start nested orchestrator or
+implementation lanes. The delegate reconciles their results into the named
+packet. Its own branch diff contains only those named `docs/triage/` and optional
+`docs/research/` paths. It does not edit code or canonical planning, choose
+promotion destinations, decide readiness, or dispatch implementation.
+
+The orchestrator reserves the topic while the delegate runs. It may continue
+only work that neither depends on the topic nor mutates the packet paths. The
+planning PR is reviewed at its exact head for scope, evidence, conversational
+fidelity to the handoff and recorded operator confirmations, and clear
+separation between confirmed decisions, recommendations, and open questions. If
+decision ownership remains unclear, the orchestrator asks the operator rather
+than relying on private thread history. Requested changes return to the same
+delegate. Accepted review plus passing checks and mergeability permits
+orchestrator merge without another approval prompt unless a stricter rule or
+explicit pause applies.
+
+After merge, the orchestrator re-reads the packet against current `main`,
+resolves drift or contradictory operator decisions, selects canonical homes,
+promotes settled meaning, and removes or splits resolved triage material. Only
+that separate promotion batch may update architecture, contracts, specs,
+roadmaps, cards, or readiness. Mechanical documentation projection may apply an
+already-settled promotion map; it cannot choose the map.
+
 ## Parallel lane dispatch
 
 Before preparing a worker, the orchestrator inspects the active roadmap runway
@@ -176,6 +236,11 @@ Use these states in the worker handoff or log when the run spans turns:
 
 - `discovery` — questions and edge cases are still being surfaced;
 - `planning` — spec/architecture/contracts/roadmap are being aligned;
+- `planning-delegate-in-flight` — the operator and delegate are exploring one
+  reserved topic in the isolated planning branch;
+- `planning-pr-awaiting-review` — the bounded triage/research packet is in a PR;
+- `planning-promotion` — the packet is merged and the orchestrator is
+  reconciling/promoting it against current `main`;
 - `ready-to-launch` — base and cards are ready; the worker-handoff path can be
   handed to a worker;
 - `worker-in-flight` — worker is executing the assigned runway;
@@ -243,10 +308,20 @@ orchestrator uses them automatically for a ready lane:
 7. returns permission requests to the operator unless existing explicit
    authority already settles the exact action.
 
+For an operator-requested planning delegate, use the same injected-tool signal
+without another permission prompt, but select a frontier conversational-
+planning profile and create a dedicated `branch-off` worktree workspace. The
+operator converses with that new agent directly. Verify handoff-named sibling
+links in the workspace container before launch. Retain its agent/workspace IDs,
+trust notifications rather than polling, and use the same agent for requested
+planning-PR revisions. Sol may be an explicitly selected local profile; it is
+not a stored Northstar model dependency.
+
 Do not use a generic task-handoff skill, including `/paseo-handoff`, for a
-Northstar worker dispatch. Such a skill generates a second briefing and would
-compete with the committed Northstar handoff. Use the base workspace and agent
-tools directly. Tool injection authorizes transport only: it does not
+Northstar worker or planning-delegate dispatch. Such a skill generates a second
+briefing and would compete with the committed Northstar handoff. Use the base
+workspace and agent tools directly. Tool injection authorizes transport only:
+it does not
 independently authorize unready work, missing product or contract choices,
 material permission requests, destructive workspace archival or cleanup,
 review, merge, or a duplicate retry. Merge authority comes from the active
@@ -396,6 +471,7 @@ Model IDs are runtime configuration, not Northstar contract values. Select by
 capability:
 
 - frontier/high effort for the orchestrator and material review;
+- frontier/high effort for an operator-facing planning delegate;
 - fast/low-cost for exact mechanical documentation projection after the
   orchestrator settles meaning;
 - capable/medium effort for bounded, mechanically direct implementation;
@@ -428,6 +504,9 @@ The initial Northstar dogfood must prove:
 - the orchestrator can find at least one real issue or explicitly record a clean
   review;
 - the requested-changes loop or approval path is exercised;
+- a planning delegate can converse directly with the operator, coordinate a
+  read-only research subagent, open a triage/research-only PR, and leave
+  promotion to the orchestrator after merge;
 - an accepted exact-head review plus passing required checks reaches merge
   without another operator prompt;
 - a changed head, explicit operator pause, stricter repository rule, or

@@ -408,14 +408,43 @@ following authority split:
 - the **worker thread** owns implementation only inside its dedicated worktree
   and branch, including bounded diagnosis and implementation judgment inside
   the assigned ready cards, tests, commits, evidence, and PR creation;
+- a **planning delegate** owns one operator-facing discovery conversation and
+  its bounded triage/research packet in an isolated branch; it does not promote
+  canonical planning, decide readiness, or implement;
 - the **operator** answers unresolved questions, may override worker-profile
   selection, starts or relays manual runs, resolves material permission
   requests, and may pause or override the lane before merge.
 
-Starting the orchestrator/worker lane pre-authorises the orchestrator to merge
-the worker PR it owns once it has reviewed the exact current head, recorded an
-accepted verdict on the provider, and confirmed every required check passes. A
-stricter repository rule or explicit operator pause still wins.
+Starting an orchestrator-owned worker or planning-delegate lane pre-authorises
+the orchestrator to merge that lane's PR once it has reviewed the exact current
+head, recorded an accepted verdict on the provider, and confirmed every required
+check passes. A stricter repository rule or explicit operator pause still wins.
+
+An operator may ask the orchestrator to spin off a frontier planning delegate
+for a named topic while the orchestrator continues unrelated work. The
+orchestrator publishes one handoff declaring `handoff_mode: planning-delegate`,
+`planning_mode: conversational-discovery`, `dispatch_authority: orchestrator`,
+and `promotion_authority: orchestrator`, then launches it in a separate
+worktree/branch using a current frontier conversational-planning profile. The
+delegate talks directly with the operator, captures confirmed decisions,
+recommendations, alternatives, evidence, and open questions in named
+`docs/triage/` and optional `docs/research/` paths, and opens a PR containing
+only that packet. Its handoff lists required sibling worktree links or `none`;
+launcher lifecycle creates them in the worktree container before setup and the
+delegate verifies them without overwriting conflicts.
+
+The planning delegate may spawn bounded read-only research subagents that
+return sourced findings to it. Those subagents do not edit, create branches or
+PRs, contact the operator, or start nested orchestrator/implementation lanes.
+The delegate itself does not edit product or canonical planning surfaces,
+promote, decide readiness, or launch implementation. The orchestrator does not
+start work that depends on the topic while its planning PR is open.
+
+After exact-head review and checks, the orchestrator merges the planning PR,
+reconciles it against current `main`, and separately promotes settled meaning
+into architecture, contracts, specs, roadmaps, or cards. It removes or splits
+resolved triage notes during promotion. Merge of a planning packet is intake,
+not promotion or execution authority.
 
 The orchestrator may delegate a meaningful batch of mechanical documentation
 projection to a fast, low-cost subagent after it has settled every planning

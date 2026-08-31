@@ -32,6 +32,7 @@ Use logs as the third step in closeout:
 
 ## Recent active-lane evidence
 
+- `2026-08/31-171710-delegate-conversational-feature-planning.md`
 - `2026-08/31-164037-delegate-mechanical-orchestrator-documentation.md`
 - `2026-08/31-152748-centralize-paseo-worktree-runtime.md`
 - `2026-08/31-141748-make-paseo-dispatch-implicit-inside-paseo.md`

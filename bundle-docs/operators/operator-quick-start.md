@@ -125,13 +125,20 @@ the handoff's absolute path; no second prompt or copied context is needed.
 The handoff lists sibling repos to symlink into the worktree container
 directory before project setup needs them.
 
-After a review requests changes, provider comments record the findings but do
-not wake a finished worker. A Paseo-backed orchestrator must prompt the same
-originating agent to read the comments, revise, validate, and push. It must not
-silently launch a replacement.
+You can also ask the orchestrator to spin off a planning conversation for one
+topic. It launches a frontier planning delegate in a separate worktree/thread;
+you talk with that delegate directly while the orchestrator continues unrelated
+work. The delegate opens a triage/research-only PR. The orchestrator reviews and
+merges it, then separately promotes the settled meaning into canonical planning.
 
-When the orchestrator accepts the exact current PR head and required checks
-pass, it may merge that lane without asking the operator again. A changed head,
+After a review requests changes, provider comments record the findings but do
+not wake a finished worker or planning delegate. A Paseo-backed orchestrator
+must prompt the same originating agent to read the comments, revise, validate,
+and push. It must not silently launch a replacement.
+
+When the orchestrator accepts the exact current worker or planning-delegate PR
+head and required checks pass, it may merge that lane without asking the
+operator again. A changed head,
 failed or pending check, stricter repository rule, explicit operator pause, or
 ambiguous merge state stops that path.
 

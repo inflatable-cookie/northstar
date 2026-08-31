@@ -56,5 +56,7 @@ Northstar system:
   repeated "continue" prompts from the operator
 - frontier orchestrators may delegate settled mechanical documentation batches
   to fast/low-cost subagents, but retain planning and full-diff semantic review
+- frontier orchestrators may delegate an operator-facing planning conversation,
+  but canonical promotion and readiness remain with the orchestrator
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

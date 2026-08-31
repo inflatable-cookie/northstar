@@ -183,6 +183,23 @@ informal habits.
 - Set a local upper bound for uninterrupted runs, such as a card limit or time
   limit, so autonomy remains bounded.
 
+### Conversational planning delegation
+
+- On operator request, the orchestrator may launch one frontier planning
+  delegate for a named topic in an isolated branch/worktree while continuing
+  unrelated work.
+- Its handoff lists required sibling worktree links or `none`; setup creates
+  them in the worktree container before use and stops on conflicts.
+- The delegate talks directly with the operator and writes only a named
+  triage/research packet. It separates confirmed decisions, recommendations,
+  evidence, and open questions; it does not promote, decide readiness, edit
+  product code, or launch implementation.
+- Bounded research subagents are read-only and return sourced findings to the
+  delegate. They do not write, contact the operator, or start nested lanes.
+- The delegate opens a PR. The orchestrator reviews and merges it, then
+  reconciles current `main` and separately promotes settled meaning. Packet
+  merge is not promotion or execution authority.
+
 ### Mechanical documentation projection
 
 - Keep discovery, planning, promotion, acceptance, readiness, review, and merge
@@ -215,13 +232,13 @@ informal habits.
 
 ### Orchestrator merge authority
 
-- Starting an orchestrator/worker lane pre-authorizes the orchestrator to merge
-  that lane's PR after it independently accepts the exact current head and all
-  required checks pass.
+- Starting an orchestrator-owned worker or planning-delegate lane pre-authorizes
+  the orchestrator to merge that lane's PR after it independently accepts the
+  exact current head and all required checks pass.
 - Confirm the PR is mergeable into the intended base. A changed head requires
   another review; ambiguous merge state stops before retry.
 - A stricter repository rule or explicit operator pause still wins.
-- Workers and standalone direct-review threads never merge.
+- Workers, planning delegates, and standalone direct-review threads never merge.
 
 ### Direct PR review boundary
 

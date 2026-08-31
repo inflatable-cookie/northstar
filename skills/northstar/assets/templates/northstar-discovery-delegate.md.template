@@ -1,0 +1,145 @@
+---
+title: {{TOPIC}} planning delegate handoff
+kind: northstar-handoff
+handoff_mode: planning-delegate
+planning_mode: conversational-discovery
+dispatch_authority: orchestrator
+promotion_authority: orchestrator
+handoff: single-file-path-only
+status: ready-to-launch
+owner: {{OWNER}}
+created: {{YYYY-MM-DD}}
+updated: {{YYYY-MM-DD}}
+handoff_path: {{ABSOLUTE_HANDOFF_PATH}}
+base_required: pushed-main
+tags: [coordination, handoff, planning, conversation, pr]
+---
+
+## What This Thread Was Doing
+
+{{PLAIN_LANGUAGE_TOPIC_AND_PLANNING_SEED}}
+
+This dispatches one operator-facing planning conversation. The delegate owns
+discovery and evidence capture for this topic, not canonical promotion or
+implementation.
+
+## Why It Matters
+
+{{WHY_THIS_PLANNING_MATTERS}}
+
+## Current State
+
+- **Repository:** `{{REPOSITORY}}`
+- **Base commit:** `{{BASE_REF}}`
+- **Pushed main verification:** `{{REMOTE_VERIFICATION}}`
+- **Planning-delegate branch:** `{{PLANNING_BRANCH}}`
+- **Planning-delegate worktree:** `{{WORKTREE_PATH}}`
+- **Required sibling worktree links:** `{{SIBLING_LINKS_OR_NONE}}`
+- **Topic boundary:** `{{TOPIC_BOUNDARY}}`
+- **Canonical context:** {{CANONICAL_REFS}}
+- **Named triage packet:** `{{TRIAGE_PATHS}}`
+- **Named research evidence:** `{{RESEARCH_PATHS_OR_NONE}}`
+- **Allowed write paths:** `{{ALLOWED_PATHS}}`
+- **Concurrent orchestrator work:** `{{NON_OVERLAPPING_ACTIVE_WORK_OR_NONE}}`
+- **Frontier planning profile:** `{{PLANNING_PROFILE}}`
+- **PR base/head:** `{{PR_BASE_AND_HEAD}}`
+- **PR URL:** `{{PR_URL_OR_PENDING}}`
+- **Promotion owner:** orchestrator after accepted review and merge
+
+## Boundaries
+
+- Stay inside `{{TOPIC_BOUNDARY}}` and the named write paths.
+- Talk directly with the operator. Ask focused questions, explore alternatives,
+  and make recommendations, but distinguish operator-confirmed decisions,
+  delegate recommendations, evidence, and unresolved questions.
+- Capture the conversation in `docs/triage/`. Put durable sourced research in
+  the named `docs/research/` paths only when this repository has that surface.
+- You may spawn bounded read-only research subagents or advisors. They return
+  findings and sources to you; they do not edit the worktree, create branches or
+  PRs, contact the operator, or start another orchestrator or implementation
+  worker.
+- Do not edit product code, architecture, contracts, specs, roadmaps, cards,
+  logs, or front doors. Do not decide canonical promotion, readiness,
+  implementation scope, or the next execution lane.
+- Do not merge. The orchestrator reviews and merges the planning PR, then owns
+  promotion against the current canonical state.
+
+## Important Context
+
+- **Known decisions:** {{SETTLED_INPUT}}
+- **Questions worth exploring:** {{OPENING_QUESTIONS}}
+- **Research needs:** {{RESEARCH_NEEDS_OR_NONE}}
+- **Non-goals:** {{EXPLICIT_NON_GOALS}}
+- **Mainline drift risk:** {{CONCURRENT_CHANGE_RISKS}}
+- **Stop conditions:** {{STOP_CONDITIONS}}
+
+## Suggested Next Move
+
+Read this handoff and the named canonical context, then start a natural planning
+conversation with the operator. Work in small question groups. At meaningful
+topic shifts, update the triage packet so the branch remains useful without the
+private transcript.
+
+## Completion Protocol
+
+### Before the conversation
+
+1. Confirm the current checkout is a clean, dedicated, non-`main` registered
+   worktree for `{{PLANNING_BRANCH}}`. Start with
+   `git rev-parse --show-toplevel`, `git branch --show-current`,
+   `git status --porcelain`, and `git worktree list --porcelain`. If the launcher
+   did not supply one, use the repository's operator-selected worktree
+   container; never guess `/tmp`, clean another checkout, or overwrite dirty
+   state.
+2. Fetch `origin`, confirm this handoff exists in the selected `HEAD`, and
+   confirm `{{BASE_REF}}` is an ancestor. The tracked handoff is canonical.
+3. Verify every required sibling link from the tracked handoff in the worktree
+   container directory. A launcher lifecycle must create it before setup; a
+   manual fallback may create an absent link after canonicalizing source and
+   destination. Reuse only a symlink resolving to the declared source. Stop on
+   a missing source or conflicting path; never delete, replace, or overwrite.
+   Skip only when the list is `none`.
+4. Read `AGENTS.md`, the named canonical refs, and existing triage/research
+   material for this topic. Do not treat the handoff or triage packet as
+   execution authority.
+
+### During the conversation
+
+- Keep the operator in the loop directly; the orchestrator is not a message
+  proxy and may continue unrelated work.
+- Preserve exact operator decisions and clearly label recommendations and open
+  questions. Cite sources for external claims.
+- Keep research delegation read-only and bounded. Reconcile its output yourself
+  before writing the packet.
+- Stop on topic expansion, conflicting operator decisions, an unlisted write
+  path, required implementation, or a canonical change that cannot wait for
+  promotion.
+
+### When the planning packet is ready
+
+1. Re-read the packet against the conversation. Make settled decisions,
+   recommendations, evidence, alternatives, unresolved questions, non-goals,
+   and suggested canonical destinations explicit.
+2. Run `{{CHECKS}}` and inspect the complete branch diff. The diff may contain
+   only the named triage/research paths.
+3. Commit and push `{{PLANNING_BRANCH}}`, then open a PR against current `main`.
+   The PR body lists the base/head, changed files, operator-confirmed decisions,
+   recommendations, unresolved questions, research sources, validation, and the
+   proposed promotion map.
+4. Report the PR URL. Do not edit canonical surfaces or merge.
+
+### Review, merge, and promotion
+
+The orchestrator reviews the exact PR head for fidelity to this handoff and the
+operator confirmations recorded in the packet, evidence quality, scope, and a
+clean separation between confirmed decisions, recommendations, and open
+questions. If decision ownership is unclear, it asks the operator rather than
+relying on private thread history. If it requests changes, revise this same
+branch and report again. When the reviewed head remains current, required checks
+pass, the PR is mergeable, and no stricter rule or operator pause applies, the
+orchestrator may merge without another approval prompt.
+
+After merge, the orchestrator reconciles the packet with current `main`, chooses
+canonical destinations, promotes settled meaning, splits or removes resolved
+triage notes, validates the promoted planning, and only then decides readiness
+or launches implementation. Promotion is never implied by merging the packet.

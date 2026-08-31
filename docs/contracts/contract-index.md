@@ -15,14 +15,19 @@ Updated: 2026-08-26
 
 | Contract | Boundary | Owning surface | Dependent roadmaps | Status |
 | --- | --- | --- | --- | --- |
-| `001-working-rules` | compact delivery grammar, papercuts feedback loop, triage capture/cleanup, done-ness, guardrail pack, spec-hygiene rule, currentness-surface rules, autonomy rules, orchestrator/worker and documentation-projection boundaries, worktree isolation, PR review and merge gates, and the live ready-state/closeout rules for the repo | `docs/`, `bundle-docs/`, `template-bundle/`, `skills/`, `scripts/` | `g01.001` through `g02.039` where directly applicable | active |
-| `002-agent-local-paths` | ignored path registry, manual worktree container selection, harness-vs-manual ownership, and nested-agent stop boundary | `AGENTS.md`, `docs/contracts/`, `template-bundle/`, `skills/`, `docs/handoffs/` | orchestrator/worker launches and any manual worktree lane | active |
+| `001-working-rules` | compact delivery grammar, papercuts feedback loop, triage capture/cleanup, done-ness, guardrail pack, spec-hygiene rule, currentness-surface rules, autonomy rules, orchestrator/worker, planning-delegate, and documentation-projection boundaries, worktree isolation, PR review and merge gates, and the live ready-state/closeout rules for the repo | `docs/`, `bundle-docs/`, `template-bundle/`, `skills/`, `scripts/` | `g01.001` through `g02.040` where directly applicable | active |
+| `002-agent-local-paths` | ignored path registry, manual worktree container selection, harness-vs-manual ownership, and nested-agent stop boundary | `AGENTS.md`, `docs/contracts/`, `template-bundle/`, `skills/`, `docs/handoffs/` | orchestrator-owned implementation-worker and planning-delegate launches, plus any manual worktree lane | active |
 | `003-agent-instruction-surface` | always-loaded versus scoped/on-demand instruction content, root-file review budget, precedence, and read-only audit boundary | `AGENTS.md`, `docs/contracts/`, `template-bundle/`, `skills/`, `scripts/` | `g02.027` and future consumer adoption | active |
 | `004-language-quality-pack` | shared language-rule catalogue, conditional framework overlays, independently gated everyday and explicit-audit workflows, scope resolution, remediation authority, assurance profiles, deviations, and completion evidence | `docs/contracts/`, language-quality catalogues, `skills/`, Effigy selectors, consumer profiles | `g02.030` (complete), `g02.031` (complete), `g02.032` (complete) | active |
 
 ## Roadmap Readiness
 
 `g01.001`, `g01.002`, `g01.003`, and `g02.001` through `g02.025` are complete.
+Roadmap `g02.040` is complete through card 108: the planning-delegate boundary,
+safe sibling-link preflight, worker-mode distinction, operator-confirmation
+authority, and separate merge/promotion lifecycle passed final review and
+validation. No live planning-delegate or Paseo dogfood was performed. Roadmap
+`g02.038` remains active and waiting for external Effigy `skill run` support.
 `g02.026` remains active: cards 075, 076, and 077 are complete, card 078 is
 ready but deferred, and the architecture-refocus and reframe parts of Batch 26.4
 are complete.

@@ -54,6 +54,12 @@ tracked handoff lists in the worktree container directory. A launcher lifecycle
 creates them before project setup; only the manual fallback worker creates an
 absent link after preflight.
 
+A planning delegate is distinct from worker mode. Its handoff declares
+`handoff_mode: planning-delegate` and
+`planning_mode: conversational-discovery`; it follows that handoff's isolated
+planning-worktree preflight, writes only named triage/research paths, and cannot
+implement or promote.
+
 ## Outcomes by mode
 
 - **Planning:** coherent architecture/contracts/roadmaps; no invented system
@@ -91,10 +97,12 @@ absent link after preflight.
   wider audit authority.
 - **Recovery:** trustworthy planning surfaces and canonical refs restored.
 - **Normalize:** baseline or strict spine installed/maintained; Effigy-first QA.
-- **Orchestrator:** question-led planning, one pushed worker handoff under
-  `docs/handoffs/`, optional fast/low-cost mechanical documentation projection
-  under frontier semantic review, bounded PR review/revision, and
-  accepted-review plus check-gated merge without a second operator prompt.
+- **Orchestrator:** question-led planning, optional operator-facing frontier
+  planning delegates with orchestrator-owned promotion, one pushed worker
+  handoff under `docs/handoffs/`, optional fast/low-cost mechanical
+  documentation projection under frontier semantic review, bounded PR
+  review/revision, and accepted-review plus check-gated merge without a second
+  operator prompt.
 - **Handoff:** a human-friendly seven-section file under `docs/handoffs/`, with
   an absolute path returned to the operator; not a substitute for log/roadmap
   closeout.
@@ -162,6 +170,7 @@ Northstar source repo, expanded doctrine lives at
 - Papercuts starter: `assets/templates/PAPERCUTS.md`
 - Handoff template: [`assets/templates/northstar-handoff.md.template`](./assets/templates/northstar-handoff.md.template)
 - Orchestrator worker handoff extension: [`assets/templates/northstar-orchestrator-run.md.template`](./assets/templates/northstar-orchestrator-run.md.template)
+- Orchestrator planning-delegate handoff: [`assets/templates/northstar-discovery-delegate.md.template`](./assets/templates/northstar-discovery-delegate.md.template)
 - Orchestrator documentation projection brief: [`assets/templates/northstar-documentation-projection.md.template`](./assets/templates/northstar-documentation-projection.md.template)
 - Handoff directory: `docs/handoffs/`
 - Triage directory: `docs/triage/`

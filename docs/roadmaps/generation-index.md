@@ -80,6 +80,10 @@ Roadmap `g02.039`, card `107`, is complete. Its exact Sol-owned brief was
 projected serially and reviewed; the next lane is `g02.038/106` after Effigy's
 external skill task runner lands.
 
+Roadmap `g02.040`, card `108`, is complete. Sol reviewed the semantic
+corrections and full validation; `g02.038/106` resumes after the external Effigy
+task runner lands.
+
 Roadmap `g02.038` is active. Complete card 106 after Effigy's external skill
 task runner is available, then prove the skill-owned Paseo lifecycle in
 Figmatic.
@@ -128,3 +132,6 @@ checks now authorizes merge without another operator prompt.
 Mechanical documentation projection `g02.039/107` is complete: Sol retains
 meaning authority and a provider-neutral, profile-driven subagent applies only
 exact bounded documentation briefs; Sol reviews the full diff before closeout.
+Conversational planning delegation `g02.040/108` is complete. Its planning
+delegate remains provider-neutral, research helpers are read-only, merge is
+intake, and promotion remains a separate orchestrator batch.

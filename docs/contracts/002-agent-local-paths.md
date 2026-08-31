@@ -2,10 +2,10 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-08-16
+Updated: 2026-08-31
 Depends on: `docs/contracts/001-working-rules.md`
 Affects: `AGENTS.md`, `skills/northstar/`, `template-bundle/`,
-`docs/handoffs/`, and manual worker launch procedures
+`docs/handoffs/`, and manual worker/planning-delegate launch procedures
 
 ## Purpose
 
@@ -23,10 +23,11 @@ script and not a secret store.
 - `.agents.local.env` is local-only, ignored by Git, and created on first need.
 - `AGENTS.md` is the required discovery point for the contract.
 
-Worker-mode agents must read `.agents.local.env` when a worker task needs a
-manual local path. Normal-mode agents must not inspect or require it merely
-because the repository supports worker lanes. A valid harness-provided worker
-location is sufficient and does not require this file.
+Implementation workers and planning delegates must read `.agents.local.env`
+when their dispatched lane needs a manual local path. Other normal-mode agents
+must not inspect or require it merely because the repository supports delegated
+lanes. A valid harness-provided worktree is sufficient and does not require this
+file.
 
 ## Supported keys
 
@@ -40,7 +41,7 @@ Only path-valued, namespaced `AGENTS_*` keys belong in this file. Do not put API
 keys, tokens, passwords, credentials, connection strings, or arbitrary commands
 in it. Read `KEY=VALUE` entries as data; never execute or `source` the file.
 
-## Worker-mode first-use procedure
+## Delegated-worktree first-use procedure
 
 1. Prefer the worktree, scratch area, or artifact location supplied by the
    harness. A clean, dedicated, non-`main` worktree registered by Git in the
@@ -67,17 +68,18 @@ in it. Read `KEY=VALUE` entries as data; never execute or `source` the file.
    boundary failure. Do not fall back to `TMPDIR`, `/tmp`, or another guessed
    location.
 
-## Worker-mode nested-agent boundary
+## Nested-agent worktree boundary
 
 A worker or subagent must not start a second orchestrator workflow, dispatch a
 new worker, or create a nested worktree unless the operator explicitly assigned
 that separate lane and the local-path contract is satisfied. When a harness or
 parent orchestrator already owns the worktree, use it and do not create another
-one.
+one. A planning delegate may spawn its handoff-bounded read-only research
+subagents, but they receive no worktree or Git/provider authority.
 
 ## Handoff requirements
 
-A worker handoff must state whether the worktree is harness-managed or manual. For
-a manual fallback it must point to the resolved local container path, not a
-hard-coded temporary directory. A worker that cannot establish this boundary
-stops before editing.
+An implementation-worker or planning-delegate handoff must state whether the
+worktree is harness-managed or manual. For a manual fallback it must point to
+the resolved local container path, not a hard-coded temporary directory. A
+lane that cannot establish this boundary stops before editing.
