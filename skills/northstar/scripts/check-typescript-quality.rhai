@@ -241,8 +241,8 @@ fn validate_profile(profile, context) {
     require(profile["when_unresolved"] == "stop", context + " must stop when ownership or overlay is unresolved");
 }
 
-fn validate_templates(skill_root) {
-    let template_root = path::join(skill_root, "assets/templates/language-quality/typescript");
+fn validate_templates(northstar_skill_root) {
+    let template_root = path::join(northstar_skill_root, "assets/templates/language-quality/typescript");
     let profile = json::read_file(path::join(template_root, "typescript-quality-profile.json"));
     let deviations = json::read_file(path::join(template_root, "typescript-quality-deviations.json"));
     validate_profile(profile, "TypeScript profile template");
@@ -251,21 +251,21 @@ fn validate_templates(skill_root) {
     require_array(deviations["deviations"], "TypeScript deviations");
 }
 
-fn validate_runtime_surface(skill_root) {
-    let router = fs::read_file(path::join(skill_root, "references/router.md"));
-    let mode_path = path::join(skill_root, "references/modes/typescript-quality-audit.md");
-    let recording_path = path::join(skill_root, "references/language-quality/typescript/audit-recording.md");
-    let setup_path = path::join(skill_root, "scripts/typescript-quality-setup.rhai");
-    let recorder_path = path::join(skill_root, "scripts/typescript-quality-recorder.rhai");
-    let adapter_path = path::join(skill_root, "commands/northstar-typescript-audit/SKILL.md");
-    let policy_path = path::join(skill_root, "commands/northstar-typescript-audit/agents/openai.yaml");
+fn validate_runtime_surface(northstar_skill_root) {
+    let router = fs::read_file(path::join(northstar_skill_root, "references/router.md"));
+    let mode_path = path::join(northstar_skill_root, "references/modes/typescript-quality-audit.md");
+    let recording_path = path::join(northstar_skill_root, "references/language-quality/typescript/audit-recording.md");
+    let setup_path = path::join(northstar_skill_root, "scripts/typescript-quality-setup.rhai");
+    let recorder_path = path::join(northstar_skill_root, "scripts/typescript-quality-recorder.rhai");
+    let adapter_path = path::join(northstar_skill_root, "commands/northstar-typescript-audit/SKILL.md");
+    let policy_path = path::join(northstar_skill_root, "commands/northstar-typescript-audit/agents/openai.yaml");
     let mode = fs::read_file(mode_path);
     let recording = fs::read_file(recording_path);
     let setup = fs::read_file(setup_path);
     let recorder = fs::read_file(recorder_path);
     let adapter = fs::read_file(adapter_path);
     let policy = fs::read_file(policy_path);
-    let catalog = fs::read_file(path::join(skill_root, "effigy.toml"));
+    let catalog = fs::read_file(path::join(northstar_skill_root, "effigy.toml"));
     require(router.contains("TypeScript/Svelte explicit audit-and-repair (explicit only)"),
         "router lacks explicit TypeScript/Svelte audit route");
     require(router.contains("never") && router.contains("activates from ordinary TypeScript or Svelte coding"),
@@ -343,19 +343,19 @@ fn self_test(catalogue_path) {
     expect_rejection("architecture authority", broadened, "operator decision");
 }
 
-let skill_root = repo_root;
+let northstar_skill_root = repo_root;
 if fs::is_dir(path::join(repo_root, "skills/northstar/references/language-quality/typescript")) {
-    skill_root = path::join(repo_root, "skills/northstar");
+    northstar_skill_root = path::join(repo_root, "skills/northstar");
 }
-let payload_root = path::join(skill_root, "references/language-quality/typescript");
+let payload_root = path::join(northstar_skill_root, "references/language-quality/typescript");
 let catalogue_path = path::join(payload_root, "catalogue.json");
 let catalogue = json::read_file(catalogue_path);
 validate_catalogue(catalogue);
 validate_projection(catalogue, payload_root);
 validate_schema(payload_root, "catalogue.schema.json");
 validate_schema(payload_root, "profile.schema.json");
-validate_templates(skill_root);
-validate_runtime_surface(skill_root);
+validate_templates(northstar_skill_root);
+validate_runtime_surface(northstar_skill_root);
 self_test(catalogue_path);
 for filename in ["audit-manifest.schema.json", "audit-unit.schema.json", "audit-result.schema.json"] {
     validate_schema(payload_root, filename);

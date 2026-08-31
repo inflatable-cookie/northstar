@@ -1,6 +1,6 @@
 # 038 - Centralize Paseo Worktree Runtime
 
-Status: active
+Status: complete
 Owner: repo maintainers
 Created: 2026-08-31
 Depends on: `g02.037`, contract `001-working-rules`, Effigy external skill task runner
@@ -8,7 +8,7 @@ Vision tags: `orchestration`, `portability`, `control-plane`, `worktrees`
 Governing refs: `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`,
 `docs/architecture/system-architecture.md`,
 `docs/contracts/001-working-rules.md`
-Planning state: card 106 in progress
+Planning state: card 106 complete
 
 ## Problem
 
@@ -24,15 +24,15 @@ Paseo worker, so review must explicitly resume the originating agent.
 
 ## Goals
 
-- [ ] ship the worktree helper once inside the installed Northstar skill;
-- [ ] invoke it from consumer `paseo.json` through `effigy skill run` while the
+- [x] ship the worktree helper once inside the installed Northstar skill;
+- [x] invoke it from consumer `paseo.json` through `effigy skill run` while the
   consumer remains the runtime target;
-- [ ] use the consumer's real idempotent setup task between prepare and replay;
+- [x] use the consumer's real idempotent setup task between prepare and replay;
 - [x] require sibling links in the worktree container directory before setup;
 - [x] require a Paseo follow-up to the originating agent after requested changes;
 - [x] let an orchestrator merge its accepted, checks-passing worker PR without a
   second operator approval prompt;
-- [ ] dogfood the boundary in Figmatic without a copied helper or local task.
+- [x] dogfood the boundary in Figmatic without a copied helper or local task.
 
 ## Non-goals
 
@@ -51,18 +51,19 @@ Figmatic setup against an Effigy binary with external skill task execution.
 
 ## Acceptance criteria
 
-- [ ] the installed Northstar skill lists and runs `paseo:worktree` against a
+- [x] the installed Northstar skill lists and runs `paseo:worktree` against a
   separate consumer root;
-- [ ] Northstar and Figmatic `paseo.json` files contain no copied-helper task or
+- [x] Northstar and Figmatic `paseo.json` files contain no copied-helper task or
   no-argument `effigy bootstrap` assumption;
-- [ ] Figmatic prepares both Longhorn and Poodle in the worktree container before
+- [x] Figmatic prepares both Longhorn and Poodle in the worktree container before
   `effigy setup`;
 - [x] orchestration docs retain agent identity and call `send_agent_prompt`
   after a changes-requested review;
 - [x] an accepted orchestrator review of the exact current head plus passing
   checks authorizes merge without another operator prompt;
-- [ ] skill validation, lifecycle self-test, docs QA, and relevant repo QA pass.
+- [x] skill validation, lifecycle self-test, docs QA, and relevant repo QA pass.
 
 ## Next task
 
-Finish card 106 when the active Effigy binary exposes `effigy skill run`.
+No automatic follow-on card. Return to generation planning or accept the next
+operator-provided live-use correction.

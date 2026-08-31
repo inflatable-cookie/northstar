@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-08-26
+Updated: 2026-08-31
 
 ## Coverage Rules
 
@@ -27,7 +27,8 @@ Roadmap `g02.040` is complete through card 108: the planning-delegate boundary,
 safe sibling-link preflight, worker-mode distinction, operator-confirmation
 authority, and separate merge/promotion lifecycle passed final review and
 validation. No live planning-delegate or Paseo dogfood was performed. Roadmap
-`g02.038` remains active and waiting for external Effigy `skill run` support.
+`g02.038` is complete: the installed external skill task and a real Figmatic
+Paseo managed-worktree lifecycle passed.
 `g02.026` remains active: cards 075, 076, and 077 are complete, card 078 is
 ready but deferred, and the architecture-refocus and reframe parts of Batch 26.4
 are complete.

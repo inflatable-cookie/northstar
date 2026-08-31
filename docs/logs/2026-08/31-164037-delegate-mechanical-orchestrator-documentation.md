@@ -37,4 +37,5 @@ and synced the installed skill.
 
 ## Next
 
-Resume `g02.038/106` after Effigy's external `skill run` task runner lands.
+The later `g02.038/106` lifecycle proof is complete. Return to generation
+planning.

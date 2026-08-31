@@ -312,14 +312,14 @@ fn project_catalogue(catalogue, workflow) {
     projection
 }
 
-fn require_projection(catalogue, workflow, skill_root, filename) {
+fn require_projection(catalogue, workflow, northstar_skill_root, filename) {
     let expected = project_catalogue(catalogue, workflow);
-    let actual = json::read_file(path::join(skill_root, filename));
+    let actual = json::read_file(path::join(northstar_skill_root, filename));
     require(actual == expected, workflow + " projection drifted from catalogue");
 }
 
-fn validate_schema_file(skill_root, filename) {
-    let schema = json::read_file(path::join(skill_root, filename));
+fn validate_schema_file(northstar_skill_root, filename) {
+    let schema = json::read_file(path::join(northstar_skill_root, filename));
     require(schema["$schema"] == "https://json-schema.org/draft/2020-12/schema", filename + " uses wrong JSON Schema dialect");
     require(schema["$id"].contains("rust-quality"), filename + " has wrong schema identity");
     require(schema["type"] == "object", filename + " root must be an object");
@@ -327,7 +327,7 @@ fn validate_schema_file(skill_root, filename) {
     require(schema["required"].len() > 0, filename + " requires no fields");
 }
 
-fn validate_authoring_references(catalogue, skill_root) {
+fn validate_authoring_references(catalogue, northstar_skill_root) {
     let ids = [
         "RUST-READ-001", "RUST-API-001", "RUST-ERR-001", "RUST-UNSAFE-001",
         "RUST-ASYNC-001", "RUST-MSRV-001", "RUST-SLOP-001",
@@ -338,11 +338,11 @@ fn validate_authoring_references(catalogue, skill_root) {
         "rust-slop-001.json",
     ];
     let projection = json::read_file(path::join(
-        skill_root,
+        northstar_skill_root,
         "references/language-quality/rust/strict-authoring.json",
     ));
     let mode = fs::read_file(path::join(
-        skill_root,
+        northstar_skill_root,
         "references/modes/rust-quality-authoring.md",
     ));
 
@@ -350,13 +350,13 @@ fn validate_authoring_references(catalogue, skill_root) {
     for index in 0..filenames.len() {
         let expected = find_rule(projection, ids[index]);
         let actual = json::read_file(path::join(
-            skill_root,
+            northstar_skill_root,
             "references/language-quality/rust/authoring/" + filenames[index],
         ));
         require(actual == expected, filenames[index] + " drifted from strict authoring projection");
         require(mode.contains(filenames[index]), "authoring mode does not route " + filenames[index]);
     }
-    require(fs::file_size(path::join(skill_root, "references/modes/rust-quality-authoring.md")) <= 8192,
+    require(fs::file_size(path::join(northstar_skill_root, "references/modes/rust-quality-authoring.md")) <= 8192,
         "Rust authoring mode exceeds compact context budget");
 }
 
@@ -370,9 +370,9 @@ fn route_authoring_case(item) {
     "other_router"
 }
 
-fn validate_authoring_routes(skill_root) {
+fn validate_authoring_routes(northstar_skill_root) {
     let fixtures = json::read_file(path::join(
-        skill_root,
+        northstar_skill_root,
         "references/language-quality/rust/authoring-routing-fixtures.json",
     ));
     require(fixtures["schema_version"] == "1.0.0", "unsupported authoring routing fixture schema");
@@ -411,9 +411,9 @@ fn authoring_workflow_action(item) {
     "review_changed_tranche"
 }
 
-fn validate_authoring_workflow(skill_root) {
+fn validate_authoring_workflow(northstar_skill_root) {
     let fixtures = json::read_file(path::join(
-        skill_root,
+        northstar_skill_root,
         "references/language-quality/rust/authoring-workflow-fixtures.json",
     ));
     require(fixtures["schema_version"] == "1.0.0", "unsupported authoring workflow fixture schema");
@@ -461,11 +461,11 @@ fn validate_deviations(deviations, context) {
     require_array(deviations["deviations"], context + " deviations");
 }
 
-fn validate_activation_surface(repo_root, skill_root) {
-    let router = fs::read_file(path::join(skill_root, "references/router.md"));
-    let skill = fs::read_file(path::join(skill_root, "SKILL.md"));
-    let mode = fs::read_file(path::join(skill_root, "references/modes/rust-quality-authoring.md"));
-    let scoped = fs::read_file(path::join(skill_root, "assets/templates/language-quality/rust/AGENTS.md"));
+fn validate_activation_surface(repo_root, northstar_skill_root) {
+    let router = fs::read_file(path::join(northstar_skill_root, "references/router.md"));
+    let skill = fs::read_file(path::join(northstar_skill_root, "SKILL.md"));
+    let mode = fs::read_file(path::join(northstar_skill_root, "references/modes/rust-quality-authoring.md"));
+    let scoped = fs::read_file(path::join(northstar_skill_root, "assets/templates/language-quality/rust/AGENTS.md"));
 
     require(router.contains("Rust everyday authoring (self-activating)"), "router lacks self-activating Rust route");
     require(router.contains("Rust explicit audit-and-repair (explicit only)"), "router lacks explicit Rust audit route");
@@ -477,13 +477,13 @@ fn validate_activation_surface(repo_root, skill_root) {
     require(scoped.contains("never route it through everyday authoring"), "scoped activation blurs audit intent");
     require(scoped.contains("northstar:rust-quality:start") && scoped.contains("northstar:rust-quality:end"),
         "scoped activation lacks idempotent setup markers");
-    require(fs::is_file(path::join(skill_root, "references/modes/rust-quality-audit.md")), "missing explicit Rust audit mode");
-    require(fs::is_file(path::join(skill_root, "references/language-quality/rust/audit-recording.md")), "missing Rust audit recorder contract");
-    require(fs::file_size(path::join(skill_root, "assets/templates/language-quality/rust/AGENTS.md")) <= 12288,
+    require(fs::is_file(path::join(northstar_skill_root, "references/modes/rust-quality-audit.md")), "missing explicit Rust audit mode");
+    require(fs::is_file(path::join(northstar_skill_root, "references/language-quality/rust/audit-recording.md")), "missing Rust audit recorder contract");
+    require(fs::file_size(path::join(northstar_skill_root, "assets/templates/language-quality/rust/AGENTS.md")) <= 12288,
         "scoped Rust instructions exceed context budget");
 
-    let template_profile = json::read_file(path::join(skill_root, "assets/templates/language-quality/rust/rust-quality-profile.json"));
-    let template_deviations = json::read_file(path::join(skill_root, "assets/templates/language-quality/rust/rust-quality-deviations.json"));
+    let template_profile = json::read_file(path::join(northstar_skill_root, "assets/templates/language-quality/rust/rust-quality-profile.json"));
+    let template_deviations = json::read_file(path::join(northstar_skill_root, "assets/templates/language-quality/rust/rust-quality-deviations.json"));
     validate_profile(template_profile, "Rust profile template");
     validate_deviations(template_deviations, "Rust deviations template");
 
@@ -495,13 +495,13 @@ fn validate_activation_surface(repo_root, skill_root) {
     }
 }
 
-fn validate_setup_surface(skill_root) {
-    let setup_path = path::join(skill_root, "scripts/rust-quality-setup.rhai");
+fn validate_setup_surface(northstar_skill_root) {
+    let setup_path = path::join(northstar_skill_root, "scripts/rust-quality-setup.rhai");
     require(fs::is_file(setup_path), "missing Rust quality setup task");
     let setup = fs::read_file(setup_path);
-    let authoring = fs::read_file(path::join(skill_root, "references/modes/rust-quality-authoring.md"));
-    let audit = fs::read_file(path::join(skill_root, "references/modes/rust-quality-audit.md"));
-    let catalog = fs::read_file(path::join(skill_root, "effigy.toml"));
+    let authoring = fs::read_file(path::join(northstar_skill_root, "references/modes/rust-quality-authoring.md"));
+    let audit = fs::read_file(path::join(northstar_skill_root, "references/modes/rust-quality-audit.md"));
+    let catalog = fs::read_file(path::join(northstar_skill_root, "effigy.toml"));
     require(catalog.contains("rust-quality:setup") && catalog.contains("test:rust-quality-setup"),
         "skill-local catalog lacks Rust setup selectors");
     require(authoring.contains("northstar/rust-quality:setup apply"),
@@ -515,19 +515,19 @@ fn validate_setup_surface(skill_root) {
         "Rust setup can launch a subprocess");
 }
 
-fn validate_audit_surface(skill_root) {
-    let mode_path = path::join(skill_root, "references/modes/rust-quality-audit.md");
-    let recording_path = path::join(skill_root, "references/language-quality/rust/audit-recording.md");
-    let evidence_path = path::join(skill_root, "references/language-quality/rust/evidence-collection.md");
-    let bootstrap_path = path::join(skill_root, "references/language-quality/rust/tool-bootstrap.md");
-    let tool_root = path::join(skill_root, "tools/rust-quality");
-    let adapter_path = path::join(skill_root, "commands/northstar-rust-audit/SKILL.md");
+fn validate_audit_surface(northstar_skill_root) {
+    let mode_path = path::join(northstar_skill_root, "references/modes/rust-quality-audit.md");
+    let recording_path = path::join(northstar_skill_root, "references/language-quality/rust/audit-recording.md");
+    let evidence_path = path::join(northstar_skill_root, "references/language-quality/rust/evidence-collection.md");
+    let bootstrap_path = path::join(northstar_skill_root, "references/language-quality/rust/tool-bootstrap.md");
+    let tool_root = path::join(northstar_skill_root, "tools/rust-quality");
+    let adapter_path = path::join(northstar_skill_root, "commands/northstar-rust-audit/SKILL.md");
     let mode = fs::read_file(mode_path);
     let recording = fs::read_file(recording_path);
     let evidence = fs::read_file(evidence_path);
     let bootstrap = fs::read_file(bootstrap_path);
     let adapter = fs::read_file(adapter_path);
-    let catalog = fs::read_file(path::join(skill_root, "effigy.toml"));
+    let catalog = fs::read_file(path::join(northstar_skill_root, "effigy.toml"));
 
     require(mode.contains("Use only when the operator explicitly requests"), "Rust audit mode is not explicit-only");
     require(mode.contains("three distinct passes"), "Rust audit mode lacks separate review passes");
@@ -574,13 +574,13 @@ fn validate_audit_surface(skill_root) {
     require(fs::file_size(bootstrap_path) <= 8192, "Rust tool bootstrap exceeds on-demand context budget");
     require(fs::file_size(adapter_path) <= 1200, "Rust audit adapter exceeds thin-adapter budget");
 
-    let manifest_schema = json::read_file(path::join(skill_root, "references/language-quality/rust/audit-manifest.schema.json"));
-    let result_schema = json::read_file(path::join(skill_root, "references/language-quality/rust/audit-result.schema.json"));
+    let manifest_schema = json::read_file(path::join(northstar_skill_root, "references/language-quality/rust/audit-manifest.schema.json"));
+    let result_schema = json::read_file(path::join(northstar_skill_root, "references/language-quality/rust/audit-result.schema.json"));
     require(manifest_schema["required"].contains("baseline_sha256"), "audit manifest does not bind file state");
     require(manifest_schema["required"].contains("policy_sha256"), "audit manifest does not bind policy");
     require(result_schema["required"].contains("changed_files"), "audit result lacks mutation attribution");
     require(result_schema["required"].contains("limitations"), "audit result lacks structured limitations");
-    let evidence_schema = json::read_file(path::join(skill_root, "references/language-quality/rust/audit-evidence.schema.json"));
+    let evidence_schema = json::read_file(path::join(northstar_skill_root, "references/language-quality/rust/audit-evidence.schema.json"));
     require(evidence_schema["properties"]["status"]["enum"].contains("warning"),
         "Rust evidence treats warning-bearing success as clean");
     require(evidence.contains("does not discover") && evidence.contains("universal command graph") &&
@@ -670,27 +670,27 @@ fn detector_self_test(catalogue, candidate_path, mapping_path) {
     expect_candidate_rejection("mapping disposition", catalogue, json::read_file(candidate_path), drifted_mapping, "mapping disposition drifted");
 }
 
-let skill_root = repo_root;
+let northstar_skill_root = repo_root;
 if fs::is_dir(path::join(repo_root, "skills/northstar/references/language-quality/rust")) {
-    skill_root = path::join(repo_root, "skills/northstar");
+    northstar_skill_root = path::join(repo_root, "skills/northstar");
 }
-let payload_root = path::join(skill_root, "references/language-quality/rust");
+let payload_root = path::join(northstar_skill_root, "references/language-quality/rust");
 let catalogue_path = path::join(payload_root, "catalogue.json");
 let catalogue = json::read_file(catalogue_path);
 validate_catalogue(catalogue);
 let candidate_path = path::join(payload_root, "detector-candidates.json");
-let mapping_path = path::join(skill_root, "tools/rust-quality/assets/diagnostic-mapping.json");
+let mapping_path = path::join(northstar_skill_root, "tools/rust-quality/assets/diagnostic-mapping.json");
 let candidates = json::read_file(candidate_path);
 let mapping = json::read_file(mapping_path);
 validate_detector_candidates(catalogue, candidates, mapping);
-require_projection(catalogue, "everyday_authoring", skill_root, "references/language-quality/rust/strict-authoring.json");
-require_projection(catalogue, "explicit_audit_repair", skill_root, "references/language-quality/rust/strict-audit.json");
-validate_authoring_references(catalogue, skill_root);
-validate_authoring_routes(skill_root);
-validate_authoring_workflow(skill_root);
-validate_activation_surface(repo_root, skill_root);
-validate_setup_surface(skill_root);
-validate_audit_surface(skill_root);
+require_projection(catalogue, "everyday_authoring", northstar_skill_root, "references/language-quality/rust/strict-authoring.json");
+require_projection(catalogue, "explicit_audit_repair", northstar_skill_root, "references/language-quality/rust/strict-audit.json");
+validate_authoring_references(catalogue, northstar_skill_root);
+validate_authoring_routes(northstar_skill_root);
+validate_authoring_workflow(northstar_skill_root);
+validate_activation_surface(repo_root, northstar_skill_root);
+validate_setup_surface(northstar_skill_root);
+validate_audit_surface(northstar_skill_root);
 
 for filename in [
     "references/language-quality/rust/catalogue.schema.json",
@@ -702,7 +702,7 @@ for filename in [
     "references/language-quality/rust/closeout.schema.json",
     "references/language-quality/rust/detector-candidates.schema.json",
 ] {
-    validate_schema_file(skill_root, filename);
+    validate_schema_file(northstar_skill_root, filename);
 }
 
 for filename in ["catalogue.json", "strict-authoring.json", "strict-audit.json"] {

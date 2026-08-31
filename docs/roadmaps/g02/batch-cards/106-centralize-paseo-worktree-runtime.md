@@ -1,6 +1,6 @@
 # 106 - Centralize Paseo Worktree Runtime
 
-Status: in-progress
+Status: complete
 Owner: repo maintainers
 Updated: 2026-08-31
 Master spec refs: `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`
@@ -30,7 +30,7 @@ in Figmatic.
 - [x] The operator selected skill-owned execution as the portability boundary.
 - [x] Effigy's external skill task contract defines source and target semantics.
 - [x] Figmatic's real setup task and sibling topology are known.
-- [ ] The active Effigy binary implements `skill tasks` and `skill run`.
+- [x] The active Effigy binary implements `skill tasks` and `skill run`.
 
 ## Acceptance Criteria
 
@@ -78,11 +78,12 @@ in Figmatic.
 
 ## Current state
 
-Northstar and Figmatic are rewritten to the draft `effigy skill run` contract.
-The active Effigy binary still rejects `skill` as an unknown selector, so runtime
-proof and installed-skill sync remain pending.
+The active Effigy binary exposes the external skill task surface. Installed
+skill inventory, self-test, explicit Figmatic target evidence, and a real Paseo
+managed-worktree lifecycle all pass. Longhorn and Poodle resolve in the
+worktree container before Figmatic setup; dependency replay and unlink complete
+against the worktree while shared sibling symlinks remain.
 
 ## Next task
 
-Rebuild or install Effigy after its external skill task runner lands, then run
-the isolated skill self-test and Figmatic lifecycle proof.
+None. Card complete; return to generation planning.

@@ -78,9 +78,9 @@ and install-parity evidence.
 
 The lane is complete. Canonical policy, template, source skill, installed skill,
 doctrine, architecture, contracts, operator, and validation surfaces are
-aligned. `g02.038/106` remains active and waiting for external Effigy `skill
-run` support. No live planning-delegate, Paseo, or PR dogfood was performed.
+aligned. The later `g02.038/106` lifecycle proof is also complete. No live
+planning-delegate or planning PR dogfood was performed in this lane.
 
 ## Next task
 
-Resume `g02.038/106` after the external Effigy `skill run` task runner lands.
+None. Return to generation planning.

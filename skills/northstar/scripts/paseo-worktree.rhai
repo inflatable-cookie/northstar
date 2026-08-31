@@ -157,9 +157,10 @@ fn prepare_links(target_root, sources) {
 
 fn run_link_action(action, records) {
     for record in records {
-        let envelope = effigy::run_json(["deps", action, record["manager"], record["source"]]);
-        require(type_of(envelope) == "map" && envelope.contains("ok") && envelope["ok"],
-            "effigy deps " + action + " failed for " + record["source"]);
+        let result = effigy::run_json(["deps", action, record["manager"], record["source"]]);
+        let expected_schema = "effigy.deps." + action + ".v1";
+        require(type_of(result) == "map" && result.contains("schema") && result["schema"] == expected_schema,
+            "effigy deps " + action + " returned unexpected evidence for " + record["source"]);
     }
     log("Paseo Effigy dependency " + action + ": OK (links=" + records.len() + ")");
 }
@@ -241,15 +242,27 @@ fn self_test() {
     log("Northstar Paseo worktree helper self-test: OK");
 }
 
-if args.len() == 0 {
+let task_args = [];
+for argument in args {
+    task_args.push(argument);
+}
+if task_args.len() > 0 && task_args[0] == "--" {
+    let forwarded = [];
+    for index in 1..task_args.len() {
+        forwarded.push(task_args[index]);
+    }
+    task_args = forwarded;
+}
+
+if task_args.len() == 0 {
     throw("usage: paseo:worktree <prepare [SOURCE[=LINK] ...]|link|unlink|self-test>");
 }
 
-let action = args[0];
+let action = task_args[0];
 if action == "prepare" {
     let extras = [];
-    for index in 1..args.len() {
-        extras.push(args[index]);
+    for index in 1..task_args.len() {
+        extras.push(task_args[index]);
     }
     prepare(repo_root, extras);
 } else if action == "link" {

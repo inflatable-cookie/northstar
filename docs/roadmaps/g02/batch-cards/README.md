@@ -48,15 +48,13 @@ manual fallback.
 Paseo runtime correction `g02.037/105` is complete. It makes injected tools
 the implicit dispatch signal while keeping `paseo.json` as project lifecycle
 configuration and preserving non-transport authority gates.
-Paseo lifecycle correction `g02.038/106` is in progress. Northstar and Figmatic
-now target the external skill task boundary; runtime proof waits for the active
-Effigy binary to expose `skill run`. The orchestrator merge gate now ends in
-merge after accepted exact-head review and passing checks, without another
-operator prompt.
+Paseo lifecycle correction `g02.038/106` is complete. The installed task
+self-test and a real Figmatic Paseo managed-worktree lifecycle pass. The
+orchestrator merge gate ends in merge after accepted exact-head review and
+passing checks, without another operator prompt.
 Mechanical documentation projection `g02.039/107` is complete. Sol supplied
 settled meaning, reviewed the full diff, and accepted the serial
-profile-driven projection. The next card is `g02.038/106` after Effigy's
-external `skill run` task runner lands.
+profile-driven projection.
 Conversational feature-planning delegation `g02.040/108` is complete. Sol
-reviewed the semantic corrections and full validation. The next card is
-`g02.038/106` after Effigy's external `skill run` task runner lands.
+reviewed the semantic corrections and full validation. No automatic follow-on
+card is selected.

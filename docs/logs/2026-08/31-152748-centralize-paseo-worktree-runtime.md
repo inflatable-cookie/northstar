@@ -3,7 +3,7 @@
 Date: 2026-08-31
 Roadmap: `g02.038`
 Card: `g02.038/106`
-Status: paused on external feature
+Status: complete
 
 ## Result
 
@@ -35,6 +35,18 @@ contain no copied helper or local lifecycle task.
 
 ## Validation
 
+- active Effigy `v0.12.1+local.fd14c5c` lists the installed
+  `northstar/paseo:worktree` selector;
+- installed-skill self-tests pass with both automatic Northstar targeting and
+  an explicit Figmatic `--repo` target;
+- the helper accepts Effigy's forwarded `--` delimiter and validates the typed
+  `effigy.deps.link.v1` / `effigy.deps.unlink.v1` results returned by
+  `effigy::run_json`;
+- five skill scripts no longer shadow Effigy's injected `skill_root` global;
+  repo-local and external-skill quality checks both resolve their payloads;
+- a real Paseo Figmatic workspace from `origin/main` created Longhorn and Poodle
+  symlinks in its container before `effigy setup`, replayed the Poodle Bun link,
+  and removed the worktree-local registration on archive;
 - both `paseo.json` files parse as JSON;
 - `git diff --check` passes in Northstar and Figmatic;
 - local `effigy test:paseo-worktree` passes create, reuse, and conflict refusal;
@@ -44,22 +56,10 @@ contain no copied helper or local lifecycle task.
 - `effigy qa:docs` and `effigy qa` pass in Figmatic: 616 tests passed and 11
   intentional integration/doc tests were ignored.
 
-## Pause
-
-The active Effigy binary is `v0.12.1+local.f3057b9` and does not yet expose the
-new `skill` command. The external skill task contract is planned and dispatched
-in Effigy, but its implementation has not landed in the local binary. Runtime
-proof would be fictional until that changes.
+The test workspace was archived, its residual clean worktree and test branch
+were removed, and no worktree-local Bun registration remains.
 
 ## Next
 
-After Effigy's external skill task runner lands, rebuild/install it and run:
-
-```sh
-effigy skill tasks --path "$HOME/.agents/skills/northstar"
-effigy skill run --path "$HOME/.agents/skills/northstar" paseo:worktree -- self-test
-```
-
-Then create one Figmatic Paseo worktree from `origin/main`, verify Longhorn and
-Poodle symlinks in its container directory before `effigy setup`, and close card
-106 with the live lifecycle evidence.
+No automatic follow-on card. Return to generation planning or accept the next
+operator-provided live-use correction.

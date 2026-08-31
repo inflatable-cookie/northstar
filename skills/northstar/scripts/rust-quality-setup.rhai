@@ -153,7 +153,7 @@ fn repository_declares_msrv(target_root, manifests, toolchain_paths) {
     toolchain_paths.len() > 0
 }
 
-fn apply_setup(skill_root, target_root, scope) {
+fn apply_setup(northstar_skill_root, target_root, scope) {
     require(fs::is_dir(target_root), "target root is not a directory: " + target_root);
     let scope = normalize_scope_directory(target_root, scope);
     let scope_root = target_root;
@@ -170,7 +170,7 @@ fn apply_setup(skill_root, target_root, scope) {
     }
     toolchain_paths.sort();
 
-    let asset_root = path::join(skill_root, "assets/templates/language-quality/rust");
+    let asset_root = path::join(northstar_skill_root, "assets/templates/language-quality/rust");
     let activation = fs::read_file(path::join(asset_root, "AGENTS.md"));
     let agent_file = path::join(scope_root, "AGENTS.md");
     let agent_state = agent_instruction_state(agent_file, activation);
@@ -221,7 +221,7 @@ fn expect_error(label, action, expected) {
     require(rejected, label + " unexpectedly passed");
 }
 
-fn self_test(skill_root) {
+fn self_test(northstar_skill_root) {
     let target = fs::make_temp_dir("northstar-rust-quality-setup-positive");
     fs::create_dir(path::join(target, "crates/app/src"));
     fs::write_file(path::join(target, "Cargo.toml"),
@@ -229,7 +229,7 @@ fn self_test(skill_root) {
     fs::write_file(path::join(target, "crates/app/Cargo.toml"),
         "[package]\nname = \"app\"\nversion = \"0.1.0\"\nrust-version.workspace = true\n");
     fs::write_file(path::join(target, "AGENTS.md"), "# Existing instructions\n");
-    apply_setup(skill_root, target, ".");
+    apply_setup(northstar_skill_root, target, ".");
 
     let profile_file = path::join(target, "docs/contracts/rust-quality-profile.json");
     let deviations_file = path::join(target, "docs/contracts/rust-quality-deviations.json");
@@ -247,21 +247,21 @@ fn self_test(skill_root) {
     let profile_hash = fs::sha256(profile_file);
     let deviations_hash = fs::sha256(deviations_file);
     let agent_hash = fs::sha256(agent_file);
-    apply_setup(skill_root, target, ".");
+    apply_setup(northstar_skill_root, target, ".");
     require(fs::sha256(profile_file) == profile_hash &&
         fs::sha256(deviations_file) == deviations_hash &&
         fs::sha256(agent_file) == agent_hash,
         "repeat setup was not idempotent");
 
     let no_cargo = fs::make_temp_dir("northstar-rust-quality-setup-no-cargo");
-    expect_error("missing Cargo manifest", || apply_setup(skill_root, no_cargo, "."), "no Cargo.toml");
+    expect_error("missing Cargo manifest", || apply_setup(northstar_skill_root, no_cargo, "."), "no Cargo.toml");
 
     let broken = fs::make_temp_dir("northstar-rust-quality-setup-broken-agents");
     fs::write_file(path::join(broken, "Cargo.toml"),
         "[package]\nname = \"broken\"\nversion = \"0.1.0\"\nrust-version = \"1.95\"\n");
     fs::write_file(path::join(broken, "AGENTS.md"),
         "<!-- northstar:rust-quality:start -->\n");
-    expect_error("partial activation", || apply_setup(skill_root, broken, "."), "incomplete Rust activation");
+    expect_error("partial activation", || apply_setup(northstar_skill_root, broken, "."), "incomplete Rust activation");
 
     let absolute_root = fs::make_temp_dir("northstar-rust-quality-setup-absolute-root");
     fs::create_dir(path::join(absolute_root, "crates/app"));
@@ -271,7 +271,7 @@ fn self_test(skill_root) {
         "absolute target-root scope did not canonicalize to '.'");
     require(normalize_scope_directory(absolute_root, path::join(absolute_root, "crates/app")) == "crates/app",
         "absolute under-target scope did not canonicalize to relative form");
-    apply_setup(skill_root, absolute_root, absolute_root);
+    apply_setup(northstar_skill_root, absolute_root, absolute_root);
     require(fs::read_file(path::join(absolute_root, "AGENTS.md")).contains("<!-- northstar:rust-quality:start -->"),
         "absolute target-root scope did not install activation");
 
@@ -285,20 +285,20 @@ fn self_test(skill_root) {
     log("Northstar Rust quality setup self-test: OK (install, preserve, idempotency, absolute-under-target, 4 negative paths)");
 }
 
-let skill_root = repo_root;
+let northstar_skill_root = repo_root;
 if fs::is_dir(path::join(repo_root, "skills/northstar/assets/templates/language-quality/rust")) {
-    skill_root = path::join(repo_root, "skills/northstar");
+    northstar_skill_root = path::join(repo_root, "skills/northstar");
 }
 
 if args.len() == 1 && args[0] == "self-test" {
-    self_test(skill_root);
+    self_test(northstar_skill_root);
 } else if (args.len() == 2 || args.len() == 3) && args[0] == "apply" {
     let target_root = resolve_path(repo_root, args[1]);
     let scope = ".";
     if args.len() == 3 {
         scope = args[2];
     }
-    apply_setup(skill_root, target_root, scope);
+    apply_setup(northstar_skill_root, target_root, scope);
 } else {
     throw("usage: rust-quality:setup self-test | apply <target-root> [scope-directory (. or crates/foo)]");
 }

@@ -86,4 +86,5 @@ source/install parity excluding generated `.effigy` and Rust `target`, and full
 
 ## Next task
 
-Resume `g02.038/106` after Effigy's external `skill run` task runner lands.
+None. The later `g02.038/106` lifecycle proof is complete; return to generation
+planning.

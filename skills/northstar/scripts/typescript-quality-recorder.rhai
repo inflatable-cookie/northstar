@@ -1305,11 +1305,11 @@ fn test_unavailable_tool_evidence(catalogue, catalogue_path) {
         "unavailable tool evidence was not reported as a limitation");
 }
 
-let skill_root = repo_root;
+let northstar_skill_root = repo_root;
 if fs::is_dir(path::join(repo_root, "skills/northstar/references/language-quality/typescript")) {
-    skill_root = path::join(repo_root, "skills/northstar");
+    northstar_skill_root = path::join(repo_root, "skills/northstar");
 }
-let catalogue_path = path::join(skill_root, "references/language-quality/typescript/catalogue.json");
+let catalogue_path = path::join(northstar_skill_root, "references/language-quality/typescript/catalogue.json");
 let catalogue = json::read_file(catalogue_path);
 
 if args.len() == 1 && args[0] == "self-test" {

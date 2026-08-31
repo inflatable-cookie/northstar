@@ -241,14 +241,14 @@ fn activation_state(agent_file, activation) {
     } else { "append" }
 }
 
-fn apply_setup(skill_root, target_root, scope) {
+fn apply_setup(northstar_skill_root, target_root, scope) {
     require(fs::is_dir(target_root), "target root is not a directory");
     require_scope(scope);
     let scope_root = target_root;
     if scope != "." { scope_root = path::join(target_root, scope); }
     require(fs::is_dir(scope_root), "TypeScript instruction scope is not a directory: " + scope);
     let discovery = discover_packages(target_root);
-    let asset_root = path::join(skill_root, "assets/templates/language-quality/typescript");
+    let asset_root = path::join(northstar_skill_root, "assets/templates/language-quality/typescript");
     let activation = fs::read_file(path::join(asset_root, "AGENTS.md"));
     let agent_file = path::join(scope_root, "AGENTS.md");
     let state = activation_state(agent_file, activation);
@@ -281,7 +281,7 @@ fn apply_setup(skill_root, target_root, scope) {
         ", unregistered=" + discovery["unregistered"].len() + ")");
 }
 
-fn test_mixed_workspace(skill_root) {
+fn test_mixed_workspace(northstar_skill_root) {
     let mixed = fs::make_temp_dir("northstar-typescript-setup-mixed");
     fs::create_dir(path::join(mixed, "apps/web"));
     fs::create_dir(path::join(mixed, "apps/web/src/routes"));
@@ -294,7 +294,7 @@ fn test_mixed_workspace(skill_root) {
     fs::write_file(path::join(mixed, "packages/core/package.json"), "{\"devDependencies\":{\"typescript\":\"^5.9.0\"}}\n");
     fs::write_file(path::join(mixed, "scratch/loose/package.json"), "{\"name\":\"loose\"}\n");
     fs::write_file(path::join(mixed, "apps/web/AGENTS.md"), "# Existing\n");
-    apply_setup(skill_root, mixed, "apps/web");
+    apply_setup(northstar_skill_root, mixed, "apps/web");
     let profile_path = path::join(mixed, "docs/contracts/typescript-quality-profile.json");
     let profile = json::read_file(profile_path);
     require(profile["packages"].len() == 3, "declared workspace package count drifted");
@@ -303,18 +303,18 @@ fn test_mixed_workspace(skill_root) {
     require(fs::read_file(path::join(mixed, "apps/web/AGENTS.md")).contains("# Existing"), "setup overwrote scoped instructions");
     let profile_hash = fs::sha256(profile_path);
     let agent_hash = fs::sha256(path::join(mixed, "apps/web/AGENTS.md"));
-    apply_setup(skill_root, mixed, "apps/web");
+    apply_setup(northstar_skill_root, mixed, "apps/web");
     require(fs::sha256(profile_path) == profile_hash && fs::sha256(path::join(mixed, "apps/web/AGENTS.md")) == agent_hash,
         "repeat setup was not idempotent");
 }
 
-fn test_rootless_packages(skill_root) {
+fn test_rootless_packages(northstar_skill_root) {
     let rootless = fs::make_temp_dir("northstar-typescript-setup-rootless");
     fs::create_dir(path::join(rootless, "apps/site"));
     fs::create_dir(path::join(rootless, "packages/lib"));
     fs::write_file(path::join(rootless, "apps/site/package.json"), "{\"dependencies\":{\"svelte\":\"4.2.0\"}}\n");
     fs::write_file(path::join(rootless, "packages/lib/package.json"), "{\"devDependencies\":{\"typescript\":\"^5.9.0\"}}\n");
-    apply_setup(skill_root, rootless, "apps/site");
+    apply_setup(northstar_skill_root, rootless, "apps/site");
     let rootless_profile = json::read_file(path::join(rootless, "docs/contracts/typescript-quality-profile.json"));
     require(rootless_profile["packages"].len() == 2, "rootless package count drifted");
     let rootless_site = rootless_profile["packages"][0];
@@ -324,10 +324,10 @@ fn test_rootless_packages(skill_root) {
     require(rootless_svelte["status"] == "unsupported", "unsupported Svelte version was not recorded");
 }
 
-fn test_setup_rejections(skill_root) {
+fn test_setup_rejections(northstar_skill_root) {
     let empty = fs::make_temp_dir("northstar-typescript-setup-empty");
     let empty_rejected = false;
-    try { apply_setup(skill_root, empty, "."); } catch (error) {
+    try { apply_setup(northstar_skill_root, empty, "."); } catch (error) {
         empty_rejected = true;
         require(error.to_string().contains("no package.json"), "missing package rejected for wrong reason: " + error);
     }
@@ -336,26 +336,26 @@ fn test_setup_rejections(skill_root) {
     fs::write_file(path::join(broken, "package.json"), "{}\n");
     fs::write_file(path::join(broken, "AGENTS.md"), "<!-- northstar:typescript-quality:start -->\n");
     let broken_rejected = false;
-    try { apply_setup(skill_root, broken, "."); } catch (error) {
+    try { apply_setup(northstar_skill_root, broken, "."); } catch (error) {
         broken_rejected = true;
         require(error.to_string().contains("incomplete TypeScript activation"), "partial activation rejected for wrong reason: " + error);
     }
     require(broken_rejected, "partial activation unexpectedly passed");
 }
 
-let skill_root = repo_root;
+let northstar_skill_root = repo_root;
 if fs::is_dir(path::join(repo_root, "skills/northstar/assets/templates/language-quality/typescript")) {
-    skill_root = path::join(repo_root, "skills/northstar");
+    northstar_skill_root = path::join(repo_root, "skills/northstar");
 }
 if args.len() == 1 && args[0] == "self-test" {
-    test_mixed_workspace(skill_root);
-    test_rootless_packages(skill_root);
-    test_setup_rejections(skill_root);
+    test_mixed_workspace(northstar_skill_root);
+    test_rootless_packages(northstar_skill_root);
+    test_setup_rejections(northstar_skill_root);
     log("Northstar TypeScript quality setup self-test: OK (mixed workspace, rootless packages, overlays, preserve, idempotency, 2 negative paths)");
 } else if (args.len() == 2 || args.len() == 3) && args[0] == "apply" {
     let scope = ".";
     if args.len() == 3 { scope = args[2]; }
-    apply_setup(skill_root, resolve_path(repo_root, args[1]), scope);
+    apply_setup(northstar_skill_root, resolve_path(repo_root, args[1]), scope);
 } else {
     throw("usage: typescript-quality:setup self-test | apply <target-root> [scope-directory]");
 }
