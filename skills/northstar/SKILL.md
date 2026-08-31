@@ -49,8 +49,10 @@ planning, review, discovery, readiness, and orchestrator threads do not run a
 worktree probe or inspect `.agents.local.env` merely because worker support
 exists. Once worker mode is activated, follow the router's lightweight
 four-command worktree fast path, verify the committed handoff in the selected
-`HEAD` before mutating anything, then create any sibling worktree links the
-tracked handoff lists.
+`HEAD` before mutating anything, then verify any sibling worktree links the
+tracked handoff lists in the worktree container directory. A launcher lifecycle
+creates them before project setup; only the manual fallback worker creates an
+absent link after preflight.
 
 ## Outcomes by mode
 
@@ -89,7 +91,10 @@ tracked handoff lists.
   wider audit authority.
 - **Recovery:** trustworthy planning surfaces and canonical refs restored.
 - **Normalize:** baseline or strict spine installed/maintained; Effigy-first QA.
-- **Orchestrator:** question-led planning, one pushed worker handoff under `docs/handoffs/`, bounded PR review loop.
+- **Orchestrator:** question-led planning, one pushed worker handoff under
+  `docs/handoffs/`, optional fast/low-cost mechanical documentation projection
+  under frontier semantic review, bounded PR review/revision, and
+  accepted-review plus check-gated merge without a second operator prompt.
 - **Handoff:** a human-friendly seven-section file under `docs/handoffs/`, with
   an absolute path returned to the operator; not a substitute for log/roadmap
   closeout.
@@ -157,6 +162,7 @@ Northstar source repo, expanded doctrine lives at
 - Papercuts starter: `assets/templates/PAPERCUTS.md`
 - Handoff template: [`assets/templates/northstar-handoff.md.template`](./assets/templates/northstar-handoff.md.template)
 - Orchestrator worker handoff extension: [`assets/templates/northstar-orchestrator-run.md.template`](./assets/templates/northstar-orchestrator-run.md.template)
+- Orchestrator documentation projection brief: [`assets/templates/northstar-documentation-projection.md.template`](./assets/templates/northstar-documentation-projection.md.template)
 - Handoff directory: `docs/handoffs/`
 - Triage directory: `docs/triage/`
 - Handoff contract: [`references/handoff-contract.md`](./references/handoff-contract.md)

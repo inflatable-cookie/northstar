@@ -60,7 +60,8 @@ Here is the state the worker is inheriting:
 - **PR base/head:** `{{PR_BASE_AND_HEAD}}`
 - **PR URL:** `{{PR_URL_OR_PENDING}}`
 - **Review state:** `{{AWAITING_REVIEW_OR_OTHER_STATE}}`
-- **Merge authorisation:** `{{OPERATOR_AUTHORITY_STATE}}`
+- **Merge path:** orchestrator after accepted review of the current head and
+  passing required checks
 
 ## Boundaries
 
@@ -79,7 +80,8 @@ Please keep this run inside the named runway:
   it through the active control plane or the operator.
 - Work only in the clean worker worktree selected by `Completion Protocol`.
   Never edit the planning checkout or an unrelated dirty checkout.
-- Do not merge the PR. Merge remains a separate operator-authorised action.
+- Do not merge the PR. Merge belongs to the orchestrator after its accepted
+  review/check gate.
 
 ## Important Context
 
@@ -184,7 +186,10 @@ operator. Blocking findings use `execution-miss`, `oracle-gap`,
 `planning-change` returns to planning before revision. Requested changes are:
 `{{REQUESTED_CHANGES_OR_NONE}}`. The PR should
 link the card, milestone, spec, changed surfaces, evidence, validation, and
-unresolved items. The operator must explicitly authorise any merge.
+unresolved items. When the exact reviewed head is still current, required checks
+pass, the PR is mergeable into the intended base, and no stricter repository
+rule or explicit operator pause applies, the orchestrator merges without another
+approval prompt.
 
 - **Closeout refs:** `{{CARD_LOG_ROADMAP_FRONT_DOORS}}`
 

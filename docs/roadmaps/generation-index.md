@@ -76,7 +76,16 @@ sequence.
 
 ## Next Task
 
-No blocking roadmap milestone is open.
+Roadmap `g02.039`, card `107`, is complete. Its exact Sol-owned brief was
+projected serially and reviewed; the next lane is `g02.038/106` after Effigy's
+external skill task runner lands.
+
+Roadmap `g02.038` is active. Complete card 106 after Effigy's external skill
+task runner is available, then prove the skill-owned Paseo lifecycle in
+Figmatic.
+
+No blocking roadmap milestone is open outside that explicit external-feature
+wait for `g02.038/106`.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed
@@ -111,3 +120,11 @@ handoff, notify, and carry follow-ups while manual dispatch remains complete.
 Operator feedback is complete under `g02.037/105`: injected Paseo tools replace
 the redundant per-run permission prompt without making project config or the
 control plane repository authority.
+The follow-up lifecycle correction is active under `g02.038/106`: consumer
+projects no longer own copied Rhai code, sibling links live in the worktree
+container before setup, and changes-requested reviews explicitly wake the
+originating Paseo worker. Accepted exact-head orchestrator review plus passing
+checks now authorizes merge without another operator prompt.
+Mechanical documentation projection `g02.039/107` is complete: Sol retains
+meaning authority and a provider-neutral, profile-driven subagent applies only
+exact bounded documentation briefs; Sol reviews the full diff before closeout.

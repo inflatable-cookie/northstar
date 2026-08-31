@@ -82,8 +82,17 @@ rollover signal.
   104, conditional Paseo dispatch, manual fallback, and 122-file skill parity)
 - `037-make-paseo-dispatch-implicit-inside-paseo.md` (complete; card 105 replaces
   the redundant permission prompt with injected-tool detection)
+- `038-centralize-paseo-worktree-runtime.md` (active; card 106 moves lifecycle
+  code into the installed skill and closes sibling/review follow-up gaps)
+- `039-delegate-mechanical-orchestrator-documentation.md` (complete; card 107
+  delegates exact documentation projection while Sol retains planning and
+  semantic authority)
 
 ## Next Task
+
+`g02.038/106` is the next lane: finish the skill-owned Paseo lifecycle after
+the Effigy external `skill run` task runner lands. `g02.039/107` is complete;
+its bounded projection was reviewed by Sol and passed validation.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and
@@ -131,8 +140,10 @@ Operator feedback closed under `g02.037/105`: injected Paseo orchestration tools
 now act as the routine dispatch signal, while `paseo.json` remains project
 lifecycle configuration and every non-transport authority gate stays explicit.
 
-No blocking roadmap milestone is open. Dogfood the corrected adapter on the next
-bounded orchestrator lane with Paseo tools injected. Northstar does not dispatch
-consumer audits.
+Roadmap `g02.038` is active. Finish card 106 after the Effigy external skill task
+runner lands: validate the installed `paseo:worktree` task and dogfood Figmatic's
+skill-owned lifecycle. The same correction removes the redundant merge prompt:
+an orchestrator may merge its accepted, checks-passing current PR head without
+asking again. Northstar does not dispatch consumer audits.
 
 Batch cards live in `g02/batch-cards/` when strict posture uses them.

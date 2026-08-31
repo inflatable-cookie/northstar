@@ -305,12 +305,14 @@ commands before this decision. After the worktree is selected, run
 then confirm `HEAD == origin/main`, the planning base is an ancestor, and the
 repository-relative handoff exists in that `HEAD`. Load the tracked handoff
 from `HEAD`; if the absolute dispatch file differs, stop. That `HEAD` copy is
-canonical. Only then create **required sibling worktree links** from it:
-canonicalize source and destination; create when absent; reuse only a symlink
-that already resolves to the declared source; stop on any other existing path;
-never delete, replace, or overwrite. If a listed source is missing, stop and
-report; do not skip a catalog member. Then continue with the normal
-mode-specific checks.
+canonical. Only then verify **required sibling worktree links** from it in the
+worktree container directory. In a launcher-managed worktree they must already
+exist before project setup; stop if one is absent. In a manual fallback,
+canonicalize source and destination and create an absent link. Reuse only a
+symlink that already resolves to the declared source; stop on any other
+existing path; never delete, replace, or overwrite. If a listed source is
+missing, stop and report; do not skip a catalog member. Then continue with the
+normal mode-specific checks.
 
 ## Posture label (all modes except handoff)
 

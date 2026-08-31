@@ -95,13 +95,16 @@ or copies multi-paragraph protocol text, treat that as a compression signal.
   - the key files or artifacts involved, using absolute paths for local files;
   - for a worker handoff, **required sibling worktree links**: each sibling
     repo the worktree needs, its absolute primary-checkout source, and the
-    link name beside the worktree (usually `../<repo>`). Write `none` when
-    there are no sibling deps. Do not treat extra-mount skip as covering
-    catalog members. Setup is: canonicalize source and destination; create
-    when absent; reuse only a symlink that already resolves to the declared
-    source; stop on any other existing path; never delete, replace, or
-    overwrite. The committed handoff in the selected `HEAD` is canonical
-    and must be verified before any sibling-path mutation.
+    link name in the worktree container directory (the worktree's parent,
+    usually reached as `../<repo>`). Write `none` when there are no sibling
+    deps. Do not treat extra-mount skip as covering catalog members. A launcher
+    lifecycle creates required links before project setup and the worker
+    verifies them. A manual fallback worker canonicalizes source and
+    destination and creates an absent link after preflight. Reuse only a
+    symlink that already resolves to the declared source; stop on any other
+    existing path; never delete, replace, or overwrite. The committed handoff
+    in the selected `HEAD` is canonical and must be verified before any
+    sibling-path mutation.
 - `Boundaries` includes at least one explicit out-of-scope boundary and any hard
   constraints the next thread must respect.
 - `Important Context` captures roadmap/log lineage, the relationship between

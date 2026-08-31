@@ -1,58 +1,62 @@
 # Paseo project setup
 
 Use this optional adapter when a Northstar repo is registered as a Paseo
-project. Paseo owns `paseo.json`; Northstar supplies copy-ready defaults and a
-safe worktree helper. Merge with an existing file instead of replacing project
-settings.
+project. Paseo owns `paseo.json`; the installed Northstar skill owns the safe
+worktree helper. Consumer repos only declare lifecycle calls and project-specific
+arguments. Merge with an existing file instead of replacing project settings.
+Paseo documents the host hook lifecycle in
+<https://paseo.sh/docs/worktrees.md>.
 
 ## Prerequisites
 
 The helper targets Paseo's Unix-host worktree flow and needs an Effigy build
-with `deps link` plus the Rhai `fs::create_symlink` and `effigy::run_json`
-surfaces. Check before installing it:
+with `skill run`, `deps link`, and the Rhai `fs::create_symlink` and
+`effigy::run_json` surfaces. Check before enabling it:
 
 ```sh
+effigy skill run --help
 effigy deps --help
 effigy rhai surface --json
 ```
 
 If those surfaces are missing, update Effigy or keep explicit project-specific
-Paseo hooks. Do not install a lifecycle command that the active binary cannot
+Paseo hooks. Do not declare a lifecycle command that the active binary cannot
 run.
 
 ## Install
 
-Copy:
+Copy `assets/templates/paseo.json.template` to project-root `paseo.json`, or
+merge its fields into an existing file. Do not copy the Rhai helper or add a
+consumer task. `effigy skill run` loads `paseo:worktree` from the installed
+Northstar skill and keeps the current project as the runtime target.
 
-- `assets/templates/paseo.json.template` to project-root `paseo.json`;
-- `assets/templates/scripts/paseo-worktree.rhai` to
-  `scripts/paseo-worktree.rhai`.
-
-Add the local Effigy task:
-
-```toml
-[tasks]
-"paseo:worktree" = [{ rhai = "scripts/paseo-worktree.rhai" }]
-```
+The template resolves the skill from `NORTHSTAR_SKILL_PATH`, falling back to
+`$HOME/.agents/skills/northstar`. Set the variable in environments that install
+Northstar elsewhere. Keep the explicit path: Effigy does not discover a global
+skill name on this surface.
 
 The default lifecycle is:
 
 ```text
-prepare siblings -> project bootstrap -> replay Effigy links
+prepare siblings -> real project setup -> replay Effigy links
 unlink Effigy links -> Paseo removes the worktree
 ```
 
-Keep those phases in that order. Replace `effigy bootstrap` with the repo's
-real setup command when bootstrap does not own dependency installation. Bun
-links must be replayed after install because installs can replace them.
+Keep those phases in that order. Replace `PROJECT_SETUP_COMMAND` before using
+the template; use the repo's normal idempotent setup task, such as
+`effigy setup`. Do not assume `effigy bootstrap`: that command may require a
+repository URL and need not own dependency installation. Bun links must be
+replayed after install because installs can replace them.
 
 ## Sibling repos
 
 `prepare` reads the primary checkout's ignored
 `.effigy/local/dependency-links.json`. For every library previously selected by
-`effigy deps link`, it creates a same-named symlink beside the Paseo worktree.
-It reuses an already-correct symlink and stops on a mismatched symlink, file, or
-directory. It never deletes or replaces an existing path.
+`effigy deps link`, it creates a same-named symlink in the Paseo worktree
+container directory: the generated worktree's parent. This makes relative paths
+such as `../poodle` resolve inside every managed worktree. It reuses an
+already-correct symlink and stops on a mismatched symlink, file, or directory.
+It never deletes or replaces an existing path.
 
 Add repos that are not in the Effigy ledger as arguments. Relative paths are
 resolved from the primary checkout, not the generated worktree:
@@ -60,8 +64,8 @@ resolved from the primary checkout, not the generated worktree:
 ```json
 {
   "worktree": {
-    "setup": "effigy paseo:worktree prepare ../signal ../poodle=ui-kit && effigy bootstrap && effigy paseo:worktree link",
-    "teardown": "effigy paseo:worktree unlink"
+    "setup": "effigy skill run --path \"${NORTHSTAR_SKILL_PATH:-$HOME/.agents/skills/northstar}\" paseo:worktree -- prepare ../signal ../poodle=ui-kit && effigy setup && effigy skill run --path \"${NORTHSTAR_SKILL_PATH:-$HOME/.agents/skills/northstar}\" paseo:worktree -- link",
+    "teardown": "effigy skill run --path \"${NORTHSTAR_SKILL_PATH:-$HOME/.agents/skills/northstar}\" paseo:worktree -- unlink"
   }
 }
 ```

@@ -54,5 +54,7 @@ Northstar system:
 - work should not be called done without real evidence
 - agents should be able to continue through ready batch cards without needing
   repeated "continue" prompts from the operator
+- frontier orchestrators may delegate settled mechanical documentation batches
+  to fast/low-cost subagents, but retain planning and full-diff semantic review
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

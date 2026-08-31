@@ -18,8 +18,11 @@ Use these top-level repo templates from this skill for the non-docs surfaces:
 - `PAPERCUTS.md` (seed on adopt/upgrade before exact-SHA / clean-tree release
   prep; do not introduce it during tag closeout after CI is green on a pinned
   SHA)
-- `paseo.json.template` plus `scripts/paseo-worktree.rhai` (optional Paseo
-  project settings and safe worktree sibling/link lifecycle)
+- `paseo.json.template` (optional Paseo project settings; its worktree
+  lifecycle invokes the installed Northstar skill through Effigy)
+- `northstar-documentation-projection.md.template` (bounded prompt for a
+  fast/low-cost subagent to project settled documentation under orchestrator
+  review)
 - `CHANGELOG.md`
 - `README.md.template`
 - `scripts.README.md.template`
@@ -29,9 +32,9 @@ Use these top-level repo templates from this skill for the non-docs surfaces:
 
 When Paseo manages project worktrees, follow
 [`../../references/setup/paseo-project.md`](../../references/setup/paseo-project.md).
-The lifecycle helper recovers sibling repositories from the primary checkout's
-Effigy dependency-link ledger, accepts extra relative sources, and replays
-machine-local links after the project's install/bootstrap phase.
+The skill-owned lifecycle helper recovers sibling repositories from the primary
+checkout's Effigy dependency-link ledger, accepts extra relative sources, and
+replays machine-local links after the project's real setup phase.
 
 Tailor `AGENTS.md` during adoption. Replace its opening prompt and commented
 review prompts with the target project's real identity, preservation

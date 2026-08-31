@@ -112,15 +112,35 @@ written there before the agent follows one branch deeply; refresh and cleanup
 should give each note a disposition.
 
 If Paseo manages the project, copy or merge the optional `paseo.json` starter
-and worktree helper from `skills/northstar/assets/templates/`. The default hook
-prepares sibling repos, runs the project's Effigy bootstrap, then replays
-machine-local `effigy deps link` state. Tailor scripts and metadata instructions
-to the repository rather than treating the starter wording as doctrine.
+from `skills/northstar/assets/templates/`. Its lifecycle invokes the helper in
+the installed Northstar skill through `effigy skill run`; do not copy the Rhai
+implementation into the project. The hook prepares sibling repos, runs the
+project's real idempotent setup task, then replays machine-local
+`effigy deps link` state. Tailor scripts and metadata instructions to the
+repository rather than treating the starter wording as doctrine.
 
 In this mode, the orchestrator commits and pushes the planning state and one
 worker handoff under `docs/handoffs/` before dispatch. The operator receives
 the handoff's absolute path; no second prompt or copied context is needed.
-The handoff lists sibling repos to symlink beside the worker worktree.
+The handoff lists sibling repos to symlink into the worktree container
+directory before project setup needs them.
+
+After a review requests changes, provider comments record the findings but do
+not wake a finished worker. A Paseo-backed orchestrator must prompt the same
+originating agent to read the comments, revise, validate, and push. It must not
+silently launch a replacement.
+
+When the orchestrator accepts the exact current PR head and required checks
+pass, it may merge that lane without asking the operator again. A changed head,
+failed or pending check, stricter repository rule, explicit operator pause, or
+ambiguous merge state stops that path.
+
+The frontier orchestrator may hand a meaningful batch of settled documentation
+projection to a fast/low-cost subagent. The brief fixes meaning and allowed
+paths; the subagent performs the named roadmap/card/log/index/template churn and
+deterministic checks, then the orchestrator reviews the full diff. Planning,
+readiness, review, merge, and Git mutations stay with the orchestrator.
+
 - “Create a handoff for the next thread” -> `northstar` (handoff mode)
 
 Handoff mode writes a plain-spoken note to `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md`

@@ -608,6 +608,45 @@ is already defined and permitted.
 They also should not have to re-invent the lane shape after every completed
 card because planning failed to leave a longer-horizon runway.
 
+## Mechanical documentation projection
+
+Keep high-cost frontier reasoning on discovery, planning, promotion, readiness,
+review-oracle design, worker routing, PR review, and merge. Once meaning is
+settled, an orchestrator may delegate a worthwhile batch of mechanical
+documentation projection to a fast, low-cost profile. Select by current role
+notes; do not make one provider model a Northstar dependency.
+
+The brief names the authority owner, settled decisions, canonical refs, allowed
+paths, exact evidence and state transitions, forbidden judgments, validation,
+and stop conditions. The projection subagent may materialize named roadmaps,
+cards, logs, front doors, indexes, handoffs, templates, parity updates, and
+deterministic evidence. It cannot choose canonical ownership, invent or
+reinterpret intent, add acceptance or stop policy, decide readiness/completion/
+next state, resolve contradictions, edit product code, commit, push, review, or
+merge.
+
+Run it serially in the planning context, without a worker handoff or worktree.
+Capture dirty state and allowed paths before dispatch. The orchestrator reviews
+the complete diff for semantic fidelity and owns Git/provider mutations. Use the
+split for roughly three or more related surfaces, or another batch large enough
+to repay dispatch and review overhead; keep tiny edits local.
+
+## Orchestrator merge authority
+
+An operator who starts a Northstar orchestrator/worker lane pre-authorizes the
+orchestrator to merge that lane's PR after independent review. This is not
+auto-merge on PR creation. Merge is allowed only when:
+
+- the provider records an accepted orchestrator verdict for the exact current
+  PR head; a same-identity provider may use the canonical review comment;
+- every required check passes and the PR is mergeable into its intended base;
+- no head commit arrived after review;
+- no stricter repository rule or explicit operator pause requires human action.
+
+A changed head requires another review. Ambiguous provider or merge state stops
+before retry. The worker never merges. A standalone direct-review thread does
+not inherit orchestrator merge authority.
+
 ## Direct PR review boundary
 
 When an operator asks a thread to review an existing PR, the review is not

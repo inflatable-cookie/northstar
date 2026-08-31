@@ -404,13 +404,34 @@ following authority split:
 
 - the **orchestrator thread** owns question-led discovery, intent summary,
   promoted architecture/contracts, roadmap readiness, worker launch preparation,
-  and PR review;
+  PR review, gated merge, and closeout;
 - the **worker thread** owns implementation only inside its dedicated worktree
   and branch, including bounded diagnosis and implementation judgment inside
   the assigned ready cards, tests, commits, evidence, and PR creation;
 - the **operator** answers unresolved questions, may override worker-profile
   selection, starts or relays manual runs, resolves material permission
-  requests, and explicitly authorises merge when that action is desired.
+  requests, and may pause or override the lane before merge.
+
+Starting the orchestrator/worker lane pre-authorises the orchestrator to merge
+the worker PR it owns once it has reviewed the exact current head, recorded an
+accepted verdict on the provider, and confirmed every required check passes. A
+stricter repository rule or explicit operator pause still wins.
+
+The orchestrator may delegate a meaningful batch of mechanical documentation
+projection to a fast, low-cost subagent after it has settled every planning
+decision. The projection brief must name the authority owner, settled meaning,
+canonical refs, allowed paths, exact evidence and state transitions, forbidden
+judgments, validation, and stop conditions. The subagent may materialize or
+synchronize named roadmap, card, log, front-door, index, handoff, template, and
+evidence surfaces. It must not choose a canonical home, invent or reinterpret
+intent, add acceptance or stop rules, decide readiness/completion/next work,
+resolve contradictions, edit product code, commit, push, review, or merge.
+
+Documentation projection runs serially in the orchestrator's planning context;
+it is not worker mode and needs no worker handoff or worktree. Capture existing
+dirty state and allowed paths before dispatch. The orchestrator reviews the full
+diff for semantic fidelity and owns commit/push. Keep tiny edits local when
+dispatch and review would cost more than the projection.
 
 The repository is the durable communication boundary. A worker must be able to
 re-enter from its worker handoff, `AGENTS.md`, canonical refs, cards, commits,
@@ -443,7 +464,7 @@ Before a worker starts:
   isolated workspace for the lane without another permission prompt; otherwise
   the operator launches the worker manually;
 - the handoff lists required sibling worktree links (absolute primary
-  checkouts and the link name beside the worktree) or `none`;
+  checkouts and the link name in the worktree container directory) or `none`;
 - the worker performs a quick startup preflight before broad reads: repository
   root, current worktree, branch, and `git status --porcelain`;
 - a clean, dedicated, non-`main` registered current worktree supplied by the
@@ -453,11 +474,14 @@ Before a worker starts:
   planning base is an ancestor, and the repository-relative handoff exists
   in that `HEAD`; load the tracked blob and stop if the absolute dispatch
   file differs;
-- then create each listed sibling worktree link: canonicalize source and
-  destination; create when absent; reuse only a symlink that already
-  resolves to the declared source; stop on any other existing path; never
-  delete, replace, or overwrite; skip only when the list is `none`; stop
-  if a listed source is missing;
+- ensure each listed sibling checkout is symlinked into the worktree container
+  directory (the worktree's parent): canonicalize source and destination;
+  create when absent; reuse only a symlink that already resolves to the declared
+  source; stop on any other existing path; never delete, replace, or overwrite;
+  skip only when the list is `none`; stop if a listed source is missing. A
+  launcher-managed lifecycle does this before project bootstrap needs the
+  sibling and the worker verifies it; the manual fallback worker creates it
+  after its startup preflight;
 - only if the current context is `main`, dirty, unregistered, or otherwise
   unsuitable does the worker consider the named handoff worktree and then create
   a unique manual worktree and branch from pushed `origin/main`, recording the
@@ -506,9 +530,17 @@ reviewable PR. PR creation is not approval or merge. The orchestrator reviews th
 actual diff, changed files, commits, and checks against canonical refs. It records
 an evidence-backed verdict in the provider review surface; on same-identity
 GitHub runs, it posts that verdict as a PR comment because formal self-approval
-is unavailable. Merge remains a separate action requiring explicit operator
-authorisation. Requested changes return to the same worker branch when possible,
-followed by another review cycle.
+is unavailable. After an accepted verdict, the orchestrator may merge without a
+second operator prompt only when the reviewed head is still current, required
+checks pass, the PR is mergeable into the intended base, and no repository rule
+or operator instruction requires a human merge. A changed head invalidates the
+verdict and requires another review. Merge failure or ambiguous provider state
+stops before retry. Requested changes return to the same worker branch when
+possible, followed by another review cycle. Provider review comments are durable
+evidence, not a worker wake-up mechanism: after posting a `changes requested`
+verdict, an orchestrator with an active control plane sends an explicit follow-up
+to the originating agent. Paseo uses `send_agent_prompt` with the retained agent
+ID. The orchestrator does not silently replace an unavailable worker.
 
 Every merge-blocking finding is classified as `execution-miss`, `oracle-gap`,
 `planning-change`, `validation-gap`, or `integration-drift`. A
@@ -544,11 +576,12 @@ selection. A repository `paseo.json` configures project lifecycle capability;
 it is not a substitute runtime signal. Adapter profile names, IDs, messages,
 and status are transport metadata, never repository authority. A generic
 task-handoff helper must not generate a second briefing for a Northstar worker.
-Tool injection does not authorize unready work, missing product or contract
-choices, material permission requests, destructive workspace cleanup, review,
-merge, or duplicate retries. Permission requests return to the operator unless
-existing explicit authority settles the exact action. Manual launch and
-operator relay remain the required fallback.
+Tool injection does not independently authorize unready work, missing product or
+contract choices, material permission requests, destructive workspace cleanup,
+review, merge, or duplicate retries. Merge authority comes from the active
+orchestrator lane and its accepted review/check gate, not from Paseo. Permission
+requests return to the operator unless existing explicit authority settles the
+exact action. Manual launch and operator relay remain the required fallback.
 
 ### Automation runtime policy
 

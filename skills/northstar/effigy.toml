@@ -14,3 +14,4 @@ alias = "northstar"
 "typescript-quality:record" = [{ rhai = "scripts/typescript-quality-recorder.rhai" }]
 "test:typescript-quality-setup" = [{ task = "typescript-quality:setup self-test" }]
 "test:typescript-quality-recorder" = [{ task = "typescript-quality:record self-test" }]
+"paseo:worktree" = [{ rhai = "scripts/paseo-worktree.rhai" }]

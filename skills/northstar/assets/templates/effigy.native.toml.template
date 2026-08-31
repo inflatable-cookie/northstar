@@ -14,9 +14,8 @@ section = "Vision Artifacts"
 exclude = ["history/**"]
 
 [tasks]
-# Optional Paseo adapter. Copy `paseo.json.template` to project-root
-# `paseo.json`, copy `scripts/paseo-worktree.rhai`, then enable this task.
-# "paseo:worktree" = [{ rhai = "scripts/paseo-worktree.rhai" }]
+# Paseo worktree lifecycle is owned by the installed Northstar skill and runs
+# through `effigy skill run`; do not copy or register it in this manifest.
 "qa:docs:links" = "effigy docs check-links"
 "qa:docs:index:vision" = "effigy docs check-index --policy-index vision"
 "qa:docs:agent-defaults" = "effigy docs check-forbidden AGENTS.md README.md docs/README.md --forbid '--repo .'"

@@ -54,9 +54,10 @@ Optional: `effigy check:posture-advisory` after structural edits.
    loaded skill's `northstar/rust-quality:setup apply <absolute-target-root>
    [scope-directory]`; let it preserve existing files and discover Cargo and
    toolchain paths. Ask only for repository policy the task cannot recover.
-   When the repo is a Paseo project, merge the optional `paseo.json` template,
-   copy its worktree helper, and keep project bootstrap between sibling
-   preparation and Effigy link replay.
+   When the repo is a Paseo project, merge the optional `paseo.json` template.
+   Keep the repo's real setup task between sibling preparation and Effigy link
+   replay. The lifecycle implementation stays in the installed Northstar skill
+   and is invoked with `effigy skill run`; do not copy it into the consumer.
 6. Runtime stack: Effigy first; TypeScript+Bun for repo scripts; bash/python
    only by exception. When wiring `effigy.toml`, keep `tasks.health` cheap
    (seconds-scale). Never alias `health` to `qa` — doctor runs health during

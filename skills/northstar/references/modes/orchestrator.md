@@ -22,7 +22,9 @@ using it. A repository `paseo.json` alone is project capability configuration,
 not evidence that the current thread is running in Paseo. When the required
 tools are absent, give the operator the handoff's **absolute path** for manual
 launch and relay. Neither route widens authority for missing planning choices,
-permission requests, destructive workspace cleanup, review, or merge.
+permission requests, destructive workspace cleanup, review, or merge. Merge
+authority comes from the orchestrator lane's accepted review/check gate, not
+from the transport adapter.
 
 ## Conversation style
 
@@ -65,6 +67,44 @@ owner, destination, or removal is unclear. Triage notes are not authority for
 execution until their useful content is promoted into the normal planning
 surfaces.
 
+## Mechanical documentation projection
+
+Keep discovery, planning, promotion, readiness, review-oracle design, worker
+routing, PR review, and merge in the frontier orchestrator. After those choices
+are settled, a fast/low-cost subagent may project a meaningful mechanical batch
+into named documentation surfaces. Use the current profile notes rather than a
+hard-coded model name; Luna is one possible local profile, not a Northstar
+dependency.
+
+When Paseo exposes profiles and agent creation, list current profiles, choose
+the one whose notes fit fast/low-cost documentation projection, and create the
+subagent in the current planning workspace. Do not create a worker workspace or
+ask for another permission prompt. If the current planning workspace cannot be
+identified safely, do not guess; use an available provider-native subagent or
+keep the projection in the orchestrator.
+
+Use `assets/templates/northstar-documentation-projection.md.template` as the
+brief. It must name the authority owner, settled decisions, canonical refs,
+allowed paths, exact facts/evidence, required state transitions, forbidden
+judgments, validation, and stop conditions. Delegable work includes:
+
+- materializing already-settled roadmap, card, log, front-door, index, handoff,
+  template, parity, and evidence updates;
+- synchronizing exact settled wording across named source/install surfaces;
+- running deterministic docs, link, parity, and diff checks.
+
+The projection subagent must not choose a canonical home, invent or reinterpret
+intent, add acceptance/stop/review-oracle policy, decide ready/complete/next
+state, resolve a contradiction, edit product code, commit, push, review, or
+merge. It stops and returns the question when the brief does not settle a choice.
+
+Run projection serially in the planning context, not as worker mode: no worker
+handoff, worktree, branch, or PR. Capture dirty state and allowed paths before
+dispatch, wait for it to finish before resuming overlapping edits, then inspect
+the complete diff for semantic fidelity. The orchestrator owns every Git
+mutation. Delegate roughly three or more related projection surfaces, or another
+batch large enough to repay dispatch and review; keep tiny edits local.
+
 ## Procedure
 
 1. **Load authority.** Read `references/router.md` first, then this mode, and
@@ -106,6 +146,9 @@ surfaces.
    failure, expected behavior, reproduction or acceptance evidence, boundaries,
    validation, and stop conditions. Do not require a known root cause or
    preselect the exact edit: diagnosis is part of the implementation lane.
+   Once meaning is settled, use mechanical documentation projection for a
+   worthwhile named batch. Review the returned diff before marking cards ready,
+   publishing planning, or making any Git mutation.
 6. **Assess parallel lanes before dispatch.** Inspect the active roadmap runway
    for multiple independent, bounded ready lanes that can run at the same time.
    Offer parallel worker-thread prompts when lanes have no shared mutable files,
@@ -146,8 +189,8 @@ surfaces.
    Give the operator each worker's handoff as an **absolute path**. Do not
    provide only a repository-relative path, a second prompt, or copied
    context. The handoff must list required sibling worktree links (or
-   `none`) so worktree initiation can symlink those primary checkouts
-   beside the worker worktree.
+   `none`) so worktree initiation can symlink those primary checkouts into the
+   worktree container directory (the worker worktree's parent).
 
    Each handoff records the planning base commit from before the handoff was
    created. It must not try to contain the SHA of the commit that contains the
@@ -175,10 +218,18 @@ surfaces.
    - call `create_workspace` once for the lane with `isolation: worktree`,
      `mode: branch-off`, `baseBranch: origin/main`, the intended branch, and the
      source checkout path;
+   - before launching the worker, verify every sibling link named by the handoff
+     exists in the managed worktree's **container directory** (the worktree's
+     parent), resolves to the declared primary checkout, and was available before
+     any project bootstrap step that needs it. Project lifecycle hooks may create
+     these links; otherwise stop on absence or conflict rather than leaving the
+     worker to discover a broken dependency topology;
    - materialize the selected profile into `create_agent`: combine its provider
      and model as the provider value, copy mode/thinking/features into settings,
      place it in that workspace, leave finish notification enabled, and use only
      `Read and follow <absolute-handoff-path>.` as the initial prompt;
+   - retain the returned agent and workspace IDs as lane transport state so
+     review follow-ups target the originating worker rather than a replacement;
    - trust finish and permission notifications; do not poll agent status. Use
      `send_agent_prompt` on the same agent for bounded continuation or requested
      changes;
@@ -205,18 +256,27 @@ surfaces.
    `execution-miss`, `oracle-gap`, `planning-change`, `validation-gap`, or
    `integration-drift`. A `planning-change` pauses worker revision while the
    orchestrator repairs canonical planning.
-   Send in-bounds requested changes to the same worker through the active
-   adapter, or give them to the operator for relay in a manual run.
+   Posting review comments does not wake a finished worker. After every
+   `changes requested` verdict is recorded on the PR, send an explicit follow-up
+   to the originating worker through the active adapter. In Paseo, call
+   `send_agent_prompt` with the retained agent ID and tell it to read the posted
+   PR findings, repair only the in-bounds requested scope, validate, push, and
+   notify on finish. If the original worker is unavailable, give the review to
+   the operator for relay; do not silently create a replacement worker. A
+   `planning-change` still returns to canonical planning before this follow-up.
 12. **Merge and close out.** Before closeout, revisit the run's triage notes and
     give each one a clear disposition: promote or rework it into canonical docs,
     merge it with another note, keep it explicitly open, or remove it when it is
     implemented, superseded, or no longer useful. Ask the operator instead of
-    guessing when the disposition is uncertain. Then merge only after the
-    operator authorises that merge
-    action and the review/check gate is satisfied. Then update card, milestone,
-    log, front-door currentness, continuation/pause state, and the single next
-    task. If the lane continues, identify the next ready card; if it ends, name
-    the next planning checkpoint.
+    guessing when the disposition is uncertain. Once the provider holds an
+    accepted verdict for the exact current PR head, every required check passes,
+    the PR is mergeable into the intended base, and no stricter repository rule
+    or explicit operator pause applies, merge without asking for another
+    approval. If the head changed after review, review it again. If merge state
+    or the merge result is ambiguous, stop before retrying. Then update card,
+    milestone, log, front-door currentness, continuation/pause state, and the
+    single next task. If the lane continues, identify the next ready card; if it
+    ends, name the next planning checkpoint.
 
 ## Worker file contract
 
@@ -262,13 +322,15 @@ The file must say, in substance:
   ancestor of `HEAD`, and confirm the repository-relative handoff exists in
   that `HEAD`. Load the tracked blob; if the absolute dispatch file differs,
   stop. The committed `HEAD` copy is canonical;
-- after that check, create each **required sibling worktree link** from the
-  tracked handoff. Canonicalize source and destination. Create when the
-  destination is absent. Reuse only when an existing symlink resolves to the
-  declared source. Stop on a mismatched symlink, directory, or file. Never
-  delete, replace, or overwrite. If a listed source is missing, stop and
-  report. Do not skip a required catalog member. If the list is `none`, skip
-  this step;
+- after that check, verify each **required sibling worktree link** from the
+  tracked handoff in the worktree container directory. For a launcher-managed
+  worktree, require the lifecycle hook to have created it before project setup;
+  stop if it is absent. For a manual fallback, canonicalize source and
+  destination and create it when absent. In either lane, reuse only when an
+  existing symlink resolves to the declared source. Stop on a mismatched
+  symlink, directory, or file. Never delete, replace, or overwrite. If a listed
+  source is missing, stop and report. Do not skip a required catalog member. If
+  the list is `none`, skip this step;
 - continue from the tracked handoff; all canonical refs and instructions needed
   for the run are named inside it;
 - execute only the ordered ready cards;
@@ -287,7 +349,8 @@ The file must say, in substance:
 - return a newly discovered product threshold, contract choice, or acceptance
   rule to planning instead of choosing it in implementation;
 - finish the assigned runway with a pushed branch and a reviewable PR;
-- do not merge or invent a new architecture.
+- do not merge or invent a new architecture; merge belongs to the orchestrator
+  after its accepted review/check gate.
 
 The only external worker handoff is the absolute path, for example:
 
@@ -318,6 +381,8 @@ changes the plan.
 Use role profiles, not fixed model names:
 
 - orchestrator/discovery/review: frontier model, high reasoning;
+- exact mechanical documentation projection: fast/low-cost profile, low or
+  medium reasoning, with the orchestrator retaining semantic review;
 - bounded, mechanically direct worker: capable coding model, medium reasoning;
 - reconnaissance and log reduction: fast model or deterministic command;
 - security, persistence, concurrency, public API, deployment, multi-version, or
@@ -346,7 +411,9 @@ Stop and return to planning or the operator when:
 - the launcher supplied a dirty or `main` worktree; stop and report it rather
   than creating a second worktree behind the launcher's back;
 - the base/worktree/branch boundary remains unverifiable after fallback;
-- merge authority is not explicit;
+- the current PR head lacks an accepted orchestrator verdict, required checks
+  are not passing, mergeability or target base is unclear, a stricter repository
+  rule requires human action, or the operator explicitly paused merge;
 - a manual worktree is needed but the local path contract has not been satisfied;
 - control-plane launch state is ambiguous enough that retrying could create a
   duplicate workspace or worker;

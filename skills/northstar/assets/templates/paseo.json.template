@@ -1,7 +1,7 @@
 {
   "worktree": {
-    "setup": "effigy paseo:worktree prepare && effigy bootstrap && effigy paseo:worktree link",
-    "teardown": "effigy paseo:worktree unlink"
+    "setup": "effigy skill run --path \"${NORTHSTAR_SKILL_PATH:-$HOME/.agents/skills/northstar}\" paseo:worktree -- prepare && PROJECT_SETUP_COMMAND && effigy skill run --path \"${NORTHSTAR_SKILL_PATH:-$HOME/.agents/skills/northstar}\" paseo:worktree -- link",
+    "teardown": "effigy skill run --path \"${NORTHSTAR_SKILL_PATH:-$HOME/.agents/skills/northstar}\" paseo:worktree -- unlink"
   },
   "scripts": {
     "qa": { "command": "effigy qa" },

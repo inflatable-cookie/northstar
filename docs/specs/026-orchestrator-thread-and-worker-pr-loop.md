@@ -68,8 +68,9 @@ surface: ready for merge, changes requested with line-specific or card-specific
 comments, or pause with a named planning gap. When the orchestrator and worker
 use the same GitHub identity, GitHub blocks formal self-approval; the
 orchestrator must post the verdict as a PR comment instead. A review comment is
-canonical review evidence in that case. Merge remains a separate,
-operator-authorized action.
+canonical review evidence in that case. An accepted orchestrator verdict plus
+passing required checks authorizes merge of that lane's current reviewed PR head
+without another operator prompt.
 
 For a reported defect, the orchestrator dispatches the whole outcome rather
 than a diagnostic phase. The worker owns reproduction, causal investigation,
@@ -100,13 +101,16 @@ before chat summarizes the result.
   OpenCode adapters.
 - Use an available control plane automatically for profile selection, worktree
   placement, notifications, and follow-ups without making it protocol authority.
+- Keep frontier reasoning on discovery, planning, review, and merge while a
+  fast/low-cost subagent handles bounded mechanical documentation projection.
 
 ## Non-goals
 
 - requiring automatic cross-session messaging or one named control plane;
 - a second public Northstar skill;
 - parallel write-heavy workers in one active lane;
-- automatic merge without a review/check gate and operator authorisation;
+- automatic merge before an accepted review of the current head and passing
+  required checks;
 - replacing Effigy, Git, or the hosting provider's PR system;
 - a universal provider-specific command wrapper.
 
@@ -114,9 +118,38 @@ before chat summarizes the result.
 
 | Role | Owns | Must not assume |
 | --- | --- | --- |
-| Operator | answers unresolved questions, may override the selected worker profile, starts or relays manual runs, resolves material permission requests, grants merge authority | that one thread can see another thread's private history |
-| Orchestrator | discovery, intent summary, promoted planning, ready runway, per-worker handoff, optional adapter dispatch, PR review verdict, closeout | that a worker's narrative or control-plane state substitutes for repository/diff/check evidence |
+| Operator | answers unresolved questions, may override the selected worker profile, starts or relays manual runs, resolves material permission requests, and may pause or override a merge | that one thread can see another thread's private history |
+| Orchestrator | discovery, intent summary, promoted planning, ready runway, per-worker handoff, optional adapter dispatch, PR review verdict, gated merge, closeout | that a worker's narrative or control-plane state substitutes for repository/diff/check evidence |
+| Documentation projection subagent | mechanically materializes an exact orchestrator brief into named docs and deterministic validation | planning choices, semantic promotion, readiness/completion judgment, code edits, commit/push, review, or merge |
 | Worker | bounded diagnosis and implementation in its worktree, card execution, tests, commits, evidence, PR creation | new architecture, missing contracts, or scope expansion |
+
+## Documentation projection
+
+The orchestrator may use a fast, low-cost profile for a meaningful mechanical
+documentation batch after it has finished the relevant planning. This is a
+serial subagent operation in the planning context, not a worker lane. It does
+not use the worker handoff, create another worktree, or gain implementation
+authority.
+
+The orchestrator supplies an exact projection brief containing:
+
+- authority owner and settled decisions;
+- canonical refs and allowed paths;
+- exact facts, evidence, and required state transitions;
+- forbidden judgments, validation, and stop conditions.
+
+The subagent may update named roadmap, card, log, front-door, index, handoff,
+template, parity, and evidence surfaces. It stops on a missing choice,
+contradiction, unlisted path, or validation result that needs interpretation. It
+does not invent wording that changes meaning, choose canonical ownership, add
+acceptance/stop/review-oracle policy, decide ready/complete/next state, edit
+product code, commit, push, review, or merge.
+
+Before dispatch, the orchestrator records dirty state and the allowed path set.
+After return, it reviews the complete diff for semantic fidelity and owns every
+Git mutation. Use this split for roughly three or more related projection
+surfaces, or another batch large enough to repay dispatch and review overhead;
+keep smaller edits in the orchestrator.
 
 ## Parallel lane dispatch
 
@@ -134,7 +167,7 @@ should offer multiple worker-thread prompts when all of the following hold:
 If any condition fails, keep the work serial and name the dependency or
 ambiguity. Parallelism is an offered execution shape, not a reason to split an
 unclear lane. Each parallel worker follows the same startup worktree-safety,
-PR, review-comment fallback, and explicit operator-authorised merge protocol
+PR, review-comment fallback, and accepted-review/check-gated merge protocol
 independently.
 
 ## State model
@@ -198,20 +231,26 @@ orchestrator uses them automatically for a ready lane:
    unless the operator explicitly named a profile for that lane;
 2. creates one Paseo worktree workspace per worker with `branch-off` isolation
    from `origin/main`, using the lane's intended branch and source checkout;
-3. creates the worker in that workspace with finish notification enabled and
+3. verifies every handoff-declared sibling checkout is symlinked into the
+   managed worktree's container directory before project bootstrap needs it;
+   it stops on a missing source, wrong symlink, or conflicting path;
+4. creates the worker in that workspace with finish notification enabled and
    the single initial prompt `Read and follow <absolute-handoff-path>.`;
-4. trusts the finish/permission notification instead of polling, reconciles the
+5. retains the returned agent and workspace IDs as lane transport state;
+6. trusts the finish/permission notification instead of polling, reconciles the
    returned report with canonical state, and uses a follow-up prompt on the same
    agent for bounded continuation or requested changes;
-5. returns permission requests to the operator unless existing explicit
+7. returns permission requests to the operator unless existing explicit
    authority already settles the exact action.
 
 Do not use a generic task-handoff skill, including `/paseo-handoff`, for a
 Northstar worker dispatch. Such a skill generates a second briefing and would
 compete with the committed Northstar handoff. Use the base workspace and agent
-tools directly. Tool injection authorizes transport only: it does not authorize
-unready work, missing product or contract choices, material permission requests,
-destructive workspace archival or cleanup, review, merge, or a duplicate retry.
+tools directly. Tool injection authorizes transport only: it does not
+independently authorize unready work, missing product or contract choices,
+material permission requests, destructive workspace archival or cleanup,
+review, merge, or a duplicate retry. Merge authority comes from the active
+orchestrator lane after its review/check gate, not from the adapter.
 If required tools are absent or setup fails before launch, preserve any created
 workspace identity, report the exact state, and fall back to the manual
 absolute-path handoff without creating a second worker silently.
@@ -251,8 +290,8 @@ frontmatter must include `handoff_mode: worker-pr-loop`,
 `worker_mode: implementation`, and `dispatch_authority: orchestrator`:
 
 - planning base commit, remote-tip verification, worker branch, and worktree command;
-- required sibling worktree links (absolute primary-checkout sources and
-  the link name beside the worktree) or `none`;
+- required sibling worktree links (absolute primary-checkout sources and the
+  link name in the worktree container directory) or `none`;
 - startup worktree-safety preflight and local-path manual-worktree instructions;
 - active vision/architecture/contract refs;
 - active master spec and roadmap milestone;
@@ -289,10 +328,12 @@ the dispatch-specific state.
 3. From the selected worktree, confirm `HEAD == origin/main`, the recorded
    planning base is an ancestor of `HEAD`, and the repository-relative handoff
    exists in that `HEAD`. Load the tracked blob; stop if the absolute dispatch
-   file differs. That `HEAD` copy is canonical. Only then create each required
-   sibling link: canonicalize source and destination; create when absent;
-   reuse only a symlink that already resolves to the declared source; stop
-   on any other existing path; never delete, replace, or overwrite. Skip
+   file differs. That `HEAD` copy is canonical. Only then verify each required
+   sibling link in the worktree container directory. In a launcher-managed
+   worktree it must already exist before project setup; stop if it is absent.
+   In a manual fallback, canonicalize source and destination and create it when
+   absent. Reuse only a symlink that already resolves to the declared source;
+   stop on any other existing path; never delete, replace, or overwrite. Skip
    sibling setup when the list is `none`.
 4. Read the active milestone, every assigned card, and governing refs.
 5. Run the repo's cheap orientation and relevant graph/query commands before code
@@ -332,16 +373,22 @@ from the PR and canonical refs, not only from the worker's report:
    when formal approval is unavailable because the orchestrator and worker share
    a GitHub identity, post a canonical `Changes required` PR comment for blocking
    findings and treat that comment as the review record;
-7. merge only when checks and review are satisfactory and the operator has
-   authorised the merge action;
+7. if the exact reviewed head is still current, every required check passes, the
+   PR is mergeable into its intended base, and no stricter repository rule or
+   explicit operator pause applies, merge without another operator prompt;
 8. after merge, update roadmap/card/log/currentness surfaces and identify the next
    planning or execution move.
 
-If changes are requested, the orchestrator sends the review to the same worker
-branch/thread through the active adapter, or the operator relays it in a manual
-run. The worker fixes only the requested scope, pushes again, and the
-orchestrator repeats the review. A new worker thread is not required unless the
-original worktree or branch is no longer usable.
+If changes are requested, posting the provider review is necessary but does not
+wake a finished worker. After the findings are on the PR, the orchestrator sends
+an explicit follow-up to the originating worker branch/thread through the active
+adapter. With Paseo it uses `send_agent_prompt` and the retained agent ID. The
+follow-up tells the worker to read the posted findings, fix only the requested
+scope, validate, push, and report again. The operator relays the same instruction
+in a manual run. Do not silently create a replacement when the originating
+worker is unavailable. A `planning-change` returns to canonical planning before
+implementation resumes; otherwise the orchestrator repeats review after the
+worker pushes.
 
 ## Model and runtime policy
 
@@ -349,6 +396,8 @@ Model IDs are runtime configuration, not Northstar contract values. Select by
 capability:
 
 - frontier/high effort for the orchestrator and material review;
+- fast/low-cost for exact mechanical documentation projection after the
+  orchestrator settles meaning;
 - capable/medium effort for bounded, mechanically direct implementation;
 - fast/low effort for read-only reconnaissance and log reduction;
 - frontier/high effort for a worker card touching security, persistence,
@@ -379,6 +428,10 @@ The initial Northstar dogfood must prove:
 - the orchestrator can find at least one real issue or explicitly record a clean
   review;
 - the requested-changes loop or approval path is exercised;
+- an accepted exact-head review plus passing required checks reaches merge
+  without another operator prompt;
+- a changed head, explicit operator pause, stricter repository rule, or
+  ambiguous merge state stops or re-enters review rather than merging blindly;
 - roadmap, card, log, and next-task surfaces remain coherent after closeout.
 
 Record elapsed time, worker rework, number of review cycles, finding reason
@@ -388,7 +441,8 @@ diagnose handoff quality. Do not generalise from one run without this evidence.
 ## Open questions
 
 - What is the minimum provider-neutral PR metadata contract for non-GitHub hosts?
-- Which merge permissions should be required in consumer repositories?
+- Which provider permissions and branch-protection settings should consumer
+  repositories require for orchestrator-owned merge?
 - Which workspace cleanup actions, if any, should a control-plane adapter take
   automatically after merge?
 

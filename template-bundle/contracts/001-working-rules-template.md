@@ -183,6 +183,20 @@ informal habits.
 - Set a local upper bound for uninterrupted runs, such as a card limit or time
   limit, so autonomy remains bounded.
 
+### Mechanical documentation projection
+
+- Keep discovery, planning, promotion, acceptance, readiness, review, and merge
+  with the orchestrator.
+- After meaning is settled, a fast/low-cost subagent may serially apply an exact
+  brief to a worthwhile batch of named documentation surfaces and deterministic
+  checks.
+- The brief must bound authority, settled meaning, canonical refs, allowed
+  paths, evidence/state transitions, forbidden judgments, validation, and stop
+  conditions.
+- The subagent does not choose authority or state, edit product code, commit,
+  push, review, or merge. It stops on ambiguity. The orchestrator reviews the
+  full diff and owns Git/provider mutations.
+
 ### Issue-fix dispatch
 
 - Dispatch a reported defect as one outcome-scoped lane covering reproduction,
@@ -198,6 +212,16 @@ informal habits.
   evidence without a fix, or a named blocker makes safe implementation
   impossible. Do not present temporary instrumentation as completion of a fix
   lane.
+
+### Orchestrator merge authority
+
+- Starting an orchestrator/worker lane pre-authorizes the orchestrator to merge
+  that lane's PR after it independently accepts the exact current head and all
+  required checks pass.
+- Confirm the PR is mergeable into the intended base. A changed head requires
+  another review; ambiguous merge state stops before retry.
+- A stricter repository rule or explicit operator pause still wins.
+- Workers and standalone direct-review threads never merge.
 
 ### Direct PR review boundary
 

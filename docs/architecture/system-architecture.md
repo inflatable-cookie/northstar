@@ -282,9 +282,16 @@ A fresh direct-review thread uses the smaller path:
 `operator -> existing PR -> direct review thread -> provider review record`
 
 The orchestrator owns question-led discovery, promoted planning, ready-state,
-launch preparation, and review. Each worker owns only the assigned ready cards in
-its dedicated worktree and branch. Independent roadmap lanes may use parallel
-worker threads, each with its own worktree, branch, handoff, PR, and closeout.
+launch preparation, semantic review, PR review, and merge. After settling
+meaning, it may run one fast/low-cost documentation projection subagent serially
+in the planning context. That subagent applies an exact brief to named docs and
+deterministic checks; it does not choose authority, invent planning, decide
+state, touch product code, or perform Git/provider mutations. The orchestrator
+reviews the resulting diff and retains semantic ownership.
+
+Each worker owns only the assigned ready cards in its dedicated worktree and
+branch. Independent roadmap lanes may use parallel worker threads, each with its
+own worktree, branch, handoff, PR, and closeout.
 When a harness has already placed a worker thread in a clean, dedicated,
 non-`main` registered worktree, that current context is authoritative; the worker
 reuses it even when the generated path or branch differs from the handoff
@@ -312,16 +319,18 @@ worktree under the operator-selected `AGENTS_WORKTREE_CONTAINER_DIR` from pushed
 
 A Paseo-managed repository may commit project-root `paseo.json` for worktree
 hooks, supervised scripts, and metadata-generation guidance. Northstar ships a
-copy-ready config and an Effigy-backed worktree helper; Paseo remains optional
-and the repository owns the final commands and wording.
+copy-ready config and owns the worktree helper inside its installed skill. The
+consumer invokes that task through `effigy skill run`, remains the runtime
+target, and does not copy the helper. Paseo remains optional and the repository
+owns the final commands and wording.
 
-The setup hook has three ordered phases: prepare sibling repos beside the
-generated worktree, run the repository's install/bootstrap command, then replay
-machine-local `effigy deps link` state from the primary checkout. Preparation
-creates an absent symlink, reuses only an already-correct symlink, and stops on
-any conflicting path. Teardown unlinks only Effigy state recorded by that
-worktree. It retains sibling symlinks because concurrent Paseo worktrees may
-share their parent directory.
+The setup hook has three ordered phases: prepare sibling repos in the generated
+worktree's container directory, run the repository's real idempotent setup task,
+then replay machine-local `effigy deps link` state from the primary checkout.
+Preparation creates an absent symlink, reuses only an already-correct symlink,
+and stops on any conflicting path. Teardown unlinks only Effigy state recorded
+by that worktree. It retains sibling symlinks because concurrent Paseo
+worktrees may share their parent directory.
 
 ## Local agent path registry
 
@@ -359,8 +368,10 @@ orchestrator lane when a parent harness already owns the worktree.
 - Each worker handoff is exactly one absolute path; no second prompt or
   copied private context is required. The committed `HEAD` copy is
   canonical before any sibling-path mutation. The file lists required
-  sibling worktree links or `none`; setup is create-if-absent,
-  reuse-if-already-correct, stop-on-conflict.
+  sibling worktree links or `none`; each destination lives in the worktree
+  container directory, and setup is create-if-absent,
+  reuse-if-already-correct, stop-on-conflict. Launcher-managed setup creates
+  required links before project bootstrap; manual workers do so after preflight.
 - A worker must quickly verify that its current context is a clean, dedicated,
   non-`main` registered worktree before broad reads or edits. If so, it reuses
   that launcher-provided worktree regardless of handoff path/branch placeholders.
@@ -370,6 +381,11 @@ orchestrator lane when a parent harness already owns the worktree.
   discards a dirty checkout.
 - Orchestrator and worker threads must use separate worktree/branch boundaries;
   a worker may not edit the orchestrator's planning checkout.
+- A mechanical documentation projection subagent may edit only the named paths
+  in the orchestrator's planning context from an exact settled brief. It is not
+  worker mode, runs serially, stops on semantic ambiguity, and cannot choose
+  authority, readiness, completion, or next work. The orchestrator captures
+  dirty state first, reviews the full diff, and owns commit/push.
 - A worker's completion authority is a reviewable PR plus evidence, not a chat
   claim. The orchestrator reviews the diff and checks against canonical refs and
   records the verdict in the provider review surface; same-identity GitHub runs
@@ -377,7 +393,12 @@ orchestrator lane when a parent harness already owns the worktree.
 - A direct PR-review request authorizes review mutations on the named PR only.
   Every merge-blocking finding is posted on the provider review surface; chat
   summarizes that record and never becomes the only home of a required change.
-- Merge remains a separate operator-authorized action.
+- A worker never merges. The orchestrator may merge its worker PR without a
+  second operator prompt after it records an accepted review of the exact
+  current head, all required checks pass, the PR is mergeable into the intended
+  base, and no stricter repository rule or explicit operator pause applies. A
+  changed head requires another review; ambiguous merge state stops before
+  retry.
 - Provider-native subagents, session messaging, and hosted agents are optional
   adapters, not Northstar protocol dependencies.
 - Project-root Paseo settings are optional project lifecycle configuration. They
@@ -392,9 +413,15 @@ orchestrator lane when a parent harness already owns the worktree.
   profiles, messages, and lifecycle state are transport metadata, not planning
   or completion authority. This does not authorize unready work, material
   permission requests, destructive workspace cleanup, review, merge, or
-  duplicate retries. Manual launch and operator relay remain the fallback.
+  duplicate retries. Orchestrator merge authority comes from the accepted
+  review/check gate, not tool injection. Manual launch and operator relay remain
+  the fallback.
 - A generic task-handoff helper must not expand a Northstar worker handoff into
   a second briefing. Adapters launch from the committed file path directly.
+- Posting requested changes on a PR does not wake a finished worker. The
+  orchestrator retains the originating adapter identity and explicitly prompts
+  that same worker after the provider review is recorded. It never silently
+  launches a replacement when the original worker is unavailable.
 - Papercuts remain an observation queue, not a competing planning authority or
   automatic work queue.
 - Triage notes remain a temporary capture buffer, not a competing planning
