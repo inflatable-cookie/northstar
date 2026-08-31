@@ -51,6 +51,10 @@ enough context for a later agent to understand it.
 At each checkpoint, either bring the note into the active plan, leave it
 explicitly open, or identify its next canonical home. Before closeout, inspect
 every note touched by the run and promote, merge, or remove it as appropriate.
+When a note is promoted into a roadmap, remove the triage file in the same
+planning batch. If the note also contains unresolved material, preserve that
+material in a separate open note before removing the promoted source; do not
+leave promoted content in triage.
 Do not silently delete an uncertain note; ask the operator when its meaning,
 owner, destination, or removal is unclear. Triage notes are not authority for
 execution until their useful content is promoted into the normal planning
@@ -82,6 +86,9 @@ surfaces.
    branch.
 5. **Compile the runway.** Create or update the master spec, active milestone,
    and meaningful batch cards. Use the generation runway to choose direction.
+   Remove each triage file promoted into that roadmap runway in the same
+   planning batch, after preserving any still-unresolved material in a separate
+   open note.
    Mark a card `ready` only when the existing Northstar rubric is satisfied:
    bounded scope, current governing refs, acceptance, validation, evidence, stop
    conditions, and explicit continuation state.
