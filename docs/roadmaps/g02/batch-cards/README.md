@@ -42,3 +42,6 @@ scanner evidence without widening repair authority or everyday context.
 Worker-review correction roadmap `g02.035` is complete. Card 103 adds review
 oracles, a worker adversarial pass, reason-coded blocking findings, risk-based
 worker routing, and compact handoffs from Figmatic and Swallowtail evidence.
+Optional control-plane roadmap `g02.036` is complete. Card 104 adds conditional
+Paseo workspace/agent dispatch while preserving the absolute file handoff and
+manual fallback.

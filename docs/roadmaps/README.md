@@ -59,11 +59,14 @@ Roadmaps sequence contract-backed work for Northstar itself.
   provider surface and forbids chat-only blocking findings.
 - `g02.035` is complete; card 103 adds review oracles, worker adversarial review,
   finding reason codes, risk-based worker routing, and compact handoffs.
+- `g02.036` is complete; card 104 makes Paseo an optional orchestrator transport
+  while preserving manual dispatch and repository authority.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-No blocking roadmap milestone is open. Gather reason-coded review evidence from
-future operator-provided runs; Northstar does not dispatch consumer audits.
+No blocking roadmap milestone is open. Dogfood the optional Paseo adapter on the
+next bounded orchestrator lane when explicitly authorized. Northstar does not
+dispatch consumer audits.

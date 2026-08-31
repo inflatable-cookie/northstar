@@ -3,7 +3,7 @@
 Status: active
 Owner: repo maintainers
 Created: 2026-08-16
-Updated: 2026-08-29
+Updated: 2026-08-31
 Related research: `bundle-docs/research/translation-memos/northstar-orchestrator-thread.md`
 Governing architecture: `docs/architecture/system-architecture.md`
 Governing contracts: `docs/contracts/001-working-rules.md`, `docs/contracts/002-agent-local-paths.md`
@@ -16,7 +16,8 @@ does not yet define the most useful split for current coding agents:
 - a conversational orchestrator thread that asks questions, explores edges,
   settles intent, maintains the planning runway, and reviews delivery;
 - a fresh worker thread that receives a durable file-based brief, works in its
-  own worktree, reports bounded chunks through the operator, and creates a PR;
+  own worktree, reports bounded chunks through an optional control plane or the
+  operator, and creates a PR;
 - an explicit review loop that ends in approval/merge or precise requested
   changes.
 
@@ -32,9 +33,11 @@ checkout. The orchestrator owns discovery, planning, architecture/contracts,
 roadmap readiness, launch preparation, and PR review. It does not implement the
 feature in the planning checkout once the worker boundary is declared.
 
-The operator creates a fresh worker thread in a dedicated worktree from the
-pushed `main` commit for each approved independent lane. When the harness creates
-that worktree before the worker starts, the current launch context is authoritative
+For each approved independent lane, the orchestrator uses an operator-authorized
+control-plane adapter when one is available, or gives the operator the handoff
+path for manual launch. Either route creates a fresh worker thread in a
+dedicated worktree from pushed `main`. When the harness creates that worktree
+before the worker starts, the current launch context is authoritative
 even if the harness-generated path or branch differs from a handoff placeholder;
 the worker reuses it rather than creating a second worktree. The orchestrator has
 already committed and pushed the planning artifacts and one concrete worker
@@ -55,8 +58,9 @@ contract says planning or operator intent is required. When the assigned runway
 is complete, it opens a PR against the prepared base and returns the URL plus
 evidence.
 
-The operator relays worker reports and the PR URL to the orchestrator. The
-orchestrator reviews the exact diff and checks against the canonical refs, then
+Worker reports and the PR URL return through the authorized control plane when
+it supports direct parent/child messaging; otherwise the operator relays them.
+The orchestrator reviews the exact diff and checks against the canonical refs, then
 records one of these evidence-backed outcomes in the hosting provider's review
 surface: ready for merge, changes requested with line-specific or card-specific
 comments, or pause with a named planning gap. When the orchestrator and worker
@@ -92,10 +96,12 @@ before chat summarizes the result.
 - Route model effort by role and risk without hard-coding provider model IDs.
 - Preserve a provider-neutral protocol while allowing Codex, Claude Code, or
   OpenCode adapters.
+- Use an available, authorized control plane for profile selection, worktree
+  placement, notifications, and follow-ups without making it protocol authority.
 
 ## Non-goals
 
-- automatic cross-session messaging;
+- requiring automatic cross-session messaging or one named control plane;
 - a second public Northstar skill;
 - parallel write-heavy workers in one active lane;
 - automatic merge without a review/check gate and operator authorisation;
@@ -106,8 +112,8 @@ before chat summarizes the result.
 
 | Role | Owns | Must not assume |
 | --- | --- | --- |
-| Operator | answers unresolved questions, starts the worker thread, relays reports/PR URLs, grants merge authority | that one thread can see another thread's private history |
-| Orchestrator | discovery, intent summary, promoted planning, ready runway, per-worker handoff, PR review verdict, closeout | that a worker's narrative substitutes for diff/check evidence |
+| Operator | answers unresolved questions, authorizes optional control-plane dispatch, starts or relays for manual runs, grants merge authority | that one thread can see another thread's private history |
+| Orchestrator | discovery, intent summary, promoted planning, ready runway, per-worker handoff, optional adapter dispatch, PR review verdict, closeout | that a worker's narrative or control-plane state substitutes for repository/diff/check evidence |
 | Worker | bounded diagnosis and implementation in its worktree, card execution, tests, commits, evidence, PR creation | new architecture, missing contracts, or scope expansion |
 
 ## Parallel lane dispatch
@@ -170,7 +176,39 @@ The orchestrator/worker boundary is a strict sequence:
    its handoff file; that would be self-referential because changing the file
    changes the commit SHA;
 9. give the operator each worker's handoff as an absolute path, and list
-   required sibling worktree links (or `none`) inside the file.
+   required sibling worktree links (or `none`) inside the file;
+10. when a control-plane adapter is available and the operator authorized it in
+    the current conversation, use that adapter to create the isolated workspace
+    and worker. Otherwise stop at `ready-to-launch` and use manual dispatch.
+
+## Optional control-plane adapter
+
+The adapter changes transport, not authority. The committed worker handoff,
+canonical repository state, branch, PR, checks, and provider review record stay
+authoritative.
+
+When Paseo tools are available and the operator has authorized their use for
+the run, the orchestrator:
+
+1. lists configured agent profiles and reads every profile's notes; it selects
+   by the Northstar role/risk profile and never hard-codes a local profile name;
+2. creates one Paseo worktree workspace per worker with `branch-off` isolation
+   from `origin/main`, using the lane's intended branch and source checkout;
+3. creates the worker in that workspace with finish notification enabled and
+   the single initial prompt `Read and follow <absolute-handoff-path>.`;
+4. trusts the finish/permission notification instead of polling, reconciles the
+   returned report with canonical state, and uses a follow-up prompt on the same
+   agent for bounded continuation or requested changes;
+5. returns permission requests to the operator unless existing explicit
+   authority already settles the exact action.
+
+Do not use a generic task-handoff skill, including `/paseo-handoff`, for a
+Northstar worker dispatch. Such a skill generates a second briefing and would
+compete with the committed Northstar handoff. Use the base workspace and agent
+tools directly. If required tools are absent, adapter authorization is absent,
+or setup fails before launch, preserve any created workspace identity, report
+the exact state, and fall back to the manual absolute-path handoff without
+creating a second worker silently.
 
 The worker must not require a separately copied prompt, transcript, or list of
 canonical refs. The handoff may point at canonical repository files, but it is
@@ -293,8 +331,9 @@ from the PR and canonical refs, not only from the worker's report:
 8. after merge, update roadmap/card/log/currentness surfaces and identify the next
    planning or execution move.
 
-If changes are requested, the operator relays the review to the same worker
-branch/thread. The worker fixes only the requested scope, pushes again, and the
+If changes are requested, the orchestrator sends the review to the same worker
+branch/thread through the active adapter, or the operator relays it in a manual
+run. The worker fixes only the requested scope, pushes again, and the
 orchestrator repeats the review. A new worker thread is not required unless the
 original worktree or branch is no longer usable.
 
@@ -312,7 +351,9 @@ capability:
 
 Use deterministic Effigy, Git, test, diff, and PR-check commands for evidence.
 Provider-native subagents, worktree managers, JSON output, resume, and PR helpers
-are adapters that may improve ergonomics but must not change the protocol.
+are adapters that may improve ergonomics but must not change the protocol. When
+an adapter exposes named profiles, select them from current notes at dispatch
+time rather than storing profile or model names in Northstar.
 
 ## Validation strategy
 
@@ -335,14 +376,15 @@ The initial Northstar dogfood must prove:
 - roadmap, card, log, and next-task surfaces remain coherent after closeout.
 
 Record elapsed time, worker rework, number of review cycles, finding reason
-codes, validation outcome, and operator relay burden. Raw cycle count does not
+codes, validation outcome, and transport/relay burden. Raw cycle count does not
 diagnose handoff quality. Do not generalise from one run without this evidence.
 
 ## Open questions
 
-- Which worker CLI should be the default local adapter for the first dogfood?
 - What is the minimum provider-neutral PR metadata contract for non-GitHub hosts?
 - Which merge permissions should be required in consumer repositories?
+- Which workspace cleanup actions, if any, should a control-plane adapter take
+  automatically after merge?
 
 These questions do not block the protocol shape; they block only adapter and
 rollout defaults.
@@ -350,12 +392,12 @@ rollout defaults.
 ## Promotion notes
 
 Durable role and boundary rules are promoted into the live architecture and
-working-rules contract. This spec remains active until the dogfood evidence
-settles the worker-handoff placement, adapter defaults, and review-cycle
-ergonomics.
+working-rules contract. This spec remains active until dogfood evidence settles
+control-plane transport, workspace cleanup, and review-cycle ergonomics.
 
 ## Next task
 
-Use the next real reported defect as an outcome-scoped dogfood lane. Confirm the
-worker carries diagnosis through the in-bounds fix and capture elapsed time,
-relay burden, and review cycles before adding adapter automation.
+Use the next real bounded lane as a Paseo-backed dogfood run when Paseo is
+available and authorized. Confirm that the adapter launches from the committed
+handoff, preserves the manual fallback and authority chain, and reduces relay
+burden without weakening review or merge gates.

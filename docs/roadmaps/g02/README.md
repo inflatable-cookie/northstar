@@ -13,7 +13,7 @@ single-pilot bucket.
 | --- | --- | --- | --- |
 | Keep learning from operator-provided consumer feedback before treating stricter posture as settled doctrine. | active | `docs/contracts/001-working-rules.md`, `docs/specs/012-consumer-repo-autonomy-proof-and-adoption.md`, `docs/specs/013-stricter-consumer-repo-autonomy-adoption.md` | pending |
 | Harden setup, nested-authority adoption, and posture classification so downstream repos can install the spine without hand adaptation. | active | `docs/specs/020-formalize-nested-docs-authority-setup.md`, `docs/specs/022-formalize-repo-posture-classification.md` | pending |
-| Keep execution autonomy bounded by ready cards, lane budgets, pause signals, and a file-based orchestrator/worker PR boundary instead of ad-hoc continuation prompts. | active | `docs/contracts/001-working-rules.md`, `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `bundle-docs/sections/07-delivery-framework-and-autonomy.md` | operator feedback intake / Batch 26.4 checkpoint |
+| Keep execution autonomy bounded by ready cards, lane budgets, pause signals, and a file-based orchestrator/worker PR boundary instead of ad-hoc continuation prompts. | active | `docs/contracts/001-working-rules.md`, `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `bundle-docs/sections/07-delivery-framework-and-autonomy.md` | Paseo-backed orchestrator dogfood |
 | Keep always-loaded agent context useful, human, and bounded while preserving safety, authority, and project intent. | complete | `docs/contracts/003-agent-instruction-surface.md`, `docs/specs/028-agent-instruction-surface-optimization.md` | accept later operator feedback |
 | Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | pending |
 | Add a genuinely long-horizon planning route without conflating it with readiness review. | active | `docs/specs/029-northstar-long-horizon-planning.md`, `skills/northstar/references/modes/atlas.md` | Non-Northstar scenario and operator confirmation |
@@ -78,6 +78,8 @@ rollover signal.
   direct review and no chat-only blocking findings)
 - `035-reduce-worker-review-rework.md` (complete; card 103, review oracles,
   reason-coded findings, risk-based workers, and compact handoffs)
+- `036-use-optional-control-plane-for-orchestrator-dispatch.md` (complete; card
+  104, conditional Paseo dispatch, manual fallback, and 122-file skill parity)
 
 ## Next Task
 
@@ -119,8 +121,13 @@ unavailable. Chat is summary-only.
 Roadmap `g02.035` is complete. Card 103 turned Figmatic and Swallowtail
 revision evidence into review oracles, a worker adversarial pass, finding reason
 codes, frontier/high routing for risky workers, and shorter dispatch overlays.
+Roadmap `g02.036` is complete. Card 104 made Paseo an optional transport adapter:
+Northstar selects current profiles by notes, creates one worktree workspace from
+`origin/main`, launches from the absolute committed handoff, trusts
+notifications, and keeps manual dispatch, permissions, review, and merge gates.
 
-No blocking roadmap milestone is open. Gather reason-coded review evidence from
-future operator-provided runs; Northstar does not dispatch consumer audits.
+No blocking roadmap milestone is open. Dogfood the adapter on the next bounded
+orchestrator lane when Paseo is available and explicitly authorized. Northstar
+does not dispatch consumer audits.
 
 Batch cards live in `g02/batch-cards/` when strict posture uses them.

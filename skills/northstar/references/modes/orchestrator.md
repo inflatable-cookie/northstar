@@ -11,13 +11,15 @@ named adapter does not define a second procedure or standard.
 You own the conversation and the planning/review boundary. You are not the
 implementation worker once a fresh worker run is launched. Keep the user's
 unresolved choices visible; do not turn uncertainty into speculative cards.
-The operator relays worker messages and PR URLs between threads.
+The operator remains the authority boundary; transport may be direct through an
+authorized control plane or operator-relayed.
 
-**Manual handoff is the default.** Use subagents, provider-native agents, or
-hosted-agent helpers only when the operator explicitly authorizes them in the
-current conversation. Orchestrator mode alone is not that authorization:
-prepare the handoff, give the operator its **absolute path**, and rely on
-the operator to start the worker thread and relay its reports and PR URL.
+**Control-plane dispatch is conditional.** A request to use Paseo or available
+control-plane tools authorizes that adapter for the current run. Merely having
+the tools does not. When authorized and available, use them after publishing the
+committed handoff. Otherwise give the operator its **absolute path** for manual
+launch and relay. Both routes use the same file, worktree, PR, review, and merge
+boundaries.
 
 ## Conversation style
 
@@ -161,12 +163,34 @@ surfaces.
    handoff worktree, then the operator-configured manual fallback. If the manual
    path is missing, the worker stops and reports the operator question instead
    of falling back to `/tmp`.
-9. **Handle worker reports.** Treat operator-relayed reports as status evidence,
-   not authority. After each chunk, reconcile card/log state and tell the
-   operator the next report or action needed. If the worker reports a planning
-   gap or scope change, pause and repair the canonical planning surfaces before
-   giving permission to continue.
-10. **Review the PR.** On the PR URL, inspect metadata, commits, diff, checks, and
+9. **Dispatch through an available control plane.** Only after the handoff is
+   committed and pushed, use Paseo when its tools are available and the operator
+   authorized it for this run:
+   - call `list_profiles` and read every profile's notes; select by the role and
+     risk rules below, not by a remembered profile or model name;
+   - call `create_workspace` once for the lane with `isolation: worktree`,
+     `mode: branch-off`, `baseBranch: origin/main`, the intended branch, and the
+     source checkout path;
+   - materialize the selected profile into `create_agent`: combine its provider
+     and model as the provider value, copy mode/thinking/features into settings,
+     place it in that workspace, leave finish notification enabled, and use only
+     `Read and follow <absolute-handoff-path>.` as the initial prompt;
+   - trust finish and permission notifications; do not poll agent status. Use
+     `send_agent_prompt` on the same agent for bounded continuation or requested
+     changes;
+   - return permission requests to the operator unless existing explicit
+     authority settles the exact action.
+
+   Do not invoke `/paseo-handoff`: it creates a second briefing and would compete
+   with the committed Northstar handoff. If authorization or required tools are
+   absent, use manual dispatch. If setup fails, preserve and report any created
+   workspace or agent identity; do not silently retry into a duplicate worker.
+10. **Handle worker reports.** Treat direct adapter reports and operator-relayed
+    reports as status evidence, not authority. After each chunk, reconcile
+    card/log state and name the next report or action needed. If the worker
+    reports a planning gap or scope change, pause and repair the canonical
+    planning surfaces before giving permission to continue.
+11. **Review the PR.** On the PR URL, inspect metadata, commits, diff, checks, and
    changed files against the spec, milestone, cards, and contracts. Review
    independently of the worker narrative. Record an evidence-backed verdict in
    the provider's review surface. If the orchestrator and worker share a GitHub
@@ -176,7 +200,9 @@ surfaces.
    `execution-miss`, `oracle-gap`, `planning-change`, `validation-gap`, or
    `integration-drift`. A `planning-change` pauses worker revision while the
    orchestrator repairs canonical planning.
-11. **Merge and close out.** Before closeout, revisit the run's triage notes and
+   Send in-bounds requested changes to the same worker through the active
+   adapter, or give them to the operator for relay in a manual run.
+12. **Merge and close out.** Before closeout, revisit the run's triage notes and
     give each one a clear disposition: promote or rework it into canonical docs,
     merge it with another note, keep it explicitly open, or remove it when it is
     implemented, superseded, or no longer useful. Ask the operator instead of
@@ -195,8 +221,9 @@ verifies the remote tip before dispatch. When independent roadmap lanes are
 approved for parallel execution, create one such handoff per lane; never merge
 multiple lane instructions into an ambiguous shared prompt. The handoff records
 the planning base commit from before the handoff was created; it must not contain
-a self-referential hash for the commit that contains the handoff. The operator
-starts each fresh worker thread in its named worktree and is given the
+a self-referential hash for the commit that contains the handoff. An authorized
+control plane may start each fresh worker thread in its managed worktree;
+otherwise the operator starts it manually. The operator is always given the
 handoff's **absolute path**. No second prompt, transcript copy, or
 manually pasted references are part of the protocol. The absolute path names
 the owning repository so dispatch cannot be read as a relative file in a
@@ -244,8 +271,8 @@ The file must say, in substance:
   implement, clean up temporary diagnostics, validate, and evidence loop. Use
   ordinary causal and code-level judgment inside the card's boundaries; do not
   stop after diagnostics or open a diagnostics-only PR;
-- report meaningful chunks through the operator with changed files, validation,
-  remaining cards, and blockers;
+- report meaningful chunks through the active control plane or the operator with
+  changed files, validation, remaining cards, and blockers;
 - stop on missing contracts, ambiguous intent, scope expansion, or validation
   failure that changes the plan;
 - update execution evidence and closeout surfaces as required by the cards;
@@ -293,7 +320,10 @@ Use role profiles, not fixed model names:
   pause before dispatch when the review oracle is not explicit.
 
 Provider-native worktrees, subagents, session messaging, JSON output, and PR
-commands are optional adapters. The protocol remains valid with manual worktree
+commands are optional adapters. When an adapter exposes profiles, list them and
+read their current notes at dispatch time; do not store local profile names in
+Northstar. Adapter identities and messages are transport metadata, not planning
+or completion authority. The protocol remains valid with manual worktree
 creation and operator-relayed text.
 
 ## Stop conditions
@@ -313,6 +343,8 @@ Stop and return to planning or the operator when:
 - the base/worktree/branch boundary remains unverifiable after fallback;
 - merge authority is not explicit;
 - a manual worktree is needed but the local path contract has not been satisfied;
+- control-plane launch state is ambiguous enough that retrying could create a
+  duplicate workspace or worker;
 - the worker/subagent would need to start a nested orchestrator or worker lane.
 
 ## Checkpoint shape

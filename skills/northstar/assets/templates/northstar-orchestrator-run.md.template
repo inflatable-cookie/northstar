@@ -76,7 +76,7 @@ Please keep this run inside the named runway:
   unresolved product/API/persistence/security decision.
 - This handoff represents one worker lane. Do not edit another lane's assigned
   scope; if shared mutable scope or a hidden dependency appears, stop and report
-  it through the operator.
+  it through the active control plane or the operator.
 - Work only in the clean worker worktree selected by `Completion Protocol`.
   Never edit the planning checkout or an unrelated dirty checkout.
 - Do not merge the PR. Merge remains a separate operator-authorised action.
@@ -144,8 +144,9 @@ report what changed, validation run, what remains, and any planning decision.
   Remove temporary instrumentation before review unless the governing refs
   explicitly require it as durable observability. Diagnosis alone does not
   complete a fix lane.
-- After each meaningful chunk, report through the operator with changed files,
-  validation actually run, remaining cards, new risks, and blockers.
+- After each meaningful chunk, report through the active control plane or the
+  operator with changed files, validation actually run, remaining cards, new
+  risks, and blockers.
 - Stop and say so if a contract is missing, intent is ambiguous, scope expands,
   authority/access is missing, or validation changes the plan.
 - Do not quietly turn an open question into a new architecture.

@@ -1,7 +1,7 @@
 # Roadmap Generation Index
 
 Status: active
-Updated: 2026-08-27
+Updated: 2026-08-31
 
 ## Mode
 
@@ -105,3 +105,6 @@ Worker-review correction is complete under `g02.035/103`: risky cards carry
 review oracles, workers try to falsify their diffs before PR creation and
 revision, review findings are reason-coded, and handoffs remain compact dispatch
 overlays rather than duplicate authority.
+Optional control-plane dispatch is complete under `g02.036/104`: Paseo can
+select current profiles, create the lane worktree, launch from the absolute
+handoff, notify, and carry follow-ups while manual dispatch remains complete.

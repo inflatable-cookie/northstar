@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-08-27
+Updated: 2026-08-31
 Vision refs: docs/vision/001-northstar-delivery-vision.md
 
 ## Top-Level Stack
@@ -289,15 +289,16 @@ When a harness has already placed a worker thread in a clean, dedicated,
 non-`main` registered worktree, that current context is authoritative; the worker
 reuses it even when the generated path or branch differs from the handoff
 placeholder.
-The operator relays reports and PR URLs while Northstar remains independent of
-provider-specific session messaging.
+An operator-authorized control plane may launch workers and return reports or PR
+URLs directly. Otherwise the operator relays them. Northstar remains independent
+of provider-specific session messaging either way.
 
 The durable boundary is the repository: architecture, contracts, specs, roadmap
 cards, one committed worker handoff per worker lane under `docs/handoffs/`, pushed
 `main`, commits, validation, and PR review. Private model conversation is not an
 authority surface. A worker launch is valid only after the planning checkout has
-published `main` and the operator has the handoff's absolute path to give
-the new thread. The handoff must declare `handoff_mode: worker-pr-loop`,
+published `main` and the handoff's absolute path is available to the operator
+and any authorized adapter. The handoff must declare `handoff_mode: worker-pr-loop`,
 `worker_mode: implementation`, and `dispatch_authority: orchestrator`; those
 fields activate worker mode. Only then does the worker run a quick startup
 worktree check. Normal-mode agents and the orchestrator do not run this check. It reuses
@@ -363,6 +364,13 @@ orchestrator lane when a parent harness already owns the worktree.
 - Merge remains a separate operator-authorized action.
 - Provider-native subagents, session messaging, and hosted agents are optional
   adapters, not Northstar protocol dependencies.
+- An available control plane may select a current role profile, create one
+  isolated worktree workspace per lane, launch the worker from the single
+  absolute handoff path, and carry notifications or follow-ups. Its IDs,
+  profiles, messages, and lifecycle state are transport metadata, not planning
+  or completion authority. Manual launch and operator relay remain the fallback.
+- A generic task-handoff helper must not expand a Northstar worker handoff into
+  a second briefing. Adapters launch from the committed file path directly.
 - Papercuts remain an observation queue, not a competing planning authority or
   automatic work queue.
 - Triage notes remain a temporary capture buffer, not a competing planning
