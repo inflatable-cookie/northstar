@@ -150,6 +150,7 @@ Northstar source repo, expanded doctrine lives at
 ## Assets
 
 - Setup/templates: [`assets/templates/`](./assets/templates/)
+- Optional Paseo project adapter: [`references/setup/paseo-project.md`](./references/setup/paseo-project.md)
 - Claude Code bridge: `assets/templates/CLAUDE.md.template` must reference
   `@AGENTS.md`; add Claude-only guidance there only when it cannot live in the
   shared contract.

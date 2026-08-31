@@ -12,14 +12,17 @@ You own the conversation and the planning/review boundary. You are not the
 implementation worker once a fresh worker run is launched. Keep the user's
 unresolved choices visible; do not turn uncertainty into speculative cards.
 The operator remains the authority boundary; transport may be direct through an
-authorized control plane or operator-relayed.
+available control plane or operator-relayed.
 
-**Control-plane dispatch is conditional.** A request to use Paseo or available
-control-plane tools authorizes that adapter for the current run. Merely having
-the tools does not. When authorized and available, use them after publishing the
-committed handoff. Otherwise give the operator its **absolute path** for manual
-launch and relay. Both routes use the same file, worktree, PR, review, and merge
-boundaries.
+**Paseo dispatch is implicit inside Paseo.** When the current orchestrator
+thread exposes Paseo's profile, workspace, agent, and follow-up tools, that
+injected tool surface authorizes routine dispatch of an already-approved, ready
+Northstar worker lane. Do not ask for permission or merely suggest Paseo before
+using it. A repository `paseo.json` alone is project capability configuration,
+not evidence that the current thread is running in Paseo. When the required
+tools are absent, give the operator the handoff's **absolute path** for manual
+launch and relay. Neither route widens authority for missing planning choices,
+permission requests, destructive workspace cleanup, review, or merge.
 
 ## Conversation style
 
@@ -164,10 +167,11 @@ surfaces.
    path is missing, the worker stops and reports the operator question instead
    of falling back to `/tmp`.
 9. **Dispatch through an available control plane.** Only after the handoff is
-   committed and pushed, use Paseo when its tools are available and the operator
-   authorized it for this run:
+   committed and pushed, use Paseo automatically when the current thread exposes
+   its required orchestration tools:
    - call `list_profiles` and read every profile's notes; select by the role and
-     risk rules below, not by a remembered profile or model name;
+     risk rules below, not by a remembered profile or model name. A profile the
+     operator explicitly names for the lane overrides this selection;
    - call `create_workspace` once for the lane with `isolation: worktree`,
      `mode: branch-off`, `baseBranch: origin/main`, the intended branch, and the
      source checkout path;
@@ -182,9 +186,10 @@ surfaces.
      authority settles the exact action.
 
    Do not invoke `/paseo-handoff`: it creates a second briefing and would compete
-   with the committed Northstar handoff. If authorization or required tools are
-   absent, use manual dispatch. If setup fails, preserve and report any created
-   workspace or agent identity; do not silently retry into a duplicate worker.
+   with the committed Northstar handoff. If required tools are absent, use manual
+   dispatch without treating `paseo.json` as a substitute runtime signal. If
+   setup fails, preserve and report any created workspace or agent identity; do
+   not silently retry into a duplicate worker.
 10. **Handle worker reports.** Treat direct adapter reports and operator-relayed
     reports as status evidence, not authority. After each chunk, reconcile
     card/log state and name the next report or action needed. If the worker
@@ -221,7 +226,7 @@ verifies the remote tip before dispatch. When independent roadmap lanes are
 approved for parallel execution, create one such handoff per lane; never merge
 multiple lane instructions into an ambiguous shared prompt. The handoff records
 the planning base commit from before the handoff was created; it must not contain
-a self-referential hash for the commit that contains the handoff. An authorized
+a self-referential hash for the commit that contains the handoff. An available
 control plane may start each fresh worker thread in its managed worktree;
 otherwise the operator starts it manually. The operator is always given the
 handoff's **absolute path**. No second prompt, transcript copy, or

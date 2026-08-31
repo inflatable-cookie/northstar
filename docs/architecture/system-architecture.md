@@ -289,16 +289,17 @@ When a harness has already placed a worker thread in a clean, dedicated,
 non-`main` registered worktree, that current context is authoritative; the worker
 reuses it even when the generated path or branch differs from the handoff
 placeholder.
-An operator-authorized control plane may launch workers and return reports or PR
-URLs directly. Otherwise the operator relays them. Northstar remains independent
-of provider-specific session messaging either way.
+A control plane whose orchestration tools are injected into the current
+orchestrator thread may launch ready workers and return reports or PR URLs
+directly without another permission prompt. Otherwise the operator relays them.
+Northstar remains independent of provider-specific session messaging either way.
 
 The durable boundary is the repository: architecture, contracts, specs, roadmap
 cards, one committed worker handoff per worker lane under `docs/handoffs/`, pushed
 `main`, commits, validation, and PR review. Private model conversation is not an
 authority surface. A worker launch is valid only after the planning checkout has
 published `main` and the handoff's absolute path is available to the operator
-and any authorized adapter. The handoff must declare `handoff_mode: worker-pr-loop`,
+and any active adapter. The handoff must declare `handoff_mode: worker-pr-loop`,
 `worker_mode: implementation`, and `dispatch_authority: orchestrator`; those
 fields activate worker mode. Only then does the worker run a quick startup
 worktree check. Normal-mode agents and the orchestrator do not run this check. It reuses
@@ -306,6 +307,21 @@ a clean, dedicated, non-`main` registered current worktree supplied by the
 harness; only an unusable current context may proceed to a named worktree or a
 worktree under the operator-selected `AGENTS_WORKTREE_CONTAINER_DIR` from pushed
 `origin/main` before editing.
+
+## Optional Paseo project lifecycle adapter
+
+A Paseo-managed repository may commit project-root `paseo.json` for worktree
+hooks, supervised scripts, and metadata-generation guidance. Northstar ships a
+copy-ready config and an Effigy-backed worktree helper; Paseo remains optional
+and the repository owns the final commands and wording.
+
+The setup hook has three ordered phases: prepare sibling repos beside the
+generated worktree, run the repository's install/bootstrap command, then replay
+machine-local `effigy deps link` state from the primary checkout. Preparation
+creates an absent symlink, reuses only an already-correct symlink, and stops on
+any conflicting path. Teardown unlinks only Effigy state recorded by that
+worktree. It retains sibling symlinks because concurrent Paseo worktrees may
+share their parent directory.
 
 ## Local agent path registry
 
@@ -364,11 +380,19 @@ orchestrator lane when a parent harness already owns the worktree.
 - Merge remains a separate operator-authorized action.
 - Provider-native subagents, session messaging, and hosted agents are optional
   adapters, not Northstar protocol dependencies.
-- An available control plane may select a current role profile, create one
+- Project-root Paseo settings are optional project lifecycle configuration. They
+  may expose Effigy tasks and worktree lifecycle hooks but do not become planning,
+  dependency, branch, commit, PR, or merge authority. Their presence does not
+  prove that the current thread is running inside Paseo.
+- Injected control-plane orchestration tools authorize routine transport for
+  ready worker lanes without a second permission prompt. The orchestrator may
+  select a current role profile, create one
   isolated worktree workspace per lane, launch the worker from the single
   absolute handoff path, and carry notifications or follow-ups. Its IDs,
   profiles, messages, and lifecycle state are transport metadata, not planning
-  or completion authority. Manual launch and operator relay remain the fallback.
+  or completion authority. This does not authorize unready work, material
+  permission requests, destructive workspace cleanup, review, merge, or
+  duplicate retries. Manual launch and operator relay remain the fallback.
 - A generic task-handoff helper must not expand a Northstar worker handoff into
   a second briefing. Adapters launch from the committed file path directly.
 - Papercuts remain an observation queue, not a competing planning authority or

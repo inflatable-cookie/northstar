@@ -1,0 +1,21 @@
+{
+  "worktree": {
+    "setup": "effigy paseo:worktree prepare && effigy bootstrap && effigy paseo:worktree link",
+    "teardown": "effigy paseo:worktree unlink"
+  },
+  "scripts": {
+    "qa": { "command": "effigy qa" },
+    "docs": { "command": "effigy qa:docs" }
+  },
+  "metadataGeneration": {
+    "branchName": {
+      "instructions": "Use a short kebab-case name for the bounded change."
+    },
+    "commitMessage": {
+      "instructions": "Use a short imperative subject; add scope when it helps review."
+    },
+    "pullRequest": {
+      "instructions": "Lead with the outcome, link governing docs, and include validation evidence and unresolved items."
+    }
+  }
+}

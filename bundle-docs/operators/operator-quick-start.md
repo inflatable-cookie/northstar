@@ -111,6 +111,12 @@ During an orchestrator or refresh conversation, ask the agent to check
 written there before the agent follows one branch deeply; refresh and cleanup
 should give each note a disposition.
 
+If Paseo manages the project, copy or merge the optional `paseo.json` starter
+and worktree helper from `skills/northstar/assets/templates/`. The default hook
+prepares sibling repos, runs the project's Effigy bootstrap, then replays
+machine-local `effigy deps link` state. Tailor scripts and metadata instructions
+to the repository rather than treating the starter wording as doctrine.
+
 In this mode, the orchestrator commits and pushes the planning state and one
 worker handoff under `docs/handoffs/` before dispatch. The operator receives
 the handoff's absolute path; no second prompt or copied context is needed.

@@ -108,3 +108,6 @@ overlays rather than duplicate authority.
 Optional control-plane dispatch is complete under `g02.036/104`: Paseo can
 select current profiles, create the lane worktree, launch from the absolute
 handoff, notify, and carry follow-ups while manual dispatch remains complete.
+Operator feedback is complete under `g02.037/105`: injected Paseo tools replace
+the redundant per-run permission prompt without making project config or the
+control plane repository authority.

@@ -40,6 +40,12 @@ worktree creation requires `AGENTS_WORKTREE_CONTAINER_DIR` from that file;
 harness-managed worktrees do not. Install `AGENTS.md` and the one-line
 `CLAUDE.md` bridge (`@AGENTS.md`) together.
 
+For projects managed by Paseo, the installed Northstar skill also ships an
+optional root `paseo.json` template and an Effigy-backed worktree helper. They
+stay outside this docs-only bundle. The helper can recreate sibling repositories
+from Effigy's machine-local dependency-link ledger before bootstrap and replay
+those links afterward.
+
 ### Optional strict Rust quality activation
 
 Rust quality is an optional scoped activation supplied by the single installed

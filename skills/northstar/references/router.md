@@ -178,7 +178,9 @@ activate worker mode or the worker startup preflight.
 Use when the user wants Northstar to own a question-led planning conversation,
 prepare a separate worker thread/worktree, maintain a runway, or review the
 worker's PR. This is an internal mode of the single public authority; the operator
-still relays messages between threads.
+relays messages between threads when no control-plane tools are available. When
+Paseo injects its orchestration tools, the mode uses them for routine dispatch
+without a separate permission prompt.
 
 → [`modes/orchestrator.md`](./modes/orchestrator.md)
 

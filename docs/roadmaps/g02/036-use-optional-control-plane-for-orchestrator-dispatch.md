@@ -55,5 +55,5 @@ updates the skill install and validation evidence.
 
 ## Next task
 
-Lane complete. Dogfood the adapter on the next real bounded orchestrator lane
-when Paseo is available and explicitly authorized.
+Lane complete. Operator feedback superseded its explicit-authorization default;
+the correction continues under `g02.037/105`.

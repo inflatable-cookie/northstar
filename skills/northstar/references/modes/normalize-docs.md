@@ -10,6 +10,7 @@ hygiene when front doors, generation index, or strict surfaces drift.
 - [`../setup/adoption-modes.md`](../setup/adoption-modes.md)
 - [`../setup/delivery-layer-adoption.md`](../setup/delivery-layer-adoption.md)
 - [`../setup/workspace-container-example.md`](../setup/workspace-container-example.md)
+- [`../setup/paseo-project.md`](../setup/paseo-project.md)
 - [`../setup/monkey-example.md`](../setup/monkey-example.md)
 - Templates: [`../../assets/templates/`](../../assets/templates/)
 - Northstar source checkout, when available: `bundle-docs/protocol-kernel.md`
@@ -53,6 +54,9 @@ Optional: `effigy check:posture-advisory` after structural edits.
    loaded skill's `northstar/rust-quality:setup apply <absolute-target-root>
    [scope-directory]`; let it preserve existing files and discover Cargo and
    toolchain paths. Ask only for repository policy the task cannot recover.
+   When the repo is a Paseo project, merge the optional `paseo.json` template,
+   copy its worktree helper, and keep project bootstrap between sibling
+   preparation and Effigy link replay.
 6. Runtime stack: Effigy first; TypeScript+Bun for repo scripts; bash/python
    only by exception. When wiring `effigy.toml`, keep `tasks.health` cheap
    (seconds-scale). Never alias `health` to `qa` — doctor runs health during

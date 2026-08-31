@@ -45,3 +45,6 @@ worker routing, and compact handoffs from Figmatic and Swallowtail evidence.
 Optional control-plane roadmap `g02.036` is complete. Card 104 adds conditional
 Paseo workspace/agent dispatch while preserving the absolute file handoff and
 manual fallback.
+Paseo runtime correction `g02.037/105` is complete. It makes injected tools
+the implicit dispatch signal while keeping `paseo.json` as project lifecycle
+configuration and preserving non-transport authority gates.

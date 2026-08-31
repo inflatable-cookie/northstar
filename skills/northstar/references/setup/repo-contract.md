@@ -39,6 +39,14 @@ the ignored file from that answer, and stop rather than guessing `/tmp`,
 
 See `docs/contracts/002-agent-local-paths.md` for the full contract.
 
+### Optional Paseo project adapter
+
+When Paseo manages the repository, project-root `paseo.json` may expose the
+repo's Effigy tasks, metadata-generation guidance, and managed-worktree hooks.
+Use [`paseo-project.md`](./paseo-project.md) and the shipped templates. Keep the
+adapter optional, merge existing settings, and preserve the project's own
+bootstrap and teardown authority.
+
 ### Claude Code bridge
 
 When adopting the Northstar starter, copy `CLAUDE.md.template` to the

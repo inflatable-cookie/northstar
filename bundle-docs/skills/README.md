@@ -74,8 +74,9 @@ receipts under `.effigy/` plus Cargo build output under
 `rsync -a --delete` from `skills/northstar/` is reserved for local development
 before the change is published. Restart agent sessions after an update.
 
-The current configured development install contains 121 source-identical files.
-Rust v2 replaces the skill-local Rhai recorder with the Cargo-native engine;
+The current source package contains 125 distributable files. Installed copies
+remain separate parity targets and may lag until an explicit update. Rust v2
+replaces the skill-local Rhai recorder with the Cargo-native engine;
 TypeScript retains its Rhai recorder. This count is evidence for the current
 payload, not a stable public contract.
 

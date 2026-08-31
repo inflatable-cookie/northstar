@@ -408,9 +408,9 @@ following authority split:
 - the **worker thread** owns implementation only inside its dedicated worktree
   and branch, including bounded diagnosis and implementation judgment inside
   the assigned ready cards, tests, commits, evidence, and PR creation;
-- the **operator** answers unresolved questions, authorizes optional
-  control-plane dispatch, starts or relays manual runs, and explicitly
-  authorises merge when that action is desired.
+- the **operator** answers unresolved questions, may override worker-profile
+  selection, starts or relays manual runs, resolves material permission
+  requests, and explicitly authorises merge when that action is desired.
 
 The repository is the durable communication boundary. A worker must be able to
 re-enter from its worker handoff, `AGENTS.md`, canonical refs, cards, commits,
@@ -438,9 +438,10 @@ Before a worker starts:
 - `main` is pushed and local `HEAD` equals `origin/main`;
 - the operator receives that handoff's absolute path as the only dispatch
   artifact;
-- when the operator authorized an available control plane, the orchestrator may
-  give that same path to a worker created in one isolated workspace for the
-  lane; otherwise the operator launches the worker manually;
+- when the current orchestrator thread exposes the required control-plane
+  tools, the orchestrator gives that same path to a worker created in one
+  isolated workspace for the lane without another permission prompt; otherwise
+  the operator launches the worker manually;
 - the handoff lists required sibling worktree links (absolute primary
   checkouts and the link name beside the worktree) or `none`;
 - the worker performs a quick startup preflight before broad reads: repository
@@ -486,7 +487,7 @@ During execution:
 - the handoff is a dispatch overlay: it points to canonical cards and contracts
   instead of copying their steps, acceptance prose, or general doctrine;
 - the worker reports after meaningful chunks with changed surfaces, validation,
-  remaining cards, blockers, and new risks; an authorized adapter may return the
+  remaining cards, blockers, and new risks; an active adapter may return the
   report directly, otherwise the operator relays it;
 - the worker stops on a planning gap, contract contradiction, unresolved product
   choice, scope expansion, missing authority/access, or validation failure that
@@ -532,15 +533,22 @@ claiming a chat-only review is complete.
 
 Northstar does not require live cross-session messaging, provider subagents, or
 hosted coding agents. Those are optional adapters; they must not weaken the
-file-based planning, worktree, PR, and review boundaries. When an authorized
-control plane is available, the orchestrator may select a current role profile,
-create the lane's worktree workspace, launch a worker with the single absolute
-handoff path, trust finish notifications instead of polling, and send bounded
-follow-ups to the same agent. Adapter profile names, IDs, messages, and status
-are transport metadata, never repository authority. A generic task-handoff
-helper must not generate a second briefing for a Northstar worker. Permission
-requests return to the operator unless existing explicit authority settles the
-exact action. Manual launch and operator relay remain the required fallback.
+file-based planning, worktree, PR, and review boundaries. When the current
+orchestrator thread exposes the required control-plane tools, their injection
+authorizes routine transport for ready worker lanes: the orchestrator selects a
+current role profile, creates the lane's worktree workspace, launches a worker
+with the single absolute handoff path, trusts finish notifications instead of
+polling, and sends bounded follow-ups to the same agent without another
+permission prompt. An operator-named profile overrides automatic profile
+selection. A repository `paseo.json` configures project lifecycle capability;
+it is not a substitute runtime signal. Adapter profile names, IDs, messages,
+and status are transport metadata, never repository authority. A generic
+task-handoff helper must not generate a second briefing for a Northstar worker.
+Tool injection does not authorize unready work, missing product or contract
+choices, material permission requests, destructive workspace cleanup, review,
+merge, or duplicate retries. Permission requests return to the operator unless
+existing explicit authority settles the exact action. Manual launch and
+operator relay remain the required fallback.
 
 ### Automation runtime policy
 

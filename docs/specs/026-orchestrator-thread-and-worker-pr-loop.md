@@ -33,9 +33,11 @@ checkout. The orchestrator owns discovery, planning, architecture/contracts,
 roadmap readiness, launch preparation, and PR review. It does not implement the
 feature in the planning checkout once the worker boundary is declared.
 
-For each approved independent lane, the orchestrator uses an operator-authorized
-control-plane adapter when one is available, or gives the operator the handoff
-path for manual launch. Either route creates a fresh worker thread in a
+For each approved independent lane, the orchestrator uses a control-plane
+adapter when the current thread exposes its orchestration tools, or gives the
+operator the handoff path for manual launch. Injected Paseo tools are the
+runtime authorization signal; a repository `paseo.json` alone is not. Either
+route creates a fresh worker thread in a
 dedicated worktree from pushed `main`. When the harness creates that worktree
 before the worker starts, the current launch context is authoritative
 even if the harness-generated path or branch differs from a handoff placeholder;
@@ -58,7 +60,7 @@ contract says planning or operator intent is required. When the assigned runway
 is complete, it opens a PR against the prepared base and returns the URL plus
 evidence.
 
-Worker reports and the PR URL return through the authorized control plane when
+Worker reports and the PR URL return through the active control plane when
 it supports direct parent/child messaging; otherwise the operator relays them.
 The orchestrator reviews the exact diff and checks against the canonical refs, then
 records one of these evidence-backed outcomes in the hosting provider's review
@@ -96,7 +98,7 @@ before chat summarizes the result.
 - Route model effort by role and risk without hard-coding provider model IDs.
 - Preserve a provider-neutral protocol while allowing Codex, Claude Code, or
   OpenCode adapters.
-- Use an available, authorized control plane for profile selection, worktree
+- Use an available control plane automatically for profile selection, worktree
   placement, notifications, and follow-ups without making it protocol authority.
 
 ## Non-goals
@@ -112,7 +114,7 @@ before chat summarizes the result.
 
 | Role | Owns | Must not assume |
 | --- | --- | --- |
-| Operator | answers unresolved questions, authorizes optional control-plane dispatch, starts or relays for manual runs, grants merge authority | that one thread can see another thread's private history |
+| Operator | answers unresolved questions, may override the selected worker profile, starts or relays manual runs, resolves material permission requests, grants merge authority | that one thread can see another thread's private history |
 | Orchestrator | discovery, intent summary, promoted planning, ready runway, per-worker handoff, optional adapter dispatch, PR review verdict, closeout | that a worker's narrative or control-plane state substitutes for repository/diff/check evidence |
 | Worker | bounded diagnosis and implementation in its worktree, card execution, tests, commits, evidence, PR creation | new architecture, missing contracts, or scope expansion |
 
@@ -177,9 +179,10 @@ The orchestrator/worker boundary is a strict sequence:
    changes the commit SHA;
 9. give the operator each worker's handoff as an absolute path, and list
    required sibling worktree links (or `none`) inside the file;
-10. when a control-plane adapter is available and the operator authorized it in
-    the current conversation, use that adapter to create the isolated workspace
-    and worker. Otherwise stop at `ready-to-launch` and use manual dispatch.
+10. when the current thread exposes the required control-plane orchestration
+    tools, use that adapter without another permission prompt to create the
+    isolated workspace and worker. Otherwise stop at `ready-to-launch` and use
+    manual dispatch. Do not use `paseo.json` alone as the runtime signal.
 
 ## Optional control-plane adapter
 
@@ -187,11 +190,12 @@ The adapter changes transport, not authority. The committed worker handoff,
 canonical repository state, branch, PR, checks, and provider review record stay
 authoritative.
 
-When Paseo tools are available and the operator has authorized their use for
-the run, the orchestrator:
+When Paseo tools are injected into the current orchestrator thread, the
+orchestrator uses them automatically for a ready lane:
 
 1. lists configured agent profiles and reads every profile's notes; it selects
-   by the Northstar role/risk profile and never hard-codes a local profile name;
+   by the Northstar role/risk profile and never hard-codes a local profile name,
+   unless the operator explicitly named a profile for that lane;
 2. creates one Paseo worktree workspace per worker with `branch-off` isolation
    from `origin/main`, using the lane's intended branch and source checkout;
 3. creates the worker in that workspace with finish notification enabled and
@@ -205,10 +209,12 @@ the run, the orchestrator:
 Do not use a generic task-handoff skill, including `/paseo-handoff`, for a
 Northstar worker dispatch. Such a skill generates a second briefing and would
 compete with the committed Northstar handoff. Use the base workspace and agent
-tools directly. If required tools are absent, adapter authorization is absent,
-or setup fails before launch, preserve any created workspace identity, report
-the exact state, and fall back to the manual absolute-path handoff without
-creating a second worker silently.
+tools directly. Tool injection authorizes transport only: it does not authorize
+unready work, missing product or contract choices, material permission requests,
+destructive workspace archival or cleanup, review, merge, or a duplicate retry.
+If required tools are absent or setup fails before launch, preserve any created
+workspace identity, report the exact state, and fall back to the manual
+absolute-path handoff without creating a second worker silently.
 
 The worker must not require a separately copied prompt, transcript, or list of
 canonical refs. The handoff may point at canonical repository files, but it is
@@ -397,7 +403,7 @@ control-plane transport, workspace cleanup, and review-cycle ergonomics.
 
 ## Next task
 
-Use the next real bounded lane as a Paseo-backed dogfood run when Paseo is
-available and authorized. Confirm that the adapter launches from the committed
+Use the next real bounded lane as a Paseo-backed dogfood run when Paseo tools
+are injected. Confirm that the adapter launches from the committed
 handoff, preserves the manual fallback and authority chain, and reduces relay
 burden without weakening review or merge gates.

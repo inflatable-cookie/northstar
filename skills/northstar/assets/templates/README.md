@@ -18,12 +18,20 @@ Use these top-level repo templates from this skill for the non-docs surfaces:
 - `PAPERCUTS.md` (seed on adopt/upgrade before exact-SHA / clean-tree release
   prep; do not introduce it during tag closeout after CI is green on a pinned
   SHA)
+- `paseo.json.template` plus `scripts/paseo-worktree.rhai` (optional Paseo
+  project settings and safe worktree sibling/link lifecycle)
 - `CHANGELOG.md`
 - `README.md.template`
 - `scripts.README.md.template`
 - `docs.README.md.template`
 - `effigy.native.toml.template`
 - `effigy.compat.toml.template`
+
+When Paseo manages project worktrees, follow
+[`../../references/setup/paseo-project.md`](../../references/setup/paseo-project.md).
+The lifecycle helper recovers sibling repositories from the primary checkout's
+Effigy dependency-link ledger, accepts extra relative sources, and replays
+machine-local links after the project's install/bootstrap phase.
 
 Tailor `AGENTS.md` during adoption. Replace its opening prompt and commented
 review prompts with the target project's real identity, preservation

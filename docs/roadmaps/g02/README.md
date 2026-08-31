@@ -80,6 +80,8 @@ rollover signal.
   reason-coded findings, risk-based workers, and compact handoffs)
 - `036-use-optional-control-plane-for-orchestrator-dispatch.md` (complete; card
   104, conditional Paseo dispatch, manual fallback, and 122-file skill parity)
+- `037-make-paseo-dispatch-implicit-inside-paseo.md` (complete; card 105 replaces
+  the redundant permission prompt with injected-tool detection)
 
 ## Next Task
 
@@ -125,9 +127,12 @@ Roadmap `g02.036` is complete. Card 104 made Paseo an optional transport adapter
 Northstar selects current profiles by notes, creates one worktree workspace from
 `origin/main`, launches from the absolute committed handoff, trusts
 notifications, and keeps manual dispatch, permissions, review, and merge gates.
+Operator feedback closed under `g02.037/105`: injected Paseo orchestration tools
+now act as the routine dispatch signal, while `paseo.json` remains project
+lifecycle configuration and every non-transport authority gate stays explicit.
 
-No blocking roadmap milestone is open. Dogfood the adapter on the next bounded
-orchestrator lane when Paseo is available and explicitly authorized. Northstar
-does not dispatch consumer audits.
+No blocking roadmap milestone is open. Dogfood the corrected adapter on the next
+bounded orchestrator lane with Paseo tools injected. Northstar does not dispatch
+consumer audits.
 
 Batch cards live in `g02/batch-cards/` when strict posture uses them.
