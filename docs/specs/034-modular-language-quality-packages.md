@@ -85,6 +85,31 @@ approval before any fetch or install. A visible notice is evidence of an
 already-authorized official acquisition, not a substitute for third-party
 approval.
 
+## Update, Rollback, And Offline Behavior
+
+Ordinary routing is local-only. When a compatible installed package exists,
+Northstar uses it without checking a registry, querying a remote version, or
+touching the network. A newer compatible release is advisory until the
+operator explicitly requests an update.
+
+Explicit update intent may acquire and activate a newer compatible official
+package with the same visible-notice and transaction rules as first install.
+The other automatic acquisition case is compatibility recovery: when an
+explicitly requested workflow has no compatible installed package, Northstar
+may acquire the core registry's pinned compatible choice and continue. An
+installed but incompatible package is retained as evidence and possible input
+to a later compatible core, but it is never routed into the current run.
+
+Activation retains the previously selected compatible install until the new
+package has passed manifest, integrity, compatibility, and package self-checks.
+Rollback reselects that proven install without fetching. A failed update or
+rollback leaves the current selection and consumer repository unchanged.
+
+Offline use therefore needs no special mode when a compatible package is
+already installed. Without one, the requested workflow stops with the exact
+missing identity and a local-path installation route; core planning,
+orchestration, review, and documentation workflows continue normally.
+
 ## Compatibility And Trust Questions
 
 Planning must settle these before a roadmap becomes ready:
@@ -92,15 +117,14 @@ Planning must settle these before a roadmap becomes ready:
 1. package identity, manifest, core-compatibility range, and independently
    addressable artifact shape;
 2. official package discovery and pinned acquisition mechanism;
-3. integrity, provenance, update, rollback, and offline behavior;
+3. integrity and provenance evidence, plus the minimum package self-checks
+   required before activation;
 4. how package commands and modes register without editing or duplicating the
    root router;
-5. update policy after the first official install, including whether a newer
-   compatible release is advisory or automatically selected;
-6. third-party allowlist ownership and revocation;
-7. migration of existing embedded Rust and TypeScript activations;
-8. source/install parity and release ownership after extraction;
-9. extraction order and the point at which embedded compatibility ends.
+5. third-party allowlist ownership and revocation;
+6. migration of existing embedded Rust and TypeScript activations;
+7. source/install parity and release ownership after extraction;
+8. extraction order and the point at which embedded compatibility ends.
 
 Effigy catalog packs were assessed as a candidate transport. The result below
 keeps the language-package contract provider-neutral and outside that
