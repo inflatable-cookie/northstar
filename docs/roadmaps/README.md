@@ -74,13 +74,14 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02.044` is complete; card 112 makes provider and profile availability
   lane-local instead of a global worker-capacity gate. PR 17 merged at
   `e5e8060`; the corrected 127-file skill payload is installed.
-- `g02.045` is active; card 113 is ready to reduce prose-coupled and historical
-  inventory validation while retaining structural negative proof.
+- `g02.045` implementation is complete through card 113; exact-head review is
+  pending for the structural validation reduction and fixture proof.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Execute `g02.045/113`, then stop for exact-head review. Spec 034 holds the
-separate modular-language-package plan and must not auto-start after this lane.
+Review the `g02.045/113` worker PR against all seven oracle rows, then stop for
+orchestrator merge. Spec 034 holds the separate modular-language-package plan
+and must not auto-start after this lane.

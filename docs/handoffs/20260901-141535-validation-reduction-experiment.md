@@ -5,7 +5,7 @@ handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
 handoff: single-file-path-only
-status: ready-to-launch
+status: awaiting-exact-head-review
 owner: repo maintainers
 created: 2026-09-01
 updated: 2026-09-01
@@ -94,8 +94,8 @@ Here is the state the worker is inheriting:
   `git diff --check`.
 - **PR base/head:** `main` <- `worker/validation-reduction-experiment`.
 - **PR URL:** pending.
-- **Review state:** awaiting worker implementation and PR, then orchestrator
-  exact-head review.
+- **Review state:** worker implementation and focused/full validation complete;
+  awaiting orchestrator exact-head review.
 - **Merge path:** orchestrator after accepted review of the current head and
   passing required checks.
 

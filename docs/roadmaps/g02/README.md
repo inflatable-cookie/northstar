@@ -15,7 +15,7 @@ single-pilot bucket.
 | Harden setup, nested-authority adoption, and posture classification so downstream repos can install the spine without hand adaptation. | active | `docs/specs/020-formalize-nested-docs-authority-setup.md`, `docs/specs/022-formalize-repo-posture-classification.md` | pending |
 | Keep execution autonomy bounded by ready cards, lane budgets, pause signals, and a file-based orchestrator/worker PR boundary instead of ad-hoc continuation prompts. | active | `docs/contracts/001-working-rules.md`, `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `bundle-docs/sections/07-delivery-framework-and-autonomy.md` | protocol frozen during `g02.045` measurement and reduction |
 | Keep always-loaded agent context useful, human, and bounded while preserving safety, authority, and project intent. | complete | `docs/contracts/003-agent-instruction-surface.md`, `docs/specs/028-agent-instruction-surface-optimization.md` | accept later operator feedback |
-| Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | `g02.045/113` ready |
+| Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | exact-head review of `g02.045/113` |
 | Add a genuinely long-horizon planning route without conflating it with readiness review. | active | `docs/specs/029-northstar-long-horizon-planning.md`, `skills/northstar/references/modes/atlas.md` | Non-Northstar scenario and operator confirmation |
 | Preserve useful conversational context and keep `/docs` drift recoverable without blind deletion. | active | `docs/specs/030-conversational-triage-and-docs-cleanup.md`, `docs/contracts/001-working-rules.md`, `skills/northstar/references/modes/cleanup-docs.md` | live triage and cleanup feedback |
 | Raise language-code quality through evidence-bound routed workflows without making every implementation part of the root payload. | active | `docs/contracts/004-language-quality-pack.md`, `docs/specs/034-modular-language-quality-packages.md` | spec 034 active; package protocol unresolved and not ready |
@@ -98,13 +98,14 @@ rollover signal.
 - `044-remove-global-capacity-gating.md` (complete; card 112 propagated
   lane-local provider routing; PR 17 merged at `e5e8060`, the corrected skill
   is installed, and active orchestrators were notified)
-- `045-reduce-prose-coupled-validation.md` (active; card 113 ready)
+- `045-reduce-prose-coupled-validation.md` (implementation complete through card
+  113; exact-head review pending)
 
 ## Next Task
 
-Execute `g02.045/113`. Keep the orchestration protocol frozen, retain structural
-validation, and stop after the worker PR for exact-head review. Spec 034 remains
-a separate not-ready language-package planning lane.
+Review the `g02.045/113` worker PR against all seven oracle rows, then stop for
+orchestrator merge. Keep the orchestration protocol frozen and retain structural
+validation. Spec 034 remains a separate not-ready language-package planning lane.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and

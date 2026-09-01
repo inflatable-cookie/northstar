@@ -76,10 +76,11 @@ sequence.
 
 ## Next Task
 
-Roadmaps `g02.038` through `g02.044` are complete. The first-principles audit
-and closed dogfood cohort compile into active roadmap `g02.045`; execute ready
-card 113. Spec 034 holds the separate modular-language-package plan and remains
-not ready for implementation.
+Roadmaps `g02.038` through `g02.045` are complete through implementation. The
+first-principles audit and closed dogfood cohort produced the structural
+validation reduction and fixture proof; exact-head review remains. Spec 034
+holds the separate modular-language-package plan and remains not ready for
+implementation.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed

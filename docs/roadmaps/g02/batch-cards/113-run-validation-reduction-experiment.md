@@ -1,6 +1,6 @@
 # 113 - Run Validation Reduction Experiment
 
-Status: ready
+Status: complete; implementation complete; awaiting exact-head review
 Owner: repo maintainers
 Created: 2026-09-01
 Master roadmap: `g02.045`
@@ -43,16 +43,17 @@ cleanup, and mode consolidation.
 
 ## Acceptance Criteria
 
-- [ ] every old required path has a recorded classification;
-- [ ] individual historical cards, milestones, logs, and closed specs are not
+- [x] every old required path has a recorded classification;
+- [x] individual historical cards, milestones, logs, and closed specs are not
   live required paths;
-- [ ] no required/forbidden prose assertion executes or remains as dead data;
-- [ ] missing-front-door, broken-link, and mirror-drift fixtures fail;
-- [ ] representative benign editorial fixtures pass;
-- [ ] existing readiness-map and command-skill tests stay intact;
-- [ ] docs explain the structural boundary without copying the fixture list;
-- [ ] card, roadmap, log, front doors, and next-task state reconcile;
-- [ ] `effigy qa:docs`, `effigy qa`, and `git diff --check` pass.
+- [x] no prose assertion data or execution path remains;
+- [x] missing-front-door, broken-link, and mirror-drift fixtures fail;
+- [x] representative benign editorial fixtures pass;
+- [x] existing readiness-map and command-skill tests stay intact;
+- [x] docs explain the structural boundary without copying the fixture list;
+- [x] card, roadmap, log, front doors, and next-task state reconcile;
+- [x] `effigy qa:docs`, `effigy qa`, and `git diff --check` pass on the final
+  closeout head.
 
 ## Review Oracle
 
@@ -69,6 +70,18 @@ the unchanged repository is insufficient.
 - unchanged-task proof for readiness and command-skill checks;
 - `effigy qa:docs`, `effigy qa`, and `git diff --check` results;
 - closeout log, reviewable PR, and exact tested head.
+
+## Completion Notes
+
+- Reduced the required-path inventory from 167 to 97 paths. The 73 removed
+  historical paths were 40 batch cards, 15 milestones, 5 logs, and 13 closed
+  or retired specs; `docs/specs/030` remains as the one active spec in the old
+  inventory.
+- Removed 320 exact-presence and 41 exact-absence assertions. The retained
+  checker validates required structure, portable skill links, Markdown links,
+  and the template mirror pair.
+- Added a seven-row temporary-fixture self-test and wired it into `qa:docs`.
+- Final validation and PR metadata are recorded in the closeout log.
 
 ## Stop Conditions
 

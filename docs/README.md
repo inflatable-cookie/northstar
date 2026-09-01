@@ -77,8 +77,9 @@ Northstar system:
   payload is installed and all other `Orchestrator`-labelled workspaces were
   notified to re-read it.
 - the first-principles packet and 26-observation dogfood cohort are promoted.
-  The protocol is frozen while `g02.045/113` tests structural validation without
-  editorial substring and historical-path coupling.
+  The protocol remains frozen; `g02.045/113` has reduced repo-contract
+  validation to structural paths, links, and parity, with exact-head review
+  pending.
 - Northstar remains general-purpose. Spec 034 plans extraction of embedded Rust
   and TypeScript tooling into optional compatible language packages; that lane
   is not ready for implementation.
