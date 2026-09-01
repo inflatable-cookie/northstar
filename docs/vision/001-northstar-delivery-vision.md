@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-04-08
+Updated: 2026-09-01
 
 ## Long-Term Outcome
 
@@ -21,10 +21,15 @@ babysitting than they do today.
   conversation.
 - Ready work can continue for longer stretches under pre-authorized autonomy
   rules.
+- Operators can adopt the core planning and execution system without also
+  installing language-specific quality tooling they do not use.
 
 ## Constraints
 
 - The public skill surface should stay small and reliable.
+- Northstar must remain general-purpose across operators, repositories,
+  harnesses, and local layouts. One operator's convenience may inform evidence
+  but must not become a reusable assumption.
 - The docs system must remain human-readable and copy-ready.
 - The repo must use the same doctrine it promotes to other projects.
 - Stricter delivery rules should reduce drift without turning Northstar into
@@ -44,6 +49,9 @@ babysitting than they do today.
 - Replacing human judgment with blind automation.
 - Growing the public skill surface by adding a separate skill for every narrow
   mode.
+- Growing the root payload indefinitely as new language-quality implementations
+  are added. Compatible language packages should remain optional modules under
+  a shared core protocol.
 
 ## Next Task
 

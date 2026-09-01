@@ -61,4 +61,6 @@ Partial Rust evidence collection repair `g02.041/109` is merged. Signal owns
 the originating papercut closure.
 Parallel-first orchestrator scheduling `g02.042/110` is complete.
 Economical worker routing `g02.043/111` is complete.
-Lane-local provider availability correction `g02.044/112` is ready for dispatch.
+Lane-local provider availability correction `g02.044/112` is complete.
+Validation reduction `g02.045/113` is ready for dispatch. Spec 034 is separate
+planning and must not start from this card.

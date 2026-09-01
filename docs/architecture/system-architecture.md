@@ -47,11 +47,22 @@ Vision refs: docs/vision/001-northstar-delivery-vision.md
 
 ## Language quality packs
 
-Northstar may extend `skills/` with optional language quality packs. Rust is the
-first planned pack. Contract
-[`004-language-quality-pack`](../contracts/004-language-quality-pack.md) governs
-the shared catalogue, profiles, authority, deviations, and evidence. Each pack
-has two workflow projections:
+Northstar core may route to optional language quality packages, but the root
+payload must remain useful without them. Core owns the package compatibility,
+trust, activation, and routing protocol; each package owns its language
+catalogue, projections, overlays, schemas, tooling, fixtures, version, and
+distribution evidence. Detection alone does not install a package. Explicit
+workflow intent or an existing repository activation may install a compatible
+official package from a pinned trusted source with visible notice; third-party
+packages require an allowlist or approval.
+
+Rust and TypeScript are currently embedded in the root skill and are the first
+extraction candidates. Spec
+[`034-modular-language-quality-packages`](../specs/034-modular-language-quality-packages.md)
+owns that migration planning. Until it is ready and executed, contract
+[`004-language-quality-pack`](../contracts/004-language-quality-pack.md)
+continues to govern their shared catalogue, profiles, authority, deviations,
+and evidence. Each pack has two workflow projections:
 
 - everyday authoring uses a compact, path-scoped activation, loads detailed
   rules only for relevant domains, and rechecks the changed tranche at exit;
@@ -482,6 +493,19 @@ subagent, which gets no worktree or Git/provider authority.
 - Validation should stay cheap enough that batch-level checks remain normal.
 - Autonomy should increase only when the repo's planning artifacts make it safe.
 
+### Validation boundary
+
+Repository validation protects structural invariants: stable entry points,
+links, identifiers, executable state, and canonical/mirror parity. Editorial
+wording and the continued presence of individual historical artifacts are not
+schema. Exact text checks need an independently stable machine contract; they
+must not mirror prose merely to detect currentness drift.
+
+Human review still owns semantic contradiction, misleading currentness, and
+historical-authority judgment that has no structural representation. A future
+structured state field may move one of those decisions into validation, but the
+checker must not invent that schema to preserve an old substring assertion.
+
 ## Interfaces With Roadmaps
 
 - `g01.001` uses this architecture to enact Northstar on Northstar and pilot
@@ -489,3 +513,7 @@ subagent, which gets no worktree or Git/provider authority.
 - `docs/contracts/004-language-quality-pack.md` governs the first language
   quality pack. Completed roadmap `g02.030` records production-boundary proof,
   implementation, fresh evidence, and distribution.
+- `g02.045` reduces Northstar's prose-coupled repository checker while keeping
+  structural negative proof.
+- Spec 034 plans later extraction of embedded language tooling into optional
+  packages; it does not authorize implementation yet.

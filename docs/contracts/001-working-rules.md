@@ -773,6 +773,14 @@ Execution must stop when:
 
 ## Validation
 
+- Repository checks protect structure, references, identifiers, executable
+  state, and canonical/mirror parity. They should not treat editorial wording
+  or individual historical artifacts as schema.
+- Keep exact-content checks only when an independently stable machine contract
+  requires that exact content. Do not mirror prose to enforce currentness.
+- Semantic contradiction, misleading currentness, and historical-authority
+  judgment remain review responsibilities until a real structured contract
+  exists.
 - `docs/specs/archive/001-northstar-delivery-layer.md` exists and matches these rules.
 - at least one live batch card exists and is tied to an active roadmap
   milestone
@@ -799,7 +807,7 @@ working-rules contract until separate seam contracts become necessary.
 - `g02.008`
 - `g02.009`
 - `g02.010`
-- `g02.024` through `g02.025` (skill distribution and orchestrator/worker PR loop)
+- `g02.024` through `g02.045` where this contract directly governs the lane
 
 ## Planning Notes
 

@@ -20,6 +20,7 @@ to adopt.
 - [specs/026-orchestrator-thread-and-worker-pr-loop.md](./specs/026-orchestrator-thread-and-worker-pr-loop.md)
 - [specs/028-agent-instruction-surface-optimization.md](./specs/028-agent-instruction-surface-optimization.md)
 - [specs/030-conversational-triage-and-docs-cleanup.md](./specs/030-conversational-triage-and-docs-cleanup.md)
+- [specs/034-modular-language-quality-packages.md](./specs/034-modular-language-quality-packages.md)
 - [triage/README.md](./triage/README.md)
 - [roadmaps/generation-index.md](./roadmaps/generation-index.md)
 - [handoffs/README.md](./handoffs/README.md)
@@ -75,9 +76,11 @@ Northstar system:
   failures stay lane-local. PR 17 merged at `e5e8060`; the 127-file skill
   payload is installed and all other `Orchestrator`-labelled workspaces were
   notified to re-read it.
-- the concurrent first-principles planning delegate delivered its packet from
-  `handoffs/20260901-110423-northstar-first-principles-audit.md`; it writes
-  only its named triage packet. PR 16 merged at `d092599` as non-authoritative
-  intake; its recommendations await explicit operator promotion choices.
+- the first-principles packet and 26-observation dogfood cohort are promoted.
+  The protocol is frozen while `g02.045/113` tests structural validation without
+  editorial substring and historical-path coupling.
+- Northstar remains general-purpose. Spec 034 plans extraction of embedded Rust
+  and TypeScript tooling into optional compatible language packages; that lane
+  is not ready for implementation.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

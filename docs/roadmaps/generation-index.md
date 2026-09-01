@@ -76,10 +76,10 @@ sequence.
 
 ## Next Task
 
-Roadmaps `g02.038` through `g02.044` are complete. PR 17 merged at `e5e8060`;
-the corrected skill is installed and active orchestrators were notified.
-Continue the passive dogfood window, then evaluate the reduction experiment and
-the separate modular-language-pack planning lane.
+Roadmaps `g02.038` through `g02.044` are complete. The first-principles audit
+and closed dogfood cohort compile into active roadmap `g02.045`; execute ready
+card 113. Spec 034 holds the separate modular-language-package plan and remains
+not ready for implementation.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed
