@@ -203,13 +203,37 @@ core remains usable. Packages cannot edit, extend, or override the allowlist,
 and an official language package cannot transfer its own trust to a third-party
 provider such as Sentrux.
 
+## Extraction Order
+
+Extraction proceeds in four ordered stages:
+
+1. prove the core manifest, discovery, compatibility, trust, installation,
+   activation, rollback, and generic routing protocol with a deliberately small
+   fixture package that carries no production language policy;
+2. extract the TypeScript/Svelte package first, preserving its explicit-audit-
+   only workflow and conditional overlay boundaries. This is the package and
+   acquisition canary because it has no everyday activation or compiled audit
+   engine;
+3. extract Rust after the TypeScript package boundary passes, then prove both
+   everyday authoring and explicit audit plus the Cargo-native recorder and
+   toolchain/runtime requirements;
+4. remove each embedded implementation only after its independently installed
+   package matches the frozen source behavior, consumer activation and profile
+   compatibility pass, and rollback evidence exists.
+
+The stages are not one combined migration. TypeScript extraction must settle
+package-protocol findings before Rust copies that shape. No new language package
+starts until both existing implementations are independently distributed and
+the root payload no longer owns their policy or engines.
+
 ## Compatibility And Trust Questions
 
 Planning must settle these before a roadmap becomes ready:
 
 1. migration of existing embedded Rust and TypeScript activations;
 2. source/install parity and release ownership after extraction;
-3. extraction order and the point at which embedded compatibility ends.
+3. the bounded overlap or cutover point at which each embedded implementation
+   ends.
 
 Effigy catalog packs were assessed as a candidate transport. The result below
 keeps the language-package contract provider-neutral and outside that
