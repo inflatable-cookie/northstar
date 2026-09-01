@@ -585,6 +585,6 @@ checker must not invent that schema to preserve an old substring assertion.
   implementation, fresh evidence, and distribution.
 - `g02.045` reduces Northstar's prose-coupled repository checker while keeping
   structural negative proof.
-- Spec 034 records the promoted package design. A separate extraction roadmap
-  must sequence the fixture protocol, TypeScript, Rust, and embedded-payload
-  removal before implementation begins.
+- Spec 034 records the promoted package design. Roadmap `g02.048` sequences the
+  fixture protocol, TypeScript, Rust, and embedded-payload removal; only its
+  current ready card authorizes implementation.

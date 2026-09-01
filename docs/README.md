@@ -90,7 +90,7 @@ Northstar system:
   falsifies all ten oracle rows. PR 20 merged at `08ad810` after exact-head
   review.
 - Northstar remains general-purpose. Spec 034's optional-package design is
-  promoted into architecture and contract 004. The next step is a separate
-  extraction roadmap; implementation remains blocked until it has ready cards.
+  promoted into architecture and contract 004. Roadmap g02.048 now sequences
+  fixture protocol, TypeScript, Rust, and embedded removal; card 116 is ready.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

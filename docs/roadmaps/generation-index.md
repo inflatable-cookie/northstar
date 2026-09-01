@@ -82,9 +82,9 @@ validation reduction, active-authority reconciliation, machine-contract checks,
 and fixture proof; PR 18 merged at `1f6647a`. Fresh-orchestrator continuation
 merged through PR 19 at `b99d19c`. Card 115 diversified model routing across
 workers, delegates, and fresh orchestrators; PR 20 merged at `08ad810` after
-exact-head review. Spec 034's modular-language-package design is promoted. Its
-separate extraction roadmap is the next planning task; no implementation is
-ready yet.
+exact-head review. Spec 034's modular-language-package design is promoted and
+compiled into `g02.048`. Card 116 is ready; cards 117-120 form the dependency-
+ordered fixture-lifecycle, TypeScript, Rust, and embedded-removal runway.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed

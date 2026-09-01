@@ -19,7 +19,7 @@ worked through.
 
 ## Promoted planning history
 
-- [034 - Modular Language Quality Packages](./034-modular-language-quality-packages.md) — promoted into system architecture and contract 004; retained until its extraction roadmap is compiled
+- [034 - Modular Language Quality Packages](./034-modular-language-quality-packages.md) — promoted into system architecture and contract 004; retained through roadmap g02.048 extraction
 
 ## Rules
 

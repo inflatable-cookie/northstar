@@ -332,12 +332,12 @@ migration behavior is promoted into
 `docs/contracts/004-language-quality-pack.md`.
 
 This spec remains the decision history behind those surfaces. It is not a
-second authority for implementation. The remaining planning action is a
-separate g02 extraction roadmap with fixture-protocol, TypeScript, Rust, and
-embedded-removal milestones.
+second authority for implementation. Roadmap
+`docs/roadmaps/g02/048-extract-modular-language-quality-packages.md` sequences
+the fixture protocol, TypeScript, Rust, and embedded-removal batches.
 
 ## Readiness Gate
 
-The design gate is satisfied and card 113 is closed. Implementation remains
-blocked until the promoted architecture and contract are compiled into a
-separate extraction roadmap with ready cards and explicit rollback proof.
+The design gate is satisfied and card 113 is closed. Roadmap g02.048 is
+compiled; only card 116 is ready. Later cards remain blocked until their named
+dependencies and readiness refreshes pass.

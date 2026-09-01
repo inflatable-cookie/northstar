@@ -80,11 +80,13 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02.047` is complete; card 115 diversified model routing across workers,
   delegates, and fresh orchestrators with focused ten-row oracle assertions.
   PR 20 merged at `08ad810` after exact-head review.
+- `g02.048` is active; card 116 freezes the machine package contracts before
+  the generic lifecycle and language extraction cards can run.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-`g02.047/115` is merged and closed. Spec 034's package design is promoted;
-compile the separate extraction roadmap before implementation begins.
+Execute ready card `g02.048/116`. The generic lifecycle, TypeScript, Rust, and
+embedded-removal cards remain planned and must not start early.
