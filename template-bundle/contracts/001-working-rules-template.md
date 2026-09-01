@@ -203,8 +203,8 @@ informal habits.
 - Provider, model, or profile quota, spend, rate, or availability failure is
   not a control-plane capacity signal. Preserve returned workspace and agent
   identities so an ambiguous attempt is not duplicated, then continue unrelated
-  clear lanes. Try another configured profile that fits the same role and
-  capability; do not promote an ordinary lane to frontier merely because its
+  clear lanes. Choose another adequate route from the lane's diversified pool;
+  do not promote an ordinary lane to frontier merely because its
   day-to-day route is unavailable. If no suitable route remains, pause only that
   lane, preserve its handoff and workspace, and continue every unrelated ready
   lane. With no control plane, publish every selected handoff at once. Do not
@@ -216,23 +216,31 @@ informal habits.
 
 ### Economical worker routing
 
-- Worker routing is economical by default. Select a matching non-frontier
-  day-to-day profile from current adapter notes for ordinary implementation,
-  bounded audits, and mechanical work.
+- Worker routing is economical and diversified by default. Build the adequate
+  pool from current adapter notes and explicit adapter cost metadata, prefer
+  the cheapest adequate tier, then vary provider/model identity before
+  reusing a recent route. Adequacy filters before price or rotation.
+- Use adapter-visible recent-agent history when it exists; otherwise remember
+  only routes launched in the current orchestrator run. Do not create a
+  durable usage ledger or encode local profile, provider, model, price,
+  balance, or allowance values.
 - Long mechanical audits and documentation churn prefer fast/low-cost or
   mechanically oriented profiles even when their scope is broad.
 - A frontier implementation worker requires both exceptional reasoning
-  difficulty after planning and highest priority or material consequence, plus
-  matching profile notes. Record both reasons in the handoff. Priority alone,
-  complexity alone, file count, duration, or a risk-domain label is
-  insufficient.
+  difficulty after planning and highest priority or material consequence,
+  plus an explanation of why planning, the review oracle, exact-head review,
+  and repository validation cannot adequately bound the remaining reasoning.
+  Record both reasons in the handoff and rotate within the frontier pool too.
+  Priority alone, complexity alone, file count, duration, or a risk-domain
+  label is insufficient.
 - Risky surfaces still need an explicit review oracle and frontier review. A
-  well-specified persistence or public-API change may use a capable
-  non-frontier worker while the orchestrator keeps material review.
-- Unresolved designs return to planning. If the matching day-to-day route is
-  unavailable, try another same-class profile rather than spending a frontier
-  worker. If no non-frontier profile fits ordinary work, report the gap; do
-  not silently escalate. An operator-named profile remains an explicit override.
+  material but settled change may use a capable non-frontier worker while the
+  orchestrator keeps material review; worker price is not the review-strength
+  control.
+- Unresolved designs return to planning. A refused route is removed only for
+  that attempt; choose another adequate route from the lane's pool. If no
+  adequate route remains, report the gap; do not silently escalate. An
+  operator-named profile remains an explicit override.
 
 ### Conversational planning delegation
 

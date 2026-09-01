@@ -13,9 +13,9 @@ single-pilot bucket.
 | --- | --- | --- | --- |
 | Keep learning from operator-provided consumer feedback before treating stricter posture as settled doctrine. | active | `docs/contracts/001-working-rules.md`, `docs/specs/012-consumer-repo-autonomy-proof-and-adoption.md`, `docs/specs/013-stricter-consumer-repo-autonomy-adoption.md` | pending |
 | Harden setup, nested-authority adoption, and posture classification so downstream repos can install the spine without hand adaptation. | active | `docs/specs/020-formalize-nested-docs-authority-setup.md`, `docs/specs/022-formalize-repo-posture-classification.md` | pending |
-| Keep execution autonomy bounded by ready cards, lane budgets, pause signals, and a file-based orchestrator/worker PR boundary instead of ad-hoc continuation prompts. | active | `docs/contracts/001-working-rules.md`, `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `bundle-docs/sections/07-delivery-framework-and-autonomy.md` | `g02.047/115` ready |
+| Keep execution autonomy bounded by ready cards, lane budgets, pause signals, and a file-based orchestrator/worker PR boundary instead of ad-hoc continuation prompts. | active | `docs/contracts/001-working-rules.md`, `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `bundle-docs/sections/07-delivery-framework-and-autonomy.md` | accept exact-head review of `g02.047/115` |
 | Keep always-loaded agent context useful, human, and bounded while preserving safety, authority, and project intent. | complete | `docs/contracts/003-agent-instruction-surface.md`, `docs/specs/028-agent-instruction-surface-optimization.md` | accept later operator feedback |
-| Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | `g02.047/115` ready |
+| Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | accept exact-head review of `g02.047/115` |
 | Add a genuinely long-horizon planning route without conflating it with readiness review. | active | `docs/specs/029-northstar-long-horizon-planning.md`, `skills/northstar/references/modes/atlas.md` | Non-Northstar scenario and operator confirmation |
 | Preserve useful conversational context and keep `/docs` drift recoverable without blind deletion. | active | `docs/specs/030-conversational-triage-and-docs-cleanup.md`, `docs/contracts/001-working-rules.md`, `skills/northstar/references/modes/cleanup-docs.md` | live triage and cleanup feedback |
 | Raise language-code quality through evidence-bound routed workflows without making every implementation part of the root payload. | active | `docs/contracts/004-language-quality-pack.md`, `docs/specs/034-modular-language-quality-packages.md` | spec 034 active; package protocol unresolved and not ready |
@@ -101,12 +101,13 @@ rollover signal.
 - `045-reduce-prose-coupled-validation.md` (complete; PR 18 merged at
   `1f6647a` after exact-head review)
 - `046-add-fresh-orchestrator-continuation.md` (complete; card 114 merged through PR 19 at `b99d19c`)
-- `047-diversify-model-routing-across-runs.md` (active; card 115 ready)
+- `047-diversify-model-routing-across-runs.md` (complete; card 115 awaiting
+  exact-head review)
 
 ## Next Task
 
-Execute `g02.047/115` from refreshed `main`; it diversifies model routing across
-workers, delegates, and fresh orchestrators. Spec 034 remains a separate
+Review the `g02.047/115` diversified-routing PR through orchestrator
+exact-head review; merge is orchestrator-owned. Spec 034 remains a separate
 not-ready language-package planning lane.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
