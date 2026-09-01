@@ -61,15 +61,17 @@ Northstar system:
 - `g02.041/109` repaired partial Rust evidence collection and merged; Signal
   owns the originating papercut closure
 - dependency-frontier, parallel-first worker scheduling is the orchestrator
-  default: every safe ready lane launches up to available capacity, freed slots
-  refill from the queue, and a serial lane must name its dependency, shared
-  surface, unresolved authority, or capacity limit
+  default: every safe ready lane launches without a global thread budget, and a
+  serial lane must name its dependency, shared surface, or unresolved authority;
+  provider/profile availability pauses or reroutes only the affected lane
 - `g02.042/110` delivered that default and merged through PR 14 at
   `8cfa0ae`
 - `g02.043/111` implemented economical day-to-day worker routing; frontier
   workers now require both highest-priority/material-consequence and
   exceptional-reasoning gates. PR 15 merged at `d5acd75` after exact-head
   review.
+- `g02.044/112` is ready to remove the accidental global-capacity interpretation
+  exposed by live provider-limit dogfood.
 - the concurrent first-principles planning delegate delivered its packet from
   `handoffs/20260901-110423-northstar-first-principles-audit.md`; it writes
   only its named triage packet. PR 16 merged at `d092599` as non-authoritative

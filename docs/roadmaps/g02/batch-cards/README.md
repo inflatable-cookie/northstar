@@ -59,4 +59,6 @@ Conversational feature-planning delegation `g02.040/108` is complete. Sol
 reviewed the semantic corrections and full validation.
 Partial Rust evidence collection repair `g02.041/109` is merged. Signal owns
 the originating papercut closure.
-Parallel-first orchestrator scheduling `g02.042/110` is ready for dispatch.
+Parallel-first orchestrator scheduling `g02.042/110` is complete.
+Economical worker routing `g02.043/111` is complete.
+Lane-local provider availability correction `g02.044/112` is ready for dispatch.

@@ -114,9 +114,9 @@ before chat summarizes the result.
   fast/low-cost subagent handles bounded mechanical documentation projection.
 - Let an operator-requested frontier planning delegate explore one topic in a
   separate conversation while the orchestrator continues non-overlapping work.
-- Make parallel scheduling the orchestrator default: plan a dependency frontier,
-  launch every safe ready lane up to available capacity, and refill that
-  capacity as workers finish without waiting for the operator to ask again.
+- Make parallel scheduling the orchestrator default: plan a dependency frontier
+  and launch every safe ready lane without treating provider availability as a
+  global worker limit or waiting for the operator to ask again.
 
 ## Non-goals
 
@@ -225,24 +225,28 @@ meaningful lanes as a dependency graph and identifies the current ready
 frontier. Before every dispatch checkpoint it refreshes that frontier across
 the active project and any operator-approved portfolio work already in scope.
 
-The orchestrator launches every safe ready-frontier lane up to available
-capacity. It does not merely offer parallel prompts or wait for the operator to
-ask for concurrency. Use an explicit capacity value when the active control
-plane exposes one. When its orchestration tools expose no capacity signal,
-attempt safe lane launches in roadmap-priority order without inventing a fixed
-limit. The first explicit capacity refusal stops further launches for that
-checkpoint: preserve every workspace or agent identity already created, record
-the refused and remaining lanes as queued for that named adapter limit, and
-retry the same retained lane state when a worker-finish notification frees a
-slot. Do not ask the operator to choose a guessed count.
+The orchestrator launches every safe ready-frontier lane. It does not merely
+offer parallel prompts, wait for the operator to ask for concurrency, impose a
+global thread count, or wait for another worker to finish before creating a new
+thread. A control-plane workspace or agent creation failure belongs to that
+lane's transport state; preserve every returned workspace or agent identity so
+an ambiguous attempt is not duplicated, then continue launching unrelated
+lanes whose transport state is clear.
+
+A provider, model, or profile quota, spend, rate, or availability failure is
+not a control-plane capacity signal. Mark only that route unavailable for the
+attempt and try another configured profile whose current notes fit the same
+worker role and capability. Do not promote an ordinary lane to frontier merely
+because its day-to-day route is unavailable. If no suitable route remains,
+pause only that lane, preserve its committed handoff and workspace state, report
+the provider/profile gap, and continue every unrelated ready lane. Recovery
+reuses the retained authority chain; it does not create a duplicate worker or
+require a rebrief.
 
 When no control plane is available, publish one committed handoff per selected
-lane and give the operator every absolute path together; operator launch
-throughput is the manual adapter's capacity. When capacity is smaller than the
-frontier, the remainder stay queued and the orchestrator fills each freed slot
-as soon as a worker finishes. While workers run, the orchestrator continues
-non-overlapping planning, review, revision routing, merge, and closeout work
-instead of idling on one lane.
+lane and give the operator every absolute path together. While workers run, the
+orchestrator continues non-overlapping planning, dispatch, review, revision
+routing, merge, and closeout work instead of idling on one lane.
 
 A lane belongs on the parallel frontier only when all of the following hold:
 
@@ -256,8 +260,9 @@ A lane belongs on the parallel frontier only when all of the following hold:
 For same-repository lanes, the plan must also partition closeout/currentness
 surfaces or reserve one named orchestrator integration step; two workers must
 not both own the same front door. If any condition fails, keep only that edge or
-lane serial and record the exact dependency, shared surface, capacity limit, or
-ambiguity. Do not serialize unrelated ready work around it.
+lane serial and record the exact dependency, shared surface, or ambiguity. A
+  provider/profile availability failure is lane-local and must not serialize
+  unrelated ready work.
 
 Parallelism is not a reason to split an unclear lane or turn one outcome-scoped
 defect into diagnostic and repair workers. Each parallel worker follows the same
@@ -291,7 +296,7 @@ The orchestrator/worker boundary is a strict sequence:
 
 1. finish discovery and promote the spec, architecture, contract, and ready cards;
 2. build or refresh the ready dependency frontier, select every independent
-   lane that should fill available capacity after publication, and record why
+   lane that should launch after publication, and record why
    any otherwise-ready lane stays queued or serial; keep one
    worktree/branch/handoff plan per selected worker lane;
 3. put the planning checkout on `main` and remove unrelated changes;

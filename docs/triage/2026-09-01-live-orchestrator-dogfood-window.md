@@ -173,7 +173,7 @@ unavailable
 
 ### 004 — Signal papercuts wave 41 LocalRuntimeHost Send boundary
 
-Status: provisional; implementation complete, material-risk review pending
+Status: complete; reviewed and merged
 
 - Worker class: `day-to-day`. This is post-refresh routing evidence: the lane
   was a bounded local Rust and API-boundary repair with no exceptional
@@ -182,15 +182,15 @@ Status: provisional; implementation complete, material-risk review pending
 - Ready frontier: one independent Signal repair was ready. The named serial edge
   is `Signal PR 20 merge -> Loophole wave 40 broker-contract closeout resume`;
   no other lane was coupled.
-- Outcome: Signal PR 20 is open at exact head
-  `0052fba3e8a332e6bafa9e7621863ad0bb9ee589` and is not merged.
-  `LocalRuntimeHost` now requires `Box<dyn HardwareBackend + Send>`; the shared
-  trait is unchanged, with no unsafe, runtime, or protocol change.
+- Outcome: Signal PR 20 merged at
+  `36242aacb010f14a3c7f4d70fe3e73c516bdf671`; the reviewed head was
+  `0052fba3e8a332e6bafa9e7621863ad0bb9ee589`. `LocalRuntimeHost` now requires
+  `Box<dyn HardwareBackend + Send>`; the shared trait, runtime, and protocol are
+  unchanged.
 - Operator intervention after dispatch: none.
-- Review: the worker completed one pass and no revision round. A downstream
-  compile failure at the existing `TransportDriver: Send` boundary was resolved
-  by the narrow host object bound; this was worker validation, not yet an
-  orchestrator finding classification. Material-risk review is pending.
+- Review: one orchestrator round, no revision requested. The downstream compile
+  failure at the existing `TransportDriver: Send` boundary was resolved by the
+  narrow host object bound. Required CI and mergeability were green.
 - Control-plane friction: workspace creation could not apply labels directly,
   so the capitalized `Papercuts` label needed separate local WebSocket assignment
   and verification. The handoff named `fmt:rust:check`, while Signal exposes
@@ -261,14 +261,79 @@ Status: provisional; three repair rounds complete, orchestrator review pending
   handoff, and log surfaces. Docs QA and the diff check passed.
 - Provider family: not supplied.
 
+### 007 — Acowtancy/Market card 161 Farmyard managed-DB harness integrity
+
+Status: provisional; exact-head review passed, merge pending at observation
+
+- Worker class: `day-to-day`. The lane was a bounded harness-contract repair and
+  broad mechanical caller sweep with no exceptional post-planning reasoning.
+- Ready frontier: one lane. The named serial edge is `card 161 -> card 160`
+  because both own the Farmyard API-test surface and card 160 consumes this
+  harness evidence.
+- Outcome: Market PR 87 is open at exact head
+  `0021c946dcc7a29ea5c1cf737c79b2efcc133c26`; exact-head orchestrator review
+  passed and merge was pending at the observation checkpoint.
+- Operator intervention after dispatch: none.
+- Review: one round and no blocking finding.
+- Control-plane friction: the worker bypassed locked-vault, TTY-only
+  `effigy container up` by starting the already-owned Compose Postgres service
+  on `127.0.0.1:22432`. The orchestrator first ran a raw Cargo oracle from the
+  monorepo root, got a non-evidentiary missing-manifest error, and reran it from
+  `apps/farmyard`.
+- Documentation QA: none. Docs QA and Northstar QA passed.
+- Reduction fixture: card 161 status and acceptance closeout plus one Farmyard
+  `PAPERCUTS.md` checkbox and resolution-line edit. Structure should be checked;
+  editorial wording should not be coupled.
+- Provider family: not supplied.
+
+### 008 — Acowtancy/Market card 160 student-safe quiz delivery
+
+Status: paused before implementation; provider route unavailable
+
+- Worker class: `frontier`. The lane combines exceptional reasoning across 13
+  closed quiz projections, drag-and-drop deassociation, immutable snapshots,
+  and server/client/schema parity with the materially consequential live student
+  boundary over canonical grading data.
+- Ready frontier: one lane. `card 161 -> card 160` was cleared before dispatch.
+  Atomic assessment response/submission remains serial behind card 160; four
+  other findings remain held and are not ready.
+- Outcome: provider stop before implementation or PR. The monthly spend limit
+  reports a 12:50 Europe/London reset.
+- Operator intervention after dispatch: none.
+- Review: zero rounds and no blocking finding because no implementation head
+  exists.
+- Control-plane friction: one provider spend cap stopped the worker before it
+  began. The committed handoff and worktree remain intact, so recovery can reuse
+  the authority chain without rebriefing or duplication. This is direct evidence
+  that provider availability is lane-local, not global worker capacity.
+- Documentation QA: none; no worker diff or validation ran.
+- Reduction fixture: none.
+- Provider family: not supplied.
+
+## Material protocol defect
+
+The operator observed active orchestrator threads drop from roughly six-to-ten
+to three after provider-limit failures. Northstar's live rule told orchestrators
+to treat the first refusal as a global capacity answer and wait for a worker to
+finish. Observation 008 shows the refused lane retained a valid handoff and
+workspace; observation 007 shows a genuine serial dependency edge separately.
+
+The settled correction is promoted to `g02.044/112` and spec 026. Provider,
+model, and profile availability is lane-local routing state. It may reroute or
+pause that lane, but it does not stop unrelated ready launches. The dogfood
+window stays open for post-install evidence and the planned validation-reduction
+experiment; no consumer lane is changed to manufacture proof.
+
 ## Cohort progress
 
-- Observations received: 6.
-- Completed cohort lanes: 0 of 8. Five implementation or planning results await
-  final review, and observation 005 is only a diagnostic kickoff.
-- Projects represented: 5, exceeding the four-project breadth gate (`Poodle`,
-  `Figmatic`, `Swallowtail`, `Signal`, and `Effigy`).
-- Provider families counted: 0 of 2; no packet has supplied one.
+- Observations received: 8.
+- Completed cohort lanes: 1 of 8. Signal observation 004 is reviewed and merged;
+  observation 007 passed review but was not yet merged, observation 008 stopped
+  before implementation, and observation 005 is only a diagnostic kickoff.
+- Projects represented: 6, exceeding the four-project breadth gate (`Poodle`,
+  `Figmatic`, `Swallowtail`, `Signal`, `Effigy`, and `Acowtancy/Market`).
+- Provider families counted: 1 of 2. Swallowtail supplied Claude explicitly;
+  no provider family is inferred for the Market spend-limit packet.
 - Worker routing: observations 001–003 are pre-refresh frontier baselines;
   observations 004–005 are post-refresh day-to-day choices; observation 006 is
   a frontier lane whose two escalation axes are explicit.
@@ -276,12 +341,12 @@ Status: provisional; three repair rounds complete, orchestrator review pending
   001 paired implementation with disjoint research; observation 002 paired two
   independent implementation lanes. Observation 005 adds a day-to-day
   diagnostic lane beside 001 but has not started substantive work.
-- Completed review rounds: 6. Recorded blockers total two `planning-change`,
+- Completed review rounds: 8. Recorded blockers total two `planning-change`,
   nine `execution-miss`, five `oracle-gap`, and four `integration-drift` findings.
-- Validation-reduction fixtures: four—one token-scanner boundary false positive
-  and three benign accepted docs shapes from observations 002, 004, and 006.
+- Validation-reduction fixtures: five—one token-scanner boundary false positive
+  and four benign accepted docs shapes from observations 002, 004, 006, and 007.
 - Control-plane or task-routing friction appears in observations 001–004 and
-  006; observation 005 reports none.
+  006–008; observation 005 reports none.
 
 ## Closeout
 

@@ -71,13 +71,15 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02.043` is implemented; card 111 made economical day-to-day profiles the
   worker default and frontier selection a two-axis exception. PR 15 merged at
   `d5acd75` after exact-head review.
+- `g02.044` is ready; card 112 makes provider and profile availability
+  lane-local instead of a global worker-capacity gate.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Discuss the first-principles packet merged through PR 16 at `d092599` and decide
-which findings, if any, to promote. Keep the packet non-authoritative until
-then. Keep the independent Signal papercut closure with the Signal orchestrator;
-do not duplicate it here.
+Dispatch `g02.044/112` to remove global capacity gating. After merge and skill
+installation, notify active orchestrator-labelled threads to re-read the
+corrected orchestration mode. The first-principles packet remains
+non-authoritative intake for the next planning discussion.
