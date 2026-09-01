@@ -334,7 +334,7 @@ Status: provisional opening checkpoint; operator conversation active
 
 ### 010 — Loophole papercuts wave 40 Signal sandbox-broker contract
 
-Status: provisional; implementation complete, PR review pending
+Status: provisional; first review repaired, re-review pending
 
 - Worker class: `day-to-day`. The lane was bounded consumer and test-contract
   adoption with local reasoning and no exceptional post-planning difficulty or
@@ -342,29 +342,33 @@ Status: provisional; implementation complete, PR review pending
 - Ready frontier: Loophole became ready only after the named upstream Signal PR
   20 merge. The serial edge was `Signal PR 20 -> Loophole PR 25`; no other lane
   was coupled.
-- Outcome: Loophole PR 25 is open at tested head
-  `de4e0f807ed7fed3369f74ef57daf26222a7767b`. It removes the test-time Cargo
+- Outcome: Loophole PR 25 is open at revised exact head
+  `c476bca3b6334fc03b87048310e981ab5fac8fa1`. It removes the test-time Cargo
   broker-build fallback, requires `SIGNAL_PLUGIN_SANDBOX_BROKER_COMMAND`, adds
   explicit `effigy test:plugin-isolation` provisioning, and closes only the
-  matching tracker entry. The Signal prerequisite is
+  matching broker tracker entry. The stale duplicate `HardwareBackend: Send`
+  entry is removed. The Signal prerequisite is
   `36242aacb010f14a3c7f4d70fe3e73c516bdf671`.
 - Operator intervention after dispatch: one same-worker continuation after
-  Signal PR 20 merged. The handoff and scope were unchanged; no replacement
-  lane was created.
+  Signal PR 20 merged, then one review correction on the same branch. The
+  handoff and scope were unchanged; no replacement lane was created.
 - Review: the initial worker pass stopped before PR because the downstream
   non-`Send` `HardwareBackend` boundary blocked required proof. That cause was
-  repaired in the separate Signal PR 20. The resumed pass completed; no PR
-  review or revision round has run yet.
+  repaired in the separate Signal PR 20. The resumed pass completed. The first
+  PR review found one `integration-drift` finding: tracker currentness still
+  carried the superseded upstream `Send` issue. The same worker applied the
+  docs-only correction; re-review is pending and no new worker validation was
+  added.
 - Control-plane friction: workspace labeling required a separate local
   WebSocket assignment. The first agent-create payload omitted Paseo's combined
   `provider/model` form; retry created no duplicate worker. The cross-repo Signal
   prerequisite stayed explicit.
-- Documentation QA: none. Package formatting, docs QA, Northstar QA, and diff
-  checks passed. The workspace formatting gate was skipped for unrelated
-  pre-existing drift.
-- Reduction fixture: one-entry `PAPERCUTS.md` closeout, a timestamped evidence
-  log, and the small explicit Effigy task declaration. No docs false positive
-  occurred.
+- Documentation QA: none. Original package formatting, docs QA, Northstar QA,
+  and diff checks passed. The workspace formatting gate was skipped for
+  unrelated pre-existing drift. The docs-only revision was not revalidated
+  during the passive window.
+- Reduction fixture: one matching `PAPERCUTS.md` closeout plus a timestamped
+  evidence log. No docs false positive occurred.
 - Provider family: not supplied.
 
 ## Material protocol defect
@@ -404,8 +408,8 @@ experiment; no consumer lane is changed to manufacture proof.
   disjoint research; observation 002 paired two independent implementation
   lanes; observation 009 paired two planning delegates and an independent
   diagnostic session while preserving the serial promotion/readiness edge.
-- Completed review rounds: 8. Recorded blockers total two `planning-change`,
-  nine `execution-miss`, five `oracle-gap`, and four `integration-drift` findings.
+- Completed review rounds: 9. Recorded blockers total two `planning-change`,
+  nine `execution-miss`, five `oracle-gap`, and five `integration-drift` findings.
 - Validation-reduction fixtures: six—one token-scanner boundary false positive
   and five benign accepted docs shapes from observations 002, 004, 006, 007,
   and 010.
