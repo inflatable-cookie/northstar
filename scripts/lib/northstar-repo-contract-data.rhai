@@ -409,7 +409,7 @@ fn required_content() {
         ["docs/roadmaps/g02/README.md", "024-harden-skill-distribution-and-consumer-papercut-proof.md", "g02 distribution milestone"],
         ["docs/roadmaps/g02/README.md", "consumer papercuts evidence", "g02 consumer evidence next task"],
         ["docs/roadmaps/generation-index.md", "## Runway rule", "generation index runway rule"],
-        ["docs/roadmaps/generation-index.md", "No blocking roadmap milestone is open", "generation index next task"],
+        ["docs/roadmaps/generation-index.md", "## Next Task", "generation index next-task heading"],
         ["docs/logs/README.md", "## Closeout rule", "live logs closeout rule"],
         ["docs/logs/README.md", "## Still-governing context", "logs context heading"],
         ["docs/logs/README.md", "## Recent active-lane evidence", "logs evidence heading"],

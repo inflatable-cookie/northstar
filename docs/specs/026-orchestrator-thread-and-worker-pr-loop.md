@@ -3,7 +3,7 @@
 Status: active
 Owner: repo maintainers
 Created: 2026-08-16
-Updated: 2026-08-31
+Updated: 2026-09-01
 Related research: `bundle-docs/research/translation-memos/northstar-orchestrator-thread.md`
 Governing architecture: `docs/architecture/system-architecture.md`
 Governing contracts: `docs/contracts/001-working-rules.md`, `docs/contracts/002-agent-local-paths.md`
@@ -114,12 +114,18 @@ before chat summarizes the result.
   fast/low-cost subagent handles bounded mechanical documentation projection.
 - Let an operator-requested frontier planning delegate explore one topic in a
   separate conversation while the orchestrator continues non-overlapping work.
+- Make parallel scheduling the orchestrator default: plan a dependency frontier,
+  launch every safe ready lane up to available capacity, and refill that
+  capacity as workers finish without waiting for the operator to ask again.
 
 ## Non-goals
 
 - requiring automatic cross-session messaging or one named control plane;
 - a second public Northstar skill;
-- parallel write-heavy workers in one active lane;
+- parallel workers with shared mutable scope, unresolved authority, or hidden
+  ordering/data/generated-artifact dependencies;
+- splitting one coherent issue-fix lane into separate diagnosis and repair PRs
+  merely to increase worker count;
 - automatic merge before an accepted review of the current head and passing
   required checks;
 - replacing Effigy, Git, or the hosting provider's PR system;
@@ -213,9 +219,21 @@ already-settled promotion map; it cannot choose the map.
 
 ## Parallel lane dispatch
 
-Before preparing a worker, the orchestrator inspects the active roadmap runway
-for multiple independent, bounded ready lanes that can run at the same time. It
-should offer multiple worker-thread prompts when all of the following hold:
+Parallelism is a planning and scheduling default, not an operator-requested
+optimization. While compiling or refreshing a runway, the orchestrator maps the
+meaningful lanes as a dependency graph and identifies the current ready
+frontier. Before every dispatch checkpoint it refreshes that frontier across
+the active project and any operator-approved portfolio work already in scope.
+
+The orchestrator launches every safe ready-frontier lane up to the control
+plane's actual available capacity. It does not merely offer parallel prompts or
+wait for the operator to ask for concurrency. When capacity is smaller than the
+frontier, roadmap priority selects the first lanes; the remainder stay queued
+and the orchestrator fills each freed slot as soon as a worker finishes. While
+workers run, the orchestrator continues non-overlapping planning, review,
+revision routing, merge, and closeout work instead of idling on one lane.
+
+A lane belongs on the parallel frontier only when all of the following hold:
 
 - lanes have no shared mutable files or overlapping write scope;
 - lanes have no ordering, data, or generated-artifact dependencies;
@@ -224,11 +242,18 @@ should offer multiple worker-thread prompts when all of the following hold:
   conditions;
 - each worker can use its own worktree, branch, and committed handoff.
 
-If any condition fails, keep the work serial and name the dependency or
-ambiguity. Parallelism is an offered execution shape, not a reason to split an
-unclear lane. Each parallel worker follows the same startup worktree-safety,
-PR, review-comment fallback, and accepted-review/check-gated merge protocol
-independently.
+For same-repository lanes, the plan must also partition closeout/currentness
+surfaces or reserve one named orchestrator integration step; two workers must
+not both own the same front door. If any condition fails, keep only that edge or
+lane serial and record the exact dependency, shared surface, capacity limit, or
+ambiguity. Do not serialize unrelated ready work around it.
+
+Parallelism is not a reason to split an unclear lane or turn one outcome-scoped
+defect into diagnostic and repair workers. Each parallel worker follows the same
+startup worktree-safety, PR, review-comment fallback, and accepted-review/check-
+gated merge protocol independently. Same-repository PRs merge one at a time;
+after each merge the orchestrator refreshes the remaining heads against current
+`main` and re-reviews any changed or conflict-resolved head.
 
 ## State model
 
@@ -254,8 +279,10 @@ Use these states in the worker handoff or log when the run spans turns:
 The orchestrator/worker boundary is a strict sequence:
 
 1. finish discovery and promote the spec, architecture, contract, and ready cards;
-2. assess whether independent roadmap lanes can run in parallel; if so, keep one
-   worktree/branch/handoff plan per lane;
+2. build or refresh the ready dependency frontier, select every independent
+   lane that should fill available capacity after publication, and record why
+   any otherwise-ready lane stays queued or serial; keep one
+   worktree/branch/handoff plan per selected worker lane;
 3. put the planning checkout on `main` and remove unrelated changes;
 4. run required QA;
 5. commit all planning and roadmap artifacts to `main`; this is the planning

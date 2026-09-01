@@ -57,5 +57,6 @@ settled meaning, reviewed the full diff, and accepted the serial
 profile-driven projection.
 Conversational feature-planning delegation `g02.040/108` is complete. Sol
 reviewed the semantic corrections and full validation.
-Partial Rust evidence collection repair `g02.041/109` is complete at the worker
-PR. Orchestrator exact-head review/merge remains, then Signal papercut closure.
+Partial Rust evidence collection repair `g02.041/109` is merged. Signal owns
+the originating papercut closure.
+Parallel-first orchestrator scheduling `g02.042/110` is ready for dispatch.

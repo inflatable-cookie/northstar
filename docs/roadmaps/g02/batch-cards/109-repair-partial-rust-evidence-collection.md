@@ -77,6 +77,5 @@ unit/class pair and compare pre-existing record hashes byte-for-byte.
 
 ## Next Task
 
-PR opened for orchestrator exact-head review. Do not merge from this worker.
-After accepted review and passing checks, the orchestrator may merge and then
-close the Signal papercut in a separate Signal coordination update.
+Merged through orchestrator exact-head review as Northstar `dbce3856`. Signal
+owns the separate originating-papercut closure.

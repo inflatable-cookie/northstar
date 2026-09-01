@@ -1,7 +1,7 @@
 # Roadmap Generation Index
 
 Status: active
-Updated: 2026-08-31
+Updated: 2026-09-01
 
 ## Mode
 
@@ -76,13 +76,9 @@ sequence.
 
 ## Next Task
 
-Roadmaps `g02.038`, `g02.039`, and `g02.040` are complete. Card 106 proved the
-installed skill task in a real Figmatic Paseo managed worktree; cards 107 and
-108 added mechanical documentation projection and conversational planning
-delegation. No automatic follow-on card is selected. Return to generation
-planning or accept the next operator-provided live-use correction.
-
-No blocking roadmap milestone is open. No automatic follow-on card is selected.
+Roadmaps `g02.038` through `g02.041` are complete. Card 110 under active roadmap
+`g02.042` is ready to make orchestrator scheduling dependency-frontier and
+parallel-first without weakening serial safety or review gates.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed

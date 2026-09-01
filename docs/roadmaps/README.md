@@ -63,14 +63,15 @@ Roadmaps sequence contract-backed work for Northstar itself.
   while preserving manual dispatch and repository authority.
 - `g02.037` is complete; card 105 makes injected Paseo tools the implicit routine
   dispatch signal while keeping project config and authority separate.
-- `g02.041` is complete at the worker PR; card 109 repaired sealed-coverage-aware
-  partial collect. Orchestrator merge and Signal papercut closure remain.
+- `g02.041` is complete and merged; card 109 repaired sealed-coverage-aware
+  partial collect. Signal owns the originating papercut closure.
+- `g02.042` is active; card 110 is ready to make orchestrator scheduling
+  dependency-frontier and parallel-first while preserving serial safety gates.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Review and merge the `g02.041/109` worker PR on exact head. Afterwards close the
-Signal papercut against the merged Northstar evidence. Do not dispatch a
-consumer audit or duplicate the Signal sandbox papercuts lane.
+Dispatch `g02.042/110` from its committed worker handoff. Keep the independent
+Signal papercut closure with the Signal orchestrator; do not duplicate it here.

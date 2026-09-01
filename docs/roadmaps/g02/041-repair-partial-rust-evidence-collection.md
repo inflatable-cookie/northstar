@@ -8,7 +8,7 @@ Vision tags: `rust-quality`, `evidence`, `consumer-feedback`, `papercuts`
 Governing refs: `docs/contracts/004-language-quality-pack.md`,
 `docs/specs/033-rust-audit-v2-tool-enforcement.md`,
 `skills/northstar/references/language-quality/rust/evidence-collection.md`
-Planning state: card 109 complete; awaiting orchestrator merge
+Planning state: card 109 complete; PR 13 merged as `dbce3856`
 
 ## Problem
 
@@ -84,6 +84,5 @@ PR lane. After merge, the Signal orchestrator closes the originating
 
 ## Next Task
 
-Orchestrator exact-head review and merge of the worker PR. Afterwards close the
-Signal papercut against the merged Northstar evidence. No further Northstar
-implementation card remains on this lane.
+Northstar implementation is merged. Signal owns closure of the originating
+papercut against `dbce3856`; no further Northstar card remains on this lane.

@@ -52,7 +52,7 @@ no-selector limitation still works.
 ## Validation
 
 - focused `cargo test` in `skills/northstar/tools/rust-quality` — pass
-  (20 cli + 4 lib + 2 detector);
+  (21 cli + 4 lib + 2 detector);
 - `cargo clippy --all-targets -- -D warnings` for that crate — pass;
 - `effigy check:rust-quality` — pass;
 - isolated `effigy check:skill-install` — pass, 127 files;
