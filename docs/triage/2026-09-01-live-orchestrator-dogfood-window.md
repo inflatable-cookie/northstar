@@ -66,7 +66,56 @@ not occurred naturally.
 
 ## Observations
 
-No observations recorded yet.
+### 001 — Poodle g16.033 HistoryCenter rejection surface
+
+Status: provisional; implementation complete, exact-head review in progress
+
+- Worker class: `frontier`, dispatched before the economical-routing refresh.
+  The lane was the highest-priority runway closeout and combined an exact public
+  semantic union and copy boundary across TypeScript, Rust, web, and GPUI with a
+  non-vacuous installed-tarball negative type proof. This is baseline evidence,
+  not evidence that the refreshed routing rule selected the worker correctly.
+- Ready frontier: g16.033 was the sole implementation edge after merged
+  g16.028. A design-intelligence research-only dossier ran in parallel with
+  disjoint writes. The named serial edge was
+  `g16.028 -> g16.033 -> host-level motion policy`; the policy must be promoted
+  and readiness-checked, and block sliders follow its outcome.
+- Outcome: implementation complete. Poodle PR 120 is open and clean at exact
+  head `ec2aa7f2469c5613f9a98de4f863761d85e7c16c`; orchestrator review is in
+  progress.
+- Operator intervention after dispatch: none. Planning had already settled the
+  structured-code choice, three new categories and their exact copy, the
+  installed-tarball proof, the `Papercuts` label, and repository ownership.
+- Review: zero completed rounds and no blocking finding class yet. Do not count
+  this as a completed cohort lane until its owning orchestrator reports the
+  review or merge disposition.
+- Control-plane friction: the worker emitted two natural-finish notifications
+  before reaching its handoff boundary while long validation stages still ran.
+  The orchestrator reactivated the same agent twice to reach commit, push, and
+  PR. It created neither a replacement worker nor a duplicate lane.
+- Documentation QA: reported as a prose-coupling false positive. More narrowly,
+  this is a token-scanner boundary defect rather than an exact-prose
+  `required_content` or `forbidden_content` assertion: `audit:security` matched
+  `sk-plus-translated-hi` inside the benign phrase
+  `mask-plus-translated-highlight` already on `main`. All other reported boards
+  were green.
+- Reduction fixture: one Markdown line containing
+  `mask-plus-translated-highlight` reproduces the false OpenAI-token finding;
+  no standalone secret-like token is needed.
+- Provider family: not supplied. Do not infer it from the worker class or
+  transport.
+
+## Cohort progress
+
+- Observations received: 1.
+- Completed cohort lanes: 0 of 8; observation 001 is awaiting review outcome.
+- Projects represented: 1 of 4 (`Poodle`).
+- Provider families counted: 0 of 2; observation 001 did not supply one.
+- Natural parallel shapes: 1 candidate of 2. This was one implementation lane
+  plus disjoint research, not two implementation lanes, and remains
+  provisional with the lane.
+- Validation-reduction fixtures: 1 token-scanner boundary false positive.
+- Control-plane lifecycle friction cases: 1 premature-finish sequence.
 
 ## Closeout
 
