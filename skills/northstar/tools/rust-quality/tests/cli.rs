@@ -947,6 +947,62 @@ fn colliding_unit_class_request_fails_before_write() {
 }
 
 #[test]
+fn duplicate_unit_class_requests_fail_before_execution() {
+    let fixture = initialized_multi_unit_fixture("duplicate-coverage-wave");
+    let evidence_root = fixture
+        .root
+        .join(".git/northstar/rust-quality/audits/duplicate-coverage-wave/evidence");
+    let marker = fixture.root.join("side-effect-marker");
+    let output = fixture.audit_operation(
+        "collect",
+        "duplicate-coverage-wave",
+        &serde_json::json!({
+            "applicable_classes": ["test"],
+            "requests": [
+                {
+                    "evidence_id": "test-core-a",
+                    "unit_id": "core",
+                    "evidence_class": "test",
+                    "selector": "touch marker",
+                    "origin": "agent_resolved",
+                    "package_cwd": ".",
+                    "environment": "fixture",
+                    "execution": {
+                        "kind": "command",
+                        "program": "touch",
+                        "args": ["side-effect-marker"],
+                        "format": "generic"
+                    }
+                },
+                {
+                    "evidence_id": "test-core-b",
+                    "unit_id": "core",
+                    "evidence_class": "test",
+                    "selector": "touch marker again",
+                    "origin": "agent_resolved",
+                    "package_cwd": ".",
+                    "environment": "fixture",
+                    "execution": {
+                        "kind": "command",
+                        "program": "touch",
+                        "args": ["side-effect-marker"],
+                        "format": "generic"
+                    }
+                }
+            ]
+        }),
+    );
+    assert_lifecycle_error(&output, "evidence.coverage_duplicate");
+    assert!(!evidence_root.exists() || evidence_inventory(&evidence_root).is_empty());
+    assert!(!evidence_root.join("test-core-a.json").exists());
+    assert!(!evidence_root.join("test-core-b.json").exists());
+    assert!(
+        !marker.exists(),
+        "duplicate coverage must fail before command side effects"
+    );
+}
+
+#[test]
 fn records_compiler_source_failure_without_losing_raw_output() {
     let fixture = initialized_lifecycle_fixture("source-failure-wave", false);
     fixture.write("src/lib.rs", "pub fn broken( {\n");

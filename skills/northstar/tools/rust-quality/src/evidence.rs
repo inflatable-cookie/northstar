@@ -204,7 +204,13 @@ pub fn collect(
         if path.exists() {
             return Err(format!("evidence.record_exists: {}", request.evidence_id));
         }
-        planned.insert(key);
+        if !planned.insert(key) {
+            return Err(format!(
+                "evidence.coverage_duplicate: {}/{}",
+                request.unit_id.as_deref().unwrap_or("-"),
+                request.evidence_class
+            ));
+        }
         request_paths.push(path);
     }
 
@@ -421,6 +427,7 @@ fn validate_plan(
         }
     }
     let mut ids = BTreeSet::new();
+    let mut coverage = BTreeSet::new();
     for request in &plan.requests {
         require_id(&request.evidence_id)?;
         if !ids.insert(request.evidence_id.as_str()) {
@@ -430,6 +437,14 @@ fn validate_plan(
         if !classes.contains(&request.evidence_class) {
             return Err(format!(
                 "evidence.class_not_applicable: {}",
+                request.evidence_class
+            ));
+        }
+        let key = coverage_key(request.unit_id.clone(), &request.evidence_class);
+        if !coverage.insert(key) {
+            return Err(format!(
+                "evidence.coverage_duplicate: {}/{}",
+                request.unit_id.as_deref().unwrap_or("-"),
                 request.evidence_class
             ));
         }

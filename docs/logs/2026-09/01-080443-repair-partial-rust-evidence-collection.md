@@ -27,6 +27,9 @@ no-selector limitation still works.
   evidence inventory.
 - Ambiguous duplicate unit/class coverage returns
   `evidence.coverage_ambiguous` before write.
+- Same-plan duplicate unit/class requests return
+  `evidence.coverage_duplicate` before execution or write (no command side
+  effect).
 - Existing warning/unavailable/unrun, completion, and finalization fixtures
   still pass.
 
