@@ -57,6 +57,5 @@ settled meaning, reviewed the full diff, and accepted the serial
 profile-driven projection.
 Conversational feature-planning delegation `g02.040/108` is complete. Sol
 reviewed the semantic corrections and full validation.
-Partial Rust evidence collection repair `g02.041/109` is ready from Signal
-live-use evidence. Run it in one isolated Northstar worker and stop at its PR
-for exact-head review.
+Partial Rust evidence collection repair `g02.041/109` is complete at the worker
+PR. Orchestrator exact-head review/merge remains, then Signal papercut closure.

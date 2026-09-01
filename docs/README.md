@@ -58,7 +58,7 @@ Northstar system:
   to fast/low-cost subagents, but retain planning and full-diff semantic review
 - frontier orchestrators may delegate an operator-facing planning conversation,
   but canonical promotion and readiness remain with the orchestrator
-- Signal live-use evidence has made `g02.041/109` ready: Northstar owns the
-  partial Rust evidence collection repair; Signal retains papercut closure
+- `g02.041/109` repaired partial Rust evidence collection; orchestrator merge
+  and Signal papercut closure remain
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

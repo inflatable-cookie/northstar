@@ -1,6 +1,6 @@
 # 041 - Repair Partial Rust Evidence Collection
 
-Status: active
+Status: complete
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.032`, `g02.033`
@@ -8,7 +8,7 @@ Vision tags: `rust-quality`, `evidence`, `consumer-feedback`, `papercuts`
 Governing refs: `docs/contracts/004-language-quality-pack.md`,
 `docs/specs/033-rust-audit-v2-tool-enforcement.md`,
 `skills/northstar/references/language-quality/rust/evidence-collection.md`
-Planning state: card 109 ready
+Planning state: card 109 complete; awaiting orchestrator merge
 
 ## Problem
 
@@ -24,14 +24,14 @@ distribution proof.
 
 ## Goals
 
-- [ ] reproduce the Signal call shape before mutation;
-- [ ] make staged audit collection respect already-sealed unit/class evidence;
-- [ ] limit synthetic `unrun` evidence to genuinely missing coverage in the
+- [x] reproduce the Signal call shape before mutation;
+- [x] make staged audit collection respect already-sealed unit/class evidence;
+- [x] limit synthetic `unrun` evidence to genuinely missing coverage in the
   current call's target scope;
-- [ ] fail without writing records when target scope cannot be resolved safely;
-- [ ] preserve immutable records and the legitimate first-call no-selector
+- [x] fail without writing records when target scope cannot be resolved safely;
+- [x] preserve immutable records and the legitimate first-call no-selector
   limitation;
-- [ ] return a reviewable Northstar PR with installed-skill validation.
+- [x] return a reviewable Northstar PR with installed-skill validation.
 
 ## Non-goals
 
@@ -42,7 +42,7 @@ distribution proof.
 
 ## Execution Plan
 
-Card `g02.041/109` owns one bounded reproduce, diagnose, repair, validate, and
+Card `g02.041/109` owned one bounded reproduce, diagnose, repair, validate, and
 PR lane. After merge, the Signal orchestrator closes the originating
 `PAPERCUTS.md` entry against the merged Northstar evidence.
 
@@ -84,5 +84,6 @@ PR lane. After merge, the Signal orchestrator closes the originating
 
 ## Next Task
 
-Execute ready card `g02.041/109` in one isolated Northstar worker. Stop at a PR
-for orchestrator exact-head review.
+Orchestrator exact-head review and merge of the worker PR. Afterwards close the
+Signal papercut against the merged Northstar evidence. No further Northstar
+implementation card remains on this lane.
