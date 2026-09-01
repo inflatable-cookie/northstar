@@ -13,10 +13,13 @@ worked through.
 - [027 - Northstar Native Pre-Execution Discovery](./027-northstar-native-pre-execution-discovery.md)
 - [029 - Northstar Long-Horizon Planning](./029-northstar-long-horizon-planning.md)
 - [030 - Conversational Triage And Docs Cleanup](./030-conversational-triage-and-docs-cleanup.md)
-- [034 - Modular Language Quality Packages](./034-modular-language-quality-packages.md)
 - [Related translation memo](../../bundle-docs/research/translation-memos/matt-pocock-skills-audit-to-northstar.md)
 - [Rust quality translation memo](../../bundle-docs/research/translation-memos/rust-quality-skills-and-audit.md)
 - [TypeScript/Svelte quality translation memo](../../bundle-docs/research/translation-memos/typescript-quality-and-svelte-overlay.md)
+
+## Promoted planning history
+
+- [034 - Modular Language Quality Packages](./034-modular-language-quality-packages.md) — promoted into system architecture and contract 004; retained until its extraction roadmap is compiled
 
 ## Rules
 

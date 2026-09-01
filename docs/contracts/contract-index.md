@@ -18,7 +18,7 @@ Updated: 2026-09-01
 | `001-working-rules` | compact delivery grammar, structural-not-editorial validation, papercuts feedback loop, triage capture/cleanup, done-ness, guardrail pack, spec-hygiene rule, currentness-surface rules, autonomy rules, diversified model routing, orchestrator/worker, planning-delegate, orchestrator-continuation, and documentation-projection boundaries, worktree isolation, PR review and merge gates, and the live ready-state/closeout rules for the repo | `docs/`, `bundle-docs/`, `template-bundle/`, `skills/`, `scripts/` | `g01.001` through `g02.047` where directly applicable | active |
 | `002-agent-local-paths` | ignored path registry, manual worktree container selection, harness-vs-manual ownership, and nested-agent stop boundary | `AGENTS.md`, `docs/contracts/`, `template-bundle/`, `skills/`, `docs/handoffs/` | orchestrator-owned implementation-worker and planning-delegate launches, plus any manual worktree lane | active |
 | `003-agent-instruction-surface` | always-loaded versus scoped/on-demand instruction content, root-file review budget, precedence, and read-only audit boundary | `AGENTS.md`, `docs/contracts/`, `template-bundle/`, `skills/`, `scripts/` | `g02.027` and future consumer adoption | active |
-| `004-language-quality-pack` | shared language-package behavior: catalogue, conditional framework overlays, independently gated everyday and explicit-audit workflows, scope resolution, remediation authority, assurance profiles, deviations, and completion evidence | `docs/contracts/`, optional language packages, current embedded catalogues, Effigy selectors, consumer profiles | `g02.030` (complete), `g02.031` (complete), `g02.032` (complete), spec 034 extraction planning | active; current embedded implementation pending modular extraction design |
+| `004-language-quality-pack` | optional package identity, discovery, acquisition, trust, lifecycle and migration plus shared catalogue, workflow, scope, remediation, profile, deviation, and evidence behavior | `docs/contracts/`, Northstar core package protocol, optional language packages, current embedded catalogues, Effigy adapters, consumer profiles | `g02.030` (complete), `g02.031` (complete), `g02.032` (complete), next spec 034 extraction roadmap | active; modular design promoted, extraction roadmap pending |
 
 ## Roadmap Readiness
 
@@ -62,5 +62,6 @@ historical-inventory assertions while retaining structural path, current
 authority, machine-contract, link, parity, readiness, command-surface, and
 install checks. PR 18 merged at `1f6647a` after corrected exact-head review.
 Roadmap `g02.046` is complete through PR 19 at `b99d19c`. Roadmap `g02.047` is
-complete through PR 20 at `08ad810`. Spec 034 separately plans modular language
-packages and is not ready for implementation.
+complete through PR 20 at `08ad810`. Spec 034's modular package design is
+promoted into architecture and contract 004. A separate extraction roadmap is
+required before implementation.

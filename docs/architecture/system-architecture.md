@@ -47,22 +47,64 @@ Vision refs: docs/vision/001-northstar-delivery-vision.md
 
 ## Language quality packs
 
-Northstar core may route to optional language quality packages, but the root
-payload must remain useful without them. Core owns the package compatibility,
-trust, activation, and routing protocol; each package owns its language
-catalogue, projections, overlays, schemas, tooling, fixtures, version, and
-distribution evidence. Detection alone does not install a package. Explicit
-workflow intent or an existing repository activation may install a compatible
-official package from a pinned trusted source with visible notice; third-party
-packages require an allowlist or approval.
+Northstar core routes to optional language quality packages, but the root
+payload remains useful without them. Core owns a provider-neutral manifest,
+discovery, compatibility, trust, installation, activation, and routing
+protocol. Each package owns its language catalogue, projections, overlays,
+schemas, setup, tooling, fixtures, self-check, version, release evidence, and
+independently addressable installed payload.
 
-Rust and TypeScript are currently embedded in the root skill and are the first
-extraction candidates. Spec
-[`034-modular-language-quality-packages`](../specs/034-modular-language-quality-packages.md)
-owns that migration planning. Until it is ready and executed, contract
-[`004-language-quality-pack`](../contracts/004-language-quality-pack.md)
-continues to govern their shared catalogue, profiles, authority, deviations,
-and evidence. Each pack has two workflow projections:
+The initial official Rust and TypeScript packages share one sibling source
+repository, provisionally `northstar-language-packs`, but they remain separate
+release, acquisition, installation, and activation units. Installing one never
+loads or retains every sibling. The protocol permits later official split repos
+and third-party sources without changing core or consumer activation files.
+
+### Package registration and runtime boundary
+
+Every package is a normal skill bundle with an agent-facing `SKILL.md` and a
+machine-readable `northstar-package.json`. The manifest declares its schema,
+stable namespaced identity, version, `language-quality` kind, compatible core
+range, languages and overlays, workflows, runtime capabilities and optional
+Effigy selectors, self-check, profile and schema versions, and optional
+evidence providers. Acquisition receipts, rather than the package manifest,
+record source, digest, and trust provenance.
+
+Core discovers packages through the host's available-skill catalogue or an
+acquisition adapter's resolved installed path. Routing is generic over package
+kind, language, workflow, and compatibility; it does not add a core branch for
+each language. Thin language command skills may live with a package. `effigy
+skill run` may execute a resolved package in a consumer repo, but Effigy is an
+optional adapter rather than the package transport or a core dependency.
+
+Core carries a small official registry that pins each approved package version
+to an immutable repository and subpath, commit and tree digest, manifest
+digest, and compatible core range. The installer verifies those identities
+before executing package code or self-checks, records them in an installation
+receipt, and re-verifies retained content before routing. A registry review,
+not a moving branch, tag, package self-claim, or newly published version,
+changes the official automatic choice.
+
+The language-package source repository owns package source, manifest,
+self-check, package fixtures, artifacts, digests, changelog, and release
+evidence. Northstar core owns the manifest schema, official registry, generic
+resolver and installer, compatibility fixtures, and consumer migration rules.
+An immutable package candidate publishes first; a reviewed registry change
+then proves installation and consumer compatibility before making it the
+official default.
+
+Rust and TypeScript remain embedded in the root skill while their ordered
+extraction runs. The external package becomes authoritative at the start of
+one bounded overlap window; the embedded copy is then frozen and available
+only as a visibly named migration fallback. The next migration milestone
+removes that fallback after parity, install, self-check, routing, rollback,
+offline, activation, and real-consumer proof. No new language package starts
+until both existing payloads are independently distributed and removed from
+core.
+
+Contract [`004-language-quality-pack`](../contracts/004-language-quality-pack.md)
+governs package behavior, profiles, authority, deviations, evidence, trust,
+and migration. Each pack has two workflow projections:
 
 - everyday authoring uses a compact, path-scoped activation, loads detailed
   rules only for relevant domains, and rechecks the changed tranche at exit;
@@ -543,5 +585,6 @@ checker must not invent that schema to preserve an old substring assertion.
   implementation, fresh evidence, and distribution.
 - `g02.045` reduces Northstar's prose-coupled repository checker while keeping
   structural negative proof.
-- Spec 034 plans later extraction of embedded language tooling into optional
-  packages; it does not authorize implementation yet.
+- Spec 034 records the promoted package design. A separate extraction roadmap
+  must sequence the fixture protocol, TypeScript, Rust, and embedded-payload
+  removal before implementation begins.

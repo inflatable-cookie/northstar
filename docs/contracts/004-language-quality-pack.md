@@ -2,12 +2,13 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-08-26
+Updated: 2026-09-01
 Depends on: `docs/contracts/001-working-rules.md`,
 `docs/contracts/003-agent-instruction-surface.md`
-Affects: language-quality catalogues, scoped authoring skills, explicit audit
-skills or commands, Effigy selectors, consumer quality profiles, findings,
-deviations, and completion evidence
+Affects: Northstar package discovery and installation, language-quality
+catalogues, scoped authoring skills, explicit audit skills or commands, Effigy
+selectors, consumer quality profiles, findings, deviations, and completion
+evidence
 
 ## Purpose
 
@@ -22,6 +23,106 @@ Ordinary and high-assurance profiles remain modelled catalogue inputs, not
 validated production claims. The initial TypeScript catalogue is also strict,
 but only its explicit audit-and-repair workflow is eligible for production
 implementation. TypeScript everyday authoring remains unavailable.
+
+## Package identity and ownership
+
+A language quality package is an independently installable skill bundle. It
+contains `SKILL.md` and `northstar-package.json`; the manifest declares a
+versioned schema, stable namespaced package ID, package version, kind
+`language-quality`, compatible Northstar core range, supported languages and
+overlays, available workflows, runtime capabilities and optional Effigy
+selectors, self-check, profile and schema versions, and optional evidence
+providers.
+
+The package owns its catalogue, projections, overlays, schemas, setup,
+recorder or other tooling, fixtures, self-check, version, release evidence,
+and installed payload. Northstar core owns the manifest schema, official
+registry, generic discovery/resolver/installer behavior, compatibility
+fixtures, and migration rules. Consumer repositories continue to own their
+profiles, deviations, toolchains, exclusions, architecture, and repair
+authority.
+
+Repository grouping is not package identity. Multiple official packages may
+share one source repository, but each has an independent manifest, version,
+artifact, digest, receipt, installation, activation, and release. Acquiring one
+must not install or load unrelated siblings. Core routing is generic over
+package kind, language, workflow, and compatibility; adding a language must not
+require a language-specific core router branch.
+
+## Discovery, acquisition, and trust
+
+Core discovers installed packages from the host's available-skill catalogue or
+an acquisition adapter's resolved installed path. An installed compatible
+package must remain routable without Effigy or any acquisition adapter.
+`effigy skill run` may execute a resolved package in a consumer repo, but the
+Effigy service catalog is not the package transport or trust authority.
+
+Language, framework, dependency, manifest, or source-file detection alone does
+not authorize acquisition. An explicit request for a package workflow or an
+existing valid consumer activation authorizes installation of a missing
+compatible official package. Core emits a visible notice naming package,
+version, source, target, and workflow, then continues without a confirmation
+pause. Failure stops only that language workflow and reports a manual or local
+installation route; other Northstar workflows remain usable.
+
+Core's official registry binds an approved package ID and version to an exact
+repository and subpath, immutable commit and tree digest, manifest digest, and
+compatible core range. Installation verifies these identities before package
+code or self-check execution, records them in a receipt, and re-verifies the
+installed content before routing. Mutable branches and tags, names alone,
+package self-claims, and unpublished registry choices cannot authorize
+no-prompt installation.
+
+Third-party packages require either an exact operator allowlist entry or
+interactive approval for one acquisition. The allowlist lives in machine or
+user operator configuration; a consumer repo or package may request trust but
+cannot grant it. Entries bind identity, digest, and core range and may narrow
+workflows or consumers. Revocation immediately blocks discovery, acquisition,
+and execution while retaining bytes, receipts, evidence, and consumer config.
+A package cannot extend the allowlist or transfer its trust to an evidence
+provider.
+
+## Updates, rollback, and offline use
+
+Ordinary routing is local-only. A compatible installed package is used without
+a network or registry check. Updates require explicit operator intent. The
+other automatic acquisition case is compatibility recovery after an explicit
+workflow request finds no compatible installed package; it uses the registry's
+pinned choice under the same notice and verification rules.
+
+Activation is transactional and retains the previous compatible install until
+manifest, integrity, compatibility, and self-check gates pass. Failed installs,
+updates, and rollbacks leave the current selection and consumer files
+unchanged. Rollback reselects a retained proven install without fetching.
+Offline workflows use an installed compatible package normally; without one,
+only the requested language workflow stops and names the local-path install
+route.
+
+## Release and embedded migration
+
+Package source owners publish an immutable candidate with package-scoped
+source/install parity, artifact digest, self-check, changelog, and release
+evidence. A reviewed Northstar registry change pins that candidate and runs
+installation, compatibility, and real-consumer proof. Registry merge, not
+publication alone, makes it the official automatic choice. No release or route
+depends on a moving branch or tag, and root whole-payload parity is not a
+substitute for package-scoped parity.
+
+Rust and TypeScript extraction each receive one bounded overlap window. The
+external package is authoritative once published and pinned; the embedded copy
+is frozen, receives no ordinary fixes or new rules, and may run only after a
+visible migration-fallback notice when official acquisition fails. Existing
+activation markers, profiles, deviations, rule IDs, workflow intent, and
+evidence formats remain valid and are not rewritten merely because ownership
+moves.
+
+The overlap closes only after exact parity, independent install and self-check,
+installed routing, rollback, offline fallback, current consumer activation,
+and one real consumer workflow pass. The following migration milestone removes
+the embedded payload and fallback together. An unsafe fallback defect pauses
+the cutover rather than creating indefinite dual maintenance. TypeScript
+extraction proves the protocol before Rust copies it; no new language begins
+until both embedded implementations have been removed from core.
 
 ## Stable workflow names and triggers
 

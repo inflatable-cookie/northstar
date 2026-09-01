@@ -1,6 +1,6 @@
 # 034 - Modular Language Quality Packages
 
-Status: planning settled; ready for promotion, not implementation
+Status: promoted; retained as planning history, not implementation authority
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `docs/contracts/004-language-quality-pack.md`,
@@ -323,17 +323,21 @@ no acquisition adapter is available.
 - no requirement that third-party packages be trusted as official packages;
 - no new language implementation before the package protocol is proven.
 
-## Promotion Targets
+## Promotion
 
-Once the open questions are settled, promote the stable package boundary into:
+The stable package topology, registration, ownership, release, and extraction
+boundary is promoted into `docs/architecture/system-architecture.md`. Binding
+acquisition, trust, compatibility, update, rollback, offline, release, and
+migration behavior is promoted into
+`docs/contracts/004-language-quality-pack.md`.
 
-- `docs/architecture/system-architecture.md`;
-- `docs/contracts/004-language-quality-pack.md`;
-- the core Northstar router and package registration contract;
-- a separate g02 extraction roadmap with migration and rollback cards.
+This spec remains the decision history behind those surfaces. It is not a
+second authority for implementation. The remaining planning action is a
+separate g02 extraction roadmap with fixture-protocol, TypeScript, Rust, and
+embedded-removal milestones.
 
 ## Readiness Gate
 
-This spec is deliberately not ready. Compile its roadmap only after card 113
-closes and the operator has accepted a concrete package identity, acquisition,
-compatibility, trust, and migration design.
+The design gate is satisfied and card 113 is closed. Implementation remains
+blocked until the promoted architecture and contract are compiled into a
+separate extraction roadmap with ready cards and explicit rollback proof.

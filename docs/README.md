@@ -89,8 +89,8 @@ Northstar system:
   use across workers, delegates, and fresh orchestrators; `check:model-routing`
   falsifies all ten oracle rows. PR 20 merged at `08ad810` after exact-head
   review.
-- Northstar remains general-purpose. Spec 034 plans extraction of embedded Rust
-  and TypeScript tooling into optional compatible language packages; that lane
-  is not ready for implementation.
+- Northstar remains general-purpose. Spec 034's optional-package design is
+  promoted into architecture and contract 004. The next step is a separate
+  extraction roadmap; implementation remains blocked until it has ready cards.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

@@ -86,6 +86,5 @@ evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-`g02.047/115` is merged and closed. Spec 034 holds the separate
-modular-language-package plan and remains not ready for implementation; return
-to planning before sequencing it.
+`g02.047/115` is merged and closed. Spec 034's package design is promoted;
+compile the separate extraction roadmap before implementation begins.
