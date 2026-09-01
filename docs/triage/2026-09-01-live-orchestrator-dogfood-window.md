@@ -608,6 +608,15 @@ worktree still owns the branch. The nonzero command exit is not the merge
 outcome. Both orchestrators verified the PR and merge commit before proceeding,
 so no ambiguous retry or duplicate merge occurred.
 
+The operator settled the intended ownership for post-freeze planning. Inside
+Paseo, a worker or orchestrator verifies the merge but does not delete its local
+branch or worktree. Explicit workspace archive owns teardown and should remove
+the managed worktree safely. Agent termination is a separate action and must
+not implicitly archive a shared workspace or discard another retained agent's
+work. Outside Paseo, Northstar keeps a provider-neutral manual cleanup path.
+This decision is evidence for the closeout card; it does not mutate the live
+protocol during the freeze.
+
 ## Cohort progress
 
 - Observations received: 17.
@@ -653,6 +662,7 @@ so no ambiguous retry or duplicate merge occurred.
 ## Closeout
 
 When the cohort gate is met, promote the reconciled evidence into one dated log,
-compile the bounded validation-reduction card, and remove this triage buffer.
-Keep modular language-package extraction and mode consolidation planned but
-unimplemented during the protocol freeze.
+compile the bounded validation-reduction card, carry the settled Paseo archive
+and teardown ownership into post-freeze planning, and remove this triage
+buffer. Keep modular language-package extraction and mode consolidation planned
+but unimplemented during the protocol freeze.
