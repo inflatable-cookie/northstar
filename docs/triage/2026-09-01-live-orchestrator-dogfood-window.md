@@ -597,6 +597,33 @@ Status: day-to-day implementation worker active; PR pending
   replacement also advances authority state.
 - Provider family: xAI, supplied explicitly.
 
+### 019 — Poodle contributor design-guidance pilot planning delegate
+
+Status: complete; planning PR accepted and merged
+
+- Worker class: `frontier conversational planning`. Candidate ownership,
+  blinded evaluation design, numeric verdict thresholds, privacy, retention,
+  and recurrence policy required direct operator decisions and high reasoning.
+- Ready frontier: planning ran independently beside motion planning and drag
+  fixes. Pilot execution remains serial on canonical router and pilot-kit
+  promotion plus named human-review availability. It does not block g16.034.
+- Outcome: Poodle PR 122 was accepted at refreshed exact head
+  `56f1712a0ae880dd8948d2469450432a15a5e993` and merged as
+  `4b87baabaec83a65d1cd1adccccdc41c624897fc`.
+- Operator intervention after dispatch: made decisions directly in the
+  delegate thread. The parent did not proxy questions after the earlier
+  duplicate-question correction.
+- Review: one accepted round after the required same-repository rebase, with no
+  blocking finding.
+- Control-plane friction: the merge produced the same local-branch cleanup
+  warning as PR 121 because the Paseo worktree still owned the delegate branch;
+  provider state confirmed the merge. Rebase correctly reused the original
+  agent and workspace identity.
+- Documentation QA: none.
+- Reduction fixture: none. The packet is decision-dense rather than a benign
+  copy-only cleanup.
+- Provider family: not supplied.
+
 ## Material protocol defect
 
 The operator observed active orchestrator threads drop from roughly six-to-ten
@@ -631,11 +658,11 @@ rule, but agent termination, workspace ownership, and retained-work discovery
 need a post-freeze control-plane assessment. No protocol change is inferred
 from this packet alone.
 
-Observations 014 and 017 show a recurring merge-adapter distinction: the
+Observations 014, 017, and 019 show a recurring merge-adapter distinction: the
 provider merge can succeed while local branch deletion fails because a Paseo
 worktree still owns the branch. The nonzero command exit is not the merge
-outcome. Both orchestrators verified the PR and merge commit before proceeding,
-so no ambiguous retry or duplicate merge occurred.
+outcome. Each merge was verified from the PR and merge commit before
+proceeding, so no ambiguous retry or duplicate merge occurred.
 
 The operator settled the intended ownership for post-freeze planning. Inside
 Paseo, a worker or orchestrator verifies the merge but does not delete its local
@@ -648,11 +675,11 @@ protocol during the freeze.
 
 ## Cohort progress
 
-- Observations received: 18.
-- Completed cohort lanes: 5 of 8. Signal observation 004, Loophole observation
-  010, Poodle observation 014, and Market observations 016–017 are merged;
-  observation 015 has changes requested, observation 007 passed review but was
-  not yet merged, and observation 005 is only a diagnostic kickoff.
+- Observations received: 19.
+- Completed cohort lanes: 6 of 8. Signal observation 004, Loophole observation
+  010, Poodle observations 014 and 019, and Market observations 016–017 are
+  merged; observation 015 has changes requested, observation 007 passed review
+  but was not yet merged, and observation 005 is only a diagnostic kickoff.
 - Projects represented: 7, exceeding the four-project breadth gate (`Poodle`,
   `Figmatic`, `Swallowtail`, `Signal`, `Effigy`, `Acowtancy/Market`, and
   `Loophole`).
@@ -671,7 +698,8 @@ protocol during the freeze.
   011; observation 015 continues the frontier Market lane from observation 008;
   observations 016–017 are economical day-to-day choices; observation 018 is
   a post-refresh day-to-day choice for material but fully settled public
-  semantics.
+  semantics; observation 019 completes the frontier conversational-planning
+  lane opened in observation 009.
 - Natural parallel shapes: 5. Observation 001 paired implementation with
   disjoint research; observation 002 paired two independent implementation
   lanes; observation 009 paired two planning delegates and an independent
@@ -681,7 +709,7 @@ protocol during the freeze.
   launched settled motion implementation beside interactive diagnosis and
   planning while limiting any future overlap to the named chunk. The required
   two multi-lane frontier observations are present in observations 002 and 015.
-- Completed review rounds: 13. Recorded blockers total two `planning-change`,
+- Completed review rounds: 14. Recorded blockers total two `planning-change`,
   nine `execution-miss`, five `oracle-gap`, and five `integration-drift`
   findings, plus three observation-015 blockers whose Northstar codes were not
   supplied.
@@ -691,8 +719,8 @@ protocol during the freeze.
   closeout shapes from observations 015–017, plus the authority-aware triage
   compaction from observation 018.
 - Control-plane or task-routing friction appears in observations 001–004 and
-  006–008, 010–011, and 013–017; observations 005, 009, 012, and 018 report
-  none.
+  006–008, 010–011, 013–017, and 019; observations 005, 009, 012, and 018
+  report none.
 
 ## Closeout
 
