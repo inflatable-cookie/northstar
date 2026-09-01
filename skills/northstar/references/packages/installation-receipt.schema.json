@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://northstar.invalid/schemas/language-package-installation-receipt.v1.json",
+  "title": "Northstar language package installation receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "package_id",
+    "version",
+    "kind",
+    "trust_class",
+    "source",
+    "content_identity",
+    "compatibility",
+    "installation"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "package_id": {
+      "type": "string",
+      "pattern": "^@[a-z0-9-]+/[a-z0-9-]+$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[a-zA-Z0-9.-]+)?$"
+    },
+    "kind": {
+      "type": "string",
+      "const": "language-quality"
+    },
+    "trust_class": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "official",
+            "operator_allowlist",
+            "interactive_approval"
+          ]
+        },
+        "registry_version": {
+          "type": "string"
+        },
+        "allowlist_entry": {
+          "type": "string"
+        },
+        "approved_by": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "repository",
+        "subpath",
+        "commit"
+      ],
+      "properties": {
+        "repository": {
+          "type": "string",
+          "pattern": "^https://[a-zA-Z0-9.-]+(/[^/]+)*\\.git$|^https://[a-zA-Z0-9.-]+(/[^/]+)*$"
+        },
+        "subpath": {
+          "type": "string",
+          "minLength": 1
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$|^[0-9a-f]{64}$"
+        },
+        "artifact_url": {
+          "type": "string"
+        },
+        "artifact_digest": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "content_identity": {
+      "type": "object",
+      "required": [
+        "package_tree_digest",
+        "manifest_digest"
+      ],
+      "properties": {
+        "package_tree_digest": {
+          "type": "string",
+          "pattern": "^(sha256:)?[0-9a-f]{64}$"
+        },
+        "manifest_digest": {
+          "type": "string",
+          "pattern": "^(sha256:)?[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "compatibility": {
+      "type": "object",
+      "required": [
+        "compatible_core_range",
+        "installed_core_version"
+      ],
+      "properties": {
+        "compatible_core_range": {
+          "type": "string",
+          "minLength": 1
+        },
+        "installed_core_version": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "installation": {
+      "type": "object",
+      "required": [
+        "installed_path",
+        "installed_at",
+        "acquisition_adapter",
+        "activation_status"
+      ],
+      "properties": {
+        "installed_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "installed_at": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(.[0-9]+)?Z?$"
+        },
+        "acquisition_adapter": {
+          "type": "string",
+          "minLength": 1
+        },
+        "activation_status": {
+          "type": "string",
+          "enum": [
+            "active",
+            "inactive",
+            "installed"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

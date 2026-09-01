@@ -168,6 +168,28 @@ operator-blocked cases without network, database, provider, or external tracker
 access. A repository with no live readiness maps passes with deterministic
 zero-map output.
 
+## Language package machine contracts (`check:language-packages`)
+
+Validate the generic machine contracts and review-oracle invariants for
+modular language quality packages:
+
+```bash
+effigy check:language-packages
+effigy qa:docs
+```
+
+The checker validates:
+1. `package-manifest.schema.json`, `official-registry.schema.json`, and
+   `installation-receipt.schema.json` against JSON Schema Draft 2020-12;
+2. the initial core-owned `official-registry.json` document;
+3. the policy-free fixture package structure, manifest, and self-check entrypoint
+   (asserting zero production language rules, profiles, overlays, or engines);
+4. package independence and sibling isolation across distinct subpaths;
+5. the negative oracle suite (identity precedes execution / digest drift,
+   core-owned official trust, immutable hex commit sources, independent
+   inventories, exact core range compatibility, and malformed manifest rejection);
+6. portable contracts (scanning for forbidden LLM provider dependencies).
+
 ## Agent-instruction audit (`check:agent-instructions`)
 
 The read-only agent-instruction checker measures root or supplied `AGENTS.md`

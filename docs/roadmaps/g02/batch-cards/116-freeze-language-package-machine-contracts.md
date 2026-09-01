@@ -1,6 +1,6 @@
 # 116 - Freeze Language Package Machine Contracts
 
-Status: ready
+Status: complete
 Owner: repo maintainers
 Updated: 2026-09-01
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -65,17 +65,17 @@ compatibility validation succeeds.
 
 ## Acceptance Criteria
 
-- [ ] manifest covers every promoted contract field without provider-specific
+- [x] manifest covers every promoted contract field without provider-specific
   acquisition configuration;
-- [ ] registry and receipt distinguish source, content, manifest, trust, and
+- [x] registry and receipt distinguish source, content, manifest, trust, and
   compatibility identities;
-- [ ] package self-claims cannot grant official or third-party trust;
-- [ ] fixture has no production language rules, profiles, overlays, or engines;
-- [ ] one package can be addressed without retaining sibling payloads;
-- [ ] malformed, mutable, incompatible, duplicate, ambiguous, and digest-drift
+- [x] package self-claims cannot grant official or third-party trust;
+- [x] fixture has no production language rules, profiles, overlays, or engines;
+- [x] one package can be addressed without retaining sibling payloads;
+- [x] malformed, mutable, incompatible, duplicate, ambiguous, and digest-drift
   fixtures fail before executable package content is consulted;
-- [ ] schema/check surfaces are present in the installed Northstar skill;
-- [ ] focused checks, docs QA, full QA, parity, and `git diff --check` pass.
+- [x] schema/check surfaces are present in the installed Northstar skill;
+- [x] focused checks, docs QA, full QA, parity, and `git diff --check` pass.
 
 ## Review Oracle
 
@@ -123,7 +123,13 @@ compatibility validation succeeds.
 
 ## Completion Notes
 
-Pending.
+Completed machine contracts for modular language quality packages (g02.048/116):
+- Added `skills/northstar/references/packages/package-manifest.schema.json`, `official-registry.schema.json`, `installation-receipt.schema.json`, and empty initial `official-registry.json`.
+- Added policy-free fixture package at `skills/northstar/assets/fixtures/language-packages/policy-free-fixture/` with zero production language rules.
+- Added negative fixtures and sibling isolation fixtures under `skills/northstar/assets/fixtures/language-packages/`.
+- Implemented `skills/northstar/scripts/check-language-packages.rhai` covering positive schema validation, all 6 review-oracle invariants, sibling package independence, and forbidden provider scans.
+- Wired `check:language-packages` into root `effigy.toml`, `skills/northstar/effigy.toml`, `qa:docs`, `validate`, and repo contract checks.
+- Validated with `effigy check:language-packages`, `effigy check:skill-install`, `effigy qa:docs`, `effigy qa`, and `git diff --check`.
 
 ## Next Task
 

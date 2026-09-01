@@ -18,7 +18,7 @@ single-pilot bucket.
 | Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | execute g02.048/116 machine contracts |
 | Add a genuinely long-horizon planning route without conflating it with readiness review. | active | `docs/specs/029-northstar-long-horizon-planning.md`, `skills/northstar/references/modes/atlas.md` | Non-Northstar scenario and operator confirmation |
 | Preserve useful conversational context and keep `/docs` drift recoverable without blind deletion. | active | `docs/specs/030-conversational-triage-and-docs-cleanup.md`, `docs/contracts/001-working-rules.md`, `skills/northstar/references/modes/cleanup-docs.md` | live triage and cleanup feedback |
-| Raise language-code quality through evidence-bound routed workflows without making every implementation part of the root payload. | active | `docs/contracts/004-language-quality-pack.md`, `docs/architecture/system-architecture.md`, `docs/roadmaps/g02/048-extract-modular-language-quality-packages.md` | card 116 ready; cards 117-120 planned |
+| Raise language-code quality through evidence-bound routed workflows without making every implementation part of the root payload. | active | `docs/contracts/004-language-quality-pack.md`, `docs/architecture/system-architecture.md`, `docs/roadmaps/g02/048-extract-modular-language-quality-packages.md` | card 116 complete; cards 117-120 planned |
 
 Update this runway only when generation-level intent changes, a milestone
 materially advances or closes a goal, or rollover is being considered. Do not
@@ -103,14 +103,15 @@ rollover signal.
 - `046-add-fresh-orchestrator-continuation.md` (complete; card 114 merged through PR 19 at `b99d19c`)
 - `047-diversify-model-routing-across-runs.md` (complete; PR 20 merged at
   `08ad810` after exact-head review)
-- `048-extract-modular-language-quality-packages.md` (active; card 116 ready,
+- `048-extract-modular-language-quality-packages.md` (active; card 116 complete,
   cards 117-120 planned in dependency order)
 
 ## Next Task
 
-`g02.048/116` is ready: freeze package, registry, and receipt schemas plus the
-policy-free fixture and negative identity suite. Cards 117-120 remain planned
-behind its reviewed machine contracts.
+`g02.048/116` is complete: package, registry, and receipt schemas frozen plus
+the policy-free fixture and negative identity suite validated. Stop for
+exact-head review and PR merge. Cards 117-120 remain planned behind its
+reviewed machine contracts.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and

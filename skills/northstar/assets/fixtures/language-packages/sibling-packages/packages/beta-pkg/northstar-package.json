@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0.0",
+  "package_id": "@northstar/beta-language",
+  "version": "0.1.0",
+  "kind": "language-quality",
+  "compatible_core_range": ">=0.2.0 <1.0.0",
+  "supported_languages": [
+    "beta-lang"
+  ],
+  "supported_overlays": [
+    "base"
+  ],
+  "available_workflows": [
+    "explicit_audit_repair"
+  ],
+  "entrypoints": {
+    "explicit_audit_repair": "SKILL.md"
+  },
+  "runtime_capabilities": {
+    "required_commands": [],
+    "optional_effigy_selectors": []
+  },
+  "self_check": {
+    "entrypoint": "scripts/self-check.rhai",
+    "validated_profile_versions": [
+      "1.0.0"
+    ],
+    "validated_schema_versions": [
+      "1.0.0"
+    ]
+  },
+  "evidence_providers": []
+}
