@@ -33,6 +33,7 @@ Use logs as the third step in closeout:
 ## Recent active-lane evidence
 
 - `2026-09/01-150310-plan-fresh-orchestrator-continuation.md`
+- `2026-09/01-143313-reduce-prose-coupled-validation.md`
 - `2026-09/01-140857-close-live-dogfood-and-plan-reduction.md`
 - `2026-09/01-122831-remove-global-capacity-gating.md`
 - `2026-09/01-110709-prefer-economical-worker-routing.md`

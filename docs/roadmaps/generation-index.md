@@ -76,8 +76,11 @@ sequence.
 
 ## Next Task
 
-Roadmaps `g02.038` through `g02.044` are complete. Finish exact-head review and
-merge of active roadmap `g02.045`, then refresh and execute planned roadmap
+Roadmaps `g02.038` through `g02.045` are complete through implementation. The
+first-principles audit and closed dogfood cohort produced the structural
+validation reduction, active-authority reconciliation, machine-contract checks,
+and fixture proof; corrected exact-head review remains. Finish exact-head review
+and merge active roadmap `g02.045`, then refresh and execute planned roadmap
 `g02.046` for fresh-orchestrator continuation. Spec 034 holds the separate
 modular-language-package plan and remains not ready for implementation.
 

@@ -5,7 +5,7 @@ handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
 handoff: single-file-path-only
-status: ready-to-launch
+status: awaiting-exact-head-review
 owner: repo maintainers
 created: 2026-09-01
 updated: 2026-09-01
@@ -69,6 +69,7 @@ Here is the state the worker is inheriting:
   its fixtures, task wiring, or card 113 closeout surfaces.
 - **Surfaces this lane owns:**
   `scripts/check-northstar-repo-contract.rhai`,
+  `scripts/check-northstar-repo-contract-wiring.rhai`,
   `scripts/lib/northstar-repo-contract-data.rhai`, focused repo-contract
   fixtures/tests and their minimal harness, `effigy.toml`, `scripts/README.md`,
   milestone 045, card 113, one dated closeout log, and directly dependent
@@ -78,10 +79,15 @@ Here is the state the worker is inheriting:
 - **Merge ordering:** same-repository PRs merge one at a time; the orchestrator
   refreshes this head against current `main` and re-reviews it if another lane
   merges first.
+- **Same-repo refresh:** the repair branch integrates current `origin/main` at
+  `280c1c5ffbf54eb32b4f495e902a6bf5c7e879a9` before final reporting. The
+  g02.045 closeout remains in exact-head review, while planned card
+  `g02.046/114` remains blocked and serial behind PR 18.
 - **Canonical refs:** `docs/architecture/system-architecture.md`;
   `docs/contracts/001-working-rules.md`;
   `docs/logs/2026-09/01-140857-close-live-dogfood-and-plan-reduction.md`.
-- **Review oracle:** all seven rows in milestone `g02.045` and card 113.
+- **Review oracle:** all nine rows in milestone `g02.045` and card 113; the
+  fixture count is tracked separately.
 - **Model capability profile:** matching low-cost mechanical implementation
   profile selected from current Paseo profile notes.
 - **Frontier-worker justification:** none.
@@ -89,13 +95,18 @@ Here is the state the worker is inheriting:
   installed skills or Paseo configuration, change orchestration behavior,
   extract language packages, touch consumer repositories, or introduce a new
   currentness schema.
-- **Required validation:** focused repo-contract fixture task; unchanged
-  readiness-map and command-skill checks; `effigy qa:docs`; `effigy qa`;
-  `git diff --check`.
+- **Required validation:** focused repo-contract fixture task and wiring check;
+  unchanged readiness-map and command-skill checks; `effigy validate`;
+  `effigy qa:docs`; `effigy qa`; `git diff --check`.
 - **PR base/head:** `main` <- `worker/validation-reduction-experiment`.
-- **PR URL:** pending.
-- **Review state:** awaiting worker implementation and PR, then orchestrator
-  exact-head review.
+- **PR URL:** https://github.com/inflatable-cookie/northstar/pull/18
+- **Initial implementation-tested head:**
+  `9eb8c6be23ef668ff9dfcf456e4983b9014263a0`.
+- **Review-fix head before main refresh:**
+  `1bbc4320288a09767ea39a3bd58444b0ce4914dc`.
+- **Review state:** this continuation repaired the circular docs-QA proof and
+  stale oracle count; the full handoff validation passes on the current branch;
+  awaiting orchestrator exact-head review.
 - **Merge path:** orchestrator after accepted review of the current head and
   passing required checks.
 
@@ -150,7 +161,7 @@ Please keep this run inside card 113:
 Run the `Completion Protocol` preflight. Read `AGENTS.md`, milestone 045, card
 113, the architecture and working-rules refs, then inventory the checker and its
 data before mutation. Record a before classification and counts. Design the
-smallest deterministic fixture harness that exercises all seven oracle rows,
+smallest deterministic fixture harness that exercises all nine oracle rows,
 then implement one coherent reduction batch.
 
 ## Completion Protocol
@@ -192,7 +203,7 @@ then implement one coherent reduction batch.
 1. Run the focused repo-contract fixture task, unchanged readiness-map and
    command-skill checks, `effigy qa:docs`, `effigy qa`, and
    `git diff --check`.
-2. Falsify the diff against all seven milestone rows. Include missing-front-door,
+2. Falsify the diff against all nine milestone rows. Include missing-front-door,
    broken-link, parity-drift, token-like-prose, editorial-rewording, and
    historical-path cases. Search for hidden or renamed assertion paths.
 3. Reconcile card 113, milestone 045, a dated closeout log, handoff status, and
@@ -207,14 +218,16 @@ then implement one coherent reduction batch.
 ### Review and merge path
 
 The orchestrator reviews the PR against the canonical refs, diff, checks, and
-all seven oracle rows. If changes are requested, stay on the same branch and
+all nine oracle rows. If changes are requested, stay on the same branch and
 repair only the posted findings. Blocking classes are `execution-miss`,
 `oracle-gap`, `planning-change`, `validation-gap`, and `integration-drift`; a
 `planning-change` returns to planning before revision. The orchestrator may
 merge an accepted current head after required checks pass and mergeability is
 clear, without another operator prompt.
 
-- **Requested changes:** none.
+- **Requested changes:** repaired the circular docs-QA wiring proof and
+  reconciled stale oracle-count references to the live nine-row oracle; no other
+  scope.
 - **Closeout refs:** card 113, milestone 045, one dated log,
   `docs/README.md`, roadmap front doors, generation index, and checker/task
   documentation.

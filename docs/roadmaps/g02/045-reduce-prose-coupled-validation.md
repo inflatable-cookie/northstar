@@ -1,6 +1,6 @@
 # 045 - Reduce Prose-Coupled Validation
 
-Status: active; card 113 ready
+Status: complete; card 113 implementation complete; awaiting exact-head review
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.044`, closed live-orchestrator dogfood cohort
@@ -9,6 +9,9 @@ Governing refs: `docs/vision/001-northstar-delivery-vision.md`,
 `docs/architecture/system-architecture.md`,
 `docs/contracts/001-working-rules.md`,
 `docs/logs/2026-09/01-140857-close-live-dogfood-and-plan-reduction.md`
+Planning state: the structural checker reduction, active-authority
+reconciliation, machine-contract checks, and fixture proof are complete on the
+worker branch; the orchestrator owns exact-head review and merge.
 
 ## Problem
 
@@ -53,21 +56,27 @@ new currentness metadata or broaden into general docs cleanup.
 
 ## Acceptance Criteria
 
-- every old `required_files` entry is classified as stable structure, active
+- [x] every old `required_files` entry is classified as stable structure, active
   authority, executable validation surface, parity surface, or historical
   inventory;
-- the live required-path list contains no individual historical batch card,
+- [x] the live required-path list contains no individual historical batch card,
   milestone, log, or closed spec;
-- `required_content` and `forbidden_content` assertions no longer run or remain
-  as dead policy data;
-- stable front-door deletion, broken distributed-skill links, and canonical
+- [x] prose assertion data and execution paths are removed;
+- [x] current active-authority paths and independently stable machine contracts
+  remain structurally protected;
+- [x] stable front-door deletion, broken distributed-skill links, and canonical
   mirror drift each fail deterministically;
-- representative token-like prose, front-door wording changes, papercut
+- [x] missing active authority, Claude bridge, and docs-QA wiring fail through
+  targeted negative fixtures; the wiring fixture executes the mutated Effigy
+  board and proves the outer `qa` path catches the `qa:docs` bypass;
+- [x] representative token-like prose, front-door wording changes, papercut
   closeouts, historical-evidence movement, and source-preserving partitions
   pass without exact wording exceptions;
-- no fixture depends on a consumer checkout or copies private provider state;
-- the reduced checker, its tests, docs, and task wiring are coherent;
-- `effigy qa:docs`, `effigy qa`, and `git diff --check` pass.
+- [x] no fixture depends on a consumer checkout or copies private provider
+  state;
+- [x] the reduced checker, its tests, docs, and task wiring are coherent;
+- [x] `effigy qa:docs`, `effigy qa`, and `git diff --check` pass on the final
+  closeout head.
 
 ## Review Oracle
 
@@ -79,6 +88,8 @@ new currentness metadata or broaden into general docs cleanup.
 | Editorial prose is not schema. | Reword a `Next Task` or move a supersession paragraph without changing structure. | Checker passes. | Benign editorial fixtures. |
 | Token-like benign text is not forbidden policy. | Add `mask-plus-translated-highlight` to Markdown. | Repo-contract checker passes; security scanning remains separately owned. | Benign token fixture. |
 | Historical inventory is not live structure. | Remove a historical-card path from an isolated required-path fixture. | Checker does not require it. | Classification inventory plus fixture. |
+| Current active authority remains live structure. | Remove `docs/specs/034-modular-language-quality-packages.md` from an isolated fixture. | Checker fails with the missing authority path. | `missing-active-authority` fixture. |
+| Stable machine contracts remain executable. | Remove the Claude bridge or repo-contract tasks from the docs-QA sequence. | The targeted selector fails for the bridge; the outer `qa` board fails when `qa:docs` wiring is removed. | `missing-claude-bridge` and `missing-qa-wiring` fixtures execute the relevant Effigy selectors. |
 | The reduction is real. | Leave a hidden or renamed substring assertion path. | Review rejects the head. | Search proof for removed assertion classes and old historical inventory. |
 
 ## Stop Conditions
@@ -93,5 +104,6 @@ new currentness metadata or broaden into general docs cleanup.
 
 ## Next Task
 
-Execute card `g02.045/113`. After merge, reassess spec 034 and the remaining
-simplification questions; do not auto-start language extraction.
+Review the worker PR against all nine oracle rows and merge only after the
+exact-head and required-check gate passes. Spec 034 remains a separate
+not-ready planning lane; do not auto-start language extraction.
