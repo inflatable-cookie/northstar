@@ -33,9 +33,8 @@ repository validation as the real risk controls.
   `main` at `b30e288`.
 - **Done in this lane:** card 115 is implemented; `check:model-routing`
   falsifies all ten milestone oracle rows; the full validation suite passes;
-  the branch is pushed and PR 20 is open
-  (https://github.com/inflatable-cookie/northstar/pull/20).
-- **Still open:** orchestrator exact-head review and merge of that PR.
+  PR 20 merged at `08ad810` after accepted exact-head review.
+- **Still open:** none in this lane.
 - **Current card:**
   `docs/roadmaps/g02/batch-cards/115-diversify-model-routing-across-runs.md`.
 - **Planning base:** `b30e288a1525d4d06c49dfabb0972503be4b5e61`.
@@ -82,9 +81,8 @@ repository validation as the real risk controls.
 
 ## Suggested Next Move
 
-Run orchestrator exact-head review of the PR against card 115's ten-row
-oracle, required validation, and the boundaries above. Merge is
-orchestrator-owned; spec 034 remains separate and not ready.
+This handoff is complete. Spec 034 remains separate and not ready; return to
+planning before sequencing it.
 
 ## Completion Protocol
 

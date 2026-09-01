@@ -87,7 +87,8 @@ Northstar system:
 - `g02.047/115` diversified model routing: every dispatch builds an adequate
   pool, prefers the cheapest adequate tier, and rotates recent provider/model
   use across workers, delegates, and fresh orchestrators; `check:model-routing`
-  falsifies all ten oracle rows. The PR awaits exact-head review.
+  falsifies all ten oracle rows. PR 20 merged at `08ad810` after exact-head
+  review.
 - Northstar remains general-purpose. Spec 034 plans extraction of embedded Rust
   and TypeScript tooling into optional compatible language packages; that lane
   is not ready for implementation.

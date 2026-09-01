@@ -77,15 +77,15 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02.045` is complete through card 113; PR 18 merged at `1f6647a` after
   exact-head review of the structural validation reduction and fixture proof.
 - `g02.046` is complete; card 114 merged through PR 19 at `b99d19c`.
-- `g02.047` is implemented; card 115 diversified model routing across workers,
+- `g02.047` is complete; card 115 diversified model routing across workers,
   delegates, and fresh orchestrators with focused ten-row oracle assertions.
-  The PR awaits exact-head review.
+  PR 20 merged at `08ad810` after exact-head review.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Review the `g02.047/115` diversified-routing PR through orchestrator
-exact-head review; merge is orchestrator-owned. Spec 034 holds the separate
-modular-language-package plan and must not auto-start from this lane.
+`g02.047/115` is merged and closed. Spec 034 holds the separate
+modular-language-package plan and remains not ready for implementation; return
+to planning before sequencing it.

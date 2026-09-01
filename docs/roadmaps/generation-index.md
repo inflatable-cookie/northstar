@@ -81,9 +81,9 @@ first-principles audit and closed dogfood cohort produced the structural
 validation reduction, active-authority reconciliation, machine-contract checks,
 and fixture proof; PR 18 merged at `1f6647a`. Fresh-orchestrator continuation
 merged through PR 19 at `b99d19c`. Card 115 diversified model routing across
-workers, delegates, and fresh orchestrators; its PR awaits exact-head review.
-Spec 034 holds the separate modular-language-package
-plan and remains not ready for implementation.
+workers, delegates, and fresh orchestrators; PR 20 merged at `08ad810` after
+exact-head review. Spec 034 holds the separate modular-language-package plan and
+remains not ready for implementation.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed

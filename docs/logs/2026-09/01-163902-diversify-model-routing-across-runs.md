@@ -3,7 +3,7 @@
 Date: 2026-09-01
 Roadmap: `g02.047`
 Card: `g02.047/115`
-Status: complete; awaiting exact-head review
+Status: complete; merged through PR 20 at `08ad810`
 
 ## Result
 
@@ -104,7 +104,8 @@ accounting.
 
 https://github.com/inflatable-cookie/northstar/pull/20 — opened at
 `006504c1bd41a48566620b3688842c9bd2c0b99d` with validation recorded above.
-The orchestrator owns exact-head review and merge.
+Accepted exact-head review at `e40d7e3b27b8095978d86c045f07085252f24957`;
+merged as `08ad810b2e16358d8a32e9631cdbbeea6ad187fc`.
 
 ## Review revision
 

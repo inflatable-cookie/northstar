@@ -1,6 +1,6 @@
 # 115 - Diversify Model Routing Across Runs
 
-Status: complete; awaiting exact-head review
+Status: complete; merged through PR 20 at `08ad810`
 Owner: repo maintainers
 Created: 2026-09-01
 Updated: 2026-09-01
@@ -101,5 +101,5 @@ weakening review and validation.
 
 ## Next Task
 
-This card is closed. The orchestrator owns exact-head review and merge of this
-lane's PR. Spec 034 remains separate and not ready.
+This card is closed. PR 20 merged at `08ad810` after accepted exact-head review.
+Spec 034 remains separate and not ready.

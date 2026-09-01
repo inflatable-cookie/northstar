@@ -1,6 +1,6 @@
 # 047 - Diversify Model Routing Across Runs
 
-Status: complete; card 115 awaiting exact-head review
+Status: complete; PR 20 merged at `08ad810`
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.046`, spec 026
@@ -87,6 +87,5 @@ surfaces, focused assertions, installed parity, and closeout in one lane.
 
 ## Next Task
 
-This lane is complete. Orchestrator exact-head review of the card 115 PR is
-next; merge is orchestrator-owned. Spec 034 remains a separate not-ready
-language-package planning lane.
+This lane is complete and merged through PR 20 at `08ad810` after exact-head
+review. Spec 034 remains a separate not-ready language-package planning lane.
