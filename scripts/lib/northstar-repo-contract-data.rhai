@@ -1,5 +1,16 @@
-fn required_files() {
+fn current_active_authority_files() {
     [
+        "docs/vision/001-northstar-delivery-vision.md",
+        "docs/contracts/004-language-quality-pack.md",
+        "docs/specs/026-orchestrator-thread-and-worker-pr-loop.md",
+        "docs/specs/027-northstar-native-pre-execution-discovery.md",
+        "docs/specs/029-northstar-long-horizon-planning.md",
+        "docs/specs/034-modular-language-quality-packages.md",
+    ]
+}
+
+fn required_files() {
+    let files = [
         "AGENTS.md",
         "CLAUDE.md",
         ".agents.local.env.example",
@@ -38,6 +49,7 @@ fn required_files() {
         "scripts/README.md",
         "scripts/check-northstar-bundle.rhai",
         "scripts/check-northstar-repo-contract.rhai",
+        "scripts/check-northstar-repo-contract-wiring.rhai",
         "scripts/check-northstar-posture-advisory.rhai",
         "scripts/check-northstar-skill-install.rhai",
         "scripts/check-northstar-readiness-map.rhai",
@@ -97,6 +109,30 @@ fn required_files() {
         "scripts/lib/northstar-repo-contract-data.rhai",
         "scripts/lib/northstar-repo-contract-checker.rhai",
         "scripts/lib/northstar-readiness-map.rhai",
+    ];
+    for file in current_active_authority_files() {
+        files.push(file);
+    }
+    files
+}
+
+fn stable_machine_contracts() {
+    [
+        ["CLAUDE.md", "@AGENTS.md", "root Claude Code bridge"],
+        ["skills/northstar/assets/templates/CLAUDE.md.template", "@AGENTS.md", "copy-ready Claude Code bridge"],
+        ["effigy.toml", "alias = \"northstar\"", "root Effigy catalog alias"],
+        ["effigy.toml", "\"check:repo-contract-wiring\" = [{ rhai = \"scripts/check-northstar-repo-contract-wiring.rhai\" }]", "repo-contract wiring task declaration"],
+        ["effigy.toml", "\"check:repo-contract\" = [{ rhai = \"scripts/check-northstar-repo-contract.rhai\" }]", "repo-contract task declaration"],
+        ["effigy.toml", "\"test:repo-contract\" = [{ rhai = \"scripts/test-northstar-repo-contract.rhai\" }]", "repo-contract fixture task declaration"],
+        ["effigy.toml", "\"qa:docs\" = [{ task = \"check:repo-contract-wiring\" }, { task = \"check:repo-contract\" }, { task = \"test:repo-contract\" }, { task = \"check:readiness-map\" }, { task = \"test:readiness-map\" }, { task = \"check:command-skills\" }]", "docs QA task sequence"],
+        ["effigy.toml", "qa = [{ task = \"validate\" }, { task = \"qa:docs\" }]", "full QA includes docs QA"],
+        ["effigy.toml", "\"paseo:worktree\" = [{ rhai = \"skills/northstar/scripts/paseo-worktree.rhai\" }]", "root Paseo task declaration"],
+        ["skills/northstar/effigy.toml", "alias = \"northstar\"", "installed skill Effigy catalog alias"],
+        ["skills/northstar/effigy.toml", "\"paseo:worktree\" = [{ rhai = \"scripts/paseo-worktree.rhai\" }]", "installed skill Paseo task declaration"],
+        ["paseo.json", "paseo:worktree -- prepare", "Paseo setup hook"],
+        ["paseo.json", "paseo:worktree -- link", "Paseo setup link hook"],
+        ["paseo.json", "paseo:worktree -- unlink", "Paseo teardown hook"],
+        ["skills/northstar/assets/templates/paseo.json.template", "paseo:worktree -- link", "copy-ready Paseo link hook"],
     ]
 }
 

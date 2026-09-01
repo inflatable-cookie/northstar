@@ -7,11 +7,13 @@ Card: `g02.045/113`
 
 ## Outcome
 
-The Northstar repo-contract checker now protects structural paths, portable
-skill links, Markdown link integrity, and the canonical batch-card mirror. It
-no longer mirrors editorial wording or requires individual historical planning
-artifacts. The focused fixture task proves the retained failures and the newly
-tolerated benign changes without using a consumer checkout or provider state.
+The Northstar repo-contract checker now protects structural paths, current
+active-authority paths, portable skill links, Markdown link integrity, the
+canonical batch-card mirror, and a small machine-contract subset. It no longer
+mirrors editorial wording or requires individual historical planning artifacts.
+The focused fixture task proves the retained failures, execution-contract
+failures, and newly tolerated benign changes without using a consumer checkout
+or provider state.
 
 The worker branch is ready for orchestrator exact-head review. The
 orchestration protocol and spec 034 remain unchanged and out of scope.
@@ -19,10 +21,12 @@ orchestration protocol and spec 034 remain unchanged and out of scope.
 ## Required-path inventory
 
 The pre-change inventory contained 167 paths, 320 exact-presence assertions, 41
-exact-absence assertions, and one mirror pair. The post-change live inventory
-contains 97 paths: 22 stable-structure paths, 57 active-authority paths, 16
-executable-validation paths, and 2 parity paths. The 73 historical paths were
-removed from executable policy but remain in the repository as evidence.
+exact-absence assertions, and one mirror pair. The corrected post-change live
+inventory contains 104 paths: 22 stable-structure paths, 63 active-authority
+paths, 17 executable-validation paths, and 2 parity paths. The 73 historical
+paths were removed from executable policy but remain in the repository as
+evidence. The checker retains 15 targeted machine-contract markers; these are
+configuration or bridge identifiers, not editorial assertions.
 
 The following classification covers every old `required_files` entry.
 
@@ -42,7 +46,7 @@ The following classification covers every old `required_files` entry.
   `template-bundle/specs/archive/README.md`,
   `template-bundle/roadmaps/g01/batch-cards/README.md`
 
-### Active authority — 57 old paths retained
+### Active authority — 57 old paths retained; 6 current paths added
 
 - Northstar architecture and contracts: `docs/architecture/system-architecture.md`,
   `docs/architecture/system-inventory.md`,
@@ -51,6 +55,13 @@ The following classification covers every old `required_files` entry.
   `docs/contracts/002-agent-local-paths.md`,
   `docs/contracts/003-agent-instruction-surface.md`,
   `docs/specs/030-conversational-triage-and-docs-cleanup.md`
+- current active-authority paths reconciled after exact-head review:
+  `docs/vision/001-northstar-delivery-vision.md`,
+  `docs/contracts/004-language-quality-pack.md`,
+  `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`,
+  `docs/specs/027-northstar-native-pre-execution-discovery.md`,
+  `docs/specs/029-northstar-long-horizon-planning.md`,
+  `docs/specs/034-modular-language-quality-packages.md`
 - reusable doctrine: `bundle-docs/README.md`, `bundle-docs/cheat-sheet.md`,
   `bundle-docs/papercuts.md`, `bundle-docs/protocol-kernel.md`,
   `bundle-docs/operators/operator-quick-start.md`,
@@ -98,7 +109,7 @@ The following classification covers every old `required_files` entry.
   `skills/northstar/assets/templates/northstar-discovery-delegate.md.template`,
   `skills/northstar/assets/templates/northstar-documentation-projection.md.template`
 
-### Executable validation surface — 13 old paths retained; 3 added
+### Executable validation surface — 13 old paths retained; 4 added
 
 - old task and checker paths: `scripts/README.md`,
   `scripts/check-northstar-bundle.rhai`,
@@ -113,8 +124,21 @@ The following classification covers every old `required_files` entry.
   `scripts/lib/northstar-repo-contract-data.rhai`,
   `scripts/lib/northstar-readiness-map.rhai`
 - new executable paths: `effigy.toml`,
+  `scripts/check-northstar-repo-contract-wiring.rhai`,
   `scripts/test-northstar-repo-contract.rhai`,
   `scripts/lib/northstar-repo-contract-checker.rhai`
+
+### Stable machine contracts — 15 targeted markers
+
+- Claude bridge: root and copy-ready `@AGENTS.md` references;
+- Effigy: root catalog/task identity, repo-contract declarations, full
+  `qa:docs` sequence, `qa` inclusion, and root Paseo task;
+- installed skill: catalog identity and Paseo task;
+- Paseo: prepare, link, unlink, and copy-ready link hook identifiers.
+
+Generic prose/currentness assertions were not restored. Adapter names and mode
+wiring remain owned by `check:command-skills`; runtime Paseo behavior remains
+owned by its existing self-test.
 
 ### Parity surface — 2 old paths retained
 
@@ -199,12 +223,12 @@ The following classification covers every old `required_files` entry.
 
 ## Fixture proof
 
-`effigy test:repo-contract` runs seven isolated oracle rows. Missing structure,
-broken distributed-skill links, and template parity drift fail with named
-reasons. Token-like text, front-door rewording, papercut closeout text,
-historical-evidence movement, source-preserving partition text, and removal of
-an unlisted historical path pass. A source scan confirms that the removed
-exact-content assertion data and calls are absent from the checker path.
+`effigy test:repo-contract` runs 11 isolated fixture cases. Missing structure,
+missing active authority, broken distributed-skill links, template parity drift,
+the Claude bridge, and docs-QA wiring fail with named reasons. Token-like text,
+front-door rewording, papercut closeout text, historical-evidence movement, and
+source-preserving partition text pass. A source scan confirms that the removed
+generic exact-content assertion data and calls are absent from the checker path.
 
 ## Validation
 
@@ -213,7 +237,9 @@ exact-content assertion data and calls are absent from the checker path.
 - baseline `effigy test:readiness-map` — pass (five fixtures);
 - baseline `effigy check:command-skills` — pass (nine adapters);
 - `effigy check:repo-contract` — pass;
-- `effigy test:repo-contract` — pass (seven oracle rows; five benign variants);
+- `effigy check:repo-contract-wiring` — pass;
+- `effigy test:repo-contract` — pass (11 fixture cases; six expected failures;
+  five benign variants);
 - `effigy qa:docs` — pass, including the focused fixtures and unchanged
   readiness/command-surface checks;
 - `effigy qa` — pass;
@@ -223,8 +249,8 @@ exact-content assertion data and calls are absent from the checker path.
 
 PR: https://github.com/inflatable-cookie/northstar/pull/18
 
-The implementation and closeout evidence above were validated at worker head
-`9eb8c6be23ef668ff9dfcf456e4983b9014263a0`. The PR is review-only; the
+The implementation and closeout evidence above were corrected and validated on
+the worker branch after exact-head review. The PR is review-only; the
 orchestrator owns exact-head review and merge.
 
 ## Limits

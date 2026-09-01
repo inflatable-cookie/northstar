@@ -56,8 +56,9 @@ in source. Cards 096-099 added immutable evidence, qualified finite detectors,
 passed revision-E production evidence, and distributed the exact 120-file
 payload.
 
-Roadmap `g02.045` is complete through card 113's implementation and fixture
-proof. It reduces prose-coupled and historical-inventory assertions while
-retaining structural path, link, parity, readiness, command-surface, and install
-checks; exact-head review is pending. Spec 034 separately plans modular
-language packages and is not ready for implementation.
+Roadmap `g02.045` is complete through card 113's implementation, review
+corrections, and fixture proof. It reduces prose-coupled and
+historical-inventory assertions while retaining structural path, current
+authority, machine-contract, link, parity, readiness, command-surface, and
+install checks; corrected exact-head review is pending. Spec 034 separately
+plans modular language packages and is not ready for implementation.

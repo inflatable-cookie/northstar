@@ -109,14 +109,22 @@ fail-closed conflicts. It installs no project dependencies.
 
 ## Repo contract (`qa:docs`)
 
-`check:repo-contract` validates the retained Northstar structure: stable entry
-points, active authority surfaces, executable validation surfaces, and declared
-source/mirror parity. Every local Markdown link under `skills/northstar/` must
-resolve inside that folder; escaping or missing targets fail QA. Editorial
-wording and individual historical artifacts are not repo-contract schema.
+`check:repo-contract-wiring` validates the small machine-facing contract around
+the docs QA route: the Claude `@AGENTS.md` bridge, repo-contract task
+declarations, the complete `qa:docs` sequence, and the Paseo/Effigy hook
+identifiers. `check:repo-contract` validates the retained Northstar structure:
+stable entry points, current active-authority surfaces, executable validation
+surfaces, and declared source/mirror parity. Every local Markdown link under
+`skills/northstar/` must resolve inside that folder; escaping or missing targets
+fail QA. Editorial wording and individual historical artifacts are not
+repo-contract schema.
 
-Run `effigy test:repo-contract` directly or through `effigy qa:docs` to exercise
-the reduced checker against isolated structural failures and benign changes.
+The machine checks cover configuration and bridge identifiers only. They do not
+restore generic prose assertions. Run `effigy check:repo-contract-wiring` or
+`effigy check:repo-contract` directly, and run
+`effigy test:repo-contract` through either `effigy qa:docs` or directly to
+exercise isolated structural failures, execution-contract failures, and benign
+changes.
 
 ## Explicit command surface (`check:command-skills`)
 

@@ -9,9 +9,9 @@ Governing refs: `docs/vision/001-northstar-delivery-vision.md`,
 `docs/architecture/system-architecture.md`,
 `docs/contracts/001-working-rules.md`,
 `docs/logs/2026-09/01-140857-close-live-dogfood-and-plan-reduction.md`
-Planning state: the structural checker reduction and seven-row fixture proof
-are complete on the worker branch; the orchestrator owns exact-head review and
-merge.
+Planning state: the structural checker reduction, active-authority
+reconciliation, machine-contract checks, and fixture proof are complete on the
+worker branch; the orchestrator owns exact-head review and merge.
 
 ## Problem
 
@@ -62,8 +62,12 @@ new currentness metadata or broaden into general docs cleanup.
 - [x] the live required-path list contains no individual historical batch card,
   milestone, log, or closed spec;
 - [x] prose assertion data and execution paths are removed;
+- [x] current active-authority paths and independently stable machine contracts
+  remain structurally protected;
 - [x] stable front-door deletion, broken distributed-skill links, and canonical
   mirror drift each fail deterministically;
+- [x] missing active authority, Claude bridge, and docs-QA wiring fail through
+  targeted negative fixtures;
 - [x] representative token-like prose, front-door wording changes, papercut
   closeouts, historical-evidence movement, and source-preserving partitions
   pass without exact wording exceptions;
@@ -83,6 +87,8 @@ new currentness metadata or broaden into general docs cleanup.
 | Editorial prose is not schema. | Reword a `Next Task` or move a supersession paragraph without changing structure. | Checker passes. | Benign editorial fixtures. |
 | Token-like benign text is not forbidden policy. | Add `mask-plus-translated-highlight` to Markdown. | Repo-contract checker passes; security scanning remains separately owned. | Benign token fixture. |
 | Historical inventory is not live structure. | Remove a historical-card path from an isolated required-path fixture. | Checker does not require it. | Classification inventory plus fixture. |
+| Current active authority remains live structure. | Remove `docs/specs/034-modular-language-quality-packages.md` from an isolated fixture. | Checker fails with the missing authority path. | `missing-active-authority` fixture. |
+| Stable machine contracts remain executable. | Remove the Claude bridge or repo-contract tasks from the docs-QA sequence. | Targeted machine check fails. | `missing-claude-bridge` and `missing-qa-wiring` fixtures. |
 | The reduction is real. | Leave a hidden or renamed substring assertion path. | Review rejects the head. | Search proof for removed assertion classes and old historical inventory. |
 
 ## Stop Conditions

@@ -69,6 +69,7 @@ Here is the state the worker is inheriting:
   its fixtures, task wiring, or card 113 closeout surfaces.
 - **Surfaces this lane owns:**
   `scripts/check-northstar-repo-contract.rhai`,
+  `scripts/check-northstar-repo-contract-wiring.rhai`,
   `scripts/lib/northstar-repo-contract-data.rhai`, focused repo-contract
   fixtures/tests and their minimal harness, `effigy.toml`, `scripts/README.md`,
   milestone 045, card 113, one dated closeout log, and directly dependent
@@ -89,14 +90,14 @@ Here is the state the worker is inheriting:
   installed skills or Paseo configuration, change orchestration behavior,
   extract language packages, touch consumer repositories, or introduce a new
   currentness schema.
-- **Required validation:** focused repo-contract fixture task; unchanged
-  readiness-map and command-skill checks; `effigy qa:docs`; `effigy qa`;
-  `git diff --check`.
+- **Required validation:** focused repo-contract fixture task and wiring check;
+  unchanged readiness-map and command-skill checks; `effigy qa:docs`;
+  `effigy qa`; `git diff --check`.
 - **PR base/head:** `main` <- `worker/validation-reduction-experiment`.
 - **PR URL:** https://github.com/inflatable-cookie/northstar/pull/18
 - **Implementation-tested head:** `9eb8c6be23ef668ff9dfcf456e4983b9014263a0`.
-- **Review state:** worker implementation and focused/full validation complete;
-  awaiting orchestrator exact-head review.
+- **Review state:** worker implementation, review corrections, and focused/full
+  validation complete; awaiting orchestrator exact-head review.
 - **Merge path:** orchestrator after accepted review of the current head and
   passing required checks.
 

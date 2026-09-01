@@ -18,6 +18,12 @@ fn fixture_required_files() {
     ]
 }
 
+fn fixture_required_files_with_active_authority() {
+    let files = fixture_required_files();
+    files.push("docs/specs/034-modular-language-quality-packages.md");
+    files
+}
+
 fn fixture_file_pairs() {
     [
         [
@@ -28,6 +34,15 @@ fn fixture_file_pairs() {
     ]
 }
 
+fn fixture_machine_contracts() {
+    [
+        ["CLAUDE.md", "@AGENTS.md", "root Claude Code bridge"],
+        ["effigy.toml", "\"check:repo-contract\" = [{ rhai = \"scripts/check-northstar-repo-contract.rhai\" }]", "repo-contract task declaration"],
+        ["effigy.toml", "\"test:repo-contract\" = [{ rhai = \"scripts/test-northstar-repo-contract.rhai\" }]", "repo-contract fixture task declaration"],
+        ["effigy.toml", "\"qa:docs\" = [{ task = \"check:repo-contract\" }, { task = \"test:repo-contract\" }]", "docs QA repo-contract wiring"],
+    ]
+}
+
 fn write_fixture_file(root, relative, contents) {
     fs::write_file(path::join(root, relative), contents);
 }
@@ -35,6 +50,7 @@ fn write_fixture_file(root, relative, contents) {
 fn new_fixture(label, include_docs_front_door, skill_target, mirror_contents, docs_contents) {
     let root = fs::make_temp_dir("northstar-repo-contract-" + label);
     fs::create_dir(path::join(root, "docs"));
+    fs::create_dir(path::join(root, "docs/specs"));
     fs::create_dir(path::join(root, "skills/northstar/references"));
     fs::create_dir(path::join(root, "skills/northstar/assets/templates/docs/specs/templates"));
     fs::create_dir(path::join(root, "template-bundle/specs/templates"));
@@ -52,8 +68,44 @@ fn new_fixture(label, include_docs_front_door, skill_target, mirror_contents, do
     root
 }
 
+fn new_authority_fixture(label, include_authority) {
+    let root = new_fixture(
+        label,
+        true,
+        "references/mode.md",
+        "canonical\n",
+        "# Docs\n",
+    );
+    if include_authority {
+        write_fixture_file(root,
+            "docs/specs/034-modular-language-quality-packages.md",
+            "# Active authority\n");
+    }
+    root
+}
+
+fn new_machine_fixture(label, claude_contents, effigy_contents) {
+    let root = fs::make_temp_dir("northstar-repo-contract-" + label);
+    write_fixture_file(root, "CLAUDE.md", claude_contents);
+    write_fixture_file(root, "effigy.toml", effigy_contents);
+    root
+}
+
 fn run_check(root) {
-    checker::check(root, fixture_required_files(), fixture_file_pairs());
+    checker::check(root, fixture_required_files(), fixture_file_pairs(), []);
+}
+
+fn run_authority_check(root) {
+    checker::check(
+        root,
+        fixture_required_files_with_active_authority(),
+        fixture_file_pairs(),
+        [],
+    );
+}
+
+fn run_machine_check(root) {
+    checker::check_machine_contracts(root, fixture_machine_contracts());
 }
 
 fn expect_pass(label, action) {
@@ -116,6 +168,18 @@ expect_failure(
     "missing required Northstar repo contract path",
 );
 
+let authority_path = "docs/specs/034-modular-language-quality-packages.md";
+for authority in contract::current_active_authority_files() {
+    require(contract::required_files().contains(authority),
+        "current active authority is missing from the live required-path list: " + authority);
+}
+let missing_active_authority = new_authority_fixture("missing-active-authority", false);
+expect_failure(
+    "missing-active-authority",
+    || run_authority_check(missing_active_authority),
+    authority_path,
+);
+
 let broken_link = new_fixture(
     "broken-link",
     true,
@@ -137,6 +201,32 @@ let parity_drift = new_fixture(
     "# Docs\n",
 );
 expect_failure("parity-drift", || run_check(parity_drift), "fixture template parity");
+
+let machine_effigy = "[tasks]\n";
+machine_effigy += "\"check:repo-contract\" = [{ rhai = \"scripts/check-northstar-repo-contract.rhai\" }]\n";
+machine_effigy += "\"test:repo-contract\" = [{ rhai = \"scripts/test-northstar-repo-contract.rhai\" }]\n";
+machine_effigy += "\"qa:docs\" = [{ task = \"check:repo-contract\" }, { task = \"test:repo-contract\" }]\n";
+let missing_claude_bridge = new_machine_fixture(
+    "missing-claude-bridge",
+    "A different Claude instruction\n",
+    machine_effigy,
+);
+expect_failure(
+    "missing-claude-bridge",
+    || run_machine_check(missing_claude_bridge),
+    "root Claude Code bridge",
+);
+
+let missing_qa_wiring = new_machine_fixture(
+    "missing-qa-wiring",
+    "@AGENTS.md\n",
+    "[tasks]\n\"check:repo-contract\" = [{ rhai = \"scripts/check-northstar-repo-contract.rhai\" }]\n\"test:repo-contract\" = [{ rhai = \"scripts/test-northstar-repo-contract.rhai\" }]\n\"qa:docs\" = [{ task = \"check:readiness-map\" }, { task = \"test:readiness-map\" }, { task = \"check:command-skills\" }]\n",
+);
+expect_failure(
+    "missing-qa-wiring",
+    || run_machine_check(missing_qa_wiring),
+    "docs QA repo-contract wiring",
+);
 
 let token_like_prose = new_fixture(
     "token-like-prose",
@@ -191,4 +281,4 @@ expect_pass("source-preserving-partition", || run_check(source_preserving_partit
 
 prove_source_reduction();
 log("repo-contract fixture source-reduction: PASS");
-log("Northstar repo-contract fixture tests: OK (7 oracle rows; 3 retained failures, 5 benign passes, source reduction proof)");
+log("Northstar repo-contract fixture tests: OK (11 fixture cases; 6 expected failures, 5 benign passes, source reduction proof)");

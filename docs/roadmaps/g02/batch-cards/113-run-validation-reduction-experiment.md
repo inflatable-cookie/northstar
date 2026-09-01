@@ -22,6 +22,8 @@ fixtures.
 - reduce it to stable structure, active authority entry points, executable
   validation surfaces, and parity surfaces;
 - remove the `required_content` and `forbidden_content` assertion classes;
+- preserve independently stable bridge, task, QA, and runtime-hook identifiers
+  with targeted checks;
 - add focused repo-contract fixtures covering every milestone oracle row;
 - wire the focused fixture task into documentation QA;
 - update checker documentation and closeout surfaces;
@@ -47,7 +49,10 @@ cleanup, and mode consolidation.
 - [x] individual historical cards, milestones, logs, and closed specs are not
   live required paths;
 - [x] no prose assertion data or execution path remains;
+- [x] current active-authority paths and stable machine contracts remain
+  structurally protected;
 - [x] missing-front-door, broken-link, and mirror-drift fixtures fail;
+- [x] missing active authority, Claude bridge, and docs-QA wiring fixtures fail;
 - [x] representative benign editorial fixtures pass;
 - [x] existing readiness-map and command-skill tests stay intact;
 - [x] docs explain the structural boundary without copying the fixture list;
@@ -73,14 +78,16 @@ the unchanged repository is insufficient.
 
 ## Completion Notes
 
-- Reduced the required-path inventory from 167 to 97 paths. The 73 removed
+- Reconciled the required-path inventory from 167 to 104 paths. The 73 removed
   historical paths were 40 batch cards, 15 milestones, 5 logs, and 13 closed
-  or retired specs; `docs/specs/030` remains as the one active spec in the old
-  inventory.
+  or retired specs; six current active-authority paths were added, including
+  the four identified in exact-head review.
 - Removed 320 exact-presence and 41 exact-absence assertions. The retained
-  checker validates required structure, portable skill links, Markdown links,
-  and the template mirror pair.
-- Added a seven-row temporary-fixture self-test and wired it into `qa:docs`.
+  checker validates required structure, current authority, portable skill
+  links, Markdown links, template parity, and 15 targeted machine contracts.
+- Added active-authority, Claude-bridge, and docs-QA-wiring negative fixtures;
+  the five existing benign prose fixtures still pass. The focused test remains
+  wired into `qa:docs` through an independent wiring check.
 - Final validation and PR metadata are recorded in the closeout log.
 
 ## Stop Conditions
@@ -94,5 +101,5 @@ the unchanged repository is insufficient.
 
 ## Next Task
 
-Open a reviewable PR and stop for orchestrator exact-head review. Do not merge
-or begin spec 034 implementation.
+Push the corrected review head and stop for orchestrator exact-head review. Do
+not merge or begin spec 034 implementation.

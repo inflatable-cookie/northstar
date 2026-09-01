@@ -42,6 +42,21 @@ fn check_required_paths(repo_root, required_files) {
     }
 }
 
+fn check_machine_contracts(repo_root, contracts) {
+    for contract in contracts {
+        let file = contract[0];
+        let marker = contract[1];
+        let description = contract[2];
+        let full_path = path::join(repo_root, file);
+        if !fs::is_file(full_path) {
+            throw("missing stable machine contract file: " + file);
+        }
+        if !fs::read_file(full_path).contains(marker) {
+            throw("missing stable machine contract " + description + " in " + file);
+        }
+    }
+}
+
 fn check_links(markdown_files) {
     try {
         let link_report = docs::check_links(#{ paths: markdown_files });
@@ -53,8 +68,9 @@ fn check_links(markdown_files) {
     }
 }
 
-fn check(repo_root, required_files, identical_file_pairs) {
+fn check(repo_root, required_files, identical_file_pairs, machine_contracts) {
     check_required_paths(repo_root, required_files);
+    check_machine_contracts(repo_root, machine_contracts);
 
     let portable_root = path::join(repo_root, "skills/northstar");
     let markdown_files = [];
