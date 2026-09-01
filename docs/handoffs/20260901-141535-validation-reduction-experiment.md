@@ -104,7 +104,8 @@ Here is the state the worker is inheriting:
 - **Review-fix head before main refresh:**
   `1bbc4320288a09767ea39a3bd58444b0ce4914dc`.
 - **Review state:** worker implementation and review corrections are complete;
-  the current-main refresh is integrated and final handoff validation is next.
+  the current-main refresh is integrated and the full handoff validation passes;
+  awaiting orchestrator exact-head review.
 - **Merge path:** orchestrator after accepted review of the current head and
   passing required checks.
 

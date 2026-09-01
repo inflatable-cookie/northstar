@@ -232,6 +232,9 @@ generic exact-content assertion data and calls are absent from the checker path.
 
 ## Validation
 
+The full handoff validation below was rerun after the same-repo refresh and
+passed on the integrated worker branch:
+
 - baseline `effigy check:repo-contract` — pass;
 - baseline `effigy check:readiness-map` — pass;
 - baseline `effigy test:readiness-map` — pass (five fixtures);
