@@ -109,9 +109,14 @@ fail-closed conflicts. It installs no project dependencies.
 
 ## Repo contract (`qa:docs`)
 
-`check:repo-contract` validates required Northstar surfaces and the installable
-skill boundary. Every local Markdown link under `skills/northstar/` must resolve
-inside that folder; escaping or missing targets fail QA.
+`check:repo-contract` validates the retained Northstar structure: stable entry
+points, active authority surfaces, executable validation surfaces, and declared
+source/mirror parity. Every local Markdown link under `skills/northstar/` must
+resolve inside that folder; escaping or missing targets fail QA. Editorial
+wording and individual historical artifacts are not repo-contract schema.
+
+Run `effigy test:repo-contract` directly or through `effigy qa:docs` to exercise
+the reduced checker against isolated structural failures and benign changes.
 
 ## Explicit command surface (`check:command-skills`)
 
