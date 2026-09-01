@@ -74,9 +74,10 @@ no contradiction was introduced.
 model-name/price tokens return no hits in `skills/`, `bundle-docs/`,
 `template-bundle/`, `docs/specs/`, `docs/contracts/`, `docs/architecture/`,
 `AGENTS.md`, `README.md`, or `scripts/` outside the checker's own denylist
-literals and shell/regex `$1` positional tokens. Sol and Luna survive only as
-the established "one possible local choice, not a Northstar dependency"
-examples.
+literals and shell/regex `$1` positional tokens. The portability scan also
+rejects the local profile names `Sol` and `Luna`; the four hard-coded
+examples removed during exact-head review repair no longer appear anywhere in
+the reusable payload.
 
 ## Validation
 
@@ -104,3 +105,18 @@ accounting.
 https://github.com/inflatable-cookie/northstar/pull/20 — opened at
 `006504c1bd41a48566620b3688842c9bd2c0b99d` with validation recorded above.
 The orchestrator owns exact-head review and merge.
+
+## Review revision
+
+Exact-head review of `006504c` recorded one blocking `oracle-gap`
+(https://github.com/inflatable-cookie/northstar/pull/20#issuecomment-5496695709):
+the portability denylist omitted local profile names that were still
+hard-coded in scanned surfaces — `Sol` at `orchestrator.md` (delegate and
+projection sections), `Sol` in doctrine 07's delegation paragraph, and `Sol`
+in spec 026's Paseo delegate paragraph, plus `Luna` in the projection
+section. This revision removed all four examples while keeping their meaning
+("a locally preferred profile/model is operator configuration, not a
+Northstar dependency"), extended the `northstar stays portable` scan with
+`(?i)\b(sol|luna)\b`, and re-ran exact-head docs/full QA on the new head.
+Reintroducing either name now fails the named oracle; no planning surface
+authority changed and no review or merge gate weakened.

@@ -738,7 +738,7 @@ resolved triage material is removed or split in that promotion batch.
 
 Select the delegate from the adequate frontier conversational-planning pool
 under the diversified-routing rule, rotating recent use like every other
-dispatch class. A locally preferred model such as Sol is configuration, not
+dispatch class. A locally preferred model is configuration, not
 Northstar doctrine.
 With a control plane, use one isolated branch-off workspace and the
 committed handoff as the only initial prompt. Without one, give the operator the

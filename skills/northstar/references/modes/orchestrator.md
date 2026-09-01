@@ -90,8 +90,9 @@ contract.
 
 Select from the adequate frontier/high-reasoning conversational-planning pool
 in current adapter notes and rotate recent use like every other dispatch
-class. An operator-named profile wins; Sol is one possible local
-choice, not a Northstar dependency. In Paseo, create one `branch-off` worktree
+class. An operator-named profile wins; a locally preferred profile is
+configuration, not a Northstar dependency. In Paseo, create one
+`branch-off` worktree
 workspace from pushed `origin/main`, materialize that profile into
 `create_agent`, retain the agent/workspace IDs, and let the operator converse in
 the new thread. Before launch, verify every named sibling link exists in the
@@ -200,8 +201,8 @@ Keep discovery, planning, promotion, readiness, review-oracle design, worker
 routing, PR review, and merge in the frontier orchestrator. After those choices
 are settled, a fast/low-cost subagent may project a meaningful mechanical batch
 into named documentation surfaces. Use the current profile notes rather than a
-hard-coded model name; Luna is one possible local profile, not a Northstar
-dependency.
+hard-coded model name; a locally preferred profile is configuration, not a
+Northstar dependency.
 
 When Paseo exposes profiles and agent creation, list current profiles, choose
 the one whose notes fit fast/low-cost documentation projection, and create the

@@ -151,6 +151,8 @@ let scanned = [
 for entry in scanned {
     forbid("northstar stays portable", entry["name"], entry["text"],
         "(?i)\\b(opus|grok|glm|sonnet|haiku|gemini)\\b");
+    forbid("northstar stays portable", entry["name"], entry["text"],
+        "(?i)\\b(sol|luna)\\b");
     forbid("northstar stays portable", entry["name"], entry["text"], "\\$\\s?[0-9]");
     forbid("northstar stays portable", entry["name"], entry["text"], "same-class");
     forbid("northstar stays portable", entry["name"], entry["text"],
