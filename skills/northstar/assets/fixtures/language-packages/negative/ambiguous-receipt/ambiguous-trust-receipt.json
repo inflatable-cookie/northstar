@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0.0",
+  "package_id": "@northstar/language-fixture",
+  "version": "0.1.0",
+  "kind": "language-quality",
+  "trust_class": {
+    "type": "official",
+    "registry_version": "1.0.0",
+    "registry_entry_digest": "a6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9",
+    "allowlist_entry": "https://github.com/inflatable-cookie/northstar.git",
+    "allowlisted_by": "operator@example.com"
+  },
+  "source": {
+    "type": "git",
+    "repository": "https://github.com/inflatable-cookie/northstar.git",
+    "subpath": "packages/fixture",
+    "commit": "a6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9"
+  },
+  "content_identity": {
+    "package_tree_digest": "a6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9",
+    "manifest_digest": "b6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9"
+  },
+  "compatibility": {
+    "compatible_core_range": ">=0.2.0 <1.0.0",
+    "installed_core_version": "0.2.0"
+  },
+  "installation": {
+    "installed_path": "/path/to/installed/package",
+    "installed_at": "2026-09-01T18:00:00Z",
+    "acquisition_adapter": "git-clone",
+    "activation_status": "active"
+  }
+}

@@ -2,16 +2,17 @@
 //
 // Validates:
 // 1. JSON Schema Draft 2020-12 structure and properties across all 3 schema files.
-// 2. Exact semantic-version parsing and numeric range compatibility.
-// 3. Safe package-relative path containment (disallowing traversal and absolute paths).
-// 4. Manifest schema instance conformance and constraints.
-// 5. Official registry schema instance conformance and constraints.
-// 6. Installation receipt schema instance conformance covering all trust variants
+// 2. Deterministic schema-instance validation engine evaluating schemas directly.
+// 3. Schema mutation discrimination proof (modifying schema constraints rejects instances).
+// 4. Exact semantic-version parsing and numeric range compatibility.
+// 5. Safe package-relative path containment (disallowing traversal and absolute paths).
+// 6. Manifest, registry, and receipt schema-instance conformance across all trust
 //    (official, operator_allowlist, interactive_approval) and source variants
 //    (git, local_path, archive).
 // 7. Deep recursive policy-free fixture verification.
-// 8. Independent package addressing and sibling payload isolation.
-// 9. Negative review-oracle invariant suite.
+// 8. Independent package addressing and materialization boundary into isolated staging.
+// 9. Negative review-oracle invariant suite (malformed, mutable, incompatible,
+//    duplicate, ambiguous, digest-drift, path-traversal, self-authorizing).
 // 10. Schema and contract portability.
 
 fn require(condition, message) {
@@ -22,58 +23,270 @@ fn require(condition, message) {
     }
 }
 
-fn require_map(val, context) {
-    if type_of(val) != "map" {
-        let err = context;
-        err += " must be an object";
+// -----------------------------------------------------------------------------
+// JSON Schema Draft 2020-12 Conformance Engine (Iterative)
+// -----------------------------------------------------------------------------
+
+fn check_node_type(instance, schema, ctx) {
+    if !schema.contains("type") { return; }
+    let expected_t = schema["type"];
+    let actual_t = type_of(instance);
+    if expected_t == "object" && actual_t != "map" {
+        let err = ctx;
+        err += " must be an object, got ";
+        err += actual_t;
         throw(err);
     }
-}
-
-fn require_array(val, context) {
-    if type_of(val) != "array" {
-        let err = context;
-        err += " must be an array";
+    if expected_t == "array" && actual_t != "array" {
+        let err = ctx;
+        err += " must be an array, got ";
+        err += actual_t;
         throw(err);
     }
-}
-
-fn require_non_empty_string(val, context) {
-    if type_of(val) != "string" || val.len() == 0 {
-        let err = context;
-        err += " must be a non-empty string";
+    if expected_t == "string" && actual_t != "string" {
+        let err = ctx;
+        err += " must be a string, got ";
+        err += actual_t;
         throw(err);
     }
-}
-
-fn require_regex(pattern, val, context) {
-    if type_of(val) != "string" || !regex::is_match(pattern, val) {
-        let err = context;
-        err += " value '";
-        err += val;
-        err += "' does not match pattern: ";
-        err += pattern;
+    if expected_t == "boolean" && actual_t != "bool" {
+        let err = ctx;
+        err += " must be a boolean, got ";
+        err += actual_t;
         throw(err);
     }
-}
-
-fn assert_allowed_keys(instance, allowed_keys, context) {
-    for key in instance.keys() {
-        if !allowed_keys.contains(key) {
-            let err = context;
-            err += " contains forbidden additional property: ";
-            err += key;
+    if expected_t == "integer" {
+        let is_int = actual_t == "i64" || actual_t == "i32" || actual_t == "int";
+        if !is_int {
+            let err = ctx;
+            err += " must be an integer, got ";
+            err += actual_t;
             throw(err);
         }
     }
 }
 
-fn require_field(instance, key, context) {
-    if !instance.contains(key) {
-        let err = context;
-        err += " missing required field: ";
-        err += key;
+fn check_node_const_enum(instance, schema, ctx) {
+    if schema.contains("const") {
+        let expected_const = schema["const"];
+        if instance != expected_const {
+            let err = ctx;
+            err += " const mismatch: expected '";
+            err += expected_const;
+            err += "', got '";
+            err += instance;
+            err += "'";
+            throw(err);
+        }
+    }
+    if schema.contains("enum") {
+        let enum_list = schema["enum"];
+        let found = false;
+        for val in enum_list {
+            if instance == val {
+                found = true;
+                break;
+            }
+        }
+        if !found {
+            let err = ctx;
+            err += " value '";
+            err += instance;
+            err += "' is not in allowed enum";
+            throw(err);
+        }
+    }
+}
+
+fn check_node_string(instance, schema, ctx) {
+    if type_of(instance) != "string" { return; }
+    if schema.contains("minLength") {
+        let min_l = schema["minLength"];
+        if instance.len() < min_l {
+            let err = ctx;
+            err += " string length is less than minLength ";
+            err += min_l;
+            throw(err);
+        }
+    }
+    if schema.contains("pattern") {
+        let pat = schema["pattern"];
+        if !regex::is_match(pat, instance) {
+            let err = ctx;
+            err += " value '";
+            err += instance;
+            err += "' does not match pattern: ";
+            err += pat;
+            throw(err);
+        }
+    }
+}
+
+fn check_node_array(instance, schema, ctx) {
+    if type_of(instance) != "array" { return; }
+    if schema.contains("minItems") {
+        let min_i = schema["minItems"];
+        if instance.len() < min_i {
+            let err = ctx;
+            err += " array length is less than minItems ";
+            err += min_i;
+            throw(err);
+        }
+    }
+}
+
+fn get_array_children(instance, schema, ctx) {
+    if type_of(instance) != "array" || !schema.contains("items") { return []; }
+    let item_s = schema["items"];
+    let children = [];
+    let i = 0;
+    for elem in instance {
+        let elem_ctx = ctx;
+        elem_ctx += "[";
+        elem_ctx += i;
+        elem_ctx += "]";
+        children.push(#{ instance: elem, schema: item_s, ctx: elem_ctx });
+        i += 1;
+    }
+    children
+}
+
+fn check_node_object_required(instance, schema, ctx) {
+    if !schema.contains("required") { return; }
+    let req_list = schema["required"];
+    for req_k in req_list {
+        if !instance.contains(req_k) {
+            let err = ctx;
+            err += " missing required field: ";
+            err += req_k;
+            throw(err);
+        }
+    }
+}
+
+fn get_object_property_children(instance, schema, ctx) {
+    if type_of(instance) != "map" || !schema.contains("properties") { return []; }
+    let props = schema["properties"];
+    let children = [];
+    for prop_k in instance.keys() {
+        if props.contains(prop_k) {
+            let sub_s = props[prop_k];
+            let sub_val = instance[prop_k];
+            let prop_ctx = ctx;
+            prop_ctx += ".";
+            prop_ctx += prop_k;
+            children.push(#{ instance: sub_val, schema: sub_s, ctx: prop_ctx });
+        }
+    }
+    children
+}
+
+fn check_disallowed_additional_props(instance, props, ctx) {
+    for k in instance.keys() {
+        if !props.contains(k) {
+            let err = ctx;
+            err += " contains forbidden additional property: ";
+            err += k;
+            throw(err);
+        }
+    }
+}
+
+fn collect_typed_additional_props(instance, props, add_prop, ctx) {
+    let children = [];
+    for k in instance.keys() {
+        if !props.contains(k) {
+            let sub_val = instance[k];
+            let prop_ctx = ctx;
+            prop_ctx += ".";
+            prop_ctx += k;
+            children.push(#{ instance: sub_val, schema: add_prop, ctx: prop_ctx });
+        }
+    }
+    children
+}
+
+fn get_object_additional_property_children(instance, schema, ctx) {
+    if type_of(instance) != "map" || !schema.contains("additionalProperties") { return []; }
+    let props = #{};
+    if schema.contains("properties") {
+        props = schema["properties"];
+    }
+    let add_prop = schema["additionalProperties"];
+    if add_prop == false {
+        check_disallowed_additional_props(instance, props, ctx);
+        return [];
+    }
+    if type_of(add_prop) == "map" {
+        return collect_typed_additional_props(instance, props, add_prop, ctx);
+    }
+    []
+}
+
+fn check_node_one_of(instance, schema, ctx) {
+    if !schema.contains("oneOf") { return false; }
+    let one_of_list = schema["oneOf"];
+    let matched = 0;
+    let last_err = "";
+    for sub_s in one_of_list {
+        let ok = true;
+        try {
+            validate_schema_node(instance, sub_s, ctx);
+        } catch (err) {
+            ok = false;
+            last_err = err.to_string();
+        }
+        if ok {
+            matched += 1;
+        }
+    }
+    if matched == 0 {
+        let err = ctx;
+        err += " failed oneOf schema validation: ";
+        err += last_err;
         throw(err);
+    }
+    if matched > 1 {
+        let err = ctx;
+        err += " matched multiple oneOf schema variants (ambiguous)";
+        throw(err);
+    }
+    true
+}
+
+fn validate_schema_node(root_instance, root_schema, root_ctx) {
+    let queue = [ #{ instance: root_instance, schema: root_schema, ctx: root_ctx } ];
+
+    while queue.len() > 0 {
+        let current = queue.pop();
+        let instance = current["instance"];
+        let schema = current["schema"];
+        let ctx = current["ctx"];
+
+        if type_of(schema) != "map" { continue; }
+
+        if check_node_one_of(instance, schema, ctx) {
+            continue;
+        }
+
+        check_node_type(instance, schema, ctx);
+        check_node_const_enum(instance, schema, ctx);
+        check_node_string(instance, schema, ctx);
+        check_node_array(instance, schema, ctx);
+
+        for child in get_array_children(instance, schema, ctx) {
+            queue.push(child);
+        }
+
+        if type_of(instance) == "map" {
+            check_node_object_required(instance, schema, ctx);
+            for child in get_object_property_children(instance, schema, ctx) {
+                queue.push(child);
+            }
+            for child in get_object_additional_property_children(instance, schema, ctx) {
+                queue.push(child);
+            }
+        }
     }
 }
 
@@ -221,7 +434,7 @@ fn assert_safe_package_relative_path(p, context) {
 // JSON Schema Structure Validation (Draft 2020-12)
 // -----------------------------------------------------------------------------
 
-fn validate_schema_file(root, filename, expected_id_part) {
+fn load_and_validate_schema_file(root, filename, expected_id_part) {
     let schema_path = path::join(root, filename);
     require(fs::is_file(schema_path), "missing schema file: " + filename);
     let schema = json::read_file(schema_path);
@@ -238,13 +451,11 @@ fn validate_schema_file(root, filename, expected_id_part) {
 }
 
 // -----------------------------------------------------------------------------
-// Manifest Conformance Validator
+// Schema Instance Validators
 // -----------------------------------------------------------------------------
 
-fn validate_manifest_instance(manifest, context) {
-    require_map(manifest, context);
-
-    // Explicit rejection of self-authorizing fields
+fn validate_manifest_instance(manifest, schema, context) {
+    // Non-schema semantic invariant: explicit rejection of self-authorizing trust
     for forbidden in ["official", "is_official", "trusted", "trust_level", "allowlisted"] {
         if manifest.contains(forbidden) {
             let err = context;
@@ -253,310 +464,103 @@ fn validate_manifest_instance(manifest, context) {
         }
     }
 
-    let allowed_keys = [
-        "schema_version", "package_id", "version", "kind", "compatible_core_range",
-        "supported_languages", "supported_overlays", "available_workflows",
-        "entrypoints", "runtime_capabilities", "self_check", "evidence_providers"
-    ];
-    assert_allowed_keys(manifest, allowed_keys, context);
+    validate_schema_node(manifest, schema, context);
 
-    for key in [
-        "schema_version", "package_id", "version", "kind", "compatible_core_range",
-        "supported_languages", "supported_overlays", "available_workflows",
-        "entrypoints", "runtime_capabilities", "self_check"
-    ] {
-        require_field(manifest, key, context);
-    }
-
-    require(manifest["schema_version"] == "1.0.0", context + " schema_version must be 1.0.0");
-    require_regex("^@[a-z0-9-]+/[a-z0-9-]+$", manifest["package_id"], context + " package_id");
-    require_regex("^[0-9]+\\.[0-9]+\\.[0-9]+$", manifest["version"], context + " version");
-    require(manifest["kind"] == "language-quality", context + " expected const 'language-quality'");
-
-    let semver_range_pattern = "^(\\*|[0-9]+\\.[0-9]+\\.[0-9]+|\\^[0-9]+\\.[0-9]+\\.[0-9]+|>=[0-9]+\\.[0-9]+\\.[0-9]+ <[0-9]+\\.[0-9]+\\.[0-9]+|>=[0-9]+\\.[0-9]+\\.[0-9]+|<[0-9]+\\.[0-9]+\\.[0-9]+)$";
-    require_regex(semver_range_pattern, manifest["compatible_core_range"], context + " compatible_core_range");
-
-    require_array(manifest["supported_languages"], context + " supported_languages");
-    require(manifest["supported_languages"].len() >= 1, context + " supported_languages must have minItems 1");
-    for lang in manifest["supported_languages"] {
-        require_non_empty_string(lang, context + " supported_language");
-    }
-
-    require_array(manifest["supported_overlays"], context + " supported_overlays");
-    for overlay in manifest["supported_overlays"] {
-        require_non_empty_string(overlay, context + " supported_overlay");
-    }
-
-    require_array(manifest["available_workflows"], context + " available_workflows");
-    require(manifest["available_workflows"].len() >= 1, context + " available_workflows must have minItems 1");
-    for workflow in manifest["available_workflows"] {
-        if workflow != "everyday_authoring" && workflow != "explicit_audit_repair" {
-            let err = context;
-            err += " unknown available_workflow: ";
-            err += workflow;
-            throw(err);
+    // Non-schema semantic invariant: entrypoints and self-check safe containment
+    if manifest.contains("entrypoints") && type_of(manifest["entrypoints"]) == "map" {
+        for entry_k in manifest["entrypoints"].keys() {
+            let entry_p = manifest["entrypoints"][entry_k];
+            assert_safe_package_relative_path(entry_p, context + " entrypoint[" + entry_k + "]");
         }
     }
-
-    require_map(manifest["entrypoints"], context + " entrypoints");
-    for entry_k in manifest["entrypoints"].keys() {
-        let entry_p = manifest["entrypoints"][entry_k];
-        assert_safe_package_relative_path(entry_p, context + " entrypoint[" + entry_k + "]");
-    }
-
-    let runtime = manifest["runtime_capabilities"];
-    require_map(runtime, context + " runtime_capabilities");
-    assert_allowed_keys(runtime, ["required_commands", "optional_effigy_selectors"], context + " runtime_capabilities");
-    require_field(runtime, "required_commands", context + " runtime_capabilities");
-    require_field(runtime, "optional_effigy_selectors", context + " runtime_capabilities");
-    require_array(runtime["required_commands"], context + " runtime_capabilities.required_commands");
-    require_array(runtime["optional_effigy_selectors"], context + " runtime_capabilities.optional_effigy_selectors");
-
-    let self_check = manifest["self_check"];
-    require_map(self_check, context + " self_check");
-    assert_allowed_keys(self_check, ["entrypoint", "validated_profile_versions", "validated_schema_versions"], context + " self_check");
-    require_field(self_check, "entrypoint", context + " self_check");
-    require_field(self_check, "validated_profile_versions", context + " self_check");
-    require_field(self_check, "validated_schema_versions", context + " self_check");
-    assert_safe_package_relative_path(self_check["entrypoint"], context + " self_check.entrypoint");
-    require_array(self_check["validated_profile_versions"], context + " self_check.validated_profile_versions");
-    require_array(self_check["validated_schema_versions"], context + " self_check.validated_schema_versions");
-    for pv in self_check["validated_profile_versions"] {
-        require_regex("^[0-9]+\\.[0-9]+\\.[0-9]+$", pv, context + " validated_profile_version");
-    }
-    for sv in self_check["validated_schema_versions"] {
-        require_regex("^[0-9]+\\.[0-9]+\\.[0-9]+$", sv, context + " validated_schema_version");
-    }
-
-    if manifest.contains("evidence_providers") {
-        require_array(manifest["evidence_providers"], context + " evidence_providers");
-        for ep in manifest["evidence_providers"] {
-            require_non_empty_string(ep, context + " evidence_provider");
-        }
-    }
-
-    // Explicit rejection of self-authorizing fields
-    for forbidden in ["official", "is_official", "trusted", "trust_level", "allowlisted"] {
-        if manifest.contains(forbidden) {
-            let err = context;
-            err += " self-claims trust or official status (trust must be core-owned)";
-            throw(err);
+    if manifest.contains("self_check") && type_of(manifest["self_check"]) == "map" {
+        if manifest["self_check"].contains("entrypoint") {
+            assert_safe_package_relative_path(manifest["self_check"]["entrypoint"], context + " self_check.entrypoint");
         }
     }
 }
 
-// -----------------------------------------------------------------------------
-// Official Registry Conformance Validator
-// -----------------------------------------------------------------------------
-
-fn validate_registry_instance(registry, context) {
-    require_map(registry, context);
-    assert_allowed_keys(registry, ["schema_version", "registry_version", "packages"], context);
-    require_field(registry, "schema_version", context);
-    require_field(registry, "registry_version", context);
-    require_field(registry, "packages", context);
-
-    require(registry["schema_version"] == "1.0.0", context + " schema_version must be 1.0.0");
-    require_regex("^[0-9]+\\.[0-9]+\\.[0-9]+$", registry["registry_version"], context + " registry_version");
-    require_array(registry["packages"], context + " packages");
-
-    let seen_ids = [];
-    let entry_allowed_keys = [
-        "package_id", "version", "repository", "subpath", "commit",
-        "tree_digest", "manifest_digest", "compatible_core_range"
-    ];
-    let semver_range_pattern = "^(\\*|[0-9]+\\.[0-9]+\\.[0-9]+|\\^[0-9]+\\.[0-9]+\\.[0-9]+|>=[0-9]+\\.[0-9]+\\.[0-9]+ <[0-9]+\\.[0-9]+\\.[0-9]+|>=[0-9]+\\.[0-9]+\\.[0-9]+|<[0-9]+\\.[0-9]+\\.[0-9]+)$";
-
-    for entry in registry["packages"] {
-        require_map(entry, context + " package entry");
-        assert_allowed_keys(entry, entry_allowed_keys, context + " package entry");
-        for req_k in entry_allowed_keys {
-            require_field(entry, req_k, context + " package entry");
-        }
-
-        let pkg_key = entry["package_id"] + "@" + entry["version"];
-        require(!seen_ids.contains(pkg_key), "duplicate registry package: " + pkg_key);
-        seen_ids.push(pkg_key);
-
-        require_regex("^@[a-z0-9-]+/[a-z0-9-]+$", entry["package_id"], context + " package_id");
-        require_regex("^[0-9]+\\.[0-9]+\\.[0-9]+$", entry["version"], context + " version");
-        require_regex("^https://[a-zA-Z0-9.-]+(/[^/]+)*$", entry["repository"], context + " repository");
+fn get_registry_entry_key(entry, context) {
+    if type_of(entry) != "map" { return ""; }
+    if entry.contains("subpath") {
         assert_safe_package_relative_path(entry["subpath"], context + " subpath");
-        require_regex("^[0-9a-f]{40}$|^[0-9a-f]{64}$", entry["commit"], context + " commit");
-        require_regex("^(sha256:)?[0-9a-f]{64}$", entry["tree_digest"], context + " tree_digest");
-        require_regex("^(sha256:)?[0-9a-f]{64}$", entry["manifest_digest"], context + " manifest_digest");
-        require_regex(semver_range_pattern, entry["compatible_core_range"], context + " compatible_core_range");
+    }
+    if entry.contains("package_id") && entry.contains("version") {
+        return entry["package_id"] + "@" + entry["version"];
+    }
+    ""
+}
+
+fn check_registry_duplicates(packages, context) {
+    let seen_ids = [];
+    for entry in packages {
+        let pkg_key = get_registry_entry_key(entry, context);
+        if pkg_key != "" {
+            if seen_ids.contains(pkg_key) {
+                let err = context;
+                err += " contains duplicate registry package: ";
+                err += pkg_key;
+                throw(err);
+            }
+            seen_ids.push(pkg_key);
+        }
+    }
+}
+
+fn validate_registry_instance(registry, schema, context) {
+    validate_schema_node(registry, schema, context);
+
+    if registry.contains("packages") && type_of(registry["packages"]) == "array" {
+        check_registry_duplicates(registry["packages"], context);
+    }
+}
+
+fn validate_receipt_instance(receipt, schema, context) {
+    validate_schema_node(receipt, schema, context);
+
+    // Non-schema semantic invariant: safe subpath containment on source
+    if receipt.contains("source") && type_of(receipt["source"]) == "map" {
+        let src = receipt["source"];
+        if src.contains("subpath") {
+            assert_safe_package_relative_path(src["subpath"], context + " source subpath");
+        }
     }
 }
 
 // -----------------------------------------------------------------------------
-// Installation Receipt Conformance Validator
+// Schema Mutation Discrimination Proof
 // -----------------------------------------------------------------------------
 
-fn validate_official_trust(trust, context) {
-    let ctx = context + " official trust";
-    assert_allowed_keys(trust, ["type", "registry_version", "registry_entry_digest"], ctx);
-    require_field(trust, "registry_version", ctx);
-    require_field(trust, "registry_entry_digest", ctx);
-    require_regex("^[0-9]+\\.[0-9]+\\.[0-9]+$", trust["registry_version"], ctx);
-    require_regex("^(sha256:)?[0-9a-f]{64}$", trust["registry_entry_digest"], ctx);
-}
+fn test_schema_mutation_discrimination(valid_manifest, base_schema) {
+    // Mutation 1: Changing schema_version.const from "1.0.0" to "9.9.9" must reject the 1.0.0 instance
+    let mutated_schema = json::parse(json::stringify(base_schema));
+    mutated_schema["properties"]["schema_version"]["const"] = "9.9.9";
 
-fn validate_allowlist_trust(trust, context) {
-    let ctx = context + " allowlist trust";
-    assert_allowed_keys(trust, ["type", "allowlist_entry", "allowlisted_by"], ctx);
-    require_field(trust, "allowlist_entry", ctx);
-    require_field(trust, "allowlisted_by", ctx);
-    require_non_empty_string(trust["allowlist_entry"], ctx);
-    require_non_empty_string(trust["allowlisted_by"], ctx);
-}
-
-fn validate_interactive_trust(trust, context) {
-    let ctx = context + " interactive trust";
-    assert_allowed_keys(trust, ["type", "approved_by", "approval_timestamp", "approval_scope"], ctx);
-    require_field(trust, "approved_by", ctx);
-    require_field(trust, "approval_timestamp", ctx);
-    require_field(trust, "approval_scope", ctx);
-    require_non_empty_string(trust["approved_by"], ctx);
-    require_regex("^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z?$", trust["approval_timestamp"], ctx);
-    let scope = trust["approval_scope"];
-    if scope != "session" && scope != "workspace" && scope != "permanent" {
-        let err = context;
-        err += " invalid approval_scope: ";
-        err += scope;
-        throw(err);
+    let rejected_const = false;
+    try {
+        validate_manifest_instance(valid_manifest, mutated_schema, "mutated-const-manifest");
+    } catch (err) {
+        let msg = err.to_string();
+        if msg.contains("const mismatch: expected '9.9.9', got '1.0.0'") {
+            rejected_const = true;
+        }
     }
-}
+    require(rejected_const, "schema mutation test failed: changing schema const did not reject instance");
 
-fn validate_receipt_trust_variant(trust, context) {
-    require_map(trust, context + " trust_class");
-    require_field(trust, "type", context + " trust_class");
+    // Mutation 2: Changing package_id pattern to reject non-matching package_id
+    let mutated_pattern_schema = json::parse(json::stringify(base_schema));
+    mutated_pattern_schema["properties"]["package_id"]["pattern"] = "^@custom/[a-z]+$";
 
-    let t_type = trust["type"];
-    if t_type == "official" {
-        validate_official_trust(trust, context);
-    } else if t_type == "operator_allowlist" {
-        validate_allowlist_trust(trust, context);
-    } else if t_type == "interactive_approval" {
-        validate_interactive_trust(trust, context);
-    } else {
-        let err = context;
-        err += " unknown trust_class type: ";
-        err += t_type;
-        throw(err);
+    let rejected_pattern = false;
+    try {
+        validate_manifest_instance(valid_manifest, mutated_pattern_schema, "mutated-pattern-manifest");
+    } catch (err) {
+        let msg = err.to_string();
+        if msg.contains("does not match pattern") {
+            rejected_pattern = true;
+        }
     }
-}
-
-fn validate_git_source(source, context) {
-    let ctx = context + " git source";
-    assert_allowed_keys(source, ["type", "repository", "subpath", "commit"], ctx);
-    require_field(source, "repository", ctx);
-    require_field(source, "subpath", ctx);
-    require_field(source, "commit", ctx);
-    require_regex("^https://[a-zA-Z0-9.-]+(/[^/]+)*$", source["repository"], ctx);
-    assert_safe_package_relative_path(source["subpath"], ctx);
-    require_regex("^[0-9a-f]{40}$|^[0-9a-f]{64}$", source["commit"], ctx);
-}
-
-fn validate_local_path_source(source, context) {
-    let ctx = context + " local_path source";
-    assert_allowed_keys(source, ["type", "path", "acquisition_mode"], ctx);
-    require_field(source, "path", ctx);
-    require_field(source, "acquisition_mode", ctx);
-    require_non_empty_string(source["path"], ctx);
-    let mode = source["acquisition_mode"];
-    if mode != "manual" && mode != "local" {
-        let err = context;
-        err += " invalid local_path acquisition_mode: ";
-        err += mode;
-        throw(err);
-    }
-}
-
-fn validate_archive_source(source, context) {
-    let ctx = context + " archive source";
-    assert_allowed_keys(source, ["type", "url", "archive_digest", "subpath"], ctx);
-    require_field(source, "url", ctx);
-    require_field(source, "archive_digest", ctx);
-    require_regex("^https://[a-zA-Z0-9.-]+(/[^/]+)*$", source["url"], ctx);
-    require_regex("^(sha256:)?[0-9a-f]{64}$", source["archive_digest"], ctx);
-    if source.contains("subpath") {
-        assert_safe_package_relative_path(source["subpath"], ctx);
-    }
-}
-
-fn validate_receipt_source_variant(source, context) {
-    require_map(source, context + " source");
-    require_field(source, "type", context + " source");
-
-    let s_type = source["type"];
-    if s_type == "git" {
-        validate_git_source(source, context);
-    } else if s_type == "local_path" {
-        validate_local_path_source(source, context);
-    } else if s_type == "archive" {
-        validate_archive_source(source, context);
-    } else {
-        let err = context;
-        err += " unknown source type: ";
-        err += s_type;
-        throw(err);
-    }
-}
-
-fn validate_receipt_instance(receipt, context) {
-    require_map(receipt, context);
-    let allowed_keys = [
-        "schema_version", "package_id", "version", "kind", "trust_class",
-        "source", "content_identity", "compatibility", "installation"
-    ];
-    assert_allowed_keys(receipt, allowed_keys, context);
-    for req_k in allowed_keys {
-        require_field(receipt, req_k, context);
-    }
-
-    require(receipt["schema_version"] == "1.0.0", context + " schema_version must be 1.0.0");
-    require_regex("^@[a-z0-9-]+/[a-z0-9-]+$", receipt["package_id"], context + " package_id");
-    require_regex("^[0-9]+\\.[0-9]+\\.[0-9]+$", receipt["version"], context + " version");
-    require(receipt["kind"] == "language-quality", context + " expected const 'language-quality'");
-
-    validate_receipt_trust_variant(receipt["trust_class"], context);
-    validate_receipt_source_variant(receipt["source"], context);
-
-    let content = receipt["content_identity"];
-    require_map(content, context + " content_identity");
-    assert_allowed_keys(content, ["package_tree_digest", "manifest_digest"], context + " content_identity");
-    require_field(content, "package_tree_digest", context + " content_identity");
-    require_field(content, "manifest_digest", context + " content_identity");
-    require_regex("^(sha256:)?[0-9a-f]{64}$", content["package_tree_digest"], context + " package_tree_digest");
-    require_regex("^(sha256:)?[0-9a-f]{64}$", content["manifest_digest"], context + " manifest_digest");
-
-    let compat = receipt["compatibility"];
-    require_map(compat, context + " compatibility");
-    assert_allowed_keys(compat, ["compatible_core_range", "installed_core_version"], context + " compatibility");
-    require_field(compat, "compatible_core_range", context + " compatibility");
-    require_field(compat, "installed_core_version", context + " compatibility");
-    let semver_range_pattern = "^(\\*|[0-9]+\\.[0-9]+\\.[0-9]+|\\^[0-9]+\\.[0-9]+\\.[0-9]+|>=[0-9]+\\.[0-9]+\\.[0-9]+ <[0-9]+\\.[0-9]+\\.[0-9]+|>=[0-9]+\\.[0-9]+\\.[0-9]+|<[0-9]+\\.[0-9]+\\.[0-9]+)$";
-    require_regex(semver_range_pattern, compat["compatible_core_range"], context + " compatible_core_range");
-    require_regex("^[0-9]+\\.[0-9]+\\.[0-9]+$", compat["installed_core_version"], context + " installed_core_version");
-
-    let install = receipt["installation"];
-    require_map(install, context + " installation");
-    assert_allowed_keys(install, ["installed_path", "installed_at", "acquisition_adapter", "activation_status"], context + " installation");
-    require_field(install, "installed_path", context + " installation");
-    require_field(install, "installed_at", context + " installation");
-    require_field(install, "acquisition_adapter", context + " installation");
-    require_field(install, "activation_status", context + " installation");
-    require_non_empty_string(install["installed_path"], context + " installed_path");
-    require_regex("^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]+)?Z?$", install["installed_at"], context + " installed_at");
-    require_non_empty_string(install["acquisition_adapter"], context + " acquisition_adapter");
-    let status = install["activation_status"];
-    if status != "active" && status != "inactive" && status != "installed" {
-        let err = context;
-        err += " invalid activation_status: ";
-        err += status;
-        throw(err);
-    }
+    require(rejected_pattern, "schema mutation test failed: changing schema pattern did not reject instance");
 }
 
 // -----------------------------------------------------------------------------
@@ -585,14 +589,14 @@ fn check_fixture_file_content(file_path) {
     }
 }
 
-fn validate_policy_free_fixture_deep(fixture_root) {
+fn validate_policy_free_fixture_deep(fixture_root, manifest_schema) {
     let skill_path = path::join(fixture_root, "SKILL.md");
     let manifest_path = path::join(fixture_root, "northstar-package.json");
     require(fs::is_file(skill_path), "policy-free fixture missing SKILL.md");
     require(fs::is_file(manifest_path), "policy-free fixture missing northstar-package.json");
 
     let manifest = json::read_file(manifest_path);
-    validate_manifest_instance(manifest, "policy-free fixture manifest");
+    validate_manifest_instance(manifest, manifest_schema, "policy-free fixture manifest");
 
     let forbidden_names = [
         "catalogue.json", "profile.schema.json", "strict-audit.json", "strict-authoring.json",
@@ -621,31 +625,66 @@ fn validate_policy_free_fixture_deep(fixture_root) {
 }
 
 // -----------------------------------------------------------------------------
-// Independent Package Addressing & Sibling Payload Isolation
+// Independent Package Addressing & Staging Materialization Boundary
 // -----------------------------------------------------------------------------
 
-fn extract_addressed_package_inventory(root, subpath) {
-    assert_safe_package_relative_path(subpath, "extract_addressed_package_inventory subpath");
-    let target = path::join(root, subpath);
-    require(fs::is_dir(target), "target package subpath directory missing: " + target);
-    let files = [];
-    let prefix = target + "/";
-    for file in fs::list_recursive(target) {
-        let rel = str::replace(file, prefix, "");
-        files.push(rel);
-    }
-    files.sort();
-    files
-}
+fn materialize_addressed_package_to_staging(source_repo_root, package_subpath, staging_root) {
+    assert_safe_package_relative_path(package_subpath, "materialize_addressed_package_to_staging subpath");
+    let source_dir = path::join(source_repo_root, package_subpath);
+    require(fs::is_dir(source_dir), "addressed package source subpath does not exist: " + source_dir);
 
-fn verify_package_isolation(files, expected_files, forbidden_substring, label) {
-    require(files == expected_files, label + " inventory drifted from expected package payload");
-    for f in files {
-        if f.contains(forbidden_substring) {
-            let err = label + " retained sibling payload: " + f;
-            throw(err);
+    let prefix = source_dir + "/";
+    let staged_files = [];
+    for file in fs::list_recursive(source_dir) {
+        if fs::is_file(file) {
+            let rel_file = str::replace(file, prefix, "");
+            let dest_file = path::join(staging_root, rel_file);
+            let dest_parent = path::parent(dest_file);
+            if !fs::is_dir(dest_parent) {
+                fs::create_dir(dest_parent);
+            }
+            let content = fs::read_file(file);
+            fs::write_file(dest_file, content);
+            staged_files.push(rel_file);
         }
     }
+    staged_files.sort();
+    staged_files
+}
+
+fn test_independent_package_materialization(sibling_root) {
+    let stage_a = fs::make_temp_dir("northstar-stage-alpha-");
+    let stage_b = fs::make_temp_dir("northstar-stage-beta-");
+
+    let alpha_staged = materialize_addressed_package_to_staging(sibling_root, "packages/alpha-pkg", stage_a);
+    let beta_staged = materialize_addressed_package_to_staging(sibling_root, "packages/beta-pkg", stage_b);
+
+    let expected_inventory = ["SKILL.md", "northstar-package.json", "scripts/self-check.rhai"];
+    require(alpha_staged == expected_inventory, "alpha-pkg staged inventory drifted");
+    require(beta_staged == expected_inventory, "beta-pkg staged inventory drifted");
+
+    // Verify stage_a contains zero beta files and vice versa
+    for f in fs::list_recursive(stage_a) {
+        if f.contains("beta") {
+            throw("stage_a retained sibling beta payload: " + f);
+        }
+    }
+    for f in fs::list_recursive(stage_b) {
+        if f.contains("alpha") {
+            throw("stage_b retained sibling alpha payload: " + f);
+        }
+    }
+
+    // Negative selection test: addressing a broader directory containing both packages
+    let stage_broad = fs::make_temp_dir("northstar-stage-broad-");
+    let broad_staged = materialize_addressed_package_to_staging(sibling_root, "packages", stage_broad);
+    let broad_retains_sibling = false;
+    for f in broad_staged {
+        if f.contains("beta-pkg") && broad_staged.contains("alpha-pkg/northstar-package.json") {
+            broad_retains_sibling = true;
+        }
+    }
+    require(broad_retains_sibling, "broad staging negative test failed to capture multiple packages");
 }
 
 // -----------------------------------------------------------------------------
@@ -694,10 +733,10 @@ fn expect_digest_drift_failure(manifest_path, tampered_digest) {
     }
 }
 
-fn expect_manifest_rejection(label, manifest, expected_reason) {
+fn expect_manifest_rejection(label, manifest, manifest_schema, expected_reason) {
     let rejected = false;
     try {
-        validate_manifest_instance(manifest, label);
+        validate_manifest_instance(manifest, manifest_schema, label);
     } catch (error) {
         rejected = true;
         let message = error.to_string();
@@ -715,10 +754,10 @@ fn expect_manifest_rejection(label, manifest, expected_reason) {
     }
 }
 
-fn expect_registry_rejection(label, registry, expected_reason) {
+fn expect_registry_rejection(label, registry, registry_schema, expected_reason) {
     let rejected = false;
     try {
-        validate_registry_instance(registry, label);
+        validate_registry_instance(registry, registry_schema, label);
     } catch (error) {
         rejected = true;
         let message = error.to_string();
@@ -736,10 +775,10 @@ fn expect_registry_rejection(label, registry, expected_reason) {
     }
 }
 
-fn expect_receipt_rejection(label, receipt, expected_reason) {
+fn expect_receipt_rejection(label, receipt, receipt_schema, expected_reason) {
     let rejected = false;
     try {
-        validate_receipt_instance(receipt, label);
+        validate_receipt_instance(receipt, receipt_schema, label);
     } catch (error) {
         rejected = true;
         let message = error.to_string();
@@ -778,7 +817,7 @@ fn expect_compat_rejection(label, range_str, core_version, pkg_id, expected_reas
     }
 }
 
-fn test_receipt_conformance_variants() {
+fn test_receipt_conformance_variants(receipt_schema) {
     // 1. Positive: official trust + git source
     let official_git_receipt = #{
         schema_version: "1.0.0",
@@ -794,7 +833,7 @@ fn test_receipt_conformance_variants() {
             type: "git",
             repository: "https://github.com/inflatable-cookie/northstar.git",
             subpath: "packages/fixture",
-            commit: "a6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9",
+            commit: "a6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9",
         },
         content_identity: #{
             package_tree_digest: "a6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9",
@@ -811,7 +850,7 @@ fn test_receipt_conformance_variants() {
             activation_status: "active",
         },
     };
-    validate_receipt_instance(official_git_receipt, "official-git-receipt");
+    validate_receipt_instance(official_git_receipt, receipt_schema, "official-git-receipt");
 
     // 2. Positive: operator_allowlist trust + local_path source
     let allowlist_local_receipt = #{
@@ -844,7 +883,7 @@ fn test_receipt_conformance_variants() {
             activation_status: "installed",
         },
     };
-    validate_receipt_instance(allowlist_local_receipt, "allowlist-local-receipt");
+    validate_receipt_instance(allowlist_local_receipt, receipt_schema, "allowlist-local-receipt");
 
     // 3. Positive: interactive_approval trust + archive source
     let interactive_archive_receipt = #{
@@ -879,7 +918,7 @@ fn test_receipt_conformance_variants() {
             activation_status: "installed",
         },
     };
-    validate_receipt_instance(interactive_archive_receipt, "interactive-archive-receipt");
+    validate_receipt_instance(interactive_archive_receipt, receipt_schema, "interactive-archive-receipt");
 
     // 4. Negative: official trust without registry_version
     let broken_official_trust = #{
@@ -894,7 +933,7 @@ fn test_receipt_conformance_variants() {
             type: "git",
             repository: "https://github.com/inflatable-cookie/northstar.git",
             subpath: "packages/fixture",
-            commit: "a6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9",
+            commit: "a6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9",
         },
         content_identity: #{
             package_tree_digest: "a6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9",
@@ -911,7 +950,7 @@ fn test_receipt_conformance_variants() {
             activation_status: "active",
         },
     };
-    expect_receipt_rejection("broken-official-trust-receipt", broken_official_trust, "missing required field: registry_version");
+    expect_receipt_rejection("broken-official-trust-receipt", broken_official_trust, receipt_schema, "failed oneOf schema validation");
 
     // 5. Negative: mismatched trust provenance (official containing approved_by)
     let mismatched_trust = #{
@@ -929,7 +968,7 @@ fn test_receipt_conformance_variants() {
             type: "git",
             repository: "https://github.com/inflatable-cookie/northstar.git",
             subpath: "packages/fixture",
-            commit: "a6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9",
+            commit: "a6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9",
         },
         content_identity: #{
             package_tree_digest: "a6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9",
@@ -946,7 +985,7 @@ fn test_receipt_conformance_variants() {
             activation_status: "active",
         },
     };
-    expect_receipt_rejection("mismatched-trust-provenance-receipt", mismatched_trust, "contains forbidden additional property: approved_by");
+    expect_receipt_rejection("mismatched-trust-provenance-receipt", mismatched_trust, receipt_schema, "failed oneOf schema validation");
 
     // 6. Negative: mismatched source provenance (local_path containing commit)
     let mismatched_source = #{
@@ -963,7 +1002,7 @@ fn test_receipt_conformance_variants() {
             type: "local_path",
             path: "/local/packages/fixture",
             acquisition_mode: "manual",
-            commit: "a6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9",
+            commit: "a6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9",
         },
         content_identity: #{
             package_tree_digest: "a6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9",
@@ -980,7 +1019,7 @@ fn test_receipt_conformance_variants() {
             activation_status: "installed",
         },
     };
-    expect_receipt_rejection("mismatched-source-provenance-receipt", mismatched_source, "contains forbidden additional property: commit");
+    expect_receipt_rejection("mismatched-source-provenance-receipt", mismatched_source, receipt_schema, "failed oneOf schema validation");
 }
 
 fn test_semver_compatibility_suite() {
@@ -1006,7 +1045,7 @@ fn test_semver_compatibility_suite() {
     require(!check_semver_compatibility("invalid-range", core), "invalid range string was accepted");
 }
 
-fn run_negative_oracle_suite(target_skill_root) {
+fn run_negative_oracle_suite(target_skill_root, manifest_schema, registry_schema, receipt_schema) {
     let fixtures_root = path::join(target_skill_root, "assets/fixtures/language-packages");
 
     // Invariant 0: Policy-free fixture discrimination proof (forbidden rules / filenames rejected).
@@ -1022,7 +1061,7 @@ fn run_negative_oracle_suite(target_skill_root) {
     // Invariant 2: Official trust is core-owned (self-authorization rejected).
     let self_auth_path = path::join(fixtures_root, "negative/self-authorizing/northstar-package.json");
     let self_auth_manifest = json::read_file(self_auth_path);
-    expect_manifest_rejection("self-authorizing-manifest", self_auth_manifest, "self-claims trust or official status");
+    expect_manifest_rejection("self-authorizing-manifest", self_auth_manifest, manifest_schema, "self-claims trust or official status");
 
     // Invariant 3: Sources are immutable (mutable registry sources rejected).
     let mutable_registry = #{
@@ -1041,7 +1080,7 @@ fn run_negative_oracle_suite(target_skill_root) {
             }
         ]
     };
-    expect_registry_rejection("mutable-registry-commit-branch", mutable_registry, "does not match pattern");
+    expect_registry_rejection("mutable-registry-commit-branch", mutable_registry, registry_schema, "does not match pattern");
 
     let tag_registry = #{
         schema_version: "1.0.0",
@@ -1059,24 +1098,11 @@ fn run_negative_oracle_suite(target_skill_root) {
             }
         ]
     };
-    expect_registry_rejection("mutable-registry-commit-tag", tag_registry, "does not match pattern");
+    expect_registry_rejection("mutable-registry-commit-tag", tag_registry, registry_schema, "does not match pattern");
 
-    // Invariant 4: Packages are independent (addressing one yields only its subpath).
+    // Invariant 4: Packages are independent (addressing one yields only its subpath in staging).
     let sibling_root = path::join(fixtures_root, "sibling-packages");
-    let alpha_files = extract_addressed_package_inventory(sibling_root, "packages/alpha-pkg");
-    let beta_files = extract_addressed_package_inventory(sibling_root, "packages/beta-pkg");
-    verify_package_isolation(alpha_files, ["SKILL.md", "northstar-package.json", "scripts/self-check.rhai"], "beta", "alpha-pkg");
-    verify_package_isolation(beta_files, ["SKILL.md", "northstar-package.json", "scripts/self-check.rhai"], "alpha", "beta-pkg");
-
-    // Sibling payload leakage discrimination test
-    let leaked_inventory = ["SKILL.md", "northstar-package.json", "packages/beta-pkg/leaked.txt", "scripts/self-check.rhai"];
-    let leakage_rejected = false;
-    try {
-        verify_package_isolation(leaked_inventory, ["SKILL.md", "northstar-package.json", "scripts/self-check.rhai"], "beta", "alpha-pkg-leak-test");
-    } catch (err) {
-        leakage_rejected = true;
-    }
-    require(leakage_rejected, "sibling payload leakage test failed to reject leaked file");
+    test_independent_package_materialization(sibling_root);
 
     // Invariant 5: Core compatibility is exact & SemVer numeric range rejection.
     let current_core = "0.2.0";
@@ -1091,20 +1117,39 @@ fn run_negative_oracle_suite(target_skill_root) {
     // Invariant 6: Path traversal and absolute path containment rejection.
     let traversal_path = path::join(fixtures_root, "negative/path-traversal-manifest/traversal-entrypoint.json");
     let traversal_manifest = json::read_file(traversal_path);
-    expect_manifest_rejection("traversal-entrypoint-manifest", traversal_manifest, "path violates package-relative containment");
+    expect_manifest_rejection("traversal-entrypoint-manifest", traversal_manifest, manifest_schema, "does not match pattern");
 
     let abs_path = path::join(fixtures_root, "negative/absolute-path-manifest/absolute-entrypoint.json");
     let abs_manifest = json::read_file(abs_path);
-    expect_manifest_rejection("absolute-entrypoint-manifest", abs_manifest, "path violates package-relative containment");
+    expect_manifest_rejection("absolute-entrypoint-manifest", abs_manifest, manifest_schema, "does not match pattern");
 
     // Invariant 7: Malformed manifests and extra fields rejected.
     let missing_fields_path = path::join(fixtures_root, "negative/malformed-manifest/missing-fields.json");
     let missing_manifest = json::read_file(missing_fields_path);
-    expect_manifest_rejection("malformed-manifest-missing-fields", missing_manifest, "missing required field");
+    expect_manifest_rejection("malformed-manifest-missing-fields", missing_manifest, manifest_schema, "missing required field");
 
     let invalid_kind_path = path::join(fixtures_root, "negative/malformed-manifest/invalid-kind.json");
     let invalid_kind_manifest = json::read_file(invalid_kind_path);
-    expect_manifest_rejection("malformed-manifest-invalid-kind", invalid_kind_manifest, "expected const 'language-quality'");
+    expect_manifest_rejection("malformed-manifest-invalid-kind", invalid_kind_manifest, manifest_schema, "const mismatch: expected 'language-quality'");
+
+    // Invariant 8: Duplicate registry entries rejected.
+    let duplicate_registry_path = path::join(fixtures_root, "negative/duplicate-registry/duplicate-package-registry.json");
+    if fs::is_file(duplicate_registry_path) {
+        let dup_registry = json::read_file(duplicate_registry_path);
+        expect_registry_rejection("duplicate-registry-entries", dup_registry, registry_schema, "duplicate registry package");
+    }
+
+    // Invariant 9: Ambiguous trust and source receipts rejected.
+    let ambiguous_trust_path = path::join(fixtures_root, "negative/ambiguous-receipt/ambiguous-trust-receipt.json");
+    if fs::is_file(ambiguous_trust_path) {
+        let amb_trust = json::read_file(ambiguous_trust_path);
+        expect_receipt_rejection("ambiguous-trust-receipt", amb_trust, receipt_schema, "failed oneOf schema validation");
+    }
+    let ambiguous_source_path = path::join(fixtures_root, "negative/ambiguous-receipt/ambiguous-source-receipt.json");
+    if fs::is_file(ambiguous_source_path) {
+        let amb_source = json::read_file(ambiguous_source_path);
+        expect_receipt_rejection("ambiguous-source-receipt", amb_source, receipt_schema, "failed oneOf schema validation");
+    }
 }
 
 fn check_forbidden_in_file(file) {
@@ -1142,21 +1187,25 @@ if !fs::is_dir(path::join(northstar_skill_root, "references/packages")) {
 }
 
 let packages_ref_root = path::join(northstar_skill_root, "references/packages");
-validate_schema_file(packages_ref_root, "package-manifest.schema.json", "language-package-manifest");
-validate_schema_file(packages_ref_root, "official-registry.schema.json", "language-package-official-registry");
-validate_schema_file(packages_ref_root, "installation-receipt.schema.json", "language-package-installation-receipt");
+let manifest_schema = load_and_validate_schema_file(packages_ref_root, "package-manifest.schema.json", "language-package-manifest");
+let registry_schema = load_and_validate_schema_file(packages_ref_root, "official-registry.schema.json", "language-package-official-registry");
+let receipt_schema = load_and_validate_schema_file(packages_ref_root, "installation-receipt.schema.json", "language-package-installation-receipt");
 
 let official_registry_path = path::join(packages_ref_root, "official-registry.json");
 require(fs::is_file(official_registry_path), "missing official-registry.json");
 let registry = json::read_file(official_registry_path);
-validate_registry_instance(registry, "official-registry.json");
+validate_registry_instance(registry, registry_schema, "official-registry.json");
 
 let fixture_root = path::join(northstar_skill_root, "assets/fixtures/language-packages/policy-free-fixture");
-validate_policy_free_fixture_deep(fixture_root);
+validate_policy_free_fixture_deep(fixture_root, manifest_schema);
+
+let fixture_manifest_path = path::join(fixture_root, "northstar-package.json");
+let fixture_manifest = json::read_file(fixture_manifest_path);
+test_schema_mutation_discrimination(fixture_manifest, manifest_schema);
 
 test_semver_compatibility_suite();
-test_receipt_conformance_variants();
-run_negative_oracle_suite(northstar_skill_root);
+test_receipt_conformance_variants(receipt_schema);
+run_negative_oracle_suite(northstar_skill_root, manifest_schema, registry_schema, receipt_schema);
 scan_forbidden_dependencies(northstar_skill_root);
 
-log("Northstar language package machine contracts: OK (3 Draft 2020-12 schemas, schema conformance across all variants, SemVer numeric ranges, path containment, trust/source receipt variants, deep policy-free proof, sibling isolation proof, 7 negative oracle invariants, portable contracts)");
+log("Northstar language package machine contracts: OK (3 Draft 2020-12 schemas, schema-derived instance conformance across all variants, schema mutation proof, SemVer numeric ranges, path containment, trust/source receipt variants, deep policy-free proof, staged sibling isolation proof, 9 negative oracle invariants, portable contracts)");

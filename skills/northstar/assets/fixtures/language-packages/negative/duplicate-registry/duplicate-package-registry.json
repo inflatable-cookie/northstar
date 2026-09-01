@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "registry_version": "1.0.0",
+  "packages": [
+    {
+      "package_id": "@northstar/duplicate-fixture",
+      "version": "0.1.0",
+      "repository": "https://github.com/inflatable-cookie/northstar.git",
+      "subpath": "packages/duplicate-a",
+      "commit": "a6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9",
+      "tree_digest": "a6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9",
+      "manifest_digest": "b6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9",
+      "compatible_core_range": ">=0.2.0 <1.0.0"
+    },
+    {
+      "package_id": "@northstar/duplicate-fixture",
+      "version": "0.1.0",
+      "repository": "https://github.com/inflatable-cookie/northstar.git",
+      "subpath": "packages/duplicate-b",
+      "commit": "b6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9",
+      "tree_digest": "b6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9",
+      "manifest_digest": "c6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9",
+      "compatible_core_range": ">=0.2.0 <1.0.0"
+    }
+  ]
+}
