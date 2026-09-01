@@ -1,6 +1,6 @@
 # 110 - Make Orchestrator Scheduling Parallel-First
 
-Status: ready
+Status: complete
 Owner: repo maintainers
 Created: 2026-09-01
 Master roadmap: `g02.042`
@@ -43,26 +43,26 @@ or weakening planning/review/merge gates.
 
 ## Acceptance Criteria
 
-- [ ] planning identifies a dependency graph and current ready frontier;
-- [ ] the orchestrator dispatches all safe ready lanes up to available capacity
+- [x] planning identifies a dependency graph and current ready frontier;
+- [x] the orchestrator dispatches all safe ready lanes up to available capacity
   without asking the operator to request parallelism;
-- [ ] a control plane without a capacity signal launches in priority order until
+- [x] a control plane without a capacity signal launches in priority order until
   explicit refusal, preserves created lane state, and retries queued work after
   a finish notification; manual dispatch publishes all selected handoffs;
-- [ ] it refills capacity and continues unrelated planning/review work while
+- [x] it refills capacity and continues unrelated planning/review work while
   workers run;
-- [ ] it records exact reasons for serial/queued lanes and never serializes
+- [x] it records exact reasons for serial/queued lanes and never serializes
   unrelated work around one blocked edge;
-- [ ] same-repo mutable and closeout surfaces are partitioned or integrated by a
+- [x] same-repo mutable and closeout surfaces are partitioned or integrated by a
   named orchestrator step;
-- [ ] issue-fix and exact-head review/merge boundaries remain intact;
-- [ ] doctrine, copy-ready contracts, skill source, handoff template, operator
+- [x] issue-fix and exact-head review/merge boundaries remain intact;
+- [x] doctrine, copy-ready contracts, skill source, handoff template, operator
   docs, and installed payload agree;
-- [ ] repository QA and isolated skill-install parity pass.
+- [x] repository QA and isolated skill-install parity pass.
 
 ## Review Oracle
 
-Use milestone `g02.042`. Exercise all six scenarios against the final wording
+Use milestone `g02.042`. Exercise all seven scenarios against the final wording
 and any deterministic checker. A reviewer must be able to tell which lanes
 launch now, which wait, why they wait, and what happens when capacity frees.
 
@@ -70,7 +70,8 @@ launch now, which wait, why they wait, and what happens when capacity frees.
 
 - before/after inventory of permissive `offer parallel` wording;
 - scenario matrix covering independent, dependent, shared-closeout, capacity-
-  refill, coherent issue-fix, and same-repo merge-order cases;
+  refill, unsurfaced-capacity, coherent issue-fix, and same-repo merge-order
+  cases;
 - changed-surface parity inventory;
 - `effigy check:command-skills`, `effigy check:skill-install`,
   `effigy qa:docs`, `effigy qa`, and `git diff --check` results;
@@ -86,5 +87,7 @@ launch now, which wait, why they wait, and what happens when capacity frees.
 
 ## Next Task
 
-Execute this card from the orchestrator handoff, open a PR, and stop for
-exact-head review. Do not merge from the worker.
+The card is executed and the PR is open on
+`worker/make-orchestrator-parallel-first`. Evidence is in
+`docs/logs/2026-09/01-101853-make-orchestrator-parallel-first.md`. The orchestrator
+reviews the exact head and merges; the worker does not.

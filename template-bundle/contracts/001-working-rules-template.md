@@ -183,6 +183,36 @@ informal habits.
 - Set a local upper bound for uninterrupted runs, such as a card limit or time
   limit, so autonomy remains bounded.
 
+### Parallel lane scheduling
+
+- Parallel dispatch is the default. The orchestrator maps ready work as a
+  dependency graph, refreshes the ready frontier at every dispatch checkpoint,
+  and launches every safe frontier lane up to available capacity without a
+  second operator request.
+- A lane joins the frontier only with no shared mutable scope, no
+  ordering/data/generated-artifact dependency, no overlapping authority
+  decision, and its own ready cards, validation, evidence, stop conditions,
+  worktree, branch, and handoff.
+- Same-repository lanes must partition mutable and closeout/front-door surfaces
+  or reserve one named orchestrator integration step. Two workers never own the
+  same front door.
+- A serial decision must name the dependency, shared surface, unresolved
+  authority, or capacity limit. Do not serialize unrelated ready work around one
+  blocked edge, invent a card to fill a slot, or split one coherent issue-fix
+  lane.
+- Discover capacity; do not guess it. Use an explicit control-plane value when
+  one is surfaced. When an adapter launches workers but exposes no capacity
+  signal, attempt safe lanes in roadmap-priority order and treat the first
+  explicit refusal as that checkpoint's limit: keep the lane state already
+  created, queue the rest, and retry when a slot frees. With no control plane,
+  publish every selected handoff at once and let operator launch throughput be
+  the limit. Do not record a fixed worker count, provider, or model.
+- A worker-finish notification frees a slot immediately. Start the next queued
+  lane then, before or alongside exact-head review of the finished PR, and keep
+  doing non-overlapping planning, review, and closeout while workers run.
+- Same-repository PRs merge one at a time. Refresh the remaining heads against
+  current `main` after each merge and re-review any head that changed.
+
 ### Conversational planning delegation
 
 - On operator request, the orchestrator may launch one frontier planning

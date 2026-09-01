@@ -76,9 +76,10 @@ sequence.
 
 ## Next Task
 
-Roadmaps `g02.038` through `g02.041` are complete. Card 110 under active roadmap
-`g02.042` is ready to make orchestrator scheduling dependency-frontier and
-parallel-first without weakening serial safety or review gates.
+Roadmaps `g02.038` through `g02.042` are complete. Card 110 made orchestrator
+scheduling dependency-frontier and parallel-first without weakening serial
+safety or review gates; its PR awaits orchestrator exact-head review. Choose the
+next `g02` milestone from the generation runway after that merge.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed

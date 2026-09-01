@@ -115,6 +115,11 @@ or copies multi-paragraph protocol text, treat that as a compression signal.
     allowed write paths, base/branch/worktree, concurrent non-overlapping work,
     required sibling links or `none`, frontier capability profile, and
     orchestrator promotion owner;
+  - for a worker handoff dispatched beside other frontier lanes, the sibling
+    lanes launched with it, the mutable and closeout surfaces this lane owns,
+    and whether shared closeout is partitioned or reserved for a named
+    orchestrator integration step. Record the reason any related lane was kept
+    serial;
   - for a worker handoff, **required sibling worktree links**: each sibling
     repo the worktree needs, its absolute primary-checkout source, and the
     link name in the worktree container directory (the worktree's parent,

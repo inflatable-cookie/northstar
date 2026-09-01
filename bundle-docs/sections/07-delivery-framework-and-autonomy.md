@@ -608,6 +608,57 @@ is already defined and permitted.
 They also should not have to re-invent the lane shape after every completed
 card because planning failed to leave a longer-horizon runway.
 
+## Parallel lane scheduling
+
+Parallelism is a scheduling default, not an operator-requested optimization. An
+orchestrator maps the runway's meaningful lanes as a dependency graph, keeps a
+current ready frontier, and refreshes that frontier at every dispatch
+checkpoint. It launches every safe frontier lane up to available capacity
+instead of following one lane through dispatch, review, and merge.
+
+A lane belongs on the frontier only when it has:
+
+- no shared mutable files or overlapping write scope;
+- no ordering, data, or generated-artifact dependency;
+- no overlapping authority decision or unresolved intent;
+- its own ready cards, acceptance, validation, evidence, and stop conditions;
+- its own worktree, branch, and committed handoff.
+
+Same-repository lanes must additionally partition their mutable and
+closeout/front-door surfaces, or reserve one named orchestrator integration
+step before launch. Two workers never own the same front door.
+
+When a condition fails, keep only that edge or lane serial and record the exact
+dependency, shared surface, unresolved authority, or capacity limit. Unrelated
+ready work is not serialized around one blocked edge. Parallelism is never a
+reason to invent a speculative card to fill a slot, or to split one coherent
+issue-fix lane into diagnosis and repair workers.
+
+Capacity is discovered, never guessed. Use an explicit value when the active
+control plane surfaces one. Many adapters can launch workers without exposing
+any capacity, quota, or slot value; there the orchestrator attempts the safe
+lanes in roadmap-priority order and treats the first explicit launch refusal as
+that checkpoint's capacity. It preserves every workspace or agent identity
+already created, queues the refused and remaining lanes against that named
+adapter limit, and retries the retained lane state when a slot frees. Where no
+control plane is installed, the orchestrator publishes a handoff per selected
+lane and gives the operator every absolute path at once; their launch throughput
+becomes the limit. Northstar names no fixed worker count, provider, model, or
+scheduler daemon, and never asks the operator to guess a count.
+
+When capacity is smaller than the frontier, roadmap priority selects the first
+lanes and the rest stay queued. A worker-finish notification frees a slot
+immediately: the orchestrator refreshes the frontier and starts the next queued
+lane then, before or alongside exact-head review of the finished lane's PR,
+rather than waiting for that PR to merge. While workers run, the orchestrator
+continues non-overlapping planning, review, revision routing, merge, and closeout
+rather than idling on one lane.
+
+Every gate survives concurrency. Each worker keeps its own worktree, branch,
+handoff, PR, review loop, and exact-head merge gate. Same-repository PRs merge
+one at a time; after each merge the remaining heads are refreshed against
+current `main` and any changed or conflict-resolved head is reviewed again.
+
 ## Conversational planning delegation
 
 An operator may ask the orchestrator to split off a frontier, high-reasoning

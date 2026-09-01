@@ -466,12 +466,44 @@ The repository is the durable communication boundary. A worker must be able to
 re-enter from its worker handoff, `AGENTS.md`, canonical refs, cards, commits,
 tests, and PR metadata; private conversation history is not required authority.
 
-Before dispatch, the orchestrator assesses whether multiple independent roadmap
-lanes can run concurrently. Parallel dispatch is appropriate only when lanes
-have no shared mutable scope, ordering/data/generated-artifact dependencies,
-or overlapping authority decisions, and each lane has its own ready cards,
-validation, evidence, stop conditions, worktree, branch, and handoff. Otherwise
-keep the run serial and record the dependency or ambiguity.
+Parallel dispatch is the default schedule, not an operator-requested option.
+While compiling a runway and again at every dispatch checkpoint, the
+orchestrator maps the meaningful lanes as a dependency graph, identifies the
+current ready frontier, and launches every safe frontier lane up to available
+capacity without a second operator request.
+
+A lane belongs on that frontier only when it has no shared mutable scope,
+no ordering/data/generated-artifact dependency, and no overlapping authority
+decision, and when it has its own ready cards, validation, evidence, stop
+conditions, worktree, branch, and handoff. Same-repository lanes must also
+partition their mutable and closeout/front-door surfaces or reserve one named
+orchestrator integration step; two workers never own the same front door.
+
+When a condition fails, keep only that edge or lane serial and record the exact
+dependency, shared surface, unresolved authority, or capacity limit. Unrelated
+ready work is not serialized around one blocked edge. Parallelism is never a
+reason to invent a speculative card or to split one coherent issue-fix lane.
+
+Capacity is discovered rather than guessed. The orchestrator uses an explicit
+value when the active control plane surfaces one. When an adapter can launch
+workers but exposes no capacity signal, it attempts the safe lanes in
+roadmap-priority order and treats the first explicit launch refusal as that
+checkpoint's capacity: already-created workspace and agent identities are
+preserved, the refused and remaining lanes are queued against that named adapter
+limit, and the retained lane state is retried when a slot frees. With no control
+plane the orchestrator publishes a handoff per selected lane and gives the
+operator every absolute path at once. Northstar does not encode a fixed worker
+count, provider, or model, and does not ask the operator to guess one.
+
+A worker-finish notification frees a slot immediately. The orchestrator refreshes
+the frontier and starts the next queued lane at that point, before or alongside
+exact-head review of the finished lane's PR, rather than waiting for merge. It
+continues non-overlapping planning, review, revision routing, merge, and closeout
+while workers run.
+
+Same-repository PRs merge one at a time. After each merge the orchestrator
+refreshes every remaining head against current `main` and re-reviews any head
+that changed or needed conflict resolution.
 
 The following worker-start conditions apply only after a worker thread has been
 explicitly dispatched by the orchestrator with a handoff declaring

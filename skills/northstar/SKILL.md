@@ -97,12 +97,13 @@ implement or promote.
   wider audit authority.
 - **Recovery:** trustworthy planning surfaces and canonical refs restored.
 - **Normalize:** baseline or strict spine installed/maintained; Effigy-first QA.
-- **Orchestrator:** question-led planning, optional operator-facing frontier
-  planning delegates with orchestrator-owned promotion, one pushed worker
-  handoff under `docs/handoffs/`, optional fast/low-cost mechanical
-  documentation projection under frontier semantic review, bounded PR
-  review/revision, and accepted-review plus check-gated merge without a second
-  operator prompt.
+- **Orchestrator:** question-led planning, parallel-first dispatch of the whole
+  safe ready dependency frontier up to available capacity, optional
+  operator-facing frontier planning delegates with orchestrator-owned promotion,
+  one pushed worker handoff under `docs/handoffs/` per launched lane, optional
+  fast/low-cost mechanical documentation projection under frontier semantic
+  review, bounded PR review/revision, and accepted-review plus check-gated merge
+  without a second operator prompt.
 - **Handoff:** a human-friendly seven-section file under `docs/handoffs/`, with
   an absolute path returned to the operator; not a substitute for log/roadmap
   closeout.

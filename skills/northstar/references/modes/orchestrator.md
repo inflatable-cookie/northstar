@@ -207,13 +207,13 @@ batch large enough to repay dispatch and review; keep tiny edits local.
    Once meaning is settled, use mechanical documentation projection for a
    worthwhile named batch. Review the returned diff before marking cards ready,
    publishing planning, or making any Git mutation.
-6. **Assess parallel lanes before dispatch.** Inspect the active roadmap runway
-   for multiple independent, bounded ready lanes that can run at the same time.
-   Offer parallel worker-thread prompts when lanes have no shared mutable files,
-   no ordering or data dependencies, no overlapping authority decisions, and no
-   unresolved scope. Use one isolated worktree, branch, and committed handoff
-   per worker. Keep dependent, overlapping, or ambiguous lanes serial; do not
-   manufacture parallelism merely to increase worker count.
+6. **Refresh the dependency frontier and dispatch all of it.** Parallelism is
+   the default schedule, not an option to offer. Map the runway's meaningful
+   lanes as a dependency graph, identify the current ready frontier, and select
+   every safe lane that fits available capacity. Record why any otherwise-ready
+   lane stays queued or serial, then plan one worktree, branch, and handoff per
+   selected lane. Do not wait for the operator to ask for concurrency. Full
+   rules are in **Parallel lane dispatch** below.
    An operator-requested planning delegate may run beside unrelated work, but
    reserve its topic and do not dispatch or promote work that depends on its
    conclusions until its PR is reviewed, merged, and promoted.
@@ -234,9 +234,12 @@ batch large enough to repay dispatch and review; keep tiny edits local.
    planning checkout.
 8. **Write the handoff file(s).** Reuse the handoff flow: fill
    `assets/templates/northstar-orchestrator-run.md.template` into one concrete
-   worker handoff under `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md` per approved
-   parallel lane. Each file must keep the seven core handoff sections and add
-   explicit worker-mode/PR instructions inside `## Completion Protocol`. Every
+   worker handoff under `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md` per selected
+   frontier lane. A same-repository lane's handoff also names the surfaces it
+   owns, the sibling lanes running beside it, and the closeout partition or
+   reserved orchestrator integration step. Each file must keep the seven core
+   handoff sections and add explicit worker-mode/PR instructions inside
+   `## Completion Protocol`. Every
    worker handoff must declare `handoff_mode: worker-pr-loop`,
    `worker_mode: implementation`, and `dispatch_authority: orchestrator` in its
    frontmatter. This metadata is what activates worker mode; a normal thread
@@ -276,9 +279,18 @@ batch large enough to repay dispatch and review; keep tiny edits local.
    - call `list_profiles` and read every profile's notes; select by the role and
      risk rules below, not by a remembered profile or model name. A profile the
      operator explicitly names for the lane overrides this selection;
-   - call `create_workspace` once for the lane with `isolation: worktree`,
-     `mode: branch-off`, `baseBranch: origin/main`, the intended branch, and the
-     source checkout path;
+   - call `create_workspace` once per dispatched lane with
+     `isolation: worktree`, `mode: branch-off`, `baseBranch: origin/main`, the
+     intended branch, and the source checkout path. Dispatch the whole selected
+     frontier rather than one lane at a time. Use an explicit capacity value
+     only when the adapter surfaces one; Paseo's profile, workspace, agent, and
+     list tools do not. With no capacity signal, attempt the safe lanes in
+     roadmap-priority order and let the adapter answer: the first explicit
+     capacity refusal ends launching for this checkpoint. Preserve every workspace
+     and agent identity already created, record the refused and remaining lanes
+     as queued against that named adapter limit, and retry the same retained
+     lane state when a worker-finish notification frees a slot. Never invent a
+     worker count or ask the operator to guess one;
    - before launching the worker, verify every sibling link named by the handoff
      exists in the managed worktree's **container directory** (the worktree's
      parent), resolves to the declared primary checkout, and was available before
@@ -303,11 +315,18 @@ batch large enough to repay dispatch and review; keep tiny edits local.
    dispatch without treating `paseo.json` as a substitute runtime signal. If
    setup fails, preserve and report any created workspace or agent identity; do
    not silently retry into a duplicate worker.
-10. **Handle worker reports.** Treat direct adapter reports and operator-relayed
-    reports as status evidence, not authority. After each chunk, reconcile
-    card/log state and name the next report or action needed. If the worker
-    reports a planning gap or scope change, pause and repair the canonical
-    planning surfaces before giving permission to continue.
+10. **Handle worker reports and refill freed capacity.** Treat direct adapter
+    reports and operator-relayed reports as status evidence, not authority.
+    After each chunk, reconcile card/log state and name the next report or
+    action needed. If the worker reports a planning gap or scope change, pause
+    and repair the canonical planning surfaces before giving permission to
+    continue.
+    A worker-finish notification frees a capacity slot immediately. Refresh the
+    ready frontier and launch the next queued lane from its retained state
+    before or alongside the exact-head review of the finished lane's PR; do not
+    wait for that PR to merge. If nothing is queued, continue non-overlapping
+    planning, review, and closeout. The separate post-merge refresh in step 12
+    still applies to same-repository heads.
 11. **Review the PR.** On the PR URL, inspect metadata, commits, diff, checks, and
    changed files against the spec, milestone, cards, and contracts. Review
    independently of the worker narrative. Record an evidence-backed verdict in
@@ -339,20 +358,25 @@ batch large enough to repay dispatch and review; keep tiny edits local.
     the PR is mergeable into the intended base, and no stricter repository rule
     or explicit operator pause applies, merge without asking for another
     approval. If the head changed after review, review it again. If merge state
-    or the merge result is ambiguous, stop before retrying. Then update card,
-    milestone, log, front-door currentness, continuation/pause state, and the
-    single next task. If the lane continues, identify the next ready card; if it
-    ends, name the next planning checkpoint.
+    or the merge result is ambiguous, stop before retrying. Same-repository PRs
+    merge one at a time: after each merge, refresh every remaining head against
+    current `main` and re-review any head that changed or needed conflict
+    resolution. Capacity was already refilled at the finish notification in step
+    10; do not wait for merge to start queued work.
+    Then update card, milestone, log, front-door currentness, continuation/pause
+    state, and the single next task. If the lane continues, identify the next
+    ready card; if it ends, name the next planning checkpoint.
 
 ## Worker file contract
 
 The orchestrator creates exactly one concrete worker handoff from the shared
 handoff template per worker lane, commits it to `main`, pushes `main`, and
 verifies the remote tip before dispatch. When independent roadmap lanes are
-approved for parallel execution, create one such handoff per lane; never merge
-multiple lane instructions into an ambiguous shared prompt. The handoff records
-the planning base commit from before the handoff was created; it must not contain
-a self-referential hash for the commit that contains the handoff. An available
+selected together on the ready frontier, create one such handoff per lane;
+never merge multiple lane instructions into an ambiguous shared prompt. The
+handoff records the planning base commit from before the handoff was created;
+it must not contain a self-referential hash for the commit that contains the
+handoff. An available
 control plane may start each fresh worker thread in its managed worktree;
 otherwise the operator starts it manually. The operator is always given the
 handoff's **absolute path**. No second prompt, transcript copy, or
@@ -400,6 +424,12 @@ The file must say, in substance:
 - continue from the tracked handoff; all canonical refs and instructions needed
   for the run are named inside it;
 - execute only the ordered ready cards;
+- when sibling frontier lanes are running, write only inside the surfaces this
+  lane owns, leave partitioned or integration-reserved closeout surfaces to
+  their named owner, and stop and report any shared mutable scope or hidden
+  dependency instead of resolving it. If a sibling lane merges first, refresh
+  this branch against current `main`, revalidate, and expect another review of
+  the changed head;
 - when a card assigns a reported issue fix, own the full reproduce, diagnose,
   implement, clean up temporary diagnostics, validate, and evidence loop. Use
   ordinary causal and code-level judgment inside the card's boundaries; do not
@@ -423,6 +453,53 @@ The only external worker handoff is the absolute path, for example:
 ```text
 Read and follow `/Users/tom/Dev/projects/soundcheck/docs/handoffs/20260816-143500-soundcheck-worker.md`.
 ```
+
+## Parallel lane dispatch
+
+Parallelism is a scheduling default. Refresh the ready frontier while compiling
+a runway and again at every dispatch checkpoint, across the active project and
+any operator-approved portfolio work already in scope.
+
+A lane joins the frontier only when all of these hold:
+
+- no shared mutable files or overlapping write scope;
+- no ordering, data, or generated-artifact dependency;
+- no overlapping authority decision or unresolved intent;
+- its own ready cards, acceptance, validation, evidence, and stop conditions;
+- its own worktree, branch, and committed handoff.
+
+Same-repository lanes must additionally partition their mutable and
+closeout/front-door surfaces, or reserve one named orchestrator integration step
+before launch. Two workers never own the same front door.
+
+When a condition fails, keep only that edge or lane serial and name the exact
+reason: the dependency edge, the shared surface, the unresolved authority, or
+the capacity limit. Do not serialize unrelated ready work around one blocked
+edge. Do not manufacture parallelism by inventing speculative cards or by
+splitting one coherent issue-fix lane into diagnosis and repair workers.
+
+Capacity is discovered, never guessed. Use an explicit value when the active
+control plane surfaces one. When the adapter can launch workers but exposes no
+capacity, quota, or slot value, attempt the safe lanes in roadmap-priority order
+and treat the first explicit launch refusal as the capacity answer for that
+checkpoint: preserve every workspace and agent identity already created, queue
+the refused and remaining lanes against that named adapter limit, and retry the
+retained lane state when a slot frees. With no control plane at all, publish a
+handoff per selected lane and give the operator every absolute path at once;
+their launch throughput is the real limit. Never encode a fixed worker count,
+provider, model, or profile name, and never ask the operator to guess one.
+
+When capacity is smaller than the frontier, roadmap priority picks the first
+lanes and the rest stay queued. A worker-finish notification frees a slot
+immediately: refresh the frontier and launch the next queued lane then, before
+or alongside review of the finished lane's PR, rather than waiting for its
+merge. While workers run, keep doing non-overlapping planning, review, revision
+routing, merge, and closeout rather than idling on one lane.
+
+Each parallel worker follows the same startup worktree-safety, PR, review-comment
+fallback, and accepted-review/check-gated merge protocol independently.
+Same-repository PRs merge one at a time; step 12 covers the refresh and
+re-review of the remaining heads.
 
 ## Issue-fix dispatch boundary
 
