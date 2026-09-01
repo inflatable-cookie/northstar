@@ -72,7 +72,7 @@ Northstar system:
   review.
 - the concurrent first-principles planning delegate delivered its packet from
   `handoffs/20260901-110423-northstar-first-principles-audit.md`; it writes
-  only its named triage packet. PR 16 is accepted before the required
-  post-merge refresh and re-review.
+  only its named triage packet. PR 16 merged at `d092599` as non-authoritative
+  intake; its recommendations await explicit operator promotion choices.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

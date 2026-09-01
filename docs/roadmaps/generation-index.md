@@ -78,8 +78,9 @@ sequence.
 
 Roadmaps `g02.038` through `g02.043` are complete. `g02.043/111` implemented
 economical day-to-day worker routing and merged through PR 15 at `d5acd75`.
-Refresh and re-review the accepted first-principles planning packet in PR 16,
-then merge it as non-authoritative intake and decide which findings to promote.
+The first-principles packet merged through PR 16 at `d092599` as
+non-authoritative intake. Discuss its operator decisions and choose which
+findings, if any, to promote.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed

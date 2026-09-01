@@ -86,5 +86,5 @@ choose local profile names or redefine their notes.
 
 ## Next Task
 
-Use the merged routing rule in live dispatch. Refresh and re-review the
-first-principles planning packet in PR 16 before choosing any promotion lane.
+Use the merged routing rule in live dispatch. Discuss the first-principles
+packet merged through PR 16 at `d092599` before choosing any promotion lane.

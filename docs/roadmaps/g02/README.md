@@ -98,10 +98,10 @@ rollover signal.
 
 ## Next Task
 
-Refresh and re-review the accepted first-principles planning packet in PR 16,
-then merge it as non-authoritative intake and decide which findings to promote.
-Signal papercut closure remains an independent consumer-owned coordination
-step.
+Discuss the first-principles packet merged through PR 16 at `d092599` and decide
+which findings, if any, to promote. Keep the packet non-authoritative until
+then. Signal papercut closure remains an independent consumer-owned
+coordination step.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and

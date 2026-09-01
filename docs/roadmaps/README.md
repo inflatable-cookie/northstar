@@ -77,7 +77,7 @@ evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Refresh and re-review the accepted first-principles planning packet in PR 16,
-then merge it as non-authoritative intake and decide which findings to promote.
-Keep the independent Signal papercut closure with the Signal orchestrator; do
-not duplicate it here.
+Discuss the first-principles packet merged through PR 16 at `d092599` and decide
+which findings, if any, to promote. Keep the packet non-authoritative until
+then. Keep the independent Signal papercut closure with the Signal orchestrator;
+do not duplicate it here.
