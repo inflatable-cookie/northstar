@@ -372,6 +372,34 @@ Status: complete; corrected exact head reviewed and merged
   evidence log. No docs false positive occurred.
 - Provider family: not supplied.
 
+### 011 — Poodle shared motion-policy planning delegate
+
+Status: provisional packet; operator decisions remain open
+
+- Worker class: `frontier planning`, not implementation. Operator-facing host
+  API, inheritance, and lifecycle decisions cross runtime boundaries and need
+  direct high-reasoning conversation.
+- Ready frontier: ran beside the design-guidance planning delegate and drag-bug
+  session. Motion implementation waits for planning PR review, merge, canonical
+  promotion, and readiness. Block sliders follow the first motion outcome;
+  icon and shimmer gates remain downstream.
+- Outcome: the delegate worktree contains
+  `docs/triage/20260901-121255-motion-policy-decision.md`; no PR exists yet.
+  Full-default behavior and reduced-opacity with a frozen endpoint are settled.
+  Host shape and inheritance remain unresolved in the delegate thread.
+- Operator intervention after dispatch: answered the first two motion choices.
+- Review: zero rounds. The open items are operator decisions, not review
+  blockers.
+- Control-plane friction: material. A `request_user_input` permission was
+  mirrored into the parent after the delegate had already asked directly,
+  producing duplicate operator questions. The next permission was denied
+  without interrupt and instructed the delegate to keep questions in its own
+  thread; the delegate then finished without a selection. The direct delegate
+  conversation remains the source of truth.
+- Documentation QA: none.
+- Reduction fixture: none.
+- Provider family: not supplied.
+
 ## Material protocol defect
 
 The operator observed active orchestrator threads drop from roughly six-to-ten
@@ -391,7 +419,7 @@ experiment; no consumer lane is changed to manufacture proof.
 
 ## Cohort progress
 
-- Observations received: 10.
+- Observations received: 11.
 - Completed cohort lanes: 2 of 8. Signal observation 004 and Loophole observation
   010 are reviewed and merged; observation 007 passed review but was not yet
   merged, observation 008 stopped before implementation, and observation 005 is
@@ -405,7 +433,8 @@ experiment; no consumer lane is changed to manufacture proof.
   observations 004–005 are post-refresh day-to-day choices; observation 006 is
   a frontier lane whose two escalation axes are explicit; observation 009 is a
   frontier planning delegate rather than an implementation worker; observation
-  010 is another bounded day-to-day implementation choice.
+  010 is another bounded day-to-day implementation choice; observation 011 is
+  the second frontier planning delegate in the same Poodle frontier.
 - Natural parallel shapes: 3. Observation 001 paired implementation with
   disjoint research; observation 002 paired two independent implementation
   lanes; observation 009 paired two planning delegates and an independent
@@ -416,7 +445,7 @@ experiment; no consumer lane is changed to manufacture proof.
   and five benign accepted docs shapes from observations 002, 004, 006, 007,
   and 010.
 - Control-plane or task-routing friction appears in observations 001–004 and
-  006–008 and 010; observations 005 and 009 report none.
+  006–008 and 010–011; observations 005 and 009 report none.
 
 ## Closeout
 
