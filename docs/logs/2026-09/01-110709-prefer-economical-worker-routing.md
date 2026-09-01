@@ -95,6 +95,15 @@ gates for risky surfaces were not weakened.
 
 https://github.com/inflatable-cookie/northstar/pull/15
 
+## Review revision
+
+Exact-head review of `8f209ba` recorded one blocking `integration-drift`: the
+branch was cut from `463d12e` and the PR deleted the concurrent planning-delegate
+handoff added on current `main` (`d287a277`). This branch was rebased onto that
+main, the audit handoff is preserved byte-for-byte, and front doors now name
+both this worker lane and the concurrent first-principles delegate. Routing
+meaning is unchanged.
+
 ## Next
 
-Orchestrator exact-head review of that PR. The worker does not merge.
+Orchestrator exact-head review of the refreshed PR. The worker does not merge.

@@ -69,5 +69,8 @@ Northstar system:
 - `g02.043/111` implemented economical day-to-day worker routing; frontier
   workers now require both highest-priority/material-consequence and
   exceptional-reasoning gates. Awaiting orchestrator exact-head review.
+- a concurrent first-principles planning delegate is in flight from
+  `handoffs/20260901-110423-northstar-first-principles-audit.md`; it writes
+  only its named triage packet
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

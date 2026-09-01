@@ -78,5 +78,6 @@ evidence; that evidence remains the provenance for the current active lane.
 ## Next Task
 
 Review and merge the `g02.043/111` PR, then choose the next `g02` milestone
-from the generation runway. Keep the independent Signal papercut closure with the
-Signal orchestrator; do not duplicate it here.
+from the generation runway. A concurrent first-principles planning-delegate
+handoff is live and owns only its named triage packet. Keep the independent
+Signal papercut closure with the Signal orchestrator; do not duplicate it here.

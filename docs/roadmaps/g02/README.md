@@ -99,8 +99,9 @@ rollover signal.
 ## Next Task
 
 Review and merge the `g02.043/111` PR, then choose the next `g02` milestone from
-the generation runway. Signal papercut closure remains an independent
-consumer-owned coordination step.
+the generation runway. A concurrent first-principles planning-delegate handoff
+is live and owns only its named triage packet. Signal papercut closure remains
+an independent consumer-owned coordination step.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and
