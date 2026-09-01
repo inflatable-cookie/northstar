@@ -1,6 +1,6 @@
 # 042 - Make Orchestrator Scheduling Parallel-First
 
-Status: active
+Status: complete
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.025`, `g02.035`, `g02.036`, `g02.037`
@@ -8,7 +8,7 @@ Vision tags: `orchestration`, `parallelism`, `workers`, `paseo`, `model-efficien
 Governing refs: `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`,
 `docs/contracts/001-working-rules.md`,
 `bundle-docs/sections/07-delivery-framework-and-autonomy.md`
-Planning state: card 110 ready for worker dispatch
+Planning state: card 110 complete; PR open for orchestrator exact-head review
 
 ## Problem
 
@@ -20,14 +20,14 @@ conversation habit rather than by dependency.
 
 ## Goals
 
-- [ ] make dependency-frontier planning part of runway compilation and every
+- [x] make dependency-frontier planning part of runway compilation and every
   dispatch checkpoint;
-- [ ] make launching all safe ready lanes up to available capacity the default;
-- [ ] refill capacity and continue unrelated planning/review while workers run;
-- [ ] require a concrete reason for serializing an otherwise-ready lane;
-- [ ] preserve one coherent issue-fix lane and every authority, worktree,
+- [x] make launching all safe ready lanes up to available capacity the default;
+- [x] refill capacity and continue unrelated planning/review while workers run;
+- [x] require a concrete reason for serializing an otherwise-ready lane;
+- [x] preserve one coherent issue-fix lane and every authority, worktree,
   review, exact-head, and merge gate;
-- [ ] distribute the behavior through doctrine, consumer contracts, the
+- [x] distribute the behavior through doctrine, consumer contracts, the
   installable skill, handoff template, and operator guidance.
 
 ## Non-goals
@@ -89,6 +89,6 @@ choose a scheduler implementation or provider-specific concurrency limit.
 
 ## Next Task
 
-Dispatch card `g02.042/110` from the committed handoff. The worker opens a PR;
-the orchestrator reviews and merges the exact accepted head without another
-operator approval prompt.
+Card `g02.042/110` is complete and its PR is open. The orchestrator reviews the
+exact head and merges it without another operator approval prompt, then chooses
+the next `g02` milestone from the generation runway.

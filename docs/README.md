@@ -60,7 +60,11 @@ Northstar system:
   but canonical promotion and readiness remain with the orchestrator
 - `g02.041/109` repaired partial Rust evidence collection and merged; Signal
   owns the originating papercut closure
-- `g02.042/110` is ready to make dependency-frontier, parallel-first worker
-  scheduling the orchestrator default
+- dependency-frontier, parallel-first worker scheduling is the orchestrator
+  default: every safe ready lane launches up to available capacity, freed slots
+  refill from the queue, and a serial lane must name its dependency, shared
+  surface, unresolved authority, or capacity limit
+- `g02.042/110` delivered that default; its PR awaits orchestrator exact-head
+  review
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

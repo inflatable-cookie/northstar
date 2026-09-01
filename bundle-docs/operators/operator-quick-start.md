@@ -120,10 +120,19 @@ project's real idempotent setup task, then replays machine-local
 repository rather than treating the starter wording as doctrine.
 
 In this mode, the orchestrator commits and pushes the planning state and one
-worker handoff under `docs/handoffs/` before dispatch. The operator receives
-the handoff's absolute path; no second prompt or copied context is needed.
-The handoff lists sibling repos to symlink into the worktree container
-directory before project setup needs them.
+worker handoff under `docs/handoffs/` per dispatched lane before dispatch. The
+operator receives each handoff's absolute path; no second prompt or copied
+context is needed. Each handoff lists sibling repos to symlink into the worktree
+container directory before project setup needs them.
+
+You do not have to ask for parallel workers. The orchestrator plans ready work
+as a dependency graph and launches every safe lane up to available capacity,
+then refills each slot as a worker finishes. Capacity is whatever your control
+plane offers; without one, you simply get several absolute handoff paths at once
+and launch as many as you want. A lane that stays serial must come with a named
+reason — a dependency edge, a shared mutable or closeout surface, unresolved
+authority, or a capacity limit. Same-repo PRs still merge one at a time, and the
+orchestrator re-reviews any remaining head that a merge changed.
 
 You can also ask the orchestrator to spin off a planning conversation for one
 topic. It launches a frontier planning delegate in a separate worktree/thread;
