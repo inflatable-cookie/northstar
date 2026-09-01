@@ -98,7 +98,7 @@ implement or promote.
 - **Recovery:** trustworthy planning surfaces and canonical refs restored.
 - **Normalize:** baseline or strict spine installed/maintained; Effigy-first QA.
 - **Orchestrator:** question-led planning, parallel-first dispatch of the whole
-  safe ready dependency frontier up to available capacity, economical day-to-day worker default
+  safe ready dependency frontier without a global thread budget, lane-local provider/profile routing, economical day-to-day worker default
   with frontier workers only when both escalation axes hold, optional
   operator-facing frontier planning delegates with orchestrator-owned promotion,
   one pushed worker handoff under `docs/handoffs/` per launched lane, optional

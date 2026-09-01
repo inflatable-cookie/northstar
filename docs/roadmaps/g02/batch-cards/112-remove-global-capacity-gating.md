@@ -1,6 +1,6 @@
 # 112 - Remove Global Capacity Gating
 
-Status: ready
+Status: complete
 Owner: repo maintainers
 Created: 2026-09-01
 Master roadmap: `g02.044`
@@ -43,18 +43,18 @@ review gates.
 
 ## Acceptance Criteria
 
-- [ ] every safe ready lane launches without a global thread-count limit;
-- [ ] provider/model/profile refusal affects only that route and lane;
-- [ ] a suitable alternative profile is tried without changing worker class;
-- [ ] no-fit state pauses one lane while unrelated ready lanes continue;
-- [ ] ambiguous transport state preserves returned identities and prevents a
+- [x] every safe ready lane launches without a global thread-count limit;
+- [x] provider/model/profile refusal affects only that route and lane;
+- [x] a suitable alternative profile is tried without changing worker class;
+- [x] no-fit state pauses one lane while unrelated ready lanes continue;
+- [x] ambiguous transport state preserves returned identities and prevents a
   duplicate retry;
-- [ ] dependency, shared-surface, authority, and merge-order gates stay intact;
-- [ ] old first-refusal/global-queue/freed-slot wording is absent from live
+- [x] dependency, shared-surface, authority, and merge-order gates stay intact;
+- [x] old first-refusal/global-queue/freed-slot wording is absent from live
   reusable surfaces and guarded by deterministic negative assertions;
-- [ ] doctrine, copy-ready contracts, skill source, operator docs, and installed
+- [x] doctrine, copy-ready contracts, skill source, operator docs, and installed
   payload agree;
-- [ ] repository QA and isolated skill-install parity pass.
+- [x] repository QA and isolated skill-install parity pass.
 
 ## Review Oracle
 
@@ -82,4 +82,6 @@ identity ambiguity, provider-route unavailability, and a real serial dependency.
 
 ## Next Task
 
-Implement from the committed handoff. Do not merge from the worker lane.
+Orchestrator exact-head review of this PR. The worker does not merge. After
+merge and skill install, notify active orchestrator-labelled threads to re-read
+the corrected mode.

@@ -126,16 +126,18 @@ context is needed. Each handoff lists sibling repos to symlink into the worktree
 container directory before project setup needs them.
 
 You do not have to ask for parallel workers. The orchestrator plans ready work
-as a dependency graph and launches every safe lane up to available capacity,
-then starts the next queued lane as soon as a worker finishes, without waiting
-for that worker's PR to merge. Capacity is discovered rather than assumed: an
-explicit value if your control plane reports one, otherwise the first launch
-refusal it gives, and without a control plane you simply get several absolute
-handoff paths at once and launch as many as you want. You are never asked to
-guess a worker count. A lane that stays serial must come with a named
-reason — a dependency edge, a shared mutable or closeout surface, unresolved
-authority, or a capacity limit. Same-repo PRs still merge one at a time, and the
-orchestrator re-reviews any remaining head that a merge changed.
+as a dependency graph and launches every safe lane without a global thread budget.
+A provider spend cap, quota, rate limit, or unavailable profile pauses
+or reroutes only that lane; unrelated ready work keeps launching. If the
+selected day-to-day route is unavailable, the orchestrator tries another
+matching profile of the same class rather than spending a frontier worker. If
+no suitable route remains, that lane keeps its handoff and workspace so recovery
+does not duplicate the agent. Without a control plane you simply get every
+absolute handoff path at once and launch as many as you want. You are never
+asked to guess a worker count. A lane that stays serial must come with a named
+reason — a dependency edge, a shared mutable or closeout surface, or unresolved
+authority. Same-repo PRs still merge one at a time, and the orchestrator
+re-reviews any remaining head that a merge changed.
 
 Ordinary workers use a matching non-frontier day-to-day profile. Frontier
 workers are rare: the lane must be both exceptionally difficult after planning

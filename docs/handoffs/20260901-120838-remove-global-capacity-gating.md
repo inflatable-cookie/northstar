@@ -5,7 +5,7 @@ handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
 handoff: single-file-path-only
-status: ready-to-launch
+status: awaiting-review
 owner: repo maintainers
 created: 2026-09-01
 updated: 2026-09-01
@@ -81,7 +81,7 @@ lane's authority chain and avoiding duplicate agents.
   `git diff --check`.
 - **PR base/head:** `main` <- `worker/remove-global-capacity-gating`.
 - **PR URL:** pending.
-- **Review state:** awaiting worker implementation and exact-head review.
+- **Review state:** worker implementation complete; awaiting exact-head review.
 - **Merge path:** orchestrator after accepted review of the current head and
   passing required checks.
 

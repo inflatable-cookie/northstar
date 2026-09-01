@@ -1,7 +1,7 @@
 # 07 Delivery Framework and Autonomy
 
 Status: active
-Updated: 2026-08-29
+Updated: 2026-09-01
 
 ## Why this section matters now
 
@@ -613,7 +613,7 @@ card because planning failed to leave a longer-horizon runway.
 Parallelism is a scheduling default, not an operator-requested optimization. An
 orchestrator maps the runway's meaningful lanes as a dependency graph, keeps a
 current ready frontier, and refreshes that frontier at every dispatch
-checkpoint. It launches every safe frontier lane up to available capacity
+checkpoint. It launches every safe frontier lane without a global worker-slot budget
 instead of following one lane through dispatch, review, and merge.
 
 A lane belongs on the frontier only when it has:
@@ -629,30 +629,34 @@ closeout/front-door surfaces, or reserve one named orchestrator integration
 step before launch. Two workers never own the same front door.
 
 When a condition fails, keep only that edge or lane serial and record the exact
-dependency, shared surface, unresolved authority, or capacity limit. Unrelated
-ready work is not serialized around one blocked edge. Parallelism is never a
-reason to invent a speculative card to fill a slot, or to split one coherent
-issue-fix lane into diagnosis and repair workers.
+dependency, shared surface, or unresolved authority. Unrelated ready work is
+not serialized around one blocked edge. A provider, model, or profile quota,
+spend, rate, or availability failure is lane-local routing state,
+not a reason to serialize the rest of the frontier. Parallelism is never a
+reason to invent
+a speculative card, or to split one coherent issue-fix lane into diagnosis and
+repair workers.
 
-Capacity is discovered, never guessed. Use an explicit value when the active
-control plane surfaces one. Many adapters can launch workers without exposing
-any capacity, quota, or slot value; there the orchestrator attempts the safe
-lanes in roadmap-priority order and treats the first explicit launch refusal as
-that checkpoint's capacity. It preserves every workspace or agent identity
-already created, queues the refused and remaining lanes against that named
-adapter limit, and retries the retained lane state when a slot frees. Where no
-control plane is installed, the orchestrator publishes a handoff per selected
-lane and gives the operator every absolute path at once; their launch throughput
-becomes the limit. Northstar names no fixed worker count, provider, model, or
-scheduler daemon, and never asks the operator to guess a count.
+A control-plane workspace or agent creation failure belongs to that lane's
+transport state. Preserve every returned workspace or agent identity so an
+ambiguous attempt is not duplicated, then continue launching unrelated lanes
+whose transport state is clear. Mark only the refused provider or profile route
+unavailable and try another configured profile whose current notes fit the same
+worker role and capability. Do not promote an ordinary lane to frontier merely
+because its day-to-day route is unavailable. If no suitable route remains,
+pause only that lane, preserve its committed handoff and workspace state,
+report the provider/profile gap, and continue every unrelated ready lane.
+Recovery reuses the retained authority chain; it does not create a duplicate
+worker or require a rebrief.
 
-When capacity is smaller than the frontier, roadmap priority selects the first
-lanes and the rest stay queued. A worker-finish notification frees a slot
-immediately: the orchestrator refreshes the frontier and starts the next queued
-lane then, before or alongside exact-head review of the finished lane's PR,
-rather than waiting for that PR to merge. While workers run, the orchestrator
-continues non-overlapping planning, review, revision routing, merge, and closeout
-rather than idling on one lane.
+Where no control plane is installed, the orchestrator publishes a handoff per
+selected lane and gives the operator every absolute path at once. Northstar
+names no fixed worker count, provider, model, or scheduler daemon, and never
+asks the operator to guess a count.
+
+While workers run, the orchestrator continues non-overlapping planning, review,
+revision routing, merge, and closeout rather than idling on one lane. A
+worker-finish notification starts review of that lane; it does not refill a global launch queue.
 
 Every gate survives concurrency. Each worker keeps its own worktree, branch,
 handoff, PR, review loop, and exact-head merge gate. Same-repository PRs merge
@@ -687,10 +691,11 @@ surfaces may use a capable non-frontier worker. Pause before dispatch when the
 review oracle is not explicit.
 
 When multiple plausible designs or an unresolved contract choice remain, return
-to planning rather than spending a frontier worker to choose architecture. If no
-configured non-frontier profile fits an ordinary lane, report the profile gap
-instead of silently promoting it to frontier. An operator-named profile remains
-an explicit override.
+to planning rather than spending a frontier worker to choose architecture. If
+the matching day-to-day route is unavailable, try another same-class profile
+rather than spending a frontier worker. If no configured non-frontier profile
+fits an ordinary lane, report the profile gap instead of silently promoting it
+to frontier. An operator-named profile remains an explicit override.
 
 ## Conversational planning delegation
 

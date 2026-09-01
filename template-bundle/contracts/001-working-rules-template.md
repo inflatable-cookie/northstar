@@ -187,8 +187,9 @@ informal habits.
 
 - Parallel dispatch is the default. The orchestrator maps ready work as a
   dependency graph, refreshes the ready frontier at every dispatch checkpoint,
-  and launches every safe frontier lane up to available capacity without a
-  second operator request.
+  and launches every safe frontier lane without a global thread budget or a
+  second operator request. It does not wait for another worker to finish before
+  creating a new thread.
 - A lane joins the frontier only with no shared mutable scope, no
   ordering/data/generated-artifact dependency, no overlapping authority
   decision, and its own ready cards, validation, evidence, stop conditions,
@@ -196,20 +197,20 @@ informal habits.
 - Same-repository lanes must partition mutable and closeout/front-door surfaces
   or reserve one named orchestrator integration step. Two workers never own the
   same front door.
-- A serial decision must name the dependency, shared surface, unresolved
-  authority, or capacity limit. Do not serialize unrelated ready work around one
-  blocked edge, invent a card to fill a slot, or split one coherent issue-fix
-  lane.
-- Discover capacity; do not guess it. Use an explicit control-plane value when
-  one is surfaced. When an adapter launches workers but exposes no capacity
-  signal, attempt safe lanes in roadmap-priority order and treat the first
-  explicit refusal as that checkpoint's limit: keep the lane state already
-  created, queue the rest, and retry when a slot frees. With no control plane,
-  publish every selected handoff at once and let operator launch throughput be
-  the limit. Do not record a fixed worker count, provider, or model.
-- A worker-finish notification frees a slot immediately. Start the next queued
-  lane then, before or alongside exact-head review of the finished PR, and keep
-  doing non-overlapping planning, review, and closeout while workers run.
+- A serial decision must name the dependency, shared surface, or unresolved
+  authority. Do not serialize unrelated ready work around one blocked edge,
+  invent a speculative card, or split one coherent issue-fix lane.
+- Provider, model, or profile quota, spend, rate, or availability failure is
+  not a control-plane capacity signal. Preserve returned workspace and agent
+  identities so an ambiguous attempt is not duplicated, then continue unrelated
+  clear lanes. Try another configured profile that fits the same role and
+  capability; do not promote an ordinary lane to frontier merely because its
+  day-to-day route is unavailable. If no suitable route remains, pause only that
+  lane, preserve its handoff and workspace, and continue every unrelated ready
+  lane. With no control plane, publish every selected handoff at once. Do not
+  record a fixed worker count, provider, or model.
+- A worker-finish notification starts review of that lane; it does not refill a global launch queue.
+  Keep doing non-overlapping planning, review, and closeout while workers run.
 - Same-repository PRs merge one at a time. Refresh the remaining heads against
   current `main` after each merge and re-review any head that changed.
 
@@ -228,9 +229,10 @@ informal habits.
 - Risky surfaces still need an explicit review oracle and frontier review. A
   well-specified persistence or public-API change may use a capable
   non-frontier worker while the orchestrator keeps material review.
-- Unresolved designs return to planning. If no non-frontier profile fits
-  ordinary work, report the gap; do not silently escalate. An operator-named
-  profile remains an explicit override.
+- Unresolved designs return to planning. If the matching day-to-day route is
+  unavailable, try another same-class profile rather than spending a frontier
+  worker. If no non-frontier profile fits ordinary work, report the gap; do
+  not silently escalate. An operator-named profile remains an explicit override.
 
 ### Conversational planning delegation
 
