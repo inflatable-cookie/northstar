@@ -626,7 +626,7 @@ Status: complete; planning PR accepted and merged
 
 ### 020 — Acowtancy/Market card 164 card-162 closeout repair
 
-Status: changes requested; canonical planning corrected and worker resumed
+Status: complete; reviewed and merged
 
 - Worker class: `day-to-day`. This is a bounded documentation and papercut
   evidence repair with no exceptional post-planning reasoning.
@@ -634,13 +634,16 @@ Status: changes requested; canonical planning corrected and worker resumed
   ordering remains the named serial edge.
 - Outcome: Market PR 91 opened at initial head `792c365c3`; changes were
   requested. The orchestrator corrected canonical planning on `main` at
-  `5ef3e677d` and resumed the same worker. A revised exact head is pending.
+  `5ef3e677d`, resumed the same worker, accepted replacement head `63f694d1c`,
+  and merged it at `a621361d2`. The card-160 worker was then told to integrate
+  current `main`.
 - Operator intervention after dispatch: relayed only that PR 91 was ready. The
   orchestrator independently reviewed the diff and corrected the card and
   handoff.
-- Review: one round found one blocking `planning-change`. Dispatch had
-  incorrectly authorized appending to a historical log despite
+- Review: two rounds. Round one found one blocking `planning-change`: dispatch
+  had incorrectly authorized appending to a historical log despite
   `docs/AGENTS.md`; base and merge provenance wording also needed correction.
+  Round two accepted the corrected exact head with no blocker.
 - Control-plane friction: the originating worker ID was absent from scoped MCP
   `list_agents`. Global `paseo ls --global --all --json` resolved the retained
   identity. The same worker resumed and no duplicate lane was created.
@@ -653,6 +656,44 @@ Status: changes requested; canonical planning corrected and worker resumed
   papercut link.
 - Provider family: not recorded; the supplied route was a local profile name,
   omitted from durable evidence.
+
+### 021 — Effigy g08.041/card 1096 catalog fragment listing papercut
+
+Status: provisional; implementation complete, exact-head review starting
+
+- Worker class: `day-to-day`. This was a bounded direct Rust repair with
+  settled acceptance, so a non-frontier implementation profile fit.
+- Ready frontier: one safe lane with no sibling lanes. Exact-head review and a
+  check-gated merge are the named serial edge before same-repository `main`
+  refreshes.
+- Outcome: the worker finished and opened Effigy PR 70 at exact head
+  `ef549abb`; orchestrator review is starting. Do not count this as a completed
+  cohort lane until the owning orchestrator reports an accepted merge.
+- Operator intervention after dispatch: none.
+- Review: zero completed rounds and no blocking finding class yet.
+- Control-plane friction: none.
+- Documentation QA: structural. Planning publication initially needed
+  index-compatible path wording, then passed.
+- Reduction fixture: the roadmap, card, log, and front-door closeout edits for
+  the one-line bundled-inventory papercut.
+- Provider family: not supplied.
+
+### 022 — Effigy Papercuts environment-lock audit
+
+Status: complete; reviewed and merged
+
+- Worker class: `mechanical`. The lane was a long exhaustive test-only audit of
+  environment reads with a settled repair boundary.
+- Ready frontier: one lane. PR review and revision followed by same-repository
+  merge were the named serial edge.
+- Outcome: Effigy PR 69 merged at `54d67af8`.
+- Operator intervention after dispatch: none.
+- Review: two rounds. One blocking `execution-miss` found helper-hidden
+  runtime-DNS reads of `HOME`; the revised head passed.
+- Control-plane friction: none.
+- Documentation QA: none.
+- Reduction fixture: the `PAPERCUTS.md` closeout and short evidence-log update.
+- Provider family: not supplied.
 
 ## Material protocol defect
 
@@ -712,11 +753,13 @@ enumeration; this packet does not justify polling workers.
 
 ## Cohort progress
 
-- Observations received: 20.
-- Completed cohort lanes: 6 of 8. Signal observation 004, Loophole observation
-  010, Poodle observations 014 and 019, and Market observations 016–017 are
-  merged; observation 015 has changes requested, observation 007 passed review
-  but was not yet merged, and observation 005 is only a diagnostic kickoff.
+- Observations received: 22.
+- Completed cohort lanes: 8 of 8. Signal observation 004, Loophole observation
+  010, Poodle observations 014 and 019, Market observations 016–017 and 020,
+  and Effigy observation 022 are merged. The minimum cohort gate is met;
+  observation 021 remains provisional, observation 015 has changes requested,
+  observation 007 passed review but was not yet merged, and observation 005 is
+  only a diagnostic kickoff.
 - Projects represented: 7, exceeding the four-project breadth gate (`Poodle`,
   `Figmatic`, `Swallowtail`, `Signal`, `Effigy`, `Acowtancy/Market`, and
   `Loophole`).
@@ -737,7 +780,8 @@ enumeration; this packet does not justify polling workers.
   a post-refresh day-to-day choice for material but fully settled public
   semantics; observation 019 completes the frontier conversational-planning
   lane opened in observation 009; observation 020 is another economical
-  day-to-day repair choice.
+  day-to-day repair choice; observation 021 is a bounded day-to-day Rust
+  repair; observation 022 is a long mechanical audit with settled boundaries.
 - Natural parallel shapes: 6. Observation 001 paired implementation with
   disjoint research; observation 002 paired two independent implementation
   lanes; observation 009 paired two planning delegates and an independent
@@ -749,24 +793,25 @@ enumeration; this packet does not justify polling workers.
   020 refilled a safe day-to-day closeout lane beside continuing card 160. The
   required two multi-lane frontier observations are present in observations 002
   and 015.
-- Completed review rounds: 15. Recorded blockers total three `planning-change`,
-  nine `execution-miss`, five `oracle-gap`, and five `integration-drift`
+- Completed review rounds: 18. Recorded blockers total three `planning-change`,
+  ten `execution-miss`, five `oracle-gap`, and five `integration-drift`
   findings, plus three observation-015 blockers whose Northstar codes were not
   supplied.
-- Validation-reduction fixtures: twelve—one token-scanner boundary false positive,
+- Validation-reduction fixtures: fourteen—one token-scanner boundary false positive,
   five benign accepted docs shapes from observations 002, 004, 006, 007, and
   010, the promoted-triage deletion from observation 013, and three concurrent
   closeout shapes from observations 015–017, plus the authority-aware triage
   compaction from observation 018 and historical-log repair from observation
-  020.
+  020, the bundled-inventory closeout from observation 021, and the compact
+  papercut closeout from observation 022.
 - Control-plane or task-routing friction appears in observations 001–004 and
   006–008, 010–011, 013–017, and 019–020; observations 005, 009, 012, and
-  018 report none.
+  018 and 021–022 report none.
 
 ## Closeout
 
-When the cohort gate is met, promote the reconciled evidence into one dated log,
-compile the bounded validation-reduction card, carry the settled Paseo archive
-and teardown ownership into post-freeze planning, and remove this triage
-buffer. Keep modular language-package extraction and mode consolidation planned
-but unimplemented during the protocol freeze.
+The cohort gate is met. Next, promote the reconciled evidence into one dated
+log, compile the bounded validation-reduction card, carry the settled Paseo
+archive and teardown ownership into post-freeze planning, and remove this
+triage buffer. Keep modular language-package extraction and mode consolidation
+planned but unimplemented during the protocol freeze.
