@@ -489,7 +489,7 @@ Status: complete; planning PR accepted and merged
 
 ### 015 — Acowtancy/Market card 160 student-safe quiz delivery
 
-Status: changes requested after first review round
+Status: changes requested after second review round; same worker resumed
 
 - Worker class: `frontier`. The lane combines exceptional reasoning across 13
   closed projection families, drag-and-drop deassociation, and immutable
@@ -498,27 +498,39 @@ Status: changes requested after first review round
 - Ready frontier: the serial edge `card 161 -> card 160` was cleared. The atomic
   response card remains downstream. Independent cards 162 and 163 launched
   concurrently, with same-repository merge order kept serial.
-- Outcome: Market PR 88 is open at exact head
-  `2884582c05d293fa8b51902bb211cc8c89854216`; changes were requested after the
-  first review round.
+- Outcome: Market PR 88 remains open with changes required at replacement head
+  `10d08557`. The same worker resumed after repeated rebases onto advancing
+  Market `main`.
 - Operator intervention after dispatch: treated the initial Claude-family quota
   failure as route-local. After recovery exposed conflicting retained state,
   the operator selected an xAI-family route and supplied a recovery handoff.
-  The viable implementation commit was recovered onto post-card-161 `main`.
-- Review: one changes-requested round found three blocking areas. Runtime schema
-  closure still accepted unknown grading fields; missing-token request
+  The viable implementation commit was recovered onto post-card-161 `main`,
+  rebased as same-repository merges advanced, and returned explicitly to the
+  same worker after each changes-requested verdict.
+- Review: two changes-requested rounds. Round one found three blocking areas:
+  runtime schema closure accepted unknown grading fields; missing-token request
   ingestion produced Axum 422/null rather than the required oracle behavior;
   and the public attempt UUID exposed the deterministic deassociation seed.
-  Northstar finding codes were not supplied for these three blockers.
+  Northstar finding codes were not supplied for those three blockers. Round two
+  found one `execution-miss` because the whole submission wrapper remained
+  open, one `integration-drift` because the shared DigitalExam endpoint was
+  documented as quiz-only, one `oracle-gap` covering missing incorrect,
+  cross-user, path, nested, and DigitalExam HTTP proofs, and one
+  `validation-gap` because the base-to-head diff-check claim was false.
 - Control-plane friction: killing the bound owner during an attempted
   same-workspace fallback archived the shared workspace and automatically
   closed its replacement. An older complete but unpushed implementation was
   not surfaced by initial routing. It was preserved; an empty duplicate was
-  cancelled. The provider refusal itself stayed lane-local.
-- Documentation QA: none.
-- Reduction fixture: two conflict resolutions preserved both card 160's
+  cancelled. Route-local redispatch succeeded, the provider refusal did not
+  stop unrelated lanes, and the original authority chain remained intact.
+- Documentation QA: repository-owned. The current implementation log records a
+  clean `git diff --check`, but one trailing space makes that command fail.
+- Reduction fixtures: two conflict resolutions preserved both card 160's
   pending-review state and card 161's merged state. This is benign concurrent
-  closeout reconciliation, not new planning meaning.
+  closeout reconciliation, not new planning meaning. Removing the single
+  trailing space at
+  `docs/logs/2026-09/01-113000-card-160-student-safe-quiz-delivery.md:52` is a
+  second benign fixture that makes the exact base-to-head claim true.
 - Provider families: Claude and xAI, both supplied explicitly.
 
 ### 016 — Acowtancy/Market card 163 Farmyard worktree Cargo routing
@@ -861,11 +873,11 @@ enumeration; this packet does not justify polling workers.
   papercut tracker's serial edge; observation 025 refilled that edge beside the
   continuing qualification lane. The required two multi-lane frontier
   observations are present in observations 002 and 015.
-- Completed review rounds: 21. Recorded blockers total three `planning-change`,
-  ten `execution-miss`, five `oracle-gap`, and five `integration-drift`
-  findings, plus three observation-015 blockers whose Northstar codes were not
-  supplied.
-- Validation-reduction fixtures: seventeen—one token-scanner boundary false positive,
+- Completed review rounds: 22. Recorded blockers total three `planning-change`,
+  eleven `execution-miss`, six `oracle-gap`, six `integration-drift`, and one
+  `validation-gap` finding, plus three observation-015 round-one blockers whose
+  Northstar codes were not supplied.
+- Validation-reduction fixtures: eighteen—one token-scanner boundary false positive,
   five benign accepted docs shapes from observations 002, 004, 006, 007, and
   010, the promoted-triage deletion from observation 013, and three concurrent
   closeout shapes from observations 015–017, plus the authority-aware triage
@@ -873,7 +885,8 @@ enumeration; this packet does not justify polling workers.
   020, the bundled-inventory closeout from observation 021, and the compact
   papercut closeout from observation 022, plus the card-067 state transition
   from observation 023 and the two-file supersession closeout from observation
-  024, plus the source-preserving test partition from observation 025.
+  024, the source-preserving test partition from observation 025, and the
+  trailing-space evidence correction from observation 015.
 - Control-plane or task-routing friction appears in observations 001–004 and
   006–008, 010–011, 013–017, and 019–020; observations 005, 009, 012, and
   018 and 021–025 report none.
