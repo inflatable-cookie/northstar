@@ -568,6 +568,35 @@ Status: complete; exact head reviewed and merged
   Effigy routing edit.
 - Provider family: not supplied.
 
+### 018 — Poodle g16.034 shared motion policy and five-family pilot
+
+Status: day-to-day implementation worker active; PR pending
+
+- Worker class: `day-to-day`. The public semantics are material, but canonical
+  planning is fully settled and carries an explicit eleven-row review oracle.
+  Implementation therefore does not meet the exceptional post-planning
+  reasoning threshold for a frontier worker.
+- Ready frontier: g16.034 launched beside the operator-driven interactive drag
+  lane and design-guidance planning. If the drag lane names a pilot component
+  or shared file, only that overlapping chunk stops; unrelated motion work
+  continues. Block sliders remain serial after g16.034, with icon and shimmer
+  downstream.
+- Outcome: canonical promotion landed as `b89c11275`; the worker handoff landed
+  as `60eea0e25`. Paseo launched agent
+  `48433232-36da-411a-b3fa-953b5e23a61e` in workspace
+  `wks_67387cd23d65f7d5`. No PR exists yet.
+- Operator intervention after dispatch: none.
+- Review: readiness review was coherent with no blocker. Implementation review
+  is pending.
+- Control-plane friction: none. Current profile notes selected the first
+  matching non-frontier day-to-day route; launch succeeded without fallback.
+- Documentation QA: none. `docs:lint` and `docs:check` passed during promotion.
+- Reduction fixture: two promoted triage notes totalling 914 lines were replaced
+  by one 96-line unresolved post-motion queue. This is useful structural
+  lifecycle and pruning evidence, but not a copy-only prose fixture because the
+  replacement also advances authority state.
+- Provider family: xAI, supplied explicitly.
+
 ## Material protocol defect
 
 The operator observed active orchestrator threads drop from roughly six-to-ten
@@ -619,7 +648,7 @@ protocol during the freeze.
 
 ## Cohort progress
 
-- Observations received: 17.
+- Observations received: 18.
 - Completed cohort lanes: 5 of 8. Signal observation 004, Loophole observation
   010, Poodle observation 014, and Market observations 016–017 are merged;
   observation 015 has changes requested, observation 007 passed review but was
@@ -628,7 +657,7 @@ protocol during the freeze.
   `Figmatic`, `Swallowtail`, `Signal`, `Effigy`, `Acowtancy/Market`, and
   `Loophole`).
 - Provider families counted: 2 of 2. Swallowtail, Figmatic, and Market supplied
-  Claude explicitly; Figmatic and Market also supplied xAI.
+  Claude explicitly; Figmatic, Market, and Poodle supplied xAI.
 - Worker routing: observations 001–003 are pre-refresh frontier baselines;
   observations 004–005 are post-refresh day-to-day choices; observation 006 is
   a frontier lane whose two escalation axes are explicit; observation 009 is a
@@ -640,24 +669,30 @@ protocol during the freeze.
   axes explicit and a provider route recovered before work began; observation
   014 completes the frontier conversational-planning lane opened in observation
   011; observation 015 continues the frontier Market lane from observation 008;
-  observations 016–017 are economical day-to-day choices.
-- Natural parallel shapes: 4. Observation 001 paired implementation with
+  observations 016–017 are economical day-to-day choices; observation 018 is
+  a post-refresh day-to-day choice for material but fully settled public
+  semantics.
+- Natural parallel shapes: 5. Observation 001 paired implementation with
   disjoint research; observation 002 paired two independent implementation
   lanes; observation 009 paired two planning delegates and an independent
   diagnostic session while preserving the serial promotion/readiness edge;
   observations 015–017 ran one frontier lane beside two independent day-to-day
-  lanes while keeping same-repository merge order serial. The required two
-  multi-lane frontier observations are now present in observations 002 and 015.
+  lanes while keeping same-repository merge order serial; observation 018
+  launched settled motion implementation beside interactive diagnosis and
+  planning while limiting any future overlap to the named chunk. The required
+  two multi-lane frontier observations are present in observations 002 and 015.
 - Completed review rounds: 13. Recorded blockers total two `planning-change`,
   nine `execution-miss`, five `oracle-gap`, and five `integration-drift`
   findings, plus three observation-015 blockers whose Northstar codes were not
   supplied.
-- Validation-reduction fixtures: ten—one token-scanner boundary false positive,
+- Validation-reduction fixtures: eleven—one token-scanner boundary false positive,
   five benign accepted docs shapes from observations 002, 004, 006, 007, and
   010, the promoted-triage deletion from observation 013, and three concurrent
-  closeout shapes from observations 015–017.
+  closeout shapes from observations 015–017, plus the authority-aware triage
+  compaction from observation 018.
 - Control-plane or task-routing friction appears in observations 001–004 and
-  006–008, 010–011, and 013–017; observations 005, 009, and 012 report none.
+  006–008, 010–011, and 013–017; observations 005, 009, 012, and 018 report
+  none.
 
 ## Closeout
 
