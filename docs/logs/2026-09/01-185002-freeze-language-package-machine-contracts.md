@@ -61,3 +61,8 @@ independent package inventories, exact core compatibility, and portable contract
 This card freezes schemas and validates them against the policy-free fixture and negative suite.
 It does not implement package installation adapters, runtime activation, language routing,
 or extraction of TypeScript/Rust into independent packages (which belong to cards 117-120).
+
+## PR
+
+https://github.com/inflatable-cookie/northstar/pull/21 — opened for card `g02.048/116`
+with exact-head review pending.

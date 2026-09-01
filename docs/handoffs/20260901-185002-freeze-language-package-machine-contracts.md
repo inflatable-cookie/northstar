@@ -86,8 +86,8 @@ the package protocol accidentally.
   qa:docs`; `effigy qa`; `git diff --check`.
 - **PR base/head:** `main` <-
   `worker/freeze-language-package-machine-contracts`.
-- **PR URL:** pending.
-- **Review state:** awaiting PR creation and orchestrator review.
+- **PR URL:** https://github.com/inflatable-cookie/northstar/pull/21.
+- **Review state:** awaiting orchestrator exact-head review.
 - **Merge path:** orchestrator after accepted exact-head review and passing
   required checks.
 
