@@ -79,6 +79,10 @@ Here is the state the worker is inheriting:
 - **Merge ordering:** same-repository PRs merge one at a time; the orchestrator
   refreshes this head against current `main` and re-reviews it if another lane
   merges first.
+- **Same-repo refresh:** the repair branch integrates current `origin/main` at
+  `280c1c5ffbf54eb32b4f495e902a6bf5c7e879a9` before final reporting. The
+  g02.045 closeout remains in exact-head review, while planned card
+  `g02.046/114` remains blocked and serial behind PR 18.
 - **Canonical refs:** `docs/architecture/system-architecture.md`;
   `docs/contracts/001-working-rules.md`;
   `docs/logs/2026-09/01-140857-close-live-dogfood-and-plan-reduction.md`.
@@ -95,9 +99,12 @@ Here is the state the worker is inheriting:
   `effigy qa`; `git diff --check`.
 - **PR base/head:** `main` <- `worker/validation-reduction-experiment`.
 - **PR URL:** https://github.com/inflatable-cookie/northstar/pull/18
-- **Implementation-tested head:** `9eb8c6be23ef668ff9dfcf456e4983b9014263a0`.
-- **Review state:** worker implementation, review corrections, and focused/full
-  validation complete; awaiting orchestrator exact-head review.
+- **Initial implementation-tested head:**
+  `9eb8c6be23ef668ff9dfcf456e4983b9014263a0`.
+- **Review-fix head before main refresh:**
+  `1bbc4320288a09767ea39a3bd58444b0ce4914dc`.
+- **Review state:** worker implementation and review corrections are complete;
+  the current-main refresh is integrated and final handoff validation is next.
 - **Merge path:** orchestrator after accepted review of the current head and
   passing required checks.
 

@@ -253,6 +253,14 @@ The implementation and closeout evidence above were corrected and validated on
 the worker branch after exact-head review. The PR is review-only; the
 orchestrator owns exact-head review and merge.
 
+## Same-Repo Refresh
+
+Before final reporting, the worker branch integrated current `origin/main` at
+`280c1c5ffbf54eb32b4f495e902a6bf5c7e879a9`. The merge preserves the g02.045
+review-correction closeout and the planned, blocked `g02.046/114` front-door
+state. Card 114 remains serial behind accepted review and merge of PR 18 and is
+outside this repair.
+
 ## Limits
 
 The experiment proves the checker boundary with local deterministic fixtures;
