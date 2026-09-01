@@ -245,6 +245,33 @@ D3. Acceptance of retiring prose-assertion validation (R2) — this loosens a
 D4. Whether a measurement window (R1) may displace new protocol milestones
     in the g02 runway.
 
+## Operator disposition — 2026-09-01
+
+- **D1 — split, with modular integration:** language quality should leave the
+  root payload. Northstar remains aware of compatible language packages and
+  can route to an available package when language work needs it. Rust and
+  TypeScript become packages under that shared protocol rather than permanent
+  root-skill special cases. The install/trust policy remains to be settled
+  before promotion.
+- **D2 — general-purpose audience:** Northstar remains usable by other people.
+  Operator convenience may inform dogfood but must not become reusable policy
+  when it would fail for another installation, harness, repository layout, or
+  workflow.
+- **D3 — retain structural validation, reduce prose coupling:** validation still
+  protects the docs spine, structured state, references, naming, parity, and
+  executable contracts. The reduction experiment targets substring assertions,
+  historical-path inventories, and other checks that mirror editorial prose;
+  it does not remove structural QA.
+- **D4 — accepted:** freeze orchestration-protocol growth for a dogfooding and
+  measurement window. A bounded validation-reduction experiment is the named
+  simplification lane during that window.
+- **R5 — accepted in direction:** consolidate overlapping modes after observed
+  usage identifies the durable set; do not choose the final mode count from the
+  audit estimate alone.
+
+These dispositions remain triage input until the orchestrator promotes them
+into vision, architecture, contracts, and a measurement/reduction roadmap.
+
 ## Unresolved questions
 
 - How much operator time does babysitting actually cost today vs pre-g02?
