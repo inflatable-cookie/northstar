@@ -101,5 +101,6 @@ accounting.
 
 ## PR
 
-Pending; the URL is recorded after `git push` and PR creation. The
-orchestrator owns exact-head review and merge.
+https://github.com/inflatable-cookie/northstar/pull/20 — opened at
+`006504c1bd41a48566620b3688842c9bd2c0b99d` with validation recorded above.
+The orchestrator owns exact-head review and merge.

@@ -33,7 +33,8 @@ repository validation as the real risk controls.
   `main` at `b30e288`.
 - **Done in this lane:** card 115 is implemented; `check:model-routing`
   falsifies all ten milestone oracle rows; the full validation suite passes;
-  the branch is pushed and a reviewable PR is open.
+  the branch is pushed and PR 20 is open
+  (https://github.com/inflatable-cookie/northstar/pull/20).
 - **Still open:** orchestrator exact-head review and merge of that PR.
 - **Current card:**
   `docs/roadmaps/g02/batch-cards/115-diversify-model-routing-across-runs.md`.
