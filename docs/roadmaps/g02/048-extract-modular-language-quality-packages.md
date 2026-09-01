@@ -1,6 +1,6 @@
 # 048 - Extract Modular Language Quality Packages
 
-Status: active; card 116 ready
+Status: active; card 116 complete
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.033`, promoted spec 034
@@ -91,5 +91,6 @@ before it becomes ready.
 
 ## Next Task
 
-Execute ready card `g02.048/116`. Do not start card 117 until card 116 is
-reviewed, merged, and its exact machine contracts are used to refresh card 117.
+Card `g02.048/116` is complete. Stop for exact-head review and PR merge. Do not
+start card 117 until card 116 is reviewed, merged, and its exact machine
+contracts are used to refresh card 117.

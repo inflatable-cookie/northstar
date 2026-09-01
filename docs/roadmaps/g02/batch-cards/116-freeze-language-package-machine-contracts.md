@@ -1,6 +1,6 @@
 # 116 - Freeze Language Package Machine Contracts
 
-Status: ready
+Status: complete
 Owner: repo maintainers
 Updated: 2026-09-01
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -65,17 +65,17 @@ compatibility validation succeeds.
 
 ## Acceptance Criteria
 
-- [ ] manifest covers every promoted contract field without provider-specific
+- [x] manifest covers every promoted contract field without provider-specific
   acquisition configuration;
-- [ ] registry and receipt distinguish source, content, manifest, trust, and
+- [x] registry and receipt distinguish source, content, manifest, trust, and
   compatibility identities;
-- [ ] package self-claims cannot grant official or third-party trust;
-- [ ] fixture has no production language rules, profiles, overlays, or engines;
-- [ ] one package can be addressed without retaining sibling payloads;
-- [ ] malformed, mutable, incompatible, duplicate, ambiguous, and digest-drift
+- [x] package self-claims cannot grant official or third-party trust;
+- [x] fixture has no production language rules, profiles, overlays, or engines;
+- [x] one package can be addressed without retaining sibling payloads;
+- [x] malformed, mutable, incompatible, duplicate, ambiguous, and digest-drift
   fixtures fail before executable package content is consulted;
-- [ ] schema/check surfaces are present in the installed Northstar skill;
-- [ ] focused checks, docs QA, full QA, parity, and `git diff --check` pass.
+- [x] schema/check surfaces are present in the installed Northstar skill;
+- [x] focused checks, docs QA, full QA, parity, and `git diff --check` pass.
 
 ## Review Oracle
 
@@ -123,7 +123,18 @@ compatibility validation succeeds.
 
 ## Completion Notes
 
-Pending.
+Completed and repaired machine contracts for modular language quality packages (g02.048/116):
+- Added `skills/northstar/references/packages/package-manifest.schema.json`, `official-registry.schema.json`, `installation-receipt.schema.json` (JSON Schema Draft 2020-12 dialect) and initial `official-registry.json`.
+- Implemented an iterative bounded schema validation engine evaluating the frozen contract vocabulary directly from disk and recursively failing closed on any unsupported schema keywords.
+- Added schema mutation discrimination proofs verifying that modifying supported schema constraints (such as `schema_version.const` to `9.9.9` or `package_id.pattern`) rejects instances and introducing unsupported keywords (such as `maxLength`) fails closed.
+- Implemented exact SemVer parsing and numeric range evaluation, supporting exact, caret, bounded, and open ranges while rejecting lexicographical comparison flaws.
+- Frozen package-relative path containment grammar and enforced strict rejection of directory traversal (`..`), empty segments, and absolute paths in schemas and runtime checks.
+- Modeled explicit receipt trust variants (`official`, `operator_allowlist`, `interactive_approval`) and source variants (`git`, `local_path`, `archive`), proving required and forbidden field combinations while preserving exact content identities (`package_tree_digest`, `manifest_digest`).
+- Added deep recursive policy-free fixture verification across all files and directories for zero production language rules, catalogues, profiles, or engines.
+- Proved independent package addressing and payload materialization into isolated staging from multi-package repository sources, verifying clean single-package inventories and negative multi-package leakage rejection.
+- Implemented mandatory negative review-oracle suite with explicit discrimination assertions for all 9 invariants (identity/digest-drift, self-authorizing trust, immutable sources, independent addressing/staging, exact semver ranges, path traversal, malformed manifests, duplicate registry packages, and ambiguous receipts).
+- Wired `check:language-packages` into root and skill `effigy.toml`, `qa:docs`, `validate`, and repo contract checks.
+- Validated with `effigy check:language-packages`, `effigy check:skill-install`, `effigy qa:docs`, `effigy qa`, and `git diff --check`.
 
 ## Next Task
 

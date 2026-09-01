@@ -8,6 +8,7 @@ alias = "northstar"
 "check:agent-instructions" = [{ rhai = "scripts/check-agent-instructions.rhai" }]
 "check:rust-quality" = [{ rhai = "scripts/check-rust-quality.rhai" }]
 "check:typescript-quality" = [{ rhai = "scripts/check-typescript-quality.rhai" }]
+"check:language-packages" = [{ rhai = "scripts/check-language-packages.rhai" }]
 "rust-quality:setup" = [{ rhai = "scripts/rust-quality-setup.rhai" }]
 "test:rust-quality-setup" = [{ task = "rust-quality:setup self-test" }]
 "typescript-quality:setup" = [{ rhai = "scripts/typescript-quality-setup.rhai" }]

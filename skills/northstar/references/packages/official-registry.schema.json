@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://northstar.invalid/schemas/language-package-official-registry.v1.json",
+  "title": "Northstar official language package registry",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "registry_version",
+    "packages"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "registry_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "packages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "package_id",
+          "version",
+          "repository",
+          "subpath",
+          "commit",
+          "tree_digest",
+          "manifest_digest",
+          "compatible_core_range"
+        ],
+        "properties": {
+          "package_id": {
+            "type": "string",
+            "pattern": "^@[a-z0-9-]+/[a-z0-9-]+$"
+          },
+          "version": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+          },
+          "repository": {
+            "type": "string",
+            "pattern": "^https://[a-zA-Z0-9.-]+(/[^/]+)*$"
+          },
+          "subpath": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_-][a-zA-Z0-9_.-]*(/[a-zA-Z0-9_-][a-zA-Z0-9_.-]*)*$"
+          },
+          "commit": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}$|^[0-9a-f]{64}$"
+          },
+          "tree_digest": {
+            "type": "string",
+            "pattern": "^(sha256:)?[0-9a-f]{64}$"
+          },
+          "manifest_digest": {
+            "type": "string",
+            "pattern": "^(sha256:)?[0-9a-f]{64}$"
+          },
+          "compatible_core_range": {
+            "type": "string",
+            "pattern": "^(\\*|[0-9]+\\.[0-9]+\\.[0-9]+|\\^[0-9]+\\.[0-9]+\\.[0-9]+|>=[0-9]+\\.[0-9]+\\.[0-9]+ <[0-9]+\\.[0-9]+\\.[0-9]+|>=[0-9]+\\.[0-9]+\\.[0-9]+|<[0-9]+\\.[0-9]+\\.[0-9]+)$"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

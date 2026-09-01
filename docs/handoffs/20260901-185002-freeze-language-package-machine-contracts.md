@@ -5,7 +5,7 @@ handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
 handoff: single-file-path-only
-status: ready-to-launch
+status: complete
 owner: repo maintainers
 created: 2026-09-01
 updated: 2026-09-01
@@ -32,6 +32,9 @@ the package protocol accidentally.
 
 ## Current State
 
+- **Done in this lane:** Card 116 implemented and validated. Added manifest,
+  registry, and receipt schemas; initial official-registry document; policy-free
+  fixture package; negative oracle suite; and focused checker.
 - **Repository:** `/Users/tom/Dev/projects/northstar`
 - **Planning branch:** `main`
 - **Planning base commit:** `b1e6691de564170ef5d0f6be306f1dce1dcd8a73`
@@ -54,6 +57,7 @@ the package protocol accidentally.
   `docs/roadmaps/g02/048-extract-modular-language-quality-packages.md`
 - **Ready cards, in order:**
   `docs/roadmaps/g02/batch-cards/116-freeze-language-package-machine-contracts.md`
+  (complete).
 - **Allowed runway:** card 116 only.
 - **Remaining card budget:** one card; stop after the reviewable PR.
 - **Dispatch topology:** sole ready frontier lane. Cards 117-120 are serial on
@@ -82,8 +86,8 @@ the package protocol accidentally.
   qa:docs`; `effigy qa`; `git diff --check`.
 - **PR base/head:** `main` <-
   `worker/freeze-language-package-machine-contracts`.
-- **PR URL:** pending.
-- **Review state:** awaiting worker implementation and PR.
+- **PR URL:** https://github.com/inflatable-cookie/northstar/pull/21.
+- **Review state:** awaiting orchestrator exact-head review.
 - **Merge path:** orchestrator after accepted exact-head review and passing
   required checks.
 
