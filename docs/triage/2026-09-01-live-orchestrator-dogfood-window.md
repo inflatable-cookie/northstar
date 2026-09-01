@@ -400,6 +400,34 @@ Status: provisional packet; operator decisions remain open
 - Reduction fixture: none.
 - Provider family: not supplied.
 
+### 012 — Poodle post-g16 ready-frontier refresh
+
+Status: scheduling checkpoint; all safe current lanes already launched
+
+- Worker class: orchestrator scheduling checkpoint, not a new worker lane. The
+  existing motion-policy and design-guidance lanes remain `frontier planning`
+  because each owns unresolved operator decisions. Interactive drag fixes
+  remain `day-to-day` because they are bounded and reproduction-led.
+- Ready frontier: motion planning, design-guidance planning, and interactive
+  drag fixes are all already launched. No global thread budget was applied.
+  Motion implementation remains serial on the motion delegate PR's review,
+  merge, canonical promotion, and readiness check. Block sliders follow the
+  first motion outcome; icon and shimmer work remain downstream of motion
+  policy. Publication needs explicit release authority, while CS20 and keyboard
+  work still depend on unresolved external or design decisions.
+- Outcome: no new PR or launch was warranted. Poodle `main` was clean and
+  synchronized at `0c81fbc22`; the refresh found no newly ready canonical card.
+- Operator intervention after dispatch: the corrected scheduler rule, plus the
+  earlier instruction that worker questions stay in their worker threads.
+- Review: zero rounds at this checkpoint. The remaining blocks are real
+  dependency or authority edges, not execution or transport failures.
+- Control-plane friction: none. The corrected rule removed the temptation to
+  infer a global slot ceiling. No provider route was attempted because no
+  additional lane was ready.
+- Documentation QA: none.
+- Reduction fixture: none.
+- Provider family: not supplied.
+
 ## Material protocol defect
 
 The operator observed active orchestrator threads drop from roughly six-to-ten
@@ -414,12 +442,15 @@ or rebrief.
 The settled correction is promoted to `g02.044/112` and spec 026. Provider,
 model, and profile availability is lane-local routing state. It may reroute or
 pause that lane, but it does not stop unrelated ready launches. The dogfood
-window stays open for post-install evidence and the planned validation-reduction
-experiment; no consumer lane is changed to manufacture proof.
+window stays open for the planned validation-reduction experiment; no consumer
+lane is changed to manufacture proof. Observation 012 is the first post-install
+scheduling checkpoint: every safe Poodle lane was already launched, no global
+slot budget was inferred, and the remaining serial edges were named from real
+dependency or authority constraints.
 
 ## Cohort progress
 
-- Observations received: 11.
+- Observations received: 12.
 - Completed cohort lanes: 2 of 8. Signal observation 004 and Loophole observation
   010 are reviewed and merged; observation 007 passed review but was not yet
   merged, observation 008 stopped before implementation, and observation 005 is
@@ -434,7 +465,9 @@ experiment; no consumer lane is changed to manufacture proof.
   a frontier lane whose two escalation axes are explicit; observation 009 is a
   frontier planning delegate rather than an implementation worker; observation
   010 is another bounded day-to-day implementation choice; observation 011 is
-  the second frontier planning delegate in the same Poodle frontier.
+  the second frontier planning delegate in the same Poodle frontier;
+  observation 012 is a post-install scheduling checkpoint, not another worker
+  lane.
 - Natural parallel shapes: 3. Observation 001 paired implementation with
   disjoint research; observation 002 paired two independent implementation
   lanes; observation 009 paired two planning delegates and an independent
@@ -445,7 +478,7 @@ experiment; no consumer lane is changed to manufacture proof.
   and five benign accepted docs shapes from observations 002, 004, 006, 007,
   and 010.
 - Control-plane or task-routing friction appears in observations 001–004 and
-  006–008 and 010–011; observations 005 and 009 report none.
+  006–008 and 010–011; observations 005, 009, and 012 report none.
 
 ## Closeout
 
