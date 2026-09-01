@@ -457,6 +457,36 @@ Status: route recovered; replacement worker active, no PR yet
   triage-lifecycle deletion rather than planning loss.
 - Provider families: Claude and xAI, both supplied explicitly.
 
+### 014 — Poodle shared motion-policy planning delegate
+
+Status: complete; planning PR accepted and merged
+
+- Worker class: `frontier conversational planning`. Unresolved cross-runtime
+  public policy, inheritance, lifecycle, and five-family contract decisions
+  required direct operator interaction and high reasoning.
+- Ready frontier: the delegate ran beside design-guidance planning and
+  interactive drag fixes. Motion implementation remains serial on accepted
+  planning intake, canonical promotion, and readiness. Block sliders follow
+  the first motion outcome; icon and shimmer remain downstream.
+- Outcome: Poodle PR 121 was accepted at exact head
+  `94da3f588e168cb565624698691531ef0e3d91a1` and merged as
+  `7f718dd42a5301f57a61ae605f18b762bc594f68`.
+- Operator intervention after dispatch: answered policy questions in the
+  delegate thread. After one correction, the parent stopped proxying duplicate
+  questions.
+- Review: one round, accepted with no blocking finding. Material contract
+  expansions for a moving Tabs underline and focused-toast removal were
+  recorded explicitly as later promotion work.
+- Control-plane friction: `gh pr merge --delete-branch` merged successfully and
+  deleted the remote branch, but could not delete the local branch because the
+  Paseo worktree still owns it. PR and merge-commit verification removed any
+  outcome ambiguity; local branch cleanup remains a worktree-lifecycle concern.
+- Documentation QA: none.
+- Reduction fixture: excluded. The 515-line single-file decision packet is
+  useful long-form planning evidence, but it contains material semantic
+  decisions rather than a benign copy-only edit.
+- Provider family: not supplied.
+
 ## Material protocol defect
 
 The operator observed active orchestrator threads drop from roughly six-to-ten
@@ -485,11 +515,11 @@ identity to assess after the freeze.
 
 ## Cohort progress
 
-- Observations received: 13.
-- Completed cohort lanes: 2 of 8. Signal observation 004 and Loophole observation
-  010 are reviewed and merged; observation 007 passed review but was not yet
-  merged, observation 008 stopped before implementation, and observation 005 is
-  only a diagnostic kickoff.
+- Observations received: 14.
+- Completed cohort lanes: 3 of 8. Signal observation 004, Loophole observation
+  010, and Poodle observation 014 are reviewed and merged; observation 007
+  passed review but was not yet merged, observation 008 stopped before
+  implementation, and observation 005 is only a diagnostic kickoff.
 - Projects represented: 7, exceeding the four-project breadth gate (`Poodle`,
   `Figmatic`, `Swallowtail`, `Signal`, `Effigy`, `Acowtancy/Market`, and
   `Loophole`).
@@ -504,18 +534,20 @@ identity to assess after the freeze.
   the second frontier planning delegate in the same Poodle frontier;
   observation 012 is a post-install scheduling checkpoint, not another worker
   lane; observation 013 is a post-install frontier choice with both escalation
-  axes explicit and a provider route recovered before work began.
+  axes explicit and a provider route recovered before work began; observation
+  014 completes the frontier conversational-planning lane opened in observation
+  011.
 - Natural parallel shapes: 3. Observation 001 paired implementation with
   disjoint research; observation 002 paired two independent implementation
   lanes; observation 009 paired two planning delegates and an independent
   diagnostic session while preserving the serial promotion/readiness edge.
-- Completed review rounds: 10. Recorded blockers total two `planning-change`,
+- Completed review rounds: 11. Recorded blockers total two `planning-change`,
   nine `execution-miss`, five `oracle-gap`, and five `integration-drift` findings.
 - Validation-reduction fixtures: seven—one token-scanner boundary false positive,
   five benign accepted docs shapes from observations 002, 004, 006, 007, and
   010, and the promoted-triage deletion from observation 013.
 - Control-plane or task-routing friction appears in observations 001–004 and
-  006–008, 010–011, and 013; observations 005, 009, and 012 report none.
+  006–008, 010–011, and 013–014; observations 005, 009, and 012 report none.
 
 ## Closeout
 
