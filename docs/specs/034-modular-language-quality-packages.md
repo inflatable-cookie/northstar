@@ -26,9 +26,10 @@ languages scale the always-distributed surface indefinitely.
   routing protocol. It does not own every language catalogue and engine.
 - Rust and TypeScript become optional packages under that shared protocol.
 - Language detection alone never installs a package.
-- Explicit language-workflow intent or an existing repository activation may
-  install a compatible official package from a pinned trusted source with a
-  visible notice.
+- Explicit language-workflow intent or an existing repository activation
+  authorizes installation of a compatible official package from a pinned
+  trusted source. Northstar shows a visible notice and continues without a
+  confirmation pause.
 - Third-party packages require an operator allowlist or explicit approval.
 - A package owns its catalogue, projections, overlays, schemas, setup,
   recorder/tooling, fixtures, version, and distribution proof.
@@ -58,6 +59,32 @@ The manifest and discovery contract must also permit an official package to
 move to its own repository and a third-party package to originate elsewhere
 without changing Northstar core or consumer activation files.
 
+## Official Acquisition And Notice
+
+Northstar may acquire a missing official package only when the operator has
+explicitly requested one of that package's workflows or the consumer
+repository already carries a valid activation for it. Language, manifest,
+framework, dependency, or source-file detection alone is not acquisition
+authority.
+
+For an eligible official package, core resolves one compatible package from
+its trusted pinned registry entry, emits a visible notice naming the package,
+version, source, target, and requested workflow, then continues without asking
+for confirmation. Success emits the resolved installed identity before routing
+into the package. Acquisition and activation are transactional: failure leaves
+any prior compatible install and consumer files unchanged.
+
+When no compatible installed package exists and official acquisition cannot
+complete, only the requested language workflow stops. Northstar core remains
+usable and reports the exact acquisition failure plus the manual or offline
+installation route; it must not silently run a missing workflow, substitute a
+different package, or infer permission for a third-party source.
+
+Third-party acquisition always requires an operator allowlist entry or explicit
+approval before any fetch or install. A visible notice is evidence of an
+already-authorized official acquisition, not a substitute for third-party
+approval.
+
 ## Compatibility And Trust Questions
 
 Planning must settle these before a roadmap becomes ready:
@@ -68,7 +95,8 @@ Planning must settle these before a roadmap becomes ready:
 3. integrity, provenance, update, rollback, and offline behavior;
 4. how package commands and modes register without editing or duplicating the
    root router;
-5. repository activation and visible install notice;
+5. update policy after the first official install, including whether a newer
+   compatible release is advisory or automatically selected;
 6. third-party allowlist ownership and revocation;
 7. migration of existing embedded Rust and TypeScript activations;
 8. source/install parity and release ownership after extraction;
