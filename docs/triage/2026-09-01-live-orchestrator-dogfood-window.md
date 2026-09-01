@@ -767,6 +767,25 @@ Status: complete; reviewed and merged
 - Provider family: not supplied; the named harness is omitted from durable
   routing evidence.
 
+### 026 — Swallowtail moving documentation-corpus papercut
+
+Status: complete; reviewed and merged
+
+- Worker class: `mechanical`. This reconciled frozen evidence with moving
+  documentation and required no product decision.
+- Ready frontier: ran beside Codex 0.152 qualification. `PAPERCUTS.md` was the
+  named serial edge before later papercut lanes.
+- Outcome: Swallowtail PR 154 passed exact-head review and merged at
+  `803f5e7e`.
+- Operator intervention after dispatch: none.
+- Review: one round, accepted with no blocking finding.
+- Control-plane friction: none.
+- Documentation QA: none.
+- Reduction fixture: two files adding one supersession paragraph and one
+  `PAPERCUTS.md` closeout while leaving Research 218 and every index untouched.
+- Provider family: not supplied; the named CLI is omitted from durable routing
+  evidence.
+
 ## Material protocol defect
 
 The operator observed active orchestrator threads drop from roughly six-to-ten
@@ -825,11 +844,11 @@ enumeration; this packet does not justify polling workers.
 
 ## Cohort progress
 
-- Observations received: 25.
-- Completed cohort lanes: 11, against a minimum gate of 8. Signal observation
+- Observations received: 26.
+- Completed cohort lanes: 12, against a minimum gate of 8. Signal observation
   004, Loophole observation 010, Poodle observations 014 and 019, Market
   observations 016–017 and 020, Effigy observation 022, Bovine Accelerator
-  Desktop observation 023, and Swallowtail observations 024–025 are merged.
+  Desktop observation 023, and Swallowtail observations 024–026 are merged.
   The minimum cohort gate is met; observation 021 remains provisional,
   observation 015 has changes requested, observation 007 passed review but was
   not yet merged, and observation 005 is only a diagnostic kickoff.
@@ -857,9 +876,9 @@ enumeration; this packet does not justify polling workers.
   day-to-day repair choice; observation 021 is a bounded day-to-day Rust
   repair; observation 022 is a long mechanical audit with settled boundaries;
   observation 023 is another bounded day-to-day implementation choice;
-  observations 024–025 are mechanical evidence and source-preserving repair
-  lanes with fixed oracles.
-- Natural parallel shapes: 9. Observation 001 paired implementation with
+  observations 024–026 are mechanical evidence and source-preserving repair
+  lanes with settled boundaries.
+- Natural parallel shapes: 10. Observation 001 paired implementation with
   disjoint research; observation 002 paired two independent implementation
   lanes; observation 009 paired two planning delegates and an independent
   diagnostic session while preserving the serial promotion/readiness edge;
@@ -871,13 +890,14 @@ enumeration; this packet does not justify polling workers.
   observation 023 ran beside Market card 160 and disjoint Bovine content work.
   Observation 024 ran beside Codex qualification while preserving the shared
   papercut tracker's serial edge; observation 025 refilled that edge beside the
-  continuing qualification lane. The required two multi-lane frontier
+  continuing qualification lane; observation 026 refilled it again without
+  overlapping the qualification work. The required two multi-lane frontier
   observations are present in observations 002 and 015.
-- Completed review rounds: 22. Recorded blockers total three `planning-change`,
+- Completed review rounds: 23. Recorded blockers total three `planning-change`,
   eleven `execution-miss`, six `oracle-gap`, six `integration-drift`, and one
   `validation-gap` finding, plus three observation-015 round-one blockers whose
   Northstar codes were not supplied.
-- Validation-reduction fixtures: eighteen—one token-scanner boundary false positive,
+- Validation-reduction fixtures: nineteen—one token-scanner boundary false positive,
   five benign accepted docs shapes from observations 002, 004, 006, 007, and
   010, the promoted-triage deletion from observation 013, and three concurrent
   closeout shapes from observations 015–017, plus the authority-aware triage
@@ -886,10 +906,11 @@ enumeration; this packet does not justify polling workers.
   papercut closeout from observation 022, plus the card-067 state transition
   from observation 023 and the two-file supersession closeout from observation
   024, the source-preserving test partition from observation 025, and the
-  trailing-space evidence correction from observation 015.
+  trailing-space evidence correction from observation 015, plus the frozen and
+  moving documentation reconciliation from observation 026.
 - Control-plane or task-routing friction appears in observations 001–004 and
   006–008, 010–011, 013–017, and 019–020; observations 005, 009, 012, and
-  018 and 021–025 report none.
+  018 and 021–026 report none.
 
 ## Closeout
 
