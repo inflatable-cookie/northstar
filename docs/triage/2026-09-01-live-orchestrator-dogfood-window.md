@@ -1,7 +1,8 @@
 # Live orchestrator dogfood window
 
-Status: active observation buffer
+Status: closed observation buffer; awaiting promotion
 Opened: 2026-09-01
+Closed: 2026-09-01
 Owner: Northstar orchestrator
 Source: operator-approved live worker lanes already running across consumer
 projects
@@ -12,6 +13,8 @@ dogfood work from it.
 
 ## Collection boundary
 
+- Collection is closed. Do not request, accept, or append further dogfood
+  packets; return project orchestrators to their normal work.
 - Reuse worker lanes their own project orchestrators already planned and
   dispatched.
 - Do not change a worker handoff, add validation, delay review, or ask a worker
