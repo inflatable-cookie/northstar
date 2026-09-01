@@ -624,6 +624,36 @@ Status: complete; planning PR accepted and merged
   copy-only cleanup.
 - Provider family: not supplied.
 
+### 020 — Acowtancy/Market card 164 card-162 closeout repair
+
+Status: changes requested; canonical planning corrected and worker resumed
+
+- Worker class: `day-to-day`. This is a bounded documentation and papercut
+  evidence repair with no exceptional post-planning reasoning.
+- Ready frontier: ran safely beside card 160. Same-repository Market merge
+  ordering remains the named serial edge.
+- Outcome: Market PR 91 opened at initial head `792c365c3`; changes were
+  requested. The orchestrator corrected canonical planning on `main` at
+  `5ef3e677d` and resumed the same worker. A revised exact head is pending.
+- Operator intervention after dispatch: relayed only that PR 91 was ready. The
+  orchestrator independently reviewed the diff and corrected the card and
+  handoff.
+- Review: one round found one blocking `planning-change`. Dispatch had
+  incorrectly authorized appending to a historical log despite
+  `docs/AGENTS.md`; base and merge provenance wording also needed correction.
+- Control-plane friction: the originating worker ID was absent from scoped MCP
+  `list_agents`. Global `paseo ls --global --all --json` resolved the retained
+  identity. The same worker resumed and no duplicate lane was created.
+- Documentation QA: repository-owned. Automated docs and Northstar gates
+  passed, but the repository's historical-log immutability rule still required
+  human review.
+- Reduction fixture: move the card-164 post-merge appendix out of the immutable
+  `docs/logs/2026-09/01-125428-card-162-cream-container-routed-test.md` and into
+  its already-created timestamped card-164 log while preserving the open
+  papercut link.
+- Provider family: not recorded; the supplied route was a local profile name,
+  omitted from durable evidence.
+
 ## Material protocol defect
 
 The operator observed active orchestrator threads drop from roughly six-to-ten
@@ -673,9 +703,16 @@ work. Outside Paseo, Northstar keeps a provider-neutral manual cleanup path.
 This decision is evidence for the closeout card; it does not mutate the live
 protocol during the freeze.
 
+Observation 020 exposes a narrower retained-agent discovery problem. The
+originating worker existed but was absent from the current MCP scope, so the
+orchestrator needed a global Paseo CLI listing to recover its identity. The
+follow-up reused that worker and created no duplicate. Post-freeze adapter work
+should support direct retained-ID lookup or follow-up without requiring scoped
+enumeration; this packet does not justify polling workers.
+
 ## Cohort progress
 
-- Observations received: 19.
+- Observations received: 20.
 - Completed cohort lanes: 6 of 8. Signal observation 004, Loophole observation
   010, Poodle observations 014 and 019, and Market observations 016–017 are
   merged; observation 015 has changes requested, observation 007 passed review
@@ -699,28 +736,32 @@ protocol during the freeze.
   observations 016–017 are economical day-to-day choices; observation 018 is
   a post-refresh day-to-day choice for material but fully settled public
   semantics; observation 019 completes the frontier conversational-planning
-  lane opened in observation 009.
-- Natural parallel shapes: 5. Observation 001 paired implementation with
+  lane opened in observation 009; observation 020 is another economical
+  day-to-day repair choice.
+- Natural parallel shapes: 6. Observation 001 paired implementation with
   disjoint research; observation 002 paired two independent implementation
   lanes; observation 009 paired two planning delegates and an independent
   diagnostic session while preserving the serial promotion/readiness edge;
   observations 015–017 ran one frontier lane beside two independent day-to-day
   lanes while keeping same-repository merge order serial; observation 018
   launched settled motion implementation beside interactive diagnosis and
-  planning while limiting any future overlap to the named chunk. The required
-  two multi-lane frontier observations are present in observations 002 and 015.
-- Completed review rounds: 14. Recorded blockers total two `planning-change`,
+  planning while limiting any future overlap to the named chunk; observation
+  020 refilled a safe day-to-day closeout lane beside continuing card 160. The
+  required two multi-lane frontier observations are present in observations 002
+  and 015.
+- Completed review rounds: 15. Recorded blockers total three `planning-change`,
   nine `execution-miss`, five `oracle-gap`, and five `integration-drift`
   findings, plus three observation-015 blockers whose Northstar codes were not
   supplied.
-- Validation-reduction fixtures: eleven—one token-scanner boundary false positive,
+- Validation-reduction fixtures: twelve—one token-scanner boundary false positive,
   five benign accepted docs shapes from observations 002, 004, 006, 007, and
   010, the promoted-triage deletion from observation 013, and three concurrent
   closeout shapes from observations 015–017, plus the authority-aware triage
-  compaction from observation 018.
+  compaction from observation 018 and historical-log repair from observation
+  020.
 - Control-plane or task-routing friction appears in observations 001–004 and
-  006–008, 010–011, 013–017, and 019; observations 005, 009, 012, and 018
-  report none.
+  006–008, 010–011, 013–017, and 019–020; observations 005, 009, 012, and
+  018 report none.
 
 ## Closeout
 
