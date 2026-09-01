@@ -25,7 +25,7 @@ exact-absence assertions, and one mirror pair. The corrected post-change live
 inventory contains 104 paths: 22 stable-structure paths, 63 active-authority
 paths, 17 executable-validation paths, and 2 parity paths. The 73 historical
 paths were removed from executable policy but remain in the repository as
-evidence. The checker retains 15 targeted machine-contract markers; these are
+evidence. The checker retains 16 targeted machine-contract markers; these are
 configuration or bridge identifiers, not editorial assertions.
 
 The following classification covers every old `required_files` entry.
@@ -128,11 +128,11 @@ The following classification covers every old `required_files` entry.
   `scripts/test-northstar-repo-contract.rhai`,
   `scripts/lib/northstar-repo-contract-checker.rhai`
 
-### Stable machine contracts — 15 targeted markers
+### Stable machine contracts — 16 targeted markers
 
 - Claude bridge: root and copy-ready `@AGENTS.md` references;
 - Effigy: root catalog/task identity, repo-contract declarations, full
-  `qa:docs` sequence, `qa` inclusion, and root Paseo task;
+  `qa:docs` and outer `validate` sequences, `qa` inclusion, and root Paseo task;
 - installed skill: catalog identity and Paseo task;
 - Paseo: prepare, link, unlink, and copy-ready link hook identifiers.
 
@@ -225,15 +225,18 @@ owned by its existing self-test.
 
 `effigy test:repo-contract` runs 11 isolated fixture cases. Missing structure,
 missing active authority, broken distributed-skill links, template parity drift,
-the Claude bridge, and docs-QA wiring fail with named reasons. Token-like text,
-front-door rewording, papercut closeout text, historical-evidence movement, and
-source-preserving partition text pass. A source scan confirms that the removed
-generic exact-content assertion data and calls are absent from the checker path.
+the Claude bridge, and docs-QA wiring fail with named reasons. The wiring case
+executes a mutated Effigy `qa:docs` selector to observe its bypass, then runs the
+outer `qa` board and requires failure through `validate`; it does not call the
+machine-check helper directly. Token-like text, front-door rewording, papercut
+closeout text, historical-evidence movement, and source-preserving partition
+text pass. A source scan confirms that the removed generic exact-content
+assertion data and calls are absent from the checker path.
 
 ## Validation
 
-The full handoff validation below was rerun after the same-repo refresh and
-passed on the integrated worker branch:
+The prior full handoff validation passed after the same-repo refresh. This
+review continuation requires a new final run after the proof and oracle updates.
 
 - baseline `effigy check:repo-contract` — pass;
 - baseline `effigy check:readiness-map` — pass;
@@ -242,7 +245,7 @@ passed on the integrated worker branch:
 - `effigy check:repo-contract` — pass;
 - `effigy check:repo-contract-wiring` — pass;
 - `effigy test:repo-contract` — pass (11 fixture cases; six expected failures;
-  five benign variants);
+  five benign variants, plus the Effigy selector/outer-board proof);
 - `effigy qa:docs` — pass, including the focused fixtures and unchanged
   readiness/command-surface checks;
 - `effigy qa` — pass;
@@ -252,8 +255,9 @@ passed on the integrated worker branch:
 
 PR: https://github.com/inflatable-cookie/northstar/pull/18
 
-The implementation and closeout evidence above were corrected and validated on
-the worker branch after exact-head review. The PR is review-only; the
+The implementation and closeout evidence above were corrected on the worker
+branch after exact-head review. This continuation addresses the circular
+docs-QA proof and stale oracle-count references only. The PR is review-only; the
 orchestrator owns exact-head review and merge.
 
 ## Same-Repo Refresh
@@ -274,6 +278,6 @@ introduced.
 
 ## Next Task
 
-Review the worker PR against all seven milestone rows and merge only after the
+Review the worker PR against all nine milestone rows and merge only after the
 exact-head and required-check gate passes. Spec 034 remains a separate
 not-ready planning lane.

@@ -67,7 +67,8 @@ new currentness metadata or broaden into general docs cleanup.
 - [x] stable front-door deletion, broken distributed-skill links, and canonical
   mirror drift each fail deterministically;
 - [x] missing active authority, Claude bridge, and docs-QA wiring fail through
-  targeted negative fixtures;
+  targeted negative fixtures; the wiring fixture executes the mutated Effigy
+  board and proves the outer `qa` path catches the `qa:docs` bypass;
 - [x] representative token-like prose, front-door wording changes, papercut
   closeouts, historical-evidence movement, and source-preserving partitions
   pass without exact wording exceptions;
@@ -88,7 +89,7 @@ new currentness metadata or broaden into general docs cleanup.
 | Token-like benign text is not forbidden policy. | Add `mask-plus-translated-highlight` to Markdown. | Repo-contract checker passes; security scanning remains separately owned. | Benign token fixture. |
 | Historical inventory is not live structure. | Remove a historical-card path from an isolated required-path fixture. | Checker does not require it. | Classification inventory plus fixture. |
 | Current active authority remains live structure. | Remove `docs/specs/034-modular-language-quality-packages.md` from an isolated fixture. | Checker fails with the missing authority path. | `missing-active-authority` fixture. |
-| Stable machine contracts remain executable. | Remove the Claude bridge or repo-contract tasks from the docs-QA sequence. | Targeted machine check fails. | `missing-claude-bridge` and `missing-qa-wiring` fixtures. |
+| Stable machine contracts remain executable. | Remove the Claude bridge or repo-contract tasks from the docs-QA sequence. | The targeted selector fails for the bridge; the outer `qa` board fails when `qa:docs` wiring is removed. | `missing-claude-bridge` and `missing-qa-wiring` fixtures execute the relevant Effigy selectors. |
 | The reduction is real. | Leave a hidden or renamed substring assertion path. | Review rejects the head. | Search proof for removed assertion classes and old historical inventory. |
 
 ## Stop Conditions
@@ -103,6 +104,6 @@ new currentness metadata or broaden into general docs cleanup.
 
 ## Next Task
 
-Review the worker PR against all seven oracle rows and merge only after the
+Review the worker PR against all nine oracle rows and merge only after the
 exact-head and required-check gate passes. Spec 034 remains a separate
 not-ready planning lane; do not auto-start language extraction.

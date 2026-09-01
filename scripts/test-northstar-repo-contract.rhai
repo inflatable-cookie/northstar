@@ -34,15 +34,6 @@ fn fixture_file_pairs() {
     ]
 }
 
-fn fixture_machine_contracts() {
-    [
-        ["CLAUDE.md", "@AGENTS.md", "root Claude Code bridge"],
-        ["effigy.toml", "\"check:repo-contract\" = [{ rhai = \"scripts/check-northstar-repo-contract.rhai\" }]", "repo-contract task declaration"],
-        ["effigy.toml", "\"test:repo-contract\" = [{ rhai = \"scripts/test-northstar-repo-contract.rhai\" }]", "repo-contract fixture task declaration"],
-        ["effigy.toml", "\"qa:docs\" = [{ task = \"check:repo-contract\" }, { task = \"test:repo-contract\" }]", "docs QA repo-contract wiring"],
-    ]
-}
-
 fn write_fixture_file(root, relative, contents) {
     fs::write_file(path::join(root, relative), contents);
 }
@@ -86,9 +77,56 @@ fn new_authority_fixture(label, include_authority) {
 
 fn new_machine_fixture(label, claude_contents, effigy_contents) {
     let root = fs::make_temp_dir("northstar-repo-contract-" + label);
+    fs::create_dir(path::join(root, "scripts"));
+    fs::create_dir(path::join(root, "scripts/lib"));
+    fs::create_dir(path::join(root, "skills"));
+    fs::create_dir(path::join(root, "skills/northstar"));
+    fs::create_dir(path::join(root, "skills/northstar/assets"));
+    fs::create_dir(path::join(root, "skills/northstar/assets/templates"));
+    write_fixture_file(root,
+        "scripts/check-northstar-repo-contract-wiring.rhai",
+        fs::read_file(path::join(repo_root, "scripts/check-northstar-repo-contract-wiring.rhai")));
+    write_fixture_file(root,
+        "scripts/lib/northstar-repo-contract-data.rhai",
+        fs::read_file(path::join(repo_root, "scripts/lib/northstar-repo-contract-data.rhai")));
+    write_fixture_file(root,
+        "scripts/lib/northstar-repo-contract-checker.rhai",
+        fs::read_file(path::join(repo_root, "scripts/lib/northstar-repo-contract-checker.rhai")));
+    write_fixture_file(root, "scripts/noop.rhai", "log(\"fixture no-op\");\n");
     write_fixture_file(root, "CLAUDE.md", claude_contents);
     write_fixture_file(root, "effigy.toml", effigy_contents);
+    write_fixture_file(root, "skills/northstar/assets/templates/CLAUDE.md.template", "@AGENTS.md\n");
+    write_fixture_file(root,
+        "skills/northstar/effigy.toml",
+        "alias = \"northstar\"\n\"paseo:worktree\" = [{ rhai = \"scripts/paseo-worktree.rhai\" }]\n");
+    write_fixture_file(root,
+        "paseo.json",
+        "paseo:worktree -- prepare\npaseo:worktree -- link\npaseo:worktree -- unlink\n");
+    write_fixture_file(root,
+        "skills/northstar/assets/templates/paseo.json.template",
+        "paseo:worktree -- link\n");
     root
+}
+
+fn run_effigy(root, selector) {
+    effigy::run(["--repo", root, selector])
+}
+
+fn expect_effigy_pass(label, root, selector) {
+    let report = run_effigy(root, selector);
+    require(report["success"],
+        "fixture " + label + " unexpectedly failed: " + report["error"]);
+    log("repo-contract fixture " + label + ": PASS (selector " + selector + " executed)");
+}
+
+fn expect_effigy_failure(label, root, selector, expected_reason) {
+    let report = run_effigy(root, selector);
+    require(!report["success"],
+        "fixture " + label + " unexpectedly passed through Effigy " + selector);
+    let output = report["error"] + "\n" + report["output"] + "\n" + report["rendered_output"];
+    require(output.contains(expected_reason),
+        "fixture " + label + " failed for the wrong reason: " + output);
+    log("repo-contract fixture " + label + ": PASS (expected failure: " + expected_reason + ")");
 }
 
 fn run_check(root) {
@@ -102,10 +140,6 @@ fn run_authority_check(root) {
         fixture_file_pairs(),
         [],
     );
-}
-
-fn run_machine_check(root) {
-    checker::check_machine_contracts(root, fixture_machine_contracts());
 }
 
 fn expect_pass(label, action) {
@@ -202,31 +236,39 @@ let parity_drift = new_fixture(
 );
 expect_failure("parity-drift", || run_check(parity_drift), "fixture template parity");
 
-let machine_effigy = "[tasks]\n";
+let full_qa_docs = "[{ task = \"check:repo-contract-wiring\" }, { task = \"check:repo-contract\" }, { task = \"test:repo-contract\" }, { task = \"check:readiness-map\" }, { task = \"test:readiness-map\" }, { task = \"check:command-skills\" }]";
+let machine_effigy = "[manifest]\nminimum_effigy_version = \"0.8.4\"\n\n";
+machine_effigy += "[catalog]\nalias = \"northstar\"\n\n[tasks]\n";
+machine_effigy += "\"check:repo-contract-wiring\" = [{ rhai = \"scripts/check-northstar-repo-contract-wiring.rhai\" }]\n";
 machine_effigy += "\"check:repo-contract\" = [{ rhai = \"scripts/check-northstar-repo-contract.rhai\" }]\n";
 machine_effigy += "\"test:repo-contract\" = [{ rhai = \"scripts/test-northstar-repo-contract.rhai\" }]\n";
-machine_effigy += "\"qa:docs\" = [{ task = \"check:repo-contract\" }, { task = \"test:repo-contract\" }]\n";
+machine_effigy += "\"check:readiness-map\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"test:readiness-map\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:command-skills\" = [{ rhai = \"scripts/noop.rhai\" }]\n";
+machine_effigy += "\"check:bundle\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:rust-quality\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:typescript-quality\" = [{ rhai = \"scripts/noop.rhai\" }]\n";
+machine_effigy += "\"test:rust-quality-setup\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"test:rust-v2-production-harness\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"test:typescript-quality-setup\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"test:typescript-quality-recorder\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"test:paseo-worktree\" = [{ rhai = \"scripts/noop.rhai\" }]\n";
+machine_effigy += "\"qa:docs\" = " + full_qa_docs + "\n";
+machine_effigy += "validate = [{ task = \"check:repo-contract-wiring\" }, { task = \"check:bundle\" }, { task = \"check:rust-quality\" }, { task = \"check:typescript-quality\" }, { task = \"test:rust-quality-setup\" }, { task = \"test:rust-v2-production-harness\" }, { task = \"test:typescript-quality-setup\" }, { task = \"test:typescript-quality-recorder\" }, { task = \"test:paseo-worktree\" }]\n";
+machine_effigy += "qa = [{ task = \"validate\" }, { task = \"qa:docs\" }]\n";
 let missing_claude_bridge = new_machine_fixture(
     "missing-claude-bridge",
     "A different Claude instruction\n",
     machine_effigy,
 );
-expect_failure(
-    "missing-claude-bridge",
-    || run_machine_check(missing_claude_bridge),
+expect_effigy_failure(
+    "missing-claude-bridge-selector",
+    missing_claude_bridge,
+    "check:repo-contract-wiring",
     "root Claude Code bridge",
 );
 
+let missing_qa_docs = "[{ task = \"check:readiness-map\" }, { task = \"test:readiness-map\" }, { task = \"check:command-skills\" }]";
+let missing_qa_wiring_effigy = str::replace(machine_effigy, full_qa_docs, missing_qa_docs);
 let missing_qa_wiring = new_machine_fixture(
     "missing-qa-wiring",
     "@AGENTS.md\n",
-    "[tasks]\n\"check:repo-contract\" = [{ rhai = \"scripts/check-northstar-repo-contract.rhai\" }]\n\"test:repo-contract\" = [{ rhai = \"scripts/test-northstar-repo-contract.rhai\" }]\n\"qa:docs\" = [{ task = \"check:readiness-map\" }, { task = \"test:readiness-map\" }, { task = \"check:command-skills\" }]\n",
+    missing_qa_wiring_effigy,
 );
-expect_failure(
-    "missing-qa-wiring",
-    || run_machine_check(missing_qa_wiring),
-    "docs QA repo-contract wiring",
-);
+expect_effigy_pass("missing-qa-wiring-qa-docs-bypass", missing_qa_wiring, "qa:docs");
+expect_effigy_failure("missing-qa-wiring-outer-board", missing_qa_wiring, "qa", "docs QA repo-contract wiring");
 
 let token_like_prose = new_fixture(
     "token-like-prose",
@@ -281,4 +323,4 @@ expect_pass("source-preserving-partition", || run_check(source_preserving_partit
 
 prove_source_reduction();
 log("repo-contract fixture source-reduction: PASS");
-log("Northstar repo-contract fixture tests: OK (11 fixture cases; 6 expected failures, 5 benign passes, source reduction proof)");
+log("Northstar repo-contract fixture tests: OK (11 fixture cases; 6 expected failures, 5 benign passes, Effigy selector/outer-board proof, source reduction proof)");

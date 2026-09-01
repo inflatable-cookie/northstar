@@ -39,7 +39,7 @@ cleanup, and mode consolidation.
   classes;
 - [x] the operator accepted structural validation and prose-coupling reduction;
 - [x] the live dogfood cohort is closed and promoted;
-- [x] the milestone defines the retained structural boundary and seven-row
+- [x] the milestone defines the retained structural boundary and nine-row
   review oracle;
 - [x] no active worker owns Northstar's checker or these planning surfaces.
 
@@ -53,6 +53,8 @@ cleanup, and mode consolidation.
   structurally protected;
 - [x] missing-front-door, broken-link, and mirror-drift fixtures fail;
 - [x] missing active authority, Claude bridge, and docs-QA wiring fixtures fail;
+  the wiring fixture executes the mutated Effigy board and proves the outer
+  `qa` path catches the `qa:docs` bypass;
 - [x] representative benign editorial fixtures pass;
 - [x] existing readiness-map and command-skill tests stay intact;
 - [x] docs explain the structural boundary without copying the fixture list;
@@ -62,10 +64,11 @@ cleanup, and mode consolidation.
 
 ## Review Oracle
 
-Use all seven rows from `g02.045`. The reviewer must falsify the changed checker
+Use all nine rows from `g02.045`. The reviewer must falsify the changed checker
 against at least the missing-front-door, broken-link, parity-drift,
 token-like-prose, editorial-rewording, and historical-path cases. A green run on
-the unchanged repository is insufficient.
+the unchanged repository is insufficient. The nine-row review oracle and the
+11-case fixture count are separate evidence.
 
 ## Evidence Required
 
@@ -84,10 +87,11 @@ the unchanged repository is insufficient.
   the four identified in exact-head review.
 - Removed 320 exact-presence and 41 exact-absence assertions. The retained
   checker validates required structure, current authority, portable skill
-  links, Markdown links, template parity, and 15 targeted machine contracts.
+  links, Markdown links, template parity, and 16 targeted machine contracts.
 - Added active-authority, Claude-bridge, and docs-QA-wiring negative fixtures;
+  the wiring fixture executes mutated `qa:docs` and outer `qa` selectors, while
   the five existing benign prose fixtures still pass. The focused test remains
-  wired into `qa:docs` through an independent wiring check.
+  wired into `qa:docs` and is also guarded by the independent `validate` path.
 - Final validation and PR metadata are recorded in the closeout log.
 
 ## Stop Conditions

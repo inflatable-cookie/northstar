@@ -111,13 +111,20 @@ fail-closed conflicts. It installs no project dependencies.
 
 `check:repo-contract-wiring` validates the small machine-facing contract around
 the docs QA route: the Claude `@AGENTS.md` bridge, repo-contract task
-declarations, the complete `qa:docs` sequence, and the Paseo/Effigy hook
-identifiers. `check:repo-contract` validates the retained Northstar structure:
-stable entry points, current active-authority surfaces, executable validation
-surfaces, and declared source/mirror parity. Every local Markdown link under
-`skills/northstar/` must resolve inside that folder; escaping or missing targets
-fail QA. Editorial wording and individual historical artifacts are not
-repo-contract schema.
+declarations, the complete `qa:docs` and outer `validate` sequences, and the
+Paseo/Effigy hook identifiers. `check:repo-contract` validates the retained
+Northstar structure: stable entry points, current active-authority surfaces,
+executable validation surfaces, and declared source/mirror parity. Every local
+Markdown link under `skills/northstar/` must resolve inside that folder; escaping
+or missing targets fail QA. Editorial wording and individual historical
+artifacts are not repo-contract schema.
+
+The root `validate` board retains the wiring task, and `qa` runs `validate`
+before `qa:docs`. `qa:docs` alone cannot protect its own task list; the full
+`qa` board rejects removal of the repo-contract tasks from `qa:docs` through the
+independent outer path. The focused negative fixture executes both selectors on
+a temporary Effigy board: it observes the mutated `qa:docs` bypass and then
+requires the outer `qa` board to fail.
 
 The machine checks cover configuration and bridge identifiers only. They do not
 restore generic prose assertions. Run `effigy check:repo-contract-wiring` or
