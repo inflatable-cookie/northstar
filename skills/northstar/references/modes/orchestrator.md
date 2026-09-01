@@ -254,7 +254,9 @@ batch large enough to repay dispatch and review; keep tiny edits local.
    provide only a repository-relative path, a second prompt, or copied
    context. The handoff must list required sibling worktree links (or
    `none`) so worktree initiation can symlink those primary checkouts into the
-   worktree container directory (the worker worktree's parent).
+   worktree container directory (the worker worktree's parent). If the selected
+   worker is frontier, the handoff records both escalation reasons; otherwise
+   the frontier-worker justification is `none`.
 
    Each handoff records the planning base commit from before the handoff was
    created. It must not try to contain the SHA of the commit that contains the
@@ -277,8 +279,9 @@ batch large enough to repay dispatch and review; keep tiny edits local.
    committed and pushed, use Paseo automatically when the current thread exposes
    its required orchestration tools:
    - call `list_profiles` and read every profile's notes; select by the role and
-     risk rules below, not by a remembered profile or model name. A profile the
-     operator explicitly names for the lane overrides this selection;
+     worker-routing rules below, not by a remembered profile or model name. A
+     profile the operator explicitly names for the lane overrides this
+     selection;
    - call `create_workspace` once per dispatched lane with
      `isolation: worktree`, `mode: branch-off`, `baseBranch: origin/main`, the
      intended branch, and the source checkout path. Dispatch the whole selected
@@ -446,7 +449,10 @@ The file must say, in substance:
   rule to planning instead of choosing it in implementation;
 - finish the assigned runway with a pushed branch and a reviewable PR;
 - do not merge or invent a new architecture; merge belongs to the orchestrator
-  after its accepted review/check gate.
+  after its accepted review/check gate;
+- if this worker is frontier, the handoff already records both exceptional
+  reasoning and highest-priority or material-consequence reasons; do not treat
+  a risk-domain label as that justification.
 
 The only external worker handoff is the absolute path, for example:
 
@@ -521,18 +527,40 @@ changes the plan.
 
 ## Model routing
 
-Use role profiles, not fixed model names:
+Use current role-profile notes, not stored model names. Worker routing is economical by default:
+choose a non-frontier profile whose notes cover ordinary day-to-day implementation,
+bounded audits, or mechanical work before considering a frontier worker.
 
-- orchestrator/discovery/review: frontier model, high reasoning;
+Select by capability:
+
+- orchestrator/discovery/review: frontier/high effort;
 - operator-facing planning delegate: frontier conversational-planning profile,
   high reasoning; an explicitly named profile wins;
 - exact mechanical documentation projection: fast/low-cost profile, low or
   medium reasoning, with the orchestrator retaining semantic review;
-- bounded, mechanically direct worker: capable coding model, medium reasoning;
-- reconnaissance and log reduction: fast model or deterministic command;
-- security, persistence, concurrency, public API, deployment, multi-version, or
-  ambiguous work: frontier worker with high reasoning and frontier review;
-  pause before dispatch when the review oracle is not explicit.
+- ordinary bounded implementation: matching non-frontier day-to-day profile;
+- long audits, broad documentation, and other token-heavy mechanical jobs
+  whose decisions and repair boundaries are already settled: fast/low-cost or
+  mechanically oriented profiles;
+- reconnaissance and log reduction: fast/low effort or a deterministic command;
+- frontier implementation worker: only when the lane is both highest-priority
+  or materially consequential **and** exceptionally difficult to reason through
+  after planning, and the selected profile's notes explicitly fit that
+  combination. Record both reasons in the handoff. Priority alone, complexity alone,
+  broad scope, duration, file count, or a risk-domain label is insufficient.
+
+Task size, file count, duration, or the bare presence of a security,
+persistence, concurrency, public-API, deployment, or multi-version surface
+does not by itself make a worker lane frontier work. Those surfaces still
+require a clear review oracle and frontier review; a well-specified direct
+implementation may use a capable non-frontier worker. Pause before dispatch
+when the review oracle is not explicit.
+
+When multiple plausible designs or an unresolved contract choice remain,
+return to planning rather than spending a frontier worker to choose
+architecture. If no configured non-frontier profile fits an ordinary lane,
+report the profile gap instead of silently promoting it to frontier. An
+operator-named profile remains an explicit override.
 
 Provider-native worktrees, subagents, session messaging, JSON output, and PR
 commands are optional adapters. When an adapter exposes profiles, list them and
@@ -564,7 +592,9 @@ Stop and return to planning or the operator when:
   duplicate workspace or worker;
 - an implementation worker or ordinary subagent would need to start a nested
   orchestrator or worker lane. A planning delegate may use only the bounded
-  read-only research subagents defined above.
+  read-only research subagents defined above;
+- no configured non-frontier profile fits an ordinary worker lane. Report the
+  profile gap instead of silently promoting it to frontier.
 
 ## Checkpoint shape
 

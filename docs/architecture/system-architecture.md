@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-08-31
+Updated: 2026-09-01
 Vision refs: docs/vision/001-northstar-delivery-vision.md
 
 ## Top-Level Stack
@@ -301,7 +301,15 @@ non-overlapping work, reviews and merges the planning PR, then separately
 promotes its settled meaning against current `main`.
 
 Each worker owns only the assigned ready cards in its dedicated worktree and
-branch. Scheduling is parallel-first: the orchestrator plans lanes as a
+branch. Worker selection is economical by default: ordinary implementation,
+bounded audits, and mechanical work use a matching non-frontier day-to-day
+profile from current adapter notes. A frontier worker requires both exceptional
+reasoning difficulty after planning and highest priority or material
+consequence; those reasons are recorded in the handoff. Risk-domain labels keep
+frontier review and an explicit review oracle; they do not by themselves select
+a frontier worker. Unresolved designs return to planning. A missing
+non-frontier profile is reported rather than silently escalated.
+Scheduling is parallel-first: the orchestrator plans lanes as a
 dependency graph and dispatches the whole safe ready frontier up to available
 capacity, each lane with its own worktree, branch, handoff, PR, and closeout.
 Capacity is discovered: an explicit control-plane value when one is surfaced,

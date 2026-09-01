@@ -13,7 +13,7 @@ single-pilot bucket.
 | --- | --- | --- | --- |
 | Keep learning from operator-provided consumer feedback before treating stricter posture as settled doctrine. | active | `docs/contracts/001-working-rules.md`, `docs/specs/012-consumer-repo-autonomy-proof-and-adoption.md`, `docs/specs/013-stricter-consumer-repo-autonomy-adoption.md` | pending |
 | Harden setup, nested-authority adoption, and posture classification so downstream repos can install the spine without hand adaptation. | active | `docs/specs/020-formalize-nested-docs-authority-setup.md`, `docs/specs/022-formalize-repo-posture-classification.md` | pending |
-| Keep execution autonomy bounded by ready cards, lane budgets, pause signals, and a file-based orchestrator/worker PR boundary instead of ad-hoc continuation prompts. | active | `docs/contracts/001-working-rules.md`, `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `bundle-docs/sections/07-delivery-framework-and-autonomy.md` | `g02.043/111` ready: economical day-to-day workers by default, frontier only on both escalation axes |
+| Keep execution autonomy bounded by ready cards, lane budgets, pause signals, and a file-based orchestrator/worker PR boundary instead of ad-hoc continuation prompts. | active | `docs/contracts/001-working-rules.md`, `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `bundle-docs/sections/07-delivery-framework-and-autonomy.md` | `g02.043/111` implemented economical worker routing; choose the next milestone from this goal or sibling goals |
 | Keep always-loaded agent context useful, human, and bounded while preserving safety, authority, and project intent. | complete | `docs/contracts/003-agent-instruction-surface.md`, `docs/specs/028-agent-instruction-surface-optimization.md` | accept later operator feedback |
 | Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | pending |
 | Add a genuinely long-horizon planning route without conflating it with readiness review. | active | `docs/specs/029-northstar-long-horizon-planning.md`, `skills/northstar/references/modes/atlas.md` | Non-Northstar scenario and operator confirmation |
@@ -94,12 +94,14 @@ rollover signal.
 - `042-make-orchestrator-parallel-first.md` (complete; card 110 made
   dependency-frontier parallel-first dispatch the orchestrator default; PR 14
   merged at `8cfa0ae` after exact-head review)
-- `043-prefer-economical-worker-routing.md` (active; card 111 ready)
+- `043-prefer-economical-worker-routing.md` (complete; card 111 implemented, awaiting exact-head review)
 
 ## Next Task
 
-Dispatch `g02.043/111`. Signal papercut closure remains an independent
-consumer-owned coordination step.
+Review and merge the `g02.043/111` PR, then choose the next `g02` milestone from
+the generation runway. A concurrent first-principles planning-delegate handoff
+is live and owns only its named triage packet. Signal papercut closure remains
+an independent consumer-owned coordination step.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and

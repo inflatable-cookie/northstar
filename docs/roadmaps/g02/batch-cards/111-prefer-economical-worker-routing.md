@@ -1,6 +1,6 @@
 # 111 - Prefer Economical Worker Routing
 
-Status: ready
+Status: complete
 Owner: repo maintainers
 Created: 2026-09-01
 Master roadmap: `g02.043`
@@ -43,18 +43,18 @@ gates.
 
 ## Acceptance Criteria
 
-- [ ] ordinary bounded workers prefer a matching non-frontier day-to-day profile;
-- [ ] broad mechanical audits/docs prefer fast/low-cost or mechanically oriented
+- [x] ordinary bounded workers prefer a matching non-frontier day-to-day profile;
+- [x] broad mechanical audits/docs prefer fast/low-cost or mechanically oriented
   profiles;
-- [ ] frontier implementation requires both exceptional reasoning difficulty
+- [x] frontier implementation requires both exceptional reasoning difficulty
   and highest priority or material consequence;
-- [ ] the handoff records both frontier reasons;
-- [ ] single-axis, broad-scope, and risk-label-only cases do not route frontier;
-- [ ] unresolved designs return to planning and no-fit profiles are reported;
-- [ ] risky lanes retain explicit review oracles and frontier review;
-- [ ] doctrine, copy-ready contracts, skill source, handoff template, operator
+- [x] the handoff records both frontier reasons;
+- [x] single-axis, broad-scope, and risk-label-only cases do not route frontier;
+- [x] unresolved designs return to planning and no-fit profiles are reported;
+- [x] risky lanes retain explicit review oracles and frontier review;
+- [x] doctrine, copy-ready contracts, skill source, handoff template, operator
   docs, and installed payload agree;
-- [ ] repository QA and isolated skill-install parity pass.
+- [x] repository QA and isolated skill-install parity pass.
 
 ## Review Oracle
 
@@ -85,5 +85,4 @@ to planning instead.
 
 ## Next Task
 
-Execute this card in the dispatched worker lane. Stop for orchestrator exact-head
-review; the worker does not merge.
+Orchestrator exact-head review of the worker PR. The worker does not merge.

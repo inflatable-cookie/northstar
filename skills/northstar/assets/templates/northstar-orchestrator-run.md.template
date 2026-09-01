@@ -60,6 +60,11 @@ Here is the state the worker is inheriting:
 - **Canonical refs:** {{ARCHITECTURE_REFS}}; {{CONTRACT_REFS}}
 - **Review oracle:** `{{CARD_REVIEW_ORACLE_REFS_OR_NONE}}`
 - **Model capability profile:** `{{WORKER_PROFILE}}`
+- **Frontier-worker justification:** `{{BOTH_AXES_OR_NONE}}`
+  Write `none` unless this is a frontier implementation worker. If it is,
+  record the exceptional-reasoning evidence after planning and the
+  highest-priority or material-consequence evidence. Either axis alone is
+  insufficient.
 - **Tool/runtime restrictions:** `{{RESTRICTIONS_OR_NONE}}`
 - **Required validation:** `{{CHECKS}}`
 - **PR base/head:** `{{PR_BASE_AND_HEAD}}`

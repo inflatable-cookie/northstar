@@ -213,6 +213,25 @@ informal habits.
 - Same-repository PRs merge one at a time. Refresh the remaining heads against
   current `main` after each merge and re-review any head that changed.
 
+### Economical worker routing
+
+- Worker routing is economical by default. Select a matching non-frontier
+  day-to-day profile from current adapter notes for ordinary implementation,
+  bounded audits, and mechanical work.
+- Long mechanical audits and documentation churn prefer fast/low-cost or
+  mechanically oriented profiles even when their scope is broad.
+- A frontier implementation worker requires both exceptional reasoning
+  difficulty after planning and highest priority or material consequence, plus
+  matching profile notes. Record both reasons in the handoff. Priority alone,
+  complexity alone, file count, duration, or a risk-domain label is
+  insufficient.
+- Risky surfaces still need an explicit review oracle and frontier review. A
+  well-specified persistence or public-API change may use a capable
+  non-frontier worker while the orchestrator keeps material review.
+- Unresolved designs return to planning. If no non-frontier profile fits
+  ordinary work, report the gap; do not silently escalate. An operator-named
+  profile remains an explicit override.
+
 ### Conversational planning delegation
 
 - On operator request, the orchestrator may launch one frontier planning

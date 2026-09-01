@@ -659,6 +659,39 @@ handoff, PR, review loop, and exact-head merge gate. Same-repository PRs merge
 one at a time; after each merge the remaining heads are refreshed against
 current `main` and any changed or conflict-resolved head is reviewed again.
 
+## Economical worker routing
+
+Worker routing is economical by default. Select by current role-profile notes,
+not stored model IDs. Choose a non-frontier profile whose notes cover ordinary
+day-to-day implementation, bounded audits, or mechanical work before considering
+a frontier worker.
+
+Task size, file count, duration, documentation churn, or the bare presence of a
+security, persistence, concurrency, public-API, deployment, or multi-version
+surface does not by itself make a worker lane frontier work. Long mechanical
+audits and broad documentation jobs prefer fast/low-cost or mechanically
+oriented profiles when their decisions and repair boundaries are already
+settled.
+
+A frontier implementation worker is a conjunctive exception. Use it only when
+the lane is both highest-priority or materially consequential **and**
+exceptionally difficult to reason through after planning, and the selected
+profile's notes explicitly fit that combination. Record both reasons in the
+handoff. Priority alone, complexity alone, broad scope, or a risk-domain label
+is insufficient.
+
+Keep frontier/high effort for the orchestrator, material review, and
+operator-facing planning delegates. Risky surfaces still require a clear review
+oracle and frontier review; a well-specified direct implementation on those
+surfaces may use a capable non-frontier worker. Pause before dispatch when the
+review oracle is not explicit.
+
+When multiple plausible designs or an unresolved contract choice remain, return
+to planning rather than spending a frontier worker to choose architecture. If no
+configured non-frontier profile fits an ordinary lane, report the profile gap
+instead of silently promoting it to frontier. An operator-named profile remains
+an explicit override.
+
 ## Conversational planning delegation
 
 An operator may ask the orchestrator to split off a frontier, high-reasoning

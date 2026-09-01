@@ -137,6 +137,14 @@ reason — a dependency edge, a shared mutable or closeout surface, unresolved
 authority, or a capacity limit. Same-repo PRs still merge one at a time, and the
 orchestrator re-reviews any remaining head that a merge changed.
 
+Ordinary workers use a matching non-frontier day-to-day profile. Frontier
+workers are rare: the lane must be both exceptionally difficult after planning
+and highest-priority or materially consequential, and the handoff records both
+reasons. A risky but well-specified change can still use a capable non-frontier
+worker; the orchestrator keeps frontier review. You can name a profile to
+override. If no day-to-day profile fits, the orchestrator reports that gap
+instead of silently spending the expensive one.
+
 You can also ask the orchestrator to spin off a planning conversation for one
 topic. It launches a frontier planning delegate in a separate worktree/thread;
 you talk with that delegate directly while the orchestrator continues unrelated
