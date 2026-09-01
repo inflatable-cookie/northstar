@@ -235,8 +235,8 @@ assertion data and calls are absent from the checker path.
 
 ## Validation
 
-The prior full handoff validation passed after the same-repo refresh. This
-review continuation requires a new final run after the proof and oracle updates.
+The full handoff validation below was rerun after this review continuation and
+passed on the integrated worker branch.
 
 - baseline `effigy check:repo-contract` — pass;
 - baseline `effigy check:readiness-map` — pass;
@@ -246,6 +246,7 @@ review continuation requires a new final run after the proof and oracle updates.
 - `effigy check:repo-contract-wiring` — pass;
 - `effigy test:repo-contract` — pass (11 fixture cases; six expected failures;
   five benign variants, plus the Effigy selector/outer-board proof);
+- `effigy validate` — pass;
 - `effigy qa:docs` — pass, including the focused fixtures and unchanged
   readiness/command-surface checks;
 - `effigy qa` — pass;
@@ -256,8 +257,8 @@ review continuation requires a new final run after the proof and oracle updates.
 PR: https://github.com/inflatable-cookie/northstar/pull/18
 
 The implementation and closeout evidence above were corrected on the worker
-branch after exact-head review. This continuation addresses the circular
-docs-QA proof and stale oracle-count references only. The PR is review-only; the
+branch after exact-head review. This continuation repaired the circular docs-QA
+proof and stale oracle-count references only. The PR is review-only; the
 orchestrator owns exact-head review and merge.
 
 ## Same-Repo Refresh

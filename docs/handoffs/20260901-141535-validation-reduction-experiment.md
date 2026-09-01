@@ -96,17 +96,17 @@ Here is the state the worker is inheriting:
   extract language packages, touch consumer repositories, or introduce a new
   currentness schema.
 - **Required validation:** focused repo-contract fixture task and wiring check;
-  unchanged readiness-map and command-skill checks; `effigy qa:docs`;
-  `effigy qa`; `git diff --check`.
+  unchanged readiness-map and command-skill checks; `effigy validate`;
+  `effigy qa:docs`; `effigy qa`; `git diff --check`.
 - **PR base/head:** `main` <- `worker/validation-reduction-experiment`.
 - **PR URL:** https://github.com/inflatable-cookie/northstar/pull/18
 - **Initial implementation-tested head:**
   `9eb8c6be23ef668ff9dfcf456e4983b9014263a0`.
 - **Review-fix head before main refresh:**
   `1bbc4320288a09767ea39a3bd58444b0ce4914dc`.
-- **Review state:** this continuation addresses the circular docs-QA proof and
-  stale oracle count; final validation is pending before the next exact-head
-  report.
+- **Review state:** this continuation repaired the circular docs-QA proof and
+  stale oracle count; the full handoff validation passes on the current branch;
+  awaiting orchestrator exact-head review.
 - **Merge path:** orchestrator after accepted review of the current head and
   passing required checks.
 
@@ -225,8 +225,9 @@ repair only the posted findings. Blocking classes are `execution-miss`,
 merge an accepted current head after required checks pass and mergeability is
 clear, without another operator prompt.
 
-- **Requested changes:** address the circular docs-QA wiring proof and reconcile
-  stale oracle-count references to the live nine-row oracle; no other scope.
+- **Requested changes:** repaired the circular docs-QA wiring proof and
+  reconciled stale oracle-count references to the live nine-row oracle; no other
+  scope.
 - **Closeout refs:** card 113, milestone 045, one dated log,
   `docs/README.md`, roadmap front doors, generation index, and checker/task
   documentation.
