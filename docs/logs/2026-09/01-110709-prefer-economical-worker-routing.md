@@ -91,6 +91,10 @@ No provider prices, model IDs, local profile names, Paseo profile mutations, or
 mid-run replacement protocol were added. Review-oracle and frontier-review
 gates for risky surfaces were not weakened.
 
+## PR
+
+https://github.com/inflatable-cookie/northstar/pull/15
+
 ## Next
 
-Orchestrator exact-head review of this PR. The worker does not merge.
+Orchestrator exact-head review of that PR. The worker does not merge.
