@@ -465,6 +465,26 @@ into architecture, contracts, specs, roadmaps, or cards. It removes or splits
 resolved triage notes during promotion. Merge of a planning packet is intake,
 not promotion or execution authority.
 
+An operator may instead ask the current orchestrator to transfer its whole live
+lane to a fresh orchestrator thread. The source writes the normal seven-section
+handoff with `handoff_mode: orchestrator-continuation`,
+`orchestrator_mode: planning-and-review`, and
+`dispatch_authority: orchestrator`, reconciles and pushes the stopping state,
+then stops planning, dispatch, review, and merge mutations for that lane. The
+successor re-enters normal orchestrator mode from the absolute handoff path; it
+does not enter worker mode or run the worker worktree preflight.
+
+When Paseo supplies the transport, create a separate local workspace for the
+same project and checkout, select a current orchestrator-role profile, and pass
+the capitalized `Orchestrator` label through the supported agent-label field.
+Use only the absolute handoff path as the initial prompt. Preserve returned
+workspace and agent identities and do not retry ambiguously. If Paseo exposes a
+native sidebar pin/reorder surface, place the successor beside the source;
+otherwise report that pinning is manual. Never use browser, computer-use, or
+other UI automation to arrange the sidebar. Without Paseo, return the absolute
+handoff path for manual launch. Do not archive or delete the source workspace as
+part of the transfer.
+
 The orchestrator may delegate a meaningful batch of mechanical documentation
 projection to a fast, low-cost subagent after it has settled every planning
 decision. The projection brief must name the authority owner, settled meaning,

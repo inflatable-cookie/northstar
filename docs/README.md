@@ -79,6 +79,10 @@ Northstar system:
 - the first-principles packet and 26-observation dogfood cohort are promoted.
   The protocol is frozen while `g02.045/113` tests structural validation without
   editorial substring and historical-path coupling.
+- `g02.046/114` plans an explicit fresh-orchestrator continuation: one pushed
+  handoff, one successor local workspace, a capitalized `Orchestrator` label,
+  source-lane ownership transfer, and manual sidebar placement when Paseo has no
+  native pin control. It remains blocked until PR 18 merges.
 - Northstar remains general-purpose. Spec 034 plans extraction of embedded Rust
   and TypeScript tooling into optional compatible language packages; that lane
   is not ready for implementation.

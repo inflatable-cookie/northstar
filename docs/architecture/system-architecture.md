@@ -292,6 +292,10 @@ A parallel planning-only branch is:
 
 `operator ↔ planning delegate/worktree -> triage/research PR -> orchestrator review/merge -> orchestrator promotion`
 
+An explicit fresh-orchestrator transfer uses:
+
+`operator ↔ source orchestrator -> committed continuation handoff -> fresh orchestrator/local workspace`
+
 A fresh direct-review thread uses the smaller path:
 
 `operator -> existing PR -> direct review thread -> provider review record`
@@ -310,6 +314,21 @@ a bounded triage/research packet in an isolated branch. It may use read-only
 research subagents. The orchestrator reserves that topic, continues only
 non-overlapping work, reviews and merges the planning PR, then separately
 promotes its settled meaning against current `main`.
+
+On explicit operator request, an orchestrator may transfer its current planning
+and review lane to one fresh orchestrator thread. The source closes the live
+state into a committed, pushed seven-section handoff, launches the successor as
+normal orchestrator mode, then stops mutating or dispatching that transferred
+lane. This is continuity, not parallel ownership: a genuinely concurrent
+orchestrator needs a separately partitioned authority scope.
+
+With Paseo available, the successor gets a separate local workspace for the
+same project and repository checkout, a current profile selected by
+orchestrator-role notes, and the capitalized `Orchestrator` agent label. It does
+not get a worktree or worker preflight. Sidebar pin position is optional adapter
+state: use a native pin/reorder control only when one is explicitly exposed;
+otherwise tell the operator to place it manually and do not use browser,
+computer-use, or other UI automation.
 
 Each worker owns only the assigned ready cards in its dedicated worktree and
 branch. Worker selection is economical by default: ordinary implementation,

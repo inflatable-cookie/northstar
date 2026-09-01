@@ -99,12 +99,15 @@ rollover signal.
   lane-local provider routing; PR 17 merged at `e5e8060`, the corrected skill
   is installed, and active orchestrators were notified)
 - `045-reduce-prose-coupled-validation.md` (active; card 113 ready)
+- `046-add-fresh-orchestrator-continuation.md` (planned; card 114 is blocked
+  behind accepted review and merge of card 113)
 
 ## Next Task
 
-Execute `g02.045/113`. Keep the orchestration protocol frozen, retain structural
-validation, and stop after the worker PR for exact-head review. Spec 034 remains
-a separate not-ready language-package planning lane.
+Finish exact-head review and merge of `g02.045/113`. Then refresh `main` and
+execute `g02.046/114`; it adds fresh-orchestrator continuation without sharing
+front-door ownership with the validation-reduction worker. Spec 034 remains a
+separate not-ready language-package planning lane.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and
