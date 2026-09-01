@@ -137,7 +137,8 @@ pending
 
 ### 003 — Swallowtail g05 Contract 061 / card 034 planning gate
 
-Status: provisional; review repairs complete, exact-head re-review pending
+Status: paused; second review requires planning repair, provider follow-up
+unavailable
 
 - Worker class: `frontier`, dispatched before the economical-routing refresh
   for a materially consequential and semantically coupled adapter-public
@@ -146,21 +147,25 @@ Status: provisional; review repairs complete, exact-head re-review pending
   034 implementation. Shared roadmap, triage, log, and `Next Task` surfaces also
   serialize the queued Swallowtail papercut and currentness closeouts.
 - Outcome: Swallowtail PR 148 is pushed at repaired exact head
-  `9e722e804da118473754e3b627150c5d63be4bfc` and is not merged. The change is
-  docs-only; the 75-emitted / 14-withheld planning ledger is unchanged.
+  `9e722e804da118473754e3b627150c5d63be4bfc` and is not merged. A requested
+  evidence-stop repair produced no new head. The change remains docs-only; the
+  75-emitted / 14-withheld planning ledger is unchanged.
 - Operator intervention after dispatch: none on product semantics. The operator
   supplied refreshed global routing rules and this passive dogfood protocol
   while the lane was active.
-- Review: one completed exact-head round produced four `oracle-gap` findings
-  and one `integration-drift`. The oracle gaps covered failure-branch split,
-  an unobservable cross-operation source prohibition, early-stop acknowledgement
-  state, and catalogue-preflight failure shape. The integration drift was a
-  prepared catalogue that backdated the post-open control. The same worker
-  repaired all five findings; re-review is pending.
-- Control-plane friction: the finish notification truncated the tail of the
-  worker report, but its structured summary retained the exact head and repair
-  evidence needed for review. No transcript mining was required, and same-worker
-  follow-up otherwise worked.
+- Review: two completed rounds. Round one produced four `oracle-gap` findings
+  and one `integration-drift`; the same worker repaired all five. Round two
+  produced one `planning-change` because there is no honest runtime vocabulary
+  for catalogue observation, one public-baseline oracle defect covering compound
+  half and state loss (counted as `oracle-gap` in the cohort taxonomy), and two
+  `integration-drift` findings covering load/resume profile conditionality and
+  an impossible Kimi Platform catalogue emitter.
+- Control-plane friction: the first finish notification truncated the worker
+  report tail, but its structured summary retained enough evidence for review.
+  The round-two follow-up then failed at the provider boundary because the Claude
+  monthly spend limit had been reached; the reported reset is 12:50
+  Europe/London. It produced no code or docs result. No transcript mining was
+  used.
 - Documentation QA: none. `qa:docs` and `qa:northstar` passed; the blockers were
   semantic planning and oracle defects, not checker behavior.
 - Reduction fixture: none.
@@ -271,8 +276,8 @@ Status: provisional; three repair rounds complete, orchestrator review pending
   001 paired implementation with disjoint research; observation 002 paired two
   independent implementation lanes. Observation 005 adds a day-to-day
   diagnostic lane beside 001 but has not started substantive work.
-- Completed review rounds: 5. Recorded blockers total one `planning-change`,
-  nine `execution-miss`, four `oracle-gap`, and two `integration-drift` findings.
+- Completed review rounds: 6. Recorded blockers total two `planning-change`,
+  nine `execution-miss`, five `oracle-gap`, and four `integration-drift` findings.
 - Validation-reduction fixtures: four—one token-scanner boundary false positive
   and three benign accepted docs shapes from observations 002, 004, and 006.
 - Control-plane or task-routing friction appears in observations 001–004 and
