@@ -105,17 +105,178 @@ Status: provisional; implementation complete, exact-head review in progress
 - Provider family: not supplied. Do not infer it from the worker class or
   transport.
 
+### 002 — Figmatic g01.016 / card 016-19 Frame and truthful Ungroup
+
+Status: provisional; refreshed implementation complete, substantive review
+pending
+
+- Worker class: `frontier`, dispatched before the economical-routing refresh
+  for a material schema migration and a cross-layer structural, geometry, and
+  capability invariant. This is baseline routing evidence.
+- Ready frontier: launched beside the independent app-command ACL papercut.
+  Card 016-20 stays serial behind 016-19 because both own OrganisationPanel,
+  container, and drop semantics.
+- Outcome: Figmatic PR 62 is open and mergeable at refreshed exact head
+  `fd81c99e60145cfbbdd0945b256de9ddbefe1a32`. The Frame classifier, schema 27,
+  and native proof are complete. It is not merged.
+- Operator intervention after dispatch: none affecting implementation. The
+  later routing update explicitly left the active worker unchanged.
+- Review: one preliminary integration round found `integration-drift` after the
+  parallel ACL PR merged first. The same worker rebased cleanly and revalidated;
+  exact-head substantive review is pending.
+- Control-plane friction: same-repository serial merge required a post-merge
+  ancestry check and an explicit Paseo follow-up. The follow-up returned the
+  original worker cleanly; there was no duplicate lane or transcript polling.
+- Documentation QA: none. `effigy qa` passed on the refreshed head. Existing
+  Studio type and test failures reproduce on base and are repository-owned,
+  outside docs QA.
+- Reduction fixture: rebase-only docs evidence updates to the base SHA and test
+  count, plus a `PAPERCUTS.md` hunk-offset shift that preserves PR 61's resolved
+  ACL entry and this lane's four open entries.
+- Provider family: not supplied.
+
+### 003 — Swallowtail g05 Contract 061 / card 034 planning gate
+
+Status: provisional; review repairs complete, exact-head re-review pending
+
+- Worker class: `frontier`, dispatched before the economical-routing refresh
+  for a materially consequential and semantically coupled adapter-public
+  baseline gate. This is baseline routing evidence.
+- Ready frontier: one serial main-lane edge. PR 148 review and merge block card
+  034 implementation. Shared roadmap, triage, log, and `Next Task` surfaces also
+  serialize the queued Swallowtail papercut and currentness closeouts.
+- Outcome: Swallowtail PR 148 is pushed at repaired exact head
+  `9e722e804da118473754e3b627150c5d63be4bfc` and is not merged. The change is
+  docs-only; the 75-emitted / 14-withheld planning ledger is unchanged.
+- Operator intervention after dispatch: none on product semantics. The operator
+  supplied refreshed global routing rules and this passive dogfood protocol
+  while the lane was active.
+- Review: one completed exact-head round produced four `oracle-gap` findings
+  and one `integration-drift`. The oracle gaps covered failure-branch split,
+  an unobservable cross-operation source prohibition, early-stop acknowledgement
+  state, and catalogue-preflight failure shape. The integration drift was a
+  prepared catalogue that backdated the post-open control. The same worker
+  repaired all five findings; re-review is pending.
+- Control-plane friction: the finish notification truncated the tail of the
+  worker report, but its structured summary retained the exact head and repair
+  evidence needed for review. No transcript mining was required, and same-worker
+  follow-up otherwise worked.
+- Documentation QA: none. `qa:docs` and `qa:northstar` passed; the blockers were
+  semantic planning and oracle defects, not checker behavior.
+- Reduction fixture: none.
+- Provider family: not supplied.
+
+### 004 — Signal papercuts wave 41 LocalRuntimeHost Send boundary
+
+Status: provisional; implementation complete, material-risk review pending
+
+- Worker class: `day-to-day`. This is post-refresh routing evidence: the lane
+  was a bounded local Rust and API-boundary repair with no exceptional
+  post-planning reasoning, while material consequence stayed with orchestrator
+  review.
+- Ready frontier: one independent Signal repair was ready. The named serial edge
+  is `Signal PR 20 merge -> Loophole wave 40 broker-contract closeout resume`;
+  no other lane was coupled.
+- Outcome: Signal PR 20 is open at exact head
+  `0052fba3e8a332e6bafa9e7621863ad0bb9ee589` and is not merged.
+  `LocalRuntimeHost` now requires `Box<dyn HardwareBackend + Send>`; the shared
+  trait is unchanged, with no unsafe, runtime, or protocol change.
+- Operator intervention after dispatch: none.
+- Review: the worker completed one pass and no revision round. A downstream
+  compile failure at the existing `TransportDriver: Send` boundary was resolved
+  by the narrow host object bound; this was worker validation, not yet an
+  orchestrator finding classification. Material-risk review is pending.
+- Control-plane friction: workspace creation could not apply labels directly,
+  so the capitalized `Papercuts` label needed separate local WebSocket assignment
+  and verification. The handoff named `fmt:rust:check`, while Signal exposes
+  `fmt`; the worker used the repository selector.
+- Documentation QA: none. Formatting, docs QA, Northstar QA, and diff checks
+  passed.
+- Reduction fixture: the single-entry `PAPERCUTS.md` closeout plus timestamped
+  evidence log; no docs false positive occurred.
+- Provider family: not supplied.
+
+### 005 — Poodle interactive drag-and-drop papercuts session
+
+Status: provisional kickoff; waiting for the first reproduction
+
+- Worker class: `day-to-day`. This is post-refresh routing evidence for bounded
+  diagnosis and surgical repair from operator-supplied component reproductions,
+  with no exceptional architecture decision authorized.
+- Ready frontier: this independent diagnostic lane may run beside g16.033.
+  Diagnosis has no serial edge. Any public API, contract, cross-runtime
+  architecture, or breaking-migration finding stops and returns to the Poodle
+  orchestrator before implementation.
+- Outcome: kickoff is complete at `9bdcf03e7` on
+  `papercuts/drag-drop-interactive-fixes`. The tree is clean; there is no code or
+  PR, and the worker is waiting for the first real reproduction.
+- Operator intervention after dispatch: one explicit request to create the
+  interactive thread; no bug details have been supplied yet.
+- Review: zero rounds and no blocking finding.
+- Control-plane friction: none. The worker completed kickoff and remains
+  available for a Paseo follow-up carrying the first reproduction.
+- Documentation QA: none.
+- Reduction fixture: none.
+- Provider family: not supplied.
+
+### 006 — Effigy g08.040 / card 1095 catalog-pack acquisition prototype
+
+Status: provisional; three repair rounds complete, orchestrator review pending
+
+- Worker class: `frontier`. The lane combined exceptional post-planning
+  reasoning across content identity, cross-process state, corruption recovery,
+  and trust boundaries with materially consequential machine-global persistence
+  and public CLI and JSON behavior.
+- Ready frontier: one lane only. The next Effigy papercut stays serial because
+  the operator gated promotion on card 1095 and both lanes own shared closeout
+  and front-door surfaces.
+- Outcome: Effigy PR 68 is complete and reported mergeable at exact head
+  `1ff1407f9367990b0897f72152b6a0e941035d9d`; orchestrator review is pending.
+- Operator intervention after dispatch: one substantive product decision—do
+  not prune packs automatically; retain installed content and defer garbage
+  collection and retention policy. Canonical planning was repaired on `main`
+  before worker revision. The later routing refresh changed process guidance,
+  not lane scope.
+- Review: three changes-requested rounds. Round one found one `planning-change`
+  on retention and five `execution-miss` findings covering stored-content
+  validation, silent fallback propagation, store locking, symlink traversal,
+  and truncated identity and reuse. Round two found three `execution-miss`
+  findings covering root and manifest no-follow, injective path identity, and
+  rollback and doctor target validation. Round three found one `execution-miss`
+  on unreadable or dangling store-metadata repair. No `oracle-gap`,
+  `validation-gap`, or `integration-drift` was reported.
+- Control-plane friction: shared GitHub identity prevented formal
+  request-changes and approval, so canonical verdicts used PR comments after one
+  failed formal-review attempt. Paseo follow-ups reliably resumed the retained
+  worker and workspace; there was no duplicate lane, transcript mining, or
+  polling.
+- Documentation QA: none. Repository-owned `qa:docs` and full Effigy QA passed.
+- Reduction fixture: commit `a5098502f`, a docs-only synchronization of the
+  operator-confirmed no-pruning decision across seven canonical planning,
+  handoff, and log surfaces. Docs QA and the diff check passed.
+- Provider family: not supplied.
+
 ## Cohort progress
 
-- Observations received: 1.
-- Completed cohort lanes: 0 of 8; observation 001 is awaiting review outcome.
-- Projects represented: 1 of 4 (`Poodle`).
-- Provider families counted: 0 of 2; observation 001 did not supply one.
-- Natural parallel shapes: 1 candidate of 2. This was one implementation lane
-  plus disjoint research, not two implementation lanes, and remains
-  provisional with the lane.
-- Validation-reduction fixtures: 1 token-scanner boundary false positive.
-- Control-plane lifecycle friction cases: 1 premature-finish sequence.
+- Observations received: 6.
+- Completed cohort lanes: 0 of 8. Five implementation or planning results await
+  final review, and observation 005 is only a diagnostic kickoff.
+- Projects represented: 5, exceeding the four-project breadth gate (`Poodle`,
+  `Figmatic`, `Swallowtail`, `Signal`, and `Effigy`).
+- Provider families counted: 0 of 2; no packet has supplied one.
+- Worker routing: observations 001–003 are pre-refresh frontier baselines;
+  observations 004–005 are post-refresh day-to-day choices; observation 006 is
+  a frontier lane whose two escalation axes are explicit.
+- Natural parallel shapes: 2 provisional frontier candidates of 2. Observation
+  001 paired implementation with disjoint research; observation 002 paired two
+  independent implementation lanes. Observation 005 adds a day-to-day
+  diagnostic lane beside 001 but has not started substantive work.
+- Completed review rounds: 5. Recorded blockers total one `planning-change`,
+  nine `execution-miss`, four `oracle-gap`, and two `integration-drift` findings.
+- Validation-reduction fixtures: four—one token-scanner boundary false positive
+  and three benign accepted docs shapes from observations 002, 004, and 006.
+- Control-plane or task-routing friction appears in observations 001–004 and
+  006; observation 005 reports none.
 
 ## Closeout
 
