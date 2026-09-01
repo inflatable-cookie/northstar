@@ -56,5 +56,7 @@ Mechanical documentation projection `g02.039/107` is complete. Sol supplied
 settled meaning, reviewed the full diff, and accepted the serial
 profile-driven projection.
 Conversational feature-planning delegation `g02.040/108` is complete. Sol
-reviewed the semantic corrections and full validation. No automatic follow-on
-card is selected.
+reviewed the semantic corrections and full validation.
+Partial Rust evidence collection repair `g02.041/109` is ready from Signal
+live-use evidence. Run it in one isolated Northstar worker and stop at its PR
+for exact-head review.

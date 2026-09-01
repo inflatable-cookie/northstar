@@ -63,12 +63,14 @@ Roadmaps sequence contract-backed work for Northstar itself.
   while preserving manual dispatch and repository authority.
 - `g02.037` is complete; card 105 makes injected Paseo tools the implicit routine
   dispatch signal while keeping project config and authority separate.
+- `g02.041` is active; card 109 is ready to repair the partial Rust evidence
+  collection defect reported by Signal without mutating Signal's sealed audit.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-No blocking roadmap milestone is open. Dogfood the optional Paseo adapter on the
-next bounded orchestrator lane with Paseo tools injected. Northstar does not
-dispatch consumer audits.
+Execute ready card `g02.041/109` in one Paseo-managed Northstar worker. Review
+the exact PR head; do not dispatch a consumer audit or duplicate the Signal
+sandbox papercuts lane.

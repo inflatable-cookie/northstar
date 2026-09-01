@@ -18,7 +18,7 @@ single-pilot bucket.
 | Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | pending |
 | Add a genuinely long-horizon planning route without conflating it with readiness review. | active | `docs/specs/029-northstar-long-horizon-planning.md`, `skills/northstar/references/modes/atlas.md` | Non-Northstar scenario and operator confirmation |
 | Preserve useful conversational context and keep `/docs` drift recoverable without blind deletion. | active | `docs/specs/030-conversational-triage-and-docs-cleanup.md`, `docs/contracts/001-working-rules.md`, `skills/northstar/references/modes/cleanup-docs.md` | live triage and cleanup feedback |
-| Raise language-code quality through evidence-bound routed workflows without creating a second standards authority or always-loaded rule dump. | active | `docs/contracts/004-language-quality-pack.md`, Rust/TypeScript translation memos, specs 031-033 | operator-provided live-use feedback |
+| Raise language-code quality through evidence-bound routed workflows without creating a second standards authority or always-loaded rule dump. | active | `docs/contracts/004-language-quality-pack.md`, Rust/TypeScript translation memos, specs 031-033 | `g02.041/109` partial Rust evidence collection repair |
 
 Update this runway only when generation-level intent changes, a milestone
 materially advances or closes a goal, or rollover is being considered. Do not
@@ -89,12 +89,14 @@ rollover signal.
   semantic authority)
 - `040-delegate-conversational-feature-planning.md` (complete; card 108 adds an
   isolated operator-facing planning delegate with orchestrator-owned promotion)
+- `041-repair-partial-rust-evidence-collection.md` (active; card 109 ready from
+  Signal live-use evidence)
 
 ## Next Task
 
-No automatic follow-on card is selected. `g02.038/106` and `g02.040/108` are
-complete. Return to generation planning or accept the next operator-provided
-live-use correction.
+Execute ready card `g02.041/109` in one isolated Northstar worker. Signal owns
+the originating papercut and its later closure; Northstar owns the collector
+repair and installed-skill proof.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and
