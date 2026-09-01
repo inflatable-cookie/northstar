@@ -71,7 +71,7 @@ baseline. Much of it can; a substantial fraction cannot.
 | Docs spine + authority chain (`bundle-docs/protocol-kernel.md`, sections 01–09) | One home per kind of truth | 124 logs, 8 dogfood repos adopted it | Low coupling; failure is drift, already managed | **keep** |
 | Working-rules grammar (ready-state, stop conditions, done) (`docs/contracts/001-working-rules.md`) | Bound agent improvisation | Dogfood: agents do stop on gaps (logs, review records) | The live contract is 787 lines and diverged 946 diff-lines from its own template (`template-bundle/contracts/001-working-rules-template.md`) | **simplify** |
 | Continuation envelope / lane budget / pause-signal taxonomy (specs 010, 011; contract 001) | Bounded autonomy | No measurement that the taxonomy (vs a simple "3 cards or 90 min, stop on gaps" rule) changes outcomes | Enumerated in ≥15 files | **simplify** (collapse to the simple rule unless evidence arrives) |
-| Orchestrator/worker/PR loop (spec 026, contract 001, mode `orchestrator.md`) | Parallel delegated execution with durable authority | Real merged PRs (13, 14), real Paseo lifecycle runs (g02.036–038) | One protocol change touches ~12 surfaces — see `docs/logs/2026-09/01-101853-make-orchestrator-parallel-first.md`; parallel-first itself shipped with *no live multi-worker run* (its own Limitations section) | **keep core, simplify spec depth** |
+| Orchestrator/worker/PR loop (spec 026, contract 001, mode `orchestrator.md`) | Parallel delegated execution with durable authority | Real merged PRs (13, 14, 15), real Paseo lifecycle runs (g02.036–038) | One protocol change touches ~12 surfaces — see `docs/logs/2026-09/01-101853-make-orchestrator-parallel-first.md`; parallel-first itself shipped with *no live multi-worker run* (its own Limitations section) | **keep core, simplify spec depth** |
 | Planning delegate + mechanical projection + capacity discovery + sibling symlink rules (g02.039/040/042) | Edge-case orchestration detail | This very packet is the first delegate run; projection ran once | Highly specific rules (symlink reuse semantics, refusal-as-capacity) written before second use | **simplify** (prune to what has run twice) |
 | Skill router + 21 modes, 127-file install (`skills/northstar/`) | Routed agent workflows | Modes used in dogfood; parity checker guards install | 21 modes with overlapping reads; several (reframe, refocus, replan, refresh, recovery, cleanup) are near-neighbors | **simplify** (target ~8 modes) |
 | Language-quality packs, Rust + TS/Svelte (contract 004, specs 031–033, `skills/northstar/references/language-quality/` 32 files/4.6k lines, `tools/rust-quality/` 22 files) | Code quality with evidence | Strong internal evidence (revision E, revision S cohorts) | Different product from docs spine; source of most papercuts (frozen-cohort halts, false-green oracles, brittle harnesses); ~10 of 43 g02 milestones | **rethink** (operator decision: split out, freeze, or accept the mission expansion) |
@@ -274,8 +274,11 @@ D4. Whether a measurement window (R1) may displace new protocol milestones
 
 ## Sources
 
-All evidence is repository-internal at base
-`463d12ef3fe73c441bfdc6c632c469e318d57a4e` (refreshed against current `main`
-before PR): cited paths above, plus counts gathered via `find`/`wc`/`grep`
+All evidence is repository-internal, gathered at dispatch base
+`463d12ef3fe73c441bfdc6c632c469e318d57a4e` and refreshed onto `main`
+`22656e5` (which adds the `g02.043` economical-worker-routing merge, PR 15 —
+one more protocol milestone consistent with this packet's counts and with
+R1's growth-curve observation; no other finding is affected): cited paths
+above, plus counts gathered via `find`/`wc`/`grep`
 over the worktree (Markdown line totals, mode counts, checker line counts,
 duplication clusters, template/live diffs). No external sources were used.
