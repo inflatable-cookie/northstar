@@ -334,21 +334,21 @@ Status: provisional opening checkpoint; operator conversation active
 
 ### 010 — Loophole papercuts wave 40 Signal sandbox-broker contract
 
-Status: provisional; first review repaired, re-review pending
+Status: complete; corrected exact head reviewed and merged
 
 - Worker class: `day-to-day`. The lane was bounded consumer and test-contract
   adoption with local reasoning and no exceptional post-planning difficulty or
   frontier implementation need.
 - Ready frontier: Loophole became ready only after the named upstream Signal PR
-  20 merge. The serial edge was `Signal PR 20 -> Loophole PR 25`; no other lane
-  was coupled.
-- Outcome: Loophole PR 25 is open at revised exact head
-  `c476bca3b6334fc03b87048310e981ab5fac8fa1`. It removes the test-time Cargo
-  broker-build fallback, requires `SIGNAL_PLUGIN_SANDBOX_BROKER_COMMAND`, adds
-  explicit `effigy test:plugin-isolation` provisioning, and closes only the
-  matching broker tracker entry. The stale duplicate `HardwareBackend: Send`
-  entry is removed. The Signal prerequisite is
-  `36242aacb010f14a3c7f4d70fe3e73c516bdf671`.
+  20 merge. The serial edge `Signal PR 20 -> Loophole PR 25` is settled; no
+  other lane was coupled.
+- Outcome: Loophole PR 25 merged at
+  `97bc0216938bbc3a3f7546952cb3b8d118cddc96`; the accepted exact head was
+  `c476bca3b6334fc03b87048310e981ab5fac8fa1`. Loophole now requires
+  `SIGNAL_PLUGIN_SANDBOX_BROKER_COMMAND`, uses explicit Signal
+  `broker:provision`, and no longer builds the broker during consumer startup or
+  tests. The matching broker papercut is closed; the independent Effigy banner
+  observation remains open.
 - Operator intervention after dispatch: one same-worker continuation after
   Signal PR 20 merged, then one review correction on the same branch. The
   handoff and scope were unchanged; no replacement lane was created.
@@ -357,12 +357,13 @@ Status: provisional; first review repaired, re-review pending
   repaired in the separate Signal PR 20. The resumed pass completed. The first
   PR review found one `integration-drift` finding: tracker currentness still
   carried the superseded upstream `Send` issue. The same worker applied the
-  docs-only correction; re-review is pending and no new worker validation was
-  added.
+  docs-only correction; the second exact-head review passed with no remaining
+  blocker.
 - Control-plane friction: workspace labeling required a separate local
   WebSocket assignment. The first agent-create payload omitted Paseo's combined
   `provider/model` form; retry created no duplicate worker. The cross-repo Signal
-  prerequisite stayed explicit.
+  prerequisite stayed explicit. There was no worker-state polling or transcript
+  mining.
 - Documentation QA: none. Original package formatting, docs QA, Northstar QA,
   and diff checks passed. The workspace formatting gate was skipped for
   unrelated pre-existing drift. The docs-only revision was not revalidated
@@ -391,9 +392,10 @@ experiment; no consumer lane is changed to manufacture proof.
 ## Cohort progress
 
 - Observations received: 10.
-- Completed cohort lanes: 1 of 8. Signal observation 004 is reviewed and merged;
-  observation 007 passed review but was not yet merged, observation 008 stopped
-  before implementation, and observation 005 is only a diagnostic kickoff.
+- Completed cohort lanes: 2 of 8. Signal observation 004 and Loophole observation
+  010 are reviewed and merged; observation 007 passed review but was not yet
+  merged, observation 008 stopped before implementation, and observation 005 is
+  only a diagnostic kickoff.
 - Projects represented: 7, exceeding the four-project breadth gate (`Poodle`,
   `Figmatic`, `Swallowtail`, `Signal`, `Effigy`, `Acowtancy/Market`, and
   `Loophole`).
@@ -408,7 +410,7 @@ experiment; no consumer lane is changed to manufacture proof.
   disjoint research; observation 002 paired two independent implementation
   lanes; observation 009 paired two planning delegates and an independent
   diagnostic session while preserving the serial promotion/readiness edge.
-- Completed review rounds: 9. Recorded blockers total two `planning-change`,
+- Completed review rounds: 10. Recorded blockers total two `planning-change`,
   nine `execution-miss`, five `oracle-gap`, and five `integration-drift` findings.
 - Validation-reduction fixtures: six—one token-scanner boundary false positive
   and five benign accepted docs shapes from observations 002, 004, 006, 007,
