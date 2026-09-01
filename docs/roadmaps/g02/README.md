@@ -100,12 +100,15 @@ rollover signal.
   is installed, and active orchestrators were notified)
 - `045-reduce-prose-coupled-validation.md` (implementation and review
   corrections complete through card 113; corrected exact-head review pending)
+- `046-add-fresh-orchestrator-continuation.md` (planned; card 114 is blocked
+  behind accepted review and merge of card 113)
 
 ## Next Task
 
-Review the `g02.045/113` worker PR against all seven oracle rows, then stop for
-orchestrator merge. Keep the orchestration protocol frozen and retain structural
-validation. Spec 034 remains a separate not-ready language-package planning lane.
+Finish exact-head review and merge of `g02.045/113`. Then refresh `main` and
+execute `g02.046/114`; it adds fresh-orchestrator continuation without sharing
+front-door ownership with the validation-reduction worker. Spec 034 remains a
+separate not-ready language-package planning lane.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and

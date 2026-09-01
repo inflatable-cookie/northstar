@@ -42,6 +42,13 @@ The orchestrator reviews and merges that packet and separately promotes settled
 meaning against current `main`; the packet never becomes execution authority by
 merge alone.
 
+On a separate explicit request, the orchestrator may transfer its whole current
+lane to a fresh orchestrator thread. It first closes the repository state and
+writes one committed continuation handoff using the normal seven-section
+handoff shape. The successor owns the same planning/review lane; the source
+stops mutating that lane after launch. This is neither worker mode nor a
+planning delegate, and it does not create an implementation worktree or PR.
+
 For each approved independent lane, the orchestrator uses a control-plane
 adapter when the current thread exposes its orchestration tools, or gives the
 operator the handoff path for manual launch. Injected Paseo tools are the
@@ -114,6 +121,8 @@ before chat summarizes the result.
   fast/low-cost subagent handles bounded mechanical documentation projection.
 - Let an operator-requested frontier planning delegate explore one topic in a
   separate conversation while the orchestrator continues non-overlapping work.
+- Let an operator-requested successor orchestrator continue the whole live lane
+  from one durable handoff without sharing mutation authority with the source.
 - Make parallel scheduling the orchestrator default: plan a dependency frontier
   and launch every safe ready lane without treating provider availability as a
   global worker limit or waiting for the operator to ask again.
@@ -121,6 +130,8 @@ before chat summarizes the result.
 ## Non-goals
 
 - requiring automatic cross-session messaging or one named control plane;
+- requiring sidebar pin/reorder support or automating the Paseo UI when it is
+  absent;
 - a second public Northstar skill;
 - parallel workers with shared mutable scope, unresolved authority, or hidden
   ordering/data/generated-artifact dependencies;
@@ -216,6 +227,60 @@ promotes settled meaning, and removes or splits resolved triage material. Only
 that separate promotion batch may update architecture, contracts, specs,
 roadmaps, cards, or readiness. Mechanical documentation projection may apply an
 already-settled promotion map; it cannot choose the map.
+
+## Fresh orchestrator continuation
+
+This path starts only when the operator explicitly asks the current
+orchestrator to hand its live lane to a fresh orchestrator thread. It is an
+ownership transfer, not a way to multiply planners over one repository state.
+
+The source orchestrator uses the normal handoff template and adds:
+
+```yaml
+handoff_mode: orchestrator-continuation
+orchestrator_mode: planning-and-review
+dispatch_authority: orchestrator
+```
+
+The handoff records the current authority chain, open operator questions,
+active and paused lanes, ready frontier, worker and PR transport identities,
+review/merge state, touched triage notes, repository state, and the next
+orchestrator action. Before automatic dispatch, the source reconciles the live
+card, roadmap, log, handoff, and front doors, commits and pushes that coherent
+state, and verifies the remote tip. It then stops planning, dispatch, review,
+merge, and closeout mutations for the transferred lane. It remains available
+for explicit clarification but does not compete with the successor.
+
+The successor receives only `Read and follow <absolute-handoff-path>.` It reads
+the committed handoff, enters normal orchestrator mode, reloads current
+repository authority, and checks that the recorded state still matches current
+`main`. It does not activate worker mode, run the worker worktree preflight, or
+inherit private conversation as authority.
+
+When Paseo tools are injected, the source:
+
+1. resolves its current project and repository checkout without guessing an
+   ambiguous workspace;
+2. lists current profiles and selects one whose notes cover orchestrator
+   planning, operator conversation, dispatch, and review, unless the operator
+   named a profile;
+3. creates a separate `local` workspace for that same project and checkout;
+4. creates the successor agent there with the capitalized label
+   `Orchestrator=true`, copied profile settings, finish notifications enabled,
+   and the single absolute-handoff prompt;
+5. retains and reports both returned identities without polling or duplicate
+   retry.
+
+Paseo workspace pin order is optional display state. If the injected adapter or
+CLI explicitly exposes a native pin/reorder operation, the source may place the
+successor beside its own workspace. When no such operation exists, it says the
+new workspace is ready and asks the operator to pin/place it manually. It must
+not use browser control, computer use, Chrome control, plugin code, or another
+UI automation route to simulate unsupported pinning.
+
+Without Paseo, the source returns the absolute handoff path for manual launch.
+The transfer never archives, deletes, kills, or unpins the source workspace or
+thread automatically.
 
 ## Parallel lane dispatch
 
