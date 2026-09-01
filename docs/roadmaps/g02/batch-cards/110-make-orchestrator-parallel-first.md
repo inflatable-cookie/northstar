@@ -70,7 +70,8 @@ launch now, which wait, why they wait, and what happens when capacity frees.
 
 - before/after inventory of permissive `offer parallel` wording;
 - scenario matrix covering independent, dependent, shared-closeout, capacity-
-  refill, coherent issue-fix, and same-repo merge-order cases;
+  refill, unsurfaced-capacity, coherent issue-fix, and same-repo merge-order
+  cases;
 - changed-surface parity inventory;
 - `effigy check:command-skills`, `effigy check:skill-install`,
   `effigy qa:docs`, `effigy qa`, and `git diff --check` results;
