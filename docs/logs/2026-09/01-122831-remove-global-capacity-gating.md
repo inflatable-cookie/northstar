@@ -97,7 +97,7 @@ evidence.
 
 ## PR
 
-pending
+https://github.com/inflatable-cookie/northstar/pull/17
 
 ## Next
 

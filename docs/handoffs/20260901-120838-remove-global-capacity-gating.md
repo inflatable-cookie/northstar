@@ -80,7 +80,7 @@ lane's authority chain and avoiding duplicate agents.
   `effigy check:skill-install`; `effigy qa:docs`; `effigy qa`;
   `git diff --check`.
 - **PR base/head:** `main` <- `worker/remove-global-capacity-gating`.
-- **PR URL:** pending.
+- **PR URL:** https://github.com/inflatable-cookie/northstar/pull/17.
 - **Review state:** worker implementation complete; awaiting exact-head review.
 - **Merge path:** orchestrator after accepted review of the current head and
   passing required checks.
