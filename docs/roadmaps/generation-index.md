@@ -76,11 +76,10 @@ sequence.
 
 ## Next Task
 
-Roadmaps `g02.038` through `g02.043` are complete on the worker branch.
-`g02.043/111` implemented economical day-to-day worker routing. Orchestrator
-exact-head review of that PR is next, then choose the following `g02`
-milestone from the generation runway. A concurrent first-principles
-planning-delegate handoff is live and owns only its named triage packet.
+Roadmaps `g02.038` through `g02.043` are complete. `g02.043/111` implemented
+economical day-to-day worker routing and merged through PR 15 at `d5acd75`.
+Refresh and re-review the accepted first-principles planning packet in PR 16,
+then merge it as non-authoritative intake and decide which findings to promote.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed

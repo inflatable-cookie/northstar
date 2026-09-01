@@ -94,14 +94,14 @@ rollover signal.
 - `042-make-orchestrator-parallel-first.md` (complete; card 110 made
   dependency-frontier parallel-first dispatch the orchestrator default; PR 14
   merged at `8cfa0ae` after exact-head review)
-- `043-prefer-economical-worker-routing.md` (complete; card 111 implemented, awaiting exact-head review)
+- `043-prefer-economical-worker-routing.md` (complete; card 111 merged through PR 15 at `d5acd75`)
 
 ## Next Task
 
-Review and merge the `g02.043/111` PR, then choose the next `g02` milestone from
-the generation runway. A concurrent first-principles planning-delegate handoff
-is live and owns only its named triage packet. Signal papercut closure remains
-an independent consumer-owned coordination step.
+Refresh and re-review the accepted first-principles planning packet in PR 16,
+then merge it as non-authoritative intake and decide which findings to promote.
+Signal papercut closure remains an independent consumer-owned coordination
+step.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and

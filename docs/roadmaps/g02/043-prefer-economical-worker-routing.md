@@ -8,7 +8,7 @@ Vision tags: `orchestration`, `workers`, `paseo`, `model-efficiency`
 Governing refs: `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`,
 `docs/contracts/001-working-rules.md`,
 `bundle-docs/sections/07-delivery-framework-and-autonomy.md`
-Planning state: card 111 implemented; awaiting orchestrator exact-head review
+Planning state: card 111 merged through PR 15 at `d5acd75`
 
 ## Problem
 
@@ -86,5 +86,5 @@ choose local profile names or redefine their notes.
 
 ## Next Task
 
-Orchestrator exact-head review and check-gated merge of the card 111 PR. Then
-choose the next `g02` milestone from the generation runway.
+Use the merged routing rule in live dispatch. Refresh and re-review the
+first-principles planning packet in PR 16 before choosing any promotion lane.

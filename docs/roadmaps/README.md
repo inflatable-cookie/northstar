@@ -69,15 +69,15 @@ Roadmaps sequence contract-backed work for Northstar itself.
   dependency-frontier and parallel-first while preserving serial safety gates.
   PR 14 merged at `8cfa0ae` after exact-head review.
 - `g02.043` is implemented; card 111 made economical day-to-day profiles the
-  worker default and frontier selection a two-axis exception. Awaiting
-  orchestrator exact-head review.
+  worker default and frontier selection a two-axis exception. PR 15 merged at
+  `d5acd75` after exact-head review.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Review and merge the `g02.043/111` PR, then choose the next `g02` milestone
-from the generation runway. A concurrent first-principles planning-delegate
-handoff is live and owns only its named triage packet. Keep the independent
-Signal papercut closure with the Signal orchestrator; do not duplicate it here.
+Refresh and re-review the accepted first-principles planning packet in PR 16,
+then merge it as non-authoritative intake and decide which findings to promote.
+Keep the independent Signal papercut closure with the Signal orchestrator; do
+not duplicate it here.

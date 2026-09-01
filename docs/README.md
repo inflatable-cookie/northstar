@@ -68,9 +68,11 @@ Northstar system:
   `8cfa0ae`
 - `g02.043/111` implemented economical day-to-day worker routing; frontier
   workers now require both highest-priority/material-consequence and
-  exceptional-reasoning gates. Awaiting orchestrator exact-head review.
-- a concurrent first-principles planning delegate is in flight from
+  exceptional-reasoning gates. PR 15 merged at `d5acd75` after exact-head
+  review.
+- the concurrent first-principles planning delegate delivered its packet from
   `handoffs/20260901-110423-northstar-first-principles-audit.md`; it writes
-  only its named triage packet
+  only its named triage packet. PR 16 is accepted before the required
+  post-merge refresh and re-review.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup
