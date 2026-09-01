@@ -219,6 +219,14 @@ exact-content assertion data and calls are absent from the checker path.
 - `effigy qa` — pass;
 - `git diff --check` — clean.
 
+## Review Handoff
+
+PR: https://github.com/inflatable-cookie/northstar/pull/18
+
+The implementation and closeout evidence above were validated at worker head
+`9eb8c6be23ef668ff9dfcf456e4983b9014263a0`. The PR is review-only; the
+orchestrator owns exact-head review and merge.
+
 ## Limits
 
 The experiment proves the checker boundary with local deterministic fixtures;

@@ -93,7 +93,8 @@ Here is the state the worker is inheriting:
   readiness-map and command-skill checks; `effigy qa:docs`; `effigy qa`;
   `git diff --check`.
 - **PR base/head:** `main` <- `worker/validation-reduction-experiment`.
-- **PR URL:** pending.
+- **PR URL:** https://github.com/inflatable-cookie/northstar/pull/18
+- **Implementation-tested head:** `9eb8c6be23ef668ff9dfcf456e4983b9014263a0`.
 - **Review state:** worker implementation and focused/full validation complete;
   awaiting orchestrator exact-head review.
 - **Merge path:** orchestrator after accepted review of the current head and
