@@ -428,6 +428,35 @@ Status: scheduling checkpoint; all safe current lanes already launched
 - Reduction fixture: none.
 - Provider family: not supplied.
 
+### 013 — Figmatic g01.018 / card 018-01 detached component-root runtime
+
+Status: route recovered; replacement worker active, no PR yet
+
+- Worker class: `frontier`. The lane combines exceptional post-planning
+  reasoning about projection identity and history with materially consequential
+  canonical-component corruption and undo behavior.
+- Ready frontier: card 018-01 was the only launchable lane. Card 016-20 waits
+  for merged-main Time and Frame operator acceptance. Card 018-02 joins the
+  accepted results of 018-01 and 016-20.
+- Outcome: the initial Claude-family route stopped before work at a monthly
+  spend limit. The committed handoff `f1d35932`, workspace
+  `wks_5a668f5e4ca3432f`, and clean untouched branch were retained. After the
+  operator selected the alternate xAI-family route, a replacement agent record
+  launched in the same workspace. No PR exists yet.
+- Operator intervention after dispatch: explicitly selected the alternate
+  provider route. Lane authority and scope did not change.
+- Review: zero rounds and no blocking finding.
+- Control-plane friction: the spend failure stayed lane-local. Paseo cannot
+  retarget the provider on an existing agent record, so recovery after the
+  terminal pre-work failure required a replacement agent record. It did not
+  require a new handoff, workspace, branch, or rebrief, and it did not create
+  two active workers for the lane.
+- Documentation QA: none.
+- Reduction fixture: committing the handoff removed the fully promoted,
+  110-line `docs/triage/2026-09-01-sidebar-component-modes.md`. This is a benign
+  triage-lifecycle deletion rather than planning loss.
+- Provider families: Claude and xAI, both supplied explicitly.
+
 ## Material protocol defect
 
 The operator observed active orchestrator threads drop from roughly six-to-ten
@@ -446,11 +475,17 @@ window stays open for the planned validation-reduction experiment; no consumer
 lane is changed to manufacture proof. Observation 012 is the first post-install
 scheduling checkpoint: every safe Poodle lane was already launched, no global
 slot budget was inferred, and the remaining serial edges were named from real
-dependency or authority constraints.
+dependency or authority constraints. Observation 013 is the first actual
+post-install provider reroute. The failure stayed lane-local and the handoff,
+workspace, and branch survived, but Paseo could not retarget the terminal agent
+record to another provider. A replacement agent record was therefore required
+in the same workspace. This is not a duplicate active worker; it is a narrower
+transport distinction between retained lane authority and reusable agent
+identity to assess after the freeze.
 
 ## Cohort progress
 
-- Observations received: 12.
+- Observations received: 13.
 - Completed cohort lanes: 2 of 8. Signal observation 004 and Loophole observation
   010 are reviewed and merged; observation 007 passed review but was not yet
   merged, observation 008 stopped before implementation, and observation 005 is
@@ -458,8 +493,9 @@ dependency or authority constraints.
 - Projects represented: 7, exceeding the four-project breadth gate (`Poodle`,
   `Figmatic`, `Swallowtail`, `Signal`, `Effigy`, `Acowtancy/Market`, and
   `Loophole`).
-- Provider families counted: 1 of 2. Swallowtail supplied Claude explicitly;
-  no provider family is inferred for the Market spend-limit packet.
+- Provider families counted: 2 of 2. Swallowtail and Figmatic supplied Claude
+  explicitly; Figmatic also supplied xAI. No provider family is inferred for
+  the Market spend-limit packet.
 - Worker routing: observations 001–003 are pre-refresh frontier baselines;
   observations 004–005 are post-refresh day-to-day choices; observation 006 is
   a frontier lane whose two escalation axes are explicit; observation 009 is a
@@ -467,18 +503,19 @@ dependency or authority constraints.
   010 is another bounded day-to-day implementation choice; observation 011 is
   the second frontier planning delegate in the same Poodle frontier;
   observation 012 is a post-install scheduling checkpoint, not another worker
-  lane.
+  lane; observation 013 is a post-install frontier choice with both escalation
+  axes explicit and a provider route recovered before work began.
 - Natural parallel shapes: 3. Observation 001 paired implementation with
   disjoint research; observation 002 paired two independent implementation
   lanes; observation 009 paired two planning delegates and an independent
   diagnostic session while preserving the serial promotion/readiness edge.
 - Completed review rounds: 10. Recorded blockers total two `planning-change`,
   nine `execution-miss`, five `oracle-gap`, and five `integration-drift` findings.
-- Validation-reduction fixtures: six—one token-scanner boundary false positive
-  and five benign accepted docs shapes from observations 002, 004, 006, 007,
-  and 010.
+- Validation-reduction fixtures: seven—one token-scanner boundary false positive,
+  five benign accepted docs shapes from observations 002, 004, 006, 007, and
+  010, and the promoted-triage deletion from observation 013.
 - Control-plane or task-routing friction appears in observations 001–004 and
-  006–008 and 010–011; observations 005, 009, and 012 report none.
+  006–008, 010–011, and 013; observations 005, 009, and 012 report none.
 
 ## Closeout
 
