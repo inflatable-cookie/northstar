@@ -1,6 +1,6 @@
 # 034 - Modular Language Quality Packages
 
-Status: active planning; not ready for implementation
+Status: planning settled; ready for promotion, not implementation
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `docs/contracts/004-language-quality-pack.md`,
@@ -257,11 +257,34 @@ payload and its fallback in one change. From that point, a missing compatible
 package stops only the requested language workflow under the normal package
 contract.
 
-## Compatibility And Trust Questions
+## Release Ownership And Promotion
 
-Planning must settle these before a roadmap becomes ready:
+The language-package source repository owns each package's source, manifest,
+self-check, package-scoped fixtures, independently addressable artifact,
+content digest, changelog, and release evidence. Source-to-install parity is
+proved per package; it is not the root Northstar skill's whole-payload parity
+check and does not make unrelated sibling packages part of the release unit.
 
-1. source/install parity and release ownership after extraction.
+Northstar core owns the package-manifest schema, official registry entries,
+generic resolver and installer behavior, core/package compatibility fixtures,
+and consumer migration rules. A package release publishes an immutable
+candidate first. A reviewed Northstar registry change then pins its exact
+source and content identities and runs installation, self-check, compatibility,
+and real-consumer proof. Registry merge makes that candidate the official
+automatic choice for eligible workflows.
+
+Neither source nor installed routing follows a moving branch or tag. A package
+may publish without changing Northstar's default, and Northstar may continue to
+pin an older compatible package until the registry review passes. Package and
+core releases therefore remain independent while the registry change is the
+explicit promotion boundary between them.
+
+## Planning Status
+
+The compatibility, trust, acquisition, update, rollback, offline, extraction,
+cutover, and release-ownership questions are settled. This spec is ready to
+promote into architecture and contract 004. It does not authorize package
+implementation or roadmap dispatch before that promotion is complete.
 
 Effigy catalog packs were assessed as a candidate transport. The result below
 keeps the language-package contract provider-neutral and outside that
