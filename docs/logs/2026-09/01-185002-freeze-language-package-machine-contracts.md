@@ -43,13 +43,13 @@ independent package inventories, exact core compatibility, and portable contract
 | Identity precedes execution | Valid self-check script with tampered manifest digest | Reject before running self-check | `expect_digest_drift_failure` verifies digest mismatch causes execution failure |
 | Official trust is core-owned | Package manifest self-asserts `official: true` or `trusted: true` | Validation rejects self-authorizing fields | `expect_manifest_rejection` with `self-authorizing-manifest` negative fixture |
 | Sources are immutable | Registry entry specifies `main` branch or a tag rather than exact commit | Validation rejects non-hex or mutable source commits | `expect_registry_rejection` with mutable/tag registry entries |
-| Packages are independent | Sibling packages share repository tree under distinct subpaths | Addressing one subpath returns only its isolated inventory | `compute_subpath_tree_inventory` verifies alpha and beta package isolation |
-| Core compatibility is exact | Package specifies incompatible `compatible_core_range` (e.g. `>=99.0.0`) | Incompatible range rejected against core version | `expect_compat_rejection` with incompatible-range fixture |
+| Packages are independent | Sibling packages share repository tree under distinct subpaths | Addressing one subpath returns only its isolated inventory; leakage rejected | `extract_addressed_package_inventory` + `verify_package_isolation` prove alpha/beta isolation and reject sibling payload leaks |
+| Core compatibility is exact | Package specifies incompatible numeric range (e.g. `>=0.10.0 <1.0.0` against core `0.2.0`) | Incompatible range rejected by numeric SemVer evaluation | `expect_compat_rejection` with `incompatible-range-lexicographical` fixture and boundary test suite |
 | Contract stays portable | Schemas hardcode LLM provider names or local paths | Portability scan fails | `scan_forbidden_dependencies` rejects provider strings in references |
 
 ## Validation
 
-- `effigy check:language-packages` — pass (3 schemas, official registry, policy-free fixture, 6 negative oracle invariants, portable contracts);
+- `effigy check:language-packages` — pass (3 Draft 2020-12 schemas, schema-derived instance conformance across all variants, SemVer numeric ranges, path containment, trust/source receipt variants, deep policy-free proof, sibling isolation proof, 7 negative oracle invariants, portable contracts);
 - `effigy check:skill-install skills/northstar` — pass (146 files in exact parity);
 - `effigy qa:docs` — pass (repo contract, readiness map, command skills, model routing, and language packages);
 - `effigy validate` — pass;

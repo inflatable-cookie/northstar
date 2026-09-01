@@ -180,15 +180,23 @@ effigy qa:docs
 
 The checker validates:
 1. `package-manifest.schema.json`, `official-registry.schema.json`, and
-   `installation-receipt.schema.json` against JSON Schema Draft 2020-12;
-2. the initial core-owned `official-registry.json` document;
-3. the policy-free fixture package structure, manifest, and self-check entrypoint
-   (asserting zero production language rules, profiles, overlays, or engines);
-4. package independence and sibling isolation across distinct subpaths;
-5. the negative oracle suite (identity precedes execution / digest drift,
-   core-owned official trust, immutable hex commit sources, independent
-   inventories, exact core range compatibility, and malformed manifest rejection);
-6. portable contracts (scanning for forbidden LLM provider dependencies).
+   `installation-receipt.schema.json` structure against JSON Schema Draft 2020-12;
+2. full schema-instance conformance for package manifests, official registry, and
+   installation receipts across all trust variants (`official`, `operator_allowlist`,
+   `interactive_approval`) and source variants (`git`, `local_path`, `archive`);
+3. exact semantic-version parsing and numeric range compatibility evaluation
+   (disallowing lexicographical comparison bugs, supporting exact, caret, bounded,
+   and open ranges);
+4. package-relative path containment (strictly rejecting parent traversal, escaping,
+   empty segments, and absolute paths in entrypoints, subpaths, and self-checks);
+5. initial core-owned `official-registry.json` document;
+6. deep recursive policy-free fixture verification across all files and directories
+   (asserting zero production language rules, profiles, overlays, engines, or catalogues);
+7. independent package addressing and sibling payload isolation from multi-package sources;
+8. negative review-oracle invariant suite (digest drift, self-authorizing rejection,
+   immutable hex commit sources, independent payload isolation, exact core ranges,
+   path traversal rejection, and malformed manifests);
+9. portable contracts (scanning for forbidden LLM provider dependencies).
 
 ## Agent-instruction audit (`check:agent-instructions`)
 

@@ -123,12 +123,16 @@ compatibility validation succeeds.
 
 ## Completion Notes
 
-Completed machine contracts for modular language quality packages (g02.048/116):
-- Added `skills/northstar/references/packages/package-manifest.schema.json`, `official-registry.schema.json`, `installation-receipt.schema.json`, and empty initial `official-registry.json`.
-- Added policy-free fixture package at `skills/northstar/assets/fixtures/language-packages/policy-free-fixture/` with zero production language rules.
-- Added negative fixtures and sibling isolation fixtures under `skills/northstar/assets/fixtures/language-packages/`.
-- Implemented `skills/northstar/scripts/check-language-packages.rhai` covering positive schema validation, all 6 review-oracle invariants, sibling package independence, and forbidden provider scans.
-- Wired `check:language-packages` into root `effigy.toml`, `skills/northstar/effigy.toml`, `qa:docs`, `validate`, and repo contract checks.
+Completed and repaired machine contracts for modular language quality packages (g02.048/116):
+- Added `skills/northstar/references/packages/package-manifest.schema.json`, `official-registry.schema.json`, `installation-receipt.schema.json` (JSON Schema Draft 2020-12) and initial `official-registry.json`.
+- Implemented exact SemVer parsing and numeric range evaluation, supporting exact, caret, bounded, and open ranges while rejecting lexicographical comparison flaws.
+- Frozen package-relative path containment grammar and enforced strict rejection of directory traversal (`..`), empty segments, and absolute paths in schemas and runtime checks.
+- Modeled explicit receipt trust variants (`official`, `operator_allowlist`, `interactive_approval`) and source variants (`git`, `local_path`, `archive`), proving required and forbidden field combinations while preserving exact content identities (`package_tree_digest`, `manifest_digest`).
+- Implemented complete schema-instance conformance validation across all manifest, registry, and receipt instances.
+- Added deep recursive policy-free fixture verification across all files and directories for zero production language rules, catalogues, profiles, or engines.
+- Proved independent package addressing and sibling payload isolation from multi-package repository sources with negative leakage rejection.
+- Implemented negative review-oracle suite with explicit discrimination assertions for all invariants.
+- Wired `check:language-packages` into root and skill `effigy.toml`, `qa:docs`, `validate`, and repo contract checks.
 - Validated with `effigy check:language-packages`, `effigy check:skill-install`, `effigy qa:docs`, `effigy qa`, and `git diff --check`.
 
 ## Next Task

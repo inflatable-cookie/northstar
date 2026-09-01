@@ -27,7 +27,7 @@
     },
     "version": {
       "type": "string",
-      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[a-zA-Z0-9.-]+)?$"
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
     },
     "kind": {
       "type": "string",
@@ -35,7 +35,7 @@
     },
     "compatible_core_range": {
       "type": "string",
-      "minLength": 1
+      "pattern": "^(\\*|[0-9]+\\.[0-9]+\\.[0-9]+|\\^[0-9]+\\.[0-9]+\\.[0-9]+|>=[0-9]+\\.[0-9]+\\.[0-9]+ <[0-9]+\\.[0-9]+\\.[0-9]+|>=[0-9]+\\.[0-9]+\\.[0-9]+|<[0-9]+\\.[0-9]+\\.[0-9]+)$"
     },
     "supported_languages": {
       "type": "array",
@@ -68,7 +68,7 @@
       "required": [],
       "additionalProperties": {
         "type": "string",
-        "minLength": 1
+        "pattern": "^[a-zA-Z0-9_-][a-zA-Z0-9_.-]*(/[a-zA-Z0-9_-][a-zA-Z0-9_.-]*)*$"
       }
     },
     "runtime_capabilities": {
@@ -81,13 +81,15 @@
         "required_commands": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         },
         "optional_effigy_selectors": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         }
       },
@@ -103,18 +105,20 @@
       "properties": {
         "entrypoint": {
           "type": "string",
-          "minLength": 1
+          "pattern": "^[a-zA-Z0-9_-][a-zA-Z0-9_.-]*(/[a-zA-Z0-9_-][a-zA-Z0-9_.-]*)*$"
         },
         "validated_profile_versions": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
           }
         },
         "validated_schema_versions": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
           }
         }
       },
@@ -123,7 +127,8 @@
     "evidence_providers": {
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "string",
+        "minLength": 1
       }
     }
   },
