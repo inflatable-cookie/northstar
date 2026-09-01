@@ -310,6 +310,28 @@ Status: paused before implementation; provider route unavailable
 - Reduction fixture: none.
 - Provider family: not supplied.
 
+### 009 — Poodle design-guidance evaluation pilot planning delegate
+
+Status: provisional opening checkpoint; operator conversation active
+
+- Worker class: `frontier planning`, not implementation. Direct operator-facing
+  choices over the guidance candidate, ownership, scoring, and pre-result
+  thresholds require high reasoning and materially shape whether Poodle adds a
+  maintained guidance and evaluation surface.
+- Ready frontier: launched beside the independent motion-policy planning
+  delegate and drag-bug session. Any pilot implementation stays serial behind
+  this planning PR's review, merge, canonical promotion, and readiness check.
+- Outcome: opening checkpoint only. The delegate recommends evaluating a
+  compact repository-local contributor router that links existing authority
+  without restating its rules. No files or PR exist yet.
+- Operator intervention after dispatch: none.
+- Review: zero rounds and no blocking finding.
+- Control-plane friction: none. The delegate completed its opening-question
+  turn and remains available for direct Paseo follow-up.
+- Documentation QA: none.
+- Reduction fixture: none.
+- Provider family: not supplied.
+
 ## Material protocol defect
 
 The operator observed active orchestrator threads drop from roughly six-to-ten
@@ -326,7 +348,7 @@ experiment; no consumer lane is changed to manufacture proof.
 
 ## Cohort progress
 
-- Observations received: 8.
+- Observations received: 9.
 - Completed cohort lanes: 1 of 8. Signal observation 004 is reviewed and merged;
   observation 007 passed review but was not yet merged, observation 008 stopped
   before implementation, and observation 005 is only a diagnostic kickoff.
@@ -336,17 +358,18 @@ experiment; no consumer lane is changed to manufacture proof.
   no provider family is inferred for the Market spend-limit packet.
 - Worker routing: observations 001–003 are pre-refresh frontier baselines;
   observations 004–005 are post-refresh day-to-day choices; observation 006 is
-  a frontier lane whose two escalation axes are explicit.
-- Natural parallel shapes: 2 provisional frontier candidates of 2. Observation
-  001 paired implementation with disjoint research; observation 002 paired two
-  independent implementation lanes. Observation 005 adds a day-to-day
-  diagnostic lane beside 001 but has not started substantive work.
+  a frontier lane whose two escalation axes are explicit; observation 009 is a
+  frontier planning delegate rather than an implementation worker.
+- Natural parallel shapes: 3. Observation 001 paired implementation with
+  disjoint research; observation 002 paired two independent implementation
+  lanes; observation 009 paired two planning delegates and an independent
+  diagnostic session while preserving the serial promotion/readiness edge.
 - Completed review rounds: 8. Recorded blockers total two `planning-change`,
   nine `execution-miss`, five `oracle-gap`, and four `integration-drift` findings.
 - Validation-reduction fixtures: five—one token-scanner boundary false positive
   and four benign accepted docs shapes from observations 002, 004, 006, and 007.
 - Control-plane or task-routing friction appears in observations 001–004 and
-  006–008; observation 005 reports none.
+  006–008; observations 005 and 009 report none.
 
 ## Closeout
 
