@@ -37,11 +37,33 @@ languages scale the always-distributed surface indefinitely.
 - Northstar core routes to an available compatible package and remains valid
   when none is installed.
 
+## Initial Official Repository Topology
+
+The initial official Rust and TypeScript packages share one sibling source
+repository, provisionally `northstar-language-packs`. This is a source and
+maintenance grouping, not the acquisition or activation unit.
+
+Each language package has its own root, package identity, manifest, version,
+core-compatibility range, integrity identity, release evidence, and installed
+state. An acquisition request names exactly one package. Installing or
+activating Rust must not install, expose, or load TypeScript or any later
+sibling package. A source adapter may temporarily fetch the shared repository,
+but the retained installed payload and runtime context contain only the named
+package. A release adapter should publish independently addressable package
+artifacts so repository growth does not make every consumer download every
+language indefinitely.
+
+The shared repository is an initial convenience, not a protocol constraint.
+The manifest and discovery contract must also permit an official package to
+move to its own repository and a third-party package to originate elsewhere
+without changing Northstar core or consumer activation files.
+
 ## Compatibility And Trust Questions
 
 Planning must settle these before a roadmap becomes ready:
 
-1. package identity, manifest, and core-compatibility range;
+1. package identity, manifest, core-compatibility range, and independently
+   addressable artifact shape;
 2. official package discovery and pinned acquisition mechanism;
 3. integrity, provenance, update, rollback, and offline behavior;
 4. how package commands and modes register without editing or duplicating the
