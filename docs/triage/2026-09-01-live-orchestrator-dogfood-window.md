@@ -487,6 +487,81 @@ Status: complete; planning PR accepted and merged
   decisions rather than a benign copy-only edit.
 - Provider family: not supplied.
 
+### 015 — Acowtancy/Market card 160 student-safe quiz delivery
+
+Status: changes requested after first review round
+
+- Worker class: `frontier`. The lane combines exceptional reasoning across 13
+  closed projection families, drag-and-drop deassociation, and immutable
+  Rust/API/TypeScript/UI binding with the highest-priority risk of exposing
+  canonical grading keys.
+- Ready frontier: the serial edge `card 161 -> card 160` was cleared. The atomic
+  response card remains downstream. Independent cards 162 and 163 launched
+  concurrently, with same-repository merge order kept serial.
+- Outcome: Market PR 88 is open at exact head
+  `2884582c05d293fa8b51902bb211cc8c89854216`; changes were requested after the
+  first review round.
+- Operator intervention after dispatch: treated the initial Claude-family quota
+  failure as route-local. After recovery exposed conflicting retained state,
+  the operator selected an xAI-family route and supplied a recovery handoff.
+  The viable implementation commit was recovered onto post-card-161 `main`.
+- Review: one changes-requested round found three blocking areas. Runtime schema
+  closure still accepted unknown grading fields; missing-token request
+  ingestion produced Axum 422/null rather than the required oracle behavior;
+  and the public attempt UUID exposed the deterministic deassociation seed.
+  Northstar finding codes were not supplied for these three blockers.
+- Control-plane friction: killing the bound owner during an attempted
+  same-workspace fallback archived the shared workspace and automatically
+  closed its replacement. An older complete but unpushed implementation was
+  not surfaced by initial routing. It was preserved; an empty duplicate was
+  cancelled. The provider refusal itself stayed lane-local.
+- Documentation QA: none.
+- Reduction fixture: two conflict resolutions preserved both card 160's
+  pending-review state and card 161's merged state. This is benign concurrent
+  closeout reconciliation, not new planning meaning.
+- Provider families: Claude and xAI, both supplied explicitly.
+
+### 016 — Acowtancy/Market card 163 Farmyard worktree Cargo routing
+
+Status: complete; evidence-only PR merged
+
+- Worker class: `day-to-day`. This was bounded evidence verification with no
+  exceptional post-planning reasoning.
+- Ready frontier: parallel-safe with cards 160 and 162. Same-repository merge
+  ordering remained the named serial edge.
+- Outcome: Market PR 89 at exact head
+  `fd8a59d85742e9c63228b512bd90ab9d63def460` merged as
+  `fcf8b9eb677fcc8896db746073c404151f5567cd`. It changed evidence only.
+- Operator intervention after dispatch: none.
+- Review: no blocking review round was recorded before the external merge.
+- Control-plane friction: the inherited Effigy health route required an
+  interactive, unlocked vault, while the governed Cargo check passed.
+- Documentation QA: none.
+- Reduction fixture: a `PAPERCUTS.md` closeout, card status transition, and
+  evidence log with no Cargo or configuration change.
+- Provider family: not supplied.
+
+### 017 — Acowtancy/Market card 162 Cream container-routed test
+
+Status: implementation complete; awaiting review
+
+- Worker class: `day-to-day`. This was a bounded Effigy routing papercut with no
+  exceptional post-planning reasoning.
+- Ready frontier: parallel-safe with cards 160 and 163. Same-repository merge
+  and rebase ordering remains the named serial edge.
+- Outcome: Market PR 90 is open at exact head
+  `b39989584027ae6a51a7b47ea560e09656e578d7`; its focused suite passed 24 of
+  24 tests and the PR awaits review.
+- Operator intervention after dispatch: none.
+- Review: zero rounds and no blocking finding.
+- Control-plane friction: the pure Cream suite starts in `apps/cream` and cannot
+  see root container configuration. The worker used a Cream-local board rather
+  than widening Effigy's routing contract.
+- Documentation QA: none.
+- Reduction fixture: card, `PAPERCUTS.md`, and evidence-log closeout around one
+  Effigy routing edit.
+- Provider family: not supplied.
+
 ## Material protocol defect
 
 The operator observed active orchestrator threads drop from roughly six-to-ten
@@ -513,19 +588,27 @@ in the same workspace. This is not a duplicate active worker; it is a narrower
 transport distinction between retained lane authority and reusable agent
 identity to assess after the freeze.
 
+Observation 015 exposes a separate recovery-lifecycle problem. Terminating an
+agent that owns a shared workspace can archive the workspace and close a
+replacement agent, while older viable unpushed work may not appear in initial
+routing. The operator recovered this lane without widening the global-capacity
+rule, but agent termination, workspace ownership, and retained-work discovery
+need a post-freeze control-plane assessment. No protocol change is inferred
+from this packet alone.
+
 ## Cohort progress
 
-- Observations received: 14.
-- Completed cohort lanes: 3 of 8. Signal observation 004, Loophole observation
-  010, and Poodle observation 014 are reviewed and merged; observation 007
-  passed review but was not yet merged, observation 008 stopped before
-  implementation, and observation 005 is only a diagnostic kickoff.
+- Observations received: 17.
+- Completed cohort lanes: 4 of 8. Signal observation 004, Loophole observation
+  010, Poodle observation 014, and Market observation 016 are merged;
+  observation 015 has changes requested, observation 017 awaits review,
+  observation 007 passed review but was not yet merged, and observation 005 is
+  only a diagnostic kickoff.
 - Projects represented: 7, exceeding the four-project breadth gate (`Poodle`,
   `Figmatic`, `Swallowtail`, `Signal`, `Effigy`, `Acowtancy/Market`, and
   `Loophole`).
-- Provider families counted: 2 of 2. Swallowtail and Figmatic supplied Claude
-  explicitly; Figmatic also supplied xAI. No provider family is inferred for
-  the Market spend-limit packet.
+- Provider families counted: 2 of 2. Swallowtail, Figmatic, and Market supplied
+  Claude explicitly; Figmatic and Market also supplied xAI.
 - Worker routing: observations 001–003 are pre-refresh frontier baselines;
   observations 004–005 are post-refresh day-to-day choices; observation 006 is
   a frontier lane whose two escalation axes are explicit; observation 009 is a
@@ -536,18 +619,25 @@ identity to assess after the freeze.
   lane; observation 013 is a post-install frontier choice with both escalation
   axes explicit and a provider route recovered before work began; observation
   014 completes the frontier conversational-planning lane opened in observation
-  011.
-- Natural parallel shapes: 3. Observation 001 paired implementation with
+  011; observation 015 continues the frontier Market lane from observation 008;
+  observations 016–017 are economical day-to-day choices.
+- Natural parallel shapes: 4. Observation 001 paired implementation with
   disjoint research; observation 002 paired two independent implementation
   lanes; observation 009 paired two planning delegates and an independent
-  diagnostic session while preserving the serial promotion/readiness edge.
-- Completed review rounds: 11. Recorded blockers total two `planning-change`,
-  nine `execution-miss`, five `oracle-gap`, and five `integration-drift` findings.
-- Validation-reduction fixtures: seven—one token-scanner boundary false positive,
+  diagnostic session while preserving the serial promotion/readiness edge;
+  observations 015–017 ran one frontier lane beside two independent day-to-day
+  lanes while keeping same-repository merge order serial. The required two
+  multi-lane frontier observations are now present in observations 002 and 015.
+- Completed review rounds: 12. Recorded blockers total two `planning-change`,
+  nine `execution-miss`, five `oracle-gap`, and five `integration-drift`
+  findings, plus three observation-015 blockers whose Northstar codes were not
+  supplied.
+- Validation-reduction fixtures: ten—one token-scanner boundary false positive,
   five benign accepted docs shapes from observations 002, 004, 006, 007, and
-  010, and the promoted-triage deletion from observation 013.
+  010, the promoted-triage deletion from observation 013, and three concurrent
+  closeout shapes from observations 015–017.
 - Control-plane or task-routing friction appears in observations 001–004 and
-  006–008, 010–011, and 013–014; observations 005, 009, and 012 report none.
+  006–008, 010–011, and 013–017; observations 005, 009, and 012 report none.
 
 ## Closeout
 
