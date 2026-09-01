@@ -1,8 +1,8 @@
 # 117 - Prove Generic Language Package Lifecycle
 
-Status: planned; blocked on card 116
+Status: ready
 Owner: repo maintainers
-Updated: 2026-09-01
+Updated: 2026-09-02
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
 Governing refs: `docs/roadmaps/g02/048-extract-modular-language-quality-packages.md`,
 `docs/architecture/system-architecture.md`,
@@ -11,8 +11,10 @@ Auto-start next card: no
 
 ## Ready-State Checks
 
-- [ ] card 116 is merged and this card names its exact schema and fixture
+- [x] card 116 is merged and this card names its exact schema and fixture
   identities;
+- [x] canonical digest framing and operator-owned lifecycle/trust state are
+  promoted into architecture, contract 004, and spec 034;
 - [x] runtime scope is limited to generic discovery, verification, lifecycle,
   routing, and fixture proof;
 - [x] transaction, trust, offline, rollback, and failure boundaries are
@@ -25,6 +27,20 @@ Auto-start next card: no
 Implement and falsify the generic installed-package resolver and transactional
 fixture lifecycle without adding language-specific core behavior.
 
+## Accepted Card-116 Baseline
+
+- reviewed head: `87496cb31877713d270b7361b297c54633c13d99`;
+- merge commit: `eaeac8889dd340e03558594e3d486b5dceaef9ce`;
+- manifest schema SHA-256: `393e7948f7826bbeec44e6286704573eee94d987374045642976cda7ad5f3c40`;
+- registry schema SHA-256: `72bdea9eac29a3681fbc8a3f48885be8630fa0cbaae37ea07409d403e238837d`;
+- receipt schema SHA-256: `7e83635408f68a9ae20f8fbe75aa7ef41d22784c08834f49b30d31a7a70a5d85`;
+- official registry SHA-256: `b7d77d17524f50ce0e2a3c123349199b4e1473cff31accc71e43313abde2dc43`;
+- policy-free fixture manifest SHA-256: `029efa327745aba66c3316714cfb28b29246c365459bb5c9d7e6526e409c64ef`.
+
+These are source-baseline identities. Card 117 implements the promoted
+canonical package-tree algorithm and derives the first runtime tree identity;
+it must not substitute Git tree IDs or ad hoc archive hashes.
+
 ## Lane Runway Context
 
 - Higher-level lane owner: g02.048 Batch A.
@@ -36,6 +52,10 @@ fixture lifecycle without adding language-specific core behavior.
 
 - discover compatible installed packages through the available-skill catalogue
   or an adapter-resolved path;
+- implement the canonical manifest/tree digest framing and reject non-portable
+  paths, collisions, symlinks, special files, and digest spelling drift;
+- add `operator-trust.schema.json` and `lifecycle-state.schema.json` under the
+  generic package references, with fixtures and the bounded schema evaluator;
 - verify manifest, registry, receipt, content, compatibility, revocation, and
   self-check ordering;
 - prove local immutable acquisition, transactional activation, retained
@@ -53,6 +73,10 @@ consumer activation, or depend on Effigy for installed routing.
   fixture; detection alone cannot;
 - [ ] invalid identity, receipt, content, compatibility, trust, revocation, or
   self-check fails before activation;
+- [ ] raw manifest and canonical tree digest vectors produce exact required
+  `sha256:` identities across source, staged, and retained payloads;
+- [ ] trust and lifecycle documents validate, reject duplicate or stale
+  selections, and never take authority from consumer files;
 - [ ] install/update/rollback failures preserve selection and consumer bytes;
 - [ ] compatible installed routing is local-only and works without Effigy;
 - [ ] offline missing-package failure stops only the requested package workflow;
@@ -66,7 +90,9 @@ consumer activation, or depend on Effigy for installed routing.
 | Invariant | Adversarial counterexample | Expected failure or stop point | Required proof |
 | --- | --- | --- | --- |
 | Detection is not authority. | Cargo files exist without Rust intent or activation. | No acquisition attempt. | Transport spy fixture. |
+| Content identity is canonical. | Two adapters reorder files, follow a symlink, or spell a digest without `sha256:`. | Reject or derive the same exact identity before execution. | Cross-adapter vectors and path-type negatives. |
 | Activation is transactional. | Candidate self-check fails after bytes stage. | Old selection and consumer files remain exact. | Before/after digest proof. |
+| State is operator-owned and compare-and-swap. | Consumer config selects a package or a writer uses a stale revision. | Ignore consumer authority; retain current selection and staged identity. | State-root and stale-writer fixtures. |
 | Offline is local. | Network unavailable with a compatible install. | Route installed package without registry access. | Network-denied fixture. |
 | Failure is scoped. | Requested package is missing offline. | Stop only package workflow; core route still passes. | Dual-workflow fixture. |
 | Trust is revocable. | Installed receipt is valid but its identity is revoked. | Block execution, retain evidence and bytes. | Revocation fixture. |
@@ -74,7 +100,9 @@ consumer activation, or depend on Effigy for installed routing.
 
 ## Evidence Required
 
-- exact card-116 identity references and updated readiness record;
+- exact card-116 identity references above and this readiness record;
+- canonical digest vectors plus lifecycle/trust schema conformance and
+  fail-closed vocabulary proof;
 - lifecycle state-transition matrix and mutation-before/after hashes;
 - acquisition notices and detection-only no-call proof;
 - Effigy-absent installed route, offline, rollback, revocation, and ambiguity
@@ -106,8 +134,11 @@ consumer activation, or depend on Effigy for installed routing.
 
 ## Completion Notes
 
-Pending card 116.
+Card 116 merged through PR 21. Post-merge readiness found and promoted the
+missing digest-framing and lifecycle-state boundaries. No operator decision or
+language-specific scope remains unresolved.
 
 ## Next Task
 
-After card 116 merges, refresh exact identities and apply the ready-state rubric.
+Dispatch card 117 from this accepted baseline. Do not start TypeScript
+extraction until the generic lifecycle PR is reviewed and merged.

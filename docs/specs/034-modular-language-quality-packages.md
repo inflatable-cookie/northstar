@@ -174,6 +174,56 @@ installed manifest and content identity before routing, so later mutation,
 truncation, or path replacement makes the package unavailable rather than
 trusted by history.
 
+### Canonical content identity
+
+V1 digest values use `sha256:<64 lowercase hex>` with the prefix required. The
+manifest digest is SHA-256 over the exact bytes of `northstar-package.json`.
+The package-tree digest is SHA-256 over one deterministic stream of every
+regular file below the package root, including the manifest. Files are ordered
+by their package-relative UTF-8 path bytes. Each record is framed as:
+
+```text
+F\0<path-byte-length>\0<path>\0<executable:0|1>\0<content-byte-length>\0<content>
+```
+
+Decimal lengths contain ASCII digits without padding. Package paths use `/`,
+the portable ASCII component grammar already used by package-relative
+entrypoints, and no absolute, empty, `.`, or `..` component. Case-folded path
+collisions are invalid. Directories are implicit; empty directories carry no
+identity and packages must not depend on them. Symbolic links and special file
+types are rejected rather than followed or normalized. The executable bit is
+the only retained mode information. An adapter may use any transport, but it
+must reconstruct this exact file inventory and digest before package code runs.
+
+### Operator-owned lifecycle state
+
+Package state never lives in a consumer repository. The host or acquisition
+adapter supplies one operator-owned state root. Northstar does not invent a
+global path when the host has not supplied one. Card 117 freezes two additional
+schemas under `references/packages/`:
+
+- `operator-trust.schema.json` contains exact allowlist entries and revocations.
+  Each record binds package ID, version, source identity, tree and manifest
+  digests, compatible core range, optional workflow/consumer scope, actor,
+  timestamp, and reason. Revocation wins over official registry or allowlist
+  trust for the same content identity.
+- `lifecycle-state.schema.json` contains a monotonic state revision, immutable
+  installed-receipt references, and at most one selected receipt per package
+  ID. Each reference repeats package ID, version, tree digest, manifest digest,
+  receipt digest, and resolved installed path so selection cannot rely on a
+  mutable path or name alone.
+
+Receipts are immutable, digest-addressed documents. Installation stages bytes
+outside the selected set, validates path shape and both digests, checks trust
+and compatibility, then runs the declared self-check. Only after every gate
+passes may it write the receipt and atomically replace lifecycle state using
+the observed state revision. A concurrent or ambiguous write retains both the
+old selection and staged identity, then stops for a fresh read; it never retries
+as a second installation. Rollback changes only the selected receipt after
+revalidating retained bytes and current revocation state. Failed install,
+update, activation, rollback, or state replacement leaves the prior selection
+and consumer repository byte-identical.
+
 A package release may advance independently in the sibling repository, but it
 does not change the automatic-install default for an existing Northstar core.
 Updating that default requires a reviewed Northstar registry change with the
@@ -339,5 +389,6 @@ the fixture protocol, TypeScript, Rust, and embedded-removal batches.
 ## Readiness Gate
 
 The design gate is satisfied and card 113 is closed. Roadmap g02.048 is
-compiled; only card 116 is ready. Later cards remain blocked until their named
-dependencies and readiness refreshes pass.
+compiled. Card 116 merged through PR 21; its readiness review promoted the
+missing digest and lifecycle-state boundary. Card 117 is ready. Cards 118-120
+remain blocked until their named dependencies and readiness refreshes pass.

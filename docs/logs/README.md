@@ -32,6 +32,8 @@ Use logs as the third step in closeout:
 
 ## Recent active-lane evidence
 
+- `2026-09/02-003949-refresh-language-package-lifecycle-readiness.md`
+- `2026-09/01-185002-freeze-language-package-machine-contracts.md`
 - `2026-09/01-163902-diversify-model-routing-across-runs.md`
 - `2026-09/01-160915-plan-diversified-model-routing.md`
 - `2026-09/01-155829-add-fresh-orchestrator-continuation.md`

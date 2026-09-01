@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-09-01
+Updated: 2026-09-02
 Vision refs: docs/vision/001-northstar-delivery-vision.md
 
 ## Top-Level Stack
@@ -85,10 +85,21 @@ receipt, and re-verifies retained content before routing. A registry review,
 not a moving branch, tag, package self-claim, or newly published version,
 changes the official automatic choice.
 
+Content identity is portable and transport-independent. V1 uses required
+`sha256:` digests: raw manifest bytes for manifest identity and a sorted,
+length-framed stream of regular package files for tree identity. Paths use the
+portable package grammar; case-fold collisions, symlinks, special files, and
+escapes are rejected. Core state lives in a host-supplied operator-owned root,
+never the consumer repository. Immutable receipts, exact trust/revocation
+records, and a revisioned lifecycle index separate retained installs from the
+single selected receipt. Activation replaces that index only after verification
+and self-check; rollback reselects retained verified content without fetching.
+
 The language-package source repository owns package source, manifest,
 self-check, package fixtures, artifacts, digests, changelog, and release
 evidence. Northstar core owns the manifest schema, official registry, generic
-resolver and installer, compatibility fixtures, and consumer migration rules.
+resolver and installer, digest framing, trust and lifecycle-state schemas,
+compatibility fixtures, and consumer migration rules.
 An immutable package candidate publishes first; a reviewed registry change
 then proves installation and consumer compatibility before making it the
 official default.

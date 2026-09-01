@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-09-01
+Updated: 2026-09-02
 Depends on: `docs/contracts/001-working-rules.md`,
 `docs/contracts/003-agent-instruction-surface.md`
 Affects: Northstar package discovery and installation, language-quality
@@ -73,6 +73,14 @@ installed content before routing. Mutable branches and tags, names alone,
 package self-claims, and unpublished registry choices cannot authorize
 no-prompt installation.
 
+V1 content digests are required `sha256:<64 lowercase hex>` values. Manifest
+identity hashes the exact manifest bytes. Tree identity hashes the canonical
+sorted, length-framed regular-file stream defined by spec 034, including paths,
+the executable bit, and file bytes. Package paths must be portable and
+contained; case-fold collisions, symlinks, special files, and implicit empty
+directory dependencies are invalid. Every acquisition adapter must reconstruct
+the same identity before package code executes.
+
 Third-party packages require either an exact operator allowlist entry or
 interactive approval for one acquisition. The allowlist lives in machine or
 user operator configuration; a consumer repo or package may request trust but
@@ -81,6 +89,14 @@ workflows or consumers. Revocation immediately blocks discovery, acquisition,
 and execution while retaining bytes, receipts, evidence, and consumer config.
 A package cannot extend the allowlist or transfer its trust to an evidence
 provider.
+
+Trust and lifecycle state live under a host-supplied operator-owned root, never
+in a consumer repository. Core owns schemas for exact allowlist/revocation
+records and for a revisioned lifecycle index. Receipts are immutable and
+digest-addressed; the index names retained receipts and at most one selected
+receipt per package. Revocation outranks registry and allowlist trust. A path,
+skill name, or previous selection without matching receipt and content identity
+is not routable.
 
 ## Updates, rollback, and offline use
 
@@ -97,6 +113,12 @@ unchanged. Rollback reselects a retained proven install without fetching.
 Offline workflows use an installed compatible package normally; without one,
 only the requested language workflow stops and names the local-path install
 route.
+
+State replacement is atomic against the observed lifecycle revision. A stale,
+concurrent, or ambiguous write retains the prior selection and staged identity,
+then stops for a fresh read rather than creating or selecting a duplicate.
+Rollback rechecks retained bytes, receipt identity, compatibility, and current
+revocation before changing only the selected receipt.
 
 ## Release and embedded migration
 

@@ -91,6 +91,8 @@ Northstar system:
   review.
 - Northstar remains general-purpose. Spec 034's optional-package design is
   promoted into architecture and contract 004. Roadmap g02.048 now sequences
-  fixture protocol, TypeScript, Rust, and embedded removal; card 116 is ready.
+  fixture protocol, TypeScript, Rust, and embedded removal. Card 116 merged
+  through PR 21 at `eaeac88`; card 117 is ready after the digest/lifecycle
+  planning repair.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup
