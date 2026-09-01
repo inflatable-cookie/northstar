@@ -181,14 +181,35 @@ new immutable identities and compatibility evidence. An operator may explicitly
 approve a newer source outside the bundled registry; that is an explicit trust
 decision and does not silently rewrite the official default.
 
+## Third-Party Trust And Revocation
+
+Third-party trust belongs to operator-owned machine or user configuration, not
+the consumer repository. A repository activation, package manifest, dependency,
+or profile may request a third-party package or evidence provider, but it cannot
+authorize fetching or executing that content.
+
+An allowlist entry binds a stable package ID to an exact source identity and
+content or artifact digest, compatible core range, and optionally permitted
+workflows or consumer scopes. An interactive approval applies to that exact
+identity for one acquisition unless the operator explicitly persists it as an
+allowlist entry. Approval of one version, source, or digest does not trust later
+content automatically.
+
+Revocation immediately removes the package from eligible discovery and blocks
+future acquisition and execution. It does not silently delete retained package
+bytes, receipts, audit evidence, or consumer configuration. A requested workflow
+that names revoked content stops visibly and identifies the revocation record;
+core remains usable. Packages cannot edit, extend, or override the allowlist,
+and an official language package cannot transfer its own trust to a third-party
+provider such as Sentrux.
+
 ## Compatibility And Trust Questions
 
 Planning must settle these before a roadmap becomes ready:
 
-1. third-party allowlist ownership and revocation;
-2. migration of existing embedded Rust and TypeScript activations;
-3. source/install parity and release ownership after extraction;
-4. extraction order and the point at which embedded compatibility ends.
+1. migration of existing embedded Rust and TypeScript activations;
+2. source/install parity and release ownership after extraction;
+3. extraction order and the point at which embedded compatibility ends.
 
 Effigy catalog packs were assessed as a candidate transport. The result below
 keeps the language-package contract provider-neutral and outside that
