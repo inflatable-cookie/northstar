@@ -64,7 +64,7 @@ Northstar system:
   default: every safe ready lane launches up to available capacity, freed slots
   refill from the queue, and a serial lane must name its dependency, shared
   surface, unresolved authority, or capacity limit
-- `g02.042/110` delivered that default; its PR awaits orchestrator exact-head
-  review
+- `g02.042/110` delivered that default and merged through PR 14 at
+  `8cfa0ae`
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

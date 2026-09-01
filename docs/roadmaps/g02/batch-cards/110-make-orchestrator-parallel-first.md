@@ -87,7 +87,7 @@ launch now, which wait, why they wait, and what happens when capacity frees.
 
 ## Next Task
 
-The card is executed and the PR is open on
-`worker/make-orchestrator-parallel-first`. Evidence is in
-`docs/logs/2026-09/01-101853-make-orchestrator-parallel-first.md`. The orchestrator
-reviews the exact head and merges; the worker does not.
+The card is complete. PR 14 merged exact head `d7c3a366` at `8cfa0ae` after
+orchestrator review. Evidence is in
+`docs/logs/2026-09/01-101853-make-orchestrator-parallel-first.md`. Choose the next
+`g02` milestone from the generation runway.

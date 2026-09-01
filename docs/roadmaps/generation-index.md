@@ -78,8 +78,8 @@ sequence.
 
 Roadmaps `g02.038` through `g02.042` are complete. Card 110 made orchestrator
 scheduling dependency-frontier and parallel-first without weakening serial
-safety or review gates; its PR awaits orchestrator exact-head review. Choose the
-next `g02` milestone from the generation runway after that merge.
+safety or review gates; PR 14 merged at `8cfa0ae` after exact-head review.
+Choose the next `g02` milestone from the generation runway.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed

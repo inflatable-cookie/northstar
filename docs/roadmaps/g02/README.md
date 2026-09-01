@@ -92,14 +92,13 @@ rollover signal.
 - `041-repair-partial-rust-evidence-collection.md` (complete; card 109 repaired
   sealed-coverage-aware partial collect and merged PR 13)
 - `042-make-orchestrator-parallel-first.md` (complete; card 110 made
-  dependency-frontier parallel-first dispatch the orchestrator default, PR
-  awaiting exact-head review)
+  dependency-frontier parallel-first dispatch the orchestrator default; PR 14
+  merged at `8cfa0ae` after exact-head review)
 
 ## Next Task
 
-Review and merge the `g02.042/110` PR, then choose the next `g02` milestone from
-the generation runway. Signal papercut closure remains an independent
-consumer-owned coordination step.
+Choose the next `g02` milestone from the generation runway. Signal papercut
+closure remains an independent consumer-owned coordination step.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and

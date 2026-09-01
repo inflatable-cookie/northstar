@@ -8,7 +8,8 @@ Vision tags: `orchestration`, `parallelism`, `workers`, `paseo`, `model-efficien
 Governing refs: `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`,
 `docs/contracts/001-working-rules.md`,
 `bundle-docs/sections/07-delivery-framework-and-autonomy.md`
-Planning state: card 110 complete; PR open for orchestrator exact-head review
+Planning state: card 110 complete; PR 14 merged at `8cfa0ae` after exact-head
+review
 
 ## Problem
 
@@ -89,6 +90,5 @@ choose a scheduler implementation or provider-specific concurrency limit.
 
 ## Next Task
 
-Card `g02.042/110` is complete and its PR is open. The orchestrator reviews the
-exact head and merges it without another operator approval prompt, then chooses
-the next `g02` milestone from the generation runway.
+Card `g02.042/110` is complete. PR 14 merged exact head `d7c3a366` at
+`8cfa0ae`. Choose the next `g02` milestone from the generation runway.

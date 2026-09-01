@@ -112,7 +112,12 @@ deterministic assertions, not an executed concurrent dispatch. No scheduler
 implementation, worker-count default, provider binding, or Paseo product change
 was added.
 
+## Merge
+
+The orchestrator accepted exact head `d7c3a366` after two review rounds. PR 14
+merged at `8cfa0ae`. The final revision reconciled card 110's evidence list with
+the seven-scenario milestone oracle and this log's scenario matrix.
+
 ## Next
 
-The orchestrator reviews the exact PR head, merges it, then chooses the next
-`g02` milestone from the generation runway.
+Choose the next `g02` milestone from the generation runway.

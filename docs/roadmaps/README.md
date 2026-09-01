@@ -67,13 +67,12 @@ Roadmaps sequence contract-backed work for Northstar itself.
   partial collect. Signal owns the originating papercut closure.
 - `g02.042` is complete; card 110 made orchestrator scheduling
   dependency-frontier and parallel-first while preserving serial safety gates.
-  Its PR awaits orchestrator exact-head review.
+  PR 14 merged at `8cfa0ae` after exact-head review.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Review and merge the `g02.042/110` PR, then choose the next `g02` milestone from
-the generation runway. Keep the independent Signal papercut closure with the
-Signal orchestrator; do not duplicate it here.
+Choose the next `g02` milestone from the generation runway. Keep the independent
+Signal papercut closure with the Signal orchestrator; do not duplicate it here.
