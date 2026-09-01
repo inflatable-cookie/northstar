@@ -1,6 +1,6 @@
 # 114 - Add Fresh Orchestrator Continuation
 
-Status: blocked; ready after `g02.045/113` merges and current `main` is refreshed
+Status: ready
 Owner: repo maintainers
 Created: 2026-09-01
 Master roadmap: `g02.046`
@@ -42,8 +42,9 @@ archiving the source workspace, or changing worker/planning-delegate semantics.
   behavior;
 - [x] current Paseo MCP and CLI inspection shows agent labels and local
   workspaces but no native pin/reorder surface;
-- [ ] PR 18 is merged and card 113/front-door closeout is current on `main`;
-- [ ] no other worker owns orchestrator mode, handoff contract, router, doctrine,
+- [x] PR 18 is merged at `1f6647a` and card 113/front-door closeout is current
+  on `main`;
+- [x] no other worker owns orchestrator mode, handoff contract, router, doctrine,
   copy-ready contract, or this card's closeout surfaces.
 
 ## Acceptance Criteria
@@ -81,5 +82,5 @@ archiving the source workspace, or changing worker/planning-delegate semantics.
 
 ## Next Task
 
-After PR 18 merges, refresh this card to `ready`, create one worker handoff, and
-dispatch a matching non-frontier day-to-day worker. Do not merge from the worker.
+Create one worker handoff and dispatch a matching non-frontier day-to-day
+worker. Do not merge from the worker.

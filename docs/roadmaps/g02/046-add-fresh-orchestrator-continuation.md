@@ -1,6 +1,6 @@
 # 046 - Add Fresh Orchestrator Continuation
 
-Status: planned; blocked on accepted review and merge of `g02.045/113`
+Status: active; card 114 ready
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.045`, spec 026
@@ -42,8 +42,8 @@ a worker or delegate gives it the wrong authority.
 
 Card `g02.046/114` owns the reusable protocol propagation, generic handoff
 overlay, router activation, Paseo launch guidance, deterministic assertions,
-distribution parity, and closeout. It must not launch until PR 18 is merged and
-the branch is based on the resulting `main`, because both lanes own Northstar
+distribution parity, and closeout. PR 18 merged at `1f6647a`; the lane must
+launch from that refreshed `main` because both milestones own Northstar
 front-door closeout.
 
 ## Acceptance Criteria
@@ -76,8 +76,8 @@ front-door closeout.
 
 ## Stop Conditions
 
-- PR 18 has not merged or current `main` no longer contains the settled
-  structural-validation boundary;
+- current `main` no longer contains the settled structural-validation boundary
+  merged through PR 18;
 - Paseo's supported label semantics cannot represent the capitalized
   `Orchestrator` agent label;
 - implementation would require a new workspace-layout or pinning API;
@@ -86,5 +86,5 @@ front-door closeout.
 
 ## Next Task
 
-Finish exact-head review and merge of PR 18. Then execute card 114 from refreshed
-`main`; do not launch it in parallel with the validation-reduction revision.
+Execute card 114 from refreshed `main`. Stop after its reviewable PR; spec 034
+remains separate and not ready.

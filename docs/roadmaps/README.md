@@ -74,18 +74,16 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02.044` is complete; card 112 makes provider and profile availability
   lane-local instead of a global worker-capacity gate. PR 17 merged at
   `e5e8060`; the corrected 127-file skill payload is installed.
-- `g02.045` implementation and review corrections are complete through card
-  113; corrected exact-head review is pending for the structural validation
-  reduction and fixture proof.
-- `g02.046` is planned; card 114 adds a fresh-orchestrator continuation handoff
-  and Paseo launch path after PR 18 merges. It is serial behind `g02.045`
-  because both lanes own front-door closeout.
+- `g02.045` is complete through card 113; PR 18 merged at `1f6647a` after
+  exact-head review of the structural validation reduction and fixture proof.
+- `g02.046` is active; card 114 is ready to add a fresh-orchestrator
+  continuation handoff and Paseo launch path.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Finish exact-head review and merge of `g02.045/113`, then refresh and dispatch
-`g02.046/114`. Spec 034 holds the separate modular-language-package plan and
+Dispatch `g02.046/114` from refreshed `main`. Spec 034 holds the separate
+modular-language-package plan and
 must not auto-start from either lane.

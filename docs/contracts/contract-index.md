@@ -15,7 +15,7 @@ Updated: 2026-09-01
 
 | Contract | Boundary | Owning surface | Dependent roadmaps | Status |
 | --- | --- | --- | --- | --- |
-| `001-working-rules` | compact delivery grammar, structural-not-editorial validation, papercuts feedback loop, triage capture/cleanup, done-ness, guardrail pack, spec-hygiene rule, currentness-surface rules, autonomy rules, orchestrator/worker, planning-delegate, and documentation-projection boundaries, worktree isolation, PR review and merge gates, and the live ready-state/closeout rules for the repo | `docs/`, `bundle-docs/`, `template-bundle/`, `skills/`, `scripts/` | `g01.001` through `g02.045` where directly applicable | active |
+| `001-working-rules` | compact delivery grammar, structural-not-editorial validation, papercuts feedback loop, triage capture/cleanup, done-ness, guardrail pack, spec-hygiene rule, currentness-surface rules, autonomy rules, orchestrator/worker, planning-delegate, and documentation-projection boundaries, worktree isolation, PR review and merge gates, and the live ready-state/closeout rules for the repo | `docs/`, `bundle-docs/`, `template-bundle/`, `skills/`, `scripts/` | `g01.001` through `g02.046` where directly applicable | active |
 | `002-agent-local-paths` | ignored path registry, manual worktree container selection, harness-vs-manual ownership, and nested-agent stop boundary | `AGENTS.md`, `docs/contracts/`, `template-bundle/`, `skills/`, `docs/handoffs/` | orchestrator-owned implementation-worker and planning-delegate launches, plus any manual worktree lane | active |
 | `003-agent-instruction-surface` | always-loaded versus scoped/on-demand instruction content, root-file review budget, precedence, and read-only audit boundary | `AGENTS.md`, `docs/contracts/`, `template-bundle/`, `skills/`, `scripts/` | `g02.027` and future consumer adoption | active |
 | `004-language-quality-pack` | shared language-package behavior: catalogue, conditional framework overlays, independently gated everyday and explicit-audit workflows, scope resolution, remediation authority, assurance profiles, deviations, and completion evidence | `docs/contracts/`, optional language packages, current embedded catalogues, Effigy selectors, consumer profiles | `g02.030` (complete), `g02.031` (complete), `g02.032` (complete), spec 034 extraction planning | active; current embedded implementation pending modular extraction design |
@@ -60,5 +60,7 @@ Roadmap `g02.045` is complete through card 113's implementation, review
 corrections, and fixture proof. It reduces prose-coupled and
 historical-inventory assertions while retaining structural path, current
 authority, machine-contract, link, parity, readiness, command-surface, and
-install checks; corrected exact-head review is pending. Spec 034 separately
-plans modular language packages and is not ready for implementation.
+install checks. PR 18 merged at `1f6647a` after corrected exact-head review.
+Roadmap `g02.046` is active with card 114 ready for fresh-orchestrator
+continuation. Spec 034 separately plans modular language packages and is not
+ready for implementation.
