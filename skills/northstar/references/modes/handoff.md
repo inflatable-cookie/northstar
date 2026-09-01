@@ -9,6 +9,11 @@ This is a writing-and-re-entry task, not a reason to stop ordinary work early.
 Do not create a handoff merely because the thread is long, context is compacted,
 or the next task is already clear in the live planning surfaces.
 
+Do not use this mode as the successor runtime for
+`handoff_mode: orchestrator-continuation`. That successor enters Orchestrator
+mode. The source orchestrator reuses the generic seven-section template; it
+does not add a public continuation mode or template.
+
 ## Tone: write like a thoughtful teammate
 
 The next thread should feel welcomed, not processed. Write in plain, natural

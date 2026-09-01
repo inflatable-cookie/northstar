@@ -58,6 +58,23 @@ research subagents, and finishes with a PR for orchestrator review. Canonical
 promotion, readiness, implementation dispatch, review, and merge remain with
 the orchestrator.
 
+### Orchestrator-continuation activation
+
+A fresh-orchestrator continuation reuses the generic seven-section handoff.
+It must declare all three frontmatter fields:
+
+```yaml
+handoff_mode: orchestrator-continuation
+orchestrator_mode: planning-and-review
+dispatch_authority: orchestrator
+```
+
+These fields activate normal orchestrator mode for the successor. They do not
+activate worker mode, planning-delegate preflight, or the handoff-writing route.
+Do not add a public mode or a second continuation template. The source yields
+planning, dispatch, review, and merge mutations for the transferred lane after
+the pushed handoff is dispatched.
+
 ### Consumer trailing sections
 
 After `## Completion Protocol`, a consumer repo may require additional `##`
@@ -135,7 +152,12 @@ or copies multi-paragraph protocol text, treat that as a compression signal.
     symlink that already resolves to the declared source; stop on any other
     existing path; never delete, replace, or overwrite. The committed handoff
     in the selected `HEAD` is canonical and must be verified before any
-    sibling-path mutation.
+    sibling-path mutation;
+  - for an orchestrator-continuation handoff, the current authority chain, open
+    operator questions, active and paused lanes, ready frontier, worker and PR
+    transport identities, review/merge state, touched triage notes, repository
+    state, and the next orchestrator action. The successor reloads current
+    `main`; private conversation is not authority.
 - `Boundaries` includes at least one explicit out-of-scope boundary and any hard
   constraints the next thread must respect.
 - `Important Context` captures roadmap/log lineage, the relationship between
@@ -148,7 +170,9 @@ or copies multi-paragraph protocol text, treat that as a compression signal.
   signal, the next task, and unresolved risks. Worker handoffs also put the
   worker/PR flow here. Planning-delegate handoffs instead define the direct
   operator conversation, bounded research, triage/research-only diff, planning
-  PR, and orchestrator-owned review/merge/promotion flow.
+  PR, and orchestrator-owned review/merge/promotion flow. Orchestrator-
+  continuation handoffs tell the successor to re-enter normal orchestrator
+  mode from the absolute path, and tell the source to yield the lane.
 
 ## Validity rules
 

@@ -251,6 +251,27 @@ informal habits.
   reconciles current `main` and separately promotes settled meaning. Packet
   merge is not promotion or execution authority.
 
+### Fresh orchestrator continuation
+
+- On operator request, the source orchestrator may transfer its whole live
+  lane to a fresh orchestrator through the generic seven-section handoff with
+  `handoff_mode: orchestrator-continuation`,
+  `orchestrator_mode: planning-and-review`, and
+  `dispatch_authority: orchestrator`.
+- After that handoff is pushed and dispatched, the source yields planning,
+  dispatch, review, and merge mutations for the transferred lane. The successor
+  enters normal orchestrator mode and does not run worker or planning-delegate
+  preflight.
+- With Paseo, create a separate `local` workspace for the same project and
+  checkout, copy a current orchestrator-role profile, apply the capitalized
+  `Orchestrator=true` label, and use only the absolute handoff path as the
+  prompt. Reject a `branch-off` worktree or a different project path. Preserve
+  returned identities and do not retry an ambiguous creation.
+- Missing pin/reorder support is not a launch failure; placement stays manual.
+  Never use browser, computer-use, or other UI automation. Without Paseo,
+  return the absolute handoff path. Do not archive the source workspace as
+  part of the transfer.
+
 ### Mechanical documentation projection
 
 - Keep discovery, planning, promotion, acceptance, readiness, review, and merge

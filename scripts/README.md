@@ -141,10 +141,13 @@ The command-surface checker validates the nine thin adapters under
 `skills/northstar/commands/`: their names, description budgets, router and mode
 references and ordering, one-mode wiring, aggregate prompt footprint,
 retired-alias removal, thin-body/procedure guards, authority boundaries, and
-exact adapter count. The set includes `/northstar-cleanup` for safe inspection
-and reworking of `/docs` drift, `/northstar-rust-audit` for explicit Rust audit,
-and explicit-only `/northstar-typescript-audit` for TypeScript/Svelte. It is
-included in `effigy qa:docs`.
+exact adapter count. It also asserts the eight fresh-orchestrator continuation
+oracle rows against the installable router, handoff contract, orchestrator
+mode, generic template, and skill outcome. The set includes
+`/northstar-cleanup` for safe inspection and reworking of `/docs` drift,
+`/northstar-rust-audit` for explicit Rust audit, and explicit-only
+`/northstar-typescript-audit` for TypeScript/Svelte. It is included in
+`effigy qa:docs`.
 
 ## Readiness-map frontier (`check:readiness-map`)
 

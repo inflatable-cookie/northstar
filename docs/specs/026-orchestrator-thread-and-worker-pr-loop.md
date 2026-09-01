@@ -353,6 +353,8 @@ Use these states in the worker handoff or log when the run spans turns:
 - `awaiting-review` — worker has opened a PR and returned evidence;
 - `changes-requested` — orchestrator review found required fixes;
 - `merged` — PR is merged and Northstar closeout is complete;
+- `orchestrator-continuation-yielded` — the source has dispatched the successor
+  and no longer mutates the transferred lane;
 - `paused` — a named stop condition, planning gap, or operator decision blocks work.
 
 ## Dispatch protocol

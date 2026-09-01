@@ -732,6 +732,30 @@ doctrine. With a control plane, use one isolated branch-off workspace and the
 committed handoff as the only initial prompt. Without one, give the operator the
 absolute handoff path for a manually isolated thread.
 
+## Fresh orchestrator continuation
+
+An operator may ask the current orchestrator to transfer its whole live lane to
+a fresh orchestrator thread. This is continuity, not parallel ownership. The
+source fills the generic seven-section handoff with
+`handoff_mode: orchestrator-continuation`,
+`orchestrator_mode: planning-and-review`, and
+`dispatch_authority: orchestrator`, pushes that coherent stopping state, then
+stops planning, dispatch, review, and merge mutations for the transferred lane.
+The successor re-enters normal orchestrator mode from the absolute handoff
+path. It does not enter worker mode, run worker preflight, or use the
+handoff-writing route.
+
+When Paseo is available, create a separate `local` workspace for the same
+project and checkout, copy a current orchestrator-role profile, apply the
+capitalized `Orchestrator=true` agent label, and use only the absolute handoff
+path as the launch prompt. Reject a `branch-off` worktree or a different
+project path. If creation returns an identity with an ambiguous error, preserve
+it and stop that attempt. Missing sidebar pin/reorder support is not a launch
+failure: report that placement is manual. Never use browser, computer-use, or
+other UI automation to arrange the sidebar. Without Paseo, return the absolute
+handoff path for manual launch. Do not archive or delete the source workspace as
+part of the transfer.
+
 ## Mechanical documentation projection
 
 Keep high-cost frontier reasoning on discovery, planning, promotion, readiness,
