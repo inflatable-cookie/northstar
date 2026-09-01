@@ -304,8 +304,11 @@ Each worker owns only the assigned ready cards in its dedicated worktree and
 branch. Scheduling is parallel-first: the orchestrator plans lanes as a
 dependency graph and dispatches the whole safe ready frontier up to available
 capacity, each lane with its own worktree, branch, handoff, PR, and closeout.
-Capacity comes from the active control plane, or from the operator's own launch
-throughput when none is installed; the topology encodes no fixed worker count.
+Capacity is discovered: an explicit control-plane value when one is surfaced,
+otherwise the first explicit launch refusal from an adapter that exposes no
+capacity signal, and otherwise the operator's own launch throughput. Created
+lane state survives a refusal and is retried when a worker finish frees a slot.
+The topology encodes no fixed worker count.
 A lane stays serial only for a named dependency, shared mutable or
 closeout/front-door surface, unresolved authority, or capacity limit, and
 same-repository lanes partition those surfaces or reserve one named

@@ -200,10 +200,16 @@ informal habits.
   authority, or capacity limit. Do not serialize unrelated ready work around one
   blocked edge, invent a card to fill a slot, or split one coherent issue-fix
   lane.
-- Capacity comes from the active control plane, or from operator launch
-  throughput when none is installed. Do not record a fixed worker count,
-  provider, or model. Refill freed slots from the queue and keep doing
-  non-overlapping planning, review, and closeout while workers run.
+- Discover capacity; do not guess it. Use an explicit control-plane value when
+  one is surfaced. When an adapter launches workers but exposes no capacity
+  signal, attempt safe lanes in roadmap-priority order and treat the first
+  explicit refusal as that checkpoint's limit: keep the lane state already
+  created, queue the rest, and retry when a slot frees. With no control plane,
+  publish every selected handoff at once and let operator launch throughput be
+  the limit. Do not record a fixed worker count, provider, or model.
+- A worker-finish notification frees a slot immediately. Start the next queued
+  lane then, before or alongside exact-head review of the finished PR, and keep
+  doing non-overlapping planning, review, and closeout while workers run.
 - Same-repository PRs merge one at a time. Refresh the remaining heads against
   current `main` after each merge and re-review any head that changed.
 

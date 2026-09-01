@@ -127,9 +127,12 @@ container directory before project setup needs them.
 
 You do not have to ask for parallel workers. The orchestrator plans ready work
 as a dependency graph and launches every safe lane up to available capacity,
-then refills each slot as a worker finishes. Capacity is whatever your control
-plane offers; without one, you simply get several absolute handoff paths at once
-and launch as many as you want. A lane that stays serial must come with a named
+then starts the next queued lane as soon as a worker finishes, without waiting
+for that worker's PR to merge. Capacity is discovered rather than assumed: an
+explicit value if your control plane reports one, otherwise the first launch
+refusal it gives, and without a control plane you simply get several absolute
+handoff paths at once and launch as many as you want. You are never asked to
+guess a worker count. A lane that stays serial must come with a named
 reason — a dependency edge, a shared mutable or closeout surface, unresolved
 authority, or a capacity limit. Same-repo PRs still merge one at a time, and the
 orchestrator re-reviews any remaining head that a merge changed.
