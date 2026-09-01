@@ -310,15 +310,21 @@ frontier review and an explicit review oracle; they do not by themselves select
 a frontier worker. Unresolved designs return to planning. A missing
 non-frontier profile is reported rather than silently escalated.
 Scheduling is parallel-first: the orchestrator plans lanes as a
-dependency graph and dispatches the whole safe ready frontier up to available
-capacity, each lane with its own worktree, branch, handoff, PR, and closeout.
-Capacity is discovered: an explicit control-plane value when one is surfaced,
-otherwise the first explicit launch refusal from an adapter that exposes no
-capacity signal, and otherwise the operator's own launch throughput. Created
-lane state survives a refusal and is retried when a worker finish frees a slot.
-The topology encodes no fixed worker count.
+dependency graph and dispatches the whole safe ready frontier without a global thread budget,
+each lane with its own worktree, branch, handoff, PR, and closeout.
+A control-plane workspace or agent creation failure belongs to that lane's
+transport state; preserve every returned identity so an ambiguous attempt is not duplicated,
+then continue launching unrelated lanes whose transport state is clear. A
+provider, model, or profile quota, spend, rate, or availability failure is
+not a control-plane capacity signal: mark only that route unavailable, try
+another configured profile that fits the same role and capability, and never
+promote an ordinary lane to frontier merely because its day-to-day route is
+unavailable.
+If no suitable route remains, pause only that lane, preserve its handoff and
+workspace, report the gap, and continue every unrelated ready lane. The
+topology encodes no fixed worker count.
 A lane stays serial only for a named dependency, shared mutable or
-closeout/front-door surface, unresolved authority, or capacity limit, and
+closeout/front-door surface, or unresolved authority, and
 same-repository lanes partition those surfaces or reserve one named
 orchestrator integration step. Same-repository PRs still merge one at a time,
 with remaining heads refreshed against current `main` and re-reviewed when they

@@ -210,10 +210,11 @@ batch large enough to repay dispatch and review; keep tiny edits local.
 6. **Refresh the dependency frontier and dispatch all of it.** Parallelism is
    the default schedule, not an option to offer. Map the runway's meaningful
    lanes as a dependency graph, identify the current ready frontier, and select
-   every safe lane that fits available capacity. Record why any otherwise-ready
-   lane stays queued or serial, then plan one worktree, branch, and handoff per
-   selected lane. Do not wait for the operator to ask for concurrency. Full
-   rules are in **Parallel lane dispatch** below.
+   every safe ready lane. Record why any otherwise-ready lane stays serial, then
+   plan one worktree, branch, and handoff per selected lane. Do not wait for the
+   operator to ask for concurrency, impose a global thread count, or wait for
+   another worker to finish before creating a new thread. Full rules are in
+   **Parallel lane dispatch** below.
    An operator-requested planning delegate may run beside unrelated work, but
    reserve its topic and do not dispatch or promote work that depends on its
    conclusions until its PR is reviewed, merged, and promoted.
@@ -285,15 +286,18 @@ batch large enough to repay dispatch and review; keep tiny edits local.
    - call `create_workspace` once per dispatched lane with
      `isolation: worktree`, `mode: branch-off`, `baseBranch: origin/main`, the
      intended branch, and the source checkout path. Dispatch the whole selected
-     frontier rather than one lane at a time. Use an explicit capacity value
-     only when the adapter surfaces one; Paseo's profile, workspace, agent, and
-     list tools do not. With no capacity signal, attempt the safe lanes in
-     roadmap-priority order and let the adapter answer: the first explicit
-     capacity refusal ends launching for this checkpoint. Preserve every workspace
-     and agent identity already created, record the refused and remaining lanes
-     as queued against that named adapter limit, and retry the same retained
-     lane state when a worker-finish notification frees a slot. Never invent a
-     worker count or ask the operator to guess one;
+     frontier rather than one lane at a time. A workspace or agent creation
+     failure belongs to that lane: preserve every returned identity so an
+     ambiguous attempt is not duplicated, then continue launching unrelated
+     lanes whose transport state is clear. A provider, model, or profile quota,
+     spend, rate, or availability failure is not a control-plane capacity
+     signal. Mark only that route unavailable and try another configured
+     profile whose current notes fit the same worker role and capability. Do
+     not promote an ordinary lane to frontier merely because its day-to-day
+     route is unavailable. If no suitable route remains, pause only that lane,
+     preserve its committed handoff and workspace, report the provider/profile
+     gap, and continue every unrelated ready lane. Never invent a worker count
+     or ask the operator to guess one;
    - before launching the worker, verify every sibling link named by the handoff
      exists in the managed worktree's **container directory** (the worktree's
      parent), resolves to the declared primary checkout, and was available before
@@ -318,18 +322,16 @@ batch large enough to repay dispatch and review; keep tiny edits local.
    dispatch without treating `paseo.json` as a substitute runtime signal. If
    setup fails, preserve and report any created workspace or agent identity; do
    not silently retry into a duplicate worker.
-10. **Handle worker reports and refill freed capacity.** Treat direct adapter
-    reports and operator-relayed reports as status evidence, not authority.
-    After each chunk, reconcile card/log state and name the next report or
-    action needed. If the worker reports a planning gap or scope change, pause
-    and repair the canonical planning surfaces before giving permission to
-    continue.
-    A worker-finish notification frees a capacity slot immediately. Refresh the
-    ready frontier and launch the next queued lane from its retained state
-    before or alongside the exact-head review of the finished lane's PR; do not
-    wait for that PR to merge. If nothing is queued, continue non-overlapping
-    planning, review, and closeout. The separate post-merge refresh in step 12
-    still applies to same-repository heads.
+10. **Handle worker reports.** Treat direct adapter reports and operator-relayed
+    reports as status evidence, not authority. After each chunk, reconcile
+    card/log state and name the next report or action needed. If the worker
+    reports a planning gap or scope change, pause and repair the canonical
+    planning surfaces before giving permission to continue.
+    A worker-finish notification starts exact-head review of that lane's PR; it
+    does not refill a global launch queue. Unrelated ready lanes should already
+    have launched at the dispatch checkpoint. Continue non-overlapping
+    planning, dispatch, review, and closeout. The separate post-merge refresh
+    in step 12 still applies to same-repository heads.
 11. **Review the PR.** On the PR URL, inspect metadata, commits, diff, checks, and
    changed files against the spec, milestone, cards, and contracts. Review
    independently of the worker narrative. Record an evidence-backed verdict in
@@ -364,8 +366,8 @@ batch large enough to repay dispatch and review; keep tiny edits local.
     or the merge result is ambiguous, stop before retrying. Same-repository PRs
     merge one at a time: after each merge, refresh every remaining head against
     current `main` and re-review any head that changed or needed conflict
-    resolution. Capacity was already refilled at the finish notification in step
-    10; do not wait for merge to start queued work.
+    resolution. Do not wait for merge to start unrelated ready work; those lanes
+    should already have launched at the dispatch checkpoint.
     Then update card, milestone, log, front-door currentness, continuation/pause
     state, and the single next task. If the lane continues, identify the next
     ready card; if it ends, name the next planning checkpoint.
@@ -479,28 +481,34 @@ closeout/front-door surfaces, or reserve one named orchestrator integration step
 before launch. Two workers never own the same front door.
 
 When a condition fails, keep only that edge or lane serial and name the exact
-reason: the dependency edge, the shared surface, the unresolved authority, or
-the capacity limit. Do not serialize unrelated ready work around one blocked
-edge. Do not manufacture parallelism by inventing speculative cards or by
-splitting one coherent issue-fix lane into diagnosis and repair workers.
+reason: the dependency edge, the shared surface, or the unresolved authority.
+Do not serialize unrelated ready work around one blocked edge. Do not
+manufacture parallelism by inventing speculative cards or by splitting one
+coherent issue-fix lane into diagnosis and repair workers.
 
-Capacity is discovered, never guessed. Use an explicit value when the active
-control plane surfaces one. When the adapter can launch workers but exposes no
-capacity, quota, or slot value, attempt the safe lanes in roadmap-priority order
-and treat the first explicit launch refusal as the capacity answer for that
-checkpoint: preserve every workspace and agent identity already created, queue
-the refused and remaining lanes against that named adapter limit, and retry the
-retained lane state when a slot frees. With no control plane at all, publish a
-handoff per selected lane and give the operator every absolute path at once;
-their launch throughput is the real limit. Never encode a fixed worker count,
+The orchestrator launches every safe ready-frontier lane. It does not impose a global thread count
+or wait for another worker to finish before creating a new thread. A control-plane workspace or agent creation failure belongs to that
+lane's transport state; preserve every returned workspace or agent identity so
+an ambiguous attempt is not duplicated, then continue launching unrelated lanes
+whose transport state is clear.
+
+A provider, model, or profile quota, spend, rate, or availability failure is
+not a control-plane capacity signal. Mark only that route unavailable for the
+attempt and try another configured profile whose current notes fit the same
+worker role and capability. Do not promote an ordinary lane to frontier merely
+because its day-to-day route is unavailable. If no suitable route remains,
+pause only that lane, preserve its committed handoff and workspace state, report
+the provider/profile gap, and continue every unrelated ready lane. Recovery
+reuses the retained authority chain; it does not create a duplicate worker or
+require a rebrief.
+
+With no control plane at all, publish a handoff per selected lane and give the
+operator every absolute path at once. Never encode a fixed worker count,
 provider, model, or profile name, and never ask the operator to guess one.
 
-When capacity is smaller than the frontier, roadmap priority picks the first
-lanes and the rest stay queued. A worker-finish notification frees a slot
-immediately: refresh the frontier and launch the next queued lane then, before
-or alongside review of the finished lane's PR, rather than waiting for its
-merge. While workers run, keep doing non-overlapping planning, review, revision
-routing, merge, and closeout rather than idling on one lane.
+While workers run, keep doing non-overlapping planning, review, revision
+routing, merge, and closeout rather than idling on one lane. A worker-finish
+notification starts review of that lane; it does not refill a global launch queue.
 
 Each parallel worker follows the same startup worktree-safety, PR, review-comment
 fallback, and accepted-review/check-gated merge protocol independently.
@@ -558,9 +566,13 @@ when the review oracle is not explicit.
 
 When multiple plausible designs or an unresolved contract choice remain,
 return to planning rather than spending a frontier worker to choose
-architecture. If no configured non-frontier profile fits an ordinary lane,
-report the profile gap instead of silently promoting it to frontier. An
-operator-named profile remains an explicit override.
+architecture. If the selected matching profile is unavailable because of spend,
+quota, rate, or availability, try another configured profile whose notes fit
+the same role and capability. Do not promote an ordinary lane to frontier
+merely because its day-to-day route is unavailable. If no configured
+non-frontier profile fits an ordinary lane, or no suitable available route
+remains, report the profile gap, pause only that lane, and do not silently
+promote it to frontier. An operator-named profile remains an explicit override.
 
 Provider-native worktrees, subagents, session messaging, JSON output, and PR
 commands are optional adapters. When an adapter exposes profiles, list them and

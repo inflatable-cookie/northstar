@@ -1,6 +1,6 @@
 # 044 - Remove Global Capacity Gating
 
-Status: ready
+Status: complete
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.042`, `g02.043`
@@ -8,7 +8,7 @@ Vision tags: `orchestration`, `parallelism`, `paseo`, `provider-routing`
 Governing refs: `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`,
 `docs/contracts/001-working-rules.md`,
 `bundle-docs/sections/07-delivery-framework-and-autonomy.md`
-Planning state: card 112 ready for dispatch
+Planning state: card 112 implemented; PR pending exact-head review
 
 ## Problem
 
@@ -80,6 +80,7 @@ worker does not choose scheduler policy or local profile names.
 
 ## Next Task
 
-Dispatch card 112. After merge and install, notify active orchestrator-labelled
-threads to re-read the Northstar orchestration skill and continue their safe
-ready frontiers under the corrected lane-local provider rule.
+Orchestrator exact-head review and merge of the card 112 PR. After merge and
+skill install, notify active orchestrator-labelled threads to re-read the
+Northstar orchestration skill and continue their safe ready frontiers under the
+corrected lane-local provider rule.

@@ -76,12 +76,10 @@ sequence.
 
 ## Next Task
 
-Roadmaps `g02.038` through `g02.043` are complete. `g02.044/112` is ready to
-remove the false global-capacity interpretation exposed by live provider-limit
-dogfood. Dispatch it, merge after exact-head review and checks, install the
-corrected skill, and notify active orchestrators to re-read it. The
-first-principles packet remains non-authoritative intake for the next planning
-discussion.
+Roadmaps `g02.038` through `g02.043` are complete. `g02.044/112` is implemented
+and awaiting exact-head review. After merge and skill install, notify active
+orchestrators to re-read the lane-local provider rule. The first-principles
+packet remains non-authoritative intake for the next planning discussion.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed

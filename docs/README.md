@@ -70,8 +70,9 @@ Northstar system:
   workers now require both highest-priority/material-consequence and
   exceptional-reasoning gates. PR 15 merged at `d5acd75` after exact-head
   review.
-- `g02.044/112` is ready to remove the accidental global-capacity interpretation
-  exposed by live provider-limit dogfood.
+- `g02.044/112` removed the accidental global-capacity interpretation: every
+  safe ready lane launches without a global thread budget, and provider/profile
+  failures stay lane-local. PR pending exact-head review.
 - the concurrent first-principles planning delegate delivered its packet from
   `handoffs/20260901-110423-northstar-first-principles-audit.md`; it writes
   only its named triage packet. PR 16 merged at `d092599` as non-authoritative

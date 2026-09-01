@@ -434,8 +434,10 @@ file count, duration, or a risk-domain label is insufficient.
 Risky surfaces still need an explicit review oracle and frontier review. A
 well-specified persistence or public-API change may use a capable non-frontier
 worker while the orchestrator keeps material review. Unresolved designs return
-to planning. If no non-frontier profile fits ordinary work, report the gap; do
-not silently escalate. An operator-named profile remains an explicit override.
+to planning. If the matching day-to-day route is unavailable, try another
+same-class profile rather than spending a frontier worker. If no non-frontier
+profile fits ordinary work, report the gap; do not silently escalate. An
+operator-named profile remains an explicit override.
 
 An operator may ask the orchestrator to spin off a frontier planning delegate
 for a named topic while the orchestrator continues unrelated work. The
@@ -486,8 +488,9 @@ tests, and PR metadata; private conversation history is not required authority.
 Parallel dispatch is the default schedule, not an operator-requested option.
 While compiling a runway and again at every dispatch checkpoint, the
 orchestrator maps the meaningful lanes as a dependency graph, identifies the
-current ready frontier, and launches every safe frontier lane up to available
-capacity without a second operator request.
+current ready frontier, and launches every safe frontier lane without a global thread budget
+or a second operator request. It does not wait for another worker to finish
+before creating a new thread.
 
 A lane belongs on that frontier only when it has no shared mutable scope,
 no ordering/data/generated-artifact dependency, and no overlapping authority
@@ -497,26 +500,28 @@ partition their mutable and closeout/front-door surfaces or reserve one named
 orchestrator integration step; two workers never own the same front door.
 
 When a condition fails, keep only that edge or lane serial and record the exact
-dependency, shared surface, unresolved authority, or capacity limit. Unrelated
-ready work is not serialized around one blocked edge. Parallelism is never a
-reason to invent a speculative card or to split one coherent issue-fix lane.
+dependency, shared surface, or unresolved authority. Unrelated ready work is
+not serialized around one blocked edge. A provider, model, or profile quota,
+spend, rate, or availability failure is not a control-plane capacity signal and
+must not serialize unrelated ready work. Parallelism is never a reason to invent
+a speculative card or to split one coherent issue-fix lane.
 
-Capacity is discovered rather than guessed. The orchestrator uses an explicit
-value when the active control plane surfaces one. When an adapter can launch
-workers but exposes no capacity signal, it attempts the safe lanes in
-roadmap-priority order and treats the first explicit launch refusal as that
-checkpoint's capacity: already-created workspace and agent identities are
-preserved, the refused and remaining lanes are queued against that named adapter
-limit, and the retained lane state is retried when a slot frees. With no control
-plane the orchestrator publishes a handoff per selected lane and gives the
-operator every absolute path at once. Northstar does not encode a fixed worker
-count, provider, or model, and does not ask the operator to guess one.
+A control-plane workspace or agent creation failure belongs to that lane.
+Preserve every returned workspace or agent identity so an ambiguous attempt is not duplicated,
+then continue launching unrelated lanes whose transport state is clear. Mark only the refused route unavailable and try another configured
+profile whose current notes fit the same worker role and capability. Do not
+promote an ordinary lane to frontier merely because its day-to-day route is
+unavailable. If no suitable route remains, pause only that lane, preserve its
+handoff and workspace, report the provider/profile gap, and continue every
+unrelated ready lane. Recovery reuses the retained authority chain; it does not
+create a duplicate worker. With no control plane the orchestrator publishes a
+handoff per selected lane and gives the operator every absolute path at once.
+Northstar does not encode a fixed worker count, provider, or model, and does not
+ask the operator to guess one.
 
-A worker-finish notification frees a slot immediately. The orchestrator refreshes
-the frontier and starts the next queued lane at that point, before or alongside
-exact-head review of the finished lane's PR, rather than waiting for merge. It
-continues non-overlapping planning, review, revision routing, merge, and closeout
-while workers run.
+The orchestrator continues non-overlapping planning, review, revision routing,
+merge, and closeout while workers run. A worker-finish notification starts
+review of that lane; it does not refill a global launch queue.
 
 Same-repository PRs merge one at a time. After each merge the orchestrator
 refreshes every remaining head against current `main` and re-reviews any head

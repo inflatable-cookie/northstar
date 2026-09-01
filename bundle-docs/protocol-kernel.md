@@ -1,7 +1,7 @@
 # Northstar Protocol Kernel
 
 Status: active  
-Updated: 2026-08-30
+Updated: 2026-09-01
 
 One-page map of **what counts as the protocol**, **where normative detail
 lives**, and **how surfaces should relate**. Use this before pasting long
@@ -39,7 +39,7 @@ contracts).
 | Planning completeness and execution authority | [sections/06-planning-and-contract-gates.md](./sections/06-planning-and-contract-gates.md) | Same expectations; repo records gaps in its own planning files |
 | Batch cards, ready-state, closeout shape, autonomy levels, master specs | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Batch card rule**, **Ready-state rubric**, **Operator-facing summary rule**, **Autonomy support levels** | `docs/contracts/001-working-rules.md` (from [`template-bundle/contracts/001-working-rules-template.md`](../template-bundle/contracts/001-working-rules-template.md)); keep compact, point here for full enumerations |
 | Review oracles, worker adversarial pass, review finding codes | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Review oracle rule**, **Worker pre-PR adversarial pass**, **Review finding classification** | Ready card + compact repo working-rules binding |
-| Parallel lane scheduling and capacity | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Parallel lane scheduling** | `docs/contracts/001-working-rules.md` plus one worker handoff per dispatched lane |
+| Parallel lane scheduling and lane-local provider routing | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Parallel lane scheduling** | `docs/contracts/001-working-rules.md` plus one worker handoff per dispatched lane |
 | Economical worker routing | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Economical worker routing** | `docs/contracts/001-working-rules.md` plus frontier-worker justification on the worker handoff |
 | Conversational planning delegation | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Conversational planning delegation** | `docs/contracts/001-working-rules.md` plus the planning-delegate handoff |
 | Mechanical documentation projection | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Mechanical documentation projection** | `docs/contracts/001-working-rules.md` plus the orchestrator projection brief |
