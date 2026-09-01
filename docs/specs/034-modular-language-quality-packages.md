@@ -52,9 +52,32 @@ Planning must settle these before a roadmap becomes ready:
 8. source/install parity and release ownership after extraction;
 9. extraction order and the point at which embedded compatibility ends.
 
-Effigy catalog packs are a candidate transport, not a settled dependency. The
-planning lane must compare them with a provider-neutral package contract before
-choosing an implementation.
+Effigy catalog packs were assessed as a candidate transport. The result below
+keeps the language-package contract provider-neutral and outside that
+service-catalog surface.
+
+## Transport Assessment
+
+Effigy's current catalog-pack surface is not the language-package transport.
+It installs one active, independently versioned set of Effigy service-fragment
+directories below project and user overrides. Its manifest cannot widen that
+fragment schema, and its store selects one active pack rather than a set of
+independent language extensions. Reusing it would couple Northstar packages to
+the wrong content model and selection semantics.
+
+`effigy skill run` is a useful optional execution adapter after a package path
+has been resolved. It deliberately executes an operator-supplied skill path in
+the context of a separate consumer repository; it does not discover, acquire,
+activate, or update packages. Northstar's package contract therefore remains
+provider-neutral. It may reuse proven digest, compatibility, transactional
+activation, rollback, and offline principles, but it must not depend on the
+Effigy service catalog-pack schema or require Effigy to be installed.
+
+The unresolved transport choice is now narrower: define the package manifest
+and installed-package discovery contract first, then let skills installers,
+local paths, or a future digest-pinned artifact adapter implement acquisition.
+Core routing must work with an already-installed compatible package even when
+no acquisition adapter is available.
 
 ## Non-Goals
 

@@ -62,5 +62,5 @@ historical-inventory assertions while retaining structural path, current
 authority, machine-contract, link, parity, readiness, command-surface, and
 install checks. PR 18 merged at `1f6647a` after corrected exact-head review.
 Roadmap `g02.046` is complete through PR 19 at `b99d19c`. Roadmap `g02.047` is
-active with card 115 ready for diversified model routing. Spec 034 separately
-plans modular language packages and is not ready for implementation.
+complete through PR 20 at `08ad810`. Spec 034 separately plans modular language
+packages and is not ready for implementation.

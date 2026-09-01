@@ -45,3 +45,17 @@ evidence can be captured without scraping presentation output.
 Promote only if the cohort shows useful additional signal and the integration
 can stay optional, pinned, explicit, and provider-neutral. Otherwise retain it
 as a recommended operator tool or close this note without changing spec 034.
+
+## Spec 034 checkpoint
+
+The first package-protocol pass keeps Sentrux out of both Northstar core and the
+initial Rust/TypeScript extraction. It is an optional evidence provider, not a
+replacement language pack: a compatible pack may name the provider and its
+supported grammar surface, while the consumer profile owns activation, scope,
+exclusions, and finding authority.
+
+Effigy catalog packs do not change that route. Their current schema is fixed to
+Effigy service fragments and selects one active catalog pack; `effigy skill
+run` executes an already-resolved path but does not acquire it. The provider
+cohort should therefore follow a provider-neutral package manifest draft and
+must not make Effigy or its catalog store a Sentrux prerequisite.
