@@ -1,9 +1,10 @@
 // Focused validation for Northstar language package machine contracts (card 116).
 //
 // Validates:
-// 1. JSON Schema Draft 2020-12 structure and properties across all 3 schema files.
-// 2. Deterministic schema-instance validation engine evaluating schemas directly.
-// 3. Schema mutation discrimination proof (modifying schema constraints rejects instances).
+// 1. Structure across all 3 schema files (JSON Schema Draft 2020-12 dialect).
+// 2. Bounded schema-instance evaluation engine evaluating frozen schema vocabulary directly.
+// 3. Schema mutation discrimination proofs (supported keyword mutations reject instances,
+//    unsupported schema keywords fail closed).
 // 4. Exact semantic-version parsing and numeric range compatibility.
 // 5. Safe package-relative path containment (disallowing traversal and absolute paths).
 // 6. Manifest, registry, and receipt schema-instance conformance across all trust
@@ -11,7 +12,7 @@
 //    (git, local_path, archive).
 // 7. Deep recursive policy-free fixture verification.
 // 8. Independent package addressing and materialization boundary into isolated staging.
-// 9. Negative review-oracle invariant suite (malformed, mutable, incompatible,
+// 9. Mandatory negative review-oracle invariant suite (malformed, mutable, incompatible,
 //    duplicate, ambiguous, digest-drift, path-traversal, self-authorizing).
 // 10. Schema and contract portability.
 
@@ -24,8 +25,26 @@ fn require(condition, message) {
 }
 
 // -----------------------------------------------------------------------------
-// JSON Schema Draft 2020-12 Conformance Engine (Iterative)
+// Bounded Schema Vocabulary & Evaluation Engine
 // -----------------------------------------------------------------------------
+
+fn assert_supported_schema_keywords(schema, ctx) {
+    if type_of(schema) != "map" { return; }
+    let allowed = [
+        "$schema", "$id", "title", "description",
+        "type", "const", "enum", "pattern", "minLength",
+        "minItems", "items", "required", "properties",
+        "additionalProperties", "oneOf"
+    ];
+    for k in schema.keys() {
+        if !allowed.contains(k) {
+            let err = ctx;
+            err += " contains unsupported schema keyword: ";
+            err += k;
+            throw(err);
+        }
+    }
+}
 
 fn check_node_type(instance, schema, ctx) {
     if !schema.contains("type") { return; }
@@ -265,6 +284,8 @@ fn validate_schema_node(root_instance, root_schema, root_ctx) {
 
         if type_of(schema) != "map" { continue; }
 
+        assert_supported_schema_keywords(schema, ctx);
+
         if check_node_one_of(instance, schema, ctx) {
             continue;
         }
@@ -434,6 +455,79 @@ fn assert_safe_package_relative_path(p, context) {
 // JSON Schema Structure Validation (Draft 2020-12)
 // -----------------------------------------------------------------------------
 
+fn collect_property_schemas(s, c) {
+    if !s.contains("properties") { return []; }
+    if type_of(s["properties"]) != "map" { return []; }
+    let props = s["properties"];
+    let items = [];
+    for k in props.keys() {
+        let sub_c = c;
+        sub_c += ".properties.";
+        sub_c += k;
+        let sub_s = props[k];
+        items.push(#{ schema: sub_s, ctx: sub_c });
+    }
+    items
+}
+
+fn collect_item_schema(s, c) {
+    if !s.contains("items") { return []; }
+    if type_of(s["items"]) != "map" { return []; }
+    let sub_c = c;
+    sub_c += ".items";
+    let sub_s = s["items"];
+    [ #{ schema: sub_s, ctx: sub_c } ]
+}
+
+fn collect_one_of_schemas(s, c) {
+    if !s.contains("oneOf") { return []; }
+    if type_of(s["oneOf"]) != "array" { return []; }
+    let list = s["oneOf"];
+    let idx = 0;
+    let items = [];
+    for sub_s in list {
+        let sub_c = c;
+        sub_c += ".oneOf[";
+        sub_c += idx;
+        sub_c += "]";
+        items.push(#{ schema: sub_s, ctx: sub_c });
+        idx += 1;
+    }
+    items
+}
+
+fn collect_additional_props_schema(s, c) {
+    if !s.contains("additionalProperties") { return []; }
+    if type_of(s["additionalProperties"]) != "map" { return []; }
+    let sub_c = c;
+    sub_c += ".additionalProperties";
+    let sub_s = s["additionalProperties"];
+    [ #{ schema: sub_s, ctx: sub_c } ]
+}
+
+fn validate_schema_file_vocabulary(schema, ctx) {
+    let queue = [ #{ schema: schema, ctx: ctx } ];
+    while queue.len() > 0 {
+        let current = queue.pop();
+        let s = current["schema"];
+        let c = current["ctx"];
+        if type_of(s) != "map" { continue; }
+        assert_supported_schema_keywords(s, c);
+        for item in collect_property_schemas(s, c) {
+            queue.push(item);
+        }
+        for item in collect_item_schema(s, c) {
+            queue.push(item);
+        }
+        for item in collect_one_of_schemas(s, c) {
+            queue.push(item);
+        }
+        for item in collect_additional_props_schema(s, c) {
+            queue.push(item);
+        }
+    }
+}
+
 fn load_and_validate_schema_file(root, filename, expected_id_part) {
     let schema_path = path::join(root, filename);
     require(fs::is_file(schema_path), "missing schema file: " + filename);
@@ -447,6 +541,7 @@ fn load_and_validate_schema_file(root, filename, expected_id_part) {
         filename + " must disallow additionalProperties at root");
     require(schema.contains("required"), filename + " must declare required fields");
     require(schema["required"].len() > 0, filename + " required fields cannot be empty");
+    validate_schema_file_vocabulary(schema, filename);
     schema
 }
 
@@ -561,6 +656,21 @@ fn test_schema_mutation_discrimination(valid_manifest, base_schema) {
         }
     }
     require(rejected_pattern, "schema mutation test failed: changing schema pattern did not reject instance");
+
+    // Mutation 3: Adding an unsupported Draft keyword (e.g. maxLength) must fail closed
+    let mutated_unsupported_schema = json::parse(json::stringify(base_schema));
+    mutated_unsupported_schema["properties"]["package_id"]["maxLength"] = 1;
+
+    let rejected_unsupported = false;
+    try {
+        validate_manifest_instance(valid_manifest, mutated_unsupported_schema, "mutated-unsupported-manifest");
+    } catch (err) {
+        let msg = err.to_string();
+        if msg.contains("contains unsupported schema keyword: maxLength") {
+            rejected_unsupported = true;
+        }
+    }
+    require(rejected_unsupported, "schema mutation test failed: unsupported schema keyword was not rejected");
 }
 
 // -----------------------------------------------------------------------------
@@ -1045,6 +1155,20 @@ fn test_semver_compatibility_suite() {
     require(!check_semver_compatibility("invalid-range", core), "invalid range string was accepted");
 }
 
+fn test_missing_fixture_discrimination() {
+    let dummy_path = "/nonexistent/path/missing-fixture.json";
+    let failed = false;
+    try {
+        require(fs::is_file(dummy_path), "missing required negative fixture: " + dummy_path);
+    } catch (err) {
+        let msg = err.to_string();
+        if msg.contains("missing required negative fixture") {
+            failed = true;
+        }
+    }
+    require(failed, "missing fixture check failed to discriminate missing file");
+}
+
 fn run_negative_oracle_suite(target_skill_root, manifest_schema, registry_schema, receipt_schema) {
     let fixtures_root = path::join(target_skill_root, "assets/fixtures/language-packages");
 
@@ -1053,13 +1177,18 @@ fn run_negative_oracle_suite(target_skill_root, manifest_schema, registry_schema
     require(has_forbidden_rule_id("Rule TS-002 violation"), "policy-free scanner failed to detect TS- rule ID");
     require(has_forbidden_rule_id("Rule SVELTE-003 violation"), "policy-free scanner failed to detect SVELTE- rule ID");
 
+    // Missing fixture discrimination proof.
+    test_missing_fixture_discrimination();
+
     // Invariant 1: Identity precedes execution (manifest digest drift).
     let valid_manifest_path = path::join(fixtures_root, "policy-free-fixture/northstar-package.json");
+    require(fs::is_file(valid_manifest_path), "missing required fixture: policy-free-fixture/northstar-package.json");
     let tampered_digest = "0000000000000000000000000000000000000000000000000000000000000000";
     expect_digest_drift_failure(valid_manifest_path, tampered_digest);
 
     // Invariant 2: Official trust is core-owned (self-authorization rejected).
     let self_auth_path = path::join(fixtures_root, "negative/self-authorizing/northstar-package.json");
+    require(fs::is_file(self_auth_path), "missing required negative fixture: negative/self-authorizing/northstar-package.json");
     let self_auth_manifest = json::read_file(self_auth_path);
     expect_manifest_rejection("self-authorizing-manifest", self_auth_manifest, manifest_schema, "self-claims trust or official status");
 
@@ -1107,49 +1236,53 @@ fn run_negative_oracle_suite(target_skill_root, manifest_schema, registry_schema
     // Invariant 5: Core compatibility is exact & SemVer numeric range rejection.
     let current_core = "0.2.0";
     let incomp_path = path::join(fixtures_root, "negative/incompatible-range/northstar-package.json");
+    require(fs::is_file(incomp_path), "missing required negative fixture: negative/incompatible-range/northstar-package.json");
     let incomp_manifest = json::read_file(incomp_path);
     expect_compat_rejection("incompatible-core-range", incomp_manifest["compatible_core_range"], current_core, incomp_manifest["package_id"], "incompatible with Northstar core");
 
     let lexico_path = path::join(fixtures_root, "negative/incompatible-range-lexicographical/northstar-package.json");
+    require(fs::is_file(lexico_path), "missing required negative fixture: negative/incompatible-range-lexicographical/northstar-package.json");
     let lexico_manifest = json::read_file(lexico_path);
     expect_compat_rejection("incompatible-core-range-lexicographical", lexico_manifest["compatible_core_range"], current_core, lexico_manifest["package_id"], "incompatible with Northstar core");
 
     // Invariant 6: Path traversal and absolute path containment rejection.
     let traversal_path = path::join(fixtures_root, "negative/path-traversal-manifest/traversal-entrypoint.json");
+    require(fs::is_file(traversal_path), "missing required negative fixture: negative/path-traversal-manifest/traversal-entrypoint.json");
     let traversal_manifest = json::read_file(traversal_path);
     expect_manifest_rejection("traversal-entrypoint-manifest", traversal_manifest, manifest_schema, "does not match pattern");
 
     let abs_path = path::join(fixtures_root, "negative/absolute-path-manifest/absolute-entrypoint.json");
+    require(fs::is_file(abs_path), "missing required negative fixture: negative/absolute-path-manifest/absolute-entrypoint.json");
     let abs_manifest = json::read_file(abs_path);
     expect_manifest_rejection("absolute-entrypoint-manifest", abs_manifest, manifest_schema, "does not match pattern");
 
     // Invariant 7: Malformed manifests and extra fields rejected.
     let missing_fields_path = path::join(fixtures_root, "negative/malformed-manifest/missing-fields.json");
+    require(fs::is_file(missing_fields_path), "missing required negative fixture: negative/malformed-manifest/missing-fields.json");
     let missing_manifest = json::read_file(missing_fields_path);
     expect_manifest_rejection("malformed-manifest-missing-fields", missing_manifest, manifest_schema, "missing required field");
 
     let invalid_kind_path = path::join(fixtures_root, "negative/malformed-manifest/invalid-kind.json");
+    require(fs::is_file(invalid_kind_path), "missing required negative fixture: negative/malformed-manifest/invalid-kind.json");
     let invalid_kind_manifest = json::read_file(invalid_kind_path);
     expect_manifest_rejection("malformed-manifest-invalid-kind", invalid_kind_manifest, manifest_schema, "const mismatch: expected 'language-quality'");
 
     // Invariant 8: Duplicate registry entries rejected.
     let duplicate_registry_path = path::join(fixtures_root, "negative/duplicate-registry/duplicate-package-registry.json");
-    if fs::is_file(duplicate_registry_path) {
-        let dup_registry = json::read_file(duplicate_registry_path);
-        expect_registry_rejection("duplicate-registry-entries", dup_registry, registry_schema, "duplicate registry package");
-    }
+    require(fs::is_file(duplicate_registry_path), "missing required negative fixture: negative/duplicate-registry/duplicate-package-registry.json");
+    let dup_registry = json::read_file(duplicate_registry_path);
+    expect_registry_rejection("duplicate-registry-entries", dup_registry, registry_schema, "duplicate registry package");
 
     // Invariant 9: Ambiguous trust and source receipts rejected.
     let ambiguous_trust_path = path::join(fixtures_root, "negative/ambiguous-receipt/ambiguous-trust-receipt.json");
-    if fs::is_file(ambiguous_trust_path) {
-        let amb_trust = json::read_file(ambiguous_trust_path);
-        expect_receipt_rejection("ambiguous-trust-receipt", amb_trust, receipt_schema, "failed oneOf schema validation");
-    }
+    require(fs::is_file(ambiguous_trust_path), "missing required negative fixture: negative/ambiguous-receipt/ambiguous-trust-receipt.json");
+    let amb_trust = json::read_file(ambiguous_trust_path);
+    expect_receipt_rejection("ambiguous-trust-receipt", amb_trust, receipt_schema, "failed oneOf schema validation");
+
     let ambiguous_source_path = path::join(fixtures_root, "negative/ambiguous-receipt/ambiguous-source-receipt.json");
-    if fs::is_file(ambiguous_source_path) {
-        let amb_source = json::read_file(ambiguous_source_path);
-        expect_receipt_rejection("ambiguous-source-receipt", amb_source, receipt_schema, "failed oneOf schema validation");
-    }
+    require(fs::is_file(ambiguous_source_path), "missing required negative fixture: negative/ambiguous-receipt/ambiguous-source-receipt.json");
+    let amb_source = json::read_file(ambiguous_source_path);
+    expect_receipt_rejection("ambiguous-source-receipt", amb_source, receipt_schema, "failed oneOf schema validation");
 }
 
 fn check_forbidden_in_file(file) {
@@ -1208,4 +1341,4 @@ test_receipt_conformance_variants(receipt_schema);
 run_negative_oracle_suite(northstar_skill_root, manifest_schema, registry_schema, receipt_schema);
 scan_forbidden_dependencies(northstar_skill_root);
 
-log("Northstar language package machine contracts: OK (3 Draft 2020-12 schemas, schema-derived instance conformance across all variants, schema mutation proof, SemVer numeric ranges, path containment, trust/source receipt variants, deep policy-free proof, staged sibling isolation proof, 9 negative oracle invariants, portable contracts)");
+log("Northstar language package machine contracts: OK (3 Draft 2020-12 schemas, bounded evaluator for frozen vocabulary across all variants, schema mutation & fail-closed proof, SemVer numeric ranges, path containment, trust/source receipt variants, deep policy-free proof, staged sibling isolation proof, 9 mandatory negative oracle invariants, portable contracts)");

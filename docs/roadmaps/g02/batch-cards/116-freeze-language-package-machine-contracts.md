@@ -124,15 +124,15 @@ compatibility validation succeeds.
 ## Completion Notes
 
 Completed and repaired machine contracts for modular language quality packages (g02.048/116):
-- Added `skills/northstar/references/packages/package-manifest.schema.json`, `official-registry.schema.json`, `installation-receipt.schema.json` (JSON Schema Draft 2020-12) and initial `official-registry.json`.
-- Implemented an iterative Draft 2020-12 schema validation engine evaluating schemas directly dynamically from disk without handwritten schema mirroring.
-- Added schema mutation discrimination proofs verifying that modifying schema constraints (such as `schema_version.const` to `9.9.9` or `package_id.pattern`) directly changes instance validation results and rejects instances.
+- Added `skills/northstar/references/packages/package-manifest.schema.json`, `official-registry.schema.json`, `installation-receipt.schema.json` (JSON Schema Draft 2020-12 dialect) and initial `official-registry.json`.
+- Implemented an iterative bounded schema validation engine evaluating the frozen contract vocabulary directly from disk and recursively failing closed on any unsupported schema keywords.
+- Added schema mutation discrimination proofs verifying that modifying supported schema constraints (such as `schema_version.const` to `9.9.9` or `package_id.pattern`) rejects instances and introducing unsupported keywords (such as `maxLength`) fails closed.
 - Implemented exact SemVer parsing and numeric range evaluation, supporting exact, caret, bounded, and open ranges while rejecting lexicographical comparison flaws.
 - Frozen package-relative path containment grammar and enforced strict rejection of directory traversal (`..`), empty segments, and absolute paths in schemas and runtime checks.
 - Modeled explicit receipt trust variants (`official`, `operator_allowlist`, `interactive_approval`) and source variants (`git`, `local_path`, `archive`), proving required and forbidden field combinations while preserving exact content identities (`package_tree_digest`, `manifest_digest`).
 - Added deep recursive policy-free fixture verification across all files and directories for zero production language rules, catalogues, profiles, or engines.
 - Proved independent package addressing and payload materialization into isolated staging from multi-package repository sources, verifying clean single-package inventories and negative multi-package leakage rejection.
-- Implemented negative review-oracle suite with explicit discrimination assertions for all 9 invariants (identity/digest-drift, self-authorizing trust, immutable sources, independent addressing/staging, exact semver ranges, path traversal, malformed manifests, duplicate registry packages, and ambiguous receipts).
+- Implemented mandatory negative review-oracle suite with explicit discrimination assertions for all 9 invariants (identity/digest-drift, self-authorizing trust, immutable sources, independent addressing/staging, exact semver ranges, path traversal, malformed manifests, duplicate registry packages, and ambiguous receipts).
 - Wired `check:language-packages` into root and skill `effigy.toml`, `qa:docs`, `validate`, and repo contract checks.
 - Validated with `effigy check:language-packages`, `effigy check:skill-install`, `effigy qa:docs`, `effigy qa`, and `git diff --check`.
 

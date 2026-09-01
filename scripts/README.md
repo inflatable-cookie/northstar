@@ -180,12 +180,14 @@ effigy qa:docs
 
 The checker validates:
 1. `package-manifest.schema.json`, `official-registry.schema.json`, and
-   `installation-receipt.schema.json` structure against JSON Schema Draft 2020-12;
-2. full iterative schema-instance conformance evaluating Draft 2020-12 schemas directly
-   without handwritten constraint mirroring across all trust variants (`official`,
-   `operator_allowlist`, `interactive_approval`) and source variants (`git`, `local_path`, `archive`);
-3. schema mutation discrimination proofs verifying that modifying schema constraints
-   (e.g., `schema_version.const` or `package_id.pattern`) rejects instances;
+   `installation-receipt.schema.json` structure (JSON Schema Draft 2020-12 dialect);
+2. bounded schema-instance evaluation for package manifests, official registry, and
+   installation receipts across all trust variants (`official`, `operator_allowlist`,
+   `interactive_approval`) and source variants (`git`, `local_path`, `archive`),
+   recursively failing closed on any unsupported schema keywords;
+3. schema mutation discrimination proofs verifying that modifying supported constraints
+   (e.g., `schema_version.const` or `package_id.pattern`) rejects instances and
+   introducing unsupported keywords (e.g., `maxLength`) fails closed;
 4. exact semantic-version parsing and numeric range compatibility evaluation
    (disallowing lexicographical comparison bugs, supporting exact, caret, bounded,
    and open ranges);
@@ -196,7 +198,7 @@ The checker validates:
    (asserting zero production language rules, profiles, overlays, engines, or catalogues);
 8. independent package addressing and staging materialization boundary from multi-package
    repository sources (asserting isolated package payloads and broad-selection capture);
-9. negative review-oracle invariant suite (digest drift, self-authorizing rejection,
+9. mandatory negative review-oracle invariant suite (digest drift, self-authorizing rejection,
    immutable hex commit sources, independent staging isolation, exact core ranges,
    path traversal rejection, malformed manifests, duplicate registry packages, and
    ambiguous receipts);

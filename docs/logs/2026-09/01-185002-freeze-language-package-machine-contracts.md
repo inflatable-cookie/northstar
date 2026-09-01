@@ -15,13 +15,14 @@ schemas, while language packages remain independently addressable units.
 A policy-free fixture package (`@northstar/language-fixture`) proves the contract
 structure without containing any production language rules, engines, or profiles.
 A focused checker (`effigy check:language-packages`) evaluates instances directly
-against Draft 2020-12 schemas without handwritten mirroring, verifies schema mutation
-discrimination, enforces exact SemVer numeric ranges and package-relative path
-containment, validates all receipt trust and source variants, materializes addressed
-packages into isolated staging, and falsifies 9 negative review-oracle invariants
-(identity/digest-drift, self-authorizing trust, immutable hex commit sources, independent
-addressing/staging, exact semver ranges, path traversal, malformed manifests, duplicate
-registry entries, and ambiguous receipts).
+against the frozen schema vocabulary with a bounded engine that fails closed on
+unsupported keywords, verifies schema mutation and fail-closed discrimination, enforces
+exact SemVer numeric ranges and package-relative path containment, validates all receipt
+trust and source variants, materializes addressed packages into isolated staging,
+and falsifies 9 mandatory negative review-oracle invariants (identity/digest-drift,
+self-authorizing trust, immutable hex commit sources, independent addressing/staging,
+exact semver ranges, path traversal, malformed manifests, duplicate registry entries,
+and ambiguous receipts).
 
 ## Changed surfaces (before/after)
 
@@ -53,12 +54,12 @@ registry entries, and ambiguous receipts).
 | Malformed content rejected | Manifest lacks required fields or has invalid kind | Validation fails schema requirements | `expect_manifest_rejection` with missing-fields and invalid-kind fixtures |
 | Duplicate entries rejected | Registry contains duplicate package id and version entry | Validation rejects duplicate registration | `expect_registry_rejection` with `duplicate-package-registry.json` |
 | Ambiguous identities rejected | Receipt matches multiple trust/source variants or mixes properties | Validation rejects ambiguous oneOf match | `expect_receipt_rejection` with `ambiguous-trust-receipt` and `ambiguous-source-receipt` |
-| Schema is authoritative | Schema `schema_version.const` mutated to `9.9.9` or pattern changed | Validation rejects fixture instance | `test_schema_mutation_discrimination` proves schema constraints govern instance results |
+| Schema is authoritative & fails closed | Schema constraints mutated (e.g. const to `9.9.9`) or unsupported keywords added (e.g. `maxLength`) | Validation rejects instance or fails closed on unsupported keyword | `test_schema_mutation_discrimination` proves schema constraints govern instance results and unsupported keywords fail closed |
 | Contract stays portable | Schemas hardcode LLM provider names or local paths | Portability scan fails | `scan_forbidden_dependencies` rejects provider strings in references |
 
 ## Validation
 
-- `effigy check:language-packages` — pass (3 Draft 2020-12 schemas, schema-derived instance conformance across all variants, schema mutation proof, SemVer numeric ranges, path containment, trust/source receipt variants, deep policy-free proof, staged sibling isolation proof, 9 negative oracle invariants, portable contracts);
+- `effigy check:language-packages` — pass (3 Draft 2020-12 schemas, bounded evaluator for frozen vocabulary across all variants, schema mutation & fail-closed proof, SemVer numeric ranges, path containment, trust/source receipt variants, deep policy-free proof, staged sibling isolation proof, 9 mandatory negative oracle invariants, portable contracts);
 - `effigy check:skill-install skills/northstar` — pass (152 files in exact parity);
 - `effigy qa:docs` — pass (repo contract, readiness map, command skills, model routing, and language packages);
 - `effigy validate` — pass;
