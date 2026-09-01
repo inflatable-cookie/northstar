@@ -46,6 +46,9 @@ or weakening planning/review/merge gates.
 - [ ] planning identifies a dependency graph and current ready frontier;
 - [ ] the orchestrator dispatches all safe ready lanes up to available capacity
   without asking the operator to request parallelism;
+- [ ] a control plane without a capacity signal launches in priority order until
+  explicit refusal, preserves created lane state, and retries queued work after
+  a finish notification; manual dispatch publishes all selected handoffs;
 - [ ] it refills capacity and continues unrelated planning/review work while
   workers run;
 - [ ] it records exact reasons for serial/queued lanes and never serializes

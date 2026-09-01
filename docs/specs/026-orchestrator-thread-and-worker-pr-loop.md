@@ -225,13 +225,24 @@ meaningful lanes as a dependency graph and identifies the current ready
 frontier. Before every dispatch checkpoint it refreshes that frontier across
 the active project and any operator-approved portfolio work already in scope.
 
-The orchestrator launches every safe ready-frontier lane up to the control
-plane's actual available capacity. It does not merely offer parallel prompts or
-wait for the operator to ask for concurrency. When capacity is smaller than the
-frontier, roadmap priority selects the first lanes; the remainder stay queued
-and the orchestrator fills each freed slot as soon as a worker finishes. While
-workers run, the orchestrator continues non-overlapping planning, review,
-revision routing, merge, and closeout work instead of idling on one lane.
+The orchestrator launches every safe ready-frontier lane up to available
+capacity. It does not merely offer parallel prompts or wait for the operator to
+ask for concurrency. Use an explicit capacity value when the active control
+plane exposes one. When its orchestration tools expose no capacity signal,
+attempt safe lane launches in roadmap-priority order without inventing a fixed
+limit. The first explicit capacity refusal stops further launches for that
+checkpoint: preserve every workspace or agent identity already created, record
+the refused and remaining lanes as queued for that named adapter limit, and
+retry the same retained lane state when a worker-finish notification frees a
+slot. Do not ask the operator to choose a guessed count.
+
+When no control plane is available, publish one committed handoff per selected
+lane and give the operator every absolute path together; operator launch
+throughput is the manual adapter's capacity. When capacity is smaller than the
+frontier, the remainder stay queued and the orchestrator fills each freed slot
+as soon as a worker finishes. While workers run, the orchestrator continues
+non-overlapping planning, review, revision routing, merge, and closeout work
+instead of idling on one lane.
 
 A lane belongs on the parallel frontier only when all of the following hold:
 

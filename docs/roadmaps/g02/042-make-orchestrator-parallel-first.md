@@ -53,6 +53,9 @@ choose a scheduler implementation or provider-specific concurrency limit.
   treating parallelism as an optional prompt;
 - every independent ready lane is dispatched up to actual available capacity
   without a second operator request;
+- capacity uses a surfaced adapter value when present, otherwise it is learned
+  from an explicit launch refusal without guessing a count or discarding created
+  lane state; no-control-plane dispatch publishes all selected handoffs at once;
 - queued ready work fills freed capacity and the orchestrator continues useful
   non-overlapping work while workers are active;
 - serial decisions name the dependency, shared mutable/closeout surface,
@@ -72,6 +75,7 @@ choose a scheduler implementation or provider-specific concurrency limit.
 | Dependencies still serialize. | Lane B consumes an artifact produced by lane A. | Keep B queued and name the A -> B edge. | Negative scenario evidence. |
 | Shared authority does not race. | Two same-repo cards both edit the generation README. | Partition closeout ownership or reserve an orchestrator integration step before launch. | Same-repo scenario evidence. |
 | Capacity is reused. | Three lanes are ready, capacity is two, and one worker finishes. | Launch the queued third lane while the other worker continues. | Capacity-refill scenario evidence. |
+| Capacity is not surfaced. | The active adapter can launch workers but exposes no slot count. | Launch safe lanes in priority order until an explicit refusal, preserve created lane state, queue the rest, and retry when a finish notification frees a slot. | Missing-capacity negative scenario evidence. |
 | Issue fixes remain coherent. | A reported defect could be split into diagnosis and patch workers. | Keep reproduce-through-fix in one outcome lane. | Doctrine/skill assertion. |
 | Exact-head review survives concurrency. | One same-repo PR merges while a sibling PR is still open. | Refresh the remaining head against current `main`; re-review any changed head. | Merge-order scenario evidence. |
 
