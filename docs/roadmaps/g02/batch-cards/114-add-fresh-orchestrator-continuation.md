@@ -1,6 +1,6 @@
 # 114 - Add Fresh Orchestrator Continuation
 
-Status: complete; implementation complete; awaiting exact-head review
+Status: complete; merged through PR 19 at `b99d19c`
 Owner: repo maintainers
 Created: 2026-09-01
 Updated: 2026-09-01
@@ -97,5 +97,4 @@ archiving the source workspace, or changing worker/planning-delegate semantics.
 
 ## Next Task
 
-Push the reviewable PR and stop for orchestrator exact-head review. Do not
-merge, start spec 034, or implement the diversified model-routing note.
+This card is closed. Continue through `g02.047/115`; do not start spec 034.

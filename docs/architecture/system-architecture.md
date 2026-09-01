@@ -323,22 +323,31 @@ lane. This is continuity, not parallel ownership: a genuinely concurrent
 orchestrator needs a separately partitioned authority scope.
 
 With Paseo available, the successor gets a separate local workspace for the
-same project and repository checkout, a current profile selected by
-orchestrator-role notes, and the capitalized `Orchestrator` agent label. It does
+same project and repository checkout, a current profile selected from the
+eligible orchestrator-role pool under the diversified-routing rule, and the
+capitalized `Orchestrator` agent label. It does
 not get a worktree or worker preflight. Sidebar pin position is optional adapter
 state: use a native pin/reorder control only when one is explicitly exposed;
 otherwise tell the operator to place it manually and do not use browser,
 computer-use, or other UI automation.
 
 Each worker owns only the assigned ready cards in its dedicated worktree and
-branch. Worker selection is economical by default: ordinary implementation,
-bounded audits, and mechanical work use a matching non-frontier day-to-day
-profile from current adapter notes. A frontier worker requires both exceptional
-reasoning difficulty after planning and highest priority or material
-consequence; those reasons are recorded in the handoff. Risk-domain labels keep
-frontier review and an explicit review oracle; they do not by themselves select
-a frontier worker. Unresolved designs return to planning. A missing
-non-frontier profile is reported rather than silently escalated.
+branch. Model routing treats current profiles as a portfolio. For each run the
+orchestrator builds the adequate pool from current role notes and any explicit
+adapter cost metadata, prefers the cheapest adequate tier, then varies
+provider/model identity before reusing a recent route. Adapter-visible recent
+agent history is evidence when available; otherwise the orchestrator remembers
+only the routes it launched in the current run. Northstar keeps no durable usage
+ledger and stores no provider or model names.
+
+Ordinary implementation, bounded audits, mechanical work, and most settled
+material lanes use that economical pool. A frontier worker is a rare residual
+exception: the handoff must explain both material consequence and why planning,
+the review oracle, exact-head review, and repository validation cannot bound the
+remaining reasoning adequately. Risk labels, priority, complexity, or breadth
+alone do not select an expensive worker. Even frontier and fresh-orchestrator
+runs rotate across their own adequate pools. An operator-selected profile still
+wins. Unresolved designs return to planning.
 Scheduling is parallel-first: the orchestrator plans lanes as a
 dependency graph and dispatches the whole safe ready frontier without a global thread budget,
 each lane with its own worktree, branch, handoff, PR, and closeout.

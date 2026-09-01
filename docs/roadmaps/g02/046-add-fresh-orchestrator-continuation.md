@@ -1,6 +1,6 @@
 # 046 - Add Fresh Orchestrator Continuation
 
-Status: active; card 114 implementation complete; awaiting exact-head review
+Status: complete; card 114 merged through PR 19 at `b99d19c`
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.045`, spec 026
@@ -86,7 +86,5 @@ front-door closeout.
 
 ## Next Task
 
-Review the worker PR against all eight oracle rows and merge only after the
-exact-head and required-check gate passes. Spec 034 remains a separate
-not-ready language-package planning lane. Diversified model-routing remains a
-separate serial planning note and must not start from this card.
+This lane is complete. `g02.047/115` owns diversified model routing. Spec 034
+remains a separate not-ready language-package planning lane.

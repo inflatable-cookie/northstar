@@ -420,24 +420,28 @@ the orchestrator to merge that lane's PR once it has reviewed the exact current
 head, recorded an accepted verdict on the provider, and confirmed every required
 check passes. A stricter repository rule or explicit operator pause still wins.
 
-Worker routing is economical by default. Select a matching non-frontier
-day-to-day profile from current adapter notes for ordinary implementation,
-bounded audits, and mechanical work. Long mechanical audits and documentation
-churn prefer fast/low-cost or mechanically oriented profiles even when their
-scope is broad.
+Model routing is diversified and economical by default. Build the adequate
+profile pool from current adapter notes and explicit adapter cost metadata when
+available, prefer the cheapest adequate tier, then vary provider/model identity
+before reusing a recent route. Use adapter-visible recent-agent history when it
+exists; otherwise remember only routes launched in the current orchestrator
+run. Do not create a durable Northstar usage ledger or encode local profile,
+provider, model, price, balance, or allowance values.
 
-A frontier implementation worker requires both exceptional reasoning difficulty
-after planning and highest priority or material consequence, plus matching
-profile notes. Record both reasons in the handoff. Priority alone, complexity alone,
-file count, duration, or a risk-domain label is insufficient.
+Ordinary implementation, bounded audits, mechanical work, and most settled
+material lanes use that economical pool. A frontier implementation worker is a
+rare exception: record the material consequence and why planning, the review
+oracle, exact-head review, and repository validation cannot adequately bound
+the remaining reasoning. Priority, complexity, file count, duration, broad
+scope, or a risk-domain label is insufficient. Rotate eligible frontier and
+fresh-orchestrator profiles too; an operator-named profile still overrides.
 
 Risky surfaces still need an explicit review oracle and frontier review. A
-well-specified persistence or public-API change may use a capable non-frontier
+well-specified persistence or public-API change may use a small economical
 worker while the orchestrator keeps material review. Unresolved designs return
-to planning. If the matching day-to-day route is unavailable, try another
-same-class profile rather than spending a frontier worker. If no non-frontier
-profile fits ordinary work, report the gap; do not silently escalate. An
-operator-named profile remains an explicit override.
+to planning. A refused route is removed only for that attempt; select another
+adequate route without treating the refusal as global capacity. If no adequate
+profile remains, preserve and pause only that lane.
 
 An operator may ask the orchestrator to spin off a frontier planning delegate
 for a named topic while the orchestrator continues unrelated work. The
@@ -528,8 +532,8 @@ a speculative card or to split one coherent issue-fix lane.
 
 A control-plane workspace or agent creation failure belongs to that lane.
 Preserve every returned workspace or agent identity so an ambiguous attempt is not duplicated,
-then continue launching unrelated lanes whose transport state is clear. Mark only the refused route unavailable and try another configured
-profile whose current notes fit the same worker role and capability. Do not
+then continue launching unrelated lanes whose transport state is clear. Mark only the refused route unavailable and choose another configured
+profile from the lane's adequate diversified pool. Do not
 promote an ordinary lane to frontier merely because its day-to-day route is
 unavailable. If no suitable route remains, pause only that lane, preserve its
 handoff and workspace, report the provider/profile gap, and continue every

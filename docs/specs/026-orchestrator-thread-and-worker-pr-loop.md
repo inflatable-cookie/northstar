@@ -261,9 +261,8 @@ When Paseo tools are injected, the source:
 
 1. resolves its current project and repository checkout without guessing an
    ambiguous workspace;
-2. lists current profiles and selects one whose notes cover orchestrator
-   planning, operator conversation, dispatch, and review, unless the operator
-   named a profile;
+2. lists current profiles, builds the adequate orchestrator-role pool, and
+   applies the diversified-routing rule unless the operator named a profile;
 3. creates a separate `local` workspace for that same project and checkout;
 4. creates the successor agent there with the capitalized label
    `Orchestrator=true`, copied profile settings, finish notifications enabled,
@@ -401,9 +400,10 @@ authoritative.
 When Paseo tools are injected into the current orchestrator thread, the
 orchestrator uses them automatically for a ready lane:
 
-1. lists configured agent profiles and reads every profile's notes; it selects
-   by the Northstar role/risk profile and never hard-codes a local profile name,
-   unless the operator explicitly named a profile for that lane;
+1. lists configured agent profiles and reads every profile's notes; it builds
+   the adequate pool, prefers the cheapest adequate tier, and varies recent
+   provider/model identity without hard-coding local names, unless the operator
+   explicitly named a profile for that lane;
 2. creates one Paseo worktree workspace per worker with `branch-off` isolation
    from `origin/main`, using the lane's intended branch and source checkout;
 3. verifies every handoff-declared sibling checkout is symlinked into the
@@ -577,37 +577,38 @@ worker pushes.
 
 ## Model and runtime policy
 
-Model IDs are runtime configuration, not Northstar contract values. Select by
-current role-profile notes. Worker routing is economical by default: choose a
-non-frontier profile whose notes cover ordinary day-to-day implementation,
-bounded audits, or mechanical work before considering a frontier worker. Task
-size, file count, duration, or the bare presence of a security, persistence,
-concurrency, public-API, deployment, or multi-version surface does not by itself
-make a worker lane frontier work.
+Model IDs are runtime configuration, not Northstar contract values. At every
+worker, planning-delegate, or fresh-orchestrator dispatch, build an adequate
+profile pool from current role notes and explicit adapter cost metadata when
+available. Prefer the cheapest adequate tier, then vary provider/model identity
+before reusing a recent route. Use adapter-visible recent-agent history when it
+exists; otherwise remember only the routes launched in the current orchestrator
+run. Northstar owns no durable usage ledger and stores no profile, provider,
+model, price, balance, or allowance value.
 
 Select by capability:
 
-- frontier/high effort for the orchestrator and material review;
-- frontier/high effort for an operator-facing planning delegate;
+- an adequate orchestrator-role pool for orchestrator continuations and
+  operator-facing planning delegates, rotated by the same rule;
 - fast/low-cost for exact mechanical documentation projection after the
   orchestrator settles meaning;
-- capable/medium effort for bounded, mechanically direct implementation;
+- the cheapest adequate pool for bounded, mechanically direct implementation;
 - fast/low effort for read-only reconnaissance and log reduction;
 - fast/low-cost or mechanically oriented profiles for long audits, broad
   documentation work, and other token-heavy jobs whose decisions and repair
   boundaries are already settled;
-- frontier/high effort for an implementation worker only when the lane is both
-  highest-priority or materially consequential **and** exceptionally difficult
-  to reason through after planning, and the selected profile's notes explicitly
-  fit that combination. Record both reasons in the handoff. Priority alone,
-  complexity alone, broad scope, or a risk-domain label is insufficient.
+- a frontier implementation pool only for the rare residual case where the lane
+  is materially consequential and the handoff explains why planning, its review
+  oracle, exact-head review, and repository validation cannot adequately bound
+  the remaining reasoning. Rotate within that pool too. Priority, complexity,
+  broad scope, or a risk-domain label is insufficient.
 
-Risky surfaces still require a clear review oracle and frontier review. When
+Risky surfaces still require a clear review oracle and material orchestrator
+review; worker price is not the review-strength control. When
 multiple plausible designs or an unresolved contract choice remain, return to
 planning rather than spending a frontier worker to choose architecture. If no
-configured non-frontier profile fits an ordinary lane, report the profile gap
-instead of silently promoting it to frontier. An operator-named profile remains
-an explicit override.
+configured adequate profile remains, report the profile gap and pause only that
+lane. An operator-named profile remains an explicit override.
 
 Use deterministic Effigy, Git, test, diff, and PR-check commands for evidence.
 Provider-native subagents, worktree managers, JSON output, resume, and PR helpers

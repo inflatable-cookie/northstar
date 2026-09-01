@@ -32,6 +32,7 @@ Use logs as the third step in closeout:
 
 ## Recent active-lane evidence
 
+- `2026-09/01-160915-plan-diversified-model-routing.md`
 - `2026-09/01-155829-add-fresh-orchestrator-continuation.md`
 - `2026-09/01-150310-plan-fresh-orchestrator-continuation.md`
 - `2026-09/01-143313-reduce-prose-coupled-validation.md`
