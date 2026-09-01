@@ -251,8 +251,10 @@ D4. Whether a measurement window (R1) may displace new protocol milestones
   root payload. Northstar remains aware of compatible language packages and
   can route to an available package when language work needs it. Rust and
   TypeScript become packages under that shared protocol rather than permanent
-  root-skill special cases. The install/trust policy remains to be settled
-  before promotion.
+  root-skill special cases. Language detection alone does not install a pack.
+  Explicit language workflow intent or an existing repository activation may
+  install a compatible official pack from a pinned trusted source with visible
+  notice. Third-party packs require an operator allowlist or approval.
 - **D2 — general-purpose audience:** Northstar remains usable by other people.
   Operator convenience may inform dogfood but must not become reusable policy
   when it would fail for another installation, harness, repository layout, or
@@ -264,7 +266,9 @@ D4. Whether a measurement window (R1) may displace new protocol milestones
   it does not remove structural QA.
 - **D4 — accepted:** freeze orchestration-protocol growth for a dogfooding and
   measurement window. A bounded validation-reduction experiment is the named
-  simplification lane during that window.
+  simplification lane during that window. Existing orchestrator-owned worker
+  lanes supply passive evidence at their normal review and closeout checkpoints;
+  Northstar does not create synthetic dogfood work or alter those handoffs.
 - **R5 — accepted in direction:** consolidate overlapping modes after observed
   usage identifies the durable set; do not choose the final mode count from the
   audit estimate alone.
