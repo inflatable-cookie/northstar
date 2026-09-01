@@ -1,6 +1,6 @@
 # 109 - Repair Partial Rust Evidence Collection
 
-Status: ready
+Status: complete
 Owner: repo maintainers
 Created: 2026-09-01
 Master roadmap: `g02.041`
@@ -41,15 +41,15 @@ consumer-audit reruns.
 
 ## Acceptance Criteria
 
-- [ ] pre-fix behavior is reproduced without altering Signal's sealed audit;
-- [ ] already-recorded unit/class evidence prevents contradictory synthetic
+- [x] pre-fix behavior is reproduced without altering Signal's sealed audit;
+- [x] already-recorded unit/class evidence prevents contradictory synthetic
   `unrun` output on a later partial call;
-- [ ] genuinely absent applicable coverage remains an honest scoped limitation;
-- [ ] invalid or ambiguous later calls fail before any record is written;
-- [ ] existing evidence bytes and hashes do not change;
-- [ ] focused Rust-quality tests, `effigy check:rust-quality`,
+- [x] genuinely absent applicable coverage remains an honest scoped limitation;
+- [x] invalid or ambiguous later calls fail before any record is written;
+- [x] existing evidence bytes and hashes do not change;
+- [x] focused Rust-quality tests, `effigy check:rust-quality`,
   `effigy check:skill-install`, `effigy qa:docs`, and `effigy qa` pass;
-- [ ] changed files stay inside the Northstar collector, its focused tests,
+- [x] changed files stay inside the Northstar collector, its focused tests,
   directly affected reference, and lane evidence surfaces.
 
 ## Review Oracle
@@ -77,6 +77,6 @@ unit/class pair and compare pre-existing record hashes byte-for-byte.
 
 ## Next Task
 
-Run this card in the dispatched worker and open a PR. Do not merge. After an
-accepted exact-head review and passing checks, the orchestrator may merge and
-then close the Signal papercut in a separate Signal coordination update.
+PR opened for orchestrator exact-head review. Do not merge from this worker.
+After accepted review and passing checks, the orchestrator may merge and then
+close the Signal papercut in a separate Signal coordination update.

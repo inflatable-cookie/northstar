@@ -22,9 +22,17 @@ Each request supplies:
   `execution.kind: unrun` with a reason.
 
 Declare every applicable class in `applicable_classes`. A class without a
-request becomes an `unrun` limitation. Use `unavailable` for a known routing,
-configuration, startup, or collection barrier, including an unavailable
-external service. A process launch failure is normalized as `startup`.
+request becomes an `unrun` limitation for each unit in the call's resolved
+scope that still lacks sealed coverage for that class. Existing immutable
+unit/class records stay authoritative: a later partial plan must not invent
+contradictory `unrun` evidence for them, a colliding request for an already
+represented unit/class fails before any new record is written, and two
+requests in one plan for the same unit/class are rejected before execution.
+With no requests, scope is every audit unit (or the closeout root). With
+requests, scope is only the units those requests name. Use `unavailable` for a
+known routing, configuration, startup, or collection barrier, including an
+unavailable external service. A process launch failure is normalized as
+`startup`.
 
 For Cargo compiler diagnostics, include
 `--message-format=json-diagnostic-rendered-ansi`. The adapter preserves stdout

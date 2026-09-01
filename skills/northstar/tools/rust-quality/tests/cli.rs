@@ -709,6 +709,300 @@ fn distinguishes_warning_unavailable_and_unrun_evidence() {
 }
 
 #[test]
+fn partial_later_collect_does_not_fabricate_unrun_for_sealed_classes() {
+    let fixture = initialized_multi_unit_fixture("partial-collect-wave");
+    let evidence_root = fixture
+        .root
+        .join(".git/northstar/rust-quality/audits/partial-collect-wave/evidence");
+
+    let first = assert_success(
+        &fixture.audit_operation(
+            "collect",
+            "partial-collect-wave",
+            &serde_json::json!({
+                "applicable_classes": ["test"],
+                "requests": [{
+                    "evidence_id": "test-core",
+                    "unit_id": "core",
+                    "evidence_class": "test",
+                    "selector": "true",
+                    "origin": "agent_resolved",
+                    "package_cwd": ".",
+                    "environment": "fixture",
+                    "execution": {
+                        "kind": "command",
+                        "program": "true",
+                        "args": [],
+                        "format": "generic"
+                    }
+                }]
+            }),
+        ),
+        "first collect seals test/core",
+    );
+    assert_eq!(first["records"][0]["status"], "passed");
+    let sealed_path = evidence_root.join("test-core.json");
+    let sealed_before = fs::read(&sealed_path).expect("read sealed record");
+    let inventory_before = evidence_inventory(&evidence_root);
+
+    let second = assert_success(
+        &fixture.audit_operation(
+            "collect",
+            "partial-collect-wave",
+            &serde_json::json!({
+                "applicable_classes": ["lint", "test"],
+                "requests": [{
+                    "evidence_id": "lint-core",
+                    "unit_id": "core",
+                    "evidence_class": "lint",
+                    "selector": "true",
+                    "origin": "agent_resolved",
+                    "package_cwd": ".",
+                    "environment": "fixture",
+                    "execution": {
+                        "kind": "command",
+                        "program": "true",
+                        "args": [],
+                        "format": "generic"
+                    }
+                }]
+            }),
+        ),
+        "partial later collect omits sealed test request",
+    );
+    let second_ids: Vec<_> = second["records"]
+        .as_array()
+        .expect("second records")
+        .iter()
+        .map(|record| record["evidence_id"].as_str().expect("id").to_owned())
+        .collect();
+    assert!(
+        !second_ids.iter().any(|id| id == "unrun-test-core"),
+        "fabricated unrun-test-core contradicting sealed evidence: {second_ids:?}"
+    );
+    assert!(
+        !second_ids.iter().any(|id| id == "unrun-test-extra"),
+        "audit-wide unrun expansion outside call scope: {second_ids:?}"
+    );
+    assert!(
+        second_ids.iter().any(|id| id == "lint-core"),
+        "expected lint-core in second receipt: {second_ids:?}"
+    );
+    assert_eq!(
+        fs::read(&sealed_path).expect("reread sealed record"),
+        sealed_before,
+        "sealed record bytes must stay immutable"
+    );
+    let inventory_after = evidence_inventory(&evidence_root);
+    for id in &inventory_before {
+        assert!(
+            inventory_after.contains(id),
+            "pre-existing evidence disappeared: {id}"
+        );
+    }
+    assert!(
+        !inventory_after.iter().any(|id| id == "unrun-test-core"),
+        "unrun-test-core must not appear on disk"
+    );
+    assert!(
+        !inventory_after.iter().any(|id| id == "unrun-test-extra"),
+        "unrun-test-extra must not appear on disk"
+    );
+}
+
+#[test]
+fn scoped_missing_coverage_still_emits_unrun() {
+    let fixture = initialized_multi_unit_fixture("missing-coverage-wave");
+    let evidence_root = fixture
+        .root
+        .join(".git/northstar/rust-quality/audits/missing-coverage-wave/evidence");
+    assert_success(
+        &fixture.audit_operation(
+            "collect",
+            "missing-coverage-wave",
+            &serde_json::json!({
+                "applicable_classes": ["test"],
+                "requests": [{
+                    "evidence_id": "test-core",
+                    "unit_id": "core",
+                    "evidence_class": "test",
+                    "selector": "true",
+                    "origin": "agent_resolved",
+                    "package_cwd": ".",
+                    "environment": "fixture",
+                    "execution": {
+                        "kind": "command",
+                        "program": "true",
+                        "args": [],
+                        "format": "generic"
+                    }
+                }]
+            }),
+        ),
+        "seal test/core",
+    );
+    let sealed_before = fs::read(evidence_root.join("test-core.json")).expect("sealed");
+    let result = assert_success(
+        &fixture.audit_operation(
+            "collect",
+            "missing-coverage-wave",
+            &serde_json::json!({
+                "applicable_classes": ["lint", "test"],
+                "requests": [{
+                    "evidence_id": "lint-extra",
+                    "unit_id": "extra",
+                    "evidence_class": "lint",
+                    "selector": "true",
+                    "origin": "agent_resolved",
+                    "package_cwd": ".",
+                    "environment": "fixture",
+                    "execution": {
+                        "kind": "command",
+                        "program": "true",
+                        "args": [],
+                        "format": "generic"
+                    }
+                }]
+            }),
+        ),
+        "collect scoped missing test for extra",
+    );
+    let ids: Vec<_> = result["records"]
+        .as_array()
+        .expect("records")
+        .iter()
+        .map(|record| record["evidence_id"].as_str().expect("id").to_owned())
+        .collect();
+    assert!(ids.iter().any(|id| id == "lint-extra"), "{ids:?}");
+    assert!(ids.iter().any(|id| id == "unrun-test-extra"), "{ids:?}");
+    assert!(!ids.iter().any(|id| id == "unrun-test-core"), "{ids:?}");
+    assert!(!ids.iter().any(|id| id == "unrun-lint-core"), "{ids:?}");
+    assert_eq!(
+        fs::read(evidence_root.join("test-core.json")).expect("reread"),
+        sealed_before
+    );
+}
+
+#[test]
+fn colliding_unit_class_request_fails_before_write() {
+    let fixture = initialized_multi_unit_fixture("collision-wave");
+    let evidence_root = fixture
+        .root
+        .join(".git/northstar/rust-quality/audits/collision-wave/evidence");
+    assert_success(
+        &fixture.audit_operation(
+            "collect",
+            "collision-wave",
+            &serde_json::json!({
+                "applicable_classes": ["test"],
+                "requests": [{
+                    "evidence_id": "test-core",
+                    "unit_id": "core",
+                    "evidence_class": "test",
+                    "selector": "true",
+                    "origin": "agent_resolved",
+                    "package_cwd": ".",
+                    "environment": "fixture",
+                    "execution": {
+                        "kind": "command",
+                        "program": "true",
+                        "args": [],
+                        "format": "generic"
+                    }
+                }]
+            }),
+        ),
+        "seal test/core",
+    );
+    let before = evidence_inventory(&evidence_root);
+    let sealed_before = fs::read(evidence_root.join("test-core.json")).expect("sealed");
+    let output = fixture.audit_operation(
+        "collect",
+        "collision-wave",
+        &serde_json::json!({
+            "applicable_classes": ["test"],
+            "requests": [{
+                "evidence_id": "test-core-again",
+                "unit_id": "core",
+                "evidence_class": "test",
+                "selector": "true",
+                "origin": "agent_resolved",
+                "package_cwd": ".",
+                "environment": "fixture",
+                "execution": {
+                    "kind": "command",
+                    "program": "true",
+                    "args": [],
+                    "format": "generic"
+                }
+            }]
+        }),
+    );
+    assert_lifecycle_error(&output, "evidence.coverage_exists");
+    assert_eq!(evidence_inventory(&evidence_root), before);
+    assert_eq!(
+        fs::read(evidence_root.join("test-core.json")).expect("reread"),
+        sealed_before
+    );
+}
+
+#[test]
+fn duplicate_unit_class_requests_fail_before_execution() {
+    let fixture = initialized_multi_unit_fixture("duplicate-coverage-wave");
+    let evidence_root = fixture
+        .root
+        .join(".git/northstar/rust-quality/audits/duplicate-coverage-wave/evidence");
+    let marker = fixture.root.join("side-effect-marker");
+    let output = fixture.audit_operation(
+        "collect",
+        "duplicate-coverage-wave",
+        &serde_json::json!({
+            "applicable_classes": ["test"],
+            "requests": [
+                {
+                    "evidence_id": "test-core-a",
+                    "unit_id": "core",
+                    "evidence_class": "test",
+                    "selector": "touch marker",
+                    "origin": "agent_resolved",
+                    "package_cwd": ".",
+                    "environment": "fixture",
+                    "execution": {
+                        "kind": "command",
+                        "program": "touch",
+                        "args": ["side-effect-marker"],
+                        "format": "generic"
+                    }
+                },
+                {
+                    "evidence_id": "test-core-b",
+                    "unit_id": "core",
+                    "evidence_class": "test",
+                    "selector": "touch marker again",
+                    "origin": "agent_resolved",
+                    "package_cwd": ".",
+                    "environment": "fixture",
+                    "execution": {
+                        "kind": "command",
+                        "program": "touch",
+                        "args": ["side-effect-marker"],
+                        "format": "generic"
+                    }
+                }
+            ]
+        }),
+    );
+    assert_lifecycle_error(&output, "evidence.coverage_duplicate");
+    assert!(!evidence_root.exists() || evidence_inventory(&evidence_root).is_empty());
+    assert!(!evidence_root.join("test-core-a.json").exists());
+    assert!(!evidence_root.join("test-core-b.json").exists());
+    assert!(
+        !marker.exists(),
+        "duplicate coverage must fail before command side effects"
+    );
+}
+
+#[test]
 fn records_compiler_source_failure_without_losing_raw_output() {
     let fixture = initialized_lifecycle_fixture("source-failure-wave", false);
     fixture.write("src/lib.rs", "pub fn broken( {\n");
@@ -958,6 +1252,51 @@ fn assessment_with_unaccepted_deviation() -> Value {
         "disposition": "deviation"
     }]);
     assessment
+}
+
+fn initialized_multi_unit_fixture(audit_id: &str) -> Fixture {
+    let fixture = Fixture::new(audit_id);
+    fixture.write(
+        "Cargo.toml",
+        "[package]\nname = \"partial-collect\"\nversion = \"0.1.0\"\nedition = \"2024\"\nrust-version = \"1.95\"\n",
+    );
+    fixture.write("src/lib.rs", "pub fn answer() -> u8 { 41 }\n");
+    fixture.write("src/extra.rs", "pub fn extra() -> u8 { 1 }\n");
+    fixture.write("README.md", "baseline\n");
+    fixture.commit();
+    fixture.write("src/lib.rs", "pub fn answer() -> u8 { 42 }\n");
+    fixture.write("src/extra.rs", "pub fn extra() -> u8 { 2 }\n");
+    let discovery = fixture.inspect();
+    let plan = fixture.plan_value(
+        &discovery,
+        &serde_json::json!({
+            "audit_id": audit_id,
+            "units": [
+                {"unit_id": "core", "anchors": ["src/lib.rs"], "context": []},
+                {"unit_id": "extra", "anchors": ["src/extra.rs"], "context": []}
+            ],
+            "excluded_dirty_files": [],
+            "repository_coverage": null
+        }),
+    );
+    assert_success(
+        &fixture.init_audit(&discovery, &plan),
+        "init multi-unit fixture",
+    );
+    fixture
+}
+
+fn evidence_inventory(evidence_root: &Path) -> Vec<String> {
+    let mut ids = fs::read_dir(evidence_root)
+        .expect("read evidence root")
+        .filter_map(|entry| {
+            let entry = entry.ok()?;
+            let name = entry.file_name().into_string().ok()?;
+            name.strip_suffix(".json").map(str::to_owned)
+        })
+        .collect::<Vec<_>>();
+    ids.sort();
+    ids
 }
 
 fn initialized_lifecycle_fixture(audit_id: &str, exclude_readme: bool) -> Fixture {

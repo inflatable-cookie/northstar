@@ -165,10 +165,16 @@ fn generic_format() -> String {
 
 /// Runs an explicit evidence plan and writes immutable records below `record_root`.
 ///
+/// Synthetic `unrun` records cover only applicable classes that remain
+/// unrepresented for the call's resolved unit scope after consulting sealed
+/// on-disk coverage. Existing unit/class evidence stays authoritative.
+///
 /// # Errors
 ///
-/// Returns an error for malformed plans, unsafe paths, duplicate records, or
-/// records that cannot be persisted. Command failures become evidence records.
+/// Returns an error for malformed plans, unsafe paths, duplicate records,
+/// contradictory coverage, or records that cannot be persisted. Validation and
+/// coverage conflicts fail before any new record is written. Command failures
+/// become evidence records.
 pub fn collect(
     repository_root: &Path,
     record_root: &Path,
@@ -179,39 +185,66 @@ pub fn collect(
     validate_plan(&plan, audit_units)?;
     fs::create_dir_all(record_root).map_err(|error| format!("evidence.record_create: {error}"))?;
 
-    let mut records = Vec::new();
-    let mut represented = BTreeSet::new();
-    for request in plan.requests {
-        represented.insert(request.evidence_class.clone());
+    let existing = index_existing_coverage(record_root)?;
+    let scope = resolve_collection_scope(&plan, audit_units)?;
+    let mut planned = BTreeSet::new();
+    let mut request_paths = Vec::new();
+    for request in &plan.requests {
+        let key = coverage_key(request.unit_id.clone(), &request.evidence_class);
+        if let Some(existing_id) = existing.get(&key)
+            && existing_id != &request.evidence_id
+        {
+            return Err(format!(
+                "evidence.coverage_exists: {}/{} via {existing_id}",
+                request.unit_id.as_deref().unwrap_or("-"),
+                request.evidence_class
+            ));
+        }
         let path = record_root.join(format!("{}.json", request.evidence_id));
         if path.exists() {
             return Err(format!("evidence.record_exists: {}", request.evidence_id));
         }
+        if !planned.insert(key) {
+            return Err(format!(
+                "evidence.coverage_duplicate: {}/{}",
+                request.unit_id.as_deref().unwrap_or("-"),
+                request.evidence_class
+            ));
+        }
+        request_paths.push(path);
+    }
+
+    let mut unrun_plans = Vec::new();
+    for class in &plan.applicable_classes {
+        for unit_id in &scope {
+            let key = coverage_key(unit_id.clone(), class);
+            if planned.contains(&key) || existing.contains_key(&key) {
+                continue;
+            }
+            let suffix = unit_id
+                .as_ref()
+                .map_or_else(String::new, |unit| format!("-{unit}"));
+            let id = format!("unrun-{class}{suffix}");
+            let path = record_root.join(format!("{id}.json"));
+            if path.exists() {
+                return Err(format!("evidence.record_exists: {id}"));
+            }
+            unrun_plans.push((id, unit_id.clone(), class.clone(), path));
+            planned.insert(key);
+        }
+    }
+
+    let mut records = Vec::new();
+    for (request, path) in plan.requests.into_iter().zip(request_paths) {
         let record = run_request(repository_root, record_root, request, &mapping)?;
         write_new_json(&path, &record)?;
         records.push(record);
     }
-    for class in &plan.applicable_classes {
-        if !represented.contains(class) {
-            let unit_ids = audit_units.map_or_else(
-                || vec![None],
-                |units| units.iter().cloned().map(Some).collect(),
-            );
-            for unit_id in unit_ids {
-                let suffix = unit_id
-                    .as_ref()
-                    .map_or_else(String::new, |unit| format!("-{unit}"));
-                let id = format!("unrun-{class}{suffix}");
-                let path = record_root.join(format!("{id}.json"));
-                if path.exists() {
-                    return Err(format!("evidence.record_exists: {id}"));
-                }
-                let mut record = unrun_record(id, unit_id, class);
-                seal(&mut record)?;
-                write_new_json(&path, &record)?;
-                records.push(record);
-            }
-        }
+    for (id, unit_id, class, path) in unrun_plans {
+        let mut record = unrun_record(id, unit_id, &class);
+        seal(&mut record)?;
+        write_new_json(&path, &record)?;
+        records.push(record);
     }
     records.sort_by(|left, right| left.evidence_id.cmp(&right.evidence_id));
     let limitations = limitations(&records);
@@ -221,6 +254,66 @@ pub fn collect(
         records,
         limitations,
     })
+}
+
+type CoverageKey = (Option<String>, String);
+
+fn coverage_key(unit_id: Option<String>, class: &str) -> CoverageKey {
+    (unit_id, class.to_owned())
+}
+
+fn index_existing_coverage(record_root: &Path) -> Result<BTreeMap<CoverageKey, String>, String> {
+    let mut coverage = BTreeMap::new();
+    let entries = match fs::read_dir(record_root) {
+        Ok(entries) => entries,
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => return Ok(coverage),
+        Err(error) => return Err(format!("evidence.record_list: {error}")),
+    };
+    for entry in entries {
+        let entry = entry.map_err(|error| format!("evidence.record_list: {error}"))?;
+        let path = entry.path();
+        if path.extension().and_then(|ext| ext.to_str()) != Some("json") {
+            continue;
+        }
+        let record = read_verified(&path)?;
+        let key = coverage_key(record.unit_id.clone(), &record.evidence_class);
+        if let Some(prior) = coverage.insert(key, record.evidence_id.clone()) {
+            return Err(format!(
+                "evidence.coverage_ambiguous: {}/{} via {prior} and {}",
+                record.unit_id.as_deref().unwrap_or("-"),
+                record.evidence_class,
+                record.evidence_id
+            ));
+        }
+    }
+    Ok(coverage)
+}
+
+fn resolve_collection_scope(
+    plan: &EvidencePlan,
+    audit_units: Option<&BTreeSet<String>>,
+) -> Result<Vec<Option<String>>, String> {
+    match audit_units {
+        None => Ok(vec![None]),
+        Some(units) => {
+            let mut scoped = BTreeSet::new();
+            for request in &plan.requests {
+                let unit = request
+                    .unit_id
+                    .clone()
+                    .ok_or_else(|| "evidence.unit_required".to_owned())?;
+                if !units.contains(&unit) {
+                    return Err(format!("evidence.unit_unknown: {unit}"));
+                }
+                scoped.insert(unit);
+            }
+            if scoped.is_empty() {
+                Ok(units.iter().cloned().map(Some).collect())
+            } else {
+                Ok(scoped.into_iter().map(Some).collect())
+            }
+        }
+    }
 }
 
 fn unrun_record(evidence_id: String, unit_id: Option<String>, class: &str) -> EvidenceRecord {
@@ -334,6 +427,7 @@ fn validate_plan(
         }
     }
     let mut ids = BTreeSet::new();
+    let mut coverage = BTreeSet::new();
     for request in &plan.requests {
         require_id(&request.evidence_id)?;
         if !ids.insert(request.evidence_id.as_str()) {
@@ -343,6 +437,14 @@ fn validate_plan(
         if !classes.contains(&request.evidence_class) {
             return Err(format!(
                 "evidence.class_not_applicable: {}",
+                request.evidence_class
+            ));
+        }
+        let key = coverage_key(request.unit_id.clone(), &request.evidence_class);
+        if !coverage.insert(key) {
+            return Err(format!(
+                "evidence.coverage_duplicate: {}/{}",
+                request.unit_id.as_deref().unwrap_or("-"),
                 request.evidence_class
             ));
         }
@@ -828,7 +930,13 @@ fn slash(path: &Path) -> String {
 
 #[cfg(test)]
 mod tests {
-    use super::{mapping, parse_diagnostics};
+    use super::{
+        EvidencePlan, EvidenceRequest, Execution, collect, mapping, parse_diagnostics, seal,
+        unrun_record, write_new_json,
+    };
+    use std::collections::BTreeSet;
+    use std::fs;
+    use std::time::{SystemTime, UNIX_EPOCH};
 
     #[test]
     fn maps_stopslop_forwarders_to_evaluation_only_evidence() {
@@ -876,5 +984,62 @@ mod tests {
         assert_eq!(diagnostics.len(), 1);
         assert_eq!(diagnostics[0].level, "warning");
         assert!(diagnostics[0].message.contains("dead suppression"));
+    }
+
+    #[test]
+    fn ambiguous_unit_class_coverage_fails_before_write() {
+        let nonce = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .expect("clock")
+            .as_nanos();
+        let root = std::env::temp_dir().join(format!(
+            "northstar-ambiguous-coverage-{}-{nonce}",
+            std::process::id()
+        ));
+        let evidence = root.join("evidence");
+        fs::create_dir_all(&evidence).expect("evidence root");
+        fs::write(root.join("Cargo.toml"), "[package]\nname=\"t\"\nversion=\"0.1.0\"\nedition=\"2024\"\n")
+            .expect("manifest");
+        fs::create_dir_all(root.join("src")).expect("src");
+        fs::write(root.join("src/lib.rs"), "pub fn x() {}\n").expect("lib");
+
+        for (id, unit) in [("test-a", "core"), ("test-b", "core")] {
+            let mut record = unrun_record(id.to_owned(), Some(unit.to_owned()), "test");
+            record.evidence_id = id.to_owned();
+            seal(&mut record).expect("seal");
+            write_new_json(&evidence.join(format!("{id}.json")), &record).expect("plant");
+        }
+        let before = fs::read(evidence.join("test-a.json")).expect("before");
+        let units = BTreeSet::from(["core".to_owned()]);
+        let error = collect(
+            &root,
+            &evidence,
+            EvidencePlan {
+                applicable_classes: vec!["lint".to_owned()],
+                requests: vec![EvidenceRequest {
+                    evidence_id: "lint-core".to_owned(),
+                    unit_id: Some("core".to_owned()),
+                    evidence_class: "lint".to_owned(),
+                    selector: "true".to_owned(),
+                    origin: "agent_resolved".to_owned(),
+                    package_cwd: ".".to_owned(),
+                    environment: "fixture".to_owned(),
+                    execution: Execution::Command {
+                        program: "true".to_owned(),
+                        args: Vec::new(),
+                        format: "generic".to_owned(),
+                    },
+                }],
+            },
+            Some(&units),
+        )
+        .expect_err("ambiguous coverage");
+        assert!(
+            error.contains("evidence.coverage_ambiguous"),
+            "unexpected error: {error}"
+        );
+        assert!(!evidence.join("lint-core.json").exists());
+        assert_eq!(fs::read(evidence.join("test-a.json")).expect("after"), before);
+        let _ = fs::remove_dir_all(&root);
     }
 }
