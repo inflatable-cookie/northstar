@@ -236,13 +236,13 @@ let parity_drift = new_fixture(
 );
 expect_failure("parity-drift", || run_check(parity_drift), "fixture template parity");
 
-let full_qa_docs = "[{ task = \"check:repo-contract-wiring\" }, { task = \"check:repo-contract\" }, { task = \"test:repo-contract\" }, { task = \"check:readiness-map\" }, { task = \"test:readiness-map\" }, { task = \"check:command-skills\" }]";
+let full_qa_docs = "[{ task = \"check:repo-contract-wiring\" }, { task = \"check:repo-contract\" }, { task = \"test:repo-contract\" }, { task = \"check:readiness-map\" }, { task = \"test:readiness-map\" }, { task = \"check:command-skills\" }, { task = \"check:model-routing\" }]";
 let machine_effigy = "[manifest]\nminimum_effigy_version = \"0.8.4\"\n\n";
 machine_effigy += "[catalog]\nalias = \"northstar\"\n\n[tasks]\n";
 machine_effigy += "\"check:repo-contract-wiring\" = [{ rhai = \"scripts/check-northstar-repo-contract-wiring.rhai\" }]\n";
 machine_effigy += "\"check:repo-contract\" = [{ rhai = \"scripts/check-northstar-repo-contract.rhai\" }]\n";
 machine_effigy += "\"test:repo-contract\" = [{ rhai = \"scripts/test-northstar-repo-contract.rhai\" }]\n";
-machine_effigy += "\"check:readiness-map\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"test:readiness-map\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:command-skills\" = [{ rhai = \"scripts/noop.rhai\" }]\n";
+machine_effigy += "\"check:readiness-map\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"test:readiness-map\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:command-skills\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:model-routing\" = [{ rhai = \"scripts/noop.rhai\" }]\n";
 machine_effigy += "\"check:bundle\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:rust-quality\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:typescript-quality\" = [{ rhai = \"scripts/noop.rhai\" }]\n";
 machine_effigy += "\"test:rust-quality-setup\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"test:rust-v2-production-harness\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"test:typescript-quality-setup\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"test:typescript-quality-recorder\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"test:paseo-worktree\" = [{ rhai = \"scripts/noop.rhai\" }]\n";
 machine_effigy += "\"qa:docs\" = " + full_qa_docs + "\n";

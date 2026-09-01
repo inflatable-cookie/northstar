@@ -88,9 +88,11 @@ required sibling links or `none`, opening questions, research boundary,
 concurrent non-overlapping work, stop conditions, validation, and planning-PR
 contract.
 
-Select a frontier/high-reasoning conversational-planning profile from current
-adapter notes. An operator-named profile wins; Sol is one possible local
-choice, not a Northstar dependency. In Paseo, create one `branch-off` worktree
+Select from the adequate frontier/high-reasoning conversational-planning pool
+in current adapter notes and rotate recent use like every other dispatch
+class. An operator-named profile wins; a locally preferred profile is
+configuration, not a Northstar dependency. In Paseo, create one
+`branch-off` worktree
 workspace from pushed `origin/main`, materialize that profile into
 `create_agent`, retain the agent/workspace IDs, and let the operator converse in
 the new thread. Before launch, verify every named sibling link exists in the
@@ -165,8 +167,9 @@ When Paseo tools are injected, the source:
 
 1. resolves its current project and repository checkout without guessing an
    ambiguous workspace;
-2. lists current profiles and selects one whose notes cover orchestrator
-   planning, operator conversation, dispatch, and review, unless the operator
+2. lists current profiles, builds the adequate orchestrator-role pool whose
+   notes cover orchestrator planning, operator conversation, dispatch, and
+   review, and applies the diversified-routing rule unless the operator
    named a profile;
 3. creates a separate `local` workspace for that same project and checkout.
    Reject the transport plan if it uses `branch-off` worktree isolation or a
@@ -198,8 +201,8 @@ Keep discovery, planning, promotion, readiness, review-oracle design, worker
 routing, PR review, and merge in the frontier orchestrator. After those choices
 are settled, a fast/low-cost subagent may project a meaningful mechanical batch
 into named documentation surfaces. Use the current profile notes rather than a
-hard-coded model name; Luna is one possible local profile, not a Northstar
-dependency.
+hard-coded model name; a locally preferred profile is configuration, not a
+Northstar dependency.
 
 When Paseo exposes profiles and agent creation, list current profiles, choose
 the one whose notes fit fast/low-cost documentation projection, and create the
@@ -358,8 +361,8 @@ batch large enough to repay dispatch and review; keep tiny edits local.
      ambiguous attempt is not duplicated, then continue launching unrelated
      lanes whose transport state is clear. A provider, model, or profile quota,
      spend, rate, or availability failure is not a control-plane capacity
-     signal. Mark only that route unavailable and try another configured
-     profile whose current notes fit the same worker role and capability. Do
+     signal. Mark only that route unavailable and choose another adequate
+     route from the lane's diversified pool. Do
      not promote an ordinary lane to frontier merely because its day-to-day
      route is unavailable. If no suitable route remains, pause only that lane,
      preserve its committed handoff and workspace, report the provider/profile
@@ -562,8 +565,8 @@ whose transport state is clear.
 
 A provider, model, or profile quota, spend, rate, or availability failure is
 not a control-plane capacity signal. Mark only that route unavailable for the
-attempt and try another configured profile whose current notes fit the same
-worker role and capability. Do not promote an ordinary lane to frontier merely
+attempt and choose another adequate route from the lane's diversified pool.
+Do not promote an ordinary lane to frontier merely
 because its day-to-day route is unavailable. If no suitable route remains,
 pause only that lane, preserve its committed handoff and workspace state, report
 the provider/profile gap, and continue every unrelated ready lane. Recovery
@@ -603,44 +606,59 @@ changes the plan.
 
 ## Model routing
 
-Use current role-profile notes, not stored model names. Worker routing is economical by default:
-choose a non-frontier profile whose notes cover ordinary day-to-day implementation,
-bounded audits, or mechanical work before considering a frontier worker.
+Treat configured profiles as a portfolio, not one remembered default. At every
+worker, planning-delegate, or fresh-orchestrator dispatch, build the adequate
+pool for the role from current role-profile notes and any explicit adapter cost
+metadata, prefer the cheapest adequate tier, then vary provider/model identity
+before reusing a recent route. Adequacy comes before price or rotation: an
+inadequate cheap route is excluded, never rotated into. Use adapter-visible
+recent-agent history when the adapter exposes it; otherwise remember only the
+routes launched in the current orchestrator run. Northstar owns no durable
+usage ledger and stores no profile, provider, model, price, balance, or
+allowance value.
 
 Select by capability:
 
-- orchestrator/discovery/review: frontier/high effort;
-- operator-facing planning delegate: frontier conversational-planning profile,
-  high reasoning; an explicitly named profile wins;
+- orchestrator continuations and operator-facing planning delegates: the
+  adequate orchestrator-role pool, rotated by the same rule; an explicitly
+  named profile wins;
+- orchestrator discovery, material review, and review-oracle design:
+  frontier/high effort;
 - exact mechanical documentation projection: fast/low-cost profile, low or
   medium reasoning, with the orchestrator retaining semantic review;
-- ordinary bounded implementation: matching non-frontier day-to-day profile;
+- ordinary bounded implementation: the cheapest adequate non-frontier
+  day-to-day pool;
 - long audits, broad documentation, and other token-heavy mechanical jobs
   whose decisions and repair boundaries are already settled: fast/low-cost or
   mechanically oriented profiles;
 - reconnaissance and log reduction: fast/low effort or a deterministic command;
 - frontier implementation worker: only when the lane is both highest-priority
-  or materially consequential **and** exceptionally difficult to reason through
-  after planning, and the selected profile's notes explicitly fit that
-  combination. Record both reasons in the handoff. Priority alone, complexity alone,
-  broad scope, duration, file count, or a risk-domain label is insufficient.
+  or materially consequential **and** the handoff can explain why planning,
+  the review oracle, exact-head review, and repository validation cannot
+  adequately bound the remaining reasoning, and the selected profile's notes
+  explicitly fit that combination. Record both reasons in the handoff and
+  rotate within the adequate frontier pool too. Priority alone, complexity
+  alone, broad scope, duration, file count, or a risk-domain label is
+  insufficient.
 
 Task size, file count, duration, or the bare presence of a security,
 persistence, concurrency, public-API, deployment, or multi-version surface
 does not by itself make a worker lane frontier work. Those surfaces still
-require a clear review oracle and frontier review; a well-specified direct
-implementation may use a capable non-frontier worker. Pause before dispatch
+require a clear review oracle and frontier review; a material but settled lane
+may use a capable non-frontier worker while the orchestrator keeps material
+review. Worker price is not the review-strength control. Pause before dispatch
 when the review oracle is not explicit.
 
 When multiple plausible designs or an unresolved contract choice remain,
 return to planning rather than spending a frontier worker to choose
-architecture. If the selected matching profile is unavailable because of spend,
-quota, rate, or availability, try another configured profile whose notes fit
-the same role and capability. Do not promote an ordinary lane to frontier
-merely because its day-to-day route is unavailable. If no configured
-non-frontier profile fits an ordinary lane, or no suitable available route
-remains, report the profile gap, pause only that lane, and do not silently
-promote it to frontier. An operator-named profile remains an explicit override.
+architecture. A provider, model, or profile quota, spend, rate, or
+availability failure is lane-local: mark only that route unavailable for the
+attempt, then choose another adequate route from the same pool. Do not
+promote an ordinary lane to frontier merely because its day-to-day route is
+unavailable. If no adequate route remains, report the profile gap, pause only
+that lane, and do not silently promote it to frontier. An operator-named
+profile remains an explicit override even when rotation would choose
+differently.
 
 Provider-native worktrees, subagents, session messaging, JSON output, and PR
 commands are optional adapters. When an adapter exposes profiles, list them and

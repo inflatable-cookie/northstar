@@ -4,7 +4,7 @@ kind: northstar-handoff
 handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
-status: active
+status: complete
 owner: repo maintainers
 created: 2026-09-01
 updated: 2026-09-01
@@ -31,8 +31,11 @@ repository validation as the real risk controls.
 - **Done:** PR 19 merged at `b99d19c`; the operator decision was promoted into
   architecture, working rules, spec 026, milestone 047, and card 115 on pushed
   `main` at `b30e288`.
-- **Still open:** implement card 115, prove its ten-row oracle, close the lane,
-  and open a reviewable PR.
+- **Done in this lane:** card 115 is implemented; `check:model-routing`
+  falsifies all ten milestone oracle rows; the full validation suite passes;
+  the branch is pushed and PR 20 is open
+  (https://github.com/inflatable-cookie/northstar/pull/20).
+- **Still open:** orchestrator exact-head review and merge of that PR.
 - **Current card:**
   `docs/roadmaps/g02/batch-cards/115-diversify-model-routing-across-runs.md`.
 - **Planning base:** `b30e288a1525d4d06c49dfabb0972503be4b5e61`.
@@ -46,7 +49,8 @@ repository validation as the real risk controls.
   card 114 and selected to exercise provider/model variation.
 - **Frontier-worker justification:** none; the ten-row oracle and policy choices
   are settled.
-- **Remaining continuation envelope:** card 115 only; no auto-start afterward.
+- **Remaining continuation envelope:** exhausted; the lane ends at its
+  reviewable PR.
 
 ## Boundaries
 
@@ -78,10 +82,9 @@ repository validation as the real risk controls.
 
 ## Suggested Next Move
 
-Run worker preflight, load the tracked handoff from the selected `HEAD`, then
-read milestone 047, card 115, spec 026's model policy, architecture, working
-rules, and the current orchestrator mode. Inventory stale single-default and
-frontier-always wording before changing it.
+Run orchestrator exact-head review of the PR against card 115's ten-row
+oracle, required validation, and the boundaries above. Merge is
+orchestrator-owned; spec 034 remains separate and not ready.
 
 ## Completion Protocol
 

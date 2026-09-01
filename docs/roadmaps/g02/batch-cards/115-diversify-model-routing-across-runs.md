@@ -1,8 +1,9 @@
 # 115 - Diversify Model Routing Across Runs
 
-Status: ready
+Status: complete; awaiting exact-head review
 Owner: repo maintainers
 Created: 2026-09-01
+Updated: 2026-09-01
 Master roadmap: `g02.047`
 Governing refs: `docs/roadmaps/g02/047-diversify-model-routing-across-runs.md`,
 `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`,
@@ -45,20 +46,20 @@ weakening review and validation.
 
 ## Acceptance Criteria
 
-- [ ] all ten milestone oracle rows have focused proof;
-- [ ] eligible profiles are filtered for adequacy before cost or rotation;
-- [ ] cheapest adequate tier and least-recent provider/model selection replace
+- [x] all ten milestone oracle rows have focused proof;
+- [x] eligible profiles are filtered for adequacy before cost or rotation;
+- [x] cheapest adequate tier and least-recent provider/model selection replace
   repeated best-fit defaulting;
-- [ ] recent-agent history is optional and bounded current-run memory works;
-- [ ] fresh orchestrators and planning delegates use diversified pools;
-- [ ] most settled material work may use small workers under strong review;
-- [ ] frontier worker selection requires the residual-reasoning explanation and
+- [x] recent-agent history is optional and bounded current-run memory works;
+- [x] fresh orchestrators and planning delegates use diversified pools;
+- [x] most settled material work may use small workers under strong review;
+- [x] frontier worker selection requires the residual-reasoning explanation and
   rotates within its adequate pool;
-- [ ] explicit operator choice wins and refusals remain lane-local;
-- [ ] no persistent usage ledger or local profile/model/cost value enters the
+- [x] explicit operator choice wins and refusals remain lane-local;
+- [x] no persistent usage ledger or local profile/model/cost value enters the
   reusable payload;
-- [ ] source/install parity, docs QA, full QA, and `git diff --check` pass;
-- [ ] the PR records its exact tested head and limits.
+- [x] source/install parity, docs QA, full QA, and `git diff --check` pass;
+- [x] the PR records its exact tested head and limits.
 
 ## Evidence Required
 
@@ -79,7 +80,26 @@ weakening review and validation.
   routing contract;
 - validation changes the plan.
 
+## Completion Notes
+
+- Orchestrator mode, doctrine `07`, the copy-ready working rules, the skill
+  outcome, operator guidance, the protocol kernel, and the handoff contract now
+  state one rule: build the adequate pool per role, prefer the cheapest
+  adequate tier, then vary provider/model identity before reusing a recent
+  route. Adapter history is optional; current-run route memory is the
+  fallback; no durable ledger or local provider/model/price value exists.
+- The rule covers ordinary, mechanical, settled-material, frontier,
+  planning-delegate, and fresh-orchestrator dispatches; frontier selection
+  requires the residual-reasoning explanation and rotates within its own pool.
+- New `check:model-routing` falsifies all ten milestone oracle rows: positive
+  per-surface assertions, negative scans for stale same-class/best-fit
+  wording and local model/price values, and parity markers shared by the live
+  and copy-ready contracts. The checker fails the pre-change tree and injected
+  violations by named oracle row.
+- No runtime usage service, local model catalogue, persistent ledger, or
+  weakened review/validation gate was added.
+
 ## Next Task
 
-Create one worker handoff and dispatch an adequate economical profile that was
-not used for card 114. Do not merge from the worker.
+This card is closed. The orchestrator owns exact-head review and merge of this
+lane's PR. Spec 034 remains separate and not ready.

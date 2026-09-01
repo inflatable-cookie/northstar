@@ -1,6 +1,6 @@
 # 047 - Diversify Model Routing Across Runs
 
-Status: active; card 115 ready
+Status: complete; card 115 awaiting exact-head review
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.046`, spec 026
@@ -87,5 +87,6 @@ surfaces, focused assertions, installed parity, and closeout in one lane.
 
 ## Next Task
 
-Execute card 115 from refreshed `main`. Stop after its reviewable PR; spec 034
-remains separate and not ready.
+This lane is complete. Orchestrator exact-head review of the card 115 PR is
+next; merge is orchestrator-owned. Spec 034 remains a separate not-ready
+language-package planning lane.

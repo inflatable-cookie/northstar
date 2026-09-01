@@ -424,8 +424,8 @@ planning profile and create a dedicated `branch-off` worktree workspace. The
 operator converses with that new agent directly. Verify handoff-named sibling
 links in the workspace container before launch. Retain its agent/workspace IDs,
 trust notifications rather than polling, and use the same agent for requested
-planning-PR revisions. Sol may be an explicitly selected local profile; it is
-not a stored Northstar model dependency.
+planning-PR revisions. An explicitly selected local profile is operator
+configuration, not a stored Northstar model dependency.
 
 Do not use a generic task-handoff skill, including `/paseo-handoff`, for a
 Northstar worker or planning-delegate dispatch. Such a skill generates a second

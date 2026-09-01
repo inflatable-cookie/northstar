@@ -129,8 +129,9 @@ You do not have to ask for parallel workers. The orchestrator plans ready work
 as a dependency graph and launches every safe lane without a global thread budget.
 A provider spend cap, quota, rate limit, or unavailable profile pauses
 or reroutes only that lane; unrelated ready work keeps launching. If the
-selected day-to-day route is unavailable, the orchestrator tries another
-matching profile of the same class rather than spending a frontier worker. If
+selected day-to-day route is unavailable, the orchestrator chooses another
+adequate route from that lane's diversified pool rather than spending a
+frontier worker. If
 no suitable route remains, that lane keeps its handoff and workspace so recovery
 does not duplicate the agent. Without a control plane you simply get every
 absolute handoff path at once and launch as many as you want. You are never
@@ -139,12 +140,14 @@ reason — a dependency edge, a shared mutable or closeout surface, or unresolve
 authority. Same-repo PRs still merge one at a time, and the orchestrator
 re-reviews any remaining head that a merge changed.
 
-Ordinary workers use a matching non-frontier day-to-day profile. Frontier
-workers are rare: the lane must be both exceptionally difficult after planning
-and highest-priority or materially consequential, and the handoff records both
+Ordinary workers draw from the cheapest adequate day-to-day pool, and the
+orchestrator varies provider/model identity between runs instead of reusing
+one remembered route. Frontier workers are rare: the lane must be both
+exceptionally difficult after planning and highest-priority or materially
+consequential, and the handoff records both
 reasons. A risky but well-specified change can still use a capable non-frontier
 worker; the orchestrator keeps frontier review. You can name a profile to
-override. If no day-to-day profile fits, the orchestrator reports that gap
+override. If no adequate profile fits, the orchestrator reports that gap
 instead of silently spending the expensive one.
 
 You can also ask the orchestrator to spin off a planning conversation for one

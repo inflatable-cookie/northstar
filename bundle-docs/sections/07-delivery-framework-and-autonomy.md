@@ -641,8 +641,8 @@ A control-plane workspace or agent creation failure belongs to that lane's
 transport state. Preserve every returned workspace or agent identity so an
 ambiguous attempt is not duplicated, then continue launching unrelated lanes
 whose transport state is clear. Mark only the refused provider or profile route
-unavailable and try another configured profile whose current notes fit the same
-worker role and capability. Do not promote an ordinary lane to frontier merely
+unavailable and choose another adequate route from the lane's diversified pool.
+Do not promote an ordinary lane to frontier merely
 because its day-to-day route is unavailable. If no suitable route remains,
 pause only that lane, preserve its committed handoff and workspace state,
 report the provider/profile gap, and continue every unrelated ready lane.
@@ -665,10 +665,16 @@ current `main` and any changed or conflict-resolved head is reviewed again.
 
 ## Economical worker routing
 
-Worker routing is economical by default. Select by current role-profile notes,
-not stored model IDs. Choose a non-frontier profile whose notes cover ordinary
-day-to-day implementation, bounded audits, or mechanical work before considering
-a frontier worker.
+Worker routing is economical and diversified by default. Select by current
+role-profile notes, not stored model IDs. For every worker, planning-delegate,
+or fresh-orchestrator run, build the adequate pool for the role from those
+notes and any explicit adapter cost metadata, prefer the cheapest adequate
+tier, then vary provider/model identity before reusing a recent route.
+Adequacy comes before price or rotation: an inadequate cheap route is
+excluded, never rotated into. Adapter-visible recent-agent history is
+evidence when available; otherwise the orchestrator remembers only the routes
+it launched in the current run. Northstar keeps no durable usage ledger and
+stores no profile, provider, model, price, balance, or allowance value.
 
 Task size, file count, duration, documentation churn, or the bare presence of a
 security, persistence, concurrency, public-API, deployment, or multi-version
@@ -678,24 +684,28 @@ oriented profiles when their decisions and repair boundaries are already
 settled.
 
 A frontier implementation worker is a conjunctive exception. Use it only when
-the lane is both highest-priority or materially consequential **and**
-exceptionally difficult to reason through after planning, and the selected
-profile's notes explicitly fit that combination. Record both reasons in the
-handoff. Priority alone, complexity alone, broad scope, or a risk-domain label
-is insufficient.
+the lane is both highest-priority or materially consequential **and** the
+handoff explains why planning, the review oracle, exact-head review, and
+repository validation cannot adequately bound the remaining reasoning, and
+the selected profile's notes explicitly fit that combination. Record both
+reasons in the handoff and rotate within the adequate frontier pool too.
+Priority alone, complexity alone, broad scope, or a risk-domain label is
+insufficient.
 
 Keep frontier/high effort for the orchestrator, material review, and
 operator-facing planning delegates. Risky surfaces still require a clear review
-oracle and frontier review; a well-specified direct implementation on those
-surfaces may use a capable non-frontier worker. Pause before dispatch when the
-review oracle is not explicit.
+oracle and frontier review; a material but settled lane may use a capable
+non-frontier worker while the orchestrator keeps material review. Worker price
+is not the review-strength control. Pause before dispatch when the review
+oracle is not explicit.
 
 When multiple plausible designs or an unresolved contract choice remain, return
-to planning rather than spending a frontier worker to choose architecture. If
-the matching day-to-day route is unavailable, try another same-class profile
-rather than spending a frontier worker. If no configured non-frontier profile
-fits an ordinary lane, report the profile gap instead of silently promoting it
-to frontier. An operator-named profile remains an explicit override.
+to planning rather than spending a frontier worker to choose architecture. A
+refused route is removed only for that attempt; choose another adequate route
+from the lane's diversified pool instead of treating the refusal as global
+capacity. If no adequate route remains, report the profile gap instead of
+silently promoting the lane to frontier. An operator-named profile remains an
+explicit override even when rotation would choose differently.
 
 ## Conversational planning delegation
 
@@ -726,9 +736,11 @@ operator prompt, then separately reconcile and promote settled meaning against
 current `main`. The merged packet remains non-authoritative until promotion;
 resolved triage material is removed or split in that promotion batch.
 
-Select the delegate from current frontier conversational-planning profile
-notes. A locally preferred model such as Sol is configuration, not Northstar
-doctrine. With a control plane, use one isolated branch-off workspace and the
+Select the delegate from the adequate frontier conversational-planning pool
+under the diversified-routing rule, rotating recent use like every other
+dispatch class. A locally preferred model is configuration, not
+Northstar doctrine.
+With a control plane, use one isolated branch-off workspace and the
 committed handoff as the only initial prompt. Without one, give the operator the
 absolute handoff path for a manually isolated thread.
 
@@ -746,7 +758,8 @@ path. It does not enter worker mode, run worker preflight, or use the
 handoff-writing route.
 
 When Paseo is available, create a separate `local` workspace for the same
-project and checkout, copy a current orchestrator-role profile, apply the
+project and checkout, select from the adequate orchestrator-role pool under
+the diversified-routing rule, apply the
 capitalized `Orchestrator=true` agent label, and use only the absolute handoff
 path as the launch prompt. Reject a `branch-off` worktree or a different
 project path. If creation returns an identity with an ambiguous error, preserve

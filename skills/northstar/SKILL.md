@@ -105,8 +105,10 @@ preflight. The source yields the transferred lane after pushed dispatch.
 - **Recovery:** trustworthy planning surfaces and canonical refs restored.
 - **Normalize:** baseline or strict spine installed/maintained; Effigy-first QA.
 - **Orchestrator:** question-led planning, parallel-first dispatch of the whole
-  safe ready dependency frontier without a global thread budget, lane-local provider/profile routing, economical day-to-day worker default
-  with frontier workers only when both escalation axes hold, optional
+  safe ready dependency frontier without a global thread budget, lane-local
+  provider/profile routing, diversified economical worker routing (adequate
+  pool, cheapest adequate tier, recent-use rotation) with frontier workers
+  only when both escalation axes hold, optional
   operator-facing frontier planning delegates with orchestrator-owned promotion,
   optional fresh-orchestrator continuation through a pushed seven-section
   handoff and a separate local workspace with `Orchestrator=true`,

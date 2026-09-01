@@ -76,12 +76,13 @@ sequence.
 
 ## Next Task
 
-Roadmaps `g02.038` through `g02.046` are complete. The
+Roadmaps `g02.038` through `g02.047` are implemented. The
 first-principles audit and closed dogfood cohort produced the structural
 validation reduction, active-authority reconciliation, machine-contract checks,
 and fixture proof; PR 18 merged at `1f6647a`. Fresh-orchestrator continuation
-merged through PR 19 at `b99d19c`. Active roadmap `g02.047` card 115 is ready
-to diversify model routing. Spec 034 holds the separate modular-language-package
+merged through PR 19 at `b99d19c`. Card 115 diversified model routing across
+workers, delegates, and fresh orchestrators; its PR awaits exact-head review.
+Spec 034 holds the separate modular-language-package
 plan and remains not ready for implementation.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
