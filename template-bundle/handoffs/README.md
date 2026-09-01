@@ -32,6 +32,10 @@ honest about what is still uncertain. Worker handoffs use the same seven section
 and add worktree, runway, reporting, validation, PR, and startup worktree-safety
 instructions inside the completion protocol.
 
+An `orchestrator-continuation` handoff reuses the same seven sections. It does
+not add a public mode or template. The successor enters orchestrator mode from
+the absolute path; it is not a worker or a planning delegate.
+
 Keep the handoff as a dispatch overlay. Link canonical cards, contracts, and
 review oracles instead of copying their steps, acceptance prose, validation, or
 general doctrine. Repeat dispatch state, worker boundaries, runtime facts, the

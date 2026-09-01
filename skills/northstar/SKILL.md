@@ -27,7 +27,7 @@ open **one** [`references/modes/`](./references/modes/) file and follow it.
 | Rust everyday authoring | Northstar is requested for ordinary Rust work, or an applicable repository instruction already activates Rust quality |
 | Pre-execution discovery | Readiness mapping, intent rounds, project language, decision prototypes, questionnaires, or reframe |
 | PR review | User asks a thread to review an existing PR |
-| Orchestrator | User wants question-led planning plus a separate worker/PR loop |
+| Orchestrator | User wants question-led planning plus a separate worker/PR loop, or a committed orchestrator-continuation handoff |
 | Docs cleanup | User wants `/docs` files and folders inspected and reworked to fit Northstar |
 | Normalize docs | Bootstrap, migrate, or keep docs spine healthy over time |
 | Research | Evidence → architecture/contracts |
@@ -59,6 +59,13 @@ A planning delegate is distinct from worker mode. Its handoff declares
 `planning_mode: conversational-discovery`; it follows that handoff's isolated
 planning-worktree preflight, writes only named triage/research paths, and cannot
 implement or promote.
+
+A fresh orchestrator continuation is distinct from both. Its handoff declares
+`handoff_mode: orchestrator-continuation`,
+`orchestrator_mode: planning-and-review`, and
+`dispatch_authority: orchestrator`. The successor enters normal orchestrator
+mode from that absolute path and does not run worker or planning-delegate
+preflight. The source yields the transferred lane after pushed dispatch.
 
 ## Outcomes by mode
 
@@ -101,6 +108,8 @@ implement or promote.
   safe ready dependency frontier without a global thread budget, lane-local provider/profile routing, economical day-to-day worker default
   with frontier workers only when both escalation axes hold, optional
   operator-facing frontier planning delegates with orchestrator-owned promotion,
+  optional fresh-orchestrator continuation through a pushed seven-section
+  handoff and a separate local workspace with `Orchestrator=true`,
   one pushed worker handoff under `docs/handoffs/` per launched lane, optional
   fast/low-cost mechanical documentation projection under frontier semantic
   review, bounded PR review/revision, and accepted-review plus check-gated merge

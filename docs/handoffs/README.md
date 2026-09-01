@@ -50,7 +50,12 @@ reporting, validation, PR flow, and startup worktree-safety/fallback instruction
 inside `Completion Protocol`. Their frontmatter must explicitly declare
 `handoff_mode: worker-pr-loop`, `worker_mode: implementation`, and
 `dispatch_authority: orchestrator`. Those fields activate worker mode; normal
-agents do not perform the worktree preflight.
+agents do not perform the worktree preflight. An `orchestrator-continuation`
+handoff uses the same seven sections with
+`handoff_mode: orchestrator-continuation`,
+`orchestrator_mode: planning-and-review`, and
+`dispatch_authority: orchestrator`; the successor enters normal orchestrator
+mode and does not run worker preflight.
 
 Keep the handoff as a dispatch overlay. Link canonical cards, contracts, and
 review oracles; do not copy their full steps, acceptance prose, validation, or

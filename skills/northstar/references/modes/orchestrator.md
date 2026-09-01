@@ -125,6 +125,73 @@ triage notes. Only after that separate promotion batch may the orchestrator
 decide readiness or dispatch implementation. Mechanical documentation
 projection may materialize the already-settled promotion, but cannot choose it.
 
+## Fresh orchestrator continuation
+
+This path starts only when the operator explicitly asks the current
+orchestrator to hand its live lane to a fresh orchestrator thread. It is an
+ownership transfer, not a second planner over the same mutable lane.
+
+The source stays in Orchestrator mode and fills the generic seven-section
+handoff. Do not add a public mode or a continuation template. The frontmatter
+must declare:
+
+```yaml
+handoff_mode: orchestrator-continuation
+orchestrator_mode: planning-and-review
+dispatch_authority: orchestrator
+```
+
+Reject the launch before dispatch if the successor would be routed through
+generic handoff, worker, or planning-delegate mode.
+
+The handoff records the current authority chain, open operator questions,
+active and paused lanes, ready frontier, worker and PR transport identities,
+review/merge state, touched triage notes, repository state, and the next
+orchestrator action. Before automatic dispatch, the source reconciles the live
+card, roadmap, log, handoff, and front doors, commits and pushes that coherent
+state, and verifies the remote tip. It then stops planning, dispatch, review,
+and merge mutations for the transferred lane. It remains available for explicit
+clarification but does not compete with the successor.
+
+The successor receives only `Read and follow <absolute-handoff-path>.` as the
+initial prompt. Reject agent creation if that prompt includes a transcript or a
+second task description. The successor reads the committed handoff, enters
+normal orchestrator mode, reloads current repository authority, and checks that
+the recorded state still matches current `main`. It does not activate worker
+mode, run the worker worktree preflight, or inherit private conversation as
+authority.
+
+When Paseo tools are injected, the source:
+
+1. resolves its current project and repository checkout without guessing an
+   ambiguous workspace;
+2. lists current profiles and selects one whose notes cover orchestrator
+   planning, operator conversation, dispatch, and review, unless the operator
+   named a profile;
+3. creates a separate `local` workspace for that same project and checkout.
+   Reject the transport plan if it uses `branch-off` worktree isolation or a
+   different project path;
+4. creates the successor agent there with the capitalized label
+   `Orchestrator=true`, copied profile settings, finish notifications enabled,
+   and the single absolute-handoff prompt. Reject launch configuration if that
+   label is omitted or lowercased;
+5. retains and reports both returned identities without polling or duplicate
+   retry. If workspace or agent creation returns an identity with an ambiguous
+   error, preserve the identity and stop that launch attempt; do not retry into
+   a duplicate successor.
+
+Paseo workspace pin order is optional display state. If the injected adapter or
+CLI explicitly exposes a native pin/reorder operation, the source may place the
+successor beside its own workspace. When no such operation exists, missing pin
+support is not a launch failure: say the new workspace is ready and ask the
+operator to pin or place it manually. Never use browser, computer-use, Chrome
+control, plugin code, or other UI automation to arrange the sidebar.
+
+Without Paseo, required orchestration tools are absent and Northstar remains
+usable: return the absolute handoff path for manual launch. The transfer never
+archives, deletes, kills, or unpins the source workspace or thread
+automatically.
+
 ## Mechanical documentation projection
 
 Keep discovery, planning, promotion, readiness, review-oracle design, worker
@@ -316,7 +383,8 @@ batch large enough to repay dispatch and review; keep tiny edits local.
    - return permission requests to the operator unless existing explicit
      authority settles the exact action.
 
-   Do not invoke `/paseo-handoff` for a worker or planning delegate: it creates a
+   Do not invoke `/paseo-handoff` for a worker, planning delegate, or
+   orchestrator continuation: it creates a
    second briefing and would compete with the committed Northstar handoff. If
    required tools are absent, use manual
    dispatch without treating `paseo.json` as a substitute runtime signal. If
@@ -601,7 +669,9 @@ Stop and return to planning or the operator when:
   rule requires human action, or the operator explicitly paused merge;
 - a manual worktree is needed but the local path contract has not been satisfied;
 - control-plane launch state is ambiguous enough that retrying could create a
-  duplicate workspace or worker;
+  duplicate workspace, worker, or successor orchestrator;
+- continuation launch would need a Paseo product/API change, a workspace-label
+  field, or browser/computer-use pinning;
 - an implementation worker or ordinary subagent would need to start a nested
   orchestrator or worker lane. A planning delegate may use only the bounded
   read-only research subagents defined above;
@@ -615,7 +685,8 @@ When a summary is useful, lead it with:
 1. what is now true;
 2. current state (`discovery`, `planning`, `planning-delegate-in-flight`,
    `planning-pr-awaiting-review`, `planning-promotion`, `ready-to-launch`,
-   `worker-in-flight`, `awaiting-review`, `changes-requested`, `merged`, or
+   `worker-in-flight`, `awaiting-review`, `changes-requested`, `merged`,
+   `orchestrator-continuation-yielded`, or
    `paused`);
 3. the next operator action or information needed.
 

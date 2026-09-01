@@ -4,7 +4,7 @@ kind: northstar-handoff
 handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
-status: active
+status: complete
 owner: repo maintainers
 created: 2026-09-01
 updated: 2026-09-01
@@ -28,16 +28,17 @@ action when the control plane exposes no native pin API.
 
 ## Current State
 
-- **Done:** PR 18 merged at `1f6647a`; readiness was refreshed and pushed on
-  `main` at `0885132`.
-- **Still open:** implement and prove card 114, close its planning/evidence
-  surfaces, and open a reviewable PR.
+- **Done:** card 114 protocol, eight-row assertions, closeout, and a reviewable
+  PR on `worker/fresh-orchestrator-continuation`. Current `origin/main` at
+  `94604a4` is integrated. Diversified model-routing remains unedited on main.
+- **Still open:** orchestrator exact-head review and merge. Spec 034 is not
+  ready. Diversified model-routing is a separate serial planning note.
 - **Active spec lane:** none. Spec 034 is separate and not ready.
 - **Current batch card:**
   `docs/roadmaps/g02/batch-cards/114-add-fresh-orchestrator-continuation.md`.
 - **Canonical refs:** milestone 046, spec 026, system architecture, working
   rules, and the handoff contract.
-- **Remaining continuation envelope:** card 114 only; no auto-start afterward.
+- **Remaining continuation envelope:** exhausted after card 114; no auto-start.
 - **Lane budget / pause signal:** stop after a pushed PR and exact tested head.
 - **Planning base:** pushed `main` at `08851328353322140d6c9dcc71130a19c1f5230f`
   before this handoff commit.
@@ -90,11 +91,9 @@ action when the control plane exposes no native pin API.
 
 ## Suggested Next Move
 
-Run worker preflight in the Paseo worktree, verify this committed handoff from
-the selected `HEAD`, then read milestone 046, card 114, spec 026, architecture,
-working rules, and the handoff contract. Inventory the existing activation and
-Paseo guidance before changing it. Implement the smallest propagation that
-satisfies the eight-row oracle.
+Review the worker PR at its exact tested head against the eight oracle rows.
+Do not merge from the worker. Do not start spec 034 or the diversified
+model-routing note from this handoff.
 
 ## Completion Protocol
 

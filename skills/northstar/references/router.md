@@ -48,9 +48,10 @@ ordinary continuation:
 
 - bare `continue`, "keep going", "context is full", compaction alone
 - routine batch closeout without asking for a handoff file
-- an orchestrator-owned planning delegate or implementation-worker lane; use
-  Orchestrator mode so dispatch, PR review, merge, and promotion stay attached
-  to the owning orchestrator
+- an orchestrator-owned planning delegate, implementation-worker, or
+  orchestrator-continuation lane; use Orchestrator mode so the successor keeps
+  planning, dispatch, PR review, merge, and promotion instead of writing another
+  note or entering worker/delegate preflight
 
 → [`modes/handoff.md`](./modes/handoff.md)
 
@@ -180,7 +181,8 @@ activate worker mode or the worker startup preflight.
 
 Use when the user wants Northstar to own a question-led planning conversation,
 spin off a separate operator-facing planning delegate, prepare a worker
-thread/worktree, maintain a runway, or review a lane's PR. This is an internal
+thread/worktree, maintain a runway, review a lane's PR, or continue from a
+committed `orchestrator-continuation` handoff. This is an internal
 mode of the single public authority; the operator relays messages between
 threads when no control-plane tools are available. When Paseo injects its
 orchestration tools, the mode uses them for routine dispatch without a separate
@@ -268,6 +270,22 @@ Choose one:
 | Change still in provisional specs | [`shape-with-specs-and-promote.md`](./modes/shape-with-specs-and-promote.md) |
 | Canonical surfaces exist; need milestones/cards | [`compile-roadmaps.md`](./modes/compile-roadmaps.md) |
 
+## Orchestrator-continuation activation
+
+This path applies **only** when a committed handoff declares all three fields:
+
+```yaml
+handoff_mode: orchestrator-continuation
+orchestrator_mode: planning-and-review
+dispatch_authority: orchestrator
+```
+
+The successor opens [`modes/orchestrator.md`](./modes/orchestrator.md) and
+continues as a normal orchestrator thread. It does not run the worker startup
+fast path, planning-delegate preflight, or generic handoff-writing mode. Reject
+the launch before those other routes if the successor was aimed at worker,
+planning-delegate, or handoff mode.
+
 ## Worker startup fast path
 
 This fast path applies **only** to worker mode. Activate worker mode by first
@@ -288,7 +306,8 @@ absent, stop the worker launch and report the missing handoff boundary.
 
 A planning delegate with `handoff_mode: planning-delegate` follows its own
 handoff's planning-worktree preflight. It does not activate this implementation
-worker fast path.
+worker fast path. An `orchestrator-continuation` handoff follows Orchestrator
+mode and does not activate this path.
 
 After worker mode is activated, before broad repository reads, run one quick
 read-only probe from the current context:

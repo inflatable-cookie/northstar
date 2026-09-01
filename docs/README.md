@@ -80,10 +80,10 @@ Northstar system:
   The protocol remains frozen; `g02.045/113` reduced repo-contract validation
   to structural paths, links, parity, current authority, and stable machine
   contracts. PR 18 merged at `1f6647a` after exact-head review.
-- `g02.046/114` is ready for an explicit fresh-orchestrator continuation: one pushed
-  handoff, one successor local workspace, a capitalized `Orchestrator` label,
-  source-lane ownership transfer, and manual sidebar placement when Paseo has no
-  native pin control.
+- `g02.046/114` is implemented and awaiting exact-head review: one pushed
+  continuation handoff, one successor local workspace, a capitalized
+  `Orchestrator` label, source-lane ownership transfer, and manual sidebar
+  placement when Paseo has no native pin control.
 - Northstar remains general-purpose. Spec 034 plans extraction of embedded Rust
   and TypeScript tooling into optional compatible language packages; that lane
   is not ready for implementation.

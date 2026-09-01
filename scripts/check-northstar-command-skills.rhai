@@ -35,6 +35,42 @@ fn first_line_containing(lines, needle) {
     -1
 }
 
+fn h2_section(text, heading) {
+    let capturing = false;
+    let out = "";
+    for line in str::split_lines(text) {
+        if capturing && str::starts_with(line, "## ") && !str::starts_with(line, "### ") {
+            return out;
+        }
+        if line == heading {
+            capturing = true;
+        }
+        if capturing {
+            out += line + "\n";
+        }
+    }
+    require(capturing, "missing section: " + heading);
+    out
+}
+
+fn h3_section(text, heading) {
+    let capturing = false;
+    let out = "";
+    for line in str::split_lines(text) {
+        if capturing && line != heading && (str::starts_with(line, "## ") || str::starts_with(line, "### ")) {
+            return out;
+        }
+        if line == heading {
+            capturing = true;
+        }
+        if capturing {
+            out += line + "\n";
+        }
+    }
+    require(capturing, "missing section: " + heading);
+    out
+}
+
 fn is_text_skill_surface(root, file) {
     let relative = str::replace(file, root + "/", "");
     if str::starts_with(relative, "target/") || relative.contains("/target/") {
@@ -159,5 +195,79 @@ for file in fs::list_recursive(root) {
 require(!all_skill_text.contains("northstar-reframe"), "retired Northstar-prefixed reframe name remains in installable skill tree");
 require(!all_skill_text.contains("northstar wayfinder"), "retired natural-language Wayfinder alias remains in installable skill tree");
 require(!all_skill_text.contains("northstar-wayfinder"), "retired slash Wayfinder alias remains in installable skill tree");
+
+let router_text = fs::read_file(path::join(root, "references/router.md"));
+let handoff_contract_text = fs::read_file(path::join(root, "references/handoff-contract.md"));
+let orchestrator_text = fs::read_file(path::join(root, "references/modes/orchestrator.md"));
+let handoff_mode_text = fs::read_file(path::join(root, "references/modes/handoff.md"));
+let continuation_router = h2_section(router_text, "## Orchestrator-continuation activation");
+let continuation_contract = h3_section(handoff_contract_text, "### Orchestrator-continuation activation");
+let continuation_mode = h2_section(orchestrator_text, "## Fresh orchestrator continuation");
+let generic_template = fs::read_file(path::join(root, "assets/templates/northstar-handoff.md.template"));
+let generic_h2 = 0;
+for line in str::split_lines(generic_template) {
+    if str::starts_with(line, "## ") && !str::starts_with(line, "### ") {
+        generic_h2 += 1;
+    }
+}
+
+require(continuation_router.contains("handoff_mode: orchestrator-continuation") &&
+    continuation_router.contains("orchestrator_mode: planning-and-review") &&
+    continuation_router.contains("dispatch_authority: orchestrator"),
+    "router continuation activation is missing the three settled fields");
+require(continuation_router.contains("does not run the worker startup") &&
+    continuation_router.contains("the launch before those other routes"),
+    "router does not reject worker, planning-delegate, or handoff successor routing");
+require(continuation_contract.contains("handoff_mode: orchestrator-continuation") &&
+    continuation_contract.contains("Do not add a public mode or a second continuation template"),
+    "handoff contract continuation overlay is incomplete");
+require(main_text.contains("handoff_mode: orchestrator-continuation") &&
+    main_text.contains("does not run worker or planning-delegate"),
+    "skill outcome does not keep continuation in orchestrator mode");
+require(handoff_mode_text.contains("Do not use this mode as the successor runtime"),
+    "handoff-writing mode can be used as continuation runtime");
+require(!continuation_mode.contains("handoff_mode: worker-pr-loop") &&
+    !continuation_mode.contains("planning_mode: conversational-discovery"),
+    "continuation procedure activates worker or planning-delegate metadata");
+require(!fs::is_file(path::join(root, "assets/templates/northstar-orchestrator-continuation.md.template")),
+    "continuation added a public template");
+require(generic_h2 == 7 && !generic_template.contains("handoff_mode:"),
+    "generic handoff template is no longer seven sections without activation fields");
+
+require(continuation_mode.contains("stops planning, dispatch, review") &&
+    continuation_mode.contains("merge mutations for the transferred lane") &&
+    continuation_mode.contains("does not compete with the successor"),
+    "source does not yield the transferred lane");
+
+require(continuation_mode.contains("creates a separate `local` workspace") &&
+    continuation_mode.contains("Reject the transport plan if it uses `branch-off` worktree isolation") &&
+    continuation_mode.contains("different project path"),
+    "continuation launch does not reject worker isolation or a different project path");
+
+require(continuation_mode.contains("capitalized label") &&
+    continuation_mode.contains("`Orchestrator=true`") &&
+    continuation_mode.contains("omitted or lowercased"),
+    "continuation launch does not require the capitalized Orchestrator label");
+
+require(continuation_mode.contains("Read and follow <absolute-handoff-path>.") &&
+    continuation_mode.contains("transcript or a") &&
+    continuation_mode.contains("second task description"),
+    "continuation launch does not keep the absolute handoff as the only prompt");
+
+require(continuation_mode.contains("missing pin") &&
+    continuation_mode.contains("is not a launch failure") &&
+    continuation_mode.contains("Never use browser, computer-use") &&
+    continuation_mode.contains("UI automation"),
+    "unsupported pinning is not kept manual");
+
+require(continuation_mode.contains("identity with an ambiguous") &&
+    continuation_mode.contains("do not retry into") &&
+    continuation_mode.contains("a duplicate successor"),
+    "ambiguous continuation creation can duplicate the successor");
+
+require(continuation_mode.contains("Without Paseo") &&
+    continuation_mode.contains("Northstar remains") &&
+    continuation_mode.contains("return the absolute handoff path for manual launch"),
+    "continuation launch fails closed when Paseo tools are absent");
 
 log("Northstar command-skill surface: OK (" + commands.len() + " adapters, aggregate descriptions=" + aggregate_description_chars + " chars)");

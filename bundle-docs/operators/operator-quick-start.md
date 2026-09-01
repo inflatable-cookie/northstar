@@ -153,6 +153,15 @@ you talk with that delegate directly while the orchestrator continues unrelated
 work. The delegate opens a triage/research-only PR. The orchestrator reviews and
 merges it, then separately promotes the settled meaning into canonical planning.
 
+You can also ask the current orchestrator to hand its live lane to a fresh
+orchestrator. It writes and pushes one ordinary seven-section handoff, then
+yields that lane. With Paseo, the successor starts in a separate local workspace
+for the same project, with a current orchestrator profile, the capitalized
+`Orchestrator` label, and only the absolute handoff path as its prompt. Sidebar
+pinning stays a manual click unless Paseo later exposes a native pin control.
+Without Paseo you still get that absolute path and can launch the successor
+yourself. The old thread is not archived or deleted as part of the transfer.
+
 After a review requests changes, provider comments record the findings but do
 not wake a finished worker or planning delegate. A Paseo-backed orchestrator
 must prompt the same originating agent to read the comments, revise, validate,

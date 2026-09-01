@@ -1,6 +1,6 @@
 # 046 - Add Fresh Orchestrator Continuation
 
-Status: active; card 114 ready
+Status: active; card 114 implementation complete; awaiting exact-head review
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.045`, spec 026
@@ -86,5 +86,7 @@ front-door closeout.
 
 ## Next Task
 
-Execute card 114 from refreshed `main`. Stop after its reviewable PR; spec 034
-remains separate and not ready.
+Review the worker PR against all eight oracle rows and merge only after the
+exact-head and required-check gate passes. Spec 034 remains a separate
+not-ready language-package planning lane. Diversified model-routing remains a
+separate serial planning note and must not start from this card.

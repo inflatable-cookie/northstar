@@ -79,9 +79,9 @@ sequence.
 Roadmaps `g02.038` through `g02.045` are complete. The
 first-principles audit and closed dogfood cohort produced the structural
 validation reduction, active-authority reconciliation, machine-contract checks,
-and fixture proof; PR 18 merged at `1f6647a`. Execute active roadmap `g02.046`
-for fresh-orchestrator continuation. Spec 034 holds the separate
-modular-language-package plan and remains not ready for implementation.
+and fixture proof; PR 18 merged at `1f6647a`. Active roadmap `g02.046` card 114
+implementation is complete and awaiting exact-head review. Spec 034 holds the
+separate modular-language-package plan and remains not ready for implementation.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed
