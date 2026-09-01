@@ -332,6 +332,41 @@ Status: provisional opening checkpoint; operator conversation active
 - Reduction fixture: none.
 - Provider family: not supplied.
 
+### 010 — Loophole papercuts wave 40 Signal sandbox-broker contract
+
+Status: provisional; implementation complete, PR review pending
+
+- Worker class: `day-to-day`. The lane was bounded consumer and test-contract
+  adoption with local reasoning and no exceptional post-planning difficulty or
+  frontier implementation need.
+- Ready frontier: Loophole became ready only after the named upstream Signal PR
+  20 merge. The serial edge was `Signal PR 20 -> Loophole PR 25`; no other lane
+  was coupled.
+- Outcome: Loophole PR 25 is open at tested head
+  `de4e0f807ed7fed3369f74ef57daf26222a7767b`. It removes the test-time Cargo
+  broker-build fallback, requires `SIGNAL_PLUGIN_SANDBOX_BROKER_COMMAND`, adds
+  explicit `effigy test:plugin-isolation` provisioning, and closes only the
+  matching tracker entry. The Signal prerequisite is
+  `36242aacb010f14a3c7f4d70fe3e73c516bdf671`.
+- Operator intervention after dispatch: one same-worker continuation after
+  Signal PR 20 merged. The handoff and scope were unchanged; no replacement
+  lane was created.
+- Review: the initial worker pass stopped before PR because the downstream
+  non-`Send` `HardwareBackend` boundary blocked required proof. That cause was
+  repaired in the separate Signal PR 20. The resumed pass completed; no PR
+  review or revision round has run yet.
+- Control-plane friction: workspace labeling required a separate local
+  WebSocket assignment. The first agent-create payload omitted Paseo's combined
+  `provider/model` form; retry created no duplicate worker. The cross-repo Signal
+  prerequisite stayed explicit.
+- Documentation QA: none. Package formatting, docs QA, Northstar QA, and diff
+  checks passed. The workspace formatting gate was skipped for unrelated
+  pre-existing drift.
+- Reduction fixture: one-entry `PAPERCUTS.md` closeout, a timestamped evidence
+  log, and the small explicit Effigy task declaration. No docs false positive
+  occurred.
+- Provider family: not supplied.
+
 ## Material protocol defect
 
 The operator observed active orchestrator threads drop from roughly six-to-ten
@@ -339,6 +374,9 @@ to three after provider-limit failures. Northstar's live rule told orchestrators
 to treat the first refusal as a global capacity answer and wait for a worker to
 finish. Observation 008 shows the refused lane retained a valid handoff and
 workspace; observation 007 shows a genuine serial dependency edge separately.
+Observation 010 shows the complementary recovery path: once a real dependency
+cleared, the retained worker and authority chain resumed without a replacement
+or rebrief.
 
 The settled correction is promoted to `g02.044/112` and spec 026. Provider,
 model, and profile availability is lane-local routing state. It may reroute or
@@ -348,28 +386,31 @@ experiment; no consumer lane is changed to manufacture proof.
 
 ## Cohort progress
 
-- Observations received: 9.
+- Observations received: 10.
 - Completed cohort lanes: 1 of 8. Signal observation 004 is reviewed and merged;
   observation 007 passed review but was not yet merged, observation 008 stopped
   before implementation, and observation 005 is only a diagnostic kickoff.
-- Projects represented: 6, exceeding the four-project breadth gate (`Poodle`,
-  `Figmatic`, `Swallowtail`, `Signal`, `Effigy`, and `Acowtancy/Market`).
+- Projects represented: 7, exceeding the four-project breadth gate (`Poodle`,
+  `Figmatic`, `Swallowtail`, `Signal`, `Effigy`, `Acowtancy/Market`, and
+  `Loophole`).
 - Provider families counted: 1 of 2. Swallowtail supplied Claude explicitly;
   no provider family is inferred for the Market spend-limit packet.
 - Worker routing: observations 001–003 are pre-refresh frontier baselines;
   observations 004–005 are post-refresh day-to-day choices; observation 006 is
   a frontier lane whose two escalation axes are explicit; observation 009 is a
-  frontier planning delegate rather than an implementation worker.
+  frontier planning delegate rather than an implementation worker; observation
+  010 is another bounded day-to-day implementation choice.
 - Natural parallel shapes: 3. Observation 001 paired implementation with
   disjoint research; observation 002 paired two independent implementation
   lanes; observation 009 paired two planning delegates and an independent
   diagnostic session while preserving the serial promotion/readiness edge.
 - Completed review rounds: 8. Recorded blockers total two `planning-change`,
   nine `execution-miss`, five `oracle-gap`, and four `integration-drift` findings.
-- Validation-reduction fixtures: five—one token-scanner boundary false positive
-  and four benign accepted docs shapes from observations 002, 004, 006, and 007.
+- Validation-reduction fixtures: six—one token-scanner boundary false positive
+  and five benign accepted docs shapes from observations 002, 004, 006, 007,
+  and 010.
 - Control-plane or task-routing friction appears in observations 001–004 and
-  006–008; observations 005 and 009 report none.
+  006–008 and 010; observations 005 and 009 report none.
 
 ## Closeout
 
