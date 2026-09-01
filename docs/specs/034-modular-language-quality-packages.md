@@ -226,14 +226,42 @@ package-protocol findings before Rust copies that shape. No new language package
 starts until both existing implementations are independently distributed and
 the root payload no longer owns their policy or engines.
 
+## Migration And Embedded Cutover
+
+Each language gets one bounded overlap window. The external package is
+published, pinned in the official registry, and made authoritative before the
+embedded implementation is removed. During that window the embedded copy is
+frozen: new rules, workflow behavior, tooling changes, and ordinary fixes land
+in the package, not in two active implementations.
+
+The generic core route prefers the verified installed package. If official
+acquisition cannot complete during the overlap, core may use the frozen
+embedded implementation only after a visible migration-fallback notice naming
+the failed package identity and acquisition reason. It must not call that
+fallback the package, update it independently, or hide that the external route
+failed. An unsafe defect in the fallback pauses cutover planning rather than
+creating an open-ended dual-maintenance promise.
+
+Existing consumer activation markers, profile and deviation paths, rule IDs,
+workflow intent, and evidence formats remain valid across extraction. Package
+setup adopts those existing files without rewriting valid repository policy.
+Thin language command adapters move with the package; the root generic route
+continues to recognize ordinary language intent and existing activation without
+carrying the language catalogue or engine.
+
+The overlap closes only after exact source-to-package behavior reconciliation,
+independent package install and self-check proof, installed routing, rollback,
+offline fallback, current consumer activation, and one real consumer workflow
+pass for that language. The following migration milestone removes the embedded
+payload and its fallback in one change. From that point, a missing compatible
+package stops only the requested language workflow under the normal package
+contract.
+
 ## Compatibility And Trust Questions
 
 Planning must settle these before a roadmap becomes ready:
 
-1. migration of existing embedded Rust and TypeScript activations;
-2. source/install parity and release ownership after extraction;
-3. the bounded overlap or cutover point at which each embedded implementation
-   ends.
+1. source/install parity and release ownership after extraction.
 
 Effigy catalog packs were assessed as a candidate transport. The result below
 keeps the language-package contract provider-neutral and outside that
