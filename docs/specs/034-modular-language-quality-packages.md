@@ -151,17 +151,44 @@ Effigy is an execution adapter, not package identity or discovery authority. A
 package must declare any required runtime capability and stop that workflow
 plainly when the host cannot provide it.
 
+## Official Registry And Integrity
+
+Northstar core ships a small official-package registry as its automatic
+acquisition trust root. Each entry names the stable package ID, approved
+version, official source repository and package subpath, exact immutable source
+commit, expected package-tree digest, manifest digest, and compatible core
+range. A branch, mutable tag, repository name, skill name, or package
+self-assertion is never enough for no-prompt acquisition.
+
+An acquisition adapter may fetch source or an independently published artifact,
+but it must reconstruct and verify the same named package tree before install.
+The package manifest must match the registry identity, version, compatibility,
+and digests. Package self-checks run only after path-shape, content identity,
+manifest, and compatibility checks have succeeded; code from an unverified
+candidate does not execute.
+
+The installation receipt records the registry entry version, resolved source
+commit or artifact digest, verified package-tree and manifest digests, installed
+path, acquisition adapter, and activation result. Selection rechecks the
+installed manifest and content identity before routing, so later mutation,
+truncation, or path replacement makes the package unavailable rather than
+trusted by history.
+
+A package release may advance independently in the sibling repository, but it
+does not change the automatic-install default for an existing Northstar core.
+Updating that default requires a reviewed Northstar registry change with the
+new immutable identities and compatibility evidence. An operator may explicitly
+approve a newer source outside the bundled registry; that is an explicit trust
+decision and does not silently rewrite the official default.
+
 ## Compatibility And Trust Questions
 
 Planning must settle these before a roadmap becomes ready:
 
-1. official registry records and the independently addressable artifact shape;
-2. integrity and provenance evidence, plus the minimum package self-checks
-   required before activation;
-3. third-party allowlist ownership and revocation;
-4. migration of existing embedded Rust and TypeScript activations;
-5. source/install parity and release ownership after extraction;
-6. extraction order and the point at which embedded compatibility ends.
+1. third-party allowlist ownership and revocation;
+2. migration of existing embedded Rust and TypeScript activations;
+3. source/install parity and release ownership after extraction;
+4. extraction order and the point at which embedded compatibility ends.
 
 Effigy catalog packs were assessed as a candidate transport. The result below
 keeps the language-package contract provider-neutral and outside that
