@@ -543,20 +543,26 @@ Status: complete; evidence-only PR merged
 
 ### 017 — Acowtancy/Market card 162 Cream container-routed test
 
-Status: implementation complete; awaiting review
+Status: complete; exact head reviewed and merged
 
 - Worker class: `day-to-day`. This was a bounded Effigy routing papercut with no
   exceptional post-planning reasoning.
-- Ready frontier: parallel-safe with cards 160 and 163. Same-repository merge
-  and rebase ordering remains the named serial edge.
-- Outcome: Market PR 90 is open at exact head
-  `b39989584027ae6a51a7b47ea560e09656e578d7`; its focused suite passed 24 of
-  24 tests and the PR awaits review.
-- Operator intervention after dispatch: none.
-- Review: zero rounds and no blocking finding.
+- Ready frontier: parallel-safe with cards 160 and 163. The named
+  same-repository merge and rebase edge was observed and is settled for this
+  lane.
+- Outcome: Market PR 90 was accepted at exact head
+  `b39989584027ae6a51a7b47ea560e09656e578d7` and merged as
+  `66d2db029dc407f5e5448f8b7bb4305a2a87cabf`.
+- Operator intervention after dispatch: exact-head replay and merge only.
+- Review: one round, passed with no blocking finding. Independent replay covered
+  the configured plan, all 24 container tests, docs QA, Northstar QA, and the
+  diff check.
 - Control-plane friction: the pure Cream suite starts in `apps/cream` and cannot
   see root container configuration. The worker used a Cream-local board rather
-  than widening Effigy's routing contract.
+  than widening Effigy's routing contract. `gh pr merge --delete-branch`
+  completed the provider merge but returned nonzero because the local branch
+  remained checked out in its Paseo worktree; merge state required separate
+  verification.
 - Documentation QA: none.
 - Reduction fixture: card, `PAPERCUTS.md`, and evidence-log closeout around one
   Effigy routing edit.
@@ -596,14 +602,19 @@ rule, but agent termination, workspace ownership, and retained-work discovery
 need a post-freeze control-plane assessment. No protocol change is inferred
 from this packet alone.
 
+Observations 014 and 017 show a recurring merge-adapter distinction: the
+provider merge can succeed while local branch deletion fails because a Paseo
+worktree still owns the branch. The nonzero command exit is not the merge
+outcome. Both orchestrators verified the PR and merge commit before proceeding,
+so no ambiguous retry or duplicate merge occurred.
+
 ## Cohort progress
 
 - Observations received: 17.
-- Completed cohort lanes: 4 of 8. Signal observation 004, Loophole observation
-  010, Poodle observation 014, and Market observation 016 are merged;
-  observation 015 has changes requested, observation 017 awaits review,
-  observation 007 passed review but was not yet merged, and observation 005 is
-  only a diagnostic kickoff.
+- Completed cohort lanes: 5 of 8. Signal observation 004, Loophole observation
+  010, Poodle observation 014, and Market observations 016–017 are merged;
+  observation 015 has changes requested, observation 007 passed review but was
+  not yet merged, and observation 005 is only a diagnostic kickoff.
 - Projects represented: 7, exceeding the four-project breadth gate (`Poodle`,
   `Figmatic`, `Swallowtail`, `Signal`, `Effigy`, `Acowtancy/Market`, and
   `Loophole`).
@@ -628,7 +639,7 @@ from this packet alone.
   observations 015–017 ran one frontier lane beside two independent day-to-day
   lanes while keeping same-repository merge order serial. The required two
   multi-lane frontier observations are now present in observations 002 and 015.
-- Completed review rounds: 12. Recorded blockers total two `planning-change`,
+- Completed review rounds: 13. Recorded blockers total two `planning-change`,
   nine `execution-miss`, five `oracle-gap`, and five `integration-drift`
   findings, plus three observation-015 blockers whose Northstar codes were not
   supplied.
