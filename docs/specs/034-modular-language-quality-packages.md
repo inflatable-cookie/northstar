@@ -110,21 +110,58 @@ already installed. Without one, the requested workflow stops with the exact
 missing identity and a local-path installation route; core planning,
 orchestration, review, and documentation workflows continue normally.
 
+## Package Shape And Registration
+
+Each language package is a normal independently installable skill bundle. Its
+root contains the agent-facing `SKILL.md` plus a machine-readable
+`northstar-package.json`. Package-specific instructions, catalogues, schemas,
+profiles, templates, fixtures, tools, and optional Effigy catalog stay inside
+that bundle; they do not enter the root Northstar payload.
+
+The v1 manifest declares:
+
+- schema version, stable namespaced package ID, package version, and package
+  kind (`language-quality`);
+- compatible Northstar core range;
+- owned languages and optional framework overlays;
+- available workflow entrypoints (`everyday-authoring` and/or
+  `explicit-audit-and-repair`), without inventing unavailable projections;
+- required runtime capabilities and optional Effigy selectors;
+- package self-check entrypoint and the profile/schema versions it validates;
+- optional evidence-provider capabilities, which remain subject to consumer
+  profile activation and contract 004 authority.
+
+Source, resolved revision or artifact digest, installation time, and trust
+decision belong to the installer receipt rather than the package declaring its
+own integrity. Activation requires the manifest, receipt, content identity,
+core compatibility, entrypoints, and self-check to agree.
+
+Core discovers packages through the host's available-skill catalogue or an
+acquisition adapter's returned installed path. It reads the manifest before
+loading package instructions. It does not scan arbitrary home-directory paths,
+infer packages from names alone, or maintain a hard-coded router branch per
+language. A generic language-package route selects a compatible manifest and
+delegates to the declared workflow entrypoint. A package may expose thin command
+skills for direct use, but those adapters point to the same package authority
+and do not duplicate its rules.
+
+When Effigy is available, core or a thin adapter may execute declared package
+tasks through `effigy skill run --path <PACKAGE> ...` in the consumer context.
+Effigy is an execution adapter, not package identity or discovery authority. A
+package must declare any required runtime capability and stop that workflow
+plainly when the host cannot provide it.
+
 ## Compatibility And Trust Questions
 
 Planning must settle these before a roadmap becomes ready:
 
-1. package identity, manifest, core-compatibility range, and independently
-   addressable artifact shape;
-2. official package discovery and pinned acquisition mechanism;
-3. integrity and provenance evidence, plus the minimum package self-checks
+1. official registry records and the independently addressable artifact shape;
+2. integrity and provenance evidence, plus the minimum package self-checks
    required before activation;
-4. how package commands and modes register without editing or duplicating the
-   root router;
-5. third-party allowlist ownership and revocation;
-6. migration of existing embedded Rust and TypeScript activations;
-7. source/install parity and release ownership after extraction;
-8. extraction order and the point at which embedded compatibility ends.
+3. third-party allowlist ownership and revocation;
+4. migration of existing embedded Rust and TypeScript activations;
+5. source/install parity and release ownership after extraction;
+6. extraction order and the point at which embedded compatibility ends.
 
 Effigy catalog packs were assessed as a candidate transport. The result below
 keeps the language-package contract provider-neutral and outside that
