@@ -97,8 +97,15 @@ evidence.
 
 ## PR
 
-https://github.com/inflatable-cookie/northstar/pull/17
+https://github.com/inflatable-cookie/northstar/pull/17 — accepted head
+`72dc48f94db29de61ef56807de375249a12bb00a`, merged at `e5e8060` after one
+metadata-only revision.
+
+The global install matches the source payload exactly at 127 files. The seven
+other active `Orchestrator`-labelled workspaces were told to re-read the
+corrected mode and refresh their ready frontiers.
 
 ## Next
 
-Orchestrator exact-head review of this PR. The worker does not merge.
+Continue passive dogfood intake. A later provider-limit observation may test
+the correction; Northstar does not create that work itself.

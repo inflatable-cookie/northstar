@@ -96,14 +96,14 @@ rollover signal.
   merged at `8cfa0ae` after exact-head review)
 - `043-prefer-economical-worker-routing.md` (complete; card 111 merged through PR 15 at `d5acd75`)
 - `044-remove-global-capacity-gating.md` (complete; card 112 propagated
-  lane-local provider routing; PR pending exact-head review)
+  lane-local provider routing; PR 17 merged at `e5e8060`, the corrected skill
+  is installed, and active orchestrators were notified)
 
 ## Next Task
 
-Review and merge the `g02.044/112` PR. After merge and skill installation,
-notify active orchestrator-labelled threads to re-read the mode and resume
-every safe ready lane. The first-principles packet remains non-authoritative
-intake for the next planning discussion.
+Continue the passive live-orchestrator dogfood window. When its stop condition
+is met, evaluate the reduction experiment and separately plan modular language
+quality packs from the first-principles packet and operator decisions.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and

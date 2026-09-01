@@ -82,6 +82,5 @@ identity ambiguity, provider-route unavailability, and a real serial dependency.
 
 ## Next Task
 
-Orchestrator exact-head review of this PR. The worker does not merge. After
-merge and skill install, notify active orchestrator-labelled threads to re-read
-the corrected mode.
+Complete. PR 17 merged at `e5e8060`; the corrected 127-file skill payload is
+installed and all other active `Orchestrator`-labelled workspaces were notified.

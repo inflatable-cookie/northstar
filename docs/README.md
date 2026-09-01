@@ -72,7 +72,9 @@ Northstar system:
   review.
 - `g02.044/112` removed the accidental global-capacity interpretation: every
   safe ready lane launches without a global thread budget, and provider/profile
-  failures stay lane-local. PR pending exact-head review.
+  failures stay lane-local. PR 17 merged at `e5e8060`; the 127-file skill
+  payload is installed and all other `Orchestrator`-labelled workspaces were
+  notified to re-read it.
 - the concurrent first-principles planning delegate delivered its packet from
   `handoffs/20260901-110423-northstar-first-principles-audit.md`; it writes
   only its named triage packet. PR 16 merged at `d092599` as non-authoritative

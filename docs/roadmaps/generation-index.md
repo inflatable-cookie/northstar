@@ -76,10 +76,10 @@ sequence.
 
 ## Next Task
 
-Roadmaps `g02.038` through `g02.043` are complete. `g02.044/112` is implemented
-and awaiting exact-head review. After merge and skill install, notify active
-orchestrators to re-read the lane-local provider rule. The first-principles
-packet remains non-authoritative intake for the next planning discussion.
+Roadmaps `g02.038` through `g02.044` are complete. PR 17 merged at `e5e8060`;
+the corrected skill is installed and active orchestrators were notified.
+Continue the passive dogfood window, then evaluate the reduction experiment and
+the separate modular-language-pack planning lane.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed

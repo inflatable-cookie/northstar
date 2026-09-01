@@ -71,16 +71,15 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02.043` is implemented; card 111 made economical day-to-day profiles the
   worker default and frontier selection a two-axis exception. PR 15 merged at
   `d5acd75` after exact-head review.
-- `g02.044` is implemented; card 112 makes provider and profile availability
-  lane-local instead of a global worker-capacity gate. PR pending exact-head
-  review.
+- `g02.044` is complete; card 112 makes provider and profile availability
+  lane-local instead of a global worker-capacity gate. PR 17 merged at
+  `e5e8060`; the corrected 127-file skill payload is installed.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Review and merge the `g02.044/112` PR. After merge and skill installation,
-notify active orchestrator-labelled threads to re-read the corrected
-orchestration mode. The first-principles packet remains non-authoritative
-intake for the next planning discussion.
+Continue the passive live-orchestrator dogfood window. When its stop condition
+is met, evaluate the reduction experiment and separately plan modular language
+quality packs from the first-principles packet and operator decisions.

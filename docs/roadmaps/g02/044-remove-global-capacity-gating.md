@@ -8,7 +8,8 @@ Vision tags: `orchestration`, `parallelism`, `paseo`, `provider-routing`
 Governing refs: `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`,
 `docs/contracts/001-working-rules.md`,
 `bundle-docs/sections/07-delivery-framework-and-autonomy.md`
-Planning state: card 112 implemented; PR pending exact-head review
+Planning state: card 112 merged through PR 17 at `e5e8060`; skill installed and
+active orchestrators notified
 
 ## Problem
 
@@ -80,7 +81,6 @@ worker does not choose scheduler policy or local profile names.
 
 ## Next Task
 
-Orchestrator exact-head review and merge of the card 112 PR. After merge and
-skill install, notify active orchestrator-labelled threads to re-read the
-Northstar orchestration skill and continue their safe ready frontiers under the
-corrected lane-local provider rule.
+Continue the passive live-orchestrator dogfood window. Judge the correction
+against later provider-limit observations when they arrive; do not manufacture
+a recovery run.

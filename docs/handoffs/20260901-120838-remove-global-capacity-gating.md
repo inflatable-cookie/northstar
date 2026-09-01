@@ -5,7 +5,7 @@ handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
 handoff: single-file-path-only
-status: awaiting-review
+status: complete
 owner: repo maintainers
 created: 2026-09-01
 updated: 2026-09-01
@@ -81,7 +81,8 @@ lane's authority chain and avoiding duplicate agents.
   `git diff --check`.
 - **PR base/head:** `main` <- `worker/remove-global-capacity-gating`.
 - **PR URL:** https://github.com/inflatable-cookie/northstar/pull/17.
-- **Review state:** worker implementation complete; awaiting exact-head review.
+- **Review state:** accepted exact-head review at `72dc48f`; PR 17 merged at
+  `e5e8060`.
 - **Merge path:** orchestrator after accepted review of the current head and
   passing required checks.
 
