@@ -695,6 +695,28 @@ Status: complete; reviewed and merged
 - Reduction fixture: the `PAPERCUTS.md` closeout and short evidence-log update.
 - Provider family: not supplied.
 
+### 023 — Bovine Accelerator Desktop card 067 media browser navigation
+
+Status: complete; reviewed and merged
+
+- Worker class: `day-to-day`. This was bounded Svelte composition and focused
+  regression work with neither frontier escalation axis.
+- Ready frontier: ran safely beside Market card 160 and Bovine content work
+  with no cross-lane mutable overlap. Ordinary same-repository merge ordering
+  was the only potential serial edge.
+- Outcome: Bovine Accelerator Desktop PR 47 passed at exact head `6aa8a9fe4`
+  and merged at `833aa0b3c`.
+- Operator intervention after dispatch: none.
+- Review: one round, accepted with no blocking finding.
+- Control-plane friction: none. Handoff, workspace, sibling links, agent
+  creation, and finish notification all worked.
+- Documentation QA: none.
+- Reduction fixture: card 067's roadmap, card, and front-door transition from
+  `ready` to `PR pending exact-head review`, plus the short closeout-log and
+  index insertion. No prose-coupling issue appeared.
+- Provider family: xAI, inferred from the supplied route; the model name is
+  omitted from durable evidence.
+
 ## Material protocol defect
 
 The operator observed active orchestrator threads drop from roughly six-to-ten
@@ -753,18 +775,20 @@ enumeration; this packet does not justify polling workers.
 
 ## Cohort progress
 
-- Observations received: 22.
-- Completed cohort lanes: 8 of 8. Signal observation 004, Loophole observation
-  010, Poodle observations 014 and 019, Market observations 016–017 and 020,
-  and Effigy observation 022 are merged. The minimum cohort gate is met;
-  observation 021 remains provisional, observation 015 has changes requested,
-  observation 007 passed review but was not yet merged, and observation 005 is
-  only a diagnostic kickoff.
-- Projects represented: 7, exceeding the four-project breadth gate (`Poodle`,
-  `Figmatic`, `Swallowtail`, `Signal`, `Effigy`, `Acowtancy/Market`, and
-  `Loophole`).
+- Observations received: 23.
+- Completed cohort lanes: 9, against a minimum gate of 8. Signal observation
+  004, Loophole observation 010, Poodle observations 014 and 019, Market
+  observations 016–017 and 020,
+  Effigy observation 022, and Bovine Accelerator Desktop observation 023 are
+  merged. The minimum cohort gate is met; observation 021 remains provisional,
+  observation 015 has changes requested, observation 007 passed review but was
+  not yet merged, and observation 005 is only a diagnostic kickoff.
+- Projects represented: 8, exceeding the four-project breadth gate (`Poodle`,
+  `Figmatic`, `Swallowtail`, `Signal`, `Effigy`, `Acowtancy/Market`, `Loophole`,
+  and `Bovine Accelerator Desktop`).
 - Provider families counted: 2 of 2. Swallowtail, Figmatic, and Market supplied
-  Claude explicitly; Figmatic, Market, and Poodle supplied xAI.
+  Claude explicitly; Figmatic, Market, Poodle, and Bovine Accelerator Desktop
+  supplied xAI.
 - Worker routing: observations 001–003 are pre-refresh frontier baselines;
   observations 004–005 are post-refresh day-to-day choices; observation 006 is
   a frontier lane whose two escalation axes are explicit; observation 009 is a
@@ -781,8 +805,9 @@ enumeration; this packet does not justify polling workers.
   semantics; observation 019 completes the frontier conversational-planning
   lane opened in observation 009; observation 020 is another economical
   day-to-day repair choice; observation 021 is a bounded day-to-day Rust
-  repair; observation 022 is a long mechanical audit with settled boundaries.
-- Natural parallel shapes: 6. Observation 001 paired implementation with
+  repair; observation 022 is a long mechanical audit with settled boundaries;
+  observation 023 is another bounded day-to-day implementation choice.
+- Natural parallel shapes: 7. Observation 001 paired implementation with
   disjoint research; observation 002 paired two independent implementation
   lanes; observation 009 paired two planning delegates and an independent
   diagnostic session while preserving the serial promotion/readiness edge;
@@ -790,23 +815,25 @@ enumeration; this packet does not justify polling workers.
   lanes while keeping same-repository merge order serial; observation 018
   launched settled motion implementation beside interactive diagnosis and
   planning while limiting any future overlap to the named chunk; observation
-  020 refilled a safe day-to-day closeout lane beside continuing card 160. The
-  required two multi-lane frontier observations are present in observations 002
-  and 015.
-- Completed review rounds: 18. Recorded blockers total three `planning-change`,
+  020 refilled a safe day-to-day closeout lane beside continuing card 160;
+  observation 023 ran beside Market card 160 and disjoint Bovine content work.
+  The required two multi-lane frontier observations are present in
+  observations 002 and 015.
+- Completed review rounds: 19. Recorded blockers total three `planning-change`,
   ten `execution-miss`, five `oracle-gap`, and five `integration-drift`
   findings, plus three observation-015 blockers whose Northstar codes were not
   supplied.
-- Validation-reduction fixtures: fourteen—one token-scanner boundary false positive,
+- Validation-reduction fixtures: fifteen—one token-scanner boundary false positive,
   five benign accepted docs shapes from observations 002, 004, 006, 007, and
   010, the promoted-triage deletion from observation 013, and three concurrent
   closeout shapes from observations 015–017, plus the authority-aware triage
   compaction from observation 018 and historical-log repair from observation
   020, the bundled-inventory closeout from observation 021, and the compact
-  papercut closeout from observation 022.
+  papercut closeout from observation 022, plus the card-067 state transition
+  from observation 023.
 - Control-plane or task-routing friction appears in observations 001–004 and
   006–008, 010–011, 013–017, and 019–020; observations 005, 009, 012, and
-  018 and 021–022 report none.
+  018 and 021–023 report none.
 
 ## Closeout
 
