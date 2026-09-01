@@ -120,6 +120,10 @@ or copies multi-paragraph protocol text, treat that as a compression signal.
     and whether shared closeout is partitioned or reserved for a named
     orchestrator integration step. Record the reason any related lane was kept
     serial;
+  - for a worker handoff, the model capability profile and, when the worker is
+    frontier, both escalation reasons (exceptional reasoning difficulty after
+    planning, and highest priority or material consequence). Write `none` for
+    the frontier-worker justification when the worker is not frontier;
   - for a worker handoff, **required sibling worktree links**: each sibling
     repo the worktree needs, its absolute primary-checkout source, and the
     link name in the worktree container directory (the worktree's parent,

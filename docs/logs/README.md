@@ -32,6 +32,7 @@ Use logs as the third step in closeout:
 
 ## Recent active-lane evidence
 
+- `2026-09/01-110709-prefer-economical-worker-routing.md`
 - `2026-09/01-101853-make-orchestrator-parallel-first.md`
 - `2026-09/01-080443-repair-partial-rust-evidence-collection.md`
 - `2026-08/31-171710-delegate-conversational-feature-planning.md`

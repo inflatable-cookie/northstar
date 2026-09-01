@@ -1,6 +1,6 @@
 # 043 - Prefer Economical Worker Routing
 
-Status: active
+Status: complete
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.025`, `g02.035`, `g02.036`, `g02.037`, `g02.042`
@@ -8,7 +8,7 @@ Vision tags: `orchestration`, `workers`, `paseo`, `model-efficiency`
 Governing refs: `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`,
 `docs/contracts/001-working-rules.md`,
 `bundle-docs/sections/07-delivery-framework-and-autonomy.md`
-Planning state: card 111 ready for worker dispatch
+Planning state: card 111 implemented; awaiting orchestrator exact-head review
 
 ## Problem
 
@@ -86,5 +86,5 @@ choose local profile names or redefine their notes.
 
 ## Next Task
 
-Dispatch card `g02.043/111` from pushed planning state. The worker opens a PR;
-the orchestrator reviews the exact head and merges after acceptance and checks.
+Orchestrator exact-head review and check-gated merge of the card 111 PR. Then
+choose the next `g02` milestone from the generation runway.

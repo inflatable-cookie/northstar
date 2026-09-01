@@ -68,13 +68,15 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02.042` is complete; card 110 made orchestrator scheduling
   dependency-frontier and parallel-first while preserving serial safety gates.
   PR 14 merged at `8cfa0ae` after exact-head review.
-- `g02.043` is active; card 111 is ready to make economical day-to-day profiles
-  the worker default and frontier selection a two-axis exception.
+- `g02.043` is implemented; card 111 made economical day-to-day profiles the
+  worker default and frontier selection a two-axis exception. Awaiting
+  orchestrator exact-head review.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Dispatch `g02.043/111`. Keep the independent Signal papercut closure with the
+Review and merge the `g02.043/111` PR, then choose the next `g02` milestone
+from the generation runway. Keep the independent Signal papercut closure with the
 Signal orchestrator; do not duplicate it here.

@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-08-31
+Updated: 2026-09-01
 Architecture refs: docs/architecture/system-architecture.md
 
 ## Coverage Summary
@@ -33,7 +33,7 @@ skills.
 | planning delegate thread/worktree | operator-facing discovery and evidence capture | operator + delegate, under orchestrator dispatch | one named triage/research packet and planning PR | planning-delegate handoff, isolated branch, orchestrator promotion authority |
 | documentation projection subagent | mechanical planning-doc projection | orchestrator | exact named docs, templates, indexes, parity, and deterministic evidence from a settled brief | orchestrator projection template, full diff review, no Git/provider authority |
 | direct PR review thread | provider-facing review surface | reviewer + operator | named existing PR | `skills/northstar/references/modes/pr-review.md`, applicable repo authority, provider review record |
-| `worker thread/worktree` | bounded implementation surface | worker agent | assigned ready cards and branch | one committed handoff per worker lane under `docs/handoffs/`, explicit worker-mode metadata, batch cards, tests, commits, startup worktree-safety preflight |
+| `worker thread/worktree` | bounded implementation surface | worker agent | assigned ready cards and branch | one committed handoff per worker lane under `docs/handoffs/`, explicit worker-mode metadata, economical day-to-day default, frontier worker only when both escalation axes hold, batch cards, tests, commits, startup worktree-safety preflight |
 | PR review boundary | delivery and merge-control surface | orchestrator, with operator pause/override | worker branch against prepared base | PR metadata, exact reviewed head, checks, provider review record (formal review or comment), closeout log |
 
 ## Interfaces and Dependencies
@@ -50,7 +50,7 @@ skills.
 | Mechanical documentation projection | settled orchestrator brief + captured dirty state + allowed paths | named documentation changes and deterministic validation report | `001-working-rules`, `026-orchestrator-thread-and-worker-pr-loop` | Fast/low-cost, serial, no semantic or Git/provider authority; orchestrator reviews the full diff |
 | Conversational triage | operator conversation + agent observations | canonical docs or explicit removal | `030-conversational-triage-and-docs-cleanup` | Capture before deep dives; never execute directly from a note |
 | Docs cleanup | `/docs` inventory and classification | reworked canonical docs or operator question | `030-conversational-triage-and-docs-cleanup` | Inspect content and references before any move or removal |
-| Worker execution | explicit worker-mode handoff + startup worktree-safety preflight + ready cards | worker branch/worktree and evidence | `001-working-rules`, `002-agent-local-paths`, active batch cards | Only an orchestrator-dispatched worker uses the harness worktree or the operator-selected `AGENTS_WORKTREE_CONTAINER_DIR` when its starting context is unsuitable |
+| Worker execution | explicit worker-mode handoff + startup worktree-safety preflight + ready cards | worker branch/worktree and evidence | `001-working-rules`, `002-agent-local-paths`, active batch cards | Economical day-to-day default; frontier worker only when both escalation axes hold and both reasons are in the handoff. Only an orchestrator-dispatched worker uses the harness worktree or the operator-selected `AGENTS_WORKTREE_CONTAINER_DIR` when its starting context is unsuitable |
 | Paseo project lifecycle | committed `paseo.json` + primary-checkout Effigy link ledger | prepared sibling links, real repository setup, replayed worktree-local links | optional Paseo setup adapter | Setup is prepare -> project setup -> link; teardown unlinks worktree state and retains potentially shared sibling symlinks |
 | PR review and merge | worker branch/PR | accepted orchestrator verdict + passing checks + gated merge | `001-working-rules`, active cards | Review uses exact-head diff/check evidence and a provider record; same-identity GitHub runs use PR comments; changed heads require re-review; no second operator prompt unless local policy or an explicit pause requires it |
 | Direct PR review | operator request + existing PR | provider review record + chat summary | `001-working-rules`, applicable PR refs | Every blocking finding is posted on the PR; same-identity fallback uses one `Changes required` comment; no branch mutation or merge authority |

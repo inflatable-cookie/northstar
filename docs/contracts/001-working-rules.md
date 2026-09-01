@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-08-31
+Updated: 2026-09-01
 Depends on: docs/architecture/system-architecture.md
 Authority owners: repo maintainers
 Affects: bundle-docs, template-bundle, skills, docs, scripts
@@ -419,6 +419,23 @@ Starting an orchestrator-owned worker or planning-delegate lane pre-authorises
 the orchestrator to merge that lane's PR once it has reviewed the exact current
 head, recorded an accepted verdict on the provider, and confirmed every required
 check passes. A stricter repository rule or explicit operator pause still wins.
+
+Worker routing is economical by default. Select a matching non-frontier
+day-to-day profile from current adapter notes for ordinary implementation,
+bounded audits, and mechanical work. Long mechanical audits and documentation
+churn prefer fast/low-cost or mechanically oriented profiles even when their
+scope is broad.
+
+A frontier implementation worker requires both exceptional reasoning difficulty
+after planning and highest priority or material consequence, plus matching
+profile notes. Record both reasons in the handoff. Priority alone, complexity alone,
+file count, duration, or a risk-domain label is insufficient.
+
+Risky surfaces still need an explicit review oracle and frontier review. A
+well-specified persistence or public-API change may use a capable non-frontier
+worker while the orchestrator keeps material review. Unresolved designs return
+to planning. If no non-frontier profile fits ordinary work, report the gap; do
+not silently escalate. An operator-named profile remains an explicit override.
 
 An operator may ask the orchestrator to spin off a frontier planning delegate
 for a named topic while the orchestrator continues unrelated work. The

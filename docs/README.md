@@ -66,8 +66,8 @@ Northstar system:
   surface, unresolved authority, or capacity limit
 - `g02.042/110` delivered that default and merged through PR 14 at
   `8cfa0ae`
-- `g02.043/111` is ready to make economical day-to-day profiles the normal
-  worker choice and reserve frontier workers for lanes that satisfy both
-  highest-priority/material-consequence and exceptional-reasoning gates
+- `g02.043/111` implemented economical day-to-day worker routing; frontier
+  workers now require both highest-priority/material-consequence and
+  exceptional-reasoning gates. Awaiting orchestrator exact-head review.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup
