@@ -76,10 +76,10 @@ sequence.
 
 ## Next Task
 
-Roadmaps `g02.038` through `g02.042` are complete. Card 110 made orchestrator
-scheduling dependency-frontier and parallel-first without weakening serial
-safety or review gates; PR 14 merged at `8cfa0ae` after exact-head review.
-Choose the next `g02` milestone from the generation runway.
+Roadmaps `g02.038` through `g02.042` are complete. `g02.043/111` is ready to
+make economical day-to-day profiles the normal worker choice and reserve
+frontier implementation for lanes that satisfy both escalation axes. Dispatch
+card 111 from pushed planning state.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed

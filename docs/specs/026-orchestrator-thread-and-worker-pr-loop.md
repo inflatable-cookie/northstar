@@ -506,7 +506,14 @@ worker pushes.
 ## Model and runtime policy
 
 Model IDs are runtime configuration, not Northstar contract values. Select by
-capability:
+current role-profile notes. Worker routing is economical by default: choose a
+non-frontier profile whose notes cover ordinary day-to-day implementation,
+bounded audits, or mechanical work before considering a frontier worker. Task
+size, file count, duration, or the bare presence of a security, persistence,
+concurrency, public-API, deployment, or multi-version surface does not by itself
+make a worker lane frontier work.
+
+Select by capability:
 
 - frontier/high effort for the orchestrator and material review;
 - frontier/high effort for an operator-facing planning delegate;
@@ -514,9 +521,21 @@ capability:
   orchestrator settles meaning;
 - capable/medium effort for bounded, mechanically direct implementation;
 - fast/low effort for read-only reconnaissance and log reduction;
-- frontier/high effort for a worker card touching security, persistence,
-  concurrency, public APIs, deployment, multi-version behavior, or multiple
-  plausible designs; pause before dispatch when its review oracle is not explicit.
+- fast/low-cost or mechanically oriented profiles for long audits, broad
+  documentation work, and other token-heavy jobs whose decisions and repair
+  boundaries are already settled;
+- frontier/high effort for an implementation worker only when the lane is both
+  highest-priority or materially consequential **and** exceptionally difficult
+  to reason through after planning, and the selected profile's notes explicitly
+  fit that combination. Record both reasons in the handoff. Priority alone,
+  complexity alone, broad scope, or a risk-domain label is insufficient.
+
+Risky surfaces still require a clear review oracle and frontier review. When
+multiple plausible designs or an unresolved contract choice remain, return to
+planning rather than spending a frontier worker to choose architecture. If no
+configured non-frontier profile fits an ordinary lane, report the profile gap
+instead of silently promoting it to frontier. An operator-named profile remains
+an explicit override.
 
 Use deterministic Effigy, Git, test, diff, and PR-check commands for evidence.
 Provider-native subagents, worktree managers, JSON output, resume, and PR helpers
