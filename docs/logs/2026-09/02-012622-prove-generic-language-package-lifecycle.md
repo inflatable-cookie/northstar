@@ -88,4 +88,8 @@ activation was not changed.
 
 ## PR
 
-PR to be recorded after opening: `main` <- `worker/prove-generic-language-package-lifecycle`.
+https://github.com/inflatable-cookie/northstar/pull/22 — opened for card
+`g02.048/117` against `main` from
+`worker/prove-generic-language-package-lifecycle`. Exact tested head:
+`cab4cad` (all validation above ran on this commit); the PR head advances only
+with this closeout record. Exact-head review pending; do not merge.

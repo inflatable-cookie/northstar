@@ -5,7 +5,7 @@ handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
 handoff: single-file-path-only
-status: active
+status: complete
 owner: repo maintainers
 created: 2026-09-02
 updated: 2026-09-02
@@ -108,3 +108,26 @@ and fixture proof against the eight-row review oracle.
 7. Report the PR URL and exact head through Paseo. Do not merge. If review asks
    for changes, remain on this branch and repair only the classified in-bounds
    findings.
+
+## Completion Record
+
+- PR: https://github.com/inflatable-cookie/northstar/pull/22
+  (`main` <- `worker/prove-generic-language-package-lifecycle`).
+- Exact tested head: `cab4cad` — all required validation (focused package
+  checks, isolated 168-file skill-install parity, `effigy qa:docs`, `effigy
+  qa`, `git diff --check`) ran on this commit before the PR opened. The PR
+  head advances only with this completion record and the dated log entry.
+- Implementation: canonical `sha256:` manifest/tree digest framing,
+  `operator-trust.schema.json` and `lifecycle-state.schema.json` with
+  positive/negative fixtures, generic manifest-field resolver and
+  transactional lifecycle (CAS state, immutable receipts, rollback, offline
+  routing, revocation, visible notices), and all eight review-oracle rows
+  falsified. Policy-free fixture tree identity
+  `sha256:653ce7f63ddc46da3381314d561dea3657b4eaf59eb8aa1c57b4ba046d9f90f0`.
+- Validation and limits: see
+  `docs/logs/2026-09/02-012622-prove-generic-language-package-lifecycle.md`.
+- Closeout: card 117 marked complete; roadmap 048, g02/README,
+  generation-index, roadmaps/README, docs/README, contract-index, and spec 034
+  readiness gate reconciled. Card 118 remains blocked for post-merge refresh.
+- Next: exact-head orchestrator review. Do not merge. In-bounds review
+  findings are repaired on this branch.
