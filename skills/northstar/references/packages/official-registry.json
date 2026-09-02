@@ -1,5 +1,16 @@
 {
   "schema_version": "1.0.0",
-  "registry_version": "1.0.0",
-  "packages": []
+  "registry_version": "1.2.0",
+  "packages": [
+    {
+      "package_id": "@northstar/typescript-quality",
+      "version": "0.1.0",
+      "repository": "https://github.com/inflatable-cookie/northstar-language-packs",
+      "subpath": "packages/typescript",
+      "commit": "d18dc33b32365216ff2b5ad2c29dbd6bee0bf5ec",
+      "tree_digest": "sha256:767671328a32f45610aba4462df7b3bdc87c62fd0ab2af8e6aee866aa15a334a",
+      "manifest_digest": "sha256:e5e32f2baeda2e901b8c327436adf0bfd5955a9de080887660684ad4583185ca",
+      "compatible_core_range": ">=0.2.0 <1.0.0"
+    }
+  ]
 }

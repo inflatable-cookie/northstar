@@ -118,3 +118,44 @@ touching closeout docs.
    and open a reviewable PR with exact tested head, evidence, and limits.
 7. Report through Paseo. Do not merge. If review asks for changes, remain on
    this branch and repair only classified in-bounds findings.
+
+## Worker Report (2026-09-02)
+
+The registry/routing step is complete on `worker/pin-typescript-package-canary`
+from pushed `main` at `e36838c`. The official registry pins the accepted
+canary identity at registry version `1.1.0`; the generic installed-package
+route and the router's TypeScript audit route send explicit audit intent
+through the installed package, with the frozen embedded payload reachable only
+behind the visible fallback notice. The canary exposed a card-117 defect
+(self-check receipts polluting the installed tree and breaking selection
+re-verification); fixed generically by executing the declared self-check on a
+byte-identical throwaway copy, with an oracle regression. Falsified with
+`oracle-14 official-pin-route`, an independent spec-034 digest implementation
+over the materialized accepted commit, and a real-package transcript.
+Validation: standalone oracle, `effigy check:language-packages`, isolated
+skill-install parity, `effigy qa:docs`, `effigy qa`, `git diff --check`. The
+embedded TypeScript payload is byte-identical to `origin/main`. Registry
+promotion is withheld pending the replacement-identity revalidation (see
+addendum); Jetstream remains serial. Evidence:
+`docs/logs/2026-09/02-201200-pin-typescript-package-canary.md`.
+
+Review addendum (2026-09-02): exact-head review of PR 23 at `057dd28` returned
+CHANGES REQUIRED with findings upstream of this branch: the pinned package's
+installed setup/record invocation is not operational (embedded-catalogue
+command identity plus un-normalized relay args in the relocated scripts), and
+the submitted oracle never exercised that route against a separate consumer.
+The handoff forbids editing the public package source, so this is a planning
+stop, not a branch repair. PR 23 and this workspace stay intact; the frozen
+fallback must not hide the failure. Paused here awaiting the replacement
+immutable identity from the orchestrator's external package-source repair,
+then: repin, oracle repair, revalidation. All three are now done.
+
+Replacement-identity addendum (2026-09-02): the external installed-invocation
+repair merged as `d18dc33b` (language-packs PR 2). This branch repinned the
+official registry to the replacement identity at registry version `1.2.0`,
+repaired the oracle gap with the pinned package's reviewed proof harness
+executed against the lifecycle `installed_path` through the exact public
+`effigy skill run --path` surface (decoy consumer, relay args verbatim,
+package tree byte-identical before/after, consumer-only attribution), reran
+the full canary transcript and all validation, and pushed the new exact head
+for re-review. Jetstream remains serial.

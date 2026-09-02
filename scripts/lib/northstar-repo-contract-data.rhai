@@ -66,6 +66,7 @@ fn required_files() {
         "skills/northstar/references/packages/lifecycle-state.schema.json",
         "skills/northstar/references/packages/language-package-host-v1.schema.json",
         "skills/northstar/references/packages/official-registry.json",
+        "skills/northstar/references/packages/installed-package-route.md",
         "skills/northstar/scripts/language-package-host.py",
         "skills/northstar/scripts/language-package-lifecycle.ts",
         "skills/northstar/assets/fixtures/language-packages/negative/manifest-invocation/missing-invocation.json",
