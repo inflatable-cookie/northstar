@@ -6,8 +6,8 @@ branch: worker/close-typescript-package-canary
 worktree_slug: close-typescript-package-canary
 base_branch: main
 handoff_path: /Users/tom/Dev/projects/northstar/docs/handoffs/20260902-223400-close-typescript-package-canary.md
-pr_url: pending
-tested_head: pending
+pr_url: https://github.com/inflatable-cookie/northstar/pull/25
+tested_head: ddff347cdfffa5f74822d02639aaeaf484295516
 ---
 
 # Close TypeScript Package Canary
@@ -88,6 +88,7 @@ merge.
 
 ## Worker Closeout
 
-The documentation/evidence reconciliation is complete. The reviewable PR URL
-and exact tested head will be filled after the final validation commit; no
-implementation worker was launched and cards 119-120 remain closed.
+The documentation/evidence reconciliation is complete. Reviewable PR:
+https://github.com/inflatable-cookie/northstar/pull/25. Exact validated
+evidence head: `ddff347cdfffa5f74822d02639aaeaf484295516`. No implementation
+worker was launched and cards 119-120 remain closed.
