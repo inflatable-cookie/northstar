@@ -15,10 +15,10 @@ single-pilot bucket.
 | Harden setup, nested-authority adoption, and posture classification so downstream repos can install the spine without hand adaptation. | active | `docs/specs/020-formalize-nested-docs-authority-setup.md`, `docs/specs/022-formalize-repo-posture-classification.md` | pending |
 | Keep execution autonomy bounded by ready cards, lane budgets, pause signals, and a file-based orchestrator/worker PR boundary instead of ad-hoc continuation prompts. | active | `docs/contracts/001-working-rules.md`, `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `bundle-docs/sections/07-delivery-framework-and-autonomy.md` | accept operator-provided live feedback |
 | Keep always-loaded agent context useful, human, and bounded while preserving safety, authority, and project intent. | complete | `docs/contracts/003-agent-instruction-surface.md`, `docs/specs/028-agent-instruction-surface-optimization.md` | accept later operator feedback |
-| Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | execute g02.048/118 TypeScript package canary |
+| Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | close out g02.048 Batch B and reach the card-119 operator checkpoint |
 | Add a genuinely long-horizon planning route without conflating it with readiness review. | active | `docs/specs/029-northstar-long-horizon-planning.md`, `skills/northstar/references/modes/atlas.md` | Non-Northstar scenario and operator confirmation |
 | Preserve useful conversational context and keep `/docs` drift recoverable without blind deletion. | active | `docs/specs/030-conversational-triage-and-docs-cleanup.md`, `docs/contracts/001-working-rules.md`, `skills/northstar/references/modes/cleanup-docs.md` | live triage and cleanup feedback |
-| Raise language-code quality through evidence-bound routed workflows without making every implementation part of the root payload. | active | `docs/contracts/004-language-quality-pack.md`, `docs/architecture/system-architecture.md`, `docs/roadmaps/g02/048-extract-modular-language-quality-packages.md` | merge the card-118 fallback-notice repair, then resume Jetstream PR 4 |
+| Raise language-code quality through evidence-bound routed workflows without making every implementation part of the root payload. | active | `docs/contracts/004-language-quality-pack.md`, `docs/architecture/system-architecture.md`, `docs/roadmaps/g02/048-extract-modular-language-quality-packages.md` | operator checkpoint before g02.048/119 Rust extraction |
 
 Update this runway only when generation-level intent changes, a milestone
 materially advances or closes a goal, or rollover is being considered. Do not
@@ -103,9 +103,9 @@ rollover signal.
 - `046-add-fresh-orchestrator-continuation.md` (complete; card 114 merged through PR 19 at `b99d19c`)
 - `047-diversify-model-routing-across-runs.md` (complete; PR 20 merged at
   `08ad810` after exact-head review)
-- `048-extract-modular-language-quality-packages.md` (active; card 117 complete,
-  card 118 repinned to the repaired package with the operational-oracle repair,
-  cards 119-120 planned in dependency order)
+- `048-extract-modular-language-quality-packages.md` (active; cards 117 and 118
+  complete, cards 119-120 closed in dependency order, and card 119 awaiting a
+  separate operator checkpoint and readiness refresh)
 
 ## Next Task
 
@@ -114,11 +114,13 @@ lifecycle. Card 118's public repository merged package PR 1 as `09ef174`, and
 its reviewed installed-invocation repair merged as `d18dc33b` (package PR 2).
 PR 23 pins the replacement identity at registry version `1.2.0`, adds the
 non-vacuous installed setup/record operational proof, and merged as `5951dfb`.
-Jetstream PR 4 exposed a missing operational frozen-fallback notice after the
-host stop. The core repair is on `worker/repair-language-package-fallback-notice`
-and now includes request-ID correlation plus a schema-validated exact-version
-overlap registry; cards 119-120 remain serial behind merge, consumer re-review
-and reconciliation.
+The accepted Jetstream PR 4 canary passed exact-head review at
+`177b75c80e5310d84fdd227d0229b261d59d6271` and squash-merged as
+`dbf7561d3845bf344f9ae4fae3296d1601b074bf`. Its bounded fallback, installed
+audit, byte-preservation, and hydrated-build evidence is accepted; four
+pre-existing editor failures and current-Poodle `ResolvedIconGeometry` API
+drift remain limits. Cards 119-120 remain closed. Stop at the operator
+checkpoint before any card-119 readiness or dispatch.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and

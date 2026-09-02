@@ -67,8 +67,9 @@ planning and must not start from this card.
 Fresh-orchestrator continuation `g02.046/114` is complete and merged through PR
 19 at `b99d19c`. Diversified model routing `g02.047/115` is complete and merged
 through PR 20 at `08ad810`.
-Modular language-package extraction `g02.048` is active. Card 117 merged.
-Card 118's core frozen-fallback notice is repaired with request-ID correlation
-and a schema-validated exact-version overlap registry; Jetstream PR 4 stays
-paused until that Northstar PR merges and the retained worker reruns forced
-fallback. Cards 119-120 stay closed.
+Modular language-package extraction `g02.048` is active. Cards 117 and 118 are
+complete. The accepted Jetstream canary proved installed routing, the visible
+bounded fallback, and consumer/package byte preservation; four pre-existing
+editor failures and current-Poodle `ResolvedIconGeometry` API drift remain
+recorded limits. Cards 119-120 stay closed; stop at the operator checkpoint
+before any card-119 readiness or dispatch.

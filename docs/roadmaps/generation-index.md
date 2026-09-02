@@ -1,7 +1,7 @@
 # Roadmap Generation Index
 
 Status: active
-Updated: 2026-09-01
+Updated: 2026-09-02
 
 ## Mode
 
@@ -88,9 +88,11 @@ merged its generic lifecycle proof through PR 22 at `75db6f5`. Card 118's
 public source repository merged package PR 1 as `09ef174` for
 `@northstar/typescript-quality` `0.1.0`; its invocation repair merged as
 `d18dc33b`. Core registry/routing PR 23 merged as `5951dfb`. Jetstream PR 4
-exposed the missing operational fallback notice; the core repair is on
-`worker/repair-language-package-fallback-notice`. Cards 119-120 remain
-dependency-ordered behind merge and consumer re-review.
+passed exact-head review at `177b75c80e5310d84fdd227d0229b261d59d6271` and
+squash-merged as `dbf7561d3845bf344f9ae4fae3296d1601b074bf`. The accepted
+bounded canary proof preserves installed routing, fallback visibility, and
+consumer/package bytes; four pre-existing editor failures and current-Poodle
+`ResolvedIconGeometry` API drift remain limits. Cards 119-120 remain closed.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed
