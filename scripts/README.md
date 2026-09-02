@@ -253,13 +253,18 @@ Card 117 extends the same checker with the generic installed-package runtime:
     interrupted-write, and identity/store negatives.
 18. card 118 official registry pin and route: the shipped registry carries
     exactly the accepted `@northstar/typescript-quality` `0.1.0` canary
-    identity at registry version 1.1.0 (schema conformance plus exact-value
-    assertions), official receipts record the actual authorizing registry
-    version and entry digest, and the oracle proves the official-pin route:
-    visible fallback trigger on acquisition failure, detection never
-    acquires, installed offline routing, drift stops instead of silently
-    routing, rollback reopens the route without fetching, and the official
-    pin outranks the operator allowlist.
+    identity (replacement commit `d18dc33b` from the reviewed
+    installed-invocation repair) at registry version 1.2.0 (schema
+    conformance plus exact-value assertions), official receipts record the
+    actual authorizing registry version and entry digest, and the oracle
+    proves the official-pin route: visible fallback trigger on acquisition
+    failure, detection never acquires, installed offline routing, drift
+    stops instead of silently routing, rollback reopens the route without
+    fetching, and the official pin outranks the operator allowlist. The
+    package's own reviewed `prove-installed-invocation.sh` (pinned in the
+    package) supplies the non-vacuous installed setup/record proof through
+    the public `effigy skill run --path <installed_path>` surface against a
+    decoy consumer.
 
 The exact same surface is exercised with Effigy absent
 (`bun run skills/northstar/scripts/language-package-lifecycle.ts oracle

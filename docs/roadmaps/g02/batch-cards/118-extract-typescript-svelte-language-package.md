@@ -1,6 +1,6 @@
 # 118 - Extract TypeScript/Svelte Language Package
 
-Status: in progress; PR 23 changes required on an upstream package-source defect; paused awaiting the external source repair and replacement identity
+Status: in progress; replacement identity repinned and installation-oracle repaired after the reviewed external source repair; PR 23 awaiting re-review
 Owner: repo maintainers
 Updated: 2026-09-02
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -116,16 +116,17 @@ external mutations; workers must stop at reviewable heads.
   target;
 - [x] the declared direct self-check executes from the installed package with
   its runtime capabilities enforced;
-- [ ] package source/install parity and immutable registry promotion pass;
-  parity proof stands, promotion withheld until the replacement package
-  identity passes review;
-- [ ] installed, offline, rollback, and acquisition-failure fallback routes
-  pass; lifecycle-level proof stands, but exact-head review found the pinned
-  package's installed setup/record invocation non-operational and the
-  operational route oracle missing; the fresh Jetstream route remains serial;
+- [x] package source/install parity and immutable registry promotion pass;
+  replacement identity `d18dc33b` digest-proven and repinned at registry
+  version `1.2.0`; promotion completes at PR 23 re-review and merge;
+- [x] installed, offline, rollback, and acquisition-failure fallback routes
+  pass, now including the non-vacuous installed setup/record proof through
+  the exact public `effigy skill run --path <installed_path>` surface against
+  a decoy consumer; the fresh Jetstream route remains serial;
 - [x] all new TypeScript package development lands externally during overlap;
 - [x] root fallback is frozen and visibly identified, not silently preferred;
-- [ ] full Northstar, package, and consumer QA pass.
+- [ ] full Northstar, package, and consumer QA pass; Northstar and package QA
+  pass on the replacement identity, consumer QA (Jetstream) remains serial.
 
 ## Review Oracle
 
@@ -228,11 +229,37 @@ replacement identity, adds the non-vacuous installed setup/record oracle
 through the exact public consumer surface, and revalidates. PR 23 stays open;
 the frozen fallback must not be used to hide the failure.
 
+Replacement-identity worker (2026-09-02): the external installed-invocation
+repair merged as `d18dc33b` (language-packs PR 2). This branch repinned the
+registry to `sha256:7676713…334a` / `sha256:e5e32f2b…85ca` at registry version
+`1.2.0` and updated the checker's exact-pin assertions and the oracle's
+provenance expectation. The `oracle-gap` is repaired with the replacement
+package's reviewed proof harness (`scripts/prove-installed-invocation.sh`,
+pinned in the package at `d18dc33b`) executed against the lifecycle
+`installed_path`: through the exact public
+`effigy skill run --path <installed_path> typescript-quality:{setup,record}
+--repo <consumer> -- …` surface it proves the old embedded-catalogue command
+identity fails against the installed package, a decoy consumer `northstar`
+catalogue wins the old prefix but never the new surface, relay sentinel args
+appear verbatim in the machine output, setup writes the activation block and
+profile only to the consumer, recorder init/assess/complete/finalize writes
+audit records only under the consumer target with the package catalogue
+digest, and the installed package tree is byte-identical before and after.
+Reran the full canary transcript against the replacement identity
+(fallback trigger, detection stop, install with real self-check, offline
+routing, drift stop, restore, refused version-drifted variant, consumer
+preservation) and the independent digest proof (21 files). Validation:
+standalone oracle, `effigy check:language-packages`, isolated skill-install
+parity, pinned-package `effigy qa`, `effigy qa`, `git diff --check`.
+Evidence: `docs/logs/2026-09/02-201200-pin-typescript-package-canary.md`.
+
 ## Next Task
 
-Paused on this branch awaiting the replacement immutable identity from the
-external package-source repair. On its return: repin, repair the oracle gap,
-rerun the canary evidence, and revalidate; then the orchestrator re-reviews
-before Jetstream dispatch. Cards 119-120 remain closed until canary
-reconciliation.
-
+The external installed-invocation repair merged as `d18dc33b` (language-packs
+PR 2). This branch repinned the registry to the replacement identity at
+registry version `1.2.0`, added the non-vacuous installed setup/record
+operational proof through the exact public `effigy skill run --path
+<installed_path>` surface against a decoy consumer, and revalidated the full
+canary evidence. The orchestrator runs exact-head re-review of PR 23; after
+merge, dispatch the Jetstream worker for the fresh installed-package audit.
+Cards 119-120 remain closed until canary reconciliation.

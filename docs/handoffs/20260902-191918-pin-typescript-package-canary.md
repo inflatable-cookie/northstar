@@ -148,4 +148,14 @@ The handoff forbids editing the public package source, so this is a planning
 stop, not a branch repair. PR 23 and this workspace stay intact; the frozen
 fallback must not hide the failure. Paused here awaiting the replacement
 immutable identity from the orchestrator's external package-source repair,
-then: repin, oracle repair, revalidation.
+then: repin, oracle repair, revalidation. All three are now done.
+
+Replacement-identity addendum (2026-09-02): the external installed-invocation
+repair merged as `d18dc33b` (language-packs PR 2). This branch repinned the
+official registry to the replacement identity at registry version `1.2.0`,
+repaired the oracle gap with the pinned package's reviewed proof harness
+executed against the lifecycle `installed_path` through the exact public
+`effigy skill run --path` surface (decoy consumer, relay args verbatim,
+package tree byte-identical before/after, consumer-only attribution), reran
+the full canary transcript and all validation, and pushed the new exact head
+for re-review. Jetstream remains serial.

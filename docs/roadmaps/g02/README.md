@@ -18,7 +18,7 @@ single-pilot bucket.
 | Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | execute g02.048/118 TypeScript package canary |
 | Add a genuinely long-horizon planning route without conflating it with readiness review. | active | `docs/specs/029-northstar-long-horizon-planning.md`, `skills/northstar/references/modes/atlas.md` | Non-Northstar scenario and operator confirmation |
 | Preserve useful conversational context and keep `/docs` drift recoverable without blind deletion. | active | `docs/specs/030-conversational-triage-and-docs-cleanup.md`, `docs/contracts/001-working-rules.md`, `skills/northstar/references/modes/cleanup-docs.md` | live triage and cleanup feedback |
-| Raise language-code quality through evidence-bound routed workflows without making every implementation part of the root payload. | active | `docs/contracts/004-language-quality-pack.md`, `docs/architecture/system-architecture.md`, `docs/roadmaps/g02/048-extract-modular-language-quality-packages.md` | card 118 paused on upstream package-source repair; PR 23 open |
+| Raise language-code quality through evidence-bound routed workflows without making every implementation part of the root payload. | active | `docs/contracts/004-language-quality-pack.md`, `docs/architecture/system-architecture.md`, `docs/roadmaps/g02/048-extract-modular-language-quality-packages.md` | card 118 repinned to repaired package; PR 23 awaiting re-review |
 
 Update this runway only when generation-level intent changes, a milestone
 materially advances or closes a goal, or rollover is being considered. Do not
@@ -104,21 +104,19 @@ rollover signal.
 - `047-diversify-model-routing-across-runs.md` (complete; PR 20 merged at
   `08ad810` after exact-head review)
 - `048-extract-modular-language-quality-packages.md` (active; card 117 complete,
-  card 118 changes-required on an upstream package-source defect, cards 119-120
-  planned in dependency order)
+  card 118 repinned to the repaired package with the operational-oracle repair,
+  cards 119-120 planned in dependency order)
 
 ## Next Task
 
 `g02.048/117` merged through PR 22 at `75db6f5` after proving the generic
-lifecycle. Card 118's public repository merged package PR 1 as `09ef174` for
-`@northstar/typescript-quality` `0.1.0`. The registry/routing worker pinned
-that identity and opened core PR 23, but exact-head review returned CHANGES
-REQUIRED: the pinned package's installed setup/record invocation is not
-operational, and the oracle never exercised that route against a separate
-consumer. The repair is upstream (public package source), so the worker is
-paused on branch `worker/pin-typescript-package-canary` awaiting the external
-package-source repair's replacement identity; then repin, oracle repair, and
-revalidation precede Jetstream. Cards 119-120 remain serial behind the canary.
+lifecycle. Card 118's public repository merged package PR 1 as `09ef174`, and
+its reviewed installed-invocation repair merged as `d18dc33b` (package PR 2).
+PR 23 now pins the replacement identity at registry version `1.2.0` and adds
+the non-vacuous installed setup/record operational proof through the exact
+public `effigy skill run --path` surface against a decoy consumer; the
+registry/routing worker pushed the repaired head for re-review. Jetstream and
+cards 119-120 remain serial behind accepted review.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and

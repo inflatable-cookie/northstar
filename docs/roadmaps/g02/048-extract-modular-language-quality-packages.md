@@ -45,11 +45,10 @@ before it becomes ready.
   verification, installation, activation, rollback, offline, and routing.
 - [ ] **Batch B — TypeScript canary:** card 118 publishes, pins, installs, and
   proves the TypeScript/Svelte explicit-audit package under one bounded overlap.
-  Registry/routing is implemented and core PR 23 is open, but exact-head
-  review returned CHANGES REQUIRED on an upstream package-source defect: the
-  pinned package's installed setup/record invocation is not operational. The
-  worker is paused awaiting the external source repair's replacement identity;
-  Jetstream proof and overlap closure remain serial behind it.
+  Registry/routing is implemented in core PR 23, now repinned to the reviewed
+  installed-invocation repair (`d18dc33b`, registry version `1.2.0`) with the
+  non-vacuous installed setup/record operational proof added; the repaired
+  head awaits re-review. Jetstream proof and overlap closure remain serial.
 - [ ] **Batch C — Rust extraction:** card 119 publishes, pins, installs, and
   proves Rust everyday authoring plus explicit audit and its Cargo engine.
 - [ ] **Batch D — root reduction:** card 120 removes both frozen embedded

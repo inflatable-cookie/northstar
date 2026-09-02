@@ -1617,9 +1617,11 @@ validate_registry_instance(registry, registry_schema, "official-registry.json");
 // Card 118: the official registry carries exactly the accepted TypeScript
 // canary identity pinned by the reviewed registry change. Schema conformance
 // above proves shape; these assertions pin the accepted values themselves so
-// identity drift fails the checker rather than silently re-pinning.
-require(registry["registry_version"] == "1.1.0",
-    "official-registry.json must record registry_version 1.1.0 for the card-118 pin");
+// identity drift fails the checker rather than silently re-pinning. The
+// replacement identity follows the reviewed installed-invocation repair
+// (language-packs PR 2, commit d18dc33b).
+require(registry["registry_version"] == "1.2.0",
+    "official-registry.json must record registry_version 1.2.0 for the card-118 replacement pin");
 let registry_packages = registry["packages"];
 require(registry_packages.len() == 1,
     "official-registry.json must contain exactly the accepted canary entry, found " + registry_packages.len());
@@ -1629,9 +1631,9 @@ let canary_expectations = #{
     "version": "0.1.0",
     "repository": "https://github.com/inflatable-cookie/northstar-language-packs",
     "subpath": "packages/typescript",
-    "commit": "09ef1743dd8fc18bae3bf04fae791f1d7d4e5daf",
-    "tree_digest": "sha256:0fcd5c58296f168895b66f2472621d49761f7786ea2ad1ebeefb801040967d6b",
-    "manifest_digest": "sha256:ed95883c428ef43f0f02d38d60bf8d50e6e29313f5751c1b2a5744157a5b5362",
+    "commit": "d18dc33b32365216ff2b5ad2c29dbd6bee0bf5ec",
+    "tree_digest": "sha256:767671328a32f45610aba4462df7b3bdc87c62fd0ab2af8e6aee866aa15a334a",
+    "manifest_digest": "sha256:e5e32f2baeda2e901b8c327436adf0bfd5955a9de080887660684ad4583185ca",
     "compatible_core_range": ">=0.2.0 <1.0.0",
 };
 for key in canary_expectations.keys() {

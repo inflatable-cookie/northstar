@@ -117,3 +117,50 @@ setup/record oracle through the exact public consumer surface (task source
 at `installed_path`, decoy consumer target, relay arguments proven, embedded
 `northstar` catalogue unavailable), update every receipt/route/evidence
 claim, and revalidate.
+
+## Replacement Identity Repin (2026-09-02)
+
+The external installed-invocation repair merged as `d18dc33b` (language-packs
+PR 2). This branch repinned and revalidated:
+
+- **Repin**: `official-registry.json` now pins commit `d18dc33b` with tree
+  `sha256:767671328a32f45610aba4462df7b3bdc87c62fd0ab2af8e6aee866aa15a334a`
+  and manifest
+  `sha256:e5e32f2baeda2e901b8c327436adf0bfd5955a9de080887660684ad4583185ca`
+  at registry version `1.2.0`. The checker's exact-pin assertions and
+  oracle-14's provenance expectation follow. An independent Python
+  implementation of the spec-034 framing over the materialized replacement
+  commit reproduced both digests exactly (21 files: the 20-file shape plus
+  the reviewed `scripts/prove-installed-invocation.sh`).
+- **Operational oracle repair** (`execution-miss` + `oracle-gap`): the
+  replacement package's reviewed proof harness was executed against the
+  lifecycle `installed_path`, chaining registry pin → acquisition → installed
+  identity → public invocation. Through
+  `effigy skill run --path <installed_path> typescript-quality:setup --repo
+  <consumer> --json -- apply <consumer> .` and the matching recorder
+  `init/assess/complete/finalize`, the harness proves: the old
+  `northstar/typescript-quality:*` identity fails against the installed
+  package ("task catalog prefix `northstar` not found"); a decoy consumer
+  carrying a `northstar` catalogue wins the old prefix but is never used by
+  the new surface; relay sentinel args appear verbatim in machine output
+  (`"--","apply"`, `"--","init"`); setup writes the activation block and
+  profile only into the consumer; recorder writes audit records only under
+  `<consumer>/.effigy/typescript-quality/audits/` bound to the package catalogue
+- **Rerun canary transcript** against the replacement identity: fallback
+  trigger (reference host, official git pin) stops visibly; detection does
+  not acquire; operator local-path trust for the exact pinned identity
+  activates through the lifecycle surface including the real package
+  self-check; resolve routes offline; drift stops and byte-exact restore
+  reopens; a hand-made version-drifted variant is refused by the package's
+  own self-check ("package version drifted") with selection, receipts, and
+  route unchanged — an identity-guard negative; installed payload stays free
+  of `.effigy` pollution; the declared direct self-check exits 0 from an
+  installed-root-shaped copy.
+- **Validation**: standalone oracle, `effigy check:language-packages`
+  (replacement pin), isolated skill-install parity (179 files), pinned-package
+  `effigy qa` (check, setup/recorder self-tests, installed-route proof),
+  `effigy qa`, `git diff --check origin/main...HEAD`. The embedded TypeScript
+  payload remains byte-identical to `origin/main`.
+
+Registry promotion remains review-gated: PR 23 is updated to this exact head
+for re-review. Jetstream stays serial.
