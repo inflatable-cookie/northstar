@@ -17,9 +17,7 @@
     "explicit_audit_repair": "references/modes/fixture-audit.md"
   },
   "runtime_capabilities": {
-    "required_commands": [
-      "sh"
-    ],
+    "required_commands": [],
     "optional_effigy_selectors": []
   },
   "self_check": {
@@ -29,7 +27,10 @@
     ],
     "validated_schema_versions": [
       "1.0.0"
-    ]
+    ],
+    "invocation": {
+      "type": "direct"
+    }
   },
   "evidence_providers": []
 }

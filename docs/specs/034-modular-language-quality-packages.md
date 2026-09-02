@@ -429,10 +429,10 @@ the fixture protocol, TypeScript, Rust, and embedded-removal batches.
 The design gate is satisfied and card 113 is closed. Roadmap g02.048 is
 compiled. Card 116 merged through PR 21; its readiness review promoted the
 missing digest and lifecycle-state boundary. Card 117 proved the generic lifecycle
-(byte-exact digest vectors, operator trust and lifecycle state, atomic CAS,
-identity-bound routing, transactional acquire/update/rollback, offline
-routing, revocable trust, generic routing); PR 22 review accepted the
-byte-level repair and returned two planning-change findings (portable core
-host/API for non-Effigy routing; explicit self-check runner/invocation
-contract). Card 117 is blocked on those decisions. Cards 118-120 remain
-blocked until their named dependencies and readiness refreshes pass.
+against the host-protocol and self-check invocation decisions promoted here
+(byte-exact digest vectors, operator trust and lifecycle state, the
+`language-package-host.v1` machine contract with operational entrypoints from
+an installed skill, explicit self-check invocation, atomic CAS, identity-
+bound routing, transactional acquire/update/rollback, offline routing,
+revocable trust). PR 22 is open for exact-head re-review. Cards 118-120
+remain blocked until their named dependencies and readiness refreshes pass.

@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0.0",
-  "package_id": "@northstar/invalid-kind-fixture",
+  "package_id": "@northstar/language-fixture",
   "version": "0.1.0",
-  "kind": "general-tool",
+  "kind": "language-quality",
   "compatible_core_range": ">=0.2.0 <1.0.0",
   "supported_languages": [
     "fixture-lang"
@@ -21,7 +21,7 @@
     "optional_effigy_selectors": []
   },
   "self_check": {
-    "entrypoint": "scripts/self-check.rhai",
+    "entrypoint": "scripts/self-check.sh",
     "validated_profile_versions": [
       "1.0.0"
     ],
@@ -29,7 +29,7 @@
       "1.0.0"
     ],
     "invocation": {
-      "type": "direct"
+      "type": "command"
     }
   },
   "evidence_providers": []

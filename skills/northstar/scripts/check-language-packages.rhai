@@ -1477,6 +1477,29 @@ fn test_lifecycle_schema_fail_closed(valid_trust, trust_schema, valid_lifecycle,
     require(lifecycle_failed_closed, "lifecycle schema unsupported keyword did not fail closed");
 }
 
+fn require_comment_stripped_source(source, comment_prefix) {
+    let code_lines = [];
+    for line in str::split_lines(source) {
+        let trimmed = str::trim(line);
+        if !str::starts_with(trimmed, comment_prefix) {
+            code_lines.push(line);
+        }
+    }
+    let code = "";
+    for line in code_lines {
+        code += line;
+        code += "\n";
+    }
+    code
+}
+
+fn require_clean_code(code, label) {
+    require(!regex::is_match("(?i)\\b(effigy|rust|cargo|typescript|svelte|clippy|eslint|biome|claude|codex|openai|anthropic)\\b", code),
+        label + " contains a forbidden dependency, provider name, or language branch");
+    require(!code.contains("process::") && !code.contains("command::"),
+        label + " can launch a subprocess");
+}
+
 fn require_surface_clean(surface_source, label) {
     // Only the marked surface slice is scanned: the oracle harness below the
     // marker is the adversarial proof and legitimately names production
@@ -1488,22 +1511,28 @@ fn require_surface_clean(surface_source, label) {
     // Strip comments so the scan proves the executable code carries no
     // language branch, Effigy dependency, or provider name, not that prose
     // never names them.
-    let code_lines = [];
-    for line in str::split_lines(slice) {
-        let trimmed = str::trim(line);
-        if !str::starts_with(trimmed, "//") {
-            code_lines.push(line);
+    let code = require_comment_stripped_source(slice, "//");
+    require_clean_code(code, label);
+}
+
+fn require_python_host_clean(python_source, label) {
+    // Python comments start with '#': strip them and scan the executable code.
+    let code = require_comment_stripped_source(python_source, "#");
+    require_clean_code(code, label);
+}
+
+fn validate_host_messages(oracle_dir, host_schema) {
+    let validated = 0;
+    for file in fs::list_recursive(oracle_dir) {
+        if str::ends_with(file, ".json") &&
+            (file.contains("/host-protocol/requests/") || file.contains("/host-protocol/results/")) {
+            let message = json::read_file(file);
+            validate_schema_node(message, host_schema, "host message " + file);
+            validated += 1;
         }
     }
-    let code = "";
-    for line in code_lines {
-        code += line;
-        code += "\n";
-    }
-    require(!regex::is_match("(?i)\\b(effigy|rust|cargo|typescript|svelte|clippy|eslint|biome|claude|codex|openai|anthropic)\\b", code),
-        label + " contains a forbidden dependency, provider name, or language branch");
-    require(!code.contains("process::") && !code.contains("command::"),
-        label + " can launch a subprocess");
+    require(validated > 0, "oracle produced no language-package-host.v1 messages to validate");
+    log("card-117 host messages: OK (" + validated + " request/result messages schema-validated)");
 }
 
 fn validate_oracle_receipts(oracle_dir, receipt_schema) {
@@ -1523,9 +1552,13 @@ fn run_card_117_oracle(northstar_skill_root, manifest_schema) {
     let surface_path = path::join(northstar_skill_root, "scripts/language-package-lifecycle.ts");
     require(fs::is_file(surface_path), "missing generic lifecycle surface: " + surface_path);
 
-    // The surface is provider-neutral: scan its code (comments stripped) for
-    // language branches, Effigy, providers, and subprocess escape.
+    // The surface and the conforming python3 host are provider-neutral: scan
+    // their code (comments stripped) for language branches, Effigy, providers,
+    // and subprocess escape.
     require_surface_clean(fs::read_file(surface_path), "language-package-lifecycle.ts");
+    let python_host_path = path::join(northstar_skill_root, "scripts/language-package-host.py");
+    require(fs::is_file(python_host_path), "missing conforming host: " + python_host_path);
+    require_python_host_clean(fs::read_file(python_host_path), "language-package-host.py");
 
     let fixture_root = path::join(northstar_skill_root, "assets/fixtures/language-packages/policy-free-fixture");
     let oracle_dir = fs::make_temp_dir("northstar-oracle-");
@@ -1547,8 +1580,9 @@ fn run_card_117_oracle(northstar_skill_root, manifest_schema) {
         "oracle-8 routing-is-generic: PASS",
         "oracle-9 trust-restrictions-and-receipt-provenance: PASS",
         "oracle-10 concurrency-atomic-cas: PASS",
-        "oracle-11 self-check-execution: PASS",
+        "oracle-11 self-check-invocation: PASS",
         "oracle-12 identity-binding-and-immutable-store: PASS",
+        "oracle-13 host-protocol-portable: PASS",
         "card-117 oracle: PASS",
     ] {
         require(output.contains(marker), "card-117 oracle missing marker: " + marker);
@@ -1628,7 +1662,18 @@ test_lifecycle_schema_fail_closed(trust_fixture_doc, trust_schema, lifecycle_fix
 
 // Drive the provider-neutral lifecycle surface (Bun CLI, no Effigy involved)
 // and validate its outputs against the frozen schemas.
+let host_schema = load_and_validate_schema_file(packages_ref_root, "language-package-host-v1.schema.json", "language-package-host-v1");
+
+let invocation_negatives_root = path::join(northstar_skill_root, "assets/fixtures/language-packages/negative/manifest-invocation");
+expect_manifest_rejection("missing-invocation",
+    json::read_file(path::join(invocation_negatives_root, "missing-invocation.json")), manifest_schema, "missing required field");
+expect_manifest_rejection("unknown-invocation-type",
+    json::read_file(path::join(invocation_negatives_root, "unknown-invocation-type.json")), manifest_schema, "failed oneOf schema validation");
+expect_manifest_rejection("command-without-command",
+    json::read_file(path::join(invocation_negatives_root, "command-without-command.json")), manifest_schema, "failed oneOf schema validation");
+
 let oracle_dir = run_card_117_oracle(northstar_skill_root, manifest_schema);
 validate_oracle_receipts(oracle_dir, receipt_schema);
+validate_host_messages(oracle_dir, host_schema);
 
 log("Northstar language package machine contracts: OK (3 Draft 2020-12 schemas, bounded evaluator for frozen vocabulary across all variants, schema mutation & fail-closed proof, SemVer numeric ranges, path containment, trust/source receipt variants, deep policy-free proof, staged sibling isolation proof, 9 mandatory negative oracle invariants, portable contracts; card 117: provider-neutral Bun lifecycle surface with canonical byte-exact digest vectors, operator trust & lifecycle schemas, atomic CAS lifecycle state, immutable receipts, identity-bound routing, transactional acquire/update/rollback, offline local routing, revocable trust, generic manifest-field routing, declared self-check execution, 8 review-oracle rows plus restrictions/provenance/concurrency falsified)");

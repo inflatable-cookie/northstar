@@ -18,8 +18,8 @@
 //
 // Independent identity vectors (computed from the canonical framing with a
 // separate reference implementation, not derived by this code):
-//   fixture manifest: sha256:bfd357c0e39785c974147e7521e6d39da0c121c2842a25bc7148535a640fdf45
-//   fixture tree:     sha256:125c0daf6de56f00ae8f293425b587af767a1bacfacac3711c042e9b56ae40d9
+//   fixture manifest: sha256:b9cdf39bbf2ae4fc2aeee656d2c8dc655c0faa951fbeec255eb887f210a683f9
+//   fixture tree:     sha256:b8e76dfdc87d84904ada0620425c0a94200532d11207e3d1339626fb2df85aa3
 //   nul content:      sha256:2d454a684186557b9d4a6b1d1ad71b2fd35653221a57da3a0a3c1c1cdce51c0c
 //   non-utf8 content: sha256:e47ead3733f036191bc07eca4279a634a6482e585b29b939a3bfac5225d0cd50
 //   multibyte:        sha256:ee719bb79ec611fd44274dab22543c4ac2ca459b803a27c4829df028b2804990
@@ -29,6 +29,7 @@
 // GENERIC-SURFACE-SCAN-BEGIN
 import { createHash, randomUUID } from "node:crypto";
 import { spawn, spawnSync } from "node:child_process";
+import type { SpawnSyncReturns } from "node:child_process";
 import * as fs from "node:fs";
 import * as path from "node:path";
 
@@ -38,13 +39,18 @@ const PORTABLE_PATH = /^[a-zA-Z0-9_-][a-zA-Z0-9_.-]*(?:\/[a-zA-Z0-9_-][a-zA-Z0-9
 const SEMVER = /^[0-9]+\.[0-9]+\.[0-9]+$/;
 const PACKAGE_ID = /^@[a-z0-9-]+\/[a-z0-9-]+$/;
 
-const FIXTURE_MANIFEST_DIGEST = "sha256:bfd357c0e39785c974147e7521e6d39da0c121c2842a25bc7148535a640fdf45";
-const FIXTURE_TREE_DIGEST = "sha256:125c0daf6de56f00ae8f293425b587af767a1bacfacac3711c042e9b56ae40d9";
+const FIXTURE_MANIFEST_DIGEST = "sha256:b9cdf39bbf2ae4fc2aeee656d2c8dc655c0faa951fbeec255eb887f210a683f9";
+const FIXTURE_TREE_DIGEST = "sha256:b8e76dfdc87d84904ada0620425c0a94200532d11207e3d1339626fb2df85aa3";
 const V_NUL = "sha256:2d454a684186557b9d4a6b1d1ad71b2fd35653221a57da3a0a3c1c1cdce51c0c";
 const V_NONUTF8 = "sha256:e47ead3733f036191bc07eca4279a634a6482e585b29b939a3bfac5225d0cd50";
 const V_MULTI = "sha256:ee719bb79ec611fd44274dab22543c4ac2ca459b803a27c4829df028b2804990";
 const V_EXE = "sha256:b026027495f9869e30fb7ee14ac23b5e29b580db1df3d66537339c9ab9555d98";
 const V_NOEXE = "sha256:3571f0cbec1c1703ada683d25a71704dec379f9af80cbebc099d521ec879793d";
+
+interface SelfCheckInvocation {
+  type: "direct" | "command";
+  command?: string;
+}
 
 interface Manifest {
   schema_version: string;
@@ -57,7 +63,7 @@ interface Manifest {
   available_workflows: string[];
   entrypoints: Record<string, string>;
   runtime_capabilities: { required_commands: string[]; optional_effigy_selectors: string[] };
-  self_check: { entrypoint: string; validated_profile_versions: string[]; validated_schema_versions: string[] };
+  self_check: { entrypoint: string; invocation: SelfCheckInvocation; validated_profile_versions: string[]; validated_schema_versions: string[] };
   evidence_providers: string[];
 }
 
@@ -154,6 +160,7 @@ interface AcquireOutcome {
   notice: string;
   receiptDigest?: string;
   treeDigest?: string;
+  manifestDigest?: string;
   installDir?: string;
 }
 
@@ -167,7 +174,7 @@ interface AcquireOptions {
   language: string;
   workflow: string;
   coreVersion: string;
-  adapter: () => string;
+  adapter: (pin: Pin) => string;
   intent: "workflow_request" | "activation" | "detection";
 }
 
@@ -658,6 +665,21 @@ function checkSemverCompatibility(range: string, coreVersion: string): boolean {
 
 // ---- trust pin and restrictions ----
 
+function hostAcquisitionAdapter(): (pin: Pin) => string {
+  // Reference host acquisition: a local_path pin stages from its resolved
+  // source path; any other source requires a transport this reference host
+  // does not provide and stops with a capability notice.
+  return (pin: Pin) => {
+    const identity = pin.entry.source_identity;
+    if (identity === undefined || identity.type !== "local_path") {
+      throw new Error("host transport capability unavailable for source type " + String(identity?.type ?? "none"));
+    }
+    const staged = stagedDir("northstar-staged-");
+    copyTree(String(identity.path), staged);
+    return staged;
+  };
+}
+
 function findPin(registry: RegistryDoc, trustDoc: TrustDoc, packageId: string, version: string): Pin | null {
   for (const entry of registry.packages) {
     if (entry.package_id === packageId && entry.version === version) {
@@ -721,15 +743,13 @@ function findCommand(cmd: string): string | null {
   return null;
 }
 
-function resolveSelfCheckRunner(manifest: Manifest): string {
-  const commands = manifest.runtime_capabilities.required_commands;
-  check(commands.length > 0, "package declares no runtime command for self-check; cannot execute " + manifest.self_check.entrypoint);
-  const runner = commands[0];
-  check(findCommand(runner) !== null, "required runtime command not available on this host: " + runner);
-  return runner;
-}
-
 function runPackageSelfCheck(stagedRoot: string, manifest: Manifest): { output: string; exit: number } {
+  // Explicit invocation contract: `direct` executes the verified entrypoint
+  // with [package_root]; `command` executes the declared command (which must
+  // appear in runtime_capabilities.required_commands) with
+  // [resolved_entrypoint, package_root]. Both use the package root as the
+  // working directory. There is no shell interpolation, no argument template,
+  // no inferred runner, and no meaning attached to required_commands order.
   const entry = manifest.self_check.entrypoint;
   check(isSafePackageRelativePath(entry), "self-check entrypoint violates containment");
   const entryPath = path.join(stagedRoot, entry);
@@ -741,10 +761,21 @@ function runPackageSelfCheck(stagedRoot: string, manifest: Manifest): { output: 
   }
   check(st.isFile(), "self-check entrypoint is not a regular file: " + entry);
   check(!st.isSymbolicLink(), "self-check entrypoint must not be a symlink: " + entry);
-  const runner = resolveSelfCheckRunner(manifest);
-  const resolved = findCommand(runner) as string;
-  const result = spawnSync(resolved, [entryPath, stagedRoot], { encoding: "utf8" });
-  check(result.error === undefined, "self-check execution failed: " + String(result.error));
+  const invocation = manifest.self_check.invocation;
+  const cwd = stagedRoot;
+  let result: SpawnSyncReturns<string>;
+  if (invocation.type === "direct") {
+    check((st.mode & 0o111) !== 0, "self-check entrypoint is not executable: " + entry);
+    result = spawnSync(entryPath, [stagedRoot], { cwd, encoding: "utf8" });
+  } else {
+    const command = invocation.command as string;
+    check(manifest.runtime_capabilities.required_commands.includes(command),
+      "self-check command runner is not declared in runtime_capabilities.required_commands: " + command);
+    const resolved = findCommand(command);
+    check(resolved !== null, "required runtime command not available on this host: " + command);
+    result = spawnSync(resolved, [entryPath, stagedRoot], { cwd, encoding: "utf8" });
+  }
+  check(result.error === undefined, "self-check launch failed: " + String(result.error));
   const output = String(result.stdout ?? "") + String(result.stderr ?? "");
   return { output, exit: result.status === null ? -1 : result.status };
 }
@@ -770,6 +801,12 @@ function parseManifest(raw: unknown, context: string): Manifest {
   asStringArray(capabilities.optional_effigy_selectors, context + ".runtime_capabilities.optional_effigy_selectors");
   const selfCheck = asRecord(doc.self_check ?? {}, context + ".self_check");
   check(isSafePackageRelativePath(selfCheck.entrypoint), context + " self_check.entrypoint violates containment");
+  const invocationRaw = asRecord(selfCheck.invocation ?? {}, context + ".self_check.invocation");
+  const invocationType = asString(invocationRaw.type, context + ".self_check.invocation.type");
+  check(invocationType === "direct" || invocationType === "command", context + " self_check.invocation.type must be direct or command");
+  if (invocationType === "command") {
+    asString(invocationRaw.command, context + ".self_check.invocation.command");
+  }
   asStringArray(selfCheck.validated_profile_versions ?? [], context + ".self_check.validated_profile_versions");
   asStringArray(selfCheck.validated_schema_versions ?? [], context + ".self_check.validated_schema_versions");
   for (const forbidden of ["official", "is_official", "trusted", "trust_level", "allowlisted"]) {
@@ -897,7 +934,14 @@ function acquireAndActivate(opts: AcquireOptions): AcquireOutcome {
     enforceRouteRestrictions(trustDoc, registry, packageId, version, identity, installed.reference.manifest_digest, workflow, consumerActivationValid(consumerDir, packageId, version).scope);
     const routeNotice = "routed " + packageId + " " + workflow + " local-only identity=" + identity;
     notice(routeNotice);
-    return { status: "routed", notice: routeNotice };
+    return {
+      status: "routed",
+      notice: routeNotice,
+      treeDigest: identity,
+      manifestDigest: installed.reference.manifest_digest,
+      receiptDigest: installed.reference.receipt_digest,
+      installDir: installed.reference.installed_path,
+    };
   }
 
   if (intent === "detection") {
@@ -926,7 +970,7 @@ function acquireAndActivate(opts: AcquireOptions): AcquireOutcome {
     " target=" + path.join(stateRoot, "installed") +
     " workflow=" + workflow);
 
-  const stagedRoot = adapter();
+  const stagedRoot = adapter(pin);
 
   const stagedManifestPath = path.join(stagedRoot, "northstar-package.json");
   check(fs.existsSync(stagedManifestPath), "staged payload missing northstar-package.json");
@@ -1012,7 +1056,14 @@ function acquireAndActivate(opts: AcquireOptions): AcquireOutcome {
     " at " + installDir;
   notice(activateNotice);
 
-  return { status: "activated", notice: activateNotice, receiptDigest, treeDigest: pin.entry.tree_digest, installDir };
+  return {
+    status: "activated",
+    notice: activateNotice,
+    receiptDigest,
+    treeDigest: pin.entry.tree_digest,
+    manifestDigest: pin.entry.manifest_digest,
+    installDir,
+  };
 }
 
 // ---- rollback ----
@@ -1050,6 +1101,164 @@ function rollbackSelected(stateRoot: string, trustDoc: TrustDoc, targetReceiptDi
   notice(n);
   return n;
 }
+
+// ---- language-package-host.v1 adapter ----
+//
+// Provider-neutral JSON request/result machine contract. A host maps its
+// native catalogue, filesystem identity, atomic state, acquisition, and
+// process capabilities onto resolve, acquire_activate, and rollback. No
+// bundled language runtime or control plane is a consumer prerequisite; this
+// file is one reference host, and a conforming host may implement the same
+// messages natively.
+
+interface HostRequest {
+  protocol_version: string;
+  operation: "resolve" | "acquire_activate" | "rollback";
+  intent: "workflow_request" | "activation" | "detection";
+  package_id: string;
+  version: string;
+  language: string;
+  workflow: string;
+  core_version: string;
+  consumer_scope?: string;
+  consumer_dir: string;
+  state_root: string;
+  target_receipt_digest?: string;
+}
+
+interface HostResult {
+  protocol_version: string;
+  status: "routed" | "activated" | "rolled_back" | "stopped";
+  notice: string;
+  tree_digest?: string;
+  manifest_digest?: string;
+  installed_path?: string;
+  receipt_digest?: string;
+}
+
+type HostCapability = "catalogue" | "identity" | "atomic" | "process" | "acquisition";
+
+const OP_CAPABILITIES: Record<HostRequest["operation"], HostCapability[]> = {
+  resolve: ["catalogue", "identity"],
+  acquire_activate: ["catalogue", "identity", "atomic", "process", "acquisition"],
+  rollback: ["catalogue", "identity", "atomic"],
+};
+
+function parseHostRequest(raw: unknown, context: string): HostRequest {
+  const doc = asRecord(raw, context);
+  check(asString(doc.protocol_version, context + ".protocol_version") === "1.0.0", context + " has unsupported protocol_version");
+  const operation = asString(doc.operation, context + ".operation");
+  check(operation === "resolve" || operation === "acquire_activate" || operation === "rollback", context + " has invalid operation");
+  const intent = asString(doc.intent, context + ".intent");
+  check(intent === "workflow_request" || intent === "activation" || intent === "detection", context + " has invalid intent");
+  check(PACKAGE_ID.test(asString(doc.package_id, context + ".package_id")), context + " has invalid package_id");
+  check(SEMVER.test(asString(doc.version, context + ".version")), context + " has invalid version");
+  asString(doc.language, context + ".language");
+  const workflow = asString(doc.workflow, context + ".workflow");
+  check(workflow === "everyday_authoring" || workflow === "explicit_audit_repair", context + " has invalid workflow");
+  check(SEMVER.test(asString(doc.core_version, context + ".core_version")), context + " has invalid core_version");
+  if (doc.consumer_scope !== undefined) {
+    asString(doc.consumer_scope, context + ".consumer_scope");
+  }
+  asString(doc.consumer_dir, context + ".consumer_dir");
+  asString(doc.state_root, context + ".state_root");
+  if (operation === "rollback") {
+    requireCanonicalDigest(doc.target_receipt_digest, context + ".target_receipt_digest");
+  }
+  return raw as HostRequest;
+}
+
+function hostTrustDoc(stateRoot: string): TrustDoc {
+  const p = path.join(stateRoot, "operator-trust.json");
+  if (!fs.existsSync(p)) {
+    return { schema_version: "1.0.0", revision: "0", allowlist: [], revocations: [] };
+  }
+  return parseTrustDoc(JSON.parse(fs.readFileSync(p, "utf8")), "operator-trust.json");
+}
+
+function hostRegistry(registryPath: string | null): RegistryDoc {
+  if (registryPath !== null && fs.existsSync(registryPath)) {
+    return parseRegistryDoc(JSON.parse(fs.readFileSync(registryPath, "utf8")), "host registry");
+  }
+  return { schema_version: "1.0.0", registry_version: "1.0.0", packages: [] };
+}
+
+function executeHostRequest(request: HostRequest, registryPath: string | null, capabilities: Set<HostCapability>): HostResult {
+  const needed = OP_CAPABILITIES[request.operation];
+  for (const capability of needed) {
+    if (!capabilities.has(capability)) {
+      const n = "host capability missing: " + capability + " for operation " + request.operation + " (" + request.package_id + "@" + request.version + " " + request.workflow + ")";
+      notice(n);
+      return { protocol_version: "1.0.0", status: "stopped", notice: n };
+    }
+  }
+  try {
+    const trustDoc = hostTrustDoc(request.state_root);
+    const registry = hostRegistry(registryPath);
+    if (request.operation === "resolve") {
+      const resolved = resolveInstalledPackage(request.state_root, trustDoc, request.package_id, request.version, request.language, request.workflow, request.core_version);
+      if (resolved === null) {
+        const n = "no compatible installed package for " + request.package_id + "@" + request.version + " (" + request.workflow + ")";
+        notice(n);
+        return { protocol_version: "1.0.0", status: "stopped", notice: n };
+      }
+      const n = "routed " + request.package_id + " " + request.workflow + " local-only identity=" + resolved.reference.tree_digest;
+      notice(n);
+      return {
+        protocol_version: "1.0.0",
+        status: "routed",
+        notice: n,
+        tree_digest: resolved.reference.tree_digest,
+        manifest_digest: resolved.reference.manifest_digest,
+        installed_path: resolved.reference.installed_path,
+        receipt_digest: resolved.reference.receipt_digest,
+      };
+    }
+    if (request.operation === "acquire_activate") {
+      const outcome = acquireAndActivate({
+        stateRoot: request.state_root,
+        consumerDir: request.consumer_dir,
+        trustDoc,
+        registry,
+        packageId: request.package_id,
+        version: request.version,
+        language: request.language,
+        workflow: request.workflow,
+        coreVersion: request.core_version,
+        adapter: hostAcquisitionAdapter(),
+        intent: request.intent,
+      });
+      const result: HostResult = {
+        protocol_version: "1.0.0",
+        status: outcome.status === "activated" ? "activated" : outcome.status === "routed" ? "routed" : "stopped",
+        notice: outcome.notice,
+        tree_digest: outcome.treeDigest,
+        manifest_digest: outcome.manifestDigest,
+        installed_path: outcome.installDir,
+        receipt_digest: outcome.receiptDigest,
+      };
+      return result;
+    }
+    const noticeText = rollbackSelected(request.state_root, trustDoc, request.target_receipt_digest as string, request.core_version);
+    const after = readStateDoc(request.state_root) as LifecycleDoc;
+    const target = after.packages.find((ref) => ref.receipt_digest === request.target_receipt_digest);
+    return {
+      protocol_version: "1.0.0",
+      status: "rolled_back",
+      notice: noticeText,
+      tree_digest: target?.tree_digest,
+      manifest_digest: target?.manifest_digest,
+      installed_path: target?.installed_path,
+      receipt_digest: request.target_receipt_digest,
+    };
+  } catch (err) {
+    const n = "workflow " + request.workflow + " for " + request.package_id + " stopped: " + (err as Error).message + "; manual or local-path installation route required";
+    notice(n);
+    return { protocol_version: "1.0.0", status: "stopped", notice: n };
+  }
+}
+
+const FULL_HOST_CAPABILITIES = new Set<HostCapability>(["catalogue", "identity", "atomic", "process", "acquisition"]);
 
 // GENERIC-SURFACE-SCAN-END
 // ============================================================================
@@ -2051,47 +2260,143 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
     console.log("oracle-10 concurrency-atomic-cas: PASS (real two-process overlap + stale/live-lock recovery)");
   }
 
-  // ---- self-check execution ----
+  // ---- self-check invocation: direct/command variants and negatives ----
   {
-    const out = path.join(outRoot, "r11-selfcheck");
+    const out = path.join(outRoot, "r11-invocation");
     const stateRoot = path.join(out, "state");
     mkdirP(stateRoot);
     const consumer = consumerDir();
     const trustDoc = fixtureTrustDoc(fixtureRoot, [], []);
     const registry = emptyRegistry();
+
+    // Positive direct: the fixture declares invocation direct; acquisition
+    // activates only after the declared entrypoint runs with [package_root]
+    // and the package root as working directory.
     const acquire = acquireAndActivate({
       stateRoot, consumerDir: consumer, trustDoc, registry,
       packageId: "@northstar/language-fixture", version: "0.1.0",
       language: "fixture-lang", workflow: "explicit_audit_repair",
       coreVersion: CORE_VERSION, adapter: fixtureAdapter(fixtureRoot), intent: "workflow_request",
     });
-    check(acquire.status === "activated", "self-check-gated acquisition did not activate");
+    check(acquire.status === "activated", "direct-invocation acquisition did not activate");
 
-    // A package declaring no runtime command cannot run its self-check and
-    // stops plainly before activation.
-    const noCommand = buildVariantPackage(fixtureRoot, "0.4.0", (manifest) => {
+    // Direct argv/cwd proof: a marker self-check echoes its first argument
+    // and working directory; both must be the staged package root.
+    const directMarker = buildVariantPackage(fixtureRoot, "0.4.0", (manifest, root) => {
+      manifest.self_check.entrypoint = "scripts/self-check-marker.sh";
+      writeText(path.join(root, "scripts/self-check-marker.sh"),
+        "#!/bin/sh\nprintf 'arg=%s|pwd=%s\\n' \"${1:?usage}\" \"$(pwd)\"\n", 0o755);
+    });
+    const directStaged = stagedDir("northstar-staged-");
+    copyTree(directMarker, directStaged);
+    const directManifest = parseManifest(JSON.parse(fs.readFileSync(path.join(directStaged, "northstar-package.json"), "utf8")), "marker manifest");
+    const directRun = runPackageSelfCheck(directStaged, directManifest);
+    check(directRun.exit === 0, "direct self-check did not run: " + directRun.output);
+    const directResolved = fs.realpathSync(directStaged);
+    check(directRun.output.includes("arg=" + directStaged), "direct self-check argv is not the exact package root: " + directRun.output);
+    check(directRun.output.includes("pwd=" + directResolved), "direct self-check cwd is not the package root: " + directRun.output);
+
+    // Positive command: the named command executes [entrypoint, package_root];
+    // required_commands ORDER has no effect.
+    const commandMarker = buildVariantPackage(fixtureRoot, "0.4.1", (manifest) => {
+      manifest.self_check.invocation = { type: "command", command: "sh" };
+      manifest.runtime_capabilities.required_commands = ["cat", "sh"];
+      manifest.self_check.entrypoint = "scripts/self-check.sh";
+    });
+    const commandStaged = stagedDir("northstar-staged-");
+    copyTree(commandMarker, commandStaged);
+    const commandManifest = parseManifest(JSON.parse(fs.readFileSync(path.join(commandStaged, "northstar-package.json"), "utf8")), "command manifest");
+    const commandRun = runPackageSelfCheck(commandStaged, commandManifest);
+    check(commandRun.exit === 0 && commandRun.output.includes("[fixture-package:self-check] OK"),
+      "command self-check did not run: " + commandRun.output);
+    // Reversed required_commands order must not change the outcome.
+    const reversedMarker = buildVariantPackage(fixtureRoot, "0.4.2", (manifest) => {
+      manifest.self_check.invocation = { type: "command", command: "sh" };
+      manifest.runtime_capabilities.required_commands = ["sh", "cat"];
+    });
+    const reversedStaged = stagedDir("northstar-staged-");
+    copyTree(reversedMarker, reversedStaged);
+    const reversedManifest = parseManifest(JSON.parse(fs.readFileSync(path.join(reversedStaged, "northstar-package.json"), "utf8")), "reversed manifest");
+    const reversedRun = runPackageSelfCheck(reversedStaged, reversedManifest);
+    check(reversedRun.exit === 0 && reversedRun.output.includes("[fixture-package:self-check] OK"),
+      "reordered required_commands changed self-check behavior: " + reversedRun.output);
+
+    // Full acquisition through command invocation (positive).
+    const commandPin = variantPin("@northstar/language-fixture", "0.4.1", commandMarker);
+    const commandTrust = fixtureTrustDoc(fixtureRoot, [commandPin], []);
+    const commandAcquire = acquireAndActivate({
+      stateRoot, consumerDir: consumer, trustDoc: commandTrust, registry,
+      packageId: "@northstar/language-fixture", version: "0.4.1",
+      language: "fixture-lang", workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION, adapter: () => {
+        const staged = stagedDir("northstar-staged-");
+        copyTree(commandMarker, staged);
+        return staged;
+      }, intent: "workflow_request",
+    });
+    check(commandAcquire.status === "activated", "command-invocation acquisition did not activate");
+
+    // Negative: command runner not declared in required_commands.
+    const undeclared = buildVariantPackage(fixtureRoot, "0.4.3", (manifest) => {
+      manifest.self_check.invocation = { type: "command", command: "sh" };
       manifest.runtime_capabilities.required_commands = [];
     });
-    const noCommandPin = variantPin("@northstar/language-fixture", "0.4.0", noCommand);
-    const noCommandTrust = fixtureTrustDoc(fixtureRoot, [noCommandPin], []);
-    let noCommandStopped = false;
+    const undeclaredStaged = stagedDir("northstar-staged-");
+    copyTree(undeclared, undeclaredStaged);
+    const undeclaredManifest = parseManifest(JSON.parse(fs.readFileSync(path.join(undeclaredStaged, "northstar-package.json"), "utf8")), "undeclared manifest");
+    let undeclaredStopped = false;
+    try {
+      runPackageSelfCheck(undeclaredStaged, undeclaredManifest);
+    } catch (err) {
+      undeclaredStopped = (err as Error).message.includes("not declared in runtime_capabilities.required_commands");
+    }
+    check(undeclaredStopped, "undeclared command runner did not stop");
+
+    // Negative: command runner unavailable on this host.
+    const unavailable = buildVariantPackage(fixtureRoot, "0.4.4", (manifest) => {
+      manifest.self_check.invocation = { type: "command", command: "definitely-not-a-real-command-xyz" };
+      manifest.runtime_capabilities.required_commands = ["definitely-not-a-real-command-xyz"];
+    });
+    const unavailableStaged = stagedDir("northstar-staged-");
+    copyTree(unavailable, unavailableStaged);
+    const unavailableManifest = parseManifest(JSON.parse(fs.readFileSync(path.join(unavailableStaged, "northstar-package.json"), "utf8")), "unavailable manifest");
+    let unavailableStopped = false;
+    try {
+      runPackageSelfCheck(unavailableStaged, unavailableManifest);
+    } catch (err) {
+      unavailableStopped = (err as Error).message.includes("not available on this host");
+    }
+    check(unavailableStopped, "unavailable command runner did not stop");
+
+    // Negative: direct entrypoint not executable stops before selection.
+    const notExecutable = buildVariantPackage(fixtureRoot, "0.4.5", (_manifest, root) => {
+      fs.chmodSync(path.join(root, "scripts/self-check.sh"), 0o644);
+    });
+    const notExecPin = variantPin("@northstar/language-fixture", "0.4.5", notExecutable);
+    const notExecTrust = fixtureTrustDoc(fixtureRoot, [notExecPin], []);
+    const stateBefore = fs.readFileSync(stateFilePath(stateRoot), "utf8");
+    let notExecStopped = false;
     try {
       acquireAndActivate({
-        stateRoot, consumerDir: consumer, trustDoc: noCommandTrust, registry,
-        packageId: "@northstar/language-fixture", version: "0.4.0",
+        stateRoot, consumerDir: consumer, trustDoc: notExecTrust, registry,
+        packageId: "@northstar/language-fixture", version: "0.4.5",
         language: "fixture-lang", workflow: "explicit_audit_repair",
         coreVersion: CORE_VERSION, adapter: () => {
           const staged = stagedDir("northstar-staged-");
-          copyTree(noCommand, staged);
+          copyTree(notExecutable, staged);
           return staged;
         }, intent: "workflow_request",
       });
     } catch (err) {
-      noCommandStopped = (err as Error).message.includes("declares no runtime command");
+      notExecStopped = (err as Error).message.includes("not executable");
     }
-    check(noCommandStopped, "package without a declared self-check runtime command did not stop");
-    console.log("oracle-11 self-check-execution: PASS");
+    check(notExecStopped, "non-executable direct entrypoint did not stop");
+    check(fs.readFileSync(stateFilePath(stateRoot), "utf8") === stateBefore,
+      "non-executable direct entrypoint changed lifecycle state");
+
+    console.log("oracle-11 self-check-invocation: PASS (direct/command positives, argv/cwd proof, order-insensitive, undeclared/unavailable/permission negatives)");
   }
+
 
   // ---- identity binding and immutable install-store negatives ----
   {
@@ -2247,6 +2552,151 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
     console.log("oracle-12 identity-binding-and-immutable-store: PASS");
   }
 
+  // ---- host protocol: language-package-host.v1 portability ----
+  {
+    const out = path.join(outRoot, "r13-host-protocol");
+    const stateRoot = path.join(out, "state");
+    const installedRoot = path.join(out, "installed-skill");
+    mkdirP(stateRoot);
+    mkdirP(installedRoot);
+    const consumer = consumerDir();
+    const registry = emptyRegistry();
+
+    // Operator-owned trust lives in the operator state root.
+    const trustPath = path.join(stateRoot, "operator-trust.json");
+    fs.writeFileSync(trustPath, JSON.stringify(fixtureTrustDoc(fixtureRoot, [], [])));
+
+    const baseRequest = {
+      protocol_version: "1.0.0",
+      intent: "workflow_request",
+      package_id: "@northstar/language-fixture",
+      version: "0.1.0",
+      language: "fixture-lang",
+      workflow: "explicit_audit_repair",
+      core_version: CORE_VERSION,
+      consumer_dir: consumer,
+      state_root: stateRoot,
+    };
+
+    // acquire_activate request -> activated result with exact identities.
+    const acquireReq: HostRequest = { ...baseRequest, operation: "acquire_activate" };
+    const acquireRes = executeHostRequest(acquireReq, null, FULL_HOST_CAPABILITIES);
+    check(acquireRes.status === "activated", "host acquire_activate did not activate: " + acquireRes.notice);
+    check(acquireRes.tree_digest === FIXTURE_TREE_DIGEST && acquireRes.manifest_digest === FIXTURE_MANIFEST_DIGEST,
+      "host activated result carries wrong identities");
+    check(acquireRes.receipt_digest !== undefined && acquireRes.installed_path !== undefined,
+      "host activated result lacks receipt/path");
+
+    // resolve request -> routed result, local-only, from the operator state.
+    const resolveReq: HostRequest = { ...baseRequest, operation: "resolve" };
+    const resolveRes = executeHostRequest(resolveReq, null, FULL_HOST_CAPABILITIES);
+    check(resolveRes.status === "routed", "host resolve did not route: " + resolveRes.notice);
+    check(resolveRes.tree_digest === FIXTURE_TREE_DIGEST && resolveRes.receipt_digest === acquireRes.receipt_digest,
+      "host resolve returned the wrong identity");
+
+    // Missing package -> scoped stopped with a visible notice.
+    const missingReq: HostRequest = { ...baseRequest, package_id: "@northstar/missing-fixture", language: "missing-lang", operation: "resolve" };
+    const missingRes = executeHostRequest(missingReq, null, FULL_HOST_CAPABILITIES);
+    check(missingRes.status === "stopped" && missingRes.notice.includes("@northstar/missing-fixture"),
+      "host resolve missing package did not stop scoped: " + missingRes.notice);
+
+    // rollback request -> rolled_back result after a second activation.
+    const variant = buildVariantPackage(fixtureRoot, "0.2.0", () => undefined);
+    const variantPinEntry = variantPin("@northstar/language-fixture", "0.2.0", variant);
+    const variantTrustDoc = fixtureTrustDoc(fixtureRoot, [variantPinEntry], []);
+    fs.writeFileSync(trustPath, JSON.stringify(variantTrustDoc));
+    const updateReq: HostRequest = { ...baseRequest, version: "0.2.0", operation: "acquire_activate" };
+    const updateRes = executeHostRequest(updateReq, null, FULL_HOST_CAPABILITIES);
+    check(updateRes.status === "activated", "host update did not activate: " + updateRes.notice);
+    const rollbackReq: HostRequest = { ...baseRequest, version: "0.1.0", operation: "rollback", target_receipt_digest: acquireRes.receipt_digest as string };
+    const rollbackRes = executeHostRequest(rollbackReq, null, FULL_HOST_CAPABILITIES);
+    check(rollbackRes.status === "rolled_back", "host rollback did not roll back: " + rollbackRes.notice);
+    const afterRollback = readStateDoc(stateRoot) as LifecycleDoc;
+    const selected = afterRollback.packages.filter((ref) => ref.selection === "selected").map((ref) => ref.version);
+    check(JSON.stringify(selected) === JSON.stringify(["0.1.0"]), "host rollback did not reselect 0.1.0");
+
+    // Capability-denied adapter: missing atomic -> scoped stopped, never a
+    // fallback runtime or partial state mutation.
+    const deniedCaps = new Set<HostCapability>(["catalogue", "identity", "process", "acquisition"]);
+    const deniedRes = executeHostRequest(acquireReq, null, deniedCaps);
+    check(deniedRes.status === "stopped" && deniedRes.notice.includes("host capability missing: atomic"),
+      "capability-denied host did not return scoped stopped: " + deniedRes.notice);
+
+    // Installed-skill invocation with Effigy absent: the reference adapter
+    // (Bun) and the conforming python3 host both run from a copied installed
+    // skill and speak the same request/result messages.
+    const surfacePath = process.argv[1];
+    const surfaceName = path.basename(surfacePath);
+    const pythonHostName = "language-package-host.py";
+    fs.copyFileSync(surfacePath, path.join(installedRoot, surfaceName));
+    fs.copyFileSync(path.join(path.dirname(surfacePath), pythonHostName), path.join(installedRoot, pythonHostName));
+    const installedState = path.join(out, "installed-state");
+    mkdirP(installedState);
+    fs.writeFileSync(path.join(installedState, "operator-trust.json"), JSON.stringify(fixtureTrustDoc(fixtureRoot, [], [])));
+    const installedConsumer = consumerDir();
+    const hostReqFile = path.join(out, "host-protocol", "requests", "resolve-installed.json");
+    mkdirP(path.dirname(hostReqFile));
+    const installedRequest = {
+      protocol_version: "1.0.0",
+      operation: "resolve",
+      intent: "workflow_request",
+      package_id: "@northstar/language-fixture",
+      version: "0.1.0",
+      language: "fixture-lang",
+      workflow: "explicit_audit_repair",
+      core_version: CORE_VERSION,
+      consumer_dir: installedConsumer,
+      state_root: installedState,
+    };
+    fs.writeFileSync(hostReqFile, JSON.stringify(installedRequest));
+    // Seed the installed state through the reference adapter from the copy.
+    const seedReq = { ...installedRequest, operation: "acquire_activate" };
+    const seedReqFile = path.join(out, "host-protocol", "requests", "acquire-seed.json");
+    fs.writeFileSync(seedReqFile, JSON.stringify(seedReq));
+    const seedResFile = path.join(out, "host-protocol", "results", "acquire-seed.json");
+    mkdirP(path.dirname(seedResFile));
+    const seedRun = spawnSync("bun", ["run", path.join(installedRoot, surfaceName), "host", seedReqFile, seedResFile], { encoding: "utf8" });
+    check(seedRun.status === 0, "installed-skill reference host failed: " + String(seedRun.stdout) + String(seedRun.stderr));
+    const seedResult = JSON.parse(fs.readFileSync(seedResFile, "utf8")) as HostResult;
+    check(seedResult.status === "activated", "installed-skill host did not activate: " + seedResult.notice);
+
+    const bunResFile = path.join(out, "host-protocol", "results", "resolve-bun.json");
+    const bunRun = spawnSync("bun", ["run", path.join(installedRoot, surfaceName), "host", hostReqFile, bunResFile], { encoding: "utf8" });
+    check(bunRun.status === 0, "installed-skill reference host resolve failed: " + String(bunRun.stderr));
+    const bunResult = JSON.parse(fs.readFileSync(bunResFile, "utf8")) as HostResult;
+    check(bunResult.status === "routed" && bunResult.tree_digest === FIXTURE_TREE_DIGEST,
+      "installed-skill reference host resolve returned wrong result: " + bunResult.notice);
+
+    // Conforming python3 host: no Bun, no Effigy in the consumer contract.
+    const pyResFile = path.join(out, "host-protocol", "results", "resolve-python.json");
+    const pyRun = spawnSync("python3", [path.join(installedRoot, pythonHostName), hostReqFile, pyResFile], { encoding: "utf8" });
+    check(pyRun.status === 0, "python conforming host failed: " + String(pyRun.stderr) + String(pyRun.stdout));
+    const pyResult = JSON.parse(fs.readFileSync(pyResFile, "utf8")) as HostResult;
+    check(pyResult.status === "routed" && pyResult.tree_digest === FIXTURE_TREE_DIGEST,
+      "python conforming host resolve returned wrong result: " + pyResult.notice);
+    check(bunResult.notice === pyResult.notice, "reference and python hosts disagree on the result message");
+
+    // Capability-denied python host: denied identity -> scoped stopped.
+    const pyDeniedFile = path.join(out, "host-protocol", "results", "resolve-python-denied.json");
+    const pyDenied = spawnSync("python3", [path.join(installedRoot, pythonHostName), hostReqFile, pyDeniedFile, "identity"], { encoding: "utf8" });
+    check(pyDenied.status === 0, "python denied host failed: " + String(pyDenied.stderr));
+    const pyDeniedResult = JSON.parse(fs.readFileSync(pyDeniedFile, "utf8")) as HostResult;
+    check(pyDeniedResult.status === "stopped" && pyDeniedResult.notice.includes("host capability missing: identity"),
+      "python denied host did not stop scoped: " + pyDeniedResult.notice);
+
+    // Missing-language request against the python host stops scoped too.
+    const pyMissingReqFile = path.join(out, "host-protocol", "requests", "resolve-missing-python.json");
+    fs.writeFileSync(pyMissingReqFile, JSON.stringify({ ...installedRequest, package_id: "@northstar/other-fixture", language: "other-lang" }));
+    const pyMissingFile = path.join(out, "host-protocol", "results", "resolve-missing-python.json");
+    const pyMissing = spawnSync("python3", [path.join(installedRoot, pythonHostName), pyMissingReqFile, pyMissingFile], { encoding: "utf8" });
+    check(pyMissing.status === 0, "python missing-host failed: " + String(pyMissing.stderr));
+    const pyMissingResult = JSON.parse(fs.readFileSync(pyMissingFile, "utf8")) as HostResult;
+    check(pyMissingResult.status === "stopped" && pyMissingResult.notice.includes("@northstar/other-fixture"),
+      "python host missing package did not stop scoped: " + pyMissingResult.notice);
+
+    console.log("oracle-13 host-protocol-portable: PASS (v1 requests/results, reference and python hosts from installed skill, capability-denied stopped)");
+  }
+
   console.log("card-117 oracle: PASS (8 review rows + transitions + restrictions + provenance + concurrency + self-check + identity-binding/store negatives)");
 }
 
@@ -2268,7 +2718,15 @@ async function main(): Promise<void> {
     casRaceMain(args.slice(1));
     return;
   }
-  throw new Error("usage: language-package-lifecycle.ts oracle <fixture-root> <out-dir> | vectors <fixture-root> | cas-race <state-root> <observed> <payload-file> <hold|attempt>");
+  if (command === "host") {
+    // host <request-file> <result-file> [registry-path]: reference host
+    // adapter for the language-package-host.v1 protocol.
+    const request = parseHostRequest(JSON.parse(fs.readFileSync(args[1], "utf8")), "host request");
+    const result = executeHostRequest(request, args[3] ?? null, FULL_HOST_CAPABILITIES);
+    fs.writeFileSync(args[2], JSON.stringify(result));
+    return;
+  }
+  throw new Error("usage: language-package-lifecycle.ts oracle <fixture-root> <out-dir> | vectors <fixture-root> | cas-race <state-root> <observed> <payload-file> <hold|attempt> | host <request-file> <result-file> [registry-path]");
 }
 
 await main();

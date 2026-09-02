@@ -15,8 +15,8 @@
     {
       "package_id": "@northstar/language-fixture",
       "version": "0.1.0",
-      "tree_digest": "sha256:125c0daf6de56f00ae8f293425b587af767a1bacfacac3711c042e9b56ae40d9",
-      "manifest_digest": "sha256:bfd357c0e39785c974147e7521e6d39da0c121c2842a25bc7148535a640fdf45",
+      "tree_digest": "sha256:b8e76dfdc87d84904ada0620425c0a94200532d11207e3d1339626fb2df85aa3",
+      "manifest_digest": "sha256:b9cdf39bbf2ae4fc2aeee656d2c8dc655c0faa951fbeec255eb887f210a683f9",
       "receipt_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
       "installed_path": "/operator/state/packages/language-fixture-0.1.0",
       "selection": "selected",

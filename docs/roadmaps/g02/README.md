@@ -18,7 +18,7 @@ single-pilot bucket.
 | Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | execute g02.048/117 generic package lifecycle |
 | Add a genuinely long-horizon planning route without conflating it with readiness review. | active | `docs/specs/029-northstar-long-horizon-planning.md`, `skills/northstar/references/modes/atlas.md` | Non-Northstar scenario and operator confirmation |
 | Preserve useful conversational context and keep `/docs` drift recoverable without blind deletion. | active | `docs/specs/030-conversational-triage-and-docs-cleanup.md`, `docs/contracts/001-working-rules.md`, `skills/northstar/references/modes/cleanup-docs.md` | live triage and cleanup feedback |
-| Raise language-code quality through evidence-bound routed workflows without making every implementation part of the root payload. | active | `docs/contracts/004-language-quality-pack.md`, `docs/architecture/system-architecture.md`, `docs/roadmaps/g02/048-extract-modular-language-quality-packages.md` | card 117 blocked on planning decisions (findings 1-2); card 118 planned |
+| Raise language-code quality through evidence-bound routed workflows without making every implementation part of the root payload. | active | `docs/contracts/004-language-quality-pack.md`, `docs/architecture/system-architecture.md`, `docs/roadmaps/g02/048-extract-modular-language-quality-packages.md` | card 117 complete; card 118 planned behind review and merge |
 
 Update this runway only when generation-level intent changes, a milestone
 materially advances or closes a goal, or rollover is being considered. Do not
@@ -103,18 +103,19 @@ rollover signal.
 - `046-add-fresh-orchestrator-continuation.md` (complete; card 114 merged through PR 19 at `b99d19c`)
 - `047-diversify-model-routing-across-runs.md` (complete; PR 20 merged at
   `08ad810` after exact-head review)
-- `048-extract-modular-language-quality-packages.md` (active; card 117 blocked on
-  planning decisions (findings 1-2); cards 118-120 planned in dependency order)
+- `048-extract-modular-language-quality-packages.md` (active; card 117 complete,
+  cards 118-120 planned in dependency order)
 
 ## Next Task
 
-`g02.048/117` proved the generic lifecycle (byte-exact digest vectors,
-operator trust and lifecycle state, atomic CAS, identity-bound routing,
-transactional acquire/update/rollback, offline routing, revocable trust) with
-all eight review-oracle rows falsified. Its PR 22 is open; round-2 review
-accepted the byte-level repair and returned two planning-change findings
-(portable core host/API; self-check runner contract). The card is blocked on
-those decisions; cards 118-120 remain planned behind them.
+`g02.048/117` proved the generic lifecycle: byte-exact digest vectors,
+operator trust and lifecycle state, the `language-package-host.v1` machine
+contract with operational entrypoints from an installed skill (reference and
+python3 hosts, no consumer runtime prerequisite), explicit self-check
+invocation, atomic CAS, identity-bound routing, transactional
+acquire/update/rollback, offline routing, revocable trust — all ten review-
+oracle rows falsified. PR 22 is open for exact-head re-review; cards 118-120
+remain planned behind it.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and

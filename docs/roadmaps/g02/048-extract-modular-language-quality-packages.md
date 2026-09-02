@@ -1,6 +1,6 @@
 # 048 - Extract Modular Language Quality Packages
 
-Status: active; card 117 blocked on planning decisions (review findings 1-2); card 118 planned
+Status: active; card 117 complete; card 118 planned
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.033`, promoted spec 034
@@ -92,11 +92,13 @@ before it becomes ready.
 ## Next Task
 
 Card `g02.048/117` implemented and falsified the generic lifecycle proof
-(byte-exact digest vectors, operator trust and lifecycle schemas, atomic CAS
-state, identity-bound routing, transactional acquire/update/rollback, offline
-routing, revocable trust, real two-process concurrency). Its PR 22 is open;
-round-2 review accepted the byte-level repair and returned two planning-change
-findings (portable core host/API for non-Effigy routing; explicit self-check
-runner/invocation contract) plus three execution-miss findings that are
-repaired. The card is blocked until the orchestrator settles the two planning
-decisions; card 118 must not start before that and the PR merges.
+against the promoted host-protocol decisions: byte-exact digest vectors,
+operator trust and lifecycle schemas, the `language-package-host.v1`
+request/result machine contract with operational resolve/acquire_activate/
+rollback entrypoints proven from an installed skill by the reference adapter
+and a stdlib-only python3 host (no runtime prerequisite for consumers), the
+explicit `self_check.invocation` direct/command tagged union with both
+variants and negatives, atomic CAS state, identity-bound routing,
+transactional acquire/update/rollback, offline routing, revocable trust, and
+real two-process concurrency. PR 22 is open for exact-head re-review; card
+118 must not start before it is accepted and merged.

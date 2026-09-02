@@ -4,9 +4,13 @@
   "version": "0.1.0",
   "kind": "language-quality",
   "compatible_core_range": ">=0.10.0 <1.0.0",
-  "supported_languages": ["fixture-lang"],
+  "supported_languages": [
+    "fixture-lang"
+  ],
   "supported_overlays": [],
-  "available_workflows": ["explicit_audit_repair"],
+  "available_workflows": [
+    "explicit_audit_repair"
+  ],
   "entrypoints": {
     "explicit_audit_repair": "references/modes/fixture-audit.md"
   },
@@ -16,7 +20,14 @@
   },
   "self_check": {
     "entrypoint": "scripts/self-check.rhai",
-    "validated_profile_versions": ["1.0.0"],
-    "validated_schema_versions": ["1.0.0"]
+    "validated_profile_versions": [
+      "1.0.0"
+    ],
+    "validated_schema_versions": [
+      "1.0.0"
+    ],
+    "invocation": {
+      "type": "direct"
+    }
   }
 }

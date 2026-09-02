@@ -5,7 +5,7 @@ handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
 handoff: single-file-path-only
-status: blocked; planning decisions required (round-2 review findings 1-2)
+status: complete; PR 22 re-review pending
 owner: repo maintainers
 created: 2026-09-02
 updated: 2026-09-02
@@ -118,32 +118,36 @@ and fixture proof against the eight-row review oracle.
 
 - PR: https://github.com/inflatable-cookie/northstar/pull/22
   (`main` <- `worker/prove-generic-language-package-lifecycle`).
-- Round-1 review head `981db752e25486e453a72888dccff394aa115b3e` required
-  changes; repaired at `2b43cf0`. Round-2 review of `2b43cf0` ACCEPTED the
-  byte-level repair and returned five findings: findings 1-2 are
-  planning-change, findings 3-5 are execution-miss.
-- Finding 3 fixed: staged manifest identity/version/range bound to the
-  requested pin, with mutated negatives; route cross-checks
-  reference/receipt/manifest end to end.
-- Finding 4 fixed: install store addressed by the FULL canonical tree digest
-  with exclusive verify-or-fail publishing (occupied/partial targets fail
-  without writing); receipts written before CAS truthfully record
-  `activation_status: "installed"`; prefix-collision and occupied-target
-  counterexamples added.
-- Finding 5 fixed: the concurrency oracle now runs two real bun processes
-  against one state root with a deterministic barrier (one winner commits,
-  the loser fails closed on the held lock without removing it, state remains
-  parseable, one selected identity); interrupted/live-lock cases retained.
-- Findings 1-2 STOPPED as planning-change: no canonical authority exists for
-  a Bun consumer prerequisite or for the `required_commands[0]` self-check
-  runner convention. The branch reverted the overstrong completion claims
-  (card 117 -> blocked; acceptance items for non-Effigy routing and
-  self-check un-checked) and records the precise decisions required in the
-  card and dated log under "Planning Blockers".
-- Validation on the new head: standalone oracle (Effigy absent) PASS (12
-  oracle groups), `effigy check:language-packages` PASS (13 receipt schema
-  validations), isolated skill-install parity (169 files), `effigy qa:docs`
-  PASS, `effigy qa` PASS, `git diff --check` clean.
-- Next: orchestrator planning decisions for the portable core host/API and
-  the self-check runner/invocation contract. Do not merge; do not start card
-  118 until the decisions land and this PR is accepted.
+- The operator accepted both round-2 planning decisions and promoted them on
+  main at `54208e9` (settle language package host protocol). This branch
+  integrated origin/main and implemented card 117 against that authority:
+  - `language-package-host.v1` JSON request/result machine contract
+    (`language-package-host-v1.schema.json`) with operational
+    resolve/acquire_activate/rollback entrypoints exercised from an
+    INSTALLED SKILL with Effigy absent by two conforming hosts: the
+    reference adapter and a stdlib-only python3 host. Capability-denied
+    hosts return scoped `stopped` notices; no Bun/Node/Python/POSIX
+    shell/Effigy/provider API is a consumer prerequisite (Bun remains only a
+    reference adapter).
+  - Explicit `self_check.invocation` direct/command tagged union in
+    `package-manifest.schema.json` and fixtures: direct executes the verified
+    entrypoint with `[package_root]`; command executes a declared command
+    (which must appear in `runtime_capabilities.required_commands`) with
+    `[entrypoint, package_root]`; both use the package root as cwd with no
+    shell interpolation and no capability-list order semantics. Both
+    positive variants proven with argv/cwd evidence; undeclared-runner,
+    unavailable-runner, and non-executable-direct negatives; schema-level
+    negative fixtures.
+  - Prior accepted repairs retained: byte-exact digest vectors, operator
+    trust/lifecycle schemas, identity/receipt/trust-bound lifecycle, atomic
+    CAS (real two-process oracle), immutable full-digest install store,
+    truthful pre-selection receipts, offline routing, revocation, scoped
+    failure, generic routing.
+- Card 117, dated log, and dependent front doors reconciled to complete;
+  blocked/overstrong claims removed after proof. Validation on the new exact
+  head: standalone oracle (Effigy absent, 13 groups) PASS;
+  `effigy check:language-packages` PASS (17 receipts, 8 host messages);
+  isolated skill-install parity; `effigy qa:docs`; `effigy qa`;
+  `git diff --check` clean.
+- Next: exact-head orchestrator re-review. Do not merge; do not start card
+  118 until this PR is accepted and merged.

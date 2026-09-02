@@ -29,7 +29,11 @@
     ],
     "validated_schema_versions": [
       "1.0.0"
-    ]
+    ],
+    "invocation": {
+      "type": "command",
+      "command": "sh"
+    }
   },
   "evidence_providers": []
 }
