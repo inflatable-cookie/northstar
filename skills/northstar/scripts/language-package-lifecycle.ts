@@ -931,10 +931,25 @@ function buildReceipt(pin: Pin, installDir: string, packageId: string, version: 
 function acquireAndActivate(opts: AcquireOptions): AcquireOutcome {
   const { stateRoot, consumerDir, trustDoc, registry, packageId, version, language, workflow, coreVersion, adapter, intent } = opts;
 
+  // The host-bound request scope takes precedence for trust restriction
+  // enforcement; the activation marker scope is the fallback and must agree
+  // when both are present.
+  let consumerScope: string | null = opts.consumerScopeHint !== undefined ? opts.consumerScopeHint : null;
+  if (intent === "activation") {
+    const activation = consumerActivationValid(consumerDir, packageId, version);
+    check(activation.valid, "activation marker missing or invalid for " + packageId + "@" + version);
+    if (consumerScope === null) {
+      consumerScope = activation.scope;
+    } else if (activation.scope !== null && consumerScope !== activation.scope) {
+      check(false, "consumer scope mismatch: request scope '" + consumerScope + "' differs from activation marker scope '" + activation.scope + "'");
+    }
+  }
+
+
   const installed = resolveInstalledPackage(stateRoot, trustDoc, packageId, version, language, workflow, coreVersion);
   if (installed !== null) {
     const identity = installed.reference.tree_digest;
-    enforceRouteRestrictions(trustDoc, registry, packageId, version, identity, installed.reference.manifest_digest, workflow, consumerActivationValid(consumerDir, packageId, version).scope);
+    enforceRouteRestrictions(trustDoc, registry, packageId, version, identity, installed.reference.manifest_digest, workflow, consumerScope);
     const routeNotice = "routed " + packageId + " " + workflow + " local-only identity=" + identity;
     notice(routeNotice);
     return {
@@ -952,21 +967,6 @@ function acquireAndActivate(opts: AcquireOptions): AcquireOutcome {
     notice(n);
     return { status: "no-route", notice: n };
   }
-
-  // The host-bound request scope takes precedence for trust restriction
-  // enforcement; the activation marker scope is the fallback and must agree
-  // when both are present.
-  let consumerScope: string | null = opts.consumerScopeHint !== undefined ? opts.consumerScopeHint : null;
-  if (intent === "activation") {
-    const activation = consumerActivationValid(consumerDir, packageId, version);
-    check(activation.valid, "activation marker missing or invalid for " + packageId + "@" + version);
-    if (consumerScope === null) {
-      consumerScope = activation.scope;
-    } else if (activation.scope !== null && consumerScope !== activation.scope) {
-      check(false, "consumer scope mismatch: request scope '" + consumerScope + "' differs from activation marker scope '" + activation.scope + "'");
-    }
-  }
-
   const pin = findPin(registry, trustDoc, packageId, version);
   check(pin !== null, "no trusted pin for " + packageId + "@" + version + "; manual or local-path installation required");
   requireCanonicalDigest(pin.entry.tree_digest, "pin");
@@ -2857,6 +2857,79 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
     check(pyScopeOkRun.status === 0, "python scope-match host failed: " + String(pyScopeOkRun.stderr));
     const pyScopeOkResult = readResult(pyScopeOk);
     check(pyScopeOkResult.status === "routed", "matching python scope did not route: " + pyScopeOkResult.notice);
+
+    // Installed-route scope binding through the copied host entrypoint: an
+    // acquire_activate request for an ALREADY-INSTALLED package must honor
+    // the same request/activation scope agreement as fresh acquisition.
+    const fastState = path.join(out, "fast-route-state");
+    mkdirP(fastState);
+    fs.writeFileSync(path.join(fastState, "operator-trust.json"), JSON.stringify(fixtureTrustDoc(fixtureRoot, [], [])));
+    const fastConsumer = consumerDir();
+    const fastSeed = writePair("fast-route-seed", { ...installedRequest, consumer_dir: fastConsumer, state_root: fastState, operation: "acquire_activate" });
+    const fastSeedRun = spawnSync("bun", ["run", path.join(installedRoot, surfaceName), "host", path.join(hostReqDir, "fast-route-seed.json"), fastSeed], { encoding: "utf8" });
+    check(fastSeedRun.status === 0, "fast-route seed failed: " + String(fastSeedRun.stderr));
+    const fastSeedResult = readResult(fastSeed);
+    check(fastSeedResult.status === "activated", "fast-route seed did not activate: " + fastSeedResult.notice);
+    // Restrict the installed identity's pin to team-b.
+    const fastRestrictedTrust = fixtureTrustDoc(fixtureRoot, [], []);
+    fastRestrictedTrust.allowlist[0].consumer_scope = "team-b";
+    fs.writeFileSync(path.join(fastState, "operator-trust.json"), JSON.stringify(fastRestrictedTrust));
+
+    const markerDir = (scope: string): string => {
+      const dir = consumerDir({
+        "docs/contracts/language-quality-activation.json": JSON.stringify({ package_id: "@northstar/language-fixture", version: "0.1.0", scope }),
+      });
+      return dir;
+    };
+    const markerB = markerDir("team-b");
+    const markerA = markerDir("team-a");
+
+    // Counterexample 1: request scope team-a against a team-b pin, marker
+    // team-b. The request/marker agreement rule must stop the installed
+    // route (the pre-fix fast path routed it via the marker scope).
+    const fastMismatch = writePair("fast-route-scope-mismatch", {
+      ...installedRequest,
+      operation: "acquire_activate",
+      intent: "activation",
+      consumer_scope: "team-a",
+      consumer_dir: markerB,
+      state_root: fastState,
+    });
+    const fastMismatchRun = spawnSync("bun", ["run", path.join(installedRoot, surfaceName), "host", path.join(hostReqDir, "fast-route-scope-mismatch.json"), fastMismatch], { encoding: "utf8" });
+    check(fastMismatchRun.status === 0, "fast-route mismatch host failed: " + String(fastMismatchRun.stderr));
+    const fastMismatchResult = readResult(fastMismatch);
+    check(fastMismatchResult.status === "stopped" && fastMismatchResult.notice.includes("consumer scope mismatch"),
+      "installed fast path bypassed the request/marker scope agreement: " + fastMismatchResult.notice);
+
+    // Counterexample 2: request scope team-b agrees with the pin but the
+    // activation marker disagrees (team-a); the route must still stop.
+    const fastMarkerDisagree = writePair("fast-route-marker-disagreement", {
+      ...installedRequest,
+      operation: "acquire_activate",
+      intent: "activation",
+      consumer_scope: "team-b",
+      consumer_dir: markerA,
+      state_root: fastState,
+    });
+    const fastMarkerDisagreeRun = spawnSync("bun", ["run", path.join(installedRoot, surfaceName), "host", path.join(hostReqDir, "fast-route-marker-disagreement.json"), fastMarkerDisagree], { encoding: "utf8" });
+    check(fastMarkerDisagreeRun.status === 0, "fast-route marker host failed: " + String(fastMarkerDisagreeRun.stderr));
+    const fastMarkerDisagreeResult = readResult(fastMarkerDisagree);
+    check(fastMarkerDisagreeResult.status === "stopped" && fastMarkerDisagreeResult.notice.includes("differs from activation marker scope"),
+      "installed fast path ignored activation-marker disagreement: " + fastMarkerDisagreeResult.notice);
+
+    // Control: request team-b, marker team-b, pin team-b -> installed route.
+    const fastMatch = writePair("fast-route-scope-match", {
+      ...installedRequest,
+      operation: "acquire_activate",
+      intent: "activation",
+      consumer_scope: "team-b",
+      consumer_dir: markerB,
+      state_root: fastState,
+    });
+    const fastMatchRun = spawnSync("bun", ["run", path.join(installedRoot, surfaceName), "host", path.join(hostReqDir, "fast-route-scope-match.json"), fastMatch], { encoding: "utf8" });
+    check(fastMatchRun.status === 0, "fast-route match host failed: " + String(fastMatchRun.stderr));
+    const fastMatchResult = readResult(fastMatch);
+    check(fastMatchResult.status === "routed", "matching installed route did not route: " + fastMatchResult.notice);
 
     console.log("oracle-13 host-protocol-portable: PASS (all three ops through installed entrypoints, resolve-bound python host, scope binding, capability/version stopped)");
   }
