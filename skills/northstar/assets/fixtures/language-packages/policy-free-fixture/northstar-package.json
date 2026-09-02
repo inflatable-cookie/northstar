@@ -17,11 +17,13 @@
     "explicit_audit_repair": "references/modes/fixture-audit.md"
   },
   "runtime_capabilities": {
-    "required_commands": [],
+    "required_commands": [
+      "sh"
+    ],
     "optional_effigy_selectors": []
   },
   "self_check": {
-    "entrypoint": "scripts/self-check.rhai",
+    "entrypoint": "scripts/self-check.sh",
     "validated_profile_versions": [
       "1.0.0"
     ],

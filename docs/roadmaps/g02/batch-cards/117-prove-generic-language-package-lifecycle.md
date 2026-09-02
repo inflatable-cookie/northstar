@@ -135,58 +135,60 @@ consumer activation, or depend on Effigy for installed routing.
 ## Completion Notes
 
 Completed and falsified the generic language package lifecycle (g02.048/117)
-against the accepted card-116 baseline:
+against the accepted card-116 baseline, including the exact-head review repair
+of PR 22 (six `execution-miss` findings):
 
-- Added `operator-trust.schema.json` and `lifecycle-state.schema.json` under
+- `operator-trust.schema.json` and `lifecycle-state.schema.json` under
   `skills/northstar/references/packages/` inside the frozen Draft 2020-12
   vocabulary, with positive state fixtures and eight negative trust/lifecycle
-  fixtures (duplicate allowlist, duplicate revocation, missing fields, digest
-  spelling drift, duplicate selection, duplicate receipt references, missing
-  required fields, bare-hex digests) plus schema mutation discrimination and
-  fail-closed keyword proofs.
-- Implemented the canonical content identity: manifest digest over exact
-  manifest bytes and the package-tree digest over the sorted length-framed
-  regular-file stream `F\0<path-len>\0<path>\0<executable>\0<content-len>\0<content>`,
-  with required `sha256:` spelling, rejection of non-portable paths, symlinks
-  (never followed), special files, and case-fold collisions, and the
-  executable bit as the only retained mode. The policy-free fixture derives the
-  first runtime tree identity `sha256:653ce7f63ddc46da3381314d561dea3657b4eaf59eb8aa1c57b4ba046d9f90f0`
-  (manifest `sha256:029efa327745aba66c3316714cfb28b29246c365459bb5c9d7e6526e409c64ef`),
+  fixtures plus schema mutation discrimination and fail-closed keyword proofs.
+- The generic lifecycle now ships as a callable provider-neutral surface:
+  `skills/northstar/scripts/language-package-lifecycle.ts` (Bun CLI). It owns
+  canonical byte-exact digest framing (Buffer streams, permission-bit
+  executable test, NUL/non-UTF-8/multibyte vectors fixed against independent
+  constants), operator trust/lifecycle documents, atomic compare-and-swap
+  lifecycle state (lock-file serialization with stale-owner recovery and
+  fail-closed ambiguous-write handling, unique staging identities), immutable
+  digest-addressed receipts, identity-bound and receipt-bound routing,
+  transactional acquisition/rollback, revocation, offline local routing, and
+  declared self-check execution via the package's `required_commands` (the
+  fixture declares `sh` and ships `scripts/self-check.sh`; the declared check
+  runs after identity/compatibility gates, and a valid-present-but-failing
+  self-check proves execution by its output while leaving state and consumer
+  bytes exact). The exact same surface is exercised with Effigy absent
+  (`bun run language-package-lifecycle.ts oracle ...`) and from the checker.
+- Route resolution binds the requested package identity and version, loads and
+  digest-checks the immutable receipt, and cross-checks receipt/reference/
+  installed manifest; trust restrictions (`workflows`, `consumer_scope`) are
+  enforced before transport and before route execution; receipts preserve the
+  actual official/allowlist trust variant and the pin's source identity.
+- The policy-free fixture was revised so its self-check is executable by the
+  declared capability (entrypoint `scripts/self-check.sh`, required command
+  `sh`). The accepted card-116 manifest identity `029efa32...` remains the
+  recorded baseline; the revised fixture derives the new runtime identities:
+  manifest `sha256:bfd357c0e39785c974147e7521e6d39da0c121c2842a25bc7148535a640fdf45`,
+  tree `sha256:125c0daf6de56f00ae8f293425b587af767a1bacfacac3711c042e9b56ae40d9`,
   proven identical across source, staged, and retained payloads and across
   reordered cross-adapter materialization.
-- Implemented the generic installed-package runtime in
-  `check-language-packages.rhai`: local-only discovery and routing by manifest
-  fields (no language switch, no Effigy dependency, read-only route selection
-  proven by scan slices), operator-owned lifecycle state with immutable
-  digest-addressed receipts and compare-and-swap replacement, transactional
-  acquisition/update/rollback with deterministic staged self-check, revocation
-  gating before any transport, and visible acquisition/routing/failure notices.
-- Falsified all eight review-oracle rows with deterministic fixtures:
-  detection-is-not-authority transport spy (zero calls), canonical identity
-  vectors and path-type negatives, transactional activation with before/after
-  hashes, operator-owned compare-and-swap with a stale-writer conflict, offline
-  network-denied local routing, scoped dual-workflow failure, revocable trust
-  with retained evidence/bytes, and synthetic `quantum-lang` manifest-field
-  routing.
-- Lifecycle transition matrix proven: init -> installed -> updated (prior
-  retained) -> rolled back -> revoked, with every failed install/update/rollback
-  leaving selection, state revision, receipts, and consumer bytes byte-identical.
+- All eight review-oracle rows are falsified, plus trust-restriction and
+  receipt-provenance counterexamples (restricted workflow, restricted consumer
+  scope, official git source, source mismatch), overlapping-writer and
+  interrupted-write concurrency oracles (one winner, one conflict, no
+  truncation, no duplicate reference, retained staged identity), and the
+  self-check execution oracles. Every written receipt is schema-validated by
+  the checker against `installation-receipt.schema.json` (12 receipts).
 - Wired the new schemas and fixtures into the repo-contract required files and
   documented the extended check in `scripts/README.md`.
-- Validated with `effigy check:language-packages` (all 8 oracles), isolated
-  skill-install parity (168 files), `effigy qa:docs`, `effigy qa`, and
+- Validated with `effigy check:language-packages` (surface oracle + receipts),
+  isolated skill-install parity, `effigy qa:docs`, `effigy qa`, and
   `git diff --check`.
 
-Known limits: the runtime proof executes the deterministic protocol self-check
-gate over the staged payload rather than arbitrary package code (the policy-free
-fixture carries no runnable engine; real package execution is the card 118
-canary boundary). The case-fold collision negative is proven through the same
-fold-registration predicate the walker executes because the host filesystem is
-case-insensitive and cannot materialize two case-only names. Receipt documents
-are validated for schema conformance by the harness against every written
-receipt; the runtime constructs them from its fixed template (Effigy Rhai caps
-call depth at eight frames, which oneOf recursion inside the runtime would
-exceed).
+Known limits: the fixture self-check executes under the declared `sh`
+capability; the surface itself requires a Bun-capable host (the repo's
+secondary runtime; no non-Effigy Rhai host exists). The case-fold collision
+negative is proven through the same fold-registration predicate the walker
+executes because the host filesystem is case-insensitive. Arbitrary package
+code beyond the declared self-check remains the card-118 canary boundary.
 
 ## Next Task
 

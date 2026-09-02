@@ -113,21 +113,29 @@ and fixture proof against the eight-row review oracle.
 
 - PR: https://github.com/inflatable-cookie/northstar/pull/22
   (`main` <- `worker/prove-generic-language-package-lifecycle`).
-- Exact tested head: `cab4cad` — all required validation (focused package
-  checks, isolated 168-file skill-install parity, `effigy qa:docs`, `effigy
-  qa`, `git diff --check`) ran on this commit before the PR opened. The PR
-  head advances only with this completion record and the dated log entry.
-- Implementation: canonical `sha256:` manifest/tree digest framing,
-  `operator-trust.schema.json` and `lifecycle-state.schema.json` with
-  positive/negative fixtures, generic manifest-field resolver and
-  transactional lifecycle (CAS state, immutable receipts, rollback, offline
-  routing, revocation, visible notices), and all eight review-oracle rows
-  falsified. Policy-free fixture tree identity
-  `sha256:653ce7f63ddc46da3381314d561dea3657b4eaf59eb8aa1c57b4ba046d9f90f0`.
-- Validation and limits: see
-  `docs/logs/2026-09/02-012622-prove-generic-language-package-lifecycle.md`.
-- Closeout: card 117 marked complete; roadmap 048, g02/README,
-  generation-index, roadmaps/README, docs/README, contract-index, and spec 034
-  readiness gate reconciled. Card 118 remains blocked for post-merge refresh.
-- Next: exact-head orchestrator review. Do not merge. In-bounds review
-  findings are repaired on this branch.
+- Review head `981db752e25486e453a72888dccff394aa115b3e` required changes
+  (six `execution-miss` findings). Repairs landed on this branch: the
+  lifecycle now ships as a provider-neutral Bun surface
+  (`skills/northstar/scripts/language-package-lifecycle.ts`) exercised with
+  Effigy absent and from the checker; byte-exact digest framing with
+  independent vectors (NUL, non-UTF-8, multibyte, 0600/0444/0755);
+  identity/receipt-bound routing; trust restrictions and truthful receipt
+  provenance; lock-based atomic CAS with stale-owner recovery and
+  fail-closed ambiguity; declared self-check execution via the fixture's
+  `sh` capability with a proven-execution failure oracle. The fixture was
+  revised accordingly (new identities: manifest
+  `sha256:bfd357c0e39785c974147e7521e6d39da0c121c2842a25bc7148535a640fdf45`,
+  tree `sha256:125c0daf6de56f00ae8f293425b587af767a1bacfacac3711c042e9b56ae40d9`);
+  the card-116 baseline identity `029efa32...` remains the recorded accepted
+  baseline.
+- Repaired head: the PR head after this record and the dated log push; the
+  full surface oracle (Effigy absent), `effigy check:language-packages`
+  (including 12 receipt schema validations), isolated skill-install parity,
+  `effigy qa:docs`, `effigy qa`, and `git diff --check` were rerun on it.
+- Closeout claims were reconciled: "works without Effigy" now refers to the
+  callable Bun surface (no non-Effigy Rhai host exists); "atomic CAS" is the
+  lock-serialized compare-and-swap; digest vectors are byte-exact with
+  independent constants; receipts are schema-validated by the checker;
+  self-check execution is real and capability-declared.
+- Next: exact-head orchestrator re-review. Do not merge. In-bounds findings
+  are repaired on this branch.

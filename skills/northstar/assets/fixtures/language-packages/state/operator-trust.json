@@ -11,8 +11,8 @@
         "subpath": "skills/northstar/assets/fixtures/language-packages/policy-free-fixture",
         "commit": "8f4a0d639c59900e9b7e4ba746776fe0f0cfb9c6"
       },
-      "tree_digest": "sha256:653ce7f63ddc46da3381314d561dea3657b4eaf59eb8aa1c57b4ba046d9f90f0",
-      "manifest_digest": "sha256:029efa327745aba66c3316714cfb28b29246c365459bb5c9d7e6526e409c64ef",
+      "tree_digest": "sha256:125c0daf6de56f00ae8f293425b587af767a1bacfacac3711c042e9b56ae40d9",
+      "manifest_digest": "sha256:bfd357c0e39785c974147e7521e6d39da0c121c2842a25bc7148535a640fdf45",
       "compatible_core_range": ">=0.2.0 <1.0.0",
       "workflows": [
         "explicit_audit_repair"

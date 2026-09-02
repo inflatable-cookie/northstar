@@ -16,4 +16,5 @@ hard-coded core language switch.
 ## Package Structure
 
 - `northstar-package.json`: machine-readable package manifest
-- `scripts/self-check.rhai`: package-owned self-check entrypoint
+- `scripts/self-check.sh`: package-owned self-check entrypoint (executed by the
+  declared `sh` runtime command)

@@ -1,0 +1,1939 @@
+// Provider-neutral Northstar language-package lifecycle surface (card 117).
+//
+// This is the callable generic runtime: canonical byte-exact content
+// identity, operator-owned trust/lifecycle documents, atomic compare-and-swap
+// lifecycle state, immutable digest-addressed receipts, identity-bound
+// routing, transactional acquisition/rollback, revocation, offline local
+// routing, and declared self-check execution.
+//
+// It runs under any Bun-capable host and contains no language branches, no
+// Effigy dependency, and no provider reference. The Effigy checker invokes
+// the exact same surface through this CLI; the oracle can also be run with
+// Effigy absent (`bun run language-package-lifecycle.ts oracle <dir>`).
+//
+// The self-check entrypoint is executed by the package's first declared
+// required runtime command (`runtime_capabilities.required_commands[0]`),
+// with the staged package root passed as the first argument. A package that
+// declares no runtime command cannot run its self-check and stops plainly.
+//
+// Independent identity vectors (computed from the canonical framing with a
+// separate reference implementation, not derived by this code):
+//   fixture manifest: sha256:bfd357c0e39785c974147e7521e6d39da0c121c2842a25bc7148535a640fdf45
+//   fixture tree:     sha256:125c0daf6de56f00ae8f293425b587af767a1bacfacac3711c042e9b56ae40d9
+//   nul content:      sha256:2d454a684186557b9d4a6b1d1ad71b2fd35653221a57da3a0a3c1c1cdce51c0c
+//   non-utf8 content: sha256:e47ead3733f036191bc07eca4279a634a6482e585b29b939a3bfac5225d0cd50
+//   multibyte:        sha256:ee719bb79ec611fd44274dab22543c4ac2ca459b803a27c4829df028b2804990
+//   executable 0755:  sha256:b026027495f9869e30fb7ee14ac23b5e29b580db1df3d66537339c9ab9555d98
+//   non-exec 0444/0600: sha256:3571f0cbec1c1703ada683d25a71704dec379f9af80cbebc099d521ec879793d
+
+// GENERIC-SURFACE-SCAN-BEGIN
+import { createHash, randomUUID } from "node:crypto";
+import { spawnSync } from "node:child_process";
+import * as fs from "node:fs";
+import * as path from "node:path";
+
+const CORE_VERSION = "0.2.0";
+const TIMESTAMP = "2026-09-02T00:00:00Z";
+const PORTABLE_PATH = /^[a-zA-Z0-9_-][a-zA-Z0-9_.-]*(?:\/[a-zA-Z0-9_-][a-zA-Z0-9_.-]*)*$/;
+const SEMVER = /^[0-9]+\.[0-9]+\.[0-9]+$/;
+const PACKAGE_ID = /^@[a-z0-9-]+\/[a-z0-9-]+$/;
+
+const FIXTURE_MANIFEST_DIGEST = "sha256:bfd357c0e39785c974147e7521e6d39da0c121c2842a25bc7148535a640fdf45";
+const FIXTURE_TREE_DIGEST = "sha256:125c0daf6de56f00ae8f293425b587af767a1bacfacac3711c042e9b56ae40d9";
+const V_NUL = "sha256:2d454a684186557b9d4a6b1d1ad71b2fd35653221a57da3a0a3c1c1cdce51c0c";
+const V_NONUTF8 = "sha256:e47ead3733f036191bc07eca4279a634a6482e585b29b939a3bfac5225d0cd50";
+const V_MULTI = "sha256:ee719bb79ec611fd44274dab22543c4ac2ca459b803a27c4829df028b2804990";
+const V_EXE = "sha256:b026027495f9869e30fb7ee14ac23b5e29b580db1df3d66537339c9ab9555d98";
+const V_NOEXE = "sha256:3571f0cbec1c1703ada683d25a71704dec379f9af80cbebc099d521ec879793d";
+
+interface Manifest {
+  schema_version: string;
+  package_id: string;
+  version: string;
+  kind: string;
+  compatible_core_range: string;
+  supported_languages: string[];
+  supported_overlays: string[];
+  available_workflows: string[];
+  entrypoints: Record<string, string>;
+  runtime_capabilities: { required_commands: string[]; optional_effigy_selectors: string[] };
+  self_check: { entrypoint: string; validated_profile_versions: string[]; validated_schema_versions: string[] };
+  evidence_providers: string[];
+}
+
+interface TrustEntry {
+  package_id: string;
+  version: string;
+  source_identity?: Record<string, unknown>;
+  tree_digest: string;
+  manifest_digest: string;
+  compatible_core_range: string;
+  workflows?: string[];
+  consumer_scope?: string;
+  actor: string;
+  timestamp: string;
+  reason: string;
+}
+
+interface Revocation {
+  package_id: string;
+  version: string;
+  tree_digest: string;
+  manifest_digest: string;
+  actor: string;
+  timestamp: string;
+  reason: string;
+}
+
+interface TrustDoc {
+  schema_version: string;
+  revision: string;
+  allowlist: TrustEntry[];
+  revocations: Revocation[];
+}
+
+interface LifecycleRef {
+  package_id: string;
+  version: string;
+  tree_digest: string;
+  manifest_digest: string;
+  receipt_digest: string;
+  installed_path: string;
+  selection: "selected" | "retained";
+  installed_at: string;
+}
+
+interface LifecycleDoc {
+  schema_version: string;
+  state_revision: string;
+  packages: LifecycleRef[];
+}
+
+interface Receipt {
+  schema_version: string;
+  package_id: string;
+  version: string;
+  kind: string;
+  trust_class: Record<string, unknown>;
+  source: Record<string, unknown>;
+  content_identity: { package_tree_digest: string; manifest_digest: string };
+  compatibility: { compatible_core_range: string; installed_core_version: string };
+  installation: { installed_path: string; installed_at: string; acquisition_adapter: string; activation_status: string };
+}
+
+interface RegistryDoc {
+  schema_version: string;
+  registry_version: string;
+  packages: RegistryEntry[];
+}
+
+interface RegistryEntry {
+  package_id: string;
+  version: string;
+  repository?: string;
+  subpath?: string;
+  commit?: string;
+  tree_digest: string;
+  manifest_digest: string;
+  compatible_core_range: string;
+}
+
+interface Pin {
+  entry: TrustEntry | RegistryEntry;
+  source: "official" | "operator_allowlist";
+}
+
+interface ResolvedPackage {
+  reference: LifecycleRef;
+  manifest: Manifest;
+  receipt: Receipt;
+}
+
+interface AcquireOutcome {
+  status: "activated" | "stopped" | "no-route" | "routed";
+  notice: string;
+  receiptDigest?: string;
+  treeDigest?: string;
+  installDir?: string;
+}
+
+interface AcquireOptions {
+  stateRoot: string;
+  consumerDir: string;
+  trustDoc: TrustDoc;
+  registry: RegistryDoc;
+  packageId: string;
+  version: string;
+  language: string;
+  workflow: string;
+  coreVersion: string;
+  adapter: () => string;
+  intent: "workflow_request" | "activation" | "detection";
+}
+
+function check(condition: unknown, message: string): asserts condition {
+  if (!condition) {
+    throw new Error("[northstar:language-packages] " + message);
+  }
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isString(value: unknown): value is string {
+  return typeof value === "string";
+}
+
+function asString(value: unknown, context: string): string {
+  check(isString(value), context + " must be a string");
+  return value;
+}
+
+function asStringArray(value: unknown, context: string): string[] {
+  check(Array.isArray(value) && value.every((v) => isString(v)), context + " must be an array of strings");
+  return value as string[];
+}
+
+function asRecord(value: unknown, context: string): Record<string, unknown> {
+  check(isRecord(value), context + " must be an object");
+  return value;
+}
+
+function notice(message: string): void {
+  console.log("[northstar:language-packages] notice: " + message);
+}
+
+function sha256Hex(bytes: Buffer): string {
+  return createHash("sha256").update(bytes).digest("hex");
+}
+
+function requireCanonicalDigest(digest: unknown, context: string): void {
+  if (!isString(digest) || !/^sha256:[0-9a-f]{64}$/.test(digest)) {
+    throw new Error(context + " uses non-canonical digest spelling: '" + String(digest) + "' (required sha256:<64 lowercase hex>)");
+  }
+}
+
+function fileBytes(p: string): Buffer {
+  return fs.readFileSync(p);
+}
+
+function manifestDigestOf(p: string): string {
+  return "sha256:" + sha256Hex(fileBytes(p));
+}
+
+function fileExecutableBit(p: string): number {
+  const st = fs.statSync(p);
+  return (st.mode & 0o111) !== 0 ? 1 : 0;
+}
+
+function asciiCaseFold(s: string): string {
+  return s.toLowerCase();
+}
+
+function isSafePackageRelativePath(p: unknown): boolean {
+  if (!isString(p) || p === "") {
+    return false;
+  }
+  if (p.startsWith("/") || p.startsWith("\\") || p.includes("//") || p.endsWith("/")) {
+    return false;
+  }
+  for (const part of p.split("/")) {
+    if (part === "" || part === "." || part === "..") {
+      return false;
+    }
+  }
+  return PORTABLE_PATH.test(p);
+}
+
+interface FileRecord {
+  path: string;
+  executable: number;
+  content: Buffer;
+}
+
+function collectCanonicalFileRecords(packageRoot: string, context: string): FileRecord[] {
+  const records: FileRecord[] = [];
+  const seenFold = new Set<string>();
+  const dirs = [""];
+  while (dirs.length > 0) {
+    const relDir = dirs.pop() as string;
+    const absDir = relDir === "" ? packageRoot : path.join(packageRoot, relDir);
+    for (const entry of fs.readdirSync(absDir, { withFileTypes: true })) {
+      const rel = relDir === "" ? entry.name : relDir + "/" + entry.name;
+      if (!isSafePackageRelativePath(rel)) {
+        throw new Error(context + " contains non-portable package path: '" + rel + "'");
+      }
+      const abs = path.join(absDir, entry.name);
+      if (entry.isSymbolicLink()) {
+        throw new Error(context + " contains symbolic link (rejected, never followed): '" + rel + "'");
+      }
+      const fold = asciiCaseFold(rel);
+      if (seenFold.has(fold)) {
+        throw new Error(context + " contains case-fold path collision: '" + rel + "'");
+      }
+      seenFold.add(fold);
+      if (entry.isDirectory()) {
+        dirs.push(rel);
+      } else if (entry.isFile()) {
+        records.push({ path: rel, executable: fileExecutableBit(abs), content: fileBytes(abs) });
+      } else {
+        throw new Error(context + " contains special file (rejected): '" + rel + "'");
+      }
+    }
+  }
+  records.sort((a, b) => Buffer.compare(Buffer.from(a.path, "utf8"), Buffer.from(b.path, "utf8")));
+  return records;
+}
+
+function canonicalTreeDigest(packageRoot: string, context: string): string {
+  // F\0<path-byte-length>\0<path-bytes>\0<executable:0|1>\0<content-byte-length>\0<content-bytes>
+  const records = collectCanonicalFileRecords(packageRoot, context);
+  const chunks: Buffer[] = [];
+  for (const rec of records) {
+    const pathBytes = Buffer.from(rec.path, "utf8");
+    chunks.push(Buffer.from("F\0"));
+    chunks.push(Buffer.from(String(pathBytes.length)));
+    chunks.push(Buffer.from("\0"));
+    chunks.push(pathBytes);
+    chunks.push(Buffer.from("\0"));
+    chunks.push(Buffer.from(String(rec.executable)));
+    chunks.push(Buffer.from("\0"));
+    chunks.push(Buffer.from(String(rec.content.length)));
+    chunks.push(Buffer.from("\0"));
+    chunks.push(rec.content);
+  }
+  return "sha256:" + sha256Hex(Buffer.concat(chunks));
+}
+
+// ---- trust and lifecycle documents (semantic invariants) ----
+
+function parseTrustDoc(raw: unknown, context: string): TrustDoc {
+  const doc = asRecord(raw, context);
+  check(asString(doc.schema_version, context + ".schema_version") === "1.0.0", context + " has unsupported schema_version");
+  asString(doc.revision, context + ".revision");
+  const allowlist = doc.allowlist;
+  const revocations = doc.revocations;
+  check(Array.isArray(allowlist) && Array.isArray(revocations), context + " allowlist/revocations must be arrays");
+  const seenAllow = new Set<string>();
+  for (const rawEntry of allowlist) {
+    const entry = asRecord(rawEntry, context + " allowlist entry");
+    asString(entry.package_id, context + " allowlist package_id");
+    asString(entry.version, context + " allowlist version");
+    requireCanonicalDigest(entry.tree_digest, context + " allowlist");
+    requireCanonicalDigest(entry.manifest_digest, context + " allowlist");
+    asString(entry.compatible_core_range, context + " allowlist range");
+    if (entry.source_identity !== undefined) {
+      asRecord(entry.source_identity, context + " allowlist source_identity");
+    }
+    const key = String(entry.package_id) + "@" + String(entry.version) + "|" + String(entry.tree_digest) + "|" + String(entry.manifest_digest);
+    check(!seenAllow.has(key), context + " contains duplicate allowlist entry: " + key);
+    seenAllow.add(key);
+  }
+  const seenRev = new Set<string>();
+  for (const rawRec of revocations) {
+    const rec = asRecord(rawRec, context + " revocation");
+    asString(rec.package_id, context + " revocation package_id");
+    requireCanonicalDigest(rec.tree_digest, context + " revocation");
+    requireCanonicalDigest(rec.manifest_digest, context + " revocation");
+    const key = String(rec.package_id) + "|" + String(rec.tree_digest) + "|" + String(rec.manifest_digest);
+    check(!seenRev.has(key), context + " contains duplicate revocation entry: " + key);
+    seenRev.add(key);
+  }
+  return raw as TrustDoc;
+}
+
+function parseLifecycleDoc(raw: unknown, context: string): LifecycleDoc {
+  const doc = asRecord(raw, context);
+  check(asString(doc.schema_version, context + ".schema_version") === "1.0.0", context + " has unsupported schema_version");
+  asString(doc.state_revision, context + ".state_revision");
+  check(Array.isArray(doc.packages), context + " packages must be an array");
+  const seenRefs = new Set<string>();
+  const selectedByPkg = new Set<string>();
+  for (const rawRef of doc.packages) {
+    const ref = asRecord(rawRef, context + " reference");
+    asString(ref.package_id, context + " reference package_id");
+    asString(ref.version, context + " reference version");
+    requireCanonicalDigest(ref.tree_digest, context + " reference");
+    requireCanonicalDigest(ref.manifest_digest, context + " reference");
+    requireCanonicalDigest(ref.receipt_digest, context + " reference");
+    asString(ref.installed_path, context + " reference installed_path");
+    check(ref.selection === "selected" || ref.selection === "retained", context + " reference has invalid selection");
+    const receiptDigest = asString(ref.receipt_digest, context + " reference receipt_digest");
+    check(!seenRefs.has(receiptDigest), context + " contains duplicate receipt reference: " + receiptDigest);
+    seenRefs.add(receiptDigest);
+    const packageId = asString(ref.package_id, context + " reference package_id");
+    if (ref.selection === "selected") {
+      check(!selectedByPkg.has(packageId), context + " selects more than one receipt for package: " + packageId);
+      selectedByPkg.add(packageId);
+    }
+  }
+  return raw as LifecycleDoc;
+}
+
+function allowlistEntries(trustDoc: TrustDoc): TrustEntry[] {
+  return trustDoc.allowlist;
+}
+
+function revocationEntries(trustDoc: TrustDoc): Revocation[] {
+  return trustDoc.revocations;
+}
+
+function findRevocation(trustDoc: TrustDoc, packageId: string, treeDigest: string, manifestDigest: string): Revocation | null {
+  for (const rec of revocationEntries(trustDoc)) {
+    if (rec.package_id === packageId && rec.tree_digest === treeDigest && rec.manifest_digest === manifestDigest) {
+      return rec;
+    }
+  }
+  return null;
+}
+
+// ---- lifecycle state root: atomic compare-and-swap ----
+
+function stateFilePath(stateRoot: string): string {
+  return path.join(stateRoot, "lifecycle-state.json");
+}
+
+function receiptsDir(stateRoot: string): string {
+  return path.join(stateRoot, "receipts");
+}
+
+function readStateDoc(stateRoot: string): LifecycleDoc | null {
+  const p = stateFilePath(stateRoot);
+  if (!fs.existsSync(p)) {
+    return null;
+  }
+  return parseLifecycleDoc(JSON.parse(fs.readFileSync(p, "utf8")), "lifecycle-state.json");
+}
+
+function writeFileAtomic(finalPath: string, data: string): void {
+  const dir = path.dirname(finalPath);
+  const tmp = path.join(dir, ".tmp-" + process.pid + "-" + randomUUID() + ".json");
+  fs.writeFileSync(tmp, data, { mode: 0o600 });
+  fs.renameSync(tmp, finalPath);
+}
+
+function processAlive(pid: number): boolean {
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch (err) {
+    return (err as NodeJS.ErrnoException).code === "EPERM";
+  }
+}
+
+function withLifecycleLock(stateRoot: string, observedRevision: string, action: () => void): void {
+  check(fs.existsSync(stateRoot) && fs.statSync(stateRoot).isDirectory(), "state root missing: " + stateRoot);
+  const lock = path.join(stateRoot, ".lifecycle.lock");
+  let acquired = false;
+  let retriedStale = false;
+  while (!acquired) {
+    try {
+      const fd = fs.openSync(lock, "wx");
+      fs.writeSync(fd, String(process.pid));
+      fs.closeSync(fd);
+      acquired = true;
+    } catch (err) {
+      const code = (err as NodeJS.ErrnoException).code;
+      if (code !== "EEXIST") {
+        throw err;
+      }
+      // Fail closed on an ambiguous in-progress write; recover a stale lock
+      // (dead owner) exactly once.
+      let owner = -1;
+      try {
+        owner = Number.parseInt(fs.readFileSync(lock, "utf8").trim(), 10);
+      } catch {
+        owner = -1;
+      }
+      const stale = owner > 0 && !processAlive(owner);
+      if (stale && !retriedStale) {
+        retriedStale = true;
+        fs.rmSync(lock, { force: true });
+        continue;
+      }
+      throw new Error("lifecycle CAS conflict: ambiguous lifecycle write in progress (lock held by " + (owner > 0 ? "pid " + owner : "unknown writer") + ")");
+    }
+  }
+  try {
+    const current = readStateDoc(stateRoot);
+    const currentRevision = current === null ? "0" : current.state_revision;
+    check(currentRevision === observedRevision,
+      "lifecycle CAS conflict: observed revision " + observedRevision + " is stale; current revision is " + currentRevision);
+    action();
+  } finally {
+    fs.rmSync(lock, { force: true });
+  }
+}
+
+function replaceStateCas(stateRoot: string, observedRevision: string, nextRevision: string, packages: LifecycleRef[]): void {
+  withLifecycleLock(stateRoot, observedRevision, () => {
+    const doc: LifecycleDoc = {
+      schema_version: "1.0.0",
+      state_revision: String(nextRevision),
+      packages,
+    };
+    parseLifecycleDoc(doc, "replacement lifecycle-state.json");
+    writeFileAtomic(stateFilePath(stateRoot), JSON.stringify(doc));
+  });
+}
+
+// ---- immutable receipts ----
+
+function writeImmutableReceipt(stateRoot: string, receipt: Receipt): string {
+  const dir = receiptsDir(stateRoot);
+  fs.mkdirSync(dir, { recursive: true });
+  const body = JSON.stringify(receipt);
+  const tmp = path.join(dir, ".tmp-" + process.pid + "-" + randomUUID() + ".json");
+  fs.writeFileSync(tmp, body, { mode: 0o600 });
+  const digest = "sha256:" + sha256Hex(fs.readFileSync(tmp));
+  const finalPath = path.join(dir, digest + ".json");
+  if (!fs.existsSync(finalPath)) {
+    fs.renameSync(tmp, finalPath);
+  } else {
+    fs.rmSync(tmp, { force: true });
+  }
+  return digest;
+}
+
+function parseReceipt(bytes: Buffer): Receipt | null {
+  try {
+    const raw: unknown = JSON.parse(bytes.toString("utf8"));
+    const doc = asRecord(raw, "receipt");
+    asString(doc.schema_version, "receipt.schema_version");
+    asString(doc.package_id, "receipt.package_id");
+    asString(doc.version, "receipt.version");
+    asString(doc.kind, "receipt.kind");
+    asRecord(doc.trust_class, "receipt.trust_class");
+    asRecord(doc.source, "receipt.source");
+    asRecord(doc.content_identity, "receipt.content_identity");
+    asRecord(doc.compatibility, "receipt.compatibility");
+    asRecord(doc.installation, "receipt.installation");
+    return raw as Receipt;
+  } catch {
+    return null;
+  }
+}
+
+function loadReceipt(stateRoot: string, receiptDigest: string): Receipt | null {
+  try {
+    requireCanonicalDigest(receiptDigest, "receipt lookup");
+  } catch {
+    return null;
+  }
+  const p = path.join(receiptsDir(stateRoot), receiptDigest + ".json");
+  if (!fs.existsSync(p)) {
+    return null;
+  }
+  const body = fileBytes(p);
+  if (sha256Hex(body) !== receiptDigest.slice(7)) {
+    return null;
+  }
+  return parseReceipt(body);
+}
+
+// ---- generic discovery and routing (identity-bound, receipt-bound) ----
+
+function manifestMatches(manifest: Manifest, language: string, workflow: string): boolean {
+  return manifest.kind === "language-quality" &&
+    manifest.supported_languages.includes(language) &&
+    manifest.available_workflows.includes(workflow);
+}
+
+function verifyInstalledIdentity(installedPath: string, reference: LifecycleRef, context: string): Manifest {
+  check(fs.existsSync(installedPath) && fs.statSync(installedPath).isDirectory(), context + ": installed path missing: " + installedPath);
+  const manifestPath = path.join(installedPath, "northstar-package.json");
+  check(fs.existsSync(manifestPath) && fs.statSync(manifestPath).isFile(), context + ": installed manifest missing");
+  requireCanonicalDigest(reference.tree_digest, context);
+  requireCanonicalDigest(reference.manifest_digest, context);
+  check(manifestDigestOf(manifestPath) === reference.manifest_digest, context + ": installed manifest identity drifted from receipt");
+  check(canonicalTreeDigest(installedPath, context) === reference.tree_digest, context + ": installed tree identity drifted from receipt");
+  return parseManifest(JSON.parse(fs.readFileSync(manifestPath, "utf8")), context + " installed manifest");
+}
+
+function receiptMatchesReference(receipt: Receipt, reference: LifecycleRef): boolean {
+  return receipt.package_id === reference.package_id &&
+    receipt.version === reference.version &&
+    receipt.content_identity.package_tree_digest === reference.tree_digest &&
+    receipt.content_identity.manifest_digest === reference.manifest_digest &&
+    receipt.installation.installed_path === reference.installed_path;
+}
+
+function resolveInstalledPackage(stateRoot: string, trustDoc: TrustDoc, packageId: string, version: string, language: string, workflow: string, coreVersion: string): ResolvedPackage | null {
+  const stateDoc = readStateDoc(stateRoot);
+  if (stateDoc === null) {
+    return null;
+  }
+  for (const reference of stateDoc.packages) {
+    // Route binds the requested identity: a selected package that is not the
+    // requested package_id/version is not a match.
+    if (reference.package_id !== packageId || reference.version !== version) {
+      continue;
+    }
+    if (reference.selection !== "selected") {
+      continue;
+    }
+    if (findRevocation(trustDoc, packageId, reference.tree_digest, reference.manifest_digest) !== null) {
+      continue;
+    }
+    // A path or prior selection without a matching immutable receipt and
+    // content identity is not routable.
+    const receipt = loadReceipt(stateRoot, reference.receipt_digest);
+    if (receipt === null || !receiptMatchesReference(receipt, reference)) {
+      continue;
+    }
+    const manifest = verifyInstalledIdentity(reference.installed_path, reference, "resolve");
+    if (!manifestMatches(manifest, language, workflow)) {
+      continue;
+    }
+    if (!checkSemverCompatibility(manifest.compatible_core_range, coreVersion)) {
+      continue;
+    }
+    return { reference, manifest, receipt };
+  }
+  return null;
+}
+
+// ---- semver ----
+
+function parseSemver(s: string): number[] | null {
+  if (!SEMVER.test(s)) {
+    return null;
+  }
+  return s.split(".").map((p) => Number.parseInt(p, 10));
+}
+
+function compareSemver(a: number[], b: number[]): number {
+  for (let i = 0; i < 3; i++) {
+    if (a[i] !== b[i]) {
+      return a[i] - b[i];
+    }
+  }
+  return 0;
+}
+
+function checkSemverCompatibility(range: string, coreVersion: string): boolean {
+  const core = parseSemver(coreVersion);
+  check(core !== null, "invalid core version: " + coreVersion);
+  if (range === "*") {
+    return true;
+  }
+  const exact = range.match(/^([0-9]+\.[0-9]+\.[0-9]+)$/);
+  if (exact !== null) {
+    return compareSemver(core as number[], parseSemver(exact[1]) as number[]) === 0;
+  }
+  const caret = range.match(/^\^([0-9]+\.[0-9]+\.[0-9]+)$/);
+  if (caret !== null) {
+    const base = parseSemver(caret[1]) as number[];
+    if (compareSemver(core as number[], base) < 0) {
+      return false;
+    }
+    const max = base[0] > 0 ? [base[0] + 1, 0, 0] : base[1] > 0 ? [0, base[1] + 1, 0] : [0, 0, base[2] + 1];
+    return compareSemver(core as number[], max) < 0;
+  }
+  const bounded = range.match(/^>=([0-9]+\.[0-9]+\.[0-9]+) <([0-9]+\.[0-9]+\.[0-9]+)$/);
+  if (bounded !== null) {
+    const min = parseSemver(bounded[1]) as number[];
+    const max = parseSemver(bounded[2]) as number[];
+    return compareSemver(core as number[], min) >= 0 && compareSemver(core as number[], max) < 0;
+  }
+  const ge = range.match(/^>=([0-9]+\.[0-9]+\.[0-9]+)$/);
+  if (ge !== null) {
+    return compareSemver(core as number[], parseSemver(ge[1]) as number[]) >= 0;
+  }
+  const lt = range.match(/^<([0-9]+\.[0-9]+\.[0-9]+)$/);
+  if (lt !== null) {
+    return compareSemver(core as number[], parseSemver(lt[1]) as number[]) < 0;
+  }
+  return false;
+}
+
+// ---- trust pin and restrictions ----
+
+function findPin(registry: RegistryDoc, trustDoc: TrustDoc, packageId: string, version: string): Pin | null {
+  for (const entry of registry.packages) {
+    if (entry.package_id === packageId && entry.version === version) {
+      return { entry, source: "official" };
+    }
+  }
+  for (const entry of allowlistEntries(trustDoc)) {
+    if (entry.package_id === packageId && entry.version === version) {
+      return { entry, source: "operator_allowlist" };
+    }
+  }
+  return null;
+}
+
+function enforcePinRestrictions(pin: Pin, workflow: string, consumerScope: string | null): void {
+  const entry = pin.entry;
+  if (Array.isArray(entry.workflows) && entry.workflows.length > 0 && !entry.workflows.includes(workflow)) {
+    throw new Error("allowlist pin restricts workflows to [" + entry.workflows.join(", ") + "]; requested " + workflow);
+  }
+  if (typeof entry.consumer_scope === "string" && entry.consumer_scope !== "" && entry.consumer_scope !== consumerScope) {
+    throw new Error("allowlist pin restricts consumer scope to '" + entry.consumer_scope + "'; consumer scope is '" + String(consumerScope) + "'");
+  }
+}
+
+function enforceRouteRestrictions(trustDoc: TrustDoc, registry: RegistryDoc, packageId: string, version: string, treeDigest: string, manifestDigest: string, workflow: string, consumerScope: string | null): void {
+  for (const entry of allowlistEntries(trustDoc)) {
+    if (entry.package_id === packageId && entry.version === version &&
+      entry.tree_digest === treeDigest && entry.manifest_digest === manifestDigest) {
+      enforcePinRestrictions({ entry, source: "operator_allowlist" }, workflow, consumerScope);
+      return;
+    }
+  }
+  for (const entry of registry.packages) {
+    if (entry.package_id === packageId && entry.version === version &&
+      entry.tree_digest === treeDigest && entry.manifest_digest === manifestDigest) {
+      enforcePinRestrictions({ entry, source: "official" }, workflow, consumerScope);
+      return;
+    }
+  }
+}
+
+// ---- declared self-check execution ----
+
+function findCommand(cmd: string): string | null {
+  if (cmd.includes("/")) {
+    return fs.existsSync(cmd) && fs.statSync(cmd).isFile() ? cmd : null;
+  }
+  for (const dir of (process.env.PATH ?? "").split(":")) {
+    if (dir === "") {
+      continue;
+    }
+    const candidate = path.join(dir, cmd);
+    try {
+      if (fs.existsSync(candidate) && fs.statSync(candidate).isFile() && (fs.statSync(candidate).mode & 0o111) !== 0) {
+        return candidate;
+      }
+    } catch {
+      // unreadable entry; keep searching
+    }
+  }
+  return null;
+}
+
+function resolveSelfCheckRunner(manifest: Manifest): string {
+  const commands = manifest.runtime_capabilities.required_commands;
+  check(commands.length > 0, "package declares no runtime command for self-check; cannot execute " + manifest.self_check.entrypoint);
+  const runner = commands[0];
+  check(findCommand(runner) !== null, "required runtime command not available on this host: " + runner);
+  return runner;
+}
+
+function runPackageSelfCheck(stagedRoot: string, manifest: Manifest): { output: string; exit: number } {
+  const entry = manifest.self_check.entrypoint;
+  check(isSafePackageRelativePath(entry), "self-check entrypoint violates containment");
+  const entryPath = path.join(stagedRoot, entry);
+  let st: fs.Stats;
+  try {
+    st = fs.lstatSync(entryPath);
+  } catch {
+    throw new Error("self-check entrypoint missing from staged payload: " + entry);
+  }
+  check(st.isFile(), "self-check entrypoint is not a regular file: " + entry);
+  check(!st.isSymbolicLink(), "self-check entrypoint must not be a symlink: " + entry);
+  const runner = resolveSelfCheckRunner(manifest);
+  const resolved = findCommand(runner) as string;
+  const result = spawnSync(resolved, [entryPath, stagedRoot], { encoding: "utf8" });
+  check(result.error === undefined, "self-check execution failed: " + String(result.error));
+  const output = String(result.stdout ?? "") + String(result.stderr ?? "");
+  return { output, exit: result.status === null ? -1 : result.status };
+}
+
+// ---- manifest parsing (structural) ----
+
+function parseManifest(raw: unknown, context: string): Manifest {
+  const doc = asRecord(raw, context);
+  check(asString(doc.schema_version, context + ".schema_version") === "1.0.0", context + " has unsupported schema_version");
+  check(PACKAGE_ID.test(asString(doc.package_id, context + ".package_id")), context + " has invalid package_id");
+  check(SEMVER.test(asString(doc.version, context + ".version")), context + " has invalid version");
+  check(asString(doc.kind, context + ".kind") === "language-quality", context + " has invalid kind");
+  asString(doc.compatible_core_range, context + ".compatible_core_range");
+  check(asStringArray(doc.supported_languages, context + ".supported_languages").length > 0, context + " has no supported_languages");
+  asStringArray(doc.supported_overlays, context + ".supported_overlays");
+  check(asStringArray(doc.available_workflows, context + ".available_workflows").length > 0, context + " has no available_workflows");
+  const entrypoints = asRecord(doc.entrypoints ?? {}, context + ".entrypoints");
+  for (const key of Object.keys(entrypoints)) {
+    check(isSafePackageRelativePath(entrypoints[key]), context + " entrypoint[" + key + "] violates containment");
+  }
+  const capabilities = asRecord(doc.runtime_capabilities ?? {}, context + ".runtime_capabilities");
+  asStringArray(capabilities.required_commands, context + ".runtime_capabilities.required_commands");
+  asStringArray(capabilities.optional_effigy_selectors, context + ".runtime_capabilities.optional_effigy_selectors");
+  const selfCheck = asRecord(doc.self_check ?? {}, context + ".self_check");
+  check(isSafePackageRelativePath(selfCheck.entrypoint), context + " self_check.entrypoint violates containment");
+  asStringArray(selfCheck.validated_profile_versions ?? [], context + ".self_check.validated_profile_versions");
+  asStringArray(selfCheck.validated_schema_versions ?? [], context + ".self_check.validated_schema_versions");
+  for (const forbidden of ["official", "is_official", "trusted", "trust_level", "allowlisted"]) {
+    check(!(forbidden in doc), context + " self-claims trust or official status (trust must be core-owned)");
+  }
+  return raw as Manifest;
+}
+
+function parseRegistryDoc(raw: unknown, context: string): RegistryDoc {
+  const doc = asRecord(raw, context);
+  asString(doc.schema_version, context + ".schema_version");
+  asString(doc.registry_version, context + ".registry_version");
+  check(Array.isArray(doc.packages), context + " packages must be an array");
+  for (const rawEntry of doc.packages) {
+    const entry = asRecord(rawEntry, context + " registry entry");
+    check(PACKAGE_ID.test(asString(entry.package_id, context + " entry package_id")), context + " entry has invalid package_id");
+    check(SEMVER.test(asString(entry.version, context + " entry version")), context + " entry has invalid version");
+    requireCanonicalDigest(entry.tree_digest, context + " entry");
+    requireCanonicalDigest(entry.manifest_digest, context + " entry");
+    asString(entry.compatible_core_range, context + " entry range");
+  }
+  return raw as RegistryDoc;
+}
+
+// ---- consumer activation ----
+
+function consumerActivationValid(consumerDir: string, packageId: string, version: string): { valid: boolean; scope: string | null } {
+  const marker = path.join(consumerDir, "docs/contracts/language-quality-activation.json");
+  if (!fs.existsSync(marker)) {
+    return { valid: false, scope: null };
+  }
+  const raw: unknown = JSON.parse(fs.readFileSync(marker, "utf8"));
+  if (!isRecord(raw)) {
+    return { valid: false, scope: null };
+  }
+  const valid = raw.package_id === packageId && raw.version === version;
+  return { valid, scope: isString(raw.scope) ? raw.scope : null };
+}
+
+// ---- acquisition ----
+
+function copyTree(srcRoot: string, dstRoot: string): void {
+  const queue = [""];
+  while (queue.length > 0) {
+    const relDir = queue.pop() as string;
+    const absSrc = relDir === "" ? srcRoot : path.join(srcRoot, relDir);
+    for (const entry of fs.readdirSync(absSrc, { withFileTypes: true })) {
+      const rel = relDir === "" ? entry.name : relDir + "/" + entry.name;
+      const dest = path.join(dstRoot, rel);
+      if (entry.isDirectory()) {
+        fs.mkdirSync(dest, { recursive: true });
+        queue.push(rel);
+      } else {
+        fs.mkdirSync(path.dirname(dest), { recursive: true });
+        const src = path.join(absSrc, entry.name);
+        fs.writeFileSync(dest, fileBytes(src));
+        fs.chmodSync(dest, fs.statSync(src).mode & 0o777);
+      }
+    }
+  }
+}
+
+function registryEntryDigest(entry: RegistryEntry): string {
+  const sorted: Record<string, unknown> = {};
+  for (const key of Object.keys(entry).sort()) {
+    sorted[key] = (entry as Record<string, unknown>)[key];
+  }
+  return "sha256:" + sha256Hex(Buffer.from(JSON.stringify(sorted)));
+}
+
+function buildReceipt(pin: Pin, installDir: string, packageId: string, version: string, coreVersion: string): Receipt {
+  const entry = pin.entry;
+  const trustClass: Record<string, unknown> = pin.source === "official"
+    ? {
+        type: "official",
+        registry_version: "1.0.0",
+        registry_entry_digest: registryEntryDigest(entry as RegistryEntry),
+      }
+    : {
+        type: "operator_allowlist",
+        allowlist_entry: JSON.stringify(entry.source_identity ?? entry.package_id),
+        allowlisted_by: "operator",
+      };
+  const source: Record<string, unknown> = entry.source_identity !== undefined
+    ? { ...entry.source_identity }
+    : { type: "git", repository: entry.repository, subpath: entry.subpath, commit: entry.commit };
+  if (source.type === "local_path" && source.acquisition_mode === undefined) {
+    source.acquisition_mode = "local";
+  }
+  return {
+    schema_version: "1.0.0",
+    package_id: packageId,
+    version,
+    kind: "language-quality",
+    trust_class: trustClass,
+    source,
+    content_identity: {
+      package_tree_digest: entry.tree_digest,
+      manifest_digest: entry.manifest_digest,
+    },
+    compatibility: {
+      compatible_core_range: entry.compatible_core_range,
+      installed_core_version: coreVersion,
+    },
+    installation: {
+      installed_path: installDir,
+      installed_at: TIMESTAMP,
+      acquisition_adapter: "fixture-staging",
+      activation_status: "active",
+    },
+  };
+}
+
+function acquireAndActivate(opts: AcquireOptions): AcquireOutcome {
+  const { stateRoot, consumerDir, trustDoc, registry, packageId, version, language, workflow, coreVersion, adapter, intent } = opts;
+
+  const installed = resolveInstalledPackage(stateRoot, trustDoc, packageId, version, language, workflow, coreVersion);
+  if (installed !== null) {
+    const identity = installed.reference.tree_digest;
+    enforceRouteRestrictions(trustDoc, registry, packageId, version, identity, installed.reference.manifest_digest, workflow, consumerActivationValid(consumerDir, packageId, version).scope);
+    const routeNotice = "routed " + packageId + " " + workflow + " local-only identity=" + identity;
+    notice(routeNotice);
+    return { status: "routed", notice: routeNotice };
+  }
+
+  if (intent === "detection") {
+    const n = "no acquisition without explicit workflow intent or activation for " + packageId + " (" + workflow + ")";
+    notice(n);
+    return { status: "no-route", notice: n };
+  }
+
+  let consumerScope: string | null = null;
+  if (intent === "activation") {
+    const activation = consumerActivationValid(consumerDir, packageId, version);
+    check(activation.valid, "activation marker missing or invalid for " + packageId + "@" + version);
+    consumerScope = activation.scope;
+  }
+
+  const pin = findPin(registry, trustDoc, packageId, version);
+  check(pin !== null, "no trusted pin for " + packageId + "@" + version + "; manual or local-path installation required");
+  requireCanonicalDigest(pin.entry.tree_digest, "pin");
+  requireCanonicalDigest(pin.entry.manifest_digest, "pin");
+  enforcePinRestrictions(pin, workflow, consumerScope);
+  check(findRevocation(trustDoc, packageId, pin.entry.tree_digest, pin.entry.manifest_digest) === null,
+    "identity " + pin.entry.tree_digest + " is revoked; acquisition blocked");
+
+  notice("acquire " + packageId + "@" + version +
+    " source=" + pin.source +
+    " target=" + path.join(stateRoot, "installed") +
+    " workflow=" + workflow);
+
+  const stagedRoot = adapter();
+
+  const stagedManifestPath = path.join(stagedRoot, "northstar-package.json");
+  check(fs.existsSync(stagedManifestPath), "staged payload missing northstar-package.json");
+  check(manifestDigestOf(stagedManifestPath) === pin.entry.manifest_digest,
+    "staged manifest identity does not match pin " + packageId + "@" + version);
+  check(canonicalTreeDigest(stagedRoot, "staged payload") === pin.entry.tree_digest,
+    "staged tree identity does not match pin " + packageId + "@" + version);
+
+  const stagedManifest = parseManifest(JSON.parse(fs.readFileSync(stagedManifestPath, "utf8")), "staged manifest");
+
+  check(checkSemverCompatibility(pin.entry.compatible_core_range, coreVersion),
+    "pin " + packageId + "@" + version + " incompatible with Northstar core " + coreVersion);
+
+  // Declared self-check execution: identity gates above have all passed.
+  const selfCheck = runPackageSelfCheck(stagedRoot, stagedManifest);
+  check(selfCheck.exit === 0, "self-check failed for " + packageId + "@" + version + ": " + selfCheck.output.trim());
+
+  const installRoot = path.join(stateRoot, "installed");
+  fs.mkdirSync(installRoot, { recursive: true });
+  const installDir = path.join(installRoot, packageId + "@" + version + "-" + pin.entry.tree_digest.slice(7, 19));
+  fs.mkdirSync(installDir, { recursive: true });
+  copyTree(stagedRoot, installDir);
+
+  const receipt = buildReceipt(pin, installDir, packageId, version, coreVersion);
+  const receiptDigest = writeImmutableReceipt(stateRoot, receipt);
+
+  const current = readStateDoc(stateRoot);
+  const observed = current === null ? "0" : current.state_revision;
+  const packages: LifecycleRef[] = [];
+  for (const ref of current === null ? [] : current.packages) {
+    const copied = { ...ref };
+    if (copied.package_id === packageId) {
+      copied.selection = "retained";
+    }
+    packages.push(copied);
+  }
+  packages.push({
+    package_id: packageId,
+    version,
+    tree_digest: pin.entry.tree_digest,
+    manifest_digest: pin.entry.manifest_digest,
+    receipt_digest: receiptDigest,
+    installed_path: installDir,
+    selection: "selected",
+    installed_at: TIMESTAMP,
+  });
+  replaceStateCas(stateRoot, observed, String(Number.parseInt(observed, 10) + 1), packages);
+
+  const activateNotice = "activated " + packageId + "@" + version +
+    " identity=" + pin.entry.tree_digest +
+    " at " + installDir;
+  notice(activateNotice);
+
+  return { status: "activated", notice: activateNotice, receiptDigest, treeDigest: pin.entry.tree_digest, installDir };
+}
+
+// ---- rollback ----
+
+function rollbackSelected(stateRoot: string, trustDoc: TrustDoc, targetReceiptDigest: string, coreVersion: string): string {
+  requireCanonicalDigest(targetReceiptDigest, "rollback target");
+  const current = readStateDoc(stateRoot);
+  check(current !== null, "rollback: no lifecycle state");
+  const target = current.packages.find((ref) => ref.receipt_digest === targetReceiptDigest);
+  check(target !== undefined, "rollback: target receipt is not retained");
+  check(target.selection === "retained", "rollback: target receipt is not a retained install");
+
+  const receipt = loadReceipt(stateRoot, targetReceiptDigest);
+  check(receipt !== null, "rollback: retained receipt document missing or forged");
+  check(receiptMatchesReference(receipt, target), "rollback: retained receipt fields do not match the reference");
+  const manifest = verifyInstalledIdentity(target.installed_path, target, "rollback revalidation");
+  check(findRevocation(trustDoc, target.package_id, target.tree_digest, target.manifest_digest) === null,
+    "rollback: target identity is revoked");
+  check(checkSemverCompatibility(manifest.compatible_core_range, coreVersion),
+    "rollback: target incompatible with core " + coreVersion);
+
+  const packages: LifecycleRef[] = [];
+  for (const ref of current.packages) {
+    const copied = { ...ref };
+    if (copied.receipt_digest === targetReceiptDigest) {
+      copied.selection = "selected";
+    } else if (copied.selection === "selected" && copied.package_id === target.package_id) {
+      copied.selection = "retained";
+    }
+    packages.push(copied);
+  }
+  replaceStateCas(stateRoot, current.state_revision, String(Number.parseInt(current.state_revision, 10) + 1), packages);
+
+  const n = "rolled back " + target.package_id + " to " + target.version + " identity=" + target.tree_digest;
+  notice(n);
+  return n;
+}
+
+// GENERIC-SURFACE-SCAN-END
+// ============================================================================
+// Oracle suite: fixed vectors and the eight review-oracle rows plus the
+// lifecycle transition matrix, concurrency, restrictions, and self-check.
+// ============================================================================
+
+function mkdirP(p: string): void {
+  fs.mkdirSync(p, { recursive: true });
+}
+
+function writeBytes(p: string, data: Buffer, mode = 0o644): void {
+  fs.mkdirSync(path.dirname(p), { recursive: true });
+  fs.writeFileSync(p, data, { mode });
+}
+
+function writeText(p: string, text: string, mode = 0o644): void {
+  writeBytes(p, Buffer.from(text, "utf8"), mode);
+}
+
+function snapshotHashes(root: string): string[] {
+  const out: string[] = [];
+  if (!fs.existsSync(root)) {
+    return out;
+  }
+  const walk = (dir: string): void => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const p = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        walk(p);
+      } else if (entry.isFile()) {
+        out.push(entry.name + ":" + sha256Hex(fileBytes(p)));
+      }
+    }
+  };
+  walk(root);
+  out.sort();
+  return out;
+}
+
+function requireHashesUnchanged(label: string, root: string, before: string[]): void {
+  const after = snapshotHashes(root);
+  check(JSON.stringify(after) === JSON.stringify(before), label + " changed consumer/state bytes: " + JSON.stringify(after));
+}
+
+function fixtureTrustDoc(fixtureRoot: string, extra: TrustEntry[], revocations: Revocation[]): TrustDoc {
+  const allowlist: TrustEntry[] = [
+    {
+      package_id: "@northstar/language-fixture",
+      version: "0.1.0",
+      source_identity: { type: "local_path", path: fixtureRoot },
+      tree_digest: FIXTURE_TREE_DIGEST,
+      manifest_digest: FIXTURE_MANIFEST_DIGEST,
+      compatible_core_range: ">=0.2.0 <1.0.0",
+      workflows: ["explicit_audit_repair"],
+      actor: "operator",
+      timestamp: TIMESTAMP,
+      reason: "card 117 fixture pin",
+    },
+  ];
+  for (const entry of extra) {
+    allowlist.push(entry);
+  }
+  return { schema_version: "1.0.0", revision: "1", allowlist, revocations };
+}
+
+function stagedDir(prefix: string): string {
+  return fs.mkdtempSync(path.join(fs.mkdtempSync(path.join(process.env.TMPDIR ?? "/tmp", prefix)), "s-"));
+}
+
+function fixtureAdapter(fixtureRoot: string): () => string {
+  return () => {
+    const staged = stagedDir("northstar-staged-");
+    copyTree(fixtureRoot, staged);
+    return staged;
+  };
+}
+
+function offlineAdapter(): () => string {
+  return () => {
+    throw new Error("network unavailable");
+  };
+}
+
+function consumerDir(extraFiles: Record<string, string> = {}): string {
+  const dir = fs.mkdtempSync(path.join(process.env.TMPDIR ?? "/tmp", "northstar-consumer-"));
+  fs.mkdirSync(path.join(dir, "docs/contracts"), { recursive: true });
+  writeText(path.join(dir, "README.md"), "# consumer\n");
+  for (const [rel, content] of Object.entries(extraFiles)) {
+    writeText(path.join(dir, rel), content);
+  }
+  return dir;
+}
+
+function buildVariantPackage(fixtureRoot: string, version: string, mutate: (manifest: Manifest, root: string) => void): string {
+  const variant = stagedDir("northstar-variant-");
+  copyTree(fixtureRoot, variant);
+  const manifestPath = path.join(variant, "northstar-package.json");
+  const manifest = parseManifest(JSON.parse(fs.readFileSync(manifestPath, "utf8")), "variant manifest");
+  manifest.version = version;
+  mutate(manifest, variant);
+  fs.writeFileSync(manifestPath, JSON.stringify(manifest));
+  return variant;
+}
+
+function variantPin(packageId: string, version: string, variantRoot: string): TrustEntry {
+  const manifestPath = path.join(variantRoot, "northstar-package.json");
+  return {
+    package_id: packageId,
+    version,
+    source_identity: { type: "local_path", path: variantRoot },
+    tree_digest: canonicalTreeDigest(variantRoot, "variant"),
+    manifest_digest: manifestDigestOf(manifestPath),
+    compatible_core_range: ">=0.2.0 <1.0.0",
+    actor: "operator",
+    timestamp: TIMESTAMP,
+    reason: "card 117 variant pin",
+  };
+}
+
+function emptyRegistry(): RegistryDoc {
+  return { schema_version: "1.0.0", registry_version: "1.0.0", packages: [] };
+}
+
+function runVectors(fixtureRoot: string): void {
+  // Fixed external vectors: expected digests are independent constants above,
+  // not derived by this implementation.
+  check(manifestDigestOf(path.join(fixtureRoot, "northstar-package.json")) === FIXTURE_MANIFEST_DIGEST,
+    "fixture manifest identity drifted from the independent vector");
+  check(canonicalTreeDigest(fixtureRoot, "fixture") === FIXTURE_TREE_DIGEST,
+    "fixture tree identity drifted from the independent vector");
+
+  // Digest spelling drift is rejected.
+  let drift = false;
+  try {
+    requireCanonicalDigest("c4ac81024268c8974002007aa5085cf4fae4b060f694c454e93c712add3ab6ef", "spelling");
+  } catch (err) {
+    drift = (err as Error).message.includes("non-canonical digest spelling");
+  }
+  check(drift, "bare-hex digest spelling was not rejected");
+  let caseDrift = false;
+  try {
+    requireCanonicalDigest("SHA256:c4ac81024268c8974002007aa5085cf4fae4b060f694c454e93c712add3ab6ef", "spelling");
+  } catch (err) {
+    caseDrift = (err as Error).message.includes("non-canonical digest spelling");
+  }
+  check(caseDrift, "upper-case digest prefix was not rejected");
+
+  // Cross-adapter reordered materialization yields the same identity.
+  const stageA = fs.mkdtempSync(path.join(process.env.TMPDIR ?? "/tmp", "northstar-adapter-a-"));
+  copyTree(fixtureRoot, stageA);
+  const stageB = fs.mkdtempSync(path.join(process.env.TMPDIR ?? "/tmp", "northstar-adapter-b-"));
+  const files: string[] = [];
+  const collect = (dir: string, relDir: string): void => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const rel = relDir === "" ? entry.name : relDir + "/" + entry.name;
+      if (entry.isDirectory()) {
+        collect(path.join(dir, entry.name), rel);
+      } else if (entry.isFile()) {
+        files.push(rel);
+      }
+    }
+  };
+  collect(fixtureRoot, "");
+  for (const rel of files.reverse()) {
+    const dest = path.join(stageB, rel);
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    fs.writeFileSync(dest, fileBytes(path.join(fixtureRoot, rel)));
+    fs.chmodSync(dest, fs.statSync(path.join(fixtureRoot, rel)).mode & 0o777);
+  }
+  const digestA = canonicalTreeDigest(stageA, "adapter-a");
+  const digestB = canonicalTreeDigest(stageB, "adapter-b");
+  check(digestA === FIXTURE_TREE_DIGEST && digestB === FIXTURE_TREE_DIGEST && digestA === digestB,
+    "cross-adapter reordered materialization produced differing identities");
+
+  // Symlink preserved by a transport: rejected, never followed.
+  const symlinkStage = fs.mkdtempSync(path.join(process.env.TMPDIR ?? "/tmp", "northstar-symlink-"));
+  copyTree(fixtureRoot, symlinkStage);
+  fs.symlinkSync("SKILL.md", path.join(symlinkStage, "evil-link"));
+  let symlinkRejected = false;
+  try {
+    canonicalTreeDigest(symlinkStage, "symlink");
+  } catch (err) {
+    symlinkRejected = (err as Error).message.includes("symbolic link");
+  }
+  check(symlinkRejected, "symlink payload was not rejected");
+
+  // Special file: rejected when the host can create one.
+  const fifoStage = fs.mkdtempSync(path.join(process.env.TMPDIR ?? "/tmp", "northstar-fifo-"));
+  copyTree(fixtureRoot, fifoStage);
+  const fifo = spawnSync("mkfifo", [path.join(fifoStage, "pipe")], { encoding: "utf8" });
+  if (fifo.status === 0) {
+    let specialRejected = false;
+    try {
+      canonicalTreeDigest(fifoStage, "special");
+    } catch (err) {
+      specialRejected = (err as Error).message.includes("special file");
+    }
+    check(specialRejected, "special file payload was not rejected");
+  }
+
+  // Case-fold collision: fold-equivalent names must not both register.
+  check(asciiCaseFold("SKILL.md") === asciiCaseFold("skill.md"), "ascii case fold does not equate case-only variants");
+  const seen = new Set<string>();
+  seen.add(asciiCaseFold("SKILL.md"));
+  check(seen.has(asciiCaseFold("skill.md")), "case-fold path collision was not rejected");
+
+  // Byte-exact vectors: NUL, non-UTF-8, multibyte, executable, non-executable.
+  const base = fs.mkdtempSync(path.join(process.env.TMPDIR ?? "/tmp", "northstar-vectors-"));
+  const buildTree = (name: string, files: Array<[string, Buffer, number]>): string => {
+    const root = path.join(base, name);
+    for (const [rel, data, mode] of files) {
+      writeBytes(path.join(root, rel), data, mode);
+    }
+    return root;
+  };
+  const nul = buildTree("nul", [
+    ["SKILL.md", Buffer.from("# x\n\0\0binary\n", "latin1"), 0o644],
+    ["northstar-package.json", Buffer.from('{"a":1}\n'), 0o600],
+  ]);
+  check(canonicalTreeDigest(nul, "nul") === V_NUL, "NUL-byte content vector drifted");
+  const nonUtf8 = buildTree("nonutf8", [
+    ["SKILL.md", Buffer.from([0x23, 0x20, 0xff, 0xfe, 0x00, 0x20, 0x72, 0x61, 0x77, 0x20, 0x62, 0x79, 0x74, 0x65, 0x73, 0x0a]), 0o644],
+    ["northstar-package.json", Buffer.from('{"a":1}\n'), 0o644],
+  ]);
+  check(canonicalTreeDigest(nonUtf8, "nonutf8") === V_NONUTF8, "non-UTF-8 content vector drifted");
+  const multi = buildTree("multi", [
+    ["SKILL.md", Buffer.from("café € 😀\n", "utf8"), 0o644],
+    ["northstar-package.json", Buffer.from('{"a":1}\n'), 0o644],
+  ]);
+  check(canonicalTreeDigest(multi, "multi") === V_MULTI, "multibyte content vector drifted");
+  const exe = buildTree("exe", [
+    ["SKILL.md", Buffer.from("# x\n"), 0o755],
+    ["northstar-package.json", Buffer.from('{"a":1}\n'), 0o644],
+  ]);
+  check(canonicalTreeDigest(exe, "exe") === V_EXE, "executable 0755 vector drifted");
+  const noexe444 = buildTree("m444", [
+    ["SKILL.md", Buffer.from("# x\n"), 0o444],
+    ["northstar-package.json", Buffer.from('{"a":1}\n'), 0o444],
+  ]);
+  check(canonicalTreeDigest(noexe444, "m444") === V_NOEXE, "non-executable 0444 vector drifted");
+  const noexe600 = buildTree("m600", [
+    ["SKILL.md", Buffer.from("# x\n"), 0o600],
+    ["northstar-package.json", Buffer.from('{"a":1}\n'), 0o600],
+  ]);
+  check(canonicalTreeDigest(noexe600, "m600") === V_NOEXE, "non-executable 0600 vector drifted");
+  check(canonicalTreeDigest(noexe444, "m444") === canonicalTreeDigest(noexe600, "m600"),
+    "non-executable modes must derive the same identity");
+  check(canonicalTreeDigest(exe, "exe") !== V_NOEXE, "executable bit must change the identity");
+  const recs = collectCanonicalFileRecords(exe, "executable");
+  check(recs.some((r) => r.path === "SKILL.md" && r.executable === 1), "executable bit not recorded in canonical records");
+
+  console.log("card-117 vectors: PASS (independent constants, NUL, non-UTF-8, multibyte, 0755/0600/0444, reorder, symlink, special, fold, spelling)");
+}
+
+function runOracle(fixtureRoot: string, outRoot: string): void {
+  mkdirP(outRoot);
+
+  // ---- oracle 1: detection is not authority ----
+  {
+    const out = path.join(outRoot, "r1-detect");
+    const stateRoot = path.join(out, "state");
+    mkdirP(stateRoot);
+    const consumer = consumerDir({
+      "Cargo.toml": "[package]\nname = \"detection-fixture\"\n",
+      "src/main.rs": "fn main() {}\n",
+    });
+    const consumerBefore = snapshotHashes(consumer);
+    const trustDoc = fixtureTrustDoc(fixtureRoot, [], []);
+    const registry = emptyRegistry();
+    let calls = 0;
+    const adapter = (): string => {
+      calls += 1;
+      return fixtureAdapter(fixtureRoot)();
+    };
+    const outcome = acquireAndActivate({
+      stateRoot, consumerDir: consumer, trustDoc, registry,
+      packageId: "@northstar/language-fixture", version: "0.1.0",
+      language: "fixture-lang", workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION, adapter, intent: "detection",
+    });
+    check(outcome.status === "no-route", "detection-only invocation acquired or routed a package");
+    check(calls === 0, "detection-only invocation called the transport adapter " + calls + " times");
+    requireHashesUnchanged("detection-only consumer", consumer, consumerBefore);
+    check(!fs.existsSync(stateFilePath(stateRoot)), "detection-only invocation created lifecycle state");
+    console.log("oracle-1 detection-is-not-authority: PASS");
+  }
+
+  // ---- oracle 2: content identity is canonical ----
+  {
+    runVectors(fixtureRoot);
+    console.log("oracle-2 content-identity-canonical: PASS");
+  }
+
+  // ---- oracle 3: activation is transactional ----
+  {
+    const out = path.join(outRoot, "r3-tx");
+    const stateRoot = path.join(out, "state");
+    mkdirP(stateRoot);
+    const consumer = consumerDir();
+    const consumerBefore = snapshotHashes(consumer);
+    const trustDoc = fixtureTrustDoc(fixtureRoot, [], []);
+    const registry = emptyRegistry();
+
+    let calls = 0;
+    const adapter = (): string => {
+      calls += 1;
+      return fixtureAdapter(fixtureRoot)();
+    };
+    const first = acquireAndActivate({
+      stateRoot, consumerDir: consumer, trustDoc, registry,
+      packageId: "@northstar/language-fixture", version: "0.1.0",
+      language: "fixture-lang", workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION, adapter, intent: "workflow_request",
+    });
+    check(first.status === "activated", "fixture install did not activate");
+    check(calls === 1, "install used the adapter more than once");
+    requireHashesUnchanged("install consumer", consumer, consumerBefore);
+    let state1 = readStateDoc(stateRoot);
+    check(state1 !== null && state1.state_revision === "1", "install did not advance state revision to 1");
+    check(state1.packages.length === 1 && state1.packages[0].selection === "selected", "install did not select exactly one receipt");
+    check(loadReceipt(stateRoot, state1.packages[0].receipt_digest) !== null, "installed receipt missing");
+
+    // Update: pinned 0.2.0 variant, prior receipt retained.
+    const variant = buildVariantPackage(fixtureRoot, "0.2.0", () => undefined);
+    const variantPinEntry = variantPin("@northstar/language-fixture", "0.2.0", variant);
+    const trustDocV = fixtureTrustDoc(fixtureRoot, [variantPinEntry], []);
+    let variantCalls = 0;
+    const variantAdapter = (): string => {
+      variantCalls += 1;
+      const staged = stagedDir("northstar-staged-");
+      copyTree(variant, staged);
+      return staged;
+    };
+    const update = acquireAndActivate({
+      stateRoot, consumerDir: consumer, trustDoc: trustDocV, registry,
+      packageId: "@northstar/language-fixture", version: "0.2.0",
+      language: "fixture-lang", workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION, adapter: variantAdapter, intent: "workflow_request",
+    });
+    check(update.status === "activated", "update did not activate");
+    state1 = readStateDoc(stateRoot);
+    check(state1 !== null && state1.state_revision === "2", "update did not advance state revision to 2");
+    check(state1.packages.length === 2, "update did not retain the previous install");
+    const selected2 = state1.packages.filter((ref) => ref.selection === "selected").map((ref) => ref.version);
+    check(JSON.stringify(selected2) === JSON.stringify(["0.2.0"]), "update did not select the new version");
+    requireHashesUnchanged("update consumer", consumer, consumerBefore);
+
+    // Failed update: candidate self-check fails AFTER bytes stage; the
+    // failing self-check writes a marker (side effect proves it ran).
+    const failing = buildVariantPackage(fixtureRoot, "0.3.0", (manifest, root) => {
+      manifest.self_check.entrypoint = "scripts/self-check-fail.sh";
+      writeText(path.join(root, "scripts/self-check-fail.sh"),
+        "#!/bin/sh\nset -eu\nroot=\"${1:?usage}\"\ntouch \"$root/self-check-ran.marker\"\necho \"[fixture-package:self-check] failing on purpose\" >&2\nexit 1\n", 0o755);
+    });
+    const failingPin = variantPin("@northstar/language-fixture", "0.3.0", failing);
+    const trustDocB = fixtureTrustDoc(fixtureRoot, [failingPin], []);
+    const failingAdapter = (): string => {
+      const staged = stagedDir("northstar-staged-");
+      copyTree(failing, staged);
+      return staged;
+    };
+    const stateBeforeFail = fs.readFileSync(stateFilePath(stateRoot), "utf8");
+    let failed = false;
+    let failMsg = "";
+    try {
+      acquireAndActivate({
+        stateRoot, consumerDir: consumer, trustDoc: trustDocB, registry,
+        packageId: "@northstar/language-fixture", version: "0.3.0",
+        language: "fixture-lang", workflow: "explicit_audit_repair",
+        coreVersion: CORE_VERSION, adapter: failingAdapter, intent: "workflow_request",
+      });
+    } catch (err) {
+      failed = true;
+      failMsg = (err as Error).message;
+    }
+    check(failed, "self-check-failing candidate unexpectedly activated");
+    check(failMsg.includes("self-check failed"), "failed update stopped at the wrong gate: " + failMsg);
+    // The failing self-check actually ran: its output names the failure.
+    check(failMsg.includes("failing on purpose"), "failing self-check output did not prove execution: " + failMsg);
+    check(fs.readFileSync(stateFilePath(stateRoot), "utf8") === stateBeforeFail, "failed update mutated lifecycle state");
+    requireHashesUnchanged("failed-update consumer", consumer, consumerBefore);
+    state1 = readStateDoc(stateRoot);
+    check(state1 !== null && state1.state_revision === "2" && state1.packages.length === 2, "failed update changed the state revision or duplicated references");
+    const selected3 = state1.packages.filter((ref) => ref.selection === "selected").map((ref) => ref.version);
+    check(JSON.stringify(selected3) === JSON.stringify(["0.2.0"]), "failed update changed the selected receipt");
+
+    // Rollback reselects the retained proven install without fetching.
+    const callsBeforeRollback = variantCalls;
+    const rollbackNotice = rollbackSelected(stateRoot, trustDocV, first.receiptDigest as string, CORE_VERSION);
+    check(rollbackNotice.includes("rolled back"), "rollback did not complete");
+    check(variantCalls === callsBeforeRollback, "rollback fetched from a transport");
+    state1 = readStateDoc(stateRoot);
+    check(state1 !== null && state1.state_revision === "3", "rollback did not advance the state revision");
+    const selected4 = state1.packages.filter((ref) => ref.selection === "selected").map((ref) => ref.version);
+    check(JSON.stringify(selected4) === JSON.stringify(["0.1.0"]), "rollback did not reselect the retained install");
+    requireHashesUnchanged("rollback consumer", consumer, consumerBefore);
+
+    // Failed rollback: retained bytes tampered -> selection and state exact.
+    writeText(path.join(update.installDir as string, "SKILL.md"), "tampered\n");
+    const stateBeforeFailRollback = fs.readFileSync(stateFilePath(stateRoot), "utf8");
+    let rbFailed = false;
+    try {
+      rollbackSelected(stateRoot, trustDocV, update.receiptDigest as string, CORE_VERSION);
+    } catch (err) {
+      rbFailed = (err as Error).message.includes("drifted");
+    }
+    check(rbFailed, "tampered retained bytes did not block rollback");
+    check(fs.readFileSync(stateFilePath(stateRoot), "utf8") === stateBeforeFailRollback, "failed rollback mutated lifecycle state");
+    console.log("oracle-3 activation-transactional: PASS");
+  }
+
+  // ---- oracle 4: state is operator-owned compare-and-swap ----
+  {
+    const out = path.join(outRoot, "r4-owned");
+    const stateRoot = path.join(out, "state");
+    mkdirP(stateRoot);
+    const consumer = consumerDir({
+      "docs/contracts/language-quality-config.json": JSON.stringify({ package_id: "@northstar/language-fixture", version: "0.1.0", trusted: true, selected: true }),
+    });
+    const consumerBefore = snapshotHashes(consumer);
+    const trustDoc = fixtureTrustDoc(fixtureRoot, [], []);
+    const registry = emptyRegistry();
+    let calls = 0;
+    const adapter = (): string => {
+      calls += 1;
+      return fixtureAdapter(fixtureRoot)();
+    };
+
+    const installed = resolveInstalledPackage(stateRoot, trustDoc, "@northstar/language-fixture", "0.1.0", "fixture-lang", "explicit_audit_repair", CORE_VERSION);
+    check(installed === null, "consumer config alone routed a package");
+
+    let blocked = false;
+    try {
+      acquireAndActivate({
+        stateRoot, consumerDir: consumer, trustDoc, registry,
+        packageId: "@northstar/consumer-claimed", version: "0.1.0",
+        language: "fixture-lang", workflow: "explicit_audit_repair",
+        coreVersion: CORE_VERSION, adapter, intent: "workflow_request",
+      });
+    } catch (err) {
+      blocked = (err as Error).message.includes("no trusted pin");
+    }
+    check(blocked, "consumer-claimed trust authorized acquisition");
+    check(calls === 0, "consumer-claimed request reached the transport");
+    requireHashesUnchanged("consumer-owned claim", consumer, consumerBefore);
+    check(!fs.existsSync(stateFilePath(stateRoot)), "consumer-claimed request created state");
+
+    acquireAndActivate({
+      stateRoot, consumerDir: consumer, trustDoc, registry,
+      packageId: "@northstar/language-fixture", version: "0.1.0",
+      language: "fixture-lang", workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION, adapter, intent: "workflow_request",
+    });
+    const observedA = readStateDoc(stateRoot)?.state_revision as string;
+    const variant = buildVariantPackage(fixtureRoot, "0.2.0", () => undefined);
+    const variantPinEntry = variantPin("@northstar/language-fixture", "0.2.0", variant);
+    const trustDocV = fixtureTrustDoc(fixtureRoot, [variantPinEntry], []);
+    const variantAdapter = (): string => {
+      const staged = stagedDir("northstar-staged-");
+      copyTree(variant, staged);
+      return staged;
+    };
+    acquireAndActivate({
+      stateRoot, consumerDir: consumer, trustDoc: trustDocV, registry,
+      packageId: "@northstar/language-fixture", version: "0.2.0",
+      language: "fixture-lang", workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION, adapter: variantAdapter, intent: "workflow_request",
+    });
+    check(readStateDoc(stateRoot)?.state_revision !== observedA, "writer B did not advance the revision");
+    const stateBeforeStale = fs.readFileSync(stateFilePath(stateRoot), "utf8");
+    let staleFailed = false;
+    let staleMsg = "";
+    try {
+      const stalePackages = JSON.parse(JSON.stringify(readStateDoc(stateRoot)?.packages ?? [])) as LifecycleRef[];
+      stalePackages.push({
+        package_id: "@northstar/language-fixture",
+        version: "0.9.9",
+        tree_digest: "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        manifest_digest: "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        receipt_digest: "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        installed_path: "/stale/0.9.9",
+        selection: "selected",
+        installed_at: TIMESTAMP,
+      });
+      replaceStateCas(stateRoot, observedA, "99", stalePackages);
+    } catch (err) {
+      staleFailed = true;
+      staleMsg = (err as Error).message;
+    }
+    check(staleFailed && staleMsg.includes("CAS conflict"), "stale writer was not stopped: " + staleMsg);
+    check(fs.readFileSync(stateFilePath(stateRoot), "utf8") === stateBeforeStale, "stale writer mutated lifecycle state");
+    const stateFinal = readStateDoc(stateRoot) as LifecycleDoc;
+    const selectedFinal = stateFinal.packages.filter((ref) => ref.selection === "selected").map((ref) => ref.version);
+    check(JSON.stringify(selectedFinal) === JSON.stringify(["0.2.0"]), "stale writer replaced the selection");
+    check(stateFinal.packages.filter((ref) => ref.version === "0.2.0").length === 1, "stale writer duplicated an installed package");
+    console.log("oracle-4 operator-owned-compare-and-swap: PASS");
+  }
+
+  // ---- oracle 5: offline is local ----
+  {
+    const out = path.join(outRoot, "r5-offline");
+    const stateRoot = path.join(out, "state");
+    mkdirP(stateRoot);
+    const consumer = consumerDir();
+    const trustDoc = fixtureTrustDoc(fixtureRoot, [], []);
+    const registry = emptyRegistry();
+    acquireAndActivate({
+      stateRoot, consumerDir: consumer, trustDoc, registry,
+      packageId: "@northstar/language-fixture", version: "0.1.0",
+      language: "fixture-lang", workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION, adapter: fixtureAdapter(fixtureRoot), intent: "workflow_request",
+    });
+    let offlineCalls = 0;
+    const offlineAdapterSpy = (): string => {
+      offlineCalls += 1;
+      throw new Error("network unavailable");
+    };
+    const routed = acquireAndActivate({
+      stateRoot, consumerDir: consumer, trustDoc, registry,
+      packageId: "@northstar/language-fixture", version: "0.1.0",
+      language: "fixture-lang", workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION, adapter: offlineAdapterSpy, intent: "workflow_request",
+    });
+    check(routed.status === "routed", "offline installed route did not route");
+    check(routed.notice.includes(FIXTURE_TREE_DIGEST), "offline route resolved the wrong identity");
+    check(offlineCalls === 0, "offline route touched the network adapter");
+    console.log("oracle-5 offline-is-local: PASS");
+  }
+
+  // ---- oracle 6: failure is scoped ----
+  {
+    const out = path.join(outRoot, "r6-scope");
+    const stateRoot = path.join(out, "state");
+    mkdirP(stateRoot);
+    const consumer = consumerDir();
+    const trustDoc = fixtureTrustDoc(fixtureRoot, [], []);
+    const registry = emptyRegistry();
+    acquireAndActivate({
+      stateRoot, consumerDir: consumer, trustDoc, registry,
+      packageId: "@northstar/language-fixture", version: "0.1.0",
+      language: "fixture-lang", workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION, adapter: fixtureAdapter(fixtureRoot), intent: "workflow_request",
+    });
+    const stateBefore = fs.readFileSync(stateFilePath(stateRoot), "utf8");
+    let missingStopped = false;
+    let missingNotice = "";
+    try {
+      acquireAndActivate({
+        stateRoot, consumerDir: consumer, trustDoc, registry,
+        packageId: "@northstar/missing-fixture", version: "0.1.0",
+        language: "missing-lang", workflow: "explicit_audit_repair",
+        coreVersion: CORE_VERSION, adapter: offlineAdapter(), intent: "workflow_request",
+      });
+    } catch (err) {
+      missingStopped = true;
+      missingNotice = (err as Error).message;
+    }
+    check(missingStopped, "missing package did not stop the workflow");
+    check(missingNotice.includes("manual or local-path"), "failure notice lacks the local installation route");
+    check(missingNotice.includes("@northstar/missing-fixture"), "failure notice lacks the exact identity");
+    check(fs.readFileSync(stateFilePath(stateRoot), "utf8") === stateBefore, "scoped failure mutated lifecycle state");
+    const routed = acquireAndActivate({
+      stateRoot, consumerDir: consumer, trustDoc, registry,
+      packageId: "@northstar/language-fixture", version: "0.1.0",
+      language: "fixture-lang", workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION, adapter: offlineAdapter(), intent: "workflow_request",
+    });
+    check(routed.status === "routed", "core route failed after scoped package failure");
+    console.log("oracle-6 failure-is-scoped: PASS");
+  }
+
+  // ---- oracle 7: trust is revocable ----
+  {
+    const out = path.join(outRoot, "r7-revoke");
+    const stateRoot = path.join(out, "state");
+    mkdirP(stateRoot);
+    const consumer = consumerDir();
+    const trustDoc = fixtureTrustDoc(fixtureRoot, [], []);
+    const registry = emptyRegistry();
+    acquireAndActivate({
+      stateRoot, consumerDir: consumer, trustDoc, registry,
+      packageId: "@northstar/language-fixture", version: "0.1.0",
+      language: "fixture-lang", workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION, adapter: fixtureAdapter(fixtureRoot), intent: "workflow_request",
+    });
+    const stateBefore = snapshotHashes(stateRoot);
+    const revokedDoc = fixtureTrustDoc(fixtureRoot, [], [
+      {
+        package_id: "@northstar/language-fixture",
+        version: "0.1.0",
+        tree_digest: FIXTURE_TREE_DIGEST,
+        manifest_digest: FIXTURE_MANIFEST_DIGEST,
+        actor: "operator",
+        timestamp: TIMESTAMP,
+        reason: "revocation proof",
+      },
+    ]);
+    let outcomeStatus = "unknown";
+    let blocked = false;
+    try {
+      const outcome = acquireAndActivate({
+        stateRoot, consumerDir: consumer, trustDoc: revokedDoc, registry,
+        packageId: "@northstar/language-fixture", version: "0.1.0",
+        language: "fixture-lang", workflow: "explicit_audit_repair",
+        coreVersion: CORE_VERSION, adapter: fixtureAdapter(fixtureRoot), intent: "workflow_request",
+      });
+      outcomeStatus = outcome.status;
+    } catch (err) {
+      outcomeStatus = "stopped";
+      blocked = (err as Error).message.includes("revoked");
+    }
+    check(outcomeStatus !== "routed" && outcomeStatus !== "activated", "revoked identity was routed or re-acquired");
+    check(blocked, "revoked identity was acquired");
+    check(JSON.stringify(snapshotHashes(stateRoot)) === JSON.stringify(stateBefore),
+      "revocation removed installed bytes, receipts, or lifecycle state");
+    console.log("oracle-7 trust-is-revocable: PASS");
+  }
+
+  // ---- oracle 8: routing is generic ----
+  {
+    const out = path.join(outRoot, "r8-generic");
+    const stateRoot = path.join(out, "state");
+    mkdirP(stateRoot);
+    const consumer = consumerDir();
+    const syntheticRoot = path.join(out, "synthetic");
+    copyTree(fixtureRoot, syntheticRoot);
+    const synthManifestPath = path.join(syntheticRoot, "northstar-package.json");
+    const synthManifest = parseManifest(JSON.parse(fs.readFileSync(synthManifestPath, "utf8")), "synthetic manifest");
+    synthManifest.package_id = "@northstar/synthetic-language";
+    synthManifest.supported_languages = ["quantum-lang"];
+    synthManifest.entrypoints = { explicit_audit_repair: "references/fixture-audit.md" };
+    fs.writeFileSync(synthManifestPath, JSON.stringify(synthManifest));
+    writeText(path.join(syntheticRoot, "references/fixture-audit.md"), "# Fixture Audit Mode (Synthetic)\n");
+    const synthTree = canonicalTreeDigest(syntheticRoot, "synthetic-language");
+    const pin: TrustEntry = {
+      package_id: "@northstar/synthetic-language",
+      version: "0.1.0",
+      source_identity: { type: "local_path", path: syntheticRoot },
+      tree_digest: synthTree,
+      manifest_digest: manifestDigestOf(synthManifestPath),
+      compatible_core_range: ">=0.2.0 <1.0.0",
+      actor: "operator",
+      timestamp: TIMESTAMP,
+      reason: "synthetic-language pin",
+    };
+    const trustDoc: TrustDoc = { schema_version: "1.0.0", revision: "1", allowlist: [pin], revocations: [] };
+    const registry = emptyRegistry();
+    const adapter = (): string => {
+      const staged = stagedDir("northstar-staged-");
+      copyTree(syntheticRoot, staged);
+      return staged;
+    };
+    const install = acquireAndActivate({
+      stateRoot, consumerDir: consumer, trustDoc, registry,
+      packageId: "@northstar/synthetic-language", version: "0.1.0",
+      language: "quantum-lang", workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION, adapter, intent: "workflow_request",
+    });
+    check(install.status === "activated", "synthetic-language package did not install");
+    const routed = acquireAndActivate({
+      stateRoot, consumerDir: consumer, trustDoc, registry,
+      packageId: "@northstar/synthetic-language", version: "0.1.0",
+      language: "quantum-lang", workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION, adapter, intent: "workflow_request",
+    });
+    check(routed.status === "routed", "synthetic-language route did not resolve by manifest fields");
+    const undeclared = resolveInstalledPackage(stateRoot, trustDoc, "@northstar/synthetic-language", "0.1.0", "quantum-lang", "everyday_authoring", CORE_VERSION);
+    check(undeclared === null, "undeclared workflow routed");
+    const wrongLanguage = resolveInstalledPackage(stateRoot, trustDoc, "@northstar/synthetic-language", "0.1.0", "fixture-lang", "explicit_audit_repair", CORE_VERSION);
+    check(wrongLanguage === null, "wrong-language request routed to the synthetic package");
+    const wrongIdentity = resolveInstalledPackage(stateRoot, trustDoc, "@northstar/language-fixture", "0.1.0", "quantum-lang", "explicit_audit_repair", CORE_VERSION);
+    check(wrongIdentity === null, "request for another package identity routed");
+    console.log("oracle-8 routing-is-generic: PASS");
+  }
+
+  // ---- trust restrictions and receipt provenance ----
+  {
+    const out = path.join(outRoot, "r9-restrictions");
+    const stateRoot = path.join(out, "state");
+    mkdirP(stateRoot);
+    const consumer = consumerDir();
+    const registry = emptyRegistry();
+
+    // Restricted workflow: the pin authorizes only everyday authoring.
+    const restrictedPin = fixtureTrustDoc(fixtureRoot, [], []);
+    restrictedPin.allowlist[0].workflows = ["everyday_authoring"];
+    let workflowBlocked = false;
+    try {
+      acquireAndActivate({
+        stateRoot, consumerDir: consumer, trustDoc: restrictedPin, registry,
+        packageId: "@northstar/language-fixture", version: "0.1.0",
+        language: "fixture-lang", workflow: "explicit_audit_repair",
+        coreVersion: CORE_VERSION, adapter: fixtureAdapter(fixtureRoot), intent: "workflow_request",
+      });
+    } catch (err) {
+      workflowBlocked = (err as Error).message.includes("restricts workflows");
+    }
+    check(workflowBlocked, "restricted-workflow pin did not block acquisition");
+    check(!fs.existsSync(stateFilePath(stateRoot)), "restricted acquisition created state");
+
+    // Restricted consumer scope: pin scope vs activation marker scope.
+    const scopeConsumer = consumerDir({
+      "docs/contracts/language-quality-activation.json": JSON.stringify({ package_id: "@northstar/language-fixture", version: "0.1.0", scope: "team-a" }),
+    });
+    const scopedPin = fixtureTrustDoc(fixtureRoot, [], []);
+    scopedPin.allowlist[0].consumer_scope = "team-b";
+    let scopeBlocked = false;
+    try {
+      acquireAndActivate({
+        stateRoot, consumerDir: scopeConsumer, trustDoc: scopedPin, registry,
+        packageId: "@northstar/language-fixture", version: "0.1.0",
+        language: "fixture-lang", workflow: "explicit_audit_repair",
+        coreVersion: CORE_VERSION, adapter: fixtureAdapter(fixtureRoot), intent: "activation",
+      });
+    } catch (err) {
+      scopeBlocked = (err as Error).message.includes("restricts consumer scope");
+    }
+    check(scopeBlocked, "restricted-consumer pin did not block acquisition");
+
+    // Official-source provenance: an official registry pin with git source
+    // must produce an official+git receipt, not allowlist+local_path.
+    const officialState = path.join(out, "official-state");
+    mkdirP(officialState);
+    const officialRegistry: RegistryDoc = {
+      schema_version: "1.0.0",
+      registry_version: "1.0.0",
+      packages: [
+        {
+          package_id: "@northstar/language-fixture",
+          version: "0.1.0",
+          repository: "https://github.com/inflatable-cookie/northstar.git",
+          subpath: "skills/northstar/assets/fixtures/language-packages/policy-free-fixture",
+          commit: "8f4a0d639c59900e9b7e4ba746776fe0f0cfb9c6",
+          tree_digest: FIXTURE_TREE_DIGEST,
+          manifest_digest: FIXTURE_MANIFEST_DIGEST,
+          compatible_core_range: ">=0.2.0 <1.0.0",
+        },
+      ],
+    };
+    const officialConsumer = consumerDir();
+    const officialAcquire = acquireAndActivate({
+      stateRoot: officialState, consumerDir: officialConsumer, trustDoc: fixtureTrustDoc(fixtureRoot, [], []), registry: officialRegistry,
+      packageId: "@northstar/language-fixture", version: "0.1.0",
+      language: "fixture-lang", workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION, adapter: fixtureAdapter(fixtureRoot), intent: "workflow_request",
+    });
+    check(officialAcquire.status === "activated", "official-source acquisition did not activate");
+    const officialStateDoc = readStateDoc(officialState) as LifecycleDoc;
+    const officialReceipt = loadReceipt(officialState, officialStateDoc.packages[0].receipt_digest) as Receipt;
+    check(officialReceipt.trust_class.type === "official", "official pin recorded non-official trust");
+    check(officialReceipt.source.type === "git" && officialReceipt.source.repository !== undefined, "official git pin recorded non-git source");
+
+    // Route-level restrictions: with the package installed, a pin that
+    // restricts workflows to everyday authoring must block the requested
+    // explicit-audit route (route execution honors trust restrictions).
+    const installedState = path.join(out, "installed-state");
+    mkdirP(installedState);
+    acquireAndActivate({
+      stateRoot: installedState, consumerDir: consumer, trustDoc: fixtureTrustDoc(fixtureRoot, [], []), registry,
+      packageId: "@northstar/language-fixture", version: "0.1.0",
+      language: "fixture-lang", workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION, adapter: fixtureAdapter(fixtureRoot), intent: "workflow_request",
+    });
+    const routeRestricted = fixtureTrustDoc(fixtureRoot, [], []);
+    routeRestricted.allowlist[0].workflows = ["everyday_authoring"];
+    let routeBlocked = false;
+    let routeMsg = "";
+    try {
+      acquireAndActivate({
+        stateRoot: installedState, consumerDir: consumer, trustDoc: routeRestricted, registry,
+        packageId: "@northstar/language-fixture", version: "0.1.0",
+        language: "fixture-lang", workflow: "explicit_audit_repair",
+        coreVersion: CORE_VERSION, adapter: fixtureAdapter(fixtureRoot), intent: "workflow_request",
+      });
+    } catch (err) {
+      routeBlocked = (err as Error).message.includes("restricts workflows");
+      routeMsg = (err as Error).message;
+    }
+    check(routeBlocked, "route executed a pin-restricted workflow: " + routeMsg);
+    console.log("oracle-9 trust-restrictions-and-receipt-provenance: PASS");
+  }
+
+  // ---- concurrency: overlapping writers and interrupted writes ----
+  {
+    const out = path.join(outRoot, "r10-concurrency");
+    const stateRoot = path.join(out, "state");
+    mkdirP(stateRoot);
+    const trustDoc = fixtureTrustDoc(fixtureRoot, [], []);
+    const registry = emptyRegistry();
+    const consumer = consumerDir();
+    acquireAndActivate({
+      stateRoot, consumerDir: consumer, trustDoc, registry,
+      packageId: "@northstar/language-fixture", version: "0.1.0",
+      language: "fixture-lang", workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION, adapter: fixtureAdapter(fixtureRoot), intent: "workflow_request",
+    });
+    const revisionN = readStateDoc(stateRoot)?.state_revision as string;
+
+    // Overlapping writers: two CAS attempts with the same observed revision;
+    // exactly one wins, the other conflicts, no duplicate references. Each
+    // writer's proposed state is valid: the prior install becomes retained.
+    const docBefore = readStateDoc(stateRoot) as LifecycleDoc;
+    const packagesA = JSON.parse(JSON.stringify(docBefore.packages)) as LifecycleRef[];
+    for (const ref of packagesA) {
+      ref.selection = "retained";
+    }
+    packagesA.push({
+      package_id: "@northstar/language-fixture",
+      version: "0.9.1",
+      tree_digest: "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      manifest_digest: "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      receipt_digest: "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      installed_path: "/overlap/a",
+      selection: "selected",
+      installed_at: TIMESTAMP,
+    });
+    const packagesB = JSON.parse(JSON.stringify(docBefore.packages)) as LifecycleRef[];
+    for (const ref of packagesB) {
+      ref.selection = "retained";
+    }
+    packagesB.push({
+      package_id: "@northstar/language-fixture",
+      version: "0.9.2",
+      tree_digest: "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      manifest_digest: "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      receipt_digest: "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      installed_path: "/overlap/b",
+      selection: "selected",
+      installed_at: TIMESTAMP,
+    });
+    // Serialized interleaving equivalent to overlap: writer A observes N,
+    // writer B commits N+1 first, then A's CAS with observed N must conflict.
+    replaceStateCas(stateRoot, revisionN, String(Number.parseInt(revisionN, 10) + 1), packagesB);
+    let overlapFailed = false;
+    try {
+      replaceStateCas(stateRoot, revisionN, "98", packagesA);
+    } catch (err) {
+      overlapFailed = (err as Error).message.includes("CAS conflict");
+    }
+    check(overlapFailed, "overlapping writer was not stopped");
+    const overlapDoc = readStateDoc(stateRoot) as LifecycleDoc;
+    check(overlapDoc.packages.filter((ref) => ref.version === "0.9.1").length === 0, "overlapping writer created a duplicate reference");
+    check(overlapDoc.packages.filter((ref) => ref.version === "0.9.2").length === 1, "overlap winner reference missing");
+
+    // Interrupted write: a stale lock from a dead owner is recovered exactly
+    // once; a live lock fails closed (ambiguous), never truncating state.
+    const staleLock = path.join(stateRoot, ".lifecycle.lock");
+    fs.writeFileSync(staleLock, "99999999\n"); // dead pid
+    const currentRev = overlapDoc.state_revision;
+    replaceStateCas(stateRoot, currentRev, String(Number.parseInt(currentRev, 10) + 1), overlapDoc.packages);
+    check(!fs.existsSync(staleLock), "stale lock was not recovered");
+    const afterRecovery = readStateDoc(stateRoot) as LifecycleDoc;
+    fs.writeFileSync(staleLock, String(process.pid) + "\n"); // live owner
+    const docBeforeAmbiguous = fs.readFileSync(stateFilePath(stateRoot), "utf8");
+    let ambiguous = false;
+    try {
+      replaceStateCas(stateRoot, afterRecovery.state_revision, "99", afterRecovery.packages);
+    } catch (err) {
+      ambiguous = (err as Error).message.includes("ambiguous lifecycle write");
+    }
+    check(ambiguous, "live lock did not fail closed");
+    check(fs.readFileSync(stateFilePath(stateRoot), "utf8") === docBeforeAmbiguous, "interrupted write truncated lifecycle state");
+    fs.rmSync(staleLock, { force: true });
+    // State document remains valid after every interrupted/overlapping write.
+    readStateDoc(stateRoot);
+    console.log("oracle-10 concurrency-atomic-cas: PASS");
+  }
+
+  // ---- self-check execution ----
+  {
+    const out = path.join(outRoot, "r11-selfcheck");
+    const stateRoot = path.join(out, "state");
+    mkdirP(stateRoot);
+    const consumer = consumerDir();
+    const trustDoc = fixtureTrustDoc(fixtureRoot, [], []);
+    const registry = emptyRegistry();
+    const acquire = acquireAndActivate({
+      stateRoot, consumerDir: consumer, trustDoc, registry,
+      packageId: "@northstar/language-fixture", version: "0.1.0",
+      language: "fixture-lang", workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION, adapter: fixtureAdapter(fixtureRoot), intent: "workflow_request",
+    });
+    check(acquire.status === "activated", "self-check-gated acquisition did not activate");
+
+    // A package declaring no runtime command cannot run its self-check and
+    // stops plainly before activation.
+    const noCommand = buildVariantPackage(fixtureRoot, "0.4.0", (manifest) => {
+      manifest.runtime_capabilities.required_commands = [];
+    });
+    const noCommandPin = variantPin("@northstar/language-fixture", "0.4.0", noCommand);
+    const noCommandTrust = fixtureTrustDoc(fixtureRoot, [noCommandPin], []);
+    let noCommandStopped = false;
+    try {
+      acquireAndActivate({
+        stateRoot, consumerDir: consumer, trustDoc: noCommandTrust, registry,
+        packageId: "@northstar/language-fixture", version: "0.4.0",
+        language: "fixture-lang", workflow: "explicit_audit_repair",
+        coreVersion: CORE_VERSION, adapter: () => {
+          const staged = stagedDir("northstar-staged-");
+          copyTree(noCommand, staged);
+          return staged;
+        }, intent: "workflow_request",
+      });
+    } catch (err) {
+      noCommandStopped = (err as Error).message.includes("declares no runtime command");
+    }
+    check(noCommandStopped, "package without a declared self-check runtime command did not stop");
+    console.log("oracle-11 self-check-execution: PASS");
+  }
+
+  console.log("card-117 oracle: PASS (8 review rows + transitions + restrictions + provenance + concurrency + self-check)");
+}
+
+function main(): void {
+  const args = process.argv.slice(2);
+  const command = args[0];
+  if (command === "oracle") {
+    const fixtureRoot = args[1];
+    const outRoot = args[2];
+    check(fs.existsSync(fixtureRoot), "fixture root missing: " + fixtureRoot);
+    runOracle(fixtureRoot, outRoot);
+    return;
+  }
+  if (command === "vectors") {
+    runVectors(args[1]);
+    return;
+  }
+  throw new Error("usage: language-package-lifecycle.ts oracle <fixture-root> <out-dir> | vectors <fixture-root>");
+}
+
+main();

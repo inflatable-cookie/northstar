@@ -204,26 +204,45 @@ The checker validates:
    ambiguous receipts);
 10. portable contracts (scanning for forbidden LLM provider dependencies).
 
-Card 117 extends the same checker with the generic installed-package runtime:
-11. canonical `sha256:` digest vectors: manifest identity over the exact manifest bytes
-    and the package-tree identity over the sorted length-framed regular-file stream
-    (rejecting non-portable paths, symlinks, special files, case-fold collisions, and
-    digest spelling drift), proven identical across source, staged, and retained payloads;
+Card 117 extends the same checker with the generic installed-package runtime,
+shipped as a provider-neutral Bun surface at
+`skills/northstar/scripts/language-package-lifecycle.ts`:
+11. canonical byte-exact `sha256:` digest vectors: manifest identity over exact
+    file bytes and the package-tree identity over the sorted length-framed
+    regular-file stream, with the executable bit taken from the permission
+    bits and fixed external vectors for NUL, non-UTF-8, and multibyte content
+    and for `0600`/`0444`/`0755` modes, expected digests from an independent
+    reference;
 12. `operator-trust.schema.json` (exact allowlist entries and revocations) and
-    `lifecycle-state.schema.json` (revisioned state with immutable receipt references
-    and at most one selected receipt per package), including duplicate/stale-selection
-    rejection and fail-closed vocabulary proofs;
-13. generic discovery and routing by manifest fields (`kind`, `supported_languages`,
-    `available_workflows`, core compatibility) with no language-specific core branch,
-    no Effigy dependency, and read-only route selection;
-14. transactional acquisition and rollback: staged identity verification, trust and
-    revocation gates before transport, deterministic self-check, immutable
-    digest-addressed receipts, compare-and-swap lifecycle replacement, and byte-exact
-    preservation of selection and consumer files on every failure;
-15. visible notices for acquisition, local-only routing, and scoped workflow failure;
-16. eight review-oracle falsifications (detection is not authority, canonical content
-    identity, transactional activation, operator-owned compare-and-swap state, offline
-    local routing, scoped failure, revocable trust, generic routing).
+    `lifecycle-state.schema.json` (revisioned state with immutable receipt
+    references and at most one selected receipt per package), including
+    duplicate/stale-selection rejection and fail-closed vocabulary proofs;
+13. identity-bound and receipt-bound discovery and routing by manifest fields
+    (`kind`, `supported_languages`, `available_workflows`, core compatibility)
+    with no language-specific core branch and no Effigy dependency: the
+    resolver loads and digest-checks the immutable receipt and cross-checks
+    receipt/reference/installed manifest before routing;
+14. transactional acquisition and rollback with atomic compare-and-swap
+    lifecycle replacement (lock-file serialization, stale-owner recovery,
+    fail-closed ambiguous-write handling, unique staging identities), trust
+    restrictions (`workflows`, `consumer_scope`) enforced before transport and
+    before route execution, truthful receipt provenance (official/allowlist
+    trust variant and pin source identity preserved), declared self-check
+    execution through the package's `required_commands` after identity gates,
+    and byte-exact preservation of selection and consumer files on every
+    failure;
+15. visible notices for acquisition, local-only routing, and scoped workflow
+    failure;
+16. review-oracle falsifications: detection is not authority, canonical
+    content identity, transactional activation, operator-owned compare-and-swap
+    state, offline local routing, scoped failure, revocable trust, generic
+    routing, plus restricted-workflow/consumer, official-source provenance,
+    overlapping-writer, interrupted-write, and self-check-execution oracles.
+
+The same surface is exercised with Effigy absent
+(`bun run skills/northstar/scripts/language-package-lifecycle.ts oracle
+<fixture-root> <out-dir>`) and from `effigy check:language-packages`, which
+also schema-validates every receipt the surface writes.
 
 ## Agent-instruction audit (`check:agent-instructions`)
 
