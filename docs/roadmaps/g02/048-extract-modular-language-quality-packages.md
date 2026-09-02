@@ -1,6 +1,6 @@
 # 048 - Extract Modular Language Quality Packages
 
-Status: active; card 117 complete; card 118 upstream fallback repair ready
+Status: active; card 118 core fallback notice repaired; Jetstream rerun serial
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.033`, promoted spec 034
@@ -48,8 +48,10 @@ before it becomes ready.
   Registry/routing is implemented in core PR 23, now repinned to the reviewed
   installed-invocation repair (`d18dc33b`, registry version `1.2.0`) with the
   non-vacuous installed setup/record operational proof added. PR 23 merged as
-  `5951dfb`. Jetstream PR 4 then exposed a missing operational fallback notice;
-  the bounded core repair is ready and overlap closure remains serial.
+  `5951dfb`. Jetstream PR 4 exposed a missing operational fallback notice;
+  the core repair adds the generic fallback decision, request-ID correlation,
+  and a schema-validated exact-version overlap registry.
+  Overlap closure remains serial on the retained Jetstream worker.
 - [ ] **Batch C — Rust extraction:** card 119 publishes, pins, installs, and
   proves Rust everyday authoring plus explicit audit and its Cargo engine.
 - [ ] **Batch D — root reduction:** card 120 removes both frozen embedded
@@ -96,7 +98,6 @@ before it becomes ready.
 
 ## Next Task
 
-Jetstream PR 4 exposed that the shipped forced-failure path stops before the
-required frozen-fallback notice. Run Northstar handoff `20260902-212756`, merge
-the bounded repair, then resume the retained Jetstream worker for exact
+Review and merge the Northstar fallback-notice PR from handoff
+`20260902-212756`. Resume the retained Jetstream PR 4 worker for exact
 fallback and hydrated editor evidence. Do not start card 119 automatically.

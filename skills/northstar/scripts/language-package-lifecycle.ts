@@ -38,6 +38,7 @@ const TIMESTAMP = "2026-09-02T00:00:00Z";
 const PORTABLE_PATH = /^[a-zA-Z0-9_-][a-zA-Z0-9_.-]*(?:\/[a-zA-Z0-9_-][a-zA-Z0-9_.-]*)*$/;
 const SEMVER = /^[0-9]+\.[0-9]+\.[0-9]+$/;
 const PACKAGE_ID = /^@[a-z0-9-]+\/[a-z0-9-]+$/;
+const REQUEST_ID = /^[A-Za-z0-9._:-]{8,128}$/;
 
 const FIXTURE_MANIFEST_DIGEST = "sha256:b9cdf39bbf2ae4fc2aeee656d2c8dc655c0faa951fbeec255eb887f210a683f9";
 const FIXTURE_TREE_DIGEST = "sha256:b8e76dfdc87d84904ada0620425c0a94200532d11207e3d1339626fb2df85aa3";
@@ -211,6 +212,15 @@ function asStringArray(value: unknown, context: string): string[] {
 function asRecord(value: unknown, context: string): Record<string, unknown> {
   check(isRecord(value), context + " must be an object");
   return value;
+}
+
+function requireClosedObject(doc: Record<string, unknown>, required: string[], context: string): void {
+  for (const key of required) {
+    check(Object.keys(doc).includes(key), context + " missing required field: " + key);
+  }
+  for (const key of Object.keys(doc)) {
+    check(required.includes(key), context + " contains forbidden additional property: " + key);
+  }
 }
 
 function notice(message: string): void {
@@ -1142,6 +1152,7 @@ function rollbackSelected(stateRoot: string, trustDoc: TrustDoc, targetReceiptDi
 
 interface HostRequest {
   protocol_version: string;
+  request_id: string;
   operation: "resolve" | "acquire_activate" | "rollback";
   intent: "workflow_request" | "activation" | "detection";
   package_id: string;
@@ -1157,6 +1168,7 @@ interface HostRequest {
 
 interface HostResult {
   protocol_version: string;
+  request_id: string;
   operation: "resolve" | "acquire_activate" | "rollback";
   status: "routed" | "activated" | "rolled_back" | "stopped";
   notice: string;
@@ -1164,6 +1176,14 @@ interface HostResult {
   manifest_digest?: string;
   installed_path?: string;
   receipt_digest?: string;
+}
+
+interface OverlapWindow {
+  language: string;
+  package_id: string;
+  version: string;
+  payload_label: string;
+  window: "open" | "closed";
 }
 
 type HostCapability = "catalogue" | "identity" | "atomic" | "process" | "acquisition";
@@ -1177,6 +1197,7 @@ const OP_CAPABILITIES: Record<HostRequest["operation"], HostCapability[]> = {
 function parseHostRequest(raw: unknown, context: string): HostRequest {
   const doc = asRecord(raw, context);
   check(asString(doc.protocol_version, context + ".protocol_version") === "1.0.0", context + " has unsupported protocol_version");
+  check(REQUEST_ID.test(asString(doc.request_id, context + ".request_id")), context + " has invalid request_id");
   const operation = asString(doc.operation, context + ".operation");
   check(operation === "resolve" || operation === "acquire_activate" || operation === "rollback", context + " has invalid operation");
   const intent = asString(doc.intent, context + ".intent");
@@ -1198,6 +1219,22 @@ function parseHostRequest(raw: unknown, context: string): HostRequest {
   return raw as HostRequest;
 }
 
+function parseHostResult(raw: unknown, context: string): HostResult {
+  const doc = asRecord(raw, context);
+  check(asString(doc.protocol_version, context + ".protocol_version") === "1.0.0", context + " has unsupported protocol_version");
+  check(REQUEST_ID.test(asString(doc.request_id, context + ".request_id")), context + " has invalid request_id");
+  const operation = asString(doc.operation, context + ".operation");
+  check(operation === "resolve" || operation === "acquire_activate" || operation === "rollback", context + " has invalid operation");
+  const status = asString(doc.status, context + ".status");
+  check(status === "routed" || status === "activated" || status === "rolled_back" || status === "stopped", context + " has invalid status");
+  asString(doc.notice, context + ".notice");
+  return raw as HostResult;
+}
+
+function hostResult(request: HostRequest, fields: Omit<HostResult, "protocol_version" | "request_id">): HostResult {
+  return { protocol_version: "1.0.0", request_id: request.request_id, ...fields };
+}
+
 function hostTrustDoc(stateRoot: string): TrustDoc {
   const p = path.join(stateRoot, "operator-trust.json");
   if (!fs.existsSync(p)) {
@@ -1215,7 +1252,7 @@ function hostRegistry(registryPath: string | null): RegistryDoc {
 
 function hostStopped(request: HostRequest, message: string): HostResult {
   notice(message);
-  return { protocol_version: "1.0.0", operation: request.operation, status: "stopped", notice: message };
+  return hostResult(request, { operation: request.operation, status: "stopped", notice: message });
 }
 
 function executeHostRequest(request: HostRequest, registryPath: string | null, capabilities: Set<HostCapability>): HostResult {
@@ -1241,8 +1278,7 @@ function executeHostRequest(request: HostRequest, registryPath: string | null, c
       enforceRouteRestrictions(trustDoc, registry, request.package_id, request.version, resolved.reference.tree_digest, resolved.reference.manifest_digest, request.workflow, requestScope);
       const n = "routed " + request.package_id + " " + request.workflow + " local-only identity=" + resolved.reference.tree_digest;
       notice(n);
-      return {
-        protocol_version: "1.0.0",
+      return hostResult(request, {
         operation: "resolve",
         status: "routed",
         notice: n,
@@ -1250,7 +1286,7 @@ function executeHostRequest(request: HostRequest, registryPath: string | null, c
         manifest_digest: resolved.reference.manifest_digest,
         installed_path: resolved.reference.installed_path,
         receipt_digest: resolved.reference.receipt_digest,
-      };
+      });
     }
     if (request.operation === "acquire_activate") {
       const outcome = acquireAndActivate({
@@ -1268,8 +1304,7 @@ function executeHostRequest(request: HostRequest, registryPath: string | null, c
         intent: request.intent,
       });
       if (outcome.status === "activated" || outcome.status === "routed") {
-        return {
-          protocol_version: "1.0.0",
+        return hostResult(request, {
           operation: "acquire_activate",
           status: outcome.status === "activated" ? "activated" : "routed",
           notice: outcome.notice,
@@ -1277,15 +1312,14 @@ function executeHostRequest(request: HostRequest, registryPath: string | null, c
           manifest_digest: outcome.manifestDigest,
           installed_path: outcome.installDir,
           receipt_digest: outcome.receiptDigest,
-        };
+        });
       }
       return hostStopped(request, outcome.notice);
     }
     const noticeText = rollbackSelected(request.state_root, trustDoc, request.target_receipt_digest as string, request.core_version);
     const after = readStateDoc(request.state_root) as LifecycleDoc;
     const target = after.packages.find((ref) => ref.receipt_digest === request.target_receipt_digest);
-    return {
-      protocol_version: "1.0.0",
+    return hostResult(request, {
       operation: "rollback",
       status: "rolled_back",
       notice: noticeText,
@@ -1293,11 +1327,61 @@ function executeHostRequest(request: HostRequest, registryPath: string | null, c
       manifest_digest: target?.manifest_digest,
       installed_path: target?.installed_path,
       receipt_digest: request.target_receipt_digest,
-    };
+    });
   } catch (err) {
-    const n = "workflow " + request.workflow + " for " + request.package_id + " stopped: " + (err as Error).message + "; manual or local-path installation route required";
+    const n = "workflow " + request.workflow + " for " + request.package_id + "@" + request.version + " stopped: " + (err as Error).message + "; manual or local-path installation route required";
     return hostStopped(request, n);
   }
+}
+
+function parseOverlapRegistry(raw: unknown, context: string): OverlapWindow[] {
+  const doc = asRecord(raw, context);
+  requireClosedObject(doc, ["schema_version", "windows"], context);
+  check(asString(doc.schema_version, context + ".schema_version") === "1.0.0", context + " has unsupported schema_version");
+  check(Array.isArray(doc.windows), context + ".windows must be an array");
+  const seen: string[] = [];
+  const windows: OverlapWindow[] = [];
+  let i = 0;
+  for (const item of doc.windows as unknown[]) {
+    const wctx = context + ".windows[" + String(i) + "]";
+    const w = asRecord(item, wctx);
+    requireClosedObject(w, ["language", "package_id", "version", "payload_label", "window"], wctx);
+    const language = asString(w.language, wctx + ".language");
+    check(language.length > 0, wctx + ".language is empty");
+    check(!seen.includes(language), context + " contains duplicate language: " + language);
+    seen.push(language);
+    const packageId = asString(w.package_id, wctx + ".package_id");
+    check(PACKAGE_ID.test(packageId), wctx + " has invalid package_id");
+    const version = asString(w.version, wctx + ".version");
+    check(SEMVER.test(version), wctx + " has invalid version");
+    const payloadLabel = asString(w.payload_label, wctx + ".payload_label");
+    check(payloadLabel.length > 0, wctx + ".payload_label is empty");
+    const window = asString(w.window, wctx + ".window");
+    check(window === "open" || window === "closed", wctx + ".window must be open or closed");
+    windows.push({ language, package_id: packageId, version, payload_label: payloadLabel, window: window as "open" | "closed" });
+    i += 1;
+  }
+  return windows;
+}
+
+function decideFrozenFallback(requestRaw: unknown, resultRaw: unknown, overlapRaw: unknown): string {
+  const request = parseHostRequest(requestRaw, "fallback request");
+  const result = parseHostResult(resultRaw, "fallback result");
+  check(request.request_id === result.request_id, "request/result identities disagree");
+  check(request.intent === "workflow_request" || request.intent === "activation", "detection never authorizes a fallback runtime");
+  const windows = parseOverlapRegistry(overlapRaw, "fallback overlap");
+  check(request.operation === result.operation, "request/result operations disagree");
+  check(request.operation === "acquire_activate", "fallback requires a stopped acquisition route");
+  check(result.status === "stopped", "fallback requires a stopped package route");
+  const matches = windows.filter((entry) => entry.language === request.language);
+  check(matches.length === 1, "language has no frozen overlap payload");
+  const selected = matches[0];
+  check(selected.package_id === request.package_id && selected.version === request.version, "request/result identities disagree");
+  check(selected.window === "open", "embedded fallback window is closed");
+  check(result.notice.length > 0, "fallback requires a stopped package route");
+  const body = request.package_id + "@" + request.version + " unavailable (" + result.notice + "); using the frozen embedded " + selected.payload_label + " payload during the bounded overlap window";
+  notice(body);
+  return body;
 }
 
 const FULL_HOST_CAPABILITIES = new Set<HostCapability>(["catalogue", "identity", "atomic", "process", "acquisition"]);
@@ -2649,6 +2733,7 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
 
     const baseRequest = {
       protocol_version: "1.0.0",
+      request_id: "req-oracle13-host-01",
       intent: "workflow_request",
       package_id: "@northstar/language-fixture",
       version: "0.1.0",
@@ -2663,6 +2748,7 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
     const acquireReq: HostRequest = { ...baseRequest, operation: "acquire_activate" };
     const acquireRes = executeHostRequest(acquireReq, null, FULL_HOST_CAPABILITIES);
     check(acquireRes.status === "activated", "host acquire_activate did not activate: " + acquireRes.notice);
+    check(acquireRes.request_id === acquireReq.request_id, "host activated result dropped request_id");
     check(acquireRes.operation === "acquire_activate", "host activated result lost its operation");
     check(acquireRes.tree_digest === FIXTURE_TREE_DIGEST && acquireRes.manifest_digest === FIXTURE_MANIFEST_DIGEST,
       "host activated result carries wrong identities");
@@ -2673,6 +2759,7 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
     const resolveReq: HostRequest = { ...baseRequest, operation: "resolve" };
     const resolveRes = executeHostRequest(resolveReq, null, FULL_HOST_CAPABILITIES);
     check(resolveRes.status === "routed", "host resolve did not route: " + resolveRes.notice);
+    check(resolveRes.request_id === resolveReq.request_id, "host routed result dropped request_id");
     check(resolveRes.operation === "resolve", "host routed result lost its operation");
     check(resolveRes.tree_digest === FIXTURE_TREE_DIGEST && resolveRes.receipt_digest === acquireRes.receipt_digest,
       "host resolve returned the wrong identity");
@@ -2682,6 +2769,7 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
     const missingRes = executeHostRequest(missingReq, null, FULL_HOST_CAPABILITIES);
     check(missingRes.status === "stopped" && missingRes.notice.includes("@northstar/missing-fixture"),
       "host resolve missing package did not stop scoped: " + missingRes.notice);
+    check(missingRes.request_id === missingReq.request_id, "host stopped result dropped request_id");
     check(missingRes.tree_digest === undefined && missingRes.receipt_digest === undefined,
       "stopped result carried success fields");
 
@@ -2779,6 +2867,7 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
     };
     const installedRequest = {
       protocol_version: "1.0.0",
+      request_id: "req-oracle13-installed-01",
       intent: "workflow_request",
       package_id: "@northstar/language-fixture",
       version: "0.1.0",
@@ -2796,6 +2885,7 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
     check(seedRun.status === 0, "installed-skill reference host failed: " + String(seedRun.stdout) + String(seedRun.stderr));
     const seedResult = readResult(seedRes);
     check(seedResult.status === "activated" && seedResult.operation === "acquire_activate", "installed-skill host did not activate: " + seedResult.notice);
+    check(seedResult.request_id === installedRequest.request_id, "installed-skill host dropped request_id");
 
     // resolve through the installed reference host entrypoint.
     const bunResFile = writePair("installed-resolve", { ...installedRequest, operation: "resolve" });
@@ -2837,6 +2927,7 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
     const pyResult = readResult(pyResFile);
     check(pyResult.status === "routed" && pyResult.operation === "resolve" && pyResult.tree_digest === FIXTURE_TREE_DIGEST,
       "python conforming host resolve returned wrong result: " + pyResult.notice);
+    check(pyResult.request_id === installedRequest.request_id, "python host dropped request_id");
     check(bunResult.notice === pyResult.notice, "reference and python hosts disagree on the result message");
 
     const pyAcquireFile = writePair("python-acquire", { ...installedRequest, operation: "acquire_activate" });
@@ -3038,6 +3129,7 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
 
     const baseRequest = {
       protocol_version: "1.0.0",
+      request_id: "req-oracle14-route-01",
       package_id: "@northstar/language-fixture",
       version: "0.1.0",
       language: "fixture-lang",
@@ -3062,19 +3154,23 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
       }
       const run = spawnSync("bun", argv, { encoding: "utf8" });
       check(run.status === 0, "host call " + name + " failed: " + String(run.stderr));
-      return JSON.parse(fs.readFileSync(resFile, "utf8")) as HostResult;
+      const result = JSON.parse(fs.readFileSync(resFile, "utf8")) as HostResult;
+      check(result.request_id === request.request_id, "host call " + name + " dropped request_id");
+      return result;
     };
 
-    // Forced-fallback trigger: official git-source pin, reference host with
-    // no git transport. The stop must be visible, name the package, and name
-    // the manual route; consumer files stay byte-identical.
+    // Official git-source pin, reference host with no git transport. The
+    // stop must be visible, name package@version, and name the manual
+    // route. That host result is not the overlap fallback notice.
     const fallback = hostCall("official-acquire-unavailable",
       { ...baseRequest, operation: "acquire_activate", intent: "workflow_request" },
       officialRegistryPath);
     check(fallback.status === "stopped" &&
-      fallback.notice.includes("@northstar/language-fixture") &&
+      fallback.notice.includes("@northstar/language-fixture@0.1.0") &&
       fallback.notice.includes("manual or local-path installation route required"),
       "official acquisition failure did not stop visibly with a manual route: " + fallback.notice);
+    check(!fallback.notice.includes("frozen embedded"),
+      "host stop claimed overlap fallback: " + fallback.notice);
     requireHashesUnchanged("official-acquisition-failure", consumer, beforeConsumer);
 
     // Route intent: detection with the official pin present must not acquire.
@@ -3186,11 +3282,108 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
       "route did not reopen on the rolled-back identity: " + afterRollback.notice);
 
     requireHashesUnchanged("card-118-route", consumer, beforeConsumer);
-    console.log("oracle-14 official-pin-route: PASS (visible fallback trigger, route intent, installed offline route, drift stop, rollback recovery, registry-version provenance)");
+    console.log("oracle-14 official-pin-route: PASS (visible acquisition stop, route intent, installed offline route, drift stop, rollback recovery, registry-version provenance)");
+  }
+
+  // ---- frozen-fallback notice: core overlap decision, not a host status ----
+  {
+    const skillRoot = path.dirname(path.dirname(process.argv[1]));
+    const overlapPath = path.join(skillRoot, "references/packages/overlap-windows.json");
+    const fixtureDir = path.join(skillRoot, "assets/fixtures/language-packages/fallback");
+    const overlap = JSON.parse(fs.readFileSync(overlapPath, "utf8"));
+    const jetstreamRequest = JSON.parse(fs.readFileSync(path.join(fixtureDir, "jetstream-shaped-request.json"), "utf8"));
+    const jetstreamResult = JSON.parse(fs.readFileSync(path.join(fixtureDir, "jetstream-shaped-result.json"), "utf8"));
+    check(jetstreamResult.status === "stopped" &&
+      jetstreamResult.notice.includes("manual or local-path installation route required") &&
+      !jetstreamResult.notice.includes("@northstar/typescript-quality@0.1.0") &&
+      !jetstreamResult.notice.includes("frozen embedded"),
+      "Jetstream-shaped host stop is no longer the pre-fix counterexample: " + jetstreamResult.notice);
+
+    const decided = decideFrozenFallback(jetstreamRequest, jetstreamResult, overlap);
+    check(decided.includes("@northstar/typescript-quality@0.1.0"),
+      "fallback notice omitted package-id@version: " + decided);
+    check(decided.includes("manual or local-path installation route required"),
+      "fallback notice omitted the host stop reason: " + decided);
+    check(decided.includes("using the frozen embedded TypeScript payload during the bounded overlap window"),
+      "fallback notice omitted the frozen payload clause: " + decided);
+
+    const out = path.join(outRoot, "r15-frozen-fallback");
+    mkdirP(path.join(out, "host-protocol/requests"));
+    mkdirP(path.join(out, "host-protocol/results"));
+    const noticeFile = path.join(out, "jetstream-shaped-notice.txt");
+    const cli = spawnSync("bun", ["run", process.argv[1], "fallback",
+      path.join(fixtureDir, "jetstream-shaped-request.json"),
+      path.join(fixtureDir, "jetstream-shaped-result.json"),
+      overlapPath,
+      noticeFile], { encoding: "utf8" });
+    check(cli.status === 0, "fallback CLI failed on the Jetstream-shaped pair: " + String(cli.stderr) + String(cli.stdout));
+    const cliNotice = fs.readFileSync(noticeFile, "utf8");
+    check(cliNotice.includes("@northstar/typescript-quality@0.1.0") &&
+      cliNotice.includes("manual or local-path installation route required") &&
+      cliNotice.includes("using the frozen embedded TypeScript payload during the bounded overlap window"),
+      "fallback CLI did not emit the exact overlap notice: " + cliNotice);
+    fs.writeFileSync(path.join(out, "host-protocol/requests", "jetstream-shaped.json"), JSON.stringify(jetstreamRequest));
+    fs.writeFileSync(path.join(out, "host-protocol/results", "jetstream-shaped.json"), JSON.stringify(jetstreamResult));
+
+    const expectFail = (label: string, request: unknown, result: unknown, overlapDoc: unknown, reason: string): void => {
+      let failed = false;
+      try {
+        decideFrozenFallback(request, result, overlapDoc);
+      } catch (err) {
+        failed = String((err as Error).message).includes(reason);
+        if (!failed) {
+          throw new Error(label + " rejected for wrong reason: " + String((err as Error).message));
+        }
+      }
+      check(failed, label + " unexpectedly passed");
+    };
+    expectFail("missing-version",
+      JSON.parse(fs.readFileSync(path.join(fixtureDir, "missing-version-request.json"), "utf8")),
+      jetstreamResult, overlap, "fallback request.version must be a string");
+    expectFail("wrong-identity",
+      JSON.parse(fs.readFileSync(path.join(fixtureDir, "wrong-identity-request.json"), "utf8")),
+      jetstreamResult, overlap, "request/result identities disagree");
+    expectFail("mismatched-request-id",
+      jetstreamRequest,
+      JSON.parse(fs.readFileSync(path.join(fixtureDir, "mismatched-request-id-result.json"), "utf8")),
+      overlap, "request/result identities disagree");
+    expectFail("detection-intent",
+      JSON.parse(fs.readFileSync(path.join(fixtureDir, "detection-intent-request.json"), "utf8")),
+      jetstreamResult, overlap, "detection never authorizes a fallback runtime");
+    expectFail("wrong-version",
+      JSON.parse(fs.readFileSync(path.join(fixtureDir, "wrong-version-request.json"), "utf8")),
+      jetstreamResult, overlap, "request/result identities disagree");
+    expectFail("non-stopped",
+      jetstreamRequest,
+      JSON.parse(fs.readFileSync(path.join(fixtureDir, "non-stopped-result.json"), "utf8")),
+      overlap, "fallback requires a stopped package route");
+    expectFail("operations-disagree",
+      jetstreamRequest,
+      JSON.parse(fs.readFileSync(path.join(fixtureDir, "operations-disagree-result.json"), "utf8")),
+      overlap, "request/result operations disagree");
+    expectFail("closed-overlap",
+      jetstreamRequest, jetstreamResult,
+      JSON.parse(fs.readFileSync(path.join(fixtureDir, "overlap-closed.json"), "utf8")),
+      "embedded fallback window is closed");
+    expectFail("no-payload",
+      JSON.parse(fs.readFileSync(path.join(fixtureDir, "no-payload-request.json"), "utf8")),
+      JSON.parse(fs.readFileSync(path.join(fixtureDir, "jetstream-shaped-result.json"), "utf8")),
+      overlap, "language has no frozen overlap payload");
+    const overlapNegDir = path.join(skillRoot, "assets/fixtures/language-packages/negative/overlap");
+    expectFail("overlap-extra-property",
+      jetstreamRequest, jetstreamResult,
+      JSON.parse(fs.readFileSync(path.join(overlapNegDir, "extra-property.json"), "utf8")),
+      "contains forbidden additional property");
+    expectFail("overlap-missing-version",
+      jetstreamRequest, jetstreamResult,
+      JSON.parse(fs.readFileSync(path.join(overlapNegDir, "missing-version.json"), "utf8")),
+      "missing required field");
+
+    console.log("oracle-15 frozen-fallback-notice: PASS (Jetstream-shaped host stop is not fallback evidence; exact overlap notice; missing version, wrong identity, mismatched request_id, detection, wrong version, non-stopped, operations disagree, closed window, no frozen payload, extra overlap property, and missing overlap version fail closed)");
   }
 
   console.log("card-117 oracle: PASS (8 review rows + transitions + restrictions + provenance + concurrency + self-check + identity-binding/store negatives)");
-  console.log("card-118 oracle: PASS (official registry pin route: visible fallback trigger, route intent, installed offline route, drift stop, rollback recovery, registry-version provenance)");
+  console.log("card-118 oracle: PASS (official registry pin route: visible acquisition stop, operational frozen-fallback notice, route intent, installed offline route, drift stop, rollback recovery, registry-version provenance)");
 }
 
 async function main(): Promise<void> {
@@ -3219,7 +3412,23 @@ async function main(): Promise<void> {
     fs.writeFileSync(args[2], JSON.stringify(result));
     return;
   }
-  throw new Error("usage: language-package-lifecycle.ts oracle <fixture-root> <out-dir> | vectors <fixture-root> | cas-race <state-root> <observed> <payload-file> <hold|attempt> | host <request-file> <result-file> [registry-path]");
+  if (command === "fallback") {
+    // fallback <request-file> <result-file> <overlap-file> [notice-file]:
+    // core-owned overlap decision. Consumes a stopped acquisition pair and
+    // emits the frozen-fallback notice, or fails closed.
+    check(args[1] !== undefined && args[2] !== undefined && args[3] !== undefined,
+      "usage: language-package-lifecycle.ts fallback <request-file> <result-file> <overlap-file> [notice-file]");
+    const body = decideFrozenFallback(
+      JSON.parse(fs.readFileSync(args[1], "utf8")),
+      JSON.parse(fs.readFileSync(args[2], "utf8")),
+      JSON.parse(fs.readFileSync(args[3], "utf8")),
+    );
+    if (args[4] !== undefined) {
+      fs.writeFileSync(args[4], body + "\n");
+    }
+    return;
+  }
+  throw new Error("usage: language-package-lifecycle.ts oracle <fixture-root> <out-dir> | vectors <fixture-root> | cas-race <state-root> <observed> <payload-file> <hold|attempt> | host <request-file> <result-file> [registry-path] | fallback <request-file> <result-file> <overlap-file> [notice-file]");
 }
 
 await main();

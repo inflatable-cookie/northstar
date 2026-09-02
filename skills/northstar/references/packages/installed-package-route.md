@@ -16,9 +16,11 @@ is one reference host adapter, not a prerequisite.
    A registry entry binds the exact source repository and subpath, immutable
    commit, tree digest, manifest digest, and compatible core range.
 2. Send `resolve` (intent `workflow_request`) through a conforming host
-   adapter: package ID, version, language, workflow, core version, optional
-   consumer scope, consumer directory, and the host-supplied operator state
-   root. Resolution is local-only; it never touches the network.
+   adapter: caller-generated `request_id`, package ID, version, language,
+   workflow, core version, optional consumer scope, consumer directory, and the
+   host-supplied operator state root. Resolution is local-only; it never
+   touches the network. Every result echoes the same `request_id`; mixed pairs
+   fail closed.
 3. On `routed`: use the package payload at `installed_path`. The result names
    the verified tree and manifest digests and the selected receipt.
 4. On `stopped` because no compatible package is installed, and the operator
@@ -61,6 +63,25 @@ Notice template:
 ```text
 [northstar:language-packages] notice: <package-id>@<version> unavailable (<stop reason>); using the frozen embedded <language> payload during the bounded overlap window
 ```
+
+A host `stopped` result is not this notice. The requesting mode obtains it by
+running the core fallback decision on the stopped `acquire_activate`
+request/result pair and the registered overlap windows
+(`references/packages/overlap-windows.json`):
+
+```text
+language-package-lifecycle.ts fallback <request.json> <result.json> <overlap-windows.json> [notice.txt]
+```
+
+The decision accepts only a correlated `stopped` acquisition for explicit
+workflow or activation intent. It fails closed when the overlap registry is
+schema-invalid (extra properties or a missing required field), the
+request/result `request_id` values differ, the intent is detection, the result
+is not `stopped`, operations or identities disagree, required identity is
+absent, the request version is outside the exact open window, the language has
+no frozen overlap payload, or the embedded fallback window is closed. Each open
+overlap entry binds one language to an exact package ID and version. It does
+not change the host status or claim the host executed embedded policy.
 
 Never silently prefer, update, refresh, or hide fallback use. The embedded
 payload receives no fixes or new rules during the window; a fallback defect

@@ -1,5 +1,6 @@
 {
   "protocol_version": "1.0.0",
+  "request_id": "req-host-result-neg-01",
   "status": "routed",
   "notice": "n",
   "tree_digest": "sha256:b8e76dfdc87d84904ada0620425c0a94200532d11207e3d1339626fb2df85aa3",

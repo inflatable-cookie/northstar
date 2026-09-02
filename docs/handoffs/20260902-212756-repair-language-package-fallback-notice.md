@@ -5,7 +5,7 @@ handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
 handoff: single-file-path-only
-status: ready
+status: complete
 owner: repo maintainers
 created: 2026-09-02
 updated: 2026-09-02
@@ -37,20 +37,27 @@ fallback pass the canary.
 ## Current State
 
 - Repository: `/Users/tom/Dev/projects/northstar`.
-- Dispatch base: `82489d47d6f8925e774560c7890a49681976acc0`.
-- Governing authority: contract 004, spec 034, installed-package route, roadmap
-  `g02.048`, card 118.
-- Accepted package: `@northstar/typescript-quality@0.1.0`, registry `1.2.0`,
-  source `d18dc33b`, tree `sha256:7676713…a334a`, manifest
-  `sha256:e5e32f2…85ca`.
-- Counterexample: Jetstream PR 4 at
-  `8420f9d1c9384aa7cf8d8bdc49a92981b87406c7`; review comment
-  `https://github.com/inflatable-cookie/jetstream/pull/4#issuecomment-5515931703`.
-- Worker branch: launcher-provided; suggested slug
-  `repair-language-package-fallback-notice`.
-- Worker class: day-to-day. The semantics are settled; implementation and
-  oracle repair are bounded.
-- Merge authority: absent. The worker opens a PR and stops.
+- Worker worktree: `/Users/tom/.paseo/worktrees/37pj4ag8/repair-language-package-fallback-notice`.
+- Worker branch: `worker/repair-language-package-fallback-notice`.
+- Dispatch base `82489d47` is an ancestor of pushed `origin/main` `9a0e5fc`.
+- Implementation: `decideFrozenFallback` plus `fallback` CLI on the generic
+  lifecycle surface. Every host request/result carries a caller-generated
+  `request_id`; both reference hosts echo it. Overlap windows are
+  schema-validated at the operational parser: extra properties and a missing
+  window version fail the CLI. The live registry pins TypeScript
+  `@northstar/typescript-quality` `0.1.0` as `open`. Detection, mismatched IDs,
+  and a version outside that exact window fail closed. Host catch prose
+  includes `@version` without claiming overlap fallback.
+- Pre-fix counterexample recorded: stopped
+  `@northstar/typescript-quality` `0.1.0` with
+  `manual or local-path installation route required`, no `@0.1.0`, no frozen
+  clause. `oracle-15` and the checker CLI convert that pair into the exact
+  notice and fail closed on the nine mutations plus overlap-schema negatives.
+  The operational CLI now also rejects extra-property and missing-version
+  overlap registries.
+- Evidence: `docs/logs/2026-09/02-215000-repair-language-package-fallback-notice.md`.
+- Jetstream PR 4 remains paused on its existing branch.
+- Merge authority: absent. The worker pushes the same PR and stops.
 
 ## Boundaries
 
@@ -96,10 +103,9 @@ fallback pass the canary.
 
 ## Suggested Next Move
 
-Run worker preflight, reproduce the missing notice through the shipped surface,
-then implement the smallest generic fallback-decision seam. Add mutation tests
-for missing version, wrong identity, non-stopped results, closed overlap, and a
-language without a frozen payload before updating closeout docs.
+Review and merge the Northstar PR, then resume the retained Jetstream PR 4
+worker for forced-fallback and hydrated editor validation. Do not start card
+119.
 
 ## Completion Protocol
 

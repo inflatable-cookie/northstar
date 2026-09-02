@@ -1,0 +1,12 @@
+{
+  "protocol_version": "1.0.0",
+  "request_id": "req-jetstream-ts-quality-01",
+  "operation": "acquire_activate",
+  "intent": "workflow_request",
+  "package_id": "@northstar/typescript-quality",
+  "language": "typescript",
+  "workflow": "explicit_audit_repair",
+  "core_version": "0.2.0",
+  "consumer_dir": "/consumer",
+  "state_root": "/state"
+}
