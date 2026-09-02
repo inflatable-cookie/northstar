@@ -127,7 +127,8 @@ The v1 manifest declares:
 - available workflow entrypoints (`everyday-authoring` and/or
   `explicit-audit-and-repair`), without inventing unavailable projections;
 - required runtime capabilities and optional Effigy selectors;
-- package self-check entrypoint and the profile/schema versions it validates;
+- package self-check entrypoint, explicit `direct` or `command` invocation,
+  and the profile/schema versions it validates;
 - optional evidence-provider capabilities, which remain subject to consumer
   profile activation and contract 004 authority.
 
@@ -150,6 +151,43 @@ tasks through `effigy skill run --path <PACKAGE> ...` in the consumer context.
 Effigy is an execution adapter, not package identity or discovery authority. A
 package must declare any required runtime capability and stop that workflow
 plainly when the host cannot provide it.
+
+### Provider-neutral host protocol
+
+`language-package-host.v1` is the operational boundary. It is a versioned JSON
+request/result protocol implemented by the current harness or another host
+adapter, not a requirement for a particular executable runtime. V1 operations
+are `resolve`, `acquire_activate`, and `rollback`. Every request names the
+operation, explicit intent, package ID and version, language, workflow, core
+version, optional consumer scope, and operator-supplied state root. A host may
+add adapter-private transport input outside the reusable message, but it cannot
+turn detection into intent or consumer data into trust.
+
+Results use `routed`, `activated`, `rolled_back`, or `stopped`; successful
+results include the exact tree and manifest identities plus resolved path and
+receipt identity when applicable, and every result includes the visible
+operator notice. The host supplies catalogue discovery, exact byte/mode reads,
+exclusive creation, atomic state replacement, acquisition, and process
+execution. Capability absence is an explicit `stopped` result scoped to the
+requested workflow. Effigy and Bun may provide adapters or reference proof,
+but the protocol and installed package do not depend on either.
+
+### Self-check invocation
+
+`self_check.invocation` is a required tagged union:
+
+- `{ "type": "direct" }` executes the verified package-relative entrypoint
+  directly with `[package_root]`;
+- `{ "type": "command", "command": "<name>" }` executes the named command
+  with `[resolved_entrypoint, package_root]`. The command must appear exactly in
+  `runtime_capabilities.required_commands`.
+
+Both variants use the package root as working directory. There is no shell
+interpolation, argument template, inferred runner, or meaning attached to the
+order of `required_commands`. Missing capability, launch failure, or non-zero
+exit stops before the candidate receipt can be selected. Hosts may capture
+bounded stdout/stderr as evidence, but output cannot grant trust or change the
+invocation contract.
 
 ## Official Registry And Integrity
 

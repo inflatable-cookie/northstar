@@ -27,6 +27,20 @@ Auto-start next card: no
 Implement and falsify the generic installed-package resolver and transactional
 fixture lifecycle without adding language-specific core behavior.
 
+## Accepted Review Decisions
+
+- The operational boundary is the provider-neutral
+  `language-package-host.v1` JSON request/result protocol. Host adapters supply
+  native catalogue, filesystem, atomic-state, transport, and execution
+  capabilities. Effigy and Bun are optional adapters/reference harnesses, not
+  consumer prerequisites.
+- V1 operations are `resolve`, `acquire_activate`, and `rollback`; requests and
+  results follow spec 034's exact fields and status grammar.
+- `self_check.invocation` is an explicit `direct`/`command` tagged union. Direct
+  execution receives `[package_root]`; command execution receives
+  `[resolved_entrypoint, package_root]`. Capability-list order has no meaning.
+- These decisions resolve PR 22 review round-two planning findings 1 and 2.
+
 ## Accepted Card-116 Baseline
 
 - reviewed head: `87496cb31877713d270b7361b297c54633c13d99`;
@@ -62,6 +76,11 @@ it must not substitute Git tree IDs or ad hoc archive hashes.
   rollback, offline routing, and language-workflow-only failure;
 - emit visible official acquisition and migration/failure notices;
 - expose generic package routing without hard-coded language branches;
+- add and validate the `language-package-host.v1` request/result machine
+  contract and exercise operational resolve/acquire/rollback entrypoints from
+  an installed skill with Effigy absent;
+- extend the manifest schema and fixtures with the explicit self-check
+  invocation union and prove both variants plus missing-capability failure;
 - add deterministic positive and negative fixture oracles and installed parity.
 
 Do not fetch a production language package, add language policy, change
@@ -77,11 +96,13 @@ consumer activation, or depend on Effigy for installed routing.
   `sha256:` identities across source, staged, and retained payloads;
 - [x] trust and lifecycle documents validate, reject duplicate or stale
   selections, and never take authority from consumer files;
-- [x] install/update/rollback failures preserve selection and consumer bytes;
-- [ ] compatible installed routing is local-only and works without Effigy
-  (operational entrypoint and portable core host pending planning);
-- [x] offline missing-package failure stops only the requested package workflow;
-- [x] ambiguous create/acquire outcomes retain identity and never duplicate an
+- [ ] install/update/rollback failures preserve selection and consumer bytes;
+- [ ] compatible installed routing is local-only and works without Effigy;
+- [ ] the installed operational surface accepts and returns
+  `language-package-host.v1` messages without requiring Bun, Node, Python,
+  POSIX shell, Effigy, or a provider API;
+- [ ] offline missing-package failure stops only the requested package workflow;
+- [ ] ambiguous create/acquire outcomes retain identity and never duplicate an
   installed package;
 - [x] no language or provider-specific branch enters core;
 - [x] full QA, package checks, parity, and negative side-effect proof pass.
@@ -98,6 +119,8 @@ consumer activation, or depend on Effigy for installed routing.
 | Failure is scoped. | Requested package is missing offline. | Stop only package workflow; core route still passes. | Dual-workflow fixture. |
 | Trust is revocable. | Installed receipt is valid but its identity is revoked. | Block execution, retain evidence and bytes. | Revocation fixture. |
 | Routing is generic. | Fixture uses an unknown language name with declared workflow. | Resolve by manifest fields, not core switch. | Synthetic-language fixture. |
+| Host protocol is portable. | Installed skill is invoked with Effigy and Bun absent, or an adapter omits one required capability. | Conforming host message routes; missing capability returns scoped `stopped`. | Installed-skill protocol fixture and capability-denied adapter. |
+| Self-check invocation is explicit. | Capability order changes, command runner is undeclared, or direct entrypoint is not executable. | Order has no effect; invalid invocation stops before selection. | Direct/command fixtures and negative runner/permission cases. |
 
 ## Evidence Required
 
