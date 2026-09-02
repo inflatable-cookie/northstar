@@ -80,16 +80,19 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02.047` is complete; card 115 diversified model routing across workers,
   delegates, and fresh orchestrators with focused ten-row oracle assertions.
   PR 20 merged at `08ad810` after exact-head review.
-- `g02.048` is active; card 117 proved the generic lifecycle (canonical digest
-  vectors, operator trust and lifecycle state, transactional
-  acquire/update/rollback, offline routing, revocable trust, generic routing)
-  and its PR is open for exact-head review.
+- `g02.048` is active; card 117 proved the generic lifecycle (byte-exact
+  digest vectors, operator trust and lifecycle state, atomic CAS, identity-
+  bound routing, transactional acquire/update/rollback, offline routing,
+  revocable trust, generic routing). PR 22 review accepted the byte-level
+  repair and returned two planning-change findings; the card is blocked on
+  the portable core host/API and self-check runner contract decisions.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Review the open `g02.048/117` generic lifecycle PR. Card 118 (TypeScript
-canary) stays blocked until that review merges and its readiness refresh
-passes; cards 119-120 remain planned behind it.
+Settle the two card `g02.048/117` planning decisions (portable core host/API
+for non-Effigy routing; explicit self-check runner/invocation contract) and
+re-review PR 22. Card 118 (TypeScript canary) stays blocked until those land
+and the PR merges; cards 119-120 remain planned behind it.

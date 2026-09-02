@@ -84,11 +84,14 @@ merged through PR 19 at `b99d19c`. Card 115 diversified model routing across
 workers, delegates, and fresh orchestrators; PR 20 merged at `08ad810` after
 exact-head review. Spec 034's modular-language-package design is promoted and
 compiled into `g02.048`. Card 116 merged through PR 21 at `eaeac88`. Card 117
-proved the generic lifecycle (canonical digest vectors, operator trust and
-lifecycle state, transactional acquire/update/rollback, offline routing,
-revocable trust, generic routing) with all eight review-oracle rows falsified;
-cards 118-120 remain the dependency-ordered TypeScript, Rust, and
-embedded-removal runway behind its review.
+proved the generic lifecycle (byte-exact digest vectors, operator trust and
+lifecycle state, atomic CAS, identity-bound routing, transactional
+acquire/update/rollback, offline routing, revocable trust, generic routing)
+with all eight review-oracle rows falsified; its PR 22 review accepted the
+byte-level repair and returned two planning-change findings, so the card is
+blocked on the portable core host/API and self-check runner contract
+decisions. Cards 118-120 remain the dependency-ordered TypeScript, Rust, and
+embedded-removal runway behind those decisions.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed

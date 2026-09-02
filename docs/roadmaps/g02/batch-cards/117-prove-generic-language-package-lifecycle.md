@@ -1,6 +1,6 @@
 # 117 - Prove Generic Language Package Lifecycle
 
-Status: complete
+Status: blocked; planning decision required (review findings 1-2)
 Owner: repo maintainers
 Updated: 2026-09-02
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -71,14 +71,15 @@ consumer activation, or depend on Effigy for installed routing.
 
 - [x] explicit workflow intent or existing activation can acquire the pinned
   fixture; detection alone cannot;
-- [x] invalid identity, receipt, content, compatibility, trust, revocation, or
-  self-check fails before activation;
+- [x] invalid identity, receipt, content, compatibility, trust, and revocation
+  fail before activation (self-check execution contract pending planning);
 - [x] raw manifest and canonical tree digest vectors produce exact required
   `sha256:` identities across source, staged, and retained payloads;
 - [x] trust and lifecycle documents validate, reject duplicate or stale
   selections, and never take authority from consumer files;
 - [x] install/update/rollback failures preserve selection and consumer bytes;
-- [x] compatible installed routing is local-only and works without Effigy;
+- [ ] compatible installed routing is local-only and works without Effigy
+  (operational entrypoint and portable core host pending planning);
 - [x] offline missing-package failure stops only the requested package workflow;
 - [x] ambiguous create/acquire outcomes retain identity and never duplicate an
   installed package;
@@ -132,66 +133,99 @@ consumer activation, or depend on Effigy for installed routing.
 - fixture proof exposes an architecture or trust gap;
 - validation changes the plan.
 
+## Planning Blockers (round-2 review findings 1-2)
+
+Two canonical decisions are missing; the branch stops on them rather than
+inventing authority:
+
+1. **Portable core host/API for installed-package routing.** Contract 004
+   requires an installed compatible package to remain routable without Effigy,
+   but no architecture/contract text names the consumer runtime host or the
+   operational API shape. The round-1 repair shipped a Bun CLI surface and
+   exercised its oracle without Effigy; round-2 review rejected that as a
+   consumer prerequisite without canonical authority (the existing
+   production-pack boundary explicitly avoids Bun/Node as a consumer
+   prerequisite merely to resolve scope). Decision required: choose and
+   document the portable core host/API (candidates: a provider-neutral data
+   protocol consumed by the harness directly; a POSIX-shell CLI; a python3
+   CLI; or an explicit Bun/Node prerequisite with the boundary updated), then
+   expose real operational commands/imports and prove them from an installed
+   skill with Effigy absent.
+2. **Explicit self-check runner/invocation contract.** The round-1 repair
+   executed the declared self-check by treating
+   `runtime_capabilities.required_commands[0]` as the runner
+   (`<runner> <entrypoint> <staged-root>`). Neither the frozen manifest schema
+   nor contract 004 assigns order or runner semantics to `required_commands`.
+   Decision required: promote an explicit runner/invocation contract (or
+   another provider-neutral self-check mechanism) into
+   `package-manifest.schema.json`, contract 004, and spec 034, update
+   fixtures, and re-base the self-check oracle on the selected contract.
+
+While these are open, the branch claims only the accepted and repaired parts:
+byte-exact digest vectors, trust/lifecycle schemas, identity/receipt-bound
+routing, atomic CAS state, immutable digest-addressed installs with truthful
+pre-selection receipts, trust restrictions and provenance, offline local
+routing, revocation, and the real two-process concurrency oracle. It does not
+claim an operational installed runtime or a canonical self-check contract.
+
 ## Completion Notes
 
-Completed and falsified the generic language package lifecycle (g02.048/117)
-against the accepted card-116 baseline, including the exact-head review repair
-of PR 22 (six `execution-miss` findings):
+Status: BLOCKED on planning decisions (round-2 review findings 1-2). The
+implementation and oracle work below is delivered and validated; the two
+planning-blocked items are scoped out of the claims.
+
+Implemented and falsified against the accepted card-116 baseline, including
+round-1 and round-2 review repairs:
 
 - `operator-trust.schema.json` and `lifecycle-state.schema.json` under
   `skills/northstar/references/packages/` inside the frozen Draft 2020-12
   vocabulary, with positive state fixtures and eight negative trust/lifecycle
   fixtures plus schema mutation discrimination and fail-closed keyword proofs.
-- The generic lifecycle now ships as a callable provider-neutral surface:
-  `skills/northstar/scripts/language-package-lifecycle.ts` (Bun CLI). It owns
-  canonical byte-exact digest framing (Buffer streams, permission-bit
-  executable test, NUL/non-UTF-8/multibyte vectors fixed against independent
-  constants), operator trust/lifecycle documents, atomic compare-and-swap
-  lifecycle state (lock-file serialization with stale-owner recovery and
-  fail-closed ambiguous-write handling, unique staging identities), immutable
-  digest-addressed receipts, identity-bound and receipt-bound routing,
-  transactional acquisition/rollback, revocation, offline local routing, and
-  declared self-check execution via the package's `required_commands` (the
-  fixture declares `sh` and ships `scripts/self-check.sh`; the declared check
-  runs after identity/compatibility gates, and a valid-present-but-failing
-  self-check proves execution by its output while leaving state and consumer
-  bytes exact). The exact same surface is exercised with Effigy absent
-  (`bun run language-package-lifecycle.ts oracle ...`) and from the checker.
-- Route resolution binds the requested package identity and version, loads and
-  digest-checks the immutable receipt, and cross-checks receipt/reference/
-  installed manifest; trust restrictions (`workflows`, `consumer_scope`) are
-  enforced before transport and before route execution; receipts preserve the
-  actual official/allowlist trust variant and the pin's source identity.
-- The policy-free fixture was revised so its self-check is executable by the
-  declared capability (entrypoint `scripts/self-check.sh`, required command
-  `sh`). The accepted card-116 manifest identity `029efa32...` remains the
-  recorded baseline; the revised fixture derives the new runtime identities:
-  manifest `sha256:bfd357c0e39785c974147e7521e6d39da0c121c2842a25bc7148535a640fdf45`,
-  tree `sha256:125c0daf6de56f00ae8f293425b587af767a1bacfacac3711c042e9b56ae40d9`,
-  proven identical across source, staged, and retained payloads and across
-  reordered cross-adapter materialization.
-- All eight review-oracle rows are falsified, plus trust-restriction and
-  receipt-provenance counterexamples (restricted workflow, restricted consumer
-  scope, official git source, source mismatch), overlapping-writer and
-  interrupted-write concurrency oracles (one winner, one conflict, no
-  truncation, no duplicate reference, retained staged identity), and the
-  self-check execution oracles. Every written receipt is schema-validated by
-  the checker against `installation-receipt.schema.json` (12 receipts).
-- Wired the new schemas and fixtures into the repo-contract required files and
-  documented the extended check in `scripts/README.md`.
-- Validated with `effigy check:language-packages` (surface oracle + receipts),
-  isolated skill-install parity, `effigy qa:docs`, `effigy qa`, and
-  `git diff --check`.
+- A proof surface, `skills/northstar/scripts/language-package-lifecycle.ts`
+  (Bun CLI), owns: canonical byte-exact digest framing (Buffer streams,
+  permission-bit executable test, fixed external vectors for
+  NUL/non-UTF-8/multibyte/0600/0444/0755 from an independent reference);
+  operator trust/lifecycle document validation; lock-serialized atomic
+  compare-and-swap lifecycle state (stale-owner recovery exactly once,
+  fail-closed ambiguous writes, unique staging identities); immutable
+  digest-addressed receipts; identity- and receipt-bound routing (requested
+  package_id/version bound; receipt loaded, digest-checked, and cross-checked
+  against reference and installed manifest); transactional
+  acquire/update/rollback; revocation before transport; offline local
+  routing; trust restrictions (`workflows`, `consumer_scope`) enforced before
+  transport and route; receipts preserving the actual official/allowlist
+  trust variant and pin source identity with truthful pre-selection
+  `activation_status: "installed"`; and immutable install store addressed by
+  the FULL tree digest with exclusive verify-or-fail publishing.
+- Round-2 execution-miss repairs landed: staged manifest identity/version/
+  range binding with mutated negatives; full-digest immutable install
+  addressing with occupied/partial-target counterexamples; and a REAL
+  two-process concurrency oracle (separate bun processes, deterministic
+  barrier, one winner commits while the other fails closed on the held lock
+  without removing it, state stays parseable, single selected identity), plus
+  the interrupted/live-lock cases.
+- All eight review-oracle rows falsified plus restrictions, provenance,
+  concurrency, self-check execution (provisional, pending the runner
+  contract), and identity/store negatives. Every written receipt is
+  schema-validated by the checker (13 receipts).
+- The policy-free fixture was revised to an executable self-check
+  (`scripts/self-check.sh`, declared `sh` capability); the accepted card-116
+  manifest identity `029efa32...` remains the recorded baseline, and the
+  revised fixture derives manifest
+  `sha256:bfd357c0e39785c974147e7521e6d39da0c121c2842a25bc7148535a640fdf45`,
+  tree `sha256:125c0daf6de56f00ae8f293425b587af767a1bacfacac3711c042e9b56ae40d9`.
+- Validation: standalone oracle (Effigy absent) PASS; `effigy
+  check:language-packages` PASS (13 receipt schema validations); isolated
+  skill-install parity; `effigy qa:docs`; `effigy qa`; `git diff --check`.
 
-Known limits: the fixture self-check executes under the declared `sh`
-capability; the surface itself requires a Bun-capable host (the repo's
-secondary runtime; no non-Effigy Rhai host exists). The case-fold collision
-negative is proven through the same fold-registration predicate the walker
-executes because the host filesystem is case-insensitive. Arbitrary package
-code beyond the declared self-check remains the card-118 canary boundary.
+Not claimed (planning-blocked): an operational installed runtime entrypoint
+and portable core host (see Planning Blockers 1) and a canonical self-check
+runner/invocation contract (see Planning Blockers 2). The Bun surface is the
+accepted proof harness, not a settled consumer prerequisite.
 
 ## Next Task
 
-Stop for exact-head review. After merge, refresh card 118 against the shipped
-generic lifecycle protocol; do not start TypeScript extraction until the
-generic lifecycle PR is reviewed and merged.
+Stop at planning: the orchestrator must settle the portable core host/API and
+the self-check runner/invocation contract (Planning Blockers 1-2) before this
+card can complete. Do not start card 118 or TypeScript extraction until those
+decisions land and this card's PR is reviewed and merged.

@@ -5,7 +5,7 @@ handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
 handoff: single-file-path-only
-status: complete
+status: blocked; planning decisions required (round-2 review findings 1-2)
 owner: repo maintainers
 created: 2026-09-02
 updated: 2026-09-02
@@ -113,29 +113,32 @@ and fixture proof against the eight-row review oracle.
 
 - PR: https://github.com/inflatable-cookie/northstar/pull/22
   (`main` <- `worker/prove-generic-language-package-lifecycle`).
-- Review head `981db752e25486e453a72888dccff394aa115b3e` required changes
-  (six `execution-miss` findings). Repairs landed on this branch: the
-  lifecycle now ships as a provider-neutral Bun surface
-  (`skills/northstar/scripts/language-package-lifecycle.ts`) exercised with
-  Effigy absent and from the checker; byte-exact digest framing with
-  independent vectors (NUL, non-UTF-8, multibyte, 0600/0444/0755);
-  identity/receipt-bound routing; trust restrictions and truthful receipt
-  provenance; lock-based atomic CAS with stale-owner recovery and
-  fail-closed ambiguity; declared self-check execution via the fixture's
-  `sh` capability with a proven-execution failure oracle. The fixture was
-  revised accordingly (new identities: manifest
-  `sha256:bfd357c0e39785c974147e7521e6d39da0c121c2842a25bc7148535a640fdf45`,
-  tree `sha256:125c0daf6de56f00ae8f293425b587af767a1bacfacac3711c042e9b56ae40d9`);
-  the card-116 baseline identity `029efa32...` remains the recorded accepted
-  baseline.
-- Repaired head: the PR head after this record and the dated log push; the
-  full surface oracle (Effigy absent), `effigy check:language-packages`
-  (including 12 receipt schema validations), isolated skill-install parity,
-  `effigy qa:docs`, `effigy qa`, and `git diff --check` were rerun on it.
-- Closeout claims were reconciled: "works without Effigy" now refers to the
-  callable Bun surface (no non-Effigy Rhai host exists); "atomic CAS" is the
-  lock-serialized compare-and-swap; digest vectors are byte-exact with
-  independent constants; receipts are schema-validated by the checker;
-  self-check execution is real and capability-declared.
-- Next: exact-head orchestrator re-review. Do not merge. In-bounds findings
-  are repaired on this branch.
+- Round-1 review head `981db752e25486e453a72888dccff394aa115b3e` required
+  changes; repaired at `2b43cf0`. Round-2 review of `2b43cf0` ACCEPTED the
+  byte-level repair and returned five findings: findings 1-2 are
+  planning-change, findings 3-5 are execution-miss.
+- Finding 3 fixed: staged manifest identity/version/range bound to the
+  requested pin, with mutated negatives; route cross-checks
+  reference/receipt/manifest end to end.
+- Finding 4 fixed: install store addressed by the FULL canonical tree digest
+  with exclusive verify-or-fail publishing (occupied/partial targets fail
+  without writing); receipts written before CAS truthfully record
+  `activation_status: "installed"`; prefix-collision and occupied-target
+  counterexamples added.
+- Finding 5 fixed: the concurrency oracle now runs two real bun processes
+  against one state root with a deterministic barrier (one winner commits,
+  the loser fails closed on the held lock without removing it, state remains
+  parseable, one selected identity); interrupted/live-lock cases retained.
+- Findings 1-2 STOPPED as planning-change: no canonical authority exists for
+  a Bun consumer prerequisite or for the `required_commands[0]` self-check
+  runner convention. The branch reverted the overstrong completion claims
+  (card 117 -> blocked; acceptance items for non-Effigy routing and
+  self-check un-checked) and records the precise decisions required in the
+  card and dated log under "Planning Blockers".
+- Validation on the new head: standalone oracle (Effigy absent) PASS (12
+  oracle groups), `effigy check:language-packages` PASS (13 receipt schema
+  validations), isolated skill-install parity (169 files), `effigy qa:docs`
+  PASS, `effigy qa` PASS, `git diff --check` clean.
+- Next: orchestrator planning decisions for the portable core host/API and
+  the self-check runner/invocation contract. Do not merge; do not start card
+  118 until the decisions land and this PR is accepted.

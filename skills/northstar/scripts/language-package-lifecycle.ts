@@ -28,7 +28,7 @@
 
 // GENERIC-SURFACE-SCAN-BEGIN
 import { createHash, randomUUID } from "node:crypto";
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as path from "node:path";
 
@@ -583,6 +583,14 @@ function resolveInstalledPackage(stateRoot: string, trustDoc: TrustDoc, packageI
       continue;
     }
     const manifest = verifyInstalledIdentity(reference.installed_path, reference, "resolve");
+    // End-to-end agreement: reference, receipt, and installed manifest must
+    // all declare the same identity, version, and compatibility range.
+    if (manifest.package_id !== packageId || manifest.version !== reference.version) {
+      continue;
+    }
+    if (manifest.compatible_core_range !== receipt.compatibility.compatible_core_range) {
+      continue;
+    }
     if (!manifestMatches(manifest, language, workflow)) {
       continue;
     }
@@ -866,11 +874,16 @@ function buildReceipt(pin: Pin, installDir: string, packageId: string, version: 
       compatible_core_range: entry.compatible_core_range,
       installed_core_version: coreVersion,
     },
+    // The receipt is written BEFORE the lifecycle compare-and-swap, so it must
+    // truthfully record only installation ("installed"); activation is the
+    // state selection that follows a successful CAS. A lost CAS leaves a
+    // receipt that claims installation of retained bytes, never an activation
+    // that did not happen.
     installation: {
       installed_path: installDir,
       installed_at: TIMESTAMP,
       acquisition_adapter: "fixture-staging",
-      activation_status: "active",
+      activation_status: "installed",
     },
   };
 }
@@ -924,6 +937,15 @@ function acquireAndActivate(opts: AcquireOptions): AcquireOutcome {
 
   const stagedManifest = parseManifest(JSON.parse(fs.readFileSync(stagedManifestPath, "utf8")), "staged manifest");
 
+  // The staged manifest must declare the requested identity, version, and
+  // compatibility range: a pin must never install a manifest that claims
+  // another package, version, or range.
+  check(stagedManifest.package_id === packageId,
+    "staged manifest declares identity " + stagedManifest.package_id + ", requested " + packageId);
+  check(stagedManifest.version === version,
+    "staged manifest declares version " + stagedManifest.version + ", requested " + version);
+  check(stagedManifest.compatible_core_range === pin.entry.compatible_core_range,
+    "staged manifest compatibility range does not match the pin");
   check(checkSemverCompatibility(pin.entry.compatible_core_range, coreVersion),
     "pin " + packageId + "@" + version + " incompatible with Northstar core " + coreVersion);
 
@@ -933,9 +955,32 @@ function acquireAndActivate(opts: AcquireOptions): AcquireOutcome {
 
   const installRoot = path.join(stateRoot, "installed");
   fs.mkdirSync(installRoot, { recursive: true });
-  const installDir = path.join(installRoot, packageId + "@" + version + "-" + pin.entry.tree_digest.slice(7, 19));
-  fs.mkdirSync(installDir, { recursive: true });
-  copyTree(stagedRoot, installDir);
+  // Immutable digest-addressed store: the install directory is addressed by
+  // the FULL canonical tree digest, published exclusively, and never
+  // overwritten. An existing target must already have the exact identity;
+  // anything else fails without writing.
+  const installDir = path.join(installRoot, packageId + "@" + version + "-" + pin.entry.tree_digest.slice(7));
+  fs.mkdirSync(path.dirname(installDir), { recursive: true });
+  if (fs.existsSync(installDir)) {
+    check(manifestDigestOf(path.join(installDir, "northstar-package.json")) === pin.entry.manifest_digest,
+      "install target exists with a different manifest identity; refusing to overwrite: " + installDir);
+    check(canonicalTreeDigest(installDir, "existing install") === pin.entry.tree_digest,
+      "install target exists with a different tree identity; refusing to overwrite: " + installDir);
+  } else {
+    try {
+      fs.mkdirSync(installDir);
+    } catch (err) {
+      const code = (err as NodeJS.ErrnoException).code;
+      check(code === "EEXIST", "cannot create install target: " + String(err));
+      // A concurrent publisher won the race: verify its exact identity
+      // before reusing; anything else fails without writing.
+      check(manifestDigestOf(path.join(installDir, "northstar-package.json")) === pin.entry.manifest_digest,
+        "concurrent install target has a different manifest identity; refusing to reuse: " + installDir);
+      check(canonicalTreeDigest(installDir, "concurrent install") === pin.entry.tree_digest,
+        "concurrent install target has a different tree identity; refusing to reuse: " + installDir);
+    }
+    copyTree(stagedRoot, installDir);
+  }
 
   const receipt = buildReceipt(pin, installDir, packageId, version, coreVersion);
   const receiptDigest = writeImmutableReceipt(stateRoot, receipt);
@@ -1007,6 +1052,79 @@ function rollbackSelected(stateRoot: string, trustDoc: TrustDoc, targetReceiptDi
 }
 
 // GENERIC-SURFACE-SCAN-END
+// ============================================================================
+// cas-race: real two-process compare-and-swap contention.
+//
+// usage: cas-race <state-root> <observed> <payload-file> <mode>
+//   mode "hold":    acquire the lifecycle lock, write <state-root>/.race-ready,
+//                   poll for <state-root>/.race-go (bounded), then CAS with the
+//                   observed revision and release.
+//   mode "attempt": attempt replaceStateCas with the observed revision; print
+//                   "cas-attempt: committed" or "cas-attempt: conflict".
+// ============================================================================
+
+function casRaceMain(args: string[]): void {
+  const stateRoot = args[0];
+  const observed = args[1];
+  const payloadFile = args[2];
+  const mode = args[3];
+  check(fs.existsSync(stateRoot) && fs.statSync(stateRoot).isDirectory(), "race state root missing: " + stateRoot);
+  const payload = JSON.parse(fs.readFileSync(payloadFile, "utf8")) as LifecycleDoc;
+  // The payload is the proposed NEXT state; it must advance the observed
+  // revision by exactly one.
+  check(payload.state_revision === String(Number.parseInt(observed, 10) + 1),
+    "race payload revision must advance the observed revision by one");
+  if (mode === "hold") {
+    const ready = path.join(stateRoot, ".race-ready");
+    const go = path.join(stateRoot, ".race-go");
+    let acquired = false;
+    const lock = path.join(stateRoot, ".lifecycle.lock");
+    while (!acquired) {
+      try {
+        const fd = fs.openSync(lock, "wx");
+        fs.writeSync(fd, String(process.pid));
+        fs.closeSync(fd);
+        acquired = true;
+      } catch (err) {
+        const code = (err as NodeJS.ErrnoException).code;
+        if (code !== "EEXIST") {
+          throw err;
+        }
+        throw new Error("cas-race hold: lock already held");
+      }
+    }
+    try {
+      fs.writeFileSync(ready, String(process.pid));
+      const deadline = Date.now() + 30000;
+      while (!fs.existsSync(go)) {
+        if (Date.now() > deadline) {
+          throw new Error("cas-race hold: go barrier timed out");
+        }
+        // busy-wait is bounded by the deadline; the barrier is the parent
+      }
+      const current = readStateDoc(stateRoot);
+      const currentRevision = current === null ? "0" : current.state_revision;
+      check(currentRevision === observed,
+        "lifecycle CAS conflict: observed revision " + observed + " is stale; current revision is " + currentRevision);
+      writeFileAtomic(stateFilePath(stateRoot), JSON.stringify(payload));
+      console.log("cas-hold: committed");
+    } finally {
+      fs.rmSync(lock, { force: true });
+    }
+    return;
+  }
+  if (mode === "attempt") {
+    try {
+      replaceStateCas(stateRoot, observed, String(Number.parseInt(observed, 10) + 1), payload.packages);
+      console.log("cas-attempt: committed");
+    } catch (err) {
+      console.log("cas-attempt: conflict: " + (err as Error).message);
+    }
+    return;
+  }
+  throw new Error("cas-race: unknown mode " + mode);
+}
+
 // ============================================================================
 // Oracle suite: fixed vectors and the eight review-oracle rows plus the
 // lifecycle transition matrix, concurrency, restrictions, and self-check.
@@ -1260,7 +1378,7 @@ function runVectors(fixtureRoot: string): void {
   console.log("card-117 vectors: PASS (independent constants, NUL, non-UTF-8, multibyte, 0755/0600/0444, reorder, symlink, special, fold, spelling)");
 }
 
-function runOracle(fixtureRoot: string, outRoot: string): void {
+async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
   mkdirP(outRoot);
 
   // ---- oracle 1: detection is not authority ----
@@ -1788,7 +1906,7 @@ function runOracle(fixtureRoot: string, outRoot: string): void {
     console.log("oracle-9 trust-restrictions-and-receipt-provenance: PASS");
   }
 
-  // ---- concurrency: overlapping writers and interrupted writes ----
+  // ---- concurrency: real overlapping processes and interrupted writes ----
   {
     const out = path.join(outRoot, "r10-concurrency");
     const stateRoot = path.join(out, "state");
@@ -1804,15 +1922,25 @@ function runOracle(fixtureRoot: string, outRoot: string): void {
     });
     const revisionN = readStateDoc(stateRoot)?.state_revision as string;
 
-    // Overlapping writers: two CAS attempts with the same observed revision;
-    // exactly one wins, the other conflicts, no duplicate references. Each
-    // writer's proposed state is valid: the prior install becomes retained.
-    const docBefore = readStateDoc(stateRoot) as LifecycleDoc;
-    const packagesA = JSON.parse(JSON.stringify(docBefore.packages)) as LifecycleRef[];
-    for (const ref of packagesA) {
+    // Real overlap: writer A is a separate bun process that takes the
+    // lifecycle lock and waits on a barrier while holding it; writer B is a
+    // second process that attempts the same CAS with the same observed
+    // revision while A still holds the lock. B must fail closed without
+    // removing A's lock; A must then commit exactly once.
+    const raceRoot = path.join(out, "race-state");
+    mkdirP(raceRoot);
+    fs.copyFileSync(stateFilePath(stateRoot), stateFilePath(raceRoot));
+    const docRace = readStateDoc(raceRoot) as LifecycleDoc;
+    const raceObserved = docRace.state_revision;
+    const payloadA: LifecycleDoc = {
+      schema_version: "1.0.0",
+      state_revision: String(Number.parseInt(raceObserved, 10) + 1),
+      packages: JSON.parse(JSON.stringify(docRace.packages)),
+    };
+    for (const ref of payloadA.packages) {
       ref.selection = "retained";
     }
-    packagesA.push({
+    payloadA.packages.push({
       package_id: "@northstar/language-fixture",
       version: "0.9.1",
       tree_digest: "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
@@ -1822,11 +1950,15 @@ function runOracle(fixtureRoot: string, outRoot: string): void {
       selection: "selected",
       installed_at: TIMESTAMP,
     });
-    const packagesB = JSON.parse(JSON.stringify(docBefore.packages)) as LifecycleRef[];
-    for (const ref of packagesB) {
+    const payloadB: LifecycleDoc = {
+      schema_version: "1.0.0",
+      state_revision: String(Number.parseInt(raceObserved, 10) + 1),
+      packages: JSON.parse(JSON.stringify(docRace.packages)),
+    };
+    for (const ref of payloadB.packages) {
       ref.selection = "retained";
     }
-    packagesB.push({
+    payloadB.packages.push({
       package_id: "@northstar/language-fixture",
       version: "0.9.2",
       tree_digest: "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
@@ -1836,42 +1968,87 @@ function runOracle(fixtureRoot: string, outRoot: string): void {
       selection: "selected",
       installed_at: TIMESTAMP,
     });
-    // Serialized interleaving equivalent to overlap: writer A observes N,
-    // writer B commits N+1 first, then A's CAS with observed N must conflict.
-    replaceStateCas(stateRoot, revisionN, String(Number.parseInt(revisionN, 10) + 1), packagesB);
-    let overlapFailed = false;
-    try {
-      replaceStateCas(stateRoot, revisionN, "98", packagesA);
-    } catch (err) {
-      overlapFailed = (err as Error).message.includes("CAS conflict");
+    const payloadFileA = path.join(out, "payload-a.json");
+    const payloadFileB = path.join(out, "payload-b.json");
+    fs.writeFileSync(payloadFileA, JSON.stringify(payloadA));
+    fs.writeFileSync(payloadFileB, JSON.stringify(payloadB));
+    const surfacePath = process.argv[1];
+    // Writer A: holds the lock, then waits for the go barrier. It must run
+    // asynchronously: the parent orchestrates the barrier while A is alive.
+    const procA = spawn("bun", ["run", surfacePath, "cas-race", raceRoot, raceObserved, payloadFileA, "hold"], { stdio: ["ignore", "pipe", "pipe"] });
+    let aOutput = "";
+    procA.stdout.on("data", (chunk: Buffer) => {
+      aOutput += chunk.toString("utf8");
+    });
+    procA.stderr.on("data", (chunk: Buffer) => {
+      aOutput += chunk.toString("utf8");
+    });
+    // A must be inside the critical section before B is launched.
+    const readyFile = path.join(raceRoot, ".race-ready");
+    const deadline = Date.now() + 30000;
+    while (!fs.existsSync(readyFile)) {
+      if (Date.now() > deadline) {
+        throw new Error("race writer A never took the lifecycle lock");
+      }
     }
-    check(overlapFailed, "overlapping writer was not stopped");
-    const overlapDoc = readStateDoc(stateRoot) as LifecycleDoc;
-    check(overlapDoc.packages.filter((ref) => ref.version === "0.9.1").length === 0, "overlapping writer created a duplicate reference");
-    check(overlapDoc.packages.filter((ref) => ref.version === "0.9.2").length === 1, "overlap winner reference missing");
+    check(fs.existsSync(path.join(raceRoot, ".lifecycle.lock")), "race writer A does not hold the lifecycle lock");
+    // Writer B: same observed revision, launched while A holds the lock.
+    const procB = spawnSync("bun", ["run", surfacePath, "cas-race", raceRoot, raceObserved, payloadFileB, "attempt"], { encoding: "utf8" });
+    check(procB.error === undefined, "race writer B failed to start: " + String(procB.error));
+    const bOutput = String(procB.stdout ?? "") + String(procB.stderr ?? "");
+    check(bOutput.includes("cas-attempt: conflict"), "overlapping writer B was not stopped by the held lock: " + bOutput);
+    check(bOutput.includes("ambiguous lifecycle write"), "writer B failed for the wrong reason: " + bOutput);
+    // B must not have removed A's lock or mutated the state.
+    check(fs.existsSync(path.join(raceRoot, ".lifecycle.lock")), "writer B removed the lock owner's lock");
+    check(fs.readFileSync(stateFilePath(raceRoot), "utf8") === fs.readFileSync(stateFilePath(stateRoot), "utf8"),
+      "writer B mutated state while the lock was held");
+    // Release the barrier: A commits exactly once.
+    fs.writeFileSync(path.join(raceRoot, ".race-go"), "go\n");
+    const aExit = await new Promise<number | null>((resolve) => {
+      const timer = setTimeout(() => resolve(null), 30000);
+      procA.on("exit", (code) => {
+        clearTimeout(timer);
+        resolve(code);
+      });
+    });
+    check(aExit !== null, "race writer A never exited");
+    check(aOutput.includes("cas-hold: committed"), "race writer A did not commit: " + aOutput);
+    const raceFinal = readStateDoc(raceRoot) as LifecycleDoc;
+    check(raceFinal.state_revision === String(Number.parseInt(raceObserved, 10) + 1), "race winner did not advance the revision exactly once");
+    check(raceFinal.packages.filter((ref) => ref.version === "0.9.1").length === 1, "race winner reference missing");
+    check(raceFinal.packages.filter((ref) => ref.version === "0.9.2").length === 0, "conflicting writer created a duplicate reference");
+    check(raceFinal.packages.filter((ref) => ref.selection === "selected").length === 1, "race ended with more than one selected identity");
+    check(!fs.existsSync(path.join(raceRoot, ".lifecycle.lock")), "race winner did not release the lock");
+    readStateDoc(raceRoot); // must remain parseable
 
-    // Interrupted write: a stale lock from a dead owner is recovered exactly
-    // once; a live lock fails closed (ambiguous), never truncating state.
-    const staleLock = path.join(stateRoot, ".lifecycle.lock");
+    // Stale-revision rejection (sequential, still useful) and interrupted
+    // writes: a stale lock from a dead owner is recovered exactly once; a
+    // live lock fails closed (ambiguous), never truncating state.
+    const staleRoot = path.join(out, "stale-state");
+    mkdirP(staleRoot);
+    fs.copyFileSync(stateFilePath(stateRoot), stateFilePath(staleRoot));
+    const staleDoc = readStateDoc(staleRoot) as LifecycleDoc;
+    // Baseline same-revision write advances the copy.
+    replaceStateCas(staleRoot, staleDoc.state_revision, String(Number.parseInt(staleDoc.state_revision, 10) + 1), staleDoc.packages);
+    const staleLock = path.join(staleRoot, ".lifecycle.lock");
     fs.writeFileSync(staleLock, "99999999\n"); // dead pid
-    const currentRev = overlapDoc.state_revision;
-    replaceStateCas(stateRoot, currentRev, String(Number.parseInt(currentRev, 10) + 1), overlapDoc.packages);
+    const beforeRecovery = readStateDoc(staleRoot) as LifecycleDoc;
+    replaceStateCas(staleRoot, beforeRecovery.state_revision, String(Number.parseInt(beforeRecovery.state_revision, 10) + 1), beforeRecovery.packages);
     check(!fs.existsSync(staleLock), "stale lock was not recovered");
-    const afterRecovery = readStateDoc(stateRoot) as LifecycleDoc;
+    const afterRecovery = readStateDoc(staleRoot) as LifecycleDoc;
     fs.writeFileSync(staleLock, String(process.pid) + "\n"); // live owner
-    const docBeforeAmbiguous = fs.readFileSync(stateFilePath(stateRoot), "utf8");
+    const docBeforeAmbiguous = fs.readFileSync(stateFilePath(staleRoot), "utf8");
     let ambiguous = false;
     try {
-      replaceStateCas(stateRoot, afterRecovery.state_revision, "99", afterRecovery.packages);
+      replaceStateCas(staleRoot, afterRecovery.state_revision, "99", afterRecovery.packages);
     } catch (err) {
       ambiguous = (err as Error).message.includes("ambiguous lifecycle write");
     }
     check(ambiguous, "live lock did not fail closed");
-    check(fs.readFileSync(stateFilePath(stateRoot), "utf8") === docBeforeAmbiguous, "interrupted write truncated lifecycle state");
+    check(fs.readFileSync(stateFilePath(staleRoot), "utf8") === docBeforeAmbiguous, "interrupted write truncated lifecycle state");
     fs.rmSync(staleLock, { force: true });
-    // State document remains valid after every interrupted/overlapping write.
-    readStateDoc(stateRoot);
-    console.log("oracle-10 concurrency-atomic-cas: PASS");
+    readStateDoc(staleRoot); // must remain parseable
+    console.log("oracle-10 concurrency-atomic-cas: PASS (real two-process overlap + stale/live-lock recovery)");
   }
 
   // ---- self-check execution ----
@@ -1916,24 +2093,182 @@ function runOracle(fixtureRoot: string, outRoot: string): void {
     console.log("oracle-11 self-check-execution: PASS");
   }
 
-  console.log("card-117 oracle: PASS (8 review rows + transitions + restrictions + provenance + concurrency + self-check)");
+  // ---- identity binding and immutable install-store negatives ----
+  {
+    const out = path.join(outRoot, "r12-identity-binding");
+    const stateRoot = path.join(out, "state");
+    mkdirP(stateRoot);
+    const consumer = consumerDir();
+    const registry = emptyRegistry();
+
+    // A pin must never install a staged manifest declaring another identity,
+    // version, or compatibility range. Each variant is pinned by a manually
+    // constructed entry claiming the REQUESTED values while the staged
+    // manifest declares the mutated values.
+    const mutatedIdentity = buildVariantPackage(fixtureRoot, "0.1.0", (manifest) => {
+      manifest.package_id = "@northstar/other-fixture";
+    });
+    const identityPin: TrustEntry = {
+      package_id: "@northstar/language-fixture",
+      version: "0.1.0",
+      source_identity: { type: "local_path", path: mutatedIdentity },
+      tree_digest: canonicalTreeDigest(mutatedIdentity, "variant"),
+      manifest_digest: manifestDigestOf(path.join(mutatedIdentity, "northstar-package.json")),
+      compatible_core_range: ">=0.2.0 <1.0.0",
+      actor: "operator",
+      timestamp: TIMESTAMP,
+      reason: "identity-binding negative",
+    };
+    const identityTrust: TrustDoc = { schema_version: "1.0.0", revision: "1", allowlist: [identityPin], revocations: [] };
+    let identityBlocked = false;
+    let identityMsg = "";
+    try {
+      acquireAndActivate({
+        stateRoot, consumerDir: consumer, trustDoc: identityTrust, registry,
+        packageId: "@northstar/language-fixture", version: "0.1.0",
+        language: "fixture-lang", workflow: "explicit_audit_repair",
+        coreVersion: CORE_VERSION, adapter: () => {
+          const staged = stagedDir("northstar-staged-");
+          copyTree(mutatedIdentity, staged);
+          return staged;
+        }, intent: "workflow_request",
+      });
+    } catch (err) {
+      identityBlocked = (err as Error).message.includes("staged manifest declares identity");
+      identityMsg = (err as Error).message;
+    }
+    check(identityBlocked, "pin installed a staged manifest with another identity: " + identityMsg);
+    check(!fs.existsSync(stateFilePath(stateRoot)), "identity-mismatched acquisition created state");
+
+    const mutatedVersion = buildVariantPackage(fixtureRoot, "0.7.0", (manifest) => {
+      manifest.version = "0.7.0";
+    });
+    const versionPin: TrustEntry = {
+      package_id: "@northstar/language-fixture",
+      version: "0.1.0",
+      source_identity: { type: "local_path", path: mutatedVersion },
+      tree_digest: canonicalTreeDigest(mutatedVersion, "variant"),
+      manifest_digest: manifestDigestOf(path.join(mutatedVersion, "northstar-package.json")),
+      compatible_core_range: ">=0.2.0 <1.0.0",
+      actor: "operator",
+      timestamp: TIMESTAMP,
+      reason: "version-binding negative",
+    };
+    const versionTrust: TrustDoc = { schema_version: "1.0.0", revision: "1", allowlist: [versionPin], revocations: [] };
+    let versionBlocked = false;
+    try {
+      acquireAndActivate({
+        stateRoot, consumerDir: consumer, trustDoc: versionTrust, registry,
+        packageId: "@northstar/language-fixture", version: "0.1.0",
+        language: "fixture-lang", workflow: "explicit_audit_repair",
+        coreVersion: CORE_VERSION, adapter: () => {
+          const staged = stagedDir("northstar-staged-");
+          copyTree(mutatedVersion, staged);
+          return staged;
+        }, intent: "workflow_request",
+      });
+    } catch (err) {
+      versionBlocked = (err as Error).message.includes("staged manifest declares version");
+    }
+    check(versionBlocked, "pin installed a staged manifest with another version");
+
+    const mutatedRange = buildVariantPackage(fixtureRoot, "0.1.0", (manifest) => {
+      manifest.compatible_core_range = ">=9.0.0 <10.0.0";
+    });
+    const rangePin: TrustEntry = {
+      package_id: "@northstar/language-fixture",
+      version: "0.1.0",
+      source_identity: { type: "local_path", path: mutatedRange },
+      tree_digest: canonicalTreeDigest(mutatedRange, "variant"),
+      manifest_digest: manifestDigestOf(path.join(mutatedRange, "northstar-package.json")),
+      compatible_core_range: ">=0.2.0 <1.0.0",
+      actor: "operator",
+      timestamp: TIMESTAMP,
+      reason: "range-binding negative",
+    };
+    const rangeTrust: TrustDoc = { schema_version: "1.0.0", revision: "1", allowlist: [rangePin], revocations: [] };
+    let rangeBlocked = false;
+    try {
+      acquireAndActivate({
+        stateRoot, consumerDir: consumer, trustDoc: rangeTrust, registry,
+        packageId: "@northstar/language-fixture", version: "0.1.0",
+        language: "fixture-lang", workflow: "explicit_audit_repair",
+        coreVersion: CORE_VERSION, adapter: () => {
+          const staged = stagedDir("northstar-staged-");
+          copyTree(mutatedRange, staged);
+          return staged;
+        }, intent: "workflow_request",
+      });
+    } catch (err) {
+      rangeBlocked = (err as Error).message.includes("compatibility range does not match the pin");
+    }
+    check(rangeBlocked, "pin installed a staged manifest with another compatibility range");
+
+    // Occupied/partial install target: an existing directory at the full
+    // digest address with different bytes must fail without writing, and the
+    // staged/retained bytes plus consumer files stay exact.
+    const occupiedState = path.join(out, "occupied-state");
+    mkdirP(occupiedState);
+    const occupiedConsumer = consumerDir();
+    const trustDoc = fixtureTrustDoc(fixtureRoot, [], []);
+    const installRoot = path.join(occupiedState, "installed");
+    const occupiedDir = path.join(installRoot, "@northstar/language-fixture@0.1.0-" + FIXTURE_TREE_DIGEST.slice(7));
+    mkdirP(occupiedDir);
+    writeText(path.join(occupiedDir, "northstar-package.json"), '{"tampered":true}\n');
+    writeText(path.join(occupiedDir, "SKILL.md"), "occupied\n");
+    const consumerBefore = snapshotHashes(occupiedConsumer);
+    let occupiedBlocked = false;
+    try {
+      acquireAndActivate({
+        stateRoot: occupiedState, consumerDir: occupiedConsumer, trustDoc, registry,
+        packageId: "@northstar/language-fixture", version: "0.1.0",
+        language: "fixture-lang", workflow: "explicit_audit_repair",
+        coreVersion: CORE_VERSION, adapter: fixtureAdapter(fixtureRoot), intent: "workflow_request",
+      });
+    } catch (err) {
+      occupiedBlocked = (err as Error).message.includes("refusing to overwrite");
+    }
+    check(occupiedBlocked, "occupied install target was overwritten");
+    check(fs.readFileSync(path.join(occupiedDir, "SKILL.md"), "utf8") === "occupied\n", "occupied install target bytes changed");
+    check(!fs.existsSync(stateFilePath(occupiedState)), "occupied-target acquisition created state");
+    requireHashesUnchanged("occupied-target consumer", occupiedConsumer, consumerBefore);
+
+    // Successful install uses the FULL canonical digest as its address.
+    const fullState = path.join(out, "full-digest-state");
+    mkdirP(fullState);
+    const acquire = acquireAndActivate({
+      stateRoot: fullState, consumerDir: consumerDir(), trustDoc, registry,
+      packageId: "@northstar/language-fixture", version: "0.1.0",
+      language: "fixture-lang", workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION, adapter: fixtureAdapter(fixtureRoot), intent: "workflow_request",
+    });
+    check(acquire.status === "activated", "full-digest install did not activate");
+    check(path.basename(acquire.installDir as string).includes(FIXTURE_TREE_DIGEST.slice(7)), "install address does not carry the full tree digest");
+    console.log("oracle-12 identity-binding-and-immutable-store: PASS");
+  }
+
+  console.log("card-117 oracle: PASS (8 review rows + transitions + restrictions + provenance + concurrency + self-check + identity-binding/store negatives)");
 }
 
-function main(): void {
+async function main(): Promise<void> {
   const args = process.argv.slice(2);
   const command = args[0];
   if (command === "oracle") {
     const fixtureRoot = args[1];
     const outRoot = args[2];
     check(fs.existsSync(fixtureRoot), "fixture root missing: " + fixtureRoot);
-    runOracle(fixtureRoot, outRoot);
+    await runOracle(fixtureRoot, outRoot);
     return;
   }
   if (command === "vectors") {
     runVectors(args[1]);
     return;
   }
-  throw new Error("usage: language-package-lifecycle.ts oracle <fixture-root> <out-dir> | vectors <fixture-root>");
+  if (command === "cas-race") {
+    casRaceMain(args.slice(1));
+    return;
+  }
+  throw new Error("usage: language-package-lifecycle.ts oracle <fixture-root> <out-dir> | vectors <fixture-root> | cas-race <state-root> <observed> <payload-file> <hold|attempt>");
 }
 
-main();
+await main();

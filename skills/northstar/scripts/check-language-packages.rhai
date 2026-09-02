@@ -1548,6 +1548,7 @@ fn run_card_117_oracle(northstar_skill_root, manifest_schema) {
         "oracle-9 trust-restrictions-and-receipt-provenance: PASS",
         "oracle-10 concurrency-atomic-cas: PASS",
         "oracle-11 self-check-execution: PASS",
+        "oracle-12 identity-binding-and-immutable-store: PASS",
         "card-117 oracle: PASS",
     ] {
         require(output.contains(marker), "card-117 oracle missing marker: " + marker);

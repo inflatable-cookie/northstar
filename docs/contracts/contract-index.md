@@ -18,7 +18,7 @@ Updated: 2026-09-01
 | `001-working-rules` | compact delivery grammar, structural-not-editorial validation, papercuts feedback loop, triage capture/cleanup, done-ness, guardrail pack, spec-hygiene rule, currentness-surface rules, autonomy rules, diversified model routing, orchestrator/worker, planning-delegate, orchestrator-continuation, and documentation-projection boundaries, worktree isolation, PR review and merge gates, and the live ready-state/closeout rules for the repo | `docs/`, `bundle-docs/`, `template-bundle/`, `skills/`, `scripts/` | `g01.001` through `g02.047` where directly applicable | active |
 | `002-agent-local-paths` | ignored path registry, manual worktree container selection, harness-vs-manual ownership, and nested-agent stop boundary | `AGENTS.md`, `docs/contracts/`, `template-bundle/`, `skills/`, `docs/handoffs/` | orchestrator-owned implementation-worker and planning-delegate launches, plus any manual worktree lane | active |
 | `003-agent-instruction-surface` | always-loaded versus scoped/on-demand instruction content, root-file review budget, precedence, and read-only audit boundary | `AGENTS.md`, `docs/contracts/`, `template-bundle/`, `skills/`, `scripts/` | `g02.027` and future consumer adoption | active |
-| `004-language-quality-pack` | optional package identity, digest framing, discovery, acquisition, operator-owned trust/lifecycle state and migration plus shared catalogue, workflow, scope, remediation, profile, deviation, and evidence behavior | `docs/contracts/`, Northstar core package protocol, optional language packages, current embedded catalogues, Effigy adapters, consumer profiles | `g02.030` (complete), `g02.031` (complete), `g02.032` (complete), `g02.048` (active) | active; card 117 complete, card 118 planned |
+| `004-language-quality-pack` | optional package identity, digest framing, discovery, acquisition, operator-owned trust/lifecycle state and migration plus shared catalogue, workflow, scope, remediation, profile, deviation, and evidence behavior | `docs/contracts/`, Northstar core package protocol, optional language packages, current embedded catalogues, Effigy adapters, consumer profiles | `g02.030` (complete), `g02.031` (complete), `g02.032` (complete), `g02.048` (active) | active; card 117 blocked on planning decisions (review findings 1-2), card 118 planned |
 
 ## Roadmap Readiness
 
@@ -65,5 +65,7 @@ Roadmap `g02.046` is complete through PR 19 at `b99d19c`. Roadmap `g02.047` is
 complete through PR 20 at `08ad810`. Spec 034's modular package design is
 promoted into architecture and contract 004. Roadmap `g02.048` is active: card
 116 merged through PR 21 at `eaeac88`, card 117 proved the generic lifecycle
-with all eight review-oracle rows falsified, and cards 118-120 remain planned
-behind its exact-head review.
+with all eight review-oracle rows falsified, and PR 22 review accepted the
+byte-level repair but returned two planning-change findings (portable core
+host/API; self-check runner contract). Card 117 is blocked on those decisions;
+cards 118-120 remain planned behind them.

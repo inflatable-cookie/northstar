@@ -92,9 +92,12 @@ Northstar system:
 - Northstar remains general-purpose. Spec 034's optional-package design is
   promoted into architecture and contract 004. Roadmap g02.048 now sequences
   fixture protocol, TypeScript, Rust, and embedded removal. Card 117 proved
-  the generic lifecycle (canonical digest vectors, operator trust and
-  lifecycle state, transactional acquire/update/rollback, offline routing,
-  revocable trust, generic routing) and its PR is open for exact-head review;
-  card 118 stays blocked until that merges.
+  the generic lifecycle (byte-exact digest vectors, operator trust and
+  lifecycle state, atomic CAS, identity-bound routing, transactional
+  acquire/update/rollback, offline routing, revocable trust, generic
+  routing); its PR 22 review accepted the byte-level repair and returned two
+  planning-change findings (portable core host/API; self-check runner
+  contract), so the card is blocked on those decisions and card 118 stays
+  blocked until they land.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

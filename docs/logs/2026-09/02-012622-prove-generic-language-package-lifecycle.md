@@ -3,22 +3,34 @@
 Date: 2026-09-02
 Roadmap: `g02.048`
 Card: `g02.048/117`
-Status: complete; exact-head review repaired; ready for re-review
+Status: blocked on planning decisions (round-2 review findings 1-2); findings 3-5 repaired and validated
 
 ## Result
 
 The generic installed-package lifecycle is implemented and falsified against
-the accepted card-116 baseline, then repaired against the exact-head review of
-PR 22. The lifecycle ships as a callable provider-neutral surface
-(`skills/northstar/scripts/language-package-lifecycle.ts`, run by Bun) with
-canonical byte-exact content identity, operator-owned trust/lifecycle state,
-atomic compare-and-swap lifecycle replacement, immutable digest-addressed
-receipts, identity-bound routing, transactional acquisition/rollback, offline
-local routing, revocation, and declared self-check execution — with no
-language-specific branch, no Effigy dependency, and no consumer-owned trust or
-selection. The exact same surface is exercised with Effigy absent
-(`bun run language-package-lifecycle.ts oracle ...`) and from the Effigy
-checker, which also schema-validates every receipt the surface writes.
+the accepted card-116 baseline, then repaired across two exact-head reviews of
+PR 22. A proof surface (`skills/northstar/scripts/language-package-lifecycle.ts`,
+run by Bun) owns canonical byte-exact content identity, operator-owned
+trust/lifecycle state, lock-serialized atomic compare-and-swap lifecycle
+replacement, immutable digest-addressed receipts, identity- and receipt-bound
+routing, transactional acquisition/rollback, offline local routing,
+revocation, trust restrictions, truthful receipt provenance, and declared
+self-check execution — with no language-specific branch, no Effigy
+dependency, and no consumer-owned trust or selection. The exact same surface
+is exercised with Effigy absent (`bun run language-package-lifecycle.ts oracle
+...`) and from the Effigy checker, which also schema-validates every receipt
+the surface writes.
+
+Round-2 repairs landed on the execution-miss findings: staged manifests are
+bound to the requested identity/version/range; the install store is addressed
+by the FULL canonical tree digest with exclusive verify-or-fail publishing and
+truthful pre-selection receipts; and the concurrency oracle now runs two real
+bun processes against one state root with a deterministic barrier (one winner
+commits, the loser fails closed on the held lock without removing it, state
+stays parseable, a single selected identity remains). The two planning-change
+findings (portable core host/API; self-check runner contract) remain open and
+are recorded as Planning Blockers below; the completion claims were reverted
+to exclude them.
 
 The policy-free fixture was revised so its declared self-check is executable:
 `scripts/self-check.sh` runs under the declared `required_commands: ["sh"]`
@@ -86,29 +98,48 @@ concurrency oracles above.
   Effigy absent (11 oracle groups; all 8 review rows + restrictions +
   provenance + concurrency + self-check);
 - `effigy check:language-packages` — pass (card-116 suite; trust/lifecycle
-  fixtures; fail-closed proofs; surface oracle driven from the checker; 12
+  fixtures; fail-closed proofs; surface oracle driven from the checker; 13
   receipts schema-validated);
-- `effigy check:skill-install <isolated>` — pass (168 files, exact parity);
+- `effigy check:skill-install <isolated>` — pass (169 files, exact parity);
 - `effigy qa:docs` — pass;
 - `effigy qa` — pass;
 - `git diff --check` — clean.
 
 ## Limits
 
-The fixture self-check executes under the declared `sh` capability; the
-surface itself requires a Bun-capable host (the repo's documented secondary
-runtime — no non-Effigy Rhai host exists). The case-fold collision negative is
-proven through the same fold-registration predicate the walker executes
-because the host filesystem is case-insensitive. Arbitrary package code beyond
-the declared self-check remains the card-118 canary boundary. No production
-package was fetched, no language policy was added, and consumer activation was
-not changed.
+The case-fold collision negative is proven through the same
+fold-registration predicate the walker executes because the host filesystem
+is case-insensitive. Arbitrary package code beyond the declared self-check
+remains the card-118 canary boundary. No production package was fetched, no
+language policy was added, and consumer activation was not changed. The
+self-check execution and the non-Effigy operational host remain PROVISIONAL
+and scoped out of the completion claims until the Planning Blockers below are
+settled.
+
+## Planning Blockers (round-2 review findings 1-2)
+
+1. Portable core host/API for installed-package routing: contract 004 requires
+   non-Effigy routing but no architecture text names the consumer runtime host
+   or the operational API. The round-1 Bun CLI surface is the accepted proof
+   harness only; making Bun a consumer prerequisite needs a canonical decision
+   (data protocol consumed by the harness; POSIX-shell CLI; python3 CLI; or an
+   explicit Bun/Node prerequisite with the production-pack boundary updated),
+   then real operational commands/imports proven from an installed skill with
+   Effigy absent.
+2. Self-check runner/invocation contract: treating
+   `runtime_capabilities.required_commands[0]` as the self-check runner is not
+   in the frozen schema or contract 004. An explicit runner/invocation
+   contract (or another provider-neutral mechanism) must be promoted into the
+   manifest schema, contract 004, and spec 034, with fixtures updated and the
+   oracle re-based on it.
 
 ## PR
 
 https://github.com/inflatable-cookie/northstar/pull/22 — opened for card
 `g02.048/117` against `main` from
-`worker/prove-generic-language-package-lifecycle`. Review head
-`981db752e25486e453a72888dccff394aa115b3e` required changes; the repaired head
-is pushed after this log with the full oracle and required validation rerun on
-it. Exact-head re-review pending; do not merge.
+`worker/prove-generic-language-package-lifecycle`. Round-1 review head
+`981db752e25486e453a72888dccff394aa115b3e` required changes; round-2 review of
+the repaired head `2b43cf0` accepted the byte-level repair and reverted to
+planning on findings 1-2. The new head carries findings 3-5 repairs and the
+reverted claims; the full oracle and required validation were rerun on it.
+Exact-head re-review pending; do not merge.
