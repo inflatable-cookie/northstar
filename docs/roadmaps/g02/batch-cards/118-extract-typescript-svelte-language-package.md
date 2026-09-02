@@ -1,6 +1,6 @@
 # 118 - Extract TypeScript/Svelte Language Package
 
-Status: in progress; registry/routing merged; Jetstream consumer canary dispatched
+Status: changes required; Jetstream canary exposed missing operational fallback notice
 Owner: repo maintainers
 Updated: 2026-09-02
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -262,10 +262,21 @@ committed to Jetstream `main` at `7c2cf010`; Paseo worker
 `f40afdd6-5597-4405-a7fc-63e6a0869e21` runs in workspace
 `wks_250577a54e82f464` with read-only Northstar and language-pack siblings.
 
+Jetstream exact-head review (2026-09-02, PR 4 at `8420f9d1`): CHANGES
+REQUIRED. The installed path, fresh five-unit audit, policy preservation,
+offline route and drift recovery passed. The forced-failure transcript stopped
+at the reference host's manual/local-install result; it never emitted the
+required frozen-fallback notice, and that host prose omitted the package
+version. This is an upstream Northstar execution miss. A separate validation
+gap also classified editor tasks as unavailable from an unhydrated worker even
+though they execute on the base checkout. Jetstream stays on the same branch
+while handoff `20260902-212756` repairs the core fallback seam; after merge the
+same consumer worker reruns fallback and hydrated editor evidence.
+
 ## Next Task
 
-PR 23 merged as `5951dfb` with registry version `1.2.0` and the repaired
-installed setup/record oracle. The Jetstream worker now runs the fresh
-installed-package audit from its tracked consumer handoff. Review and merge
-that exact consumer head, reconcile card 118, then stop at the operator
-checkpoint. Cards 119-120 remain closed until canary reconciliation.
+Jetstream PR 4 exposed a missing operational fallback notice after the host
+stop. Dispatch the bounded Northstar repair from handoff `20260902-212756`.
+After that PR merges, resume the same Jetstream worker for forced-fallback and
+hydrated editor validation, then re-review its exact head. Cards 119-120 remain
+closed.

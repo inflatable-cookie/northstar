@@ -18,7 +18,7 @@ single-pilot bucket.
 | Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | execute g02.048/118 TypeScript package canary |
 | Add a genuinely long-horizon planning route without conflating it with readiness review. | active | `docs/specs/029-northstar-long-horizon-planning.md`, `skills/northstar/references/modes/atlas.md` | Non-Northstar scenario and operator confirmation |
 | Preserve useful conversational context and keep `/docs` drift recoverable without blind deletion. | active | `docs/specs/030-conversational-triage-and-docs-cleanup.md`, `docs/contracts/001-working-rules.md`, `skills/northstar/references/modes/cleanup-docs.md` | live triage and cleanup feedback |
-| Raise language-code quality through evidence-bound routed workflows without making every implementation part of the root payload. | active | `docs/contracts/004-language-quality-pack.md`, `docs/architecture/system-architecture.md`, `docs/roadmaps/g02/048-extract-modular-language-quality-packages.md` | review the running Jetstream card-118 canary |
+| Raise language-code quality through evidence-bound routed workflows without making every implementation part of the root payload. | active | `docs/contracts/004-language-quality-pack.md`, `docs/architecture/system-architecture.md`, `docs/roadmaps/g02/048-extract-modular-language-quality-packages.md` | repair the card-118 operational fallback notice |
 
 Update this runway only when generation-level intent changes, a milestone
 materially advances or closes a goal, or rollover is being considered. Do not
@@ -114,8 +114,9 @@ lifecycle. Card 118's public repository merged package PR 1 as `09ef174`, and
 its reviewed installed-invocation repair merged as `d18dc33b` (package PR 2).
 PR 23 pins the replacement identity at registry version `1.2.0`, adds the
 non-vacuous installed setup/record operational proof, and merged as `5951dfb`.
-The Jetstream consumer canary is dispatched from its tracked handoff. Cards
-119-120 remain serial behind accepted consumer review and reconciliation.
+Jetstream PR 4 exposed a missing operational frozen-fallback notice after the
+host stop. The bounded core repair is ready from handoff `20260902-212756`;
+cards 119-120 remain serial behind repair, consumer re-review and reconciliation.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and

@@ -1,6 +1,6 @@
 # 048 - Extract Modular Language Quality Packages
 
-Status: active; card 117 complete; card 118 Jetstream consumer canary running
+Status: active; card 117 complete; card 118 upstream fallback repair ready
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.033`, promoted spec 034
@@ -48,7 +48,8 @@ before it becomes ready.
   Registry/routing is implemented in core PR 23, now repinned to the reviewed
   installed-invocation repair (`d18dc33b`, registry version `1.2.0`) with the
   non-vacuous installed setup/record operational proof added. PR 23 merged as
-  `5951dfb`; Jetstream proof is dispatched and overlap closure remains serial.
+  `5951dfb`. Jetstream PR 4 then exposed a missing operational fallback notice;
+  the bounded core repair is ready and overlap closure remains serial.
 - [ ] **Batch C — Rust extraction:** card 119 publishes, pins, installs, and
   proves Rust everyday authoring plus explicit audit and its Cargo engine.
 - [ ] **Batch D — root reduction:** card 120 removes both frozen embedded
@@ -95,8 +96,7 @@ before it becomes ready.
 
 ## Next Task
 
-Card 118's package repair merged as `d18dc33b`; core PR 23 repinned it and
-merged as `5951dfb`. The Jetstream consumer worker is running from handoff
-`docs/handoffs/20260902-jetstream-installed-typescript-package-canary.md` at
-Jetstream base `7c2cf010`. Review and merge its fresh installed-package audit,
-then reconcile the overlap evidence. Do not start card 119 automatically.
+Jetstream PR 4 exposed that the shipped forced-failure path stops before the
+required frozen-fallback notice. Run Northstar handoff `20260902-212756`, merge
+the bounded repair, then resume the retained Jetstream worker for exact
+fallback and hydrated editor evidence. Do not start card 119 automatically.
