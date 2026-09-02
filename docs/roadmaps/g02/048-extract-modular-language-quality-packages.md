@@ -1,6 +1,6 @@
 # 048 - Extract Modular Language Quality Packages
 
-Status: active; card 117 complete; card 118 planned
+Status: active; card 117 complete; card 118 ready
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.033`, promoted spec 034
@@ -28,7 +28,7 @@ before it becomes ready.
 
 ## Goals
 
-- [ ] prove the generic package schema, registry, receipt, trust, lifecycle,
+- [x] prove the generic package schema, registry, receipt, trust, lifecycle,
   discovery, and routing boundary with a policy-free fixture;
 - [ ] extract TypeScript/Svelte as the first independent official package;
 - [ ] extract Rust without weakening its everyday or explicit-audit evidence;
@@ -40,7 +40,7 @@ before it becomes ready.
 
 ## Execution Plan
 
-- [ ] **Batch A — fixture protocol:** card 116 freezes machine contracts and
+- [x] **Batch A — fixture protocol:** card 116 freezes machine contracts and
   the policy-free fixture; card 117 implements and falsifies generic discovery,
   verification, installation, activation, rollback, offline, and routing.
 - [ ] **Batch B — TypeScript canary:** card 118 publishes, pins, installs, and
@@ -91,14 +91,11 @@ before it becomes ready.
 
 ## Next Task
 
-Card `g02.048/117` implemented and falsified the generic lifecycle proof
-against the promoted host-protocol decisions: byte-exact digest vectors,
-operator trust and lifecycle schemas, the `language-package-host.v1`
-request/result machine contract with operational resolve/acquire_activate/
-rollback entrypoints proven from an installed skill by the reference adapter
-and a stdlib-only python3 host (no runtime prerequisite for consumers), the
-explicit `self_check.invocation` direct/command tagged union with both
-variants and negatives, atomic CAS state, identity-bound routing,
-transactional acquire/update/rollback, offline routing, revocable trust, and
-real two-process concurrency. PR 22 is open for exact-head re-review; card
-118 must not start before it is accepted and merged.
+Card `g02.048/117` merged through PR 22 at `75db6f5` after implementing and
+falsifying the generic lifecycle proof. Card 118 is ready with the public
+`inflatable-cookie/northstar-language-packs` topology,
+`@northstar/typescript-quality` `0.1.0` canary identity, exact 17-file embedded
+baseline, 20-file initial package shape, and Jetstream consumer proof pinned.
+Create the shared repository and dispatch only the package-source lane. The
+Northstar registry and Jetstream lanes remain serial behind accepted immutable
+source and registry heads.

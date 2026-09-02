@@ -5,7 +5,7 @@ handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
 handoff: single-file-path-only
-status: complete; PR 22 re-review pending
+status: complete; PR 22 merged; card 118 readiness refreshed
 owner: repo maintainers
 created: 2026-09-02
 updated: 2026-09-02
@@ -152,5 +152,8 @@ and fixture proof against the eight-row review oracle.
   `effigy check:language-packages` PASS (20 receipts, 23 host messages);
   isolated skill-install parity; `effigy qa:docs`; `effigy qa`;
   `git diff --check` clean.
-- Next: exact-head orchestrator re-review. Do not merge; do not start card
-  118 until this PR is accepted and merged.
+- Exact head `57f850a964ec5c735b22d590a64ab4ade366d0bf` was accepted and
+  merged through PR 22 at `75db6f5`.
+- Card 118's post-merge readiness review is recorded in
+  `docs/logs/2026-09/02-184102-refresh-typescript-package-canary-readiness.md`;
+  this handoff has no remaining execution authority.

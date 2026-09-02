@@ -1,8 +1,8 @@
 # 118 - Extract TypeScript/Svelte Language Package
 
-Status: planned; blocked on card 117
+Status: ready
 Owner: repo maintainers
-Updated: 2026-09-01
+Updated: 2026-09-02
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
 Governing refs: `docs/roadmaps/g02/048-extract-modular-language-quality-packages.md`,
 `docs/architecture/system-architecture.md`,
@@ -11,8 +11,8 @@ Auto-start next card: no
 
 ## Ready-State Checks
 
-- [ ] cards 116-117 are merged and the accepted protocol is referenced exactly;
-- [ ] current TypeScript payload and consumer cohort are inventoried against
+- [x] cards 116-117 are merged and the accepted protocol is referenced exactly;
+- [x] current TypeScript payload and consumer cohort are inventoried against
   the accepted package boundary;
 - [x] TypeScript remains explicit-audit-only and carries Svelte/SvelteKit as
   conditional overlays;
@@ -20,10 +20,47 @@ Auto-start next card: no
   unchanged;
 - [x] Rust and root reduction are out of scope.
 
+## Accepted Baseline
+
+- Card 117 was accepted at `57f850a964ec5c735b22d590a64ab4ade366d0bf`
+  and merged through PR 22 at `75db6f5`.
+- The first canary is `@northstar/typescript-quality` `0.1.0`, compatible with
+  core `>=0.2.0 <1.0.0`, at
+  `inflatable-cookie/northstar-language-packs/packages/typescript`.
+- The embedded extraction inventory is 17 files with aggregate source-list
+  digest `7e3ff26cd9319743fee5b0433d79b0cea6515347aa5780f68f2fcbb6eb664d26`:
+  three profile/activation templates, the command skill and its agent metadata,
+  eight TypeScript reference files, the audit mode, and three Rhai scripts.
+  The historical 93-file number is whole-skill distribution parity, not the
+  extraction inventory.
+- Jetstream is the current real-consumer canary at
+  `ab6d2e6c82b54732c6bea4a61569c14a2a9a2991`. Its TypeScript profile digest is
+  `9fcb6b8dd99ce09864a725a71167d63323cb495551e6e76f5c89dcf9113b2c7b`; its
+  empty deviations digest is
+  `131c912ee29ebf7811fcd3773b6575ee3f3aa62b87ae477a4985844d8572d445`.
+  It has one independent `editor-ui` package and resolves `base` plus `svelte`.
+  The previous ignored audit ledger is absent, so this card must create fresh
+  installed-package evidence rather than claim ledger continuity.
+
 ## Objective
 
 Publish, pin, install, and prove TypeScript/Svelte as the first independent
 official language package under one bounded embedded-overlap window.
+
+## Package Shape
+
+The initial package contains 20 files: the 17 relocated embedded surfaces plus
+`northstar-package.json`, package-local `effigy.toml`, and executable
+`scripts/self-check.sh`. The existing command adapter becomes the package-root
+`SKILL.md`; its agent metadata becomes package-root `agents/openai.yaml`.
+
+The manifest exposes only `explicit_audit_repair`, declares TypeScript with
+`base`, `svelte`, and `sveltekit` overlays, and declares `effigy` and `sh` as
+runtime capabilities. Its direct self-check wrapper runs the package-owned
+Effigy check against the installed package root. The Rhai setup, recorder, and
+check scripts resolve package assets from Effigy's task-source/catalog context;
+`repo_root` remains the consumer target. They must not infer package assets
+from the consumer checkout.
 
 ## Lane Runway Context
 
@@ -34,31 +71,57 @@ official language package under one bounded embedded-overlap window.
 
 ## Scope
 
-- move the TypeScript catalogue, overlays, schemas, mode, setup, recorder,
-  fixtures, templates, and thin adapter into its independently addressable
-  package;
-- publish an immutable candidate and pin it through a reviewed core registry
-  change;
+- create the public shared source repository and the independently addressable
+  `packages/typescript` package;
+- relocate the exact TypeScript catalogue, overlays, schemas, mode, setup,
+  recorder, fixtures, templates, and thin adapter without semantic edits;
+- publish an immutable candidate and pin it through a reviewed Northstar core
+  registry change;
 - preserve existing consumer activation/profile/deviation/evidence paths;
 - route explicit audit through the installed package and prove independent
   acquisition, self-check, rollback, offline, and visible frozen fallback;
-- run package-scoped parity and at least one real consumer workflow.
+- run package-scoped parity and a fresh Jetstream workflow.
 
 Do not add TypeScript everyday authoring, alter rule meaning or authority,
-install Rust, or remove the embedded fallback in this card.
+install Rust, or remove the embedded fallback in this card. Repository creation,
+publication, registry merge, and consumer PR merge remain orchestrator-owned
+external mutations; workers must stop at reviewable heads.
+
+## Execution Plan
+
+1. The orchestrator creates the public shared repository if it is still absent,
+   installs its Northstar/Paseo project surfaces, and records the immutable base.
+2. A package worker relocates the 17-file baseline into the 20-file package,
+   refactors only task-source resolution, proves source/self-check parity, and
+   opens a source-package PR.
+3. After exact-head acceptance, the orchestrator merges and records the source
+   commit, package-tree digest, and manifest digest as the candidate identity.
+4. A Northstar worker pins that exact candidate, adds installed-package routing
+   plus the visible frozen-fallback route, and opens the core PR.
+5. After the registry/routing PR merges, a Jetstream worker runs a fresh audit
+   through the installed package and records consumer bytes, route identity,
+   overlays, evidence, rollback, offline, and forced-fallback results.
+6. The orchestrator reconciles both repositories and closes the overlap evidence
+   without starting Rust extraction automatically.
 
 ## Acceptance Criteria
 
-- [ ] installed payload contains only the named TypeScript/Svelte package;
+- [ ] package source contains the exact 20-file shape and the installed payload
+  contains only the named TypeScript/Svelte package;
 - [ ] revision-S behavior, nine normative rules, evaluation-only boundary,
   overlays, scope, and retained limitations remain exact;
-- [ ] valid consumer files remain byte-identical and existing evidence readable;
+- [ ] valid consumer files remain byte-identical and existing evidence remains
+  readable;
+- [ ] package tasks resolve their installed source separately from the consumer
+  target;
+- [ ] the declared direct self-check executes from the installed package with
+  its runtime capabilities enforced;
 - [ ] package source/install parity and immutable registry promotion pass;
-- [ ] installed, offline, rollback, acquisition-failure fallback, and real
-  consumer routes pass;
+- [ ] installed, offline, rollback, acquisition-failure fallback, and fresh
+  Jetstream routes pass;
 - [ ] all new TypeScript package development lands externally during overlap;
 - [ ] root fallback is frozen and visibly identified, not silently preferred;
-- [ ] full Northstar and package QA pass.
+- [ ] full Northstar, package, and consumer QA pass.
 
 ## Review Oracle
 
@@ -67,19 +130,23 @@ install Rust, or remove the embedded fallback in this card.
 | Workflow availability is preserved. | Ordinary TypeScript coding triggers everyday package policy. | Route remains unavailable. | Negative activation fixture. |
 | Overlays stay conditional. | Dependency exists without owned Svelte surface. | Do not activate overlay. | Existing overlay fixtures through package. |
 | Package is independent. | Shared source repo also contains Rust. | TypeScript install retains no Rust payload. | Installed inventory. |
-| Consumer policy survives. | Existing strict profile and deviation files predate extraction. | Preserve bytes and interpretation. | Migration fixture hashes. |
+| Package source and consumer target stay distinct. | Recorder resolves its catalogue below the consumer root. | Stop before evidence creation. | Installed-source/consumer-target fixture. |
+| Self-check is operational. | Manifest names a missing command or wrapper exits nonzero. | Stop before activation. | Installed direct self-check negatives. |
+| Consumer policy survives. | Jetstream's strict profile and deviations predate extraction. | Preserve bytes and interpretation. | Pinned before/after hashes. |
 | Fallback is visible and bounded. | Package acquisition fails during overlap. | Name package failure and frozen root fallback. | Forced-failure transcript. |
-| Evidence remains comparable. | Pre-extraction finalized audit is reopened/read. | Preserve schema and meaning. | Evidence compatibility fixture. |
+| Evidence remains comparable. | A pre-extraction finalized audit is reopened/read. | Preserve schema and meaning. | Evidence compatibility fixture. |
+| The canary is current. | Evidence is copied from the absent prior Jetstream ledger. | Reject as non-evidence. | Fresh installed-package audit identity. |
 
 ## Evidence Required
 
-- accepted-protocol and source-payload inventories;
-- package release identity, registry pin, artifact and manifest digests;
-- source/install parity and no-Rust inventory;
+- accepted-protocol, 17-file source, and 20-file package inventories;
+- package source commit, registry pin, tree digest, and manifest digest;
+- source/install parity, direct self-check, and no-Rust inventory;
 - existing production fixtures plus installed, rollback, offline, fallback, and
-  real-consumer runs;
-- consumer file and evidence compatibility hashes;
-- package QA, Northstar QA, `git diff --check`, PR, exact head, and limits.
+  fresh Jetstream runs;
+- Jetstream profile/deviation hashes and evidence compatibility results;
+- package QA, Northstar QA, consumer QA, `git diff --check`, PRs, exact heads,
+  and limits.
 
 ## Continuation Envelope
 
@@ -99,16 +166,20 @@ install Rust, or remove the embedded fallback in this card.
 
 - extraction changes catalogue semantics, workflow availability, repair
   authority, or consumer policy;
-- installed package requires Rust or the root source checkout;
+- installed package requires Rust, a Northstar source checkout, or conflates
+  its task source with the consumer target;
 - package protocol findings would be copied into Rust;
-- revision-S or real-consumer evidence cannot be preserved;
+- revision-S or fresh Jetstream evidence cannot be preserved;
 - validation changes the plan.
 
 ## Completion Notes
 
-Pending cards 116-117 and readiness refresh.
+Readiness refreshed on 2026-09-02 after PR 22 merged. The operator selected the
+public shared-repository topology and Jetstream canary. No external repository,
+package, registry pin, or consumer branch was created during this planning pass.
 
 ## Next Task
 
-After card 117 merges, reconcile the exact TypeScript inventory and apply the
-ready-state rubric.
+Create the public shared source repository and dispatch only the first package
+source lane from this card. Do not start Northstar registry or Jetstream work
+until their named predecessors are accepted and merged.

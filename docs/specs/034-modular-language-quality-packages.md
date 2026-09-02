@@ -40,9 +40,9 @@ languages scale the always-distributed surface indefinitely.
 
 ## Initial Official Repository Topology
 
-The initial official Rust and TypeScript packages share one sibling source
-repository, provisionally `northstar-language-packs`. This is a source and
-maintenance grouping, not the acquisition or activation unit.
+The initial official Rust and TypeScript packages share the public sibling
+source repository `inflatable-cookie/northstar-language-packs`. This is a
+source and maintenance grouping, not the acquisition or activation unit.
 
 Each language package has its own root, package identity, manifest, version,
 core-compatibility range, integrity identity, release evidence, and installed
@@ -58,6 +58,12 @@ The shared repository is an initial convenience, not a protocol constraint.
 The manifest and discovery contract must also permit an official package to
 move to its own repository and a third-party package to originate elsewhere
 without changing Northstar core or consumer activation files.
+
+The first canary is `@northstar/typescript-quality` `0.1.0` at
+`packages/typescript`, compatible with Northstar core `>=0.2.0 <1.0.0`. It
+owns TypeScript plus the `base`, `svelte`, and `sveltekit` overlays and exposes
+only `explicit_audit_repair`. Package maintainers own its source and release
+evidence; Northstar maintainers review the immutable official-registry pin.
 
 ## Official Acquisition And Notice
 
@@ -428,11 +434,12 @@ the fixture protocol, TypeScript, Rust, and embedded-removal batches.
 
 The design gate is satisfied and card 113 is closed. Roadmap g02.048 is
 compiled. Card 116 merged through PR 21; its readiness review promoted the
-missing digest and lifecycle-state boundary. Card 117 proved the generic lifecycle
-against the host-protocol and self-check invocation decisions promoted here
-(byte-exact digest vectors, operator trust and lifecycle state, the
-`language-package-host.v1` machine contract with operational entrypoints from
-an installed skill, explicit self-check invocation, atomic CAS, identity-
-bound routing, transactional acquire/update/rollback, offline routing,
-revocable trust). PR 22 is open for exact-head re-review. Cards 118-120
-remain blocked until their named dependencies and readiness refreshes pass.
+missing digest and lifecycle-state boundary. Card 117 proved the generic
+lifecycle against the host-protocol and self-check invocation decisions
+promoted here (byte-exact digest vectors, operator trust and lifecycle state,
+the `language-package-host.v1` machine contract with operational entrypoints
+from an installed skill, explicit self-check invocation, atomic CAS,
+identity-bound routing, transactional acquire/update/rollback, offline
+routing, revocable trust). PR 22 merged at `75db6f5`. Card 118 is ready against
+that accepted protocol and the settled first-canary identity; cards 119-120
+remain blocked behind their named dependencies and readiness refreshes.

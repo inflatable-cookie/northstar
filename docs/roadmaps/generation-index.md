@@ -84,15 +84,11 @@ merged through PR 19 at `b99d19c`. Card 115 diversified model routing across
 workers, delegates, and fresh orchestrators; PR 20 merged at `08ad810` after
 exact-head review. Spec 034's modular-language-package design is promoted and
 compiled into `g02.048`. Card 116 merged through PR 21 at `eaeac88`. Card 117
-proved the generic lifecycle against the promoted host-protocol decisions:
-byte-exact digest vectors, operator trust and lifecycle state, the
-`language-package-host.v1` machine contract with operational entrypoints from
-an installed skill (reference and python3 hosts, no consumer runtime
-prerequisite), explicit self-check invocation, atomic CAS, identity-bound
-routing, transactional acquire/update/rollback, offline routing, revocable
-trust — all ten review-oracle rows falsified. PR 22 is open for exact-head
-re-review; cards 118-120 remain the dependency-ordered TypeScript, Rust, and
-embedded-removal runway behind it.
+merged its generic lifecycle proof through PR 22 at `75db6f5`. Card 118 is
+ready with the public shared package repository,
+`@northstar/typescript-quality` `0.1.0`, exact extraction/package inventories,
+and Jetstream consumer proof settled; cards 119-120 remain dependency-ordered
+behind it.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed

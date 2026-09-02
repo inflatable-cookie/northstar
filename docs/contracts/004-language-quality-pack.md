@@ -159,6 +159,15 @@ activation markers, profiles, deviations, rule IDs, workflow intent, and
 evidence formats remain valid and are not rewritten merely because ownership
 moves.
 
+The first official canary is `@northstar/typescript-quality` `0.1.0`, sourced
+from `inflatable-cookie/northstar-language-packs/packages/typescript` and
+compatible with core `>=0.2.0 <1.0.0`. Its only workflow is
+`explicit_audit_repair`; `base`, `svelte`, and `sveltekit` remain overlays, not
+separate packages. The package declares Effigy and `sh` as runtime
+capabilities. Its direct self-check wrapper invokes the package-owned Effigy
+check against the installed package root; setup and recording keep the package
+task source separate from the consumer target.
+
 The overlap closes only after exact parity, independent install and self-check,
 installed routing, rollback, offline fallback, current consumer activation,
 and one real consumer workflow pass. The following migration milestone removes

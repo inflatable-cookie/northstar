@@ -54,11 +54,12 @@ protocol. Each package owns its language catalogue, projections, overlays,
 schemas, setup, tooling, fixtures, self-check, version, release evidence, and
 independently addressable installed payload.
 
-The initial official Rust and TypeScript packages share one sibling source
-repository, provisionally `northstar-language-packs`, but they remain separate
-release, acquisition, installation, and activation units. Installing one never
-loads or retains every sibling. The protocol permits later official split repos
-and third-party sources without changing core or consumer activation files.
+The initial official Rust and TypeScript packages share the public sibling
+source repository `inflatable-cookie/northstar-language-packs`, but they remain
+separate release, acquisition, installation, and activation units. Installing
+one never loads or retains every sibling. The protocol permits later official
+split repos and third-party sources without changing core or consumer
+activation files.
 
 ### Package registration and runtime boundary
 
@@ -213,6 +214,15 @@ The consumer profile and deviations live at
 declared workspaces while reporting other nested manifests. Without a root
 package, discovered subpackage manifests are independent owning roots. This
 supports mixed repositories without assuming TypeScript lives at the root.
+
+The first external package is `@northstar/typescript-quality` version `0.1.0`
+at `packages/typescript` in `inflatable-cookie/northstar-language-packs`. It
+supports core `>=0.2.0 <1.0.0`, owns TypeScript with `base`, `svelte`, and
+`sveltekit` overlays, and exposes only `explicit_audit_repair`. The package
+relocates the 17 embedded TypeScript surfaces and adds only its manifest,
+Effigy catalogue, and direct self-check wrapper. Effigy remains the declared
+Rhai runtime; package tasks resolve their installed source through Effigy's
+task-source context while the consumer repository remains the target.
 
 The initial boundary supports package-json ownership, Svelte 5, and SvelteKit
 2. Deno-only/source-only roots and older or unresolved framework overlays remain
