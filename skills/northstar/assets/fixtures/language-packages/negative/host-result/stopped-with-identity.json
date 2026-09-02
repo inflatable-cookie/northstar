@@ -1,0 +1,7 @@
+{
+  "protocol_version": "1.0.0",
+  "operation": "resolve",
+  "status": "stopped",
+  "notice": "n",
+  "tree_digest": "sha256:b8e76dfdc87d84904ada0620425c0a94200532d11207e3d1339626fb2df85aa3"
+}

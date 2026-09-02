@@ -243,12 +243,28 @@ def resolve_installed(state_root, trust_doc, package_id, version, language, work
 
 
 def execute_host_request(request, denied):
+    """Execute one host request.
+
+    This adapter is bound to the resolve operation: acquire_activate and
+    rollback return a scoped `stopped` result naming the missing capability
+    instead of pretending to implement them. Requests with an unsupported
+    protocol version are stopped, never answered as v1.
+    """
     operation = request.get("operation")
+    if request.get("protocol_version") != PROTOCOL_VERSION:
+        message = "unsupported protocol_version " + str(request.get("protocol_version")) + " for operation " + str(operation)
+        notice(message)
+        return {"protocol_version": PROTOCOL_VERSION, "operation": operation, "status": "stopped", "notice": message}
+    supported_ops = {"resolve"}
+    if operation not in supported_ops:
+        message = "host capability missing: operation " + str(operation) + " is not implemented by this host adapter"
+        notice(message)
+        return {"protocol_version": PROTOCOL_VERSION, "operation": operation, "status": "stopped", "notice": message}
     missing = [cap for cap in OP_CAPABILITIES.get(operation, []) if cap in denied]
     if missing:
         message = "host capability missing: " + missing[0] + " for operation " + operation
         notice(message)
-        return {"protocol_version": PROTOCOL_VERSION, "status": "stopped", "notice": message}
+        return {"protocol_version": PROTOCOL_VERSION, "operation": operation, "status": "stopped", "notice": message}
     try:
         state_root = request["state_root"]
         trust_doc = host_trust_doc(state_root)
@@ -257,12 +273,28 @@ def execute_host_request(request, denied):
         if resolved is None:
             message = "no compatible installed package for " + request["package_id"] + "@" + request["version"] + " (" + request["workflow"] + ")"
             notice(message)
-            return {"protocol_version": PROTOCOL_VERSION, "status": "stopped", "notice": message}
+            return {"protocol_version": PROTOCOL_VERSION, "operation": operation, "status": "stopped", "notice": message}
         reference, _manifest, _receipt = resolved
+        # The request's consumer scope binds trust restrictions; a scope
+        # restriction on the matching pin that disagrees stops the route.
+        request_scope = request.get("consumer_scope")
+        for entry in trust_doc.get("allowlist", []):
+            if (entry.get("package_id") == request["package_id"] and entry.get("version") == request["version"]
+                    and entry.get("tree_digest") == reference.get("tree_digest")
+                    and entry.get("manifest_digest") == reference.get("manifest_digest")):
+                if "workflows" in entry and request["workflow"] not in entry["workflows"]:
+                    message = "allowlist pin restricts workflows to " + str(entry["workflows"]) + "; requested " + request["workflow"]
+                    notice(message)
+                    return {"protocol_version": PROTOCOL_VERSION, "operation": operation, "status": "stopped", "notice": message}
+                if "consumer_scope" in entry and entry["consumer_scope"] != "" and entry["consumer_scope"] != request_scope:
+                    message = "allowlist pin restricts consumer scope to '" + entry["consumer_scope"] + "'; request scope is '" + str(request_scope) + "'"
+                    notice(message)
+                    return {"protocol_version": PROTOCOL_VERSION, "operation": operation, "status": "stopped", "notice": message}
         message = "routed " + request["package_id"] + " " + request["workflow"] + " local-only identity=" + reference["tree_digest"]
         notice(message)
         return {
             "protocol_version": PROTOCOL_VERSION,
+            "operation": operation,
             "status": "routed",
             "notice": message,
             "tree_digest": reference["tree_digest"],
@@ -273,7 +305,7 @@ def execute_host_request(request, denied):
     except Exception as err:  # noqa: BLE001 - protocol stops scoped on any host failure
         message = "workflow " + request.get("workflow", "?") + " for " + request.get("package_id", "?") + " stopped: " + str(err)
         notice(message)
-        return {"protocol_version": PROTOCOL_VERSION, "status": "stopped", "notice": message}
+        return {"protocol_version": PROTOCOL_VERSION, "operation": operation, "status": "stopped", "notice": message}
 
 
 def main(argv):

@@ -32,9 +32,12 @@ stays parseable, a single selected identity remains).
 The operator accepted the two planning decisions and promoted them on main at
 `54208e9`. Card 117 now implements them: the `language-package-host.v1`
 request/result machine contract with operational resolve/acquire_activate/
-rollback entrypoints exercised from an INSTALLED SKILL with Effigy absent by
-two conforming hosts (the reference adapter, and a stdlib-only python3 host),
-with capability-denied hosts returning scoped `stopped`; and the explicit
+rollback entrypoints exercised from an INSTALLED SKILL with Effigy absent:
+the reference adapter implements all three operations through the installed
+entrypoint, and a resolve-bound stdlib-only python3 host stops
+acquire_activate/rollback as missing capability; capability-denied hosts and
+unsupported protocol versions return scoped `stopped`; the request consumer
+scope binds trust restrictions at the host boundary; and the explicit
 `self_check.invocation` direct/command tagged union frozen into the manifest
 schema and fixtures (direct: `[package_root]`; command: `[entrypoint,
 package_root]`; package-root cwd; no shell interpolation; no
@@ -56,7 +59,7 @@ fixture derives the new runtime identities:
 
 | Surface | Before | After |
 | --- | --- | --- |
-| `skills/northstar/scripts/language-package-lifecycle.ts`, `language-package-host.py` | did not exist | Reference host adapter (Bun harness) and a conforming stdlib-only python3 host speaking the `language-package-host.v1` messages; byte-exact digests, trust/lifecycle validation, lock-based atomic CAS state, immutable receipts, identity/receipt-bound resolver, transactional acquire/rollback, explicit self-check invocation, oracle suite |
+| `skills/northstar/scripts/language-package-lifecycle.ts`, `language-package-host.py` | did not exist | Reference host adapter (Bun harness, all three ops) and a resolve-bound stdlib-only python3 host speaking the `language-package-host.v1` messages; byte-exact digests, trust/lifecycle validation, lock-based atomic CAS state, immutable receipts, identity/receipt-bound resolver, transactional acquire/rollback, explicit self-check invocation, oracle suite |
 | `skills/northstar/references/packages/language-package-host-v1.schema.json` | did not exist | Draft 2020-12 schema for the provider-neutral host request/result machine contract |
 | `skills/northstar/references/packages/operator-trust.schema.json` | did not exist | Draft 2020-12 schema for exact allowlist entries and revocations |
 | `skills/northstar/references/packages/lifecycle-state.schema.json` | did not exist | Draft 2020-12 schema for the revisioned lifecycle index |

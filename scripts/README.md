@@ -229,8 +229,13 @@ Card 117 extends the same checker with the generic installed-package runtime:
 15. the `language-package-host.v1` request/result machine contract
     (`language-package-host-v1.schema.json`) with operational
     resolve/acquire_activate/rollback entrypoints exercised from an installed
-    skill by two conforming hosts — the reference adapter and a stdlib-only
-    python3 host — with capability-denied hosts returning scoped `stopped`;
+    skill: the reference adapter implements all three operations, and a
+    resolve-bound stdlib-only python3 host stops the others as missing
+    capability; capability-denied hosts and unsupported protocol versions
+    return scoped `stopped`; the request consumer scope binds trust
+    restrictions at the host boundary; result messages are discriminated by
+    operation and status so incomplete or operation-incoherent results are
+    rejected;
 16. explicit `self_check.invocation` (`direct` executes the entrypoint with
     `[package_root]`; `command` executes a declared command with
     `[entrypoint, package_root]`; both use the package root as cwd, no shell

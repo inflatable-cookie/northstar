@@ -225,22 +225,26 @@
       "type": "object",
       "required": [
         "protocol_version",
+        "operation",
         "status",
-        "notice"
+        "notice",
+        "tree_digest",
+        "manifest_digest",
+        "installed_path",
+        "receipt_digest"
       ],
       "properties": {
         "protocol_version": {
           "type": "string",
           "const": "1.0.0"
         },
+        "operation": {
+          "type": "string",
+          "const": "resolve"
+        },
         "status": {
           "type": "string",
-          "enum": [
-            "routed",
-            "activated",
-            "rolled_back",
-            "stopped"
-          ]
+          "const": "routed"
         },
         "notice": {
           "type": "string",
@@ -261,6 +265,234 @@
         "receipt_digest": {
           "type": "string",
           "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "protocol_version",
+        "operation",
+        "status",
+        "notice"
+      ],
+      "properties": {
+        "protocol_version": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "operation": {
+          "type": "string",
+          "const": "resolve"
+        },
+        "status": {
+          "type": "string",
+          "const": "stopped"
+        },
+        "notice": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "protocol_version",
+        "operation",
+        "status",
+        "notice",
+        "tree_digest",
+        "manifest_digest",
+        "installed_path",
+        "receipt_digest"
+      ],
+      "properties": {
+        "protocol_version": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "operation": {
+          "type": "string",
+          "const": "acquire_activate"
+        },
+        "status": {
+          "type": "string",
+          "const": "routed"
+        },
+        "notice": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tree_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "manifest_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "installed_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "receipt_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "protocol_version",
+        "operation",
+        "status",
+        "notice",
+        "tree_digest",
+        "manifest_digest",
+        "installed_path",
+        "receipt_digest"
+      ],
+      "properties": {
+        "protocol_version": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "operation": {
+          "type": "string",
+          "const": "acquire_activate"
+        },
+        "status": {
+          "type": "string",
+          "const": "activated"
+        },
+        "notice": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tree_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "manifest_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "installed_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "receipt_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "protocol_version",
+        "operation",
+        "status",
+        "notice"
+      ],
+      "properties": {
+        "protocol_version": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "operation": {
+          "type": "string",
+          "const": "acquire_activate"
+        },
+        "status": {
+          "type": "string",
+          "const": "stopped"
+        },
+        "notice": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "protocol_version",
+        "operation",
+        "status",
+        "notice",
+        "tree_digest",
+        "manifest_digest",
+        "installed_path",
+        "receipt_digest"
+      ],
+      "properties": {
+        "protocol_version": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "operation": {
+          "type": "string",
+          "const": "rollback"
+        },
+        "status": {
+          "type": "string",
+          "const": "rolled_back"
+        },
+        "notice": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tree_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "manifest_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "installed_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "receipt_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "protocol_version",
+        "operation",
+        "status",
+        "notice"
+      ],
+      "properties": {
+        "protocol_version": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "operation": {
+          "type": "string",
+          "const": "rollback"
+        },
+        "status": {
+          "type": "string",
+          "const": "stopped"
+        },
+        "notice": {
+          "type": "string",
+          "minLength": 1
         }
       },
       "additionalProperties": false

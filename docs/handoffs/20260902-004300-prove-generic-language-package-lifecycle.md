@@ -124,9 +124,12 @@ and fixture proof against the eight-row review oracle.
   - `language-package-host.v1` JSON request/result machine contract
     (`language-package-host-v1.schema.json`) with operational
     resolve/acquire_activate/rollback entrypoints exercised from an
-    INSTALLED SKILL with Effigy absent by two conforming hosts: the
-    reference adapter and a stdlib-only python3 host. Capability-denied
-    hosts return scoped `stopped` notices; no Bun/Node/Python/POSIX
+    INSTALLED SKILL with Effigy absent: the reference adapter implements all
+    three operations through the installed entrypoint; a resolve-bound
+    stdlib-only python3 host stops acquire_activate/rollback as missing
+    capability. Capability-denied hosts and unsupported protocol versions
+    return scoped `stopped` notices; the request consumer scope binds trust
+    restrictions at the host boundary; no Bun/Node/Python/POSIX
     shell/Effigy/provider API is a consumer prerequisite (Bun remains only a
     reference adapter).
   - Explicit `self_check.invocation` direct/command tagged union in
@@ -146,7 +149,7 @@ and fixture proof against the eight-row review oracle.
 - Card 117, dated log, and dependent front doors reconciled to complete;
   blocked/overstrong claims removed after proof. Validation on the new exact
   head: standalone oracle (Effigy absent, 13 groups) PASS;
-  `effigy check:language-packages` PASS (17 receipts, 8 host messages);
+  `effigy check:language-packages` PASS (20 receipts, 23 host messages);
   isolated skill-install parity; `effigy qa:docs`; `effigy qa`;
   `git diff --check` clean.
 - Next: exact-head orchestrator re-review. Do not merge; do not start card

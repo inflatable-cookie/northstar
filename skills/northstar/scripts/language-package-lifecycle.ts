@@ -176,6 +176,9 @@ interface AcquireOptions {
   coreVersion: string;
   adapter: (pin: Pin) => string;
   intent: "workflow_request" | "activation" | "detection";
+  // Optional host-bound consumer scope: takes precedence over the activation
+  // marker scope for trust restriction enforcement.
+  consumerScopeHint?: string | null;
 }
 
 function check(condition: unknown, message: string): asserts condition {
@@ -950,11 +953,18 @@ function acquireAndActivate(opts: AcquireOptions): AcquireOutcome {
     return { status: "no-route", notice: n };
   }
 
-  let consumerScope: string | null = null;
+  // The host-bound request scope takes precedence for trust restriction
+  // enforcement; the activation marker scope is the fallback and must agree
+  // when both are present.
+  let consumerScope: string | null = opts.consumerScopeHint !== undefined ? opts.consumerScopeHint : null;
   if (intent === "activation") {
     const activation = consumerActivationValid(consumerDir, packageId, version);
     check(activation.valid, "activation marker missing or invalid for " + packageId + "@" + version);
-    consumerScope = activation.scope;
+    if (consumerScope === null) {
+      consumerScope = activation.scope;
+    } else if (activation.scope !== null && consumerScope !== activation.scope) {
+      check(false, "consumer scope mismatch: request scope '" + consumerScope + "' differs from activation marker scope '" + activation.scope + "'");
+    }
   }
 
   const pin = findPin(registry, trustDoc, packageId, version);
@@ -1128,6 +1138,7 @@ interface HostRequest {
 
 interface HostResult {
   protocol_version: string;
+  operation: "resolve" | "acquire_activate" | "rollback";
   status: "routed" | "activated" | "rolled_back" | "stopped";
   notice: string;
   tree_digest?: string;
@@ -1183,29 +1194,37 @@ function hostRegistry(registryPath: string | null): RegistryDoc {
   return { schema_version: "1.0.0", registry_version: "1.0.0", packages: [] };
 }
 
+function hostStopped(request: HostRequest, message: string): HostResult {
+  notice(message);
+  return { protocol_version: "1.0.0", operation: request.operation, status: "stopped", notice: message };
+}
+
 function executeHostRequest(request: HostRequest, registryPath: string | null, capabilities: Set<HostCapability>): HostResult {
   const needed = OP_CAPABILITIES[request.operation];
   for (const capability of needed) {
     if (!capabilities.has(capability)) {
       const n = "host capability missing: " + capability + " for operation " + request.operation + " (" + request.package_id + "@" + request.version + " " + request.workflow + ")";
-      notice(n);
-      return { protocol_version: "1.0.0", status: "stopped", notice: n };
+      return hostStopped(request, n);
     }
   }
   try {
     const trustDoc = hostTrustDoc(request.state_root);
     const registry = hostRegistry(registryPath);
+    // The request's consumer scope binds trust restrictions at the host
+    // boundary; it cannot be silently ignored.
+    const requestScope = request.consumer_scope ?? null;
     if (request.operation === "resolve") {
       const resolved = resolveInstalledPackage(request.state_root, trustDoc, request.package_id, request.version, request.language, request.workflow, request.core_version);
       if (resolved === null) {
         const n = "no compatible installed package for " + request.package_id + "@" + request.version + " (" + request.workflow + ")";
-        notice(n);
-        return { protocol_version: "1.0.0", status: "stopped", notice: n };
+        return hostStopped(request, n);
       }
+      enforceRouteRestrictions(trustDoc, registry, request.package_id, request.version, resolved.reference.tree_digest, resolved.reference.manifest_digest, request.workflow, requestScope);
       const n = "routed " + request.package_id + " " + request.workflow + " local-only identity=" + resolved.reference.tree_digest;
       notice(n);
       return {
         protocol_version: "1.0.0",
+        operation: "resolve",
         status: "routed",
         notice: n,
         tree_digest: resolved.reference.tree_digest,
@@ -1225,25 +1244,30 @@ function executeHostRequest(request: HostRequest, registryPath: string | null, c
         language: request.language,
         workflow: request.workflow,
         coreVersion: request.core_version,
+        consumerScopeHint: requestScope,
         adapter: hostAcquisitionAdapter(),
         intent: request.intent,
       });
-      const result: HostResult = {
-        protocol_version: "1.0.0",
-        status: outcome.status === "activated" ? "activated" : outcome.status === "routed" ? "routed" : "stopped",
-        notice: outcome.notice,
-        tree_digest: outcome.treeDigest,
-        manifest_digest: outcome.manifestDigest,
-        installed_path: outcome.installDir,
-        receipt_digest: outcome.receiptDigest,
-      };
-      return result;
+      if (outcome.status === "activated" || outcome.status === "routed") {
+        return {
+          protocol_version: "1.0.0",
+          operation: "acquire_activate",
+          status: outcome.status === "activated" ? "activated" : "routed",
+          notice: outcome.notice,
+          tree_digest: outcome.treeDigest,
+          manifest_digest: outcome.manifestDigest,
+          installed_path: outcome.installDir,
+          receipt_digest: outcome.receiptDigest,
+        };
+      }
+      return hostStopped(request, outcome.notice);
     }
     const noticeText = rollbackSelected(request.state_root, trustDoc, request.target_receipt_digest as string, request.core_version);
     const after = readStateDoc(request.state_root) as LifecycleDoc;
     const target = after.packages.find((ref) => ref.receipt_digest === request.target_receipt_digest);
     return {
       protocol_version: "1.0.0",
+      operation: "rollback",
       status: "rolled_back",
       notice: noticeText,
       tree_digest: target?.tree_digest,
@@ -1253,8 +1277,7 @@ function executeHostRequest(request: HostRequest, registryPath: string | null, c
     };
   } catch (err) {
     const n = "workflow " + request.workflow + " for " + request.package_id + " stopped: " + (err as Error).message + "; manual or local-path installation route required";
-    notice(n);
-    return { protocol_version: "1.0.0", status: "stopped", notice: n };
+    return hostStopped(request, n);
   }
 }
 
@@ -2582,6 +2605,7 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
     const acquireReq: HostRequest = { ...baseRequest, operation: "acquire_activate" };
     const acquireRes = executeHostRequest(acquireReq, null, FULL_HOST_CAPABILITIES);
     check(acquireRes.status === "activated", "host acquire_activate did not activate: " + acquireRes.notice);
+    check(acquireRes.operation === "acquire_activate", "host activated result lost its operation");
     check(acquireRes.tree_digest === FIXTURE_TREE_DIGEST && acquireRes.manifest_digest === FIXTURE_MANIFEST_DIGEST,
       "host activated result carries wrong identities");
     check(acquireRes.receipt_digest !== undefined && acquireRes.installed_path !== undefined,
@@ -2591,6 +2615,7 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
     const resolveReq: HostRequest = { ...baseRequest, operation: "resolve" };
     const resolveRes = executeHostRequest(resolveReq, null, FULL_HOST_CAPABILITIES);
     check(resolveRes.status === "routed", "host resolve did not route: " + resolveRes.notice);
+    check(resolveRes.operation === "resolve", "host routed result lost its operation");
     check(resolveRes.tree_digest === FIXTURE_TREE_DIGEST && resolveRes.receipt_digest === acquireRes.receipt_digest,
       "host resolve returned the wrong identity");
 
@@ -2599,6 +2624,53 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
     const missingRes = executeHostRequest(missingReq, null, FULL_HOST_CAPABILITIES);
     check(missingRes.status === "stopped" && missingRes.notice.includes("@northstar/missing-fixture"),
       "host resolve missing package did not stop scoped: " + missingRes.notice);
+    check(missingRes.tree_digest === undefined && missingRes.receipt_digest === undefined,
+      "stopped result carried success fields");
+
+    // Scope binding at the host boundary: a restricted pin and a mismatched
+    // request scope stop resolve and activation through the host entrypoint.
+    const restrictedState = path.join(out, "restricted-state");
+    mkdirP(restrictedState);
+    const scopeRestrictedTrust = fixtureTrustDoc(fixtureRoot, [], []);
+    scopeRestrictedTrust.allowlist[0].consumer_scope = "team-b";
+    fs.writeFileSync(path.join(restrictedState, "operator-trust.json"), JSON.stringify(scopeRestrictedTrust));
+    const restrictedConsumer = consumerDir();
+    const restrictedAcquire: HostRequest = {
+      ...baseRequest,
+      operation: "acquire_activate",
+      consumer_scope: "team-a",
+      consumer_dir: restrictedConsumer,
+      state_root: restrictedState,
+    };
+    const restrictedAcquireRes = executeHostRequest(restrictedAcquire, null, FULL_HOST_CAPABILITIES);
+    check(restrictedAcquireRes.status === "stopped" && restrictedAcquireRes.notice.includes("restricts consumer scope"),
+      "host ignored the request scope against a restricted pin: " + restrictedAcquireRes.notice);
+    // Workflow restriction stops activation even with a matching scope.
+    const workflowState = path.join(out, "workflow-state");
+    mkdirP(workflowState);
+    const workflowRestrictedTrust = fixtureTrustDoc(fixtureRoot, [], []);
+    workflowRestrictedTrust.allowlist[0].workflows = ["everyday_authoring"];
+    fs.writeFileSync(path.join(workflowState, "operator-trust.json"), JSON.stringify(workflowRestrictedTrust));
+    const scopeConsumer = consumerDir();
+    const restrictedWorkflow: HostRequest = {
+      ...baseRequest,
+      operation: "acquire_activate",
+      consumer_scope: "team-b",
+      consumer_dir: scopeConsumer,
+      state_root: workflowState,
+    };
+    const restrictedWorkflowRes = executeHostRequest(restrictedWorkflow, null, FULL_HOST_CAPABILITIES);
+    check(restrictedWorkflowRes.status === "stopped" && restrictedWorkflowRes.notice.includes("restricts workflows"),
+      "host ignored the workflow restriction: " + restrictedWorkflowRes.notice);
+    // Matching scope routes once installed under an unrestricted pin.
+    const matchState = path.join(out, "match-state");
+    mkdirP(matchState);
+    fs.writeFileSync(path.join(matchState, "operator-trust.json"), JSON.stringify(fixtureTrustDoc(fixtureRoot, [], [])));
+    const matchConsumer = consumerDir();
+    executeHostRequest({ ...baseRequest, operation: "acquire_activate", consumer_dir: matchConsumer, state_root: matchState }, null, FULL_HOST_CAPABILITIES);
+    const scopedResolve: HostRequest = { ...baseRequest, operation: "resolve", consumer_scope: "team-a", consumer_dir: matchConsumer, state_root: matchState };
+    const scopedResolveRes = executeHostRequest(scopedResolve, null, FULL_HOST_CAPABILITIES);
+    check(scopedResolveRes.status === "routed", "matching-scope resolve did not route: " + scopedResolveRes.notice);
 
     // rollback request -> rolled_back result after a second activation.
     const variant = buildVariantPackage(fixtureRoot, "0.2.0", () => undefined);
@@ -2611,6 +2683,7 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
     const rollbackReq: HostRequest = { ...baseRequest, version: "0.1.0", operation: "rollback", target_receipt_digest: acquireRes.receipt_digest as string };
     const rollbackRes = executeHostRequest(rollbackReq, null, FULL_HOST_CAPABILITIES);
     check(rollbackRes.status === "rolled_back", "host rollback did not roll back: " + rollbackRes.notice);
+    check(rollbackRes.operation === "rollback", "host rolled_back result lost its operation");
     const afterRollback = readStateDoc(stateRoot) as LifecycleDoc;
     const selected = afterRollback.packages.filter((ref) => ref.selection === "selected").map((ref) => ref.version);
     check(JSON.stringify(selected) === JSON.stringify(["0.1.0"]), "host rollback did not reselect 0.1.0");
@@ -2623,8 +2696,10 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
       "capability-denied host did not return scoped stopped: " + deniedRes.notice);
 
     // Installed-skill invocation with Effigy absent: the reference adapter
-    // (Bun) and the conforming python3 host both run from a copied installed
-    // skill and speak the same request/result messages.
+    // (Bun harness) and the resolve-bound python3 host both run from a copied
+    // installed skill and speak the same request/result messages. ALL THREE
+    // operations are exercised through the installed entrypoints the card
+    // requires.
     const surfacePath = process.argv[1];
     const surfaceName = path.basename(surfacePath);
     const pythonHostName = "language-package-host.py";
@@ -2634,11 +2709,18 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
     mkdirP(installedState);
     fs.writeFileSync(path.join(installedState, "operator-trust.json"), JSON.stringify(fixtureTrustDoc(fixtureRoot, [], [])));
     const installedConsumer = consumerDir();
-    const hostReqFile = path.join(out, "host-protocol", "requests", "resolve-installed.json");
-    mkdirP(path.dirname(hostReqFile));
+    const hostReqDir = path.join(out, "host-protocol", "requests");
+    const hostResDir = path.join(out, "host-protocol", "results");
+    mkdirP(hostReqDir);
+    mkdirP(hostResDir);
+    const writePair = (name: string, request: Record<string, unknown>): string => {
+      const reqFile = path.join(hostReqDir, name + ".json");
+      const resFile = path.join(hostResDir, name + ".json");
+      fs.writeFileSync(reqFile, JSON.stringify(request));
+      return resFile;
+    };
     const installedRequest = {
       protocol_version: "1.0.0",
-      operation: "resolve",
       intent: "workflow_request",
       package_id: "@northstar/language-fixture",
       version: "0.1.0",
@@ -2648,54 +2730,137 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
       consumer_dir: installedConsumer,
       state_root: installedState,
     };
-    fs.writeFileSync(hostReqFile, JSON.stringify(installedRequest));
-    // Seed the installed state through the reference adapter from the copy.
-    const seedReq = { ...installedRequest, operation: "acquire_activate" };
-    const seedReqFile = path.join(out, "host-protocol", "requests", "acquire-seed.json");
-    fs.writeFileSync(seedReqFile, JSON.stringify(seedReq));
-    const seedResFile = path.join(out, "host-protocol", "results", "acquire-seed.json");
-    mkdirP(path.dirname(seedResFile));
-    const seedRun = spawnSync("bun", ["run", path.join(installedRoot, surfaceName), "host", seedReqFile, seedResFile], { encoding: "utf8" });
-    check(seedRun.status === 0, "installed-skill reference host failed: " + String(seedRun.stdout) + String(seedRun.stderr));
-    const seedResult = JSON.parse(fs.readFileSync(seedResFile, "utf8")) as HostResult;
-    check(seedResult.status === "activated", "installed-skill host did not activate: " + seedResult.notice);
+    const readResult = (resFile: string): HostResult => JSON.parse(fs.readFileSync(resFile, "utf8")) as HostResult;
 
-    const bunResFile = path.join(out, "host-protocol", "results", "resolve-bun.json");
-    const bunRun = spawnSync("bun", ["run", path.join(installedRoot, surfaceName), "host", hostReqFile, bunResFile], { encoding: "utf8" });
+    // acquire_activate through the installed reference host entrypoint.
+    const seedRes = writePair("installed-acquire", { ...installedRequest, operation: "acquire_activate" });
+    const seedRun = spawnSync("bun", ["run", path.join(installedRoot, surfaceName), "host", path.join(hostReqDir, "installed-acquire.json"), seedRes], { encoding: "utf8" });
+    check(seedRun.status === 0, "installed-skill reference host failed: " + String(seedRun.stdout) + String(seedRun.stderr));
+    const seedResult = readResult(seedRes);
+    check(seedResult.status === "activated" && seedResult.operation === "acquire_activate", "installed-skill host did not activate: " + seedResult.notice);
+
+    // resolve through the installed reference host entrypoint.
+    const bunResFile = writePair("installed-resolve", { ...installedRequest, operation: "resolve" });
+    const bunRun = spawnSync("bun", ["run", path.join(installedRoot, surfaceName), "host", path.join(hostReqDir, "installed-resolve.json"), bunResFile], { encoding: "utf8" });
     check(bunRun.status === 0, "installed-skill reference host resolve failed: " + String(bunRun.stderr));
-    const bunResult = JSON.parse(fs.readFileSync(bunResFile, "utf8")) as HostResult;
-    check(bunResult.status === "routed" && bunResult.tree_digest === FIXTURE_TREE_DIGEST,
+    const bunResult = readResult(bunResFile);
+    check(bunResult.status === "routed" && bunResult.operation === "resolve" && bunResult.tree_digest === FIXTURE_TREE_DIGEST,
       "installed-skill reference host resolve returned wrong result: " + bunResult.notice);
 
-    // Conforming python3 host: no Bun, no Effigy in the consumer contract.
-    const pyResFile = path.join(out, "host-protocol", "results", "resolve-python.json");
-    const pyRun = spawnSync("python3", [path.join(installedRoot, pythonHostName), hostReqFile, pyResFile], { encoding: "utf8" });
+    // rollback through the installed reference host entrypoint: install
+    // 0.2.0 through the copy, then roll back through the copy.
+    const installedVariantTrust = fixtureTrustDoc(fixtureRoot, [variantPinEntry], []);
+    fs.writeFileSync(path.join(installedState, "operator-trust.json"), JSON.stringify(installedVariantTrust));
+    const instUpdateRes = writePair("installed-update", { ...installedRequest, version: "0.2.0", operation: "acquire_activate" });
+    const instUpdateRun = spawnSync("bun", ["run", path.join(installedRoot, surfaceName), "host", path.join(hostReqDir, "installed-update.json"), instUpdateRes], { encoding: "utf8" });
+    check(instUpdateRun.status === 0, "installed reference update failed: " + String(instUpdateRun.stderr));
+    const instUpdateResult = readResult(instUpdateRes);
+    check(instUpdateResult.status === "activated", "installed reference update did not activate: " + instUpdateResult.notice);
+    const instRollbackRes = writePair("installed-rollback", {
+      ...installedRequest,
+      version: "0.1.0",
+      operation: "rollback",
+      target_receipt_digest: seedResult.receipt_digest as string,
+    });
+    const instRollbackRun = spawnSync("bun", ["run", path.join(installedRoot, surfaceName), "host", path.join(hostReqDir, "installed-rollback.json"), instRollbackRes], { encoding: "utf8" });
+    check(instRollbackRun.status === 0, "installed reference rollback failed: " + String(instRollbackRun.stderr));
+    const instRollbackResult = readResult(instRollbackRes);
+    check(instRollbackResult.status === "rolled_back" && instRollbackResult.operation === "rollback",
+      "installed reference rollback returned wrong result: " + instRollbackResult.notice);
+    const installedAfter = readStateDoc(installedState) as LifecycleDoc;
+    const installedSelected = installedAfter.packages.filter((ref) => ref.selection === "selected").map((ref) => ref.version);
+    check(JSON.stringify(installedSelected) === JSON.stringify(["0.1.0"]), "installed reference rollback did not reselect");
+
+    // Conforming python3 host: resolve-only by explicit bound; unsupported
+    // operations stop as missing capability instead of pretending.
+    const pyResFile = writePair("python-resolve", { ...installedRequest, operation: "resolve" });
+    const pyRun = spawnSync("python3", [path.join(installedRoot, pythonHostName), path.join(hostReqDir, "python-resolve.json"), pyResFile], { encoding: "utf8" });
     check(pyRun.status === 0, "python conforming host failed: " + String(pyRun.stderr) + String(pyRun.stdout));
-    const pyResult = JSON.parse(fs.readFileSync(pyResFile, "utf8")) as HostResult;
-    check(pyResult.status === "routed" && pyResult.tree_digest === FIXTURE_TREE_DIGEST,
+    const pyResult = readResult(pyResFile);
+    check(pyResult.status === "routed" && pyResult.operation === "resolve" && pyResult.tree_digest === FIXTURE_TREE_DIGEST,
       "python conforming host resolve returned wrong result: " + pyResult.notice);
     check(bunResult.notice === pyResult.notice, "reference and python hosts disagree on the result message");
 
+    const pyAcquireFile = writePair("python-acquire", { ...installedRequest, operation: "acquire_activate" });
+    const pyAcquire = spawnSync("python3", [path.join(installedRoot, pythonHostName), path.join(hostReqDir, "python-acquire.json"), pyAcquireFile], { encoding: "utf8" });
+    check(pyAcquire.status === 0, "python acquire dispatch failed: " + String(pyAcquire.stderr));
+    const pyAcquireResult = readResult(pyAcquireFile);
+    check(pyAcquireResult.status === "stopped" && pyAcquireResult.operation === "acquire_activate" && pyAcquireResult.notice.includes("not implemented"),
+      "python host did not stop unsupported acquire_activate: " + pyAcquireResult.notice);
+
+    const pyRollbackFile = writePair("python-rollback", { ...installedRequest, operation: "rollback", target_receipt_digest: seedResult.receipt_digest as string });
+    const pyRollback = spawnSync("python3", [path.join(installedRoot, pythonHostName), path.join(hostReqDir, "python-rollback.json"), pyRollbackFile], { encoding: "utf8" });
+    check(pyRollback.status === 0, "python rollback dispatch failed: " + String(pyRollback.stderr));
+    const pyRollbackResult = readResult(pyRollbackFile);
+    check(pyRollbackResult.status === "stopped" && pyRollbackResult.operation === "rollback" && pyRollbackResult.notice.includes("not implemented"),
+      "python host did not stop unsupported rollback: " + pyRollbackResult.notice);
+
+    // Unsupported protocol version is stopped, never answered as v1. The
+    // malformed request itself is not a valid v1 message, so it is kept out
+    // of the schema-validated request set.
+    const badVersionReq = path.join(out, "bad-version-request.json");
+    fs.writeFileSync(badVersionReq, JSON.stringify({ ...installedRequest, protocol_version: "9.9.9", operation: "resolve" }));
+    const pyVersionFile = path.join(hostResDir, "python-bad-version.json");
+    const pyVersion = spawnSync("python3", [path.join(installedRoot, pythonHostName), badVersionReq, pyVersionFile], { encoding: "utf8" });
+    check(pyVersion.status === 0, "python version gate failed: " + String(pyVersion.stderr));
+    const pyVersionResult = readResult(pyVersionFile);
+    check(pyVersionResult.status === "stopped" && pyVersionResult.notice.includes("unsupported protocol_version"),
+      "python host answered an unsupported protocol version: " + pyVersionResult.notice);
+
     // Capability-denied python host: denied identity -> scoped stopped.
-    const pyDeniedFile = path.join(out, "host-protocol", "results", "resolve-python-denied.json");
-    const pyDenied = spawnSync("python3", [path.join(installedRoot, pythonHostName), hostReqFile, pyDeniedFile, "identity"], { encoding: "utf8" });
+    const pyDeniedFile = writePair("python-denied", { ...installedRequest, operation: "resolve" });
+    const pyDenied = spawnSync("python3", [path.join(installedRoot, pythonHostName), path.join(hostReqDir, "python-denied.json"), pyDeniedFile, "identity"], { encoding: "utf8" });
     check(pyDenied.status === 0, "python denied host failed: " + String(pyDenied.stderr));
-    const pyDeniedResult = JSON.parse(fs.readFileSync(pyDeniedFile, "utf8")) as HostResult;
+    const pyDeniedResult = readResult(pyDeniedFile);
     check(pyDeniedResult.status === "stopped" && pyDeniedResult.notice.includes("host capability missing: identity"),
       "python denied host did not stop scoped: " + pyDeniedResult.notice);
 
     // Missing-language request against the python host stops scoped too.
-    const pyMissingReqFile = path.join(out, "host-protocol", "requests", "resolve-missing-python.json");
-    fs.writeFileSync(pyMissingReqFile, JSON.stringify({ ...installedRequest, package_id: "@northstar/other-fixture", language: "other-lang" }));
-    const pyMissingFile = path.join(out, "host-protocol", "results", "resolve-missing-python.json");
-    const pyMissing = spawnSync("python3", [path.join(installedRoot, pythonHostName), pyMissingReqFile, pyMissingFile], { encoding: "utf8" });
+    const pyMissingReq = writePair("python-missing", { ...installedRequest, package_id: "@northstar/other-fixture", language: "other-lang", operation: "resolve" });
+    const pyMissing = spawnSync("python3", [path.join(installedRoot, pythonHostName), path.join(hostReqDir, "python-missing.json"), pyMissingReq], { encoding: "utf8" });
     check(pyMissing.status === 0, "python missing-host failed: " + String(pyMissing.stderr));
-    const pyMissingResult = JSON.parse(fs.readFileSync(pyMissingFile, "utf8")) as HostResult;
+    const pyMissingResult = readResult(pyMissingReq);
     check(pyMissingResult.status === "stopped" && pyMissingResult.notice.includes("@northstar/other-fixture"),
       "python host missing package did not stop scoped: " + pyMissingResult.notice);
 
-    console.log("oracle-13 host-protocol-portable: PASS (v1 requests/results, reference and python hosts from installed skill, capability-denied stopped)");
+    // Scope restriction through the installed python entrypoint.
+    const restrictedInstalledState = path.join(out, "restricted-installed-state");
+    mkdirP(restrictedInstalledState);
+    const restrictedInstalledTrust = fixtureTrustDoc(fixtureRoot, [], []);
+    restrictedInstalledTrust.allowlist[0].consumer_scope = "team-b";
+    fs.writeFileSync(path.join(restrictedInstalledState, "operator-trust.json"), JSON.stringify(restrictedInstalledTrust));
+    const restrictedConsumerDir = consumerDir();
+    const instRes = executeHostRequest({
+      ...installedRequest, operation: "acquire_activate", consumer_scope: "team-b", consumer_dir: restrictedConsumerDir, state_root: restrictedInstalledState,
+    }, null, FULL_HOST_CAPABILITIES);
+    check(instRes.status === "activated", "restricted installed seed failed: " + instRes.notice);
+    const pyScopeReq = writePair("python-scope-mismatch", {
+      ...installedRequest,
+      operation: "resolve",
+      consumer_scope: "team-a",
+      consumer_dir: restrictedConsumerDir,
+      state_root: restrictedInstalledState,
+    });
+    const pyScope = spawnSync("python3", [path.join(installedRoot, pythonHostName), path.join(hostReqDir, "python-scope-mismatch.json"), pyScopeReq], { encoding: "utf8" });
+    check(pyScope.status === 0, "python scope gate failed: " + String(pyScope.stderr));
+    const pyScopeResult = readResult(pyScopeReq);
+    check(pyScopeResult.status === "stopped" && pyScopeResult.notice.includes("restricts consumer scope"),
+      "python host ignored the request scope restriction: " + pyScopeResult.notice);
+    const pyScopeOk = writePair("python-scope-match", {
+      ...installedRequest,
+      operation: "resolve",
+      consumer_scope: "team-b",
+      consumer_dir: restrictedConsumerDir,
+      state_root: restrictedInstalledState,
+    });
+    const pyScopeOkRun = spawnSync("python3", [path.join(installedRoot, pythonHostName), path.join(hostReqDir, "python-scope-match.json"), pyScopeOk], { encoding: "utf8" });
+    check(pyScopeOkRun.status === 0, "python scope-match host failed: " + String(pyScopeOkRun.stderr));
+    const pyScopeOkResult = readResult(pyScopeOk);
+    check(pyScopeOkResult.status === "routed", "matching python scope did not route: " + pyScopeOkResult.notice);
+
+    console.log("oracle-13 host-protocol-portable: PASS (all three ops through installed entrypoints, resolve-bound python host, scope binding, capability/version stopped)");
   }
+
 
   console.log("card-117 oracle: PASS (8 review rows + transitions + restrictions + provenance + concurrency + self-check + identity-binding/store negatives)");
 }

@@ -182,11 +182,14 @@ invocation), across the PR 22 review rounds:
   root (rollback binds the target receipt digest); results carry
   routed/activated/rolled_back/stopped, exact identities, resolved path and
   receipt when applicable, and the visible notice. Operational entrypoints
-  are exercised from an INSTALLED SKILL with Effigy absent by two conforming
-  hosts: the reference adapter (this repo's Bun harness — a reference adapter
-  only) and a stdlib-only python3 host; capability-denied hosts return a
-  scoped `stopped` notice and never a fallback runtime. No Bun, Node, Python,
-  POSIX shell, Effigy, or provider API is a consumer prerequisite.
+  are exercised from an INSTALLED SKILL with Effigy absent: the reference
+  adapter (this repo's Bun harness — a reference adapter only) implements all
+  three operations through the installed entrypoint, and a resolve-bound
+  stdlib-only python3 host implements resolve while stopping
+  acquire_activate/rollback as missing capability; capability-denied hosts
+  and unsupported protocol versions return scoped `stopped` notices and never
+  a fallback runtime or a v1 answer to a non-v1 request. No Bun, Node,
+  Python, POSIX shell, Effigy, or provider API is a consumer prerequisite.
 - Explicit `self_check.invocation` tagged union (`direct` executes the
   verified entrypoint with `[package_root]`; `command` executes a declared
   command, which must appear in `required_commands`, with
@@ -204,11 +207,16 @@ invocation), across the PR 22 review rounds:
 - All ten review-oracle rows falsified (the eight original plus host-protocol
   portability and self-check invocation) plus restrictions, provenance,
   concurrency, identity/store, and invocation negatives. The checker
-  schema-validates every written receipt (17) and every host request/result
-  message (8). Repo-contract required files and `scripts/README.md` wired.
+  schema-validates every written receipt (20) and every host request/result
+  message (23), plus four negative result fixtures rejecting incomplete or
+  operation-incoherent results. The request consumer scope binds trust
+  restrictions at the host boundary for resolve and activation (mismatched
+  scope against a restricted pin stops through the operational entrypoint).
+  Repo-contract required files and `scripts/README.md` wired.
 - Validation: standalone oracle (Effigy absent, all 13 groups) PASS;
-  `effigy check:language-packages` PASS; isolated skill-install parity;
-  `effigy qa:docs`; `effigy qa`; `git diff --check` clean.
+  `effigy check:language-packages` PASS (20 receipts and 23 host messages
+  schema-validated); isolated skill-install parity; `effigy qa:docs`;
+  `effigy qa`; `git diff --check` clean.
 
 ## Next Task
 

@@ -1672,6 +1672,39 @@ expect_manifest_rejection("unknown-invocation-type",
 expect_manifest_rejection("command-without-command",
     json::read_file(path::join(invocation_negatives_root, "command-without-command.json")), manifest_schema, "failed oneOf schema validation");
 
+// Result schema mutation/fixture negatives: incomplete or
+// operation-incoherent results must be rejected by the discriminated grammar.
+fn expect_host_result_rejection(label, doc, host_schema, expected_reason) {
+    let rejected = false;
+    try {
+        validate_schema_node(doc, host_schema, label);
+    } catch (error) {
+        rejected = true;
+        let message = error.to_string();
+        if !message.contains(expected_reason) {
+            let err = label;
+            err += " rejected for wrong reason: ";
+            err += message;
+            throw(err);
+        }
+    }
+    if !rejected {
+        let err = label;
+        err += " unexpectedly passed";
+        throw(err);
+    }
+}
+
+let host_result_negatives_root = path::join(northstar_skill_root, "assets/fixtures/language-packages/negative/host-result");
+expect_host_result_rejection("activated-without-identity",
+    json::read_file(path::join(host_result_negatives_root, "activated-without-identity.json")), host_schema, "failed oneOf schema validation");
+expect_host_result_rejection("stopped-with-identity",
+    json::read_file(path::join(host_result_negatives_root, "stopped-with-identity.json")), host_schema, "contains forbidden additional property");
+expect_host_result_rejection("incoherent-op-status",
+    json::read_file(path::join(host_result_negatives_root, "incoherent-op-status.json")), host_schema, "failed oneOf schema validation");
+expect_host_result_rejection("missing-operation",
+    json::read_file(path::join(host_result_negatives_root, "missing-operation.json")), host_schema, "failed oneOf schema validation");
+
 let oracle_dir = run_card_117_oracle(northstar_skill_root, manifest_schema);
 validate_oracle_receipts(oracle_dir, receipt_schema);
 validate_host_messages(oracle_dir, host_schema);
