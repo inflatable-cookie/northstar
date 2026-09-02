@@ -135,5 +135,17 @@ over the materialized accepted commit, and a real-package transcript.
 Validation: standalone oracle, `effigy check:language-packages`, isolated
 skill-install parity, `effigy qa:docs`, `effigy qa`, `git diff --check`. The
 embedded TypeScript payload is byte-identical to `origin/main`. Registry
-promotion completes at merge; Jetstream remains serial. Evidence:
+promotion is withheld pending the replacement-identity revalidation (see
+addendum); Jetstream remains serial. Evidence:
 `docs/logs/2026-09/02-201200-pin-typescript-package-canary.md`.
+
+Review addendum (2026-09-02): exact-head review of PR 23 at `057dd28` returned
+CHANGES REQUIRED with findings upstream of this branch: the pinned package's
+installed setup/record invocation is not operational (embedded-catalogue
+command identity plus un-normalized relay args in the relocated scripts), and
+the submitted oracle never exercised that route against a separate consumer.
+The handoff forbids editing the public package source, so this is a planning
+stop, not a branch repair. PR 23 and this workspace stay intact; the frozen
+fallback must not hide the failure. Paused here awaiting the replacement
+immutable identity from the orchestrator's external package-source repair,
+then: repin, oracle repair, revalidation.

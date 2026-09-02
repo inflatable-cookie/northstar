@@ -78,7 +78,42 @@ TypeScript payload files are byte-identical to `origin/main`.
 
 ## Limits
 
-Registry promotion completes when the orchestrator merges the PR. Fresh
-Jetstream consumer evidence (installed-package audit identity, route identity,
-overlays, rollback, offline, forced-fallback runs, consumer before/after
-hashes) remains serial behind the accepted head, per the handoff.
+Registry promotion is withheld pending the external package-source repair and
+the replacement-identity revalidation described under Exact-Head Review.
+Fresh Jetstream consumer evidence (installed-package audit identity, route
+identity, overlays, rollback, offline, forced-fallback runs, consumer
+before/after hashes) remains serial behind the accepted head, per the
+handoff.
+
+## Exact-Head Review (2026-09-02, PR 23 at `057dd28`)
+
+CHANGES REQUIRED. Accepted in isolation: the registry pin, generic route
+procedure, fallback wording, self-check isolation repair, and truthful
+receipt provenance. Blocking findings, all upstream of this branch's
+authority:
+
+- `execution-miss`: the pinned `09ef1743` package cannot perform its
+  installed setup/record workflow. Its own mode and `audit-recording.md`
+  still instruct the embedded-catalogue identity
+  (`northstar/typescript-quality:setup|record`), which does not resolve
+  against the installed package catalog (`typescript-quality`); and via the
+  correct external-source surface
+  (`effigy skill run --path <pkg> typescript-quality/typescript-quality:setup`),
+  the relocated scripts fail their usage guard because they never normalize
+  Effigy's relay sentinel args (`["--", "self-test"]`).
+- `oracle-gap`: the submitted real-package transcript proved acquisition,
+  self-check, identity, and resolve, but never executed the package's
+  declared setup/record route against a separate consumer. The installed
+  workflow claim was therefore unproven, not disproven — and the pinned
+  payload currently cannot pass it.
+- `planning-change`: the handoff forbids editing the public package source;
+  the repair belongs to an external package-source PR producing a
+  replacement source commit and tree digest.
+
+Disposition: planning stop recorded on this branch. PR 23 stays open; no
+in-bounds repair exists; the frozen fallback must not hide the failure. On
+the replacement identity's return: repin, add a non-vacuous installed
+setup/record oracle through the exact public consumer surface (task source
+at `installed_path`, decoy consumer target, relay arguments proven, embedded
+`northstar` catalogue unavailable), update every receipt/route/evidence
+claim, and revalidate.

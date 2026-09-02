@@ -94,9 +94,11 @@ Northstar system:
   fixture protocol, TypeScript, Rust, and embedded removal. Card 117's generic
   lifecycle proof merged through PR 22 at `75db6f5`. Card 118's public package
   repository merged package PR 1 as `09ef174`; exact TypeScript identity and
-  inventory are accepted. The registry/routing worker pinned that identity in
-  the official registry and opened the core PR for installed-package routing
-  with a visible frozen fallback; Jetstream proof remains serial behind
-  accepted review.
+  inventory are accepted. Core PR 23 pins that identity and routes explicit
+  audit intent through the installed package, but exact-head review returned
+  CHANGES REQUIRED on an upstream package-source defect (the pinned package's
+  installed setup/record invocation is not operational); the worker is paused
+  awaiting the external source repair's replacement identity, and Jetstream
+  proof remains serial behind it.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

@@ -1,6 +1,6 @@
 # 118 - Extract TypeScript/Svelte Language Package
 
-Status: in progress; registry/routing PR open for exact-head review
+Status: in progress; PR 23 changes required on an upstream package-source defect; paused awaiting the external source repair and replacement identity
 Owner: repo maintainers
 Updated: 2026-09-02
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -116,9 +116,13 @@ external mutations; workers must stop at reviewable heads.
   target;
 - [x] the declared direct self-check executes from the installed package with
   its runtime capabilities enforced;
-- [x] package source/install parity and immutable registry promotion pass;
-- [x] installed, offline, rollback, and acquisition-failure fallback routes
-  pass; the fresh Jetstream route remains serial behind the accepted PR;
+- [ ] package source/install parity and immutable registry promotion pass;
+  parity proof stands, promotion withheld until the replacement package
+  identity passes review;
+- [ ] installed, offline, rollback, and acquisition-failure fallback routes
+  pass; lifecycle-level proof stands, but exact-head review found the pinned
+  package's installed setup/record invocation non-operational and the
+  operational route oracle missing; the fresh Jetstream route remains serial;
 - [x] all new TypeScript package development lands externally during overlap;
 - [x] root fallback is frozen and visibly identified, not silently preferred;
 - [ ] full Northstar, package, and consumer QA pass.
@@ -207,11 +211,28 @@ isolated skill-install parity, `effigy qa:docs`, `effigy qa`,
 `git diff --check`. Evidence: `docs/logs/2026-09/02-201200-pin-typescript-package-canary.md`.
 The embedded TypeScript payload files remain byte-identical to `origin/main`.
 
+Exact-head review (2026-09-02, PR 23 at `057dd28`): CHANGES REQUIRED. The
+registry pin, generic route, fallback wording, self-check isolation repair,
+and provenance repair were not disputed. Blocking findings, all upstream of
+this branch's authority: the pinned `09ef1743` package cannot perform its
+installed setup/record workflow — its embedded-catalogue command identity
+(`northstar/...` prefixes) is wrong for the installed package, and the
+relocated setup/recorder scripts do not normalize Effigy's relay sentinel
+args; and the submitted evidence never executed the package's declared
+setup/record route against a separate consumer, so the installed-workflow
+claims were accepted as unproven. The handoff forbids editing the public
+package source, so this stops here as a planning stop, not a branch repair.
+The orchestrator is dispatching an external package-source repair producing a
+replacement source commit and tree digest; this branch then repins the
+replacement identity, adds the non-vacuous installed setup/record oracle
+through the exact public consumer surface, and revalidates. PR 23 stays open;
+the frozen fallback must not be used to hide the failure.
+
 ## Next Task
 
-The registry/routing worker is complete on branch
-`worker/pin-typescript-package-canary`; the orchestrator runs exact-head
-review and merges the core PR. After merge, dispatch the Jetstream worker for
-the fresh installed-package audit (route identity, overlays, evidence,
-rollback, offline, forced fallback, consumer before/after hashes). Cards
-119-120 remain closed until canary reconciliation.
+Paused on this branch awaiting the replacement immutable identity from the
+external package-source repair. On its return: repin, repair the oracle gap,
+rerun the canary evidence, and revalidate; then the orchestrator re-reviews
+before Jetstream dispatch. Cards 119-120 remain closed until canary
+reconciliation.
+
