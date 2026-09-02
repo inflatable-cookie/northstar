@@ -98,7 +98,7 @@ Northstar system:
   as `d18dc33b` (package PR 2). Core PR 23 repins that replacement identity
   (registry version `1.2.0`) and adds the non-vacuous installed setup/record
   operational proof through the exact public `effigy skill run --path`
-  surface; the repaired head awaits re-review and Jetstream proof remains
-  serial behind it.
+  surface; it merged as `5951dfb`. The Jetstream consumer proof is now running
+  from its tracked handoff, with cards 119-120 still closed.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

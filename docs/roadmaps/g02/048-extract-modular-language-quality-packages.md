@@ -1,6 +1,6 @@
 # 048 - Extract Modular Language Quality Packages
 
-Status: active; card 117 complete; card 118 registry/routing worker ready
+Status: active; card 117 complete; card 118 Jetstream consumer canary running
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.033`, promoted spec 034
@@ -47,8 +47,8 @@ before it becomes ready.
   proves the TypeScript/Svelte explicit-audit package under one bounded overlap.
   Registry/routing is implemented in core PR 23, now repinned to the reviewed
   installed-invocation repair (`d18dc33b`, registry version `1.2.0`) with the
-  non-vacuous installed setup/record operational proof added; the repaired
-  head awaits re-review. Jetstream proof and overlap closure remain serial.
+  non-vacuous installed setup/record operational proof added. PR 23 merged as
+  `5951dfb`; Jetstream proof is dispatched and overlap closure remains serial.
 - [ ] **Batch C — Rust extraction:** card 119 publishes, pins, installs, and
   proves Rust everyday authoring plus explicit audit and its Cargo engine.
 - [ ] **Batch D — root reduction:** card 120 removes both frozen embedded
@@ -95,13 +95,8 @@ before it becomes ready.
 
 ## Next Task
 
-Card `g02.048/117` merged through PR 22 at `75db6f5` after implementing and
-falsifying the generic lifecycle proof. Card 118 is ready with the public
-`inflatable-cookie/northstar-language-packs` topology,
-`@northstar/typescript-quality` `0.1.0` canary identity, exact 17-file embedded
-baseline, 20-file initial package shape, and Jetstream consumer proof pinned.
-The shared repository is public. Package PR 1 was accepted at `2982d0e` and
-merged as `09ef174`; its canonical package-tree digest is `sha256:0fcd5c58...`
-and manifest digest is `sha256:ed95883c...`. Dispatch the registry/routing lane
-from handoff `20260902-191918`; Jetstream remains serial behind its accepted
-Northstar head.
+Card 118's package repair merged as `d18dc33b`; core PR 23 repinned it and
+merged as `5951dfb`. The Jetstream consumer worker is running from handoff
+`docs/handoffs/20260902-jetstream-installed-typescript-package-canary.md` at
+Jetstream base `7c2cf010`. Review and merge its fresh installed-package audit,
+then reconcile the overlap evidence. Do not start card 119 automatically.

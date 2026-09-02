@@ -3,7 +3,7 @@
 Date: 2026-09-02
 Roadmap: `g02.048`
 Card: `g02.048/118`
-Status: registry/routing worker complete; PR open for exact-head review
+Status: registry/routing merged; Jetstream consumer canary dispatched
 
 ## What Was Built
 
@@ -164,3 +164,12 @@ PR 2). This branch repinned and revalidated:
 
 Registry promotion remains review-gated: PR 23 is updated to this exact head
 for re-review. Jetstream stays serial.
+
+## Orchestrator Closeout
+
+Exact-head re-review accepted PR 23 at
+`d4c23816e9995cdc358a70b53acd50648a1f5e9a`. It merged as
+`5951dfb46eb5ba11cc933a225c3dd0d2a10a1bbe`. The registry is promoted at
+version `1.2.0`; the serial Jetstream consumer canary was dispatched from its
+tracked handoff at Jetstream `7c2cf010`. This log now stops at the consumer
+boundary; fresh audit evidence belongs to the Jetstream PR and its own log.

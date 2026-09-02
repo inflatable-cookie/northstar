@@ -5,7 +5,7 @@ handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
 handoff: single-file-path-only
-status: ready
+status: complete
 owner: repo maintainers
 created: 2026-09-02
 updated: 2026-09-02
@@ -159,3 +159,9 @@ executed against the lifecycle `installed_path` through the exact public
 package tree byte-identical before/after, consumer-only attribution), reran
 the full canary transcript and all validation, and pushed the new exact head
 for re-review. Jetstream remains serial.
+
+Orchestrator closeout (2026-09-02): exact-head re-review accepted
+`d4c23816e9995cdc358a70b53acd50648a1f5e9a`; PR 23 merged as
+`5951dfb46eb5ba11cc933a225c3dd0d2a10a1bbe`. The worker workspace was archived
+and Paseo removed its worktree. The Jetstream consumer canary was promoted and
+dispatched from its own tracked handoff; this continuation envelope is closed.

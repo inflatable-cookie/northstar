@@ -1,6 +1,6 @@
 # 118 - Extract TypeScript/Svelte Language Package
 
-Status: in progress; replacement identity repinned and installation-oracle repaired after the reviewed external source repair; PR 23 awaiting re-review
+Status: in progress; registry/routing merged; Jetstream consumer canary dispatched
 Owner: repo maintainers
 Updated: 2026-09-02
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -118,7 +118,7 @@ external mutations; workers must stop at reviewable heads.
   its runtime capabilities enforced;
 - [x] package source/install parity and immutable registry promotion pass;
   replacement identity `d18dc33b` digest-proven and repinned at registry
-  version `1.2.0`; promotion completes at PR 23 re-review and merge;
+  version `1.2.0`; PR 23 merged as `5951dfb` after exact-head review;
 - [x] installed, offline, rollback, and acquisition-failure fallback routes
   pass, now including the non-vacuous installed setup/record proof through
   the exact public `effigy skill run --path <installed_path>` surface against
@@ -253,13 +253,19 @@ standalone oracle, `effigy check:language-packages`, isolated skill-install
 parity, pinned-package `effigy qa`, `effigy qa`, `git diff --check`.
 Evidence: `docs/logs/2026-09/02-201200-pin-typescript-package-canary.md`.
 
+Orchestrator closeout (2026-09-02): exact-head re-review accepted PR 23 at
+`d4c23816e9995cdc358a70b53acd50648a1f5e9a`; it merged as
+`5951dfb46eb5ba11cc933a225c3dd0d2a10a1bbe`. The serial Jetstream edge was
+promoted without changing its product roadmap. Handoff
+`docs/handoffs/20260902-jetstream-installed-typescript-package-canary.md` was
+committed to Jetstream `main` at `7c2cf010`; Paseo worker
+`f40afdd6-5597-4405-a7fc-63e6a0869e21` runs in workspace
+`wks_250577a54e82f464` with read-only Northstar and language-pack siblings.
+
 ## Next Task
 
-The external installed-invocation repair merged as `d18dc33b` (language-packs
-PR 2). This branch repinned the registry to the replacement identity at
-registry version `1.2.0`, added the non-vacuous installed setup/record
-operational proof through the exact public `effigy skill run --path
-<installed_path>` surface against a decoy consumer, and revalidated the full
-canary evidence. The orchestrator runs exact-head re-review of PR 23; after
-merge, dispatch the Jetstream worker for the fresh installed-package audit.
-Cards 119-120 remain closed until canary reconciliation.
+PR 23 merged as `5951dfb` with registry version `1.2.0` and the repaired
+installed setup/record oracle. The Jetstream worker now runs the fresh
+installed-package audit from its tracked consumer handoff. Review and merge
+that exact consumer head, reconcile card 118, then stop at the operator
+checkpoint. Cards 119-120 remain closed until canary reconciliation.
