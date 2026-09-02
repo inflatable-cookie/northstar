@@ -11,6 +11,15 @@ audit, no-slop pass, whole-codebase review, or audit-and-fix action. Resolve
 `worktree` or `repository` scope and package-local Svelte overlays. It never
 activates from ordinary TypeScript or Svelte coding.
 
+Route through the installed package before using embedded content. The
+official registry pins `@northstar/typescript-quality` as the official
+TypeScript choice (`explicit_audit_repair`, `typescript` with `base`,
+`svelte`, and `sveltekit` overlays). Run the generic installed-package route
+([`packages/installed-package-route.md`](./packages/installed-package-route.md))
+for that identity: a `routed` result executes the package's declared audit
+entrypoint from `installed_path`; a stopped route falls back to the frozen
+embedded payload only after the route doc's visible fallback notice.
+
 → [`modes/typescript-quality-audit.md`](./modes/typescript-quality-audit.md)
 
 ## Rust explicit audit-and-repair (explicit only)

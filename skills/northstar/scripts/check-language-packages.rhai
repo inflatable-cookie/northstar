@@ -1583,12 +1583,13 @@ fn run_card_117_oracle(northstar_skill_root, manifest_schema) {
         "oracle-11 self-check-invocation: PASS",
         "oracle-12 identity-binding-and-immutable-store: PASS",
         "oracle-13 host-protocol-portable: PASS",
+        "oracle-14 official-pin-route: PASS",
         "card-117 oracle: PASS",
+        "card-118 oracle: PASS",
     ] {
         require(output.contains(marker), "card-117 oracle missing marker: " + marker);
     }
     log("card-117 surface oracle: PASS (bun, Effigy absent; same surface driven from the checker)");
-    log("card-117 oracle notices:\n" + output);
     oracle_dir
 }
 
@@ -1612,6 +1613,31 @@ let official_registry_path = path::join(packages_ref_root, "official-registry.js
 require(fs::is_file(official_registry_path), "missing official-registry.json");
 let registry = json::read_file(official_registry_path);
 validate_registry_instance(registry, registry_schema, "official-registry.json");
+
+// Card 118: the official registry carries exactly the accepted TypeScript
+// canary identity pinned by the reviewed registry change. Schema conformance
+// above proves shape; these assertions pin the accepted values themselves so
+// identity drift fails the checker rather than silently re-pinning.
+require(registry["registry_version"] == "1.1.0",
+    "official-registry.json must record registry_version 1.1.0 for the card-118 pin");
+let registry_packages = registry["packages"];
+require(registry_packages.len() == 1,
+    "official-registry.json must contain exactly the accepted canary entry, found " + registry_packages.len());
+let canary = registry_packages[0];
+let canary_expectations = #{
+    "package_id": "@northstar/typescript-quality",
+    "version": "0.1.0",
+    "repository": "https://github.com/inflatable-cookie/northstar-language-packs",
+    "subpath": "packages/typescript",
+    "commit": "09ef1743dd8fc18bae3bf04fae791f1d7d4e5daf",
+    "tree_digest": "sha256:0fcd5c58296f168895b66f2472621d49761f7786ea2ad1ebeefb801040967d6b",
+    "manifest_digest": "sha256:ed95883c428ef43f0f02d38d60bf8d50e6e29313f5751c1b2a5744157a5b5362",
+    "compatible_core_range": ">=0.2.0 <1.0.0",
+};
+for key in canary_expectations.keys() {
+    require(canary.contains(key) && canary[key] == canary_expectations[key],
+        "official-registry.json canary entry field '" + key + "' drifted from the accepted card-118 identity");
+}
 
 let fixture_root = path::join(northstar_skill_root, "assets/fixtures/language-packages/policy-free-fixture");
 validate_policy_free_fixture_deep(fixture_root, manifest_schema);

@@ -7,6 +7,15 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 
 <!-- Keep entries short. Append newest entries at the top. Do not include secrets. -->
 
+- **2026-09-02 — `effigy doctor` fails structurally on pre-existing god-file
+  findings:** doctor reports 6 error-level `scan.god-files` findings (9 total)
+  on a clean `main` checkout while `effigy qa` passes, so the orientation
+  surface always ends in `[error] Task failed` during worker startup; impact
+  is that routing/health ambiguity cannot use doctor cleanly and real
+  regressions hide inside pre-existing noise; plausible fix is splitting the
+  flagged files or raising the thresholds deliberately and recording the
+  decision; affected surface is `effigy doctor` scan.god-files configuration
+  in `effigy.toml`.
 - **2026-08-30 — worker preflight `git fetch origin` can hang on SSH
   (resolved):** a blocked SSH prompt left the worker startup fetch silent for
   minutes; impact was wedged-looking probes that burned the long command

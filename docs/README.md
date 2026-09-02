@@ -94,7 +94,9 @@ Northstar system:
   fixture protocol, TypeScript, Rust, and embedded removal. Card 117's generic
   lifecycle proof merged through PR 22 at `75db6f5`. Card 118's public package
   repository merged package PR 1 as `09ef174`; exact TypeScript identity and
-  inventory are accepted. Registry/routing is the ready edge; Jetstream proof
-  remains serial behind it.
+  inventory are accepted. The registry/routing worker pinned that identity in
+  the official registry and opened the core PR for installed-package routing
+  with a visible frozen fallback; Jetstream proof remains serial behind
+  accepted review.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

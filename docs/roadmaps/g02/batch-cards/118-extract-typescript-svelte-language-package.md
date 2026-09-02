@@ -1,6 +1,6 @@
 # 118 - Extract TypeScript/Svelte Language Package
 
-Status: in progress; registry/routing worker ready
+Status: in progress; registry/routing PR open for exact-head review
 Owner: repo maintainers
 Updated: 2026-09-02
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -116,11 +116,11 @@ external mutations; workers must stop at reviewable heads.
   target;
 - [x] the declared direct self-check executes from the installed package with
   its runtime capabilities enforced;
-- [ ] package source/install parity and immutable registry promotion pass;
-- [ ] installed, offline, rollback, acquisition-failure fallback, and fresh
-  Jetstream routes pass;
+- [x] package source/install parity and immutable registry promotion pass;
+- [x] installed, offline, rollback, and acquisition-failure fallback routes
+  pass; the fresh Jetstream route remains serial behind the accepted PR;
 - [x] all new TypeScript package development lands externally during overlap;
-- [ ] root fallback is frozen and visibly identified, not silently preferred;
+- [x] root fallback is frozen and visibly identified, not silently preferred;
 - [ ] full Northstar, package, and consumer QA pass.
 
 ## Review Oracle
@@ -189,10 +189,29 @@ The source-list digest remains
 The source worker workspace was archived and its Paseo-owned worktree removed.
 No registry pin or consumer branch exists.
 
+Registry/routing worker (2026-09-02): the official registry pins the accepted
+canary identity at registry version `1.1.0`; the generic
+installed-package route (`references/packages/installed-package-route.md`) and
+the router's TypeScript audit route send explicit audit intent through the
+installed package with the frozen embedded payload as a visibly announced
+fallback. The canary exposed and fixed a card-117 defect: self-check receipts
+(`.effigy/`) polluted the installed tree and broke selection re-verification;
+the reference surface now executes the self-check on a byte-identical
+throwaway copy, proven by an oracle-11 pollution regression. Falsified with
+`oracle-14 official-pin-route`, an independent spec-034 digest implementation
+over the materialized accepted commit, and a real-package transcript
+(visible fallback trigger, detection never acquires, install with real
+self-check, offline routing, drift stop, byte-exact restore, consumer
+preservation). Validation: standalone oracle, `effigy check:language-packages`,
+isolated skill-install parity, `effigy qa:docs`, `effigy qa`,
+`git diff --check`. Evidence: `docs/logs/2026-09/02-201200-pin-typescript-package-canary.md`.
+The embedded TypeScript payload files remain byte-identical to `origin/main`.
+
 ## Next Task
 
-Dispatch the Northstar registry/routing worker from
-`docs/handoffs/20260902-191918-pin-typescript-package-canary.md`. Pin only the
-accepted immutable source, implement installed-package routing plus visible
-frozen fallback, and stop at a reviewable Northstar PR. Jetstream remains
-serial behind the accepted registry/routing head.
+The registry/routing worker is complete on branch
+`worker/pin-typescript-package-canary`; the orchestrator runs exact-head
+review and merges the core PR. After merge, dispatch the Jetstream worker for
+the fresh installed-package audit (route identity, overlays, evidence,
+rollback, offline, forced fallback, consumer before/after hashes). Cards
+119-120 remain closed until canary reconciliation.

@@ -241,13 +241,25 @@ Card 117 extends the same checker with the generic installed-package runtime:
     `[entrypoint, package_root]`; both use the package root as cwd, no shell
     interpolation, no order semantics) with both positive variants and
     undeclared-runner, unavailable-runner, and non-executable-permission
-    negatives;
+    negatives. The candidate executes on a byte-identical throwaway copy of
+    the staged root, so a self-check that writes receipts into its package
+    root cannot mutate the verified payload; the installed tree keeps the
+    pinned identity for selection re-verification.
 17. review-oracle falsifications: detection is not authority, canonical
     content identity, transactional activation, operator-owned compare-and-swap
     state, offline local routing, scoped failure, revocable trust, generic
     routing, host-protocol portability, and self-check invocation, plus
     restricted-workflow/consumer, provenance, overlapping-writer,
     interrupted-write, and identity/store negatives.
+18. card 118 official registry pin and route: the shipped registry carries
+    exactly the accepted `@northstar/typescript-quality` `0.1.0` canary
+    identity at registry version 1.1.0 (schema conformance plus exact-value
+    assertions), official receipts record the actual authorizing registry
+    version and entry digest, and the oracle proves the official-pin route:
+    visible fallback trigger on acquisition failure, detection never
+    acquires, installed offline routing, drift stops instead of silently
+    routing, rollback reopens the route without fetching, and the official
+    pin outranks the operator allowlist.
 
 The exact same surface is exercised with Effigy absent
 (`bun run skills/northstar/scripts/language-package-lifecycle.ts oracle

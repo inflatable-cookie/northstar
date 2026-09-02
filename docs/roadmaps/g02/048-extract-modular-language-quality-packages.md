@@ -45,6 +45,8 @@ before it becomes ready.
   verification, installation, activation, rollback, offline, and routing.
 - [ ] **Batch B — TypeScript canary:** card 118 publishes, pins, installs, and
   proves the TypeScript/Svelte explicit-audit package under one bounded overlap.
+  Registry/routing is implemented and the core PR is open; Jetstream proof and
+  overlap closure remain serial behind accepted review.
 - [ ] **Batch C — Rust extraction:** card 119 publishes, pins, installs, and
   proves Rust everyday authoring plus explicit audit and its Cargo engine.
 - [ ] **Batch D — root reduction:** card 120 removes both frozen embedded

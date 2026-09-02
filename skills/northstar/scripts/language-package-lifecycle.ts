@@ -147,6 +147,9 @@ interface RegistryEntry {
 interface Pin {
   entry: TrustEntry | RegistryEntry;
   source: "official" | "operator_allowlist";
+  // The registry document version that authorized an official pin; null for
+  // operator allowlist pins. Receipts must record this truthfully.
+  registry_version: string | null;
 }
 
 interface ResolvedPackage {
@@ -686,12 +689,12 @@ function hostAcquisitionAdapter(): (pin: Pin) => string {
 function findPin(registry: RegistryDoc, trustDoc: TrustDoc, packageId: string, version: string): Pin | null {
   for (const entry of registry.packages) {
     if (entry.package_id === packageId && entry.version === version) {
-      return { entry, source: "official" };
+      return { entry, source: "official", registry_version: registry.registry_version };
     }
   }
   for (const entry of allowlistEntries(trustDoc)) {
     if (entry.package_id === packageId && entry.version === version) {
-      return { entry, source: "operator_allowlist" };
+      return { entry, source: "operator_allowlist", registry_version: null };
     }
   }
   return null;
@@ -746,13 +749,19 @@ function findCommand(cmd: string): string | null {
   return null;
 }
 
-function runPackageSelfCheck(stagedRoot: string, manifest: Manifest): { output: string; exit: number } {
+function runPackageSelfCheck(stagedRoot: string, manifest: Manifest): { output: string; exit: number; execRoot: string; execRealRoot: string; execTreeDigest: string } {
   // Explicit invocation contract: `direct` executes the verified entrypoint
   // with [package_root]; `command` executes the declared command (which must
   // appear in runtime_capabilities.required_commands) with
   // [resolved_entrypoint, package_root]. Both use the package root as the
   // working directory. There is no shell interpolation, no argument template,
   // no inferred runner, and no meaning attached to required_commands order.
+  //
+  // The candidate executes against a throwaway byte-identical copy of the
+  // verified staged root (mode-preserving): the copy is the package root for
+  // the candidate run, and any receipts or state a real self-check writes
+  // are discarded with the copy. The installed payload therefore keeps the
+  // exact pinned identity for later selection re-verification.
   const entry = manifest.self_check.entrypoint;
   check(isSafePackageRelativePath(entry), "self-check entrypoint violates containment");
   const entryPath = path.join(stagedRoot, entry);
@@ -765,25 +774,33 @@ function runPackageSelfCheck(stagedRoot: string, manifest: Manifest): { output: 
   check(st.isFile(), "self-check entrypoint is not a regular file: " + entry);
   check(!st.isSymbolicLink(), "self-check entrypoint must not be a symlink: " + entry);
   const invocation = manifest.self_check.invocation;
-  const cwd = stagedRoot;
+  const execParent = fs.mkdtempSync(path.join(process.env.TMPDIR ?? "/tmp", "northstar-selfcheck-"));
+  const execRoot = path.join(execParent, "package");
+  copyTree(stagedRoot, execRoot);
+  const execEntryPath = path.join(execRoot, entry);
+  const execRealRoot = fs.realpathSync(execRoot);
+  const execTreeDigest = canonicalTreeDigest(execRoot, "self-check execution copy");
+  const cwd = execRoot;
   let result: SpawnSyncReturns<string>;
-  if (invocation.type === "direct") {
-    check((st.mode & 0o111) !== 0, "self-check entrypoint is not executable: " + entry);
-    result = spawnSync(entryPath, [stagedRoot], { cwd, encoding: "utf8" });
-  } else {
-    const command = invocation.command as string;
-    check(manifest.runtime_capabilities.required_commands.includes(command),
-      "self-check command runner is not declared in runtime_capabilities.required_commands: " + command);
-    const resolved = findCommand(command);
-    check(resolved !== null, "required runtime command not available on this host: " + command);
-    result = spawnSync(resolved, [entryPath, stagedRoot], { cwd, encoding: "utf8" });
+  try {
+    if (invocation.type === "direct") {
+      check((st.mode & 0o111) !== 0, "self-check entrypoint is not executable: " + entry);
+      result = spawnSync(execEntryPath, [execRoot], { cwd, encoding: "utf8" });
+    } else {
+      const command = invocation.command as string;
+      check(manifest.runtime_capabilities.required_commands.includes(command),
+        "self-check command runner is not declared in runtime_capabilities.required_commands: " + command);
+      const resolved = findCommand(command);
+      check(resolved !== null, "required runtime command not available on this host: " + command);
+      result = spawnSync(resolved, [execEntryPath, execRoot], { cwd, encoding: "utf8" });
+    }
+  } finally {
+    fs.rmSync(execParent, { recursive: true, force: true });
   }
   check(result.error === undefined, "self-check launch failed: " + String(result.error));
   const output = String(result.stdout ?? "") + String(result.stderr ?? "");
-  return { output, exit: result.status === null ? -1 : result.status };
+  return { output, exit: result.status === null ? -1 : result.status, execRoot, execRealRoot, execTreeDigest };
 }
-
-// ---- manifest parsing (structural) ----
 
 function parseManifest(raw: unknown, context: string): Manifest {
   const doc = asRecord(raw, context);
@@ -885,7 +902,9 @@ function buildReceipt(pin: Pin, installDir: string, packageId: string, version: 
   const trustClass: Record<string, unknown> = pin.source === "official"
     ? {
         type: "official",
-        registry_version: "1.0.0",
+        // Truthful provenance: the registry document version that authorized
+        // this pin, not a constant.
+        registry_version: pin.registry_version,
         registry_entry_digest: registryEntryDigest(entry as RegistryEntry),
       }
     : {
@@ -2315,9 +2334,48 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
     const directManifest = parseManifest(JSON.parse(fs.readFileSync(path.join(directStaged, "northstar-package.json"), "utf8")), "marker manifest");
     const directRun = runPackageSelfCheck(directStaged, directManifest);
     check(directRun.exit === 0, "direct self-check did not run: " + directRun.output);
-    const directResolved = fs.realpathSync(directStaged);
-    check(directRun.output.includes("arg=" + directStaged), "direct self-check argv is not the exact package root: " + directRun.output);
-    check(directRun.output.includes("pwd=" + directResolved), "direct self-check cwd is not the package root: " + directRun.output);
+    // The candidate executes on a throwaway byte-identical copy of the
+    // staged root: argv and cwd are that execution copy's package root, and
+    // the copy must carry the exact verified tree identity.
+    check(directRun.execRoot !== directStaged, "self-check executed on the staged root itself");
+    check(directRun.execTreeDigest === canonicalTreeDigest(directStaged, "staged root"),
+      "self-check execution copy is not byte-identical to the staged root");
+    check(directRun.output.includes("arg=" + directRun.execRoot), "direct self-check argv is not the exact package root: " + directRun.output);
+    check(directRun.output.includes("pwd=" + directRun.execRealRoot), "direct self-check cwd is not the package root: " + directRun.output);
+
+    // Pollution regression (card-118 canary): a self-check that writes
+    // receipts into its package root must not mutate the verified staged
+    // payload, and an acquisition of a polluting package must still route
+    // afterwards — the installed payload keeps the pinned identity.
+    const pollutingVariant = buildVariantPackage(fixtureRoot, "0.4.3", (manifest, root) => {
+      manifest.self_check.entrypoint = "scripts/self-check-pollute.sh";
+      writeText(path.join(root, "scripts/self-check-pollute.sh"),
+        "#!/bin/sh\nmkdir -p \"$1/.effigy\"\nprintf 'x' > \"$1/.effigy/receipt.json\"\necho polluting-self-check ran\n", 0o755);
+    });
+    const polluteStaged = stagedDir("northstar-staged-");
+    copyTree(pollutingVariant, polluteStaged);
+    const polluteManifest = parseManifest(JSON.parse(fs.readFileSync(path.join(polluteStaged, "northstar-package.json"), "utf8")), "pollution manifest");
+    const beforePollution = canonicalTreeDigest(polluteStaged, "pre-pollution staged");
+    const polluteRun = runPackageSelfCheck(polluteStaged, polluteManifest);
+    check(polluteRun.exit === 0 && polluteRun.output.includes("polluting-self-check ran"),
+      "polluting self-check did not run: " + polluteRun.output);
+    check(canonicalTreeDigest(polluteStaged, "post-pollution staged") === beforePollution,
+      "self-check mutated the verified staged payload");
+    const polluteStateRoot = path.join(out, "pollute-state");
+    mkdirP(polluteStateRoot);
+    const polluteTrust = fixtureTrustDoc(fixtureRoot,
+      [variantPin("@northstar/language-fixture", "0.4.3", pollutingVariant)], []);
+    const polluteAcquire = acquireAndActivate({
+      stateRoot: polluteStateRoot, consumerDir: consumer, trustDoc: polluteTrust,
+      registry,
+      packageId: "@northstar/language-fixture", version: "0.4.3",
+      language: "fixture-lang", workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION, adapter: fixtureAdapter(pollutingVariant), intent: "workflow_request",
+    });
+    check(polluteAcquire.status === "activated", "polluting package did not activate: " + polluteAcquire.notice);
+    const polluteRouted = resolveInstalledPackage(polluteStateRoot, polluteTrust,
+      "@northstar/language-fixture", "0.4.3", "fixture-lang", "explicit_audit_repair", CORE_VERSION);
+    check(polluteRouted !== null, "polluting package lost its pinned identity after self-check; selection re-verification failed");
 
     // Positive command: the named command executes [entrypoint, package_root];
     // required_commands ORDER has no effect.
@@ -2417,7 +2475,7 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
     check(fs.readFileSync(stateFilePath(stateRoot), "utf8") === stateBefore,
       "non-executable direct entrypoint changed lifecycle state");
 
-    console.log("oracle-11 self-check-invocation: PASS (direct/command positives, argv/cwd proof, order-insensitive, undeclared/unavailable/permission negatives)");
+    console.log("oracle-11 self-check-invocation: PASS (direct/command positives, argv/cwd proof on a byte-identical throwaway execution copy, order-insensitive, undeclared/unavailable/permission negatives, self-check pollution cannot mutate the verified payload)");
   }
 
 
@@ -2934,8 +2992,205 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
     console.log("oracle-13 host-protocol-portable: PASS (all three ops through installed entrypoints, resolve-bound python host, scope binding, capability/version stopped)");
   }
 
+  // ---- oracle 14: official registry pin and the card-118 route ----
+  //
+  // Mirrors the shipped official-registry.json shape (git source, immutable
+  // commit, pinned digests, core range) with fixture identities, then
+  // falsifies the card-118 route invariants: official acquisition failure is
+  // a visible stop naming the package and the manual route, detection never
+  // acquires, the installed route resolves offline, drifted installed bytes
+  // stop instead of routing, rollback reopens the route without fetching,
+  // and official receipts record the actual authorizing registry version.
+  {
+    const out = path.join(outRoot, "r14-official-pin");
+    mkdirP(out);
+    const emptyTrust: TrustDoc = { schema_version: "1.0.0", revision: "1", allowlist: [], revocations: [] };
+
+    // A byte-exact local copy stands in for a conforming transport's
+    // reconstruction of the pinned tree.
+    const localRoot = path.join(out, "materialized");
+    copyTree(fixtureRoot, localRoot);
+
+    const officialEntry: RegistryEntry = {
+      package_id: "@northstar/language-fixture",
+      version: "0.1.0",
+      repository: "https://github.com/example/fixture-packs",
+      subpath: "packages/fixture",
+      commit: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      tree_digest: FIXTURE_TREE_DIGEST,
+      manifest_digest: FIXTURE_MANIFEST_DIGEST,
+      compatible_core_range: ">=0.2.0 <1.0.0",
+    };
+    const officialRegistry: RegistryDoc = {
+      schema_version: "1.0.0",
+      registry_version: "1.1.0",
+      packages: [officialEntry],
+    };
+    const officialRegistryPath = path.join(out, "official-registry.json");
+    fs.writeFileSync(officialRegistryPath, JSON.stringify(officialRegistry));
+
+
+    const stateRoot = path.join(out, "state");
+    mkdirP(stateRoot);
+    fs.writeFileSync(path.join(stateRoot, "operator-trust.json"), JSON.stringify(emptyTrust));
+    const consumer = consumerDir();
+    const beforeConsumer = snapshotHashes(consumer);
+
+    const baseRequest = {
+      protocol_version: "1.0.0",
+      package_id: "@northstar/language-fixture",
+      version: "0.1.0",
+      language: "fixture-lang",
+      workflow: "explicit_audit_repair",
+      core_version: CORE_VERSION,
+      consumer_dir: consumer,
+      state_root: stateRoot,
+    };
+
+    const surfacePath = process.argv[1];
+    const reqDir = path.join(out, "requests");
+    const resDir = path.join(out, "results");
+    mkdirP(reqDir);
+    mkdirP(resDir);
+    const hostCall = (name: string, request: Record<string, unknown>, registryPath: string | null): HostResult => {
+      const reqFile = path.join(reqDir, name + ".json");
+      const resFile = path.join(resDir, name + ".json");
+      fs.writeFileSync(reqFile, JSON.stringify(request));
+      const argv = ["run", surfacePath, "host", reqFile, resFile];
+      if (registryPath !== null) {
+        argv.push(registryPath);
+      }
+      const run = spawnSync("bun", argv, { encoding: "utf8" });
+      check(run.status === 0, "host call " + name + " failed: " + String(run.stderr));
+      return JSON.parse(fs.readFileSync(resFile, "utf8")) as HostResult;
+    };
+
+    // Forced-fallback trigger: official git-source pin, reference host with
+    // no git transport. The stop must be visible, name the package, and name
+    // the manual route; consumer files stay byte-identical.
+    const fallback = hostCall("official-acquire-unavailable",
+      { ...baseRequest, operation: "acquire_activate", intent: "workflow_request" },
+      officialRegistryPath);
+    check(fallback.status === "stopped" &&
+      fallback.notice.includes("@northstar/language-fixture") &&
+      fallback.notice.includes("manual or local-path installation route required"),
+      "official acquisition failure did not stop visibly with a manual route: " + fallback.notice);
+    requireHashesUnchanged("official-acquisition-failure", consumer, beforeConsumer);
+
+    // Route intent: detection with the official pin present must not acquire.
+    const detection = hostCall("official-acquire-detection",
+      { ...baseRequest, operation: "acquire_activate", intent: "detection" },
+      officialRegistryPath);
+    check(detection.status === "stopped" &&
+      detection.notice.includes("no acquisition without explicit workflow intent"),
+      "detection intent with an official pin present did not stop without acquisition: " + detection.notice);
+    requireHashesUnchanged("detection-no-acquisition", consumer, beforeConsumer);
+
+    // Official pin outranks the operator allowlist: with the registry
+    // present, a host without official transport stops even when a
+    // local-path allowlist entry exists for the same identity. The allowlist
+    // never silently bypasses the official pin.
+    fs.writeFileSync(path.join(stateRoot, "operator-trust.json"),
+      JSON.stringify(fixtureTrustDoc(fixtureRoot, [], [])));
+    const bypass = hostCall("allowlist-bypass-attempt",
+      { ...baseRequest, operation: "acquire_activate", intent: "workflow_request" },
+      officialRegistryPath);
+    check(bypass.status === "stopped" &&
+      bypass.notice.includes("manual or local-path installation route required"),
+      "allowlist pin silently outranked the official registry pin: " + bypass.notice);
+    requireHashesUnchanged("allowlist-bypass-attempt", consumer, beforeConsumer);
+
+    // Installed route: a conforming transport reconstructs the exact pinned
+    // tree and installs through the lifecycle surface. Provenance must name
+    // the actual authorizing registry version and entry digest, and the git
+    // source fields, truthfully.
+    const officialAcquire = acquireAndActivate({
+      stateRoot,
+      consumerDir: consumer,
+      trustDoc: emptyTrust,
+      registry: officialRegistry,
+      packageId: officialEntry.package_id,
+      version: officialEntry.version,
+      language: "fixture-lang",
+      workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION,
+      adapter: (): string => {
+        const staged = stagedDir("northstar-staged-");
+        copyTree(localRoot, staged);
+        return staged;
+      },
+      intent: "workflow_request",
+    });
+    check(officialAcquire.status === "activated" && officialAcquire.treeDigest === FIXTURE_TREE_DIGEST,
+      "official-pin acquisition did not activate: " + officialAcquire.notice);
+    const firstReceiptDigest = officialAcquire.receiptDigest;
+    const officialReceipt = loadReceipt(stateRoot, firstReceiptDigest);
+    check(officialReceipt !== null, "official-pin receipt missing");
+    const officialTrust = officialReceipt!.trust_class as Record<string, unknown>;
+    check(officialTrust.type === "official" && officialTrust.registry_version === "1.1.0",
+      "official receipt did not record the actual registry version: " + JSON.stringify(officialTrust));
+    check(officialTrust.registry_entry_digest === registryEntryDigest(officialEntry),
+      "official receipt did not record the registry entry digest: " + JSON.stringify(officialTrust));
+    const officialSource = officialReceipt!.source as Record<string, unknown>;
+    check(officialSource.type === "git" && officialSource.repository === officialEntry.repository &&
+      officialSource.subpath === officialEntry.subpath && officialSource.commit === officialEntry.commit,
+      "official receipt did not record the git source truthfully: " + JSON.stringify(officialSource));
+    requireHashesUnchanged("official-install", consumer, beforeConsumer);
+
+    const routed = hostCall("installed-resolve",
+      { ...baseRequest, operation: "resolve", intent: "workflow_request" },
+      officialRegistryPath);
+    check(routed.status === "routed" && routed.tree_digest === FIXTURE_TREE_DIGEST &&
+      typeof routed.installed_path === "string",
+      "installed route did not resolve offline: " + routed.notice);
+
+    // Identity drift: mutated installed bytes stop; exact restoration reopens
+    // the route. Drift never routes silently.
+    const installedPath = routed.installed_path as string;
+    const probeRel = "references/modes/fixture-audit.md";
+    const probePath = path.join(installedPath, probeRel);
+    const probeOriginal = fs.readFileSync(probePath);
+    fs.writeFileSync(probePath, Buffer.concat([probeOriginal, Buffer.from("\n<!-- drift -->\n")]));
+    const drift = hostCall("installed-resolve-drift",
+      { ...baseRequest, operation: "resolve", intent: "workflow_request" },
+      officialRegistryPath);
+    check(drift.status === "stopped",
+      "drifted installed content did not stop the route: " + drift.notice);
+    fs.writeFileSync(probePath, probeOriginal);
+    const restored = hostCall("installed-resolve-restored",
+      { ...baseRequest, operation: "resolve", intent: "workflow_request" },
+      officialRegistryPath);
+    check(restored.status === "routed",
+      "restored installed content did not reopen the route: " + restored.notice);
+
+    // Rollback: activate 0.2.0, then roll back to the retained 0.1.0 receipt
+    // through the host without fetching; the route reopens on 0.1.0.
+    const variant = buildVariantPackage(fixtureRoot, "0.2.0", () => {});
+    const variantPinEntry = variantPin("@northstar/language-fixture", "0.2.0", variant);
+    fs.writeFileSync(path.join(stateRoot, "operator-trust.json"),
+      JSON.stringify(fixtureTrustDoc(fixtureRoot, [variantPinEntry], [])));
+    const updated = hostCall("installed-update",
+      { ...baseRequest, version: "0.2.0", operation: "acquire_activate", intent: "workflow_request" },
+      officialRegistryPath);
+    check(updated.status === "activated",
+      "installed update to the variant did not activate: " + updated.notice);
+    const rolledBack = hostCall("installed-rollback",
+      { ...baseRequest, operation: "rollback", intent: "workflow_request", target_receipt_digest: firstReceiptDigest },
+      officialRegistryPath);
+    check(rolledBack.status === "rolled_back" && rolledBack.tree_digest === FIXTURE_TREE_DIGEST,
+      "rollback did not reselect the retained pinned identity: " + rolledBack.notice);
+    const afterRollback = hostCall("installed-resolve-after-rollback",
+      { ...baseRequest, operation: "resolve", intent: "workflow_request" },
+      officialRegistryPath);
+    check(afterRollback.status === "routed" && afterRollback.tree_digest === FIXTURE_TREE_DIGEST,
+      "route did not reopen on the rolled-back identity: " + afterRollback.notice);
+
+    requireHashesUnchanged("card-118-route", consumer, beforeConsumer);
+    console.log("oracle-14 official-pin-route: PASS (visible fallback trigger, route intent, installed offline route, drift stop, rollback recovery, registry-version provenance)");
+  }
 
   console.log("card-117 oracle: PASS (8 review rows + transitions + restrictions + provenance + concurrency + self-check + identity-binding/store negatives)");
+  console.log("card-118 oracle: PASS (official registry pin route: visible fallback trigger, route intent, installed offline route, drift stop, rollback recovery, registry-version provenance)");
 }
 
 async function main(): Promise<void> {
