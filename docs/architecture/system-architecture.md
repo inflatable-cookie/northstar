@@ -77,6 +77,20 @@ each language. Thin language command skills may live with a package. `effigy
 skill run` may execute a resolved package in a consumer repo, but Effigy is an
 optional adapter rather than the package transport or a core dependency.
 
+The portable runtime boundary is the versioned `language-package-host.v1`
+request/result protocol, not a bundled language-runtime executable. A host
+adapter supplies its native catalogue, byte/file metadata, atomic state,
+transport, and process-execution capabilities behind that protocol. The core
+operations are resolve, acquire-and-activate, and rollback; requests bind
+intent, package identity, language, workflow, core version, consumer scope, and
+the operator-supplied state root, and results carry a bounded status, exact
+identity, resolved path or receipt where applicable, and visible notice.
+Effigy, Bun, Node, Python, POSIX shell, and provider APIs may implement an
+adapter or reference harness, but none is a Northstar consumer prerequisite.
+When no conforming host adapter is available, only the requested package
+workflow stops with a visible capability notice; ordinary Northstar routing
+continues.
+
 Core carries a small official registry that pins each approved package version
 to an immutable repository and subpath, commit and tree digest, manifest
 digest, and compatible core range. The installer verifies those identities
@@ -94,6 +108,15 @@ never the consumer repository. Immutable receipts, exact trust/revocation
 records, and a revisioned lifecycle index separate retained installs from the
 single selected receipt. Activation replaces that index only after verification
 and self-check; rollback reselects retained verified content without fetching.
+
+Self-check invocation is explicit rather than inferred from capability-list
+order. The manifest chooses `direct` or `command`. Direct invocation executes
+the verified package-relative entrypoint with the package root as its sole
+argument. Command invocation names one required host command and executes it
+with the resolved entrypoint and package root as fixed arguments. Both run with
+the package root as working directory, use no shell interpolation, and stop
+activation on launch failure or non-zero exit. A command runner must also
+appear in `runtime_capabilities.required_commands`; list order has no meaning.
 
 The language-package source repository owns package source, manifest,
 self-check, package fixtures, artifacts, digests, changelog, and release

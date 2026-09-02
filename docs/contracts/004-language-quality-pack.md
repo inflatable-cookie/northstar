@@ -57,6 +57,18 @@ package must remain routable without Effigy or any acquisition adapter.
 `effigy skill run` may execute a resolved package in a consumer repo, but the
 Effigy service catalog is not the package transport or trust authority.
 
+Core exposes package lifecycle behavior through the provider-neutral
+`language-package-host.v1` request/result protocol. It does not require Bun,
+Node, Python, POSIX shell, Effigy, or a provider runtime. A conforming host maps
+its native catalogue, filesystem identity, atomic state, acquisition, and
+process capabilities onto resolve, acquire-and-activate, and rollback
+operations. Requests carry explicit intent, package ID/version, language,
+workflow, core version, optional consumer scope, and the host-supplied
+operator-state root. Results carry `routed`, `activated`, `rolled-back`, or
+`stopped`, the exact selected identity and resolved path/receipt when relevant,
+and the visible notice. Missing host capability stops only the requested
+package workflow and never authorizes a fallback runtime or acquisition.
+
 Language, framework, dependency, manifest, or source-file detection alone does
 not authorize acquisition. An explicit request for a package workflow or an
 existing valid consumer activation authorizes installation of a missing
@@ -72,6 +84,15 @@ code or self-check execution, records them in a receipt, and re-verifies the
 installed content before routing. Mutable branches and tags, names alone,
 package self-claims, and unpublished registry choices cannot authorize
 no-prompt installation.
+
+The manifest declares self-check invocation explicitly. `direct` executes the
+verified package-relative entrypoint with one argument, the package root.
+`command` names a command that must also appear in
+`runtime_capabilities.required_commands` and executes fixed arguments
+`[entrypoint, package_root]`. The package root is the working directory in both
+cases. Hosts do not infer a runner from capability-list order, interpolate a
+shell command, or add arguments. Launch failure or non-zero exit fails the
+candidate before receipt selection.
 
 V1 content digests are required `sha256:<64 lowercase hex>` values. Manifest
 identity hashes the exact manifest bytes. Tree identity hashes the canonical

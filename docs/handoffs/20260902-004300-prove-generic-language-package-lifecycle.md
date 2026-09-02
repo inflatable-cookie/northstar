@@ -82,6 +82,11 @@ must stay generic so future language packages do not require core branches.
   retained bytes on failure.
 - Schema evaluator support remains bounded and fail-closed. Do not silently
   widen its vocabulary.
+- Review planning is now settled: implement `language-package-host.v1` as the
+  provider-neutral operational contract. Effigy/Bun may drive reference proof
+  but cannot be consumer prerequisites. Extend the manifest with the explicit
+  `direct`/`command` self-check invocation union and fixed argument grammar from
+  spec 034; never infer the runner from `required_commands` order.
 
 ## Suggested Next Move
 
