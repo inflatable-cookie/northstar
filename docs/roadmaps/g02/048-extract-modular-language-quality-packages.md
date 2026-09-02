@@ -1,6 +1,6 @@
 # 048 - Extract Modular Language Quality Packages
 
-Status: active; card 117 complete; card 118 ready
+Status: active; card 117 complete; card 118 package-source worker in flight
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.033`, promoted spec 034
@@ -96,6 +96,7 @@ falsifying the generic lifecycle proof. Card 118 is ready with the public
 `inflatable-cookie/northstar-language-packs` topology,
 `@northstar/typescript-quality` `0.1.0` canary identity, exact 17-file embedded
 baseline, 20-file initial package shape, and Jetstream consumer proof pinned.
-Create the shared repository and dispatch only the package-source lane. The
-Northstar registry and Jetstream lanes remain serial behind accepted immutable
-source and registry heads.
+The shared repository is public and its package-source worker is in flight from
+committed handoff `ad5db1b`. Await and review that PR. The Northstar registry
+and Jetstream lanes remain serial behind accepted immutable source and registry
+heads.

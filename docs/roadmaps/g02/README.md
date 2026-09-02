@@ -18,7 +18,7 @@ single-pilot bucket.
 | Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | execute g02.048/118 TypeScript package canary |
 | Add a genuinely long-horizon planning route without conflating it with readiness review. | active | `docs/specs/029-northstar-long-horizon-planning.md`, `skills/northstar/references/modes/atlas.md` | Non-Northstar scenario and operator confirmation |
 | Preserve useful conversational context and keep `/docs` drift recoverable without blind deletion. | active | `docs/specs/030-conversational-triage-and-docs-cleanup.md`, `docs/contracts/001-working-rules.md`, `skills/northstar/references/modes/cleanup-docs.md` | live triage and cleanup feedback |
-| Raise language-code quality through evidence-bound routed workflows without making every implementation part of the root payload. | active | `docs/contracts/004-language-quality-pack.md`, `docs/architecture/system-architecture.md`, `docs/roadmaps/g02/048-extract-modular-language-quality-packages.md` | card 117 complete; card 118 ready |
+| Raise language-code quality through evidence-bound routed workflows without making every implementation part of the root payload. | active | `docs/contracts/004-language-quality-pack.md`, `docs/architecture/system-architecture.md`, `docs/roadmaps/g02/048-extract-modular-language-quality-packages.md` | card 117 complete; card 118 package-source worker in flight |
 
 Update this runway only when generation-level intent changes, a milestone
 materially advances or closes a goal, or rollover is being considered. Do not
@@ -104,15 +104,15 @@ rollover signal.
 - `047-diversify-model-routing-across-runs.md` (complete; PR 20 merged at
   `08ad810` after exact-head review)
 - `048-extract-modular-language-quality-packages.md` (active; card 117 complete,
-  card 118 ready, cards 119-120 planned in dependency order)
+  card 118 in progress, cards 119-120 planned in dependency order)
 
 ## Next Task
 
 `g02.048/117` merged through PR 22 at `75db6f5` after proving the generic
-lifecycle. Card 118 is ready with the public shared package repository,
-`@northstar/typescript-quality` `0.1.0`, exact source/package inventories, and
-Jetstream consumer proof settled. Create the repository and dispatch only the
-package-source lane; cards 119-120 remain planned behind the canary.
+lifecycle. Card 118's public repository is bootstrapped and its package-source
+worker is in flight for `@northstar/typescript-quality` `0.1.0`. Await and
+review its PR; registry promotion, Jetstream proof, and cards 119-120 remain
+serial behind the canary.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and

@@ -92,8 +92,8 @@ Northstar system:
 - Northstar remains general-purpose. Spec 034's optional-package design is
   promoted into architecture and contract 004. Roadmap g02.048 now sequences
   fixture protocol, TypeScript, Rust, and embedded removal. Card 117's generic
-  lifecycle proof merged through PR 22 at `75db6f5`. Card 118 is ready with the
-  public shared package repository, exact TypeScript canary identity and
-  inventory, and Jetstream consumer proof settled.
+  lifecycle proof merged through PR 22 at `75db6f5`. Card 118's public package
+  repository is bootstrapped and its package-source worker is in flight; exact
+  TypeScript identity, inventory, and Jetstream proof remain settled.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

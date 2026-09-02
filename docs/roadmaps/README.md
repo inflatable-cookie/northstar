@@ -81,15 +81,15 @@ Roadmaps sequence contract-backed work for Northstar itself.
   delegates, and fresh orchestrators with focused ten-row oracle assertions.
   PR 20 merged at `08ad810` after exact-head review.
 - `g02.048` is active; card 117's generic lifecycle proof merged through PR 22
-  at `75db6f5`. Card 118 is ready with the public shared package repository,
-  exact TypeScript canary identity and inventory, and Jetstream consumer proof
-  settled.
+  at `75db6f5`. Card 118's public package repository is bootstrapped and its
+  package-source worker is in flight. Registry promotion and Jetstream proof
+  remain serial.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Create the public shared language-package repository and dispatch only
-`g02.048/118`'s package-source lane. Registry promotion and Jetstream proof are
+Await and exact-head review `g02.048/118`'s package-source PR. Return in-bounds
+findings to its originating worker. Registry promotion and Jetstream proof are
 serial behind accepted immutable heads; cards 119-120 remain planned.

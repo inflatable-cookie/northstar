@@ -68,5 +68,16 @@ dispatched no worker.
 
 ## Next Move
 
-Create the public shared source repository, install its Northstar/Paseo project
-surfaces, then dispatch only card 118's package-source worker.
+Await and exact-head review the package-source PR. Registry promotion stays
+serial behind its accepted immutable source identity.
+
+## Dispatch Checkpoint
+
+The public repository is
+<https://github.com/inflatable-cookie/northstar-language-packs>. Its strict
+Northstar/Paseo base is `9e307f5`; committed worker handoff `ad5db1b` launched
+Paseo workspace `wks_de87f5ee3ff4e5ab` and originating worker
+`daaee385-9fd9-46e4-b94a-4753927de19d` through the current Cursor Auto profile.
+The worktree is clean at `origin/main` and its container-level `northstar`
+sibling resolves to the primary checkout. No registry or consumer lane was
+launched.

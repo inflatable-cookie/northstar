@@ -440,6 +440,7 @@ promoted here (byte-exact digest vectors, operator trust and lifecycle state,
 the `language-package-host.v1` machine contract with operational entrypoints
 from an installed skill, explicit self-check invocation, atomic CAS,
 identity-bound routing, transactional acquire/update/rollback, offline
-routing, revocable trust). PR 22 merged at `75db6f5`. Card 118 is ready against
-that accepted protocol and the settled first-canary identity; cards 119-120
-remain blocked behind their named dependencies and readiness refreshes.
+routing, revocable trust). PR 22 merged at `75db6f5`. Card 118's public source
+repository is bootstrapped and its package-source worker is in flight against
+the accepted protocol and settled first-canary identity; cards 119-120 remain
+blocked behind their named dependencies and readiness refreshes.

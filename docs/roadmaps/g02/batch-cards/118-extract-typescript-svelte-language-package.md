@@ -1,6 +1,6 @@
 # 118 - Extract TypeScript/Svelte Language Package
 
-Status: ready
+Status: in progress; package-source worker in flight
 Owner: repo maintainers
 Updated: 2026-09-02
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -175,11 +175,14 @@ external mutations; workers must stop at reviewable heads.
 ## Completion Notes
 
 Readiness refreshed on 2026-09-02 after PR 22 merged. The operator selected the
-public shared-repository topology and Jetstream canary. No external repository,
-package, registry pin, or consumer branch was created during this planning pass.
+public shared-repository topology and Jetstream canary. The public repository
+was bootstrapped at source base `9e307f5`; its committed worker handoff is at
+`ad5db1b`. Paseo workspace `wks_de87f5ee3ff4e5ab` and originating worker
+`daaee385-9fd9-46e4-b94a-4753927de19d` own the package-source lane. No registry
+pin or consumer branch exists.
 
 ## Next Task
 
-Create the public shared source repository and dispatch only the first package
-source lane from this card. Do not start Northstar registry or Jetstream work
-until their named predecessors are accepted and merged.
+Await the package-source PR, review its exact head, and return any in-bounds
+findings to the originating worker. Do not start Northstar registry or
+Jetstream work until their named predecessors are accepted and merged.
