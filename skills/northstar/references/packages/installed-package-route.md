@@ -62,6 +62,21 @@ Notice template:
 [northstar:language-packages] notice: <package-id>@<version> unavailable (<stop reason>); using the frozen embedded <language> payload during the bounded overlap window
 ```
 
+A host `stopped` result is not this notice. The requesting mode obtains it by
+running the core fallback decision on the stopped `acquire_activate`
+request/result pair and the registered overlap windows
+(`references/packages/overlap-windows.json`):
+
+```text
+language-package-lifecycle.ts fallback <request.json> <result.json> <overlap-windows.json> [notice.txt]
+```
+
+The decision binds request/result operations and package identity, then fails
+closed when the result is not `stopped`, operations or identities disagree,
+required identity is absent, the language has no frozen overlap payload, or
+the embedded fallback window is closed. It does not change the host status
+or claim the host executed embedded policy.
+
 Never silently prefer, update, refresh, or hide fallback use. The embedded
 payload receives no fixes or new rules during the window; a fallback defect
 pauses the cutover rather than bending the package. After the overlap closes,

@@ -32,6 +32,8 @@ Use logs as the third step in closeout:
 
 ## Recent active-lane evidence
 
+- `2026-09/02-215000-repair-language-package-fallback-notice.md`
+- `2026-09/02-201200-pin-typescript-package-canary.md`
 - `2026-09/02-184102-refresh-typescript-package-canary-readiness.md`
 - `2026-09/02-021500-settle-language-package-host-and-self-check.md`
 - `2026-09/02-003949-refresh-language-package-lifecycle-readiness.md`

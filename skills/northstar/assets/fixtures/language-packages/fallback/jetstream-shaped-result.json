@@ -1,0 +1,6 @@
+{
+  "protocol_version": "1.0.0",
+  "operation": "acquire_activate",
+  "status": "stopped",
+  "notice": "workflow explicit_audit_repair for @northstar/typescript-quality stopped: host transport capability unavailable for source type none; manual or local-path installation route required"
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0.0",
+  "windows": [
+    {
+      "language": "typescript",
+      "package_id": "@northstar/typescript-quality",
+      "payload_label": "TypeScript",
+      "window": "open"
+    }
+  ]
+}

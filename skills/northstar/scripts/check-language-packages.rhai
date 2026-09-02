@@ -1584,6 +1584,7 @@ fn run_card_117_oracle(northstar_skill_root, manifest_schema) {
         "oracle-12 identity-binding-and-immutable-store: PASS",
         "oracle-13 host-protocol-portable: PASS",
         "oracle-14 official-pin-route: PASS",
+        "oracle-15 frozen-fallback-notice: PASS",
         "card-117 oracle: PASS",
         "card-118 oracle: PASS",
     ] {
@@ -1591,6 +1592,28 @@ fn run_card_117_oracle(northstar_skill_root, manifest_schema) {
     }
     log("card-117 surface oracle: PASS (bun, Effigy absent; same surface driven from the checker)");
     oracle_dir
+}
+
+fn expect_fallback_cli_failure(label, surface_path, request_path, result_path, overlap_path, reason) {
+    let failed = false;
+    let output = "";
+    try {
+        let report = exec::run(
+            ["bun", "run", surface_path, "fallback", request_path, result_path, overlap_path],
+            #{ run_in: "host", cwd: repo_root },
+        );
+        if !report["success"] {
+            failed = true;
+            output = report["stderr"] + report["stdout"];
+        } else {
+            output = report["stdout"] + report["stderr"];
+        }
+    } catch (error) {
+        failed = true;
+        output = error.to_string();
+    }
+    require(failed, label + " unexpectedly passed");
+    require(output.contains(reason), label + " rejected for wrong reason: " + output);
 }
 
 // =============================================================================
@@ -1640,6 +1663,18 @@ for key in canary_expectations.keys() {
     require(canary.contains(key) && canary[key] == canary_expectations[key],
         "official-registry.json canary entry field '" + key + "' drifted from the accepted card-118 identity");
 }
+
+let overlap_path = path::join(packages_ref_root, "overlap-windows.json");
+require(fs::is_file(overlap_path), "missing overlap-windows.json");
+let overlap_doc = json::read_file(overlap_path);
+require(overlap_doc["schema_version"] == "1.0.0", "overlap-windows.json schema_version drifted");
+require(overlap_doc["windows"].len() == 1, "overlap-windows.json must contain exactly the TypeScript overlap window");
+let overlap_window = overlap_doc["windows"][0];
+require(overlap_window["language"] == "typescript" &&
+    overlap_window["package_id"] == "@northstar/typescript-quality" &&
+    overlap_window["payload_label"] == "TypeScript" &&
+    overlap_window["window"] == "open",
+    "overlap-windows.json drifted from the accepted TypeScript overlap window");
 
 let fixture_root = path::join(northstar_skill_root, "assets/fixtures/language-packages/policy-free-fixture");
 validate_policy_free_fixture_deep(fixture_root, manifest_schema);
@@ -1736,5 +1771,52 @@ expect_host_result_rejection("missing-operation",
 let oracle_dir = run_card_117_oracle(northstar_skill_root, manifest_schema);
 validate_oracle_receipts(oracle_dir, receipt_schema);
 validate_host_messages(oracle_dir, host_schema);
+
+let surface_path = path::join(northstar_skill_root, "scripts/language-package-lifecycle.ts");
+let fallback_fixtures = path::join(northstar_skill_root, "assets/fixtures/language-packages/fallback");
+let fallback_notice_path = path::join(fs::make_temp_dir("northstar-fallback-notice-"), "notice.txt");
+let fallback_report = exec::run(
+    ["bun", "run", surface_path, "fallback",
+        path::join(fallback_fixtures, "jetstream-shaped-request.json"),
+        path::join(fallback_fixtures, "jetstream-shaped-result.json"),
+        overlap_path,
+        fallback_notice_path],
+    #{ run_in: "host", cwd: repo_root },
+);
+require(fallback_report["success"], "fallback CLI failed on the Jetstream-shaped pair: " + fallback_report["stderr"] + fallback_report["stdout"]);
+let fallback_notice = fs::read_file(fallback_notice_path);
+require(fallback_notice.contains("@northstar/typescript-quality@0.1.0"),
+    "fallback CLI omitted @northstar/typescript-quality@0.1.0");
+require(fallback_notice.contains("manual or local-path installation route required"),
+    "fallback CLI omitted the host stop reason");
+require(fallback_notice.contains("using the frozen embedded TypeScript payload during the bounded overlap window"),
+    "fallback CLI omitted the frozen payload clause");
+
+expect_fallback_cli_failure("missing-version", surface_path,
+    path::join(fallback_fixtures, "missing-version-request.json"),
+    path::join(fallback_fixtures, "jetstream-shaped-result.json"),
+    overlap_path, "required package version is absent");
+expect_fallback_cli_failure("wrong-identity", surface_path,
+    path::join(fallback_fixtures, "wrong-identity-request.json"),
+    path::join(fallback_fixtures, "jetstream-shaped-result.json"),
+    overlap_path, "request/result identities disagree");
+expect_fallback_cli_failure("non-stopped", surface_path,
+    path::join(fallback_fixtures, "jetstream-shaped-request.json"),
+    path::join(fallback_fixtures, "non-stopped-result.json"),
+    overlap_path, "fallback requires a stopped package route");
+expect_fallback_cli_failure("operations-disagree", surface_path,
+    path::join(fallback_fixtures, "jetstream-shaped-request.json"),
+    path::join(fallback_fixtures, "operations-disagree-result.json"),
+    overlap_path, "request/result operations disagree");
+expect_fallback_cli_failure("closed-overlap", surface_path,
+    path::join(fallback_fixtures, "jetstream-shaped-request.json"),
+    path::join(fallback_fixtures, "jetstream-shaped-result.json"),
+    path::join(fallback_fixtures, "overlap-closed.json"),
+    "embedded fallback window is closed");
+expect_fallback_cli_failure("no-payload", surface_path,
+    path::join(fallback_fixtures, "no-payload-request.json"),
+    path::join(fallback_fixtures, "jetstream-shaped-result.json"),
+    overlap_path, "language has no frozen overlap payload");
+log("card-118 operational fallback CLI: PASS (Jetstream-shaped notice plus six fail-closed mutations)");
 
 log("Northstar language package machine contracts: OK (3 Draft 2020-12 schemas, bounded evaluator for frozen vocabulary across all variants, schema mutation & fail-closed proof, SemVer numeric ranges, path containment, trust/source receipt variants, deep policy-free proof, staged sibling isolation proof, 9 mandatory negative oracle invariants, portable contracts; card 117: provider-neutral Bun lifecycle surface with canonical byte-exact digest vectors, operator trust & lifecycle schemas, atomic CAS lifecycle state, immutable receipts, identity-bound routing, transactional acquire/update/rollback, offline local routing, revocable trust, generic manifest-field routing, declared self-check execution, 8 review-oracle rows plus restrictions/provenance/concurrency falsified)");

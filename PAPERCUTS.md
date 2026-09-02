@@ -7,6 +7,14 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 
 <!-- Keep entries short. Append newest entries at the top. Do not include secrets. -->
 
+- **2026-09-02 — worker handoff omitted required sibling-link field:** handoff
+  `20260902-212756` has no `Required sibling worktree links` line (peer
+  worker handoffs write `none`); impact is that the worker startup fast path
+  cannot distinguish omitted-from-`none` and must infer from out-of-scope
+  boundaries; plausible fix is requiring the field in the orchestrator-run
+  template and handoff checker; affected surfaces are
+  `docs/handoffs/20260902-212756-repair-language-package-fallback-notice.md`
+  and `assets/templates/northstar-orchestrator-run.md.template`.
 - **2026-09-02 — `effigy doctor` fails structurally on pre-existing god-file
   findings:** doctor reports 6 error-level `scan.god-files` findings (9 total)
   on a clean `main` checkout while `effigy qa` passes, so the orientation

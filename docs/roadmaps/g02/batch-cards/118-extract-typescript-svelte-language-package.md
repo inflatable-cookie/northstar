@@ -1,6 +1,6 @@
 # 118 - Extract TypeScript/Svelte Language Package
 
-Status: changes required; Jetstream canary exposed missing operational fallback notice
+Status: core fallback notice repaired; Jetstream forced-fallback rerun serial
 Owner: repo maintainers
 Updated: 2026-09-02
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -138,7 +138,7 @@ external mutations; workers must stop at reviewable heads.
 | Package source and consumer target stay distinct. | Recorder resolves its catalogue below the consumer root. | Stop before evidence creation. | Installed-source/consumer-target fixture. |
 | Self-check is operational. | Manifest names a missing command or wrapper exits nonzero. | Stop before activation. | Installed direct self-check negatives. |
 | Consumer policy survives. | Jetstream's strict profile and deviations predate extraction. | Preserve bytes and interpretation. | Pinned before/after hashes. |
-| Fallback is visible and bounded. | Package acquisition fails during overlap. | Name package failure and frozen root fallback. | Forced-failure transcript. |
+| Fallback is visible and bounded. | Package acquisition fails during overlap. | Name package failure and frozen root fallback. | Forced-failure transcript through `fallback` on a stopped `acquire_activate` pair; host stop alone is not proof. |
 | Evidence remains comparable. | A pre-extraction finalized audit is reopened/read. | Preserve schema and meaning. | Evidence compatibility fixture. |
 | The canary is current. | Evidence is copied from the absent prior Jetstream ledger. | Reject as non-evidence. | Fresh installed-package audit identity. |
 
@@ -273,10 +273,26 @@ though they execute on the base checkout. Jetstream stays on the same branch
 while handoff `20260902-212756` repairs the core fallback seam; after merge the
 same consumer worker reruns fallback and hydrated editor evidence.
 
+Core fallback-notice repair (2026-09-02): the generic lifecycle surface now
+owns `decideFrozenFallback` and a `fallback` CLI. It consumes a stopped
+`acquire_activate` request/result pair plus registered overlap windows and
+emits the exact notice naming `package-id@version`, the host stop reason, and
+the frozen embedded payload. The host status grammar is unchanged; a host
+`stopped` result is not fallback evidence. Host catch prose now includes
+`@version`. Pre-fix Jetstream-shaped pair recorded: stopped
+`@northstar/typescript-quality` `0.1.0` with
+`manual or local-path installation route required`, no `@0.1.0`, no frozen
+clause. `oracle-15` and the checker CLI convert that pair into
+`@northstar/typescript-quality@0.1.0` plus the frozen TypeScript payload
+clause, and fail closed on missing version, wrong identity, non-stopped
+results, disagreeing operations, a closed window, and a language with no
+frozen payload. Jetstream remains paused on PR 4 until this Northstar PR
+merges; then the same worker reruns forced fallback and hydrated editor
+validation. Cards 119-120 stay closed.
+
 ## Next Task
 
-Jetstream PR 4 exposed a missing operational fallback notice after the host
-stop. Dispatch the bounded Northstar repair from handoff `20260902-212756`.
-After that PR merges, resume the same Jetstream worker for forced-fallback and
-hydrated editor validation, then re-review its exact head. Cards 119-120 remain
-closed.
+Review and merge the Northstar fallback-notice PR. Resume the existing
+Jetstream PR 4 worker for forced-fallback and hydrated editor validation, then
+re-review its exact head. Do not create a replacement Jetstream lane. Cards
+119-120 remain closed.
