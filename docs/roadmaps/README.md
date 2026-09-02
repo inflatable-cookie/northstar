@@ -85,14 +85,15 @@ Roadmaps sequence contract-backed work for Northstar itself.
   invocation repair, core registry/routing, and Jetstream canary are complete.
   Batch B's bounded proof is accepted with four pre-existing editor failures
   and current-Poodle `ResolvedIconGeometry` API drift recorded as limits.
-  Cards 119-120 remain closed.
+  Card 121 is ready to repair the TypeScript package's non-standalone command
+  adapter and repin its replacement identity. The Rust inventory is frozen and
+  Convergence selected, but cards 119-120 remain blocked behind that repair.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Stop at the orchestrator/operator checkpoint after `g02.048/118`'s accepted
-TypeScript canary closeout. Refresh card 119 against the reconciled evidence
-before deciding whether to make Rust extraction ready; do not start or promote
-it automatically. Cards 119-120 remain closed.
+Execute `g02.048/121`'s bounded TypeScript package adapter repair and registry
+repin. Then refresh card 119 against the merged replacement identity; do not
+start Rust extraction before that dependency clears.

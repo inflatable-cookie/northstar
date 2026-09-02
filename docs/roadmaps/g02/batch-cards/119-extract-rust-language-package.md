@@ -1,8 +1,8 @@
 # 119 - Extract Rust Language Package
 
-Status: planned; awaiting operator checkpoint and Rust inventory/readiness refresh
+Status: planned; blocked on card 121 TypeScript standalone-entrypoint repair
 Owner: repo maintainers
-Updated: 2026-09-02
+Updated: 2026-09-03
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
 Governing refs: `docs/roadmaps/g02/048-extract-modular-language-quality-packages.md`,
 `docs/architecture/system-architecture.md`,
@@ -12,7 +12,9 @@ Auto-start next card: no
 ## Ready-State Checks
 
 - [x] TypeScript canary is accepted and protocol findings are reconciled;
-- [ ] current Rust payload, engine, install, and consumer cohort are inventoried;
+- [ ] the TypeScript package's agent-facing `SKILL.md` is standalone and the
+  replacement identity is pinned through card 121;
+- [x] current Rust payload, engine, install, and consumer cohort are inventoried;
 - [x] strict everyday authoring and explicit audit remain separate workflows;
 - [x] Cargo-native engine, six normative rules, evaluation input, authority,
   scope, and evidence contracts remain unchanged;
@@ -39,7 +41,7 @@ preserving both production workflows and the Cargo-native audit engine.
 - preserve consumer activation/profile/deviation/evidence paths and engine
   cache/integrity behavior;
 - prove everyday authoring, explicit audit, independent acquisition, rollback,
-  offline, visible fallback, and one real consumer;
+  offline, visible fallback, and the Convergence real-consumer canary;
 - keep TypeScript package and root reduction untouched.
 
 Do not change MSRV ownership, catalogue rules, remediation authority, engine
@@ -72,7 +74,9 @@ lifecycle, or install unrelated package payloads.
 
 ## Evidence Required
 
-- accepted TypeScript protocol findings and current Rust inventory;
+- accepted TypeScript protocol findings, card 121 replacement identity, and
+  the current Rust inventory frozen in
+  `docs/logs/2026-09/03-005031-refresh-rust-package-readiness.md`;
 - package release identity, registry pin, artifact/manifest/engine digests;
 - package parity and no-TypeScript installed inventory;
 - existing production fixtures plus both workflows, rollback, offline,
@@ -107,11 +111,30 @@ lifecycle, or install unrelated package payloads.
 
 Card 118's accepted TypeScript prerequisite is complete. The bounded canary
 proof, fallback visibility, installed audit, byte preservation, and known
-consumer limits are recorded in card 118 and its closeout log. Card 119 remains
-planned and not ready; the next step is the operator checkpoint followed by a
-current Rust inventory and readiness refresh.
+consumer limits are recorded in card 118 and its closeout log.
+
+The 2026-09-03 readiness refresh froze a 54-file Rust extraction boundary at
+Northstar `4f534b204211b241fd5da17f4a7b845f969b0bc`: 24 language references,
+two modes, two Rhai scripts, 22 Cargo-engine files, one explicit command skill,
+and three templates. The SHA-256 of the sorted GNU `sha256sum` listing is
+`2f8515afce33c87e9b38f103b9c41440ed7f182142fc2c65fed4d10d9264040b`.
+The historical 120-file figure is whole-skill distribution parity, not the
+package source boundary.
+
+The operator selected Convergence as the real-consumer canary. Its clean
+checkout was at `1f05db1e507aa67f73a68eccc2325e23dfc1d478`, with six Cargo
+manifests, active everyday and explicit-audit instructions, profile digest
+`5049d861115f819db5368dcd9ab2dc45381d1be6c5ae3c9947aa1e595fc281a4`,
+and deviations digest
+`d6d876aeb6e70da9fec368201350b6d16f345a7363309dde4169284c51c2fcd0`.
+
+The same review found that the accepted TypeScript package's agent-facing
+`SKILL.md` loads `references/router.md`, which is absent from the independently
+installed package. Its Effigy workflow proof did not exercise that adapter.
+Card 121 owns the bounded source repair, replacement identity, and core repin.
+Card 119 stays not ready until that serial prerequisite merges.
 
 ## Next Task
 
-At the operator checkpoint, reconcile the current Rust inventory and apply the
-ready-state rubric. Do not mark this card ready or launch it automatically.
+Complete card 121, then refresh this card against the merged replacement
+identity. Do not launch Rust package work before that dependency clears.

@@ -103,7 +103,9 @@ Northstar system:
   `dbf7561d3845bf344f9ae4fae3296d1601b074bf`. Its bounded fallback,
   installed-audit, and byte-preservation proof is accepted; four pre-existing
   editor failures and current-Poodle `ResolvedIconGeometry` API drift remain
-  limits. Cards 119-120 stay closed; stop at the operator checkpoint before
-  any card-119 readiness or dispatch.
+  limits. The Rust readiness refresh selected Convergence and froze the
+  54-file source boundary, but found the external package's agent-facing
+  `SKILL.md` loads an absent router. Card 121 is ready for that bounded repair
+  and replacement registry pin; cards 119-120 remain blocked.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

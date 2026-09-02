@@ -1,6 +1,6 @@
 # 048 - Extract Modular Language Quality Packages
 
-Status: active; Batch B complete; Batch C remains a separate operator checkpoint
+Status: active; Batch B accepted; standalone adapter repair precedes Batch C
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.033`, promoted spec 034
@@ -31,6 +31,8 @@ before it becomes ready.
 - [x] prove the generic package schema, registry, receipt, trust, lifecycle,
   discovery, and routing boundary with a policy-free fixture;
 - [x] extract TypeScript/Svelte as the first independent official package;
+- [ ] make the TypeScript package's advertised agent-facing skill standalone
+  and repin its replacement identity;
 - [ ] extract Rust without weakening its everyday or explicit-audit evidence;
 - [ ] remove both embedded implementations and their bounded migration
   fallbacks from the root payload;
@@ -53,6 +55,9 @@ before it becomes ready.
   installed-audit, byte-preservation, and hydrated-build evidence is accepted;
   four pre-existing editor failures and current-Poodle API drift remain
   recorded limits. Batch C stays behind a separate operator checkpoint.
+- [ ] **Batch B.1 — standalone adapter repair:** card 121 repairs the accepted
+  package's missing local router reference, proves installed adapter path
+  closure, and repins the replacement identity without changing policy.
 - [ ] **Batch C — Rust extraction:** card 119 publishes, pins, installs, and
   proves Rust everyday authoring plus explicit audit and its Cargo engine.
 - [ ] **Batch D — root reduction:** card 120 removes both frozen embedded
@@ -61,7 +66,7 @@ before it becomes ready.
 
 ## Acceptance Criteria
 
-- [ ] all five cards satisfy their review oracles and exact-head gates;
+- [ ] all six cards satisfy their review oracles and exact-head gates;
 - [ ] official packages use immutable registry identities and independently
   addressable installed payloads;
 - [ ] package discovery and execution do not require Effigy;
@@ -99,7 +104,6 @@ before it becomes ready.
 
 ## Next Task
 
-Stop at the orchestrator/operator checkpoint. Refresh card 119 against the
-accepted TypeScript canary before deciding whether to make Rust extraction
-ready. Do not start or promote card 119 automatically; cards 119-120 remain
-closed.
+Execute card 121's bounded package-source repair and replacement registry pin.
+Then refresh card 119 against the merged identity and the frozen 54-file Rust
+inventory. Do not start Rust extraction before that dependency clears.

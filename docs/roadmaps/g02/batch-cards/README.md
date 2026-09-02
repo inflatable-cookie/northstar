@@ -69,7 +69,8 @@ Fresh-orchestrator continuation `g02.046/114` is complete and merged through PR
 through PR 20 at `08ad810`.
 Modular language-package extraction `g02.048` is active. Cards 117 and 118 are
 complete. The accepted Jetstream canary proved installed routing, the visible
-bounded fallback, and consumer/package byte preservation; four pre-existing
-editor failures and current-Poodle `ResolvedIconGeometry` API drift remain
-recorded limits. Cards 119-120 stay closed; stop at the operator checkpoint
-before any card-119 readiness or dispatch.
+bounded fallback, and consumer/package byte preservation. The Rust readiness
+refresh selected Convergence and froze a 54-file source boundary, but found the
+TypeScript package's agent-facing `SKILL.md` loads an absent router. Card 121 is
+ready for that bounded source repair and replacement registry pin. Cards
+119-120 remain blocked.

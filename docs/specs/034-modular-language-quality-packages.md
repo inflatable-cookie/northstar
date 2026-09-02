@@ -454,5 +454,8 @@ package, core registry/routing, and accepted Jetstream canary are complete;
 core PR 23 merged as `5951dfb`, and Jetstream PR 4 squash-merged after
 exact-head review at
 `177b75c80e5310d84fdd227d0229b261d59d6271` as
-`dbf7561d3845bf344f9ae4fae3296d1601b074bf`. Cards 119-120 remain closed; card
-119 awaits the operator checkpoint and current Rust inventory/readiness refresh.
+`dbf7561d3845bf344f9ae4fae3296d1601b074bf`. Card 119's Rust inventory and
+Convergence canary are selected, but the refresh found
+that the accepted TypeScript package's agent-facing `SKILL.md` loads a router
+absent from the installed package. Card 121 owns the bounded source repair and
+replacement registry pin. Cards 119-120 remain blocked behind it.
