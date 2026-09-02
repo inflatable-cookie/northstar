@@ -1,0 +1,501 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://northstar.invalid/schemas/language-package-host-v1.json",
+  "title": "Northstar language package host protocol v1",
+  "type": "object",
+  "description": "Provider-neutral JSON request/result machine contract for the language package host protocol. A host adapter maps its native catalogue, filesystem identity, atomic state, transport, and process capabilities onto resolve, acquire_activate, and rollback. No bundled language runtime (Bun, Node, Python, POSIX shell), Effigy, or provider API is a consumer prerequisite.",
+  "required": [
+    "protocol_version"
+  ],
+  "additionalProperties": false,
+  "oneOf": [
+    {
+      "type": "object",
+      "required": [
+        "protocol_version",
+        "operation",
+        "intent",
+        "package_id",
+        "version",
+        "language",
+        "workflow",
+        "core_version",
+        "consumer_dir",
+        "state_root"
+      ],
+      "properties": {
+        "protocol_version": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "operation": {
+          "type": "string",
+          "const": "resolve"
+        },
+        "intent": {
+          "type": "string",
+          "enum": [
+            "workflow_request",
+            "activation",
+            "detection"
+          ]
+        },
+        "package_id": {
+          "type": "string",
+          "pattern": "^@[a-z0-9-]+/[a-z0-9-]+$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "language": {
+          "type": "string",
+          "minLength": 1
+        },
+        "workflow": {
+          "type": "string",
+          "enum": [
+            "everyday_authoring",
+            "explicit_audit_repair"
+          ]
+        },
+        "core_version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "consumer_scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "consumer_dir": {
+          "type": "string",
+          "minLength": 1
+        },
+        "state_root": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "protocol_version",
+        "operation",
+        "intent",
+        "package_id",
+        "version",
+        "language",
+        "workflow",
+        "core_version",
+        "consumer_dir",
+        "state_root"
+      ],
+      "properties": {
+        "protocol_version": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "operation": {
+          "type": "string",
+          "const": "acquire_activate"
+        },
+        "intent": {
+          "type": "string",
+          "enum": [
+            "workflow_request",
+            "activation",
+            "detection"
+          ]
+        },
+        "package_id": {
+          "type": "string",
+          "pattern": "^@[a-z0-9-]+/[a-z0-9-]+$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "language": {
+          "type": "string",
+          "minLength": 1
+        },
+        "workflow": {
+          "type": "string",
+          "enum": [
+            "everyday_authoring",
+            "explicit_audit_repair"
+          ]
+        },
+        "core_version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "consumer_scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "consumer_dir": {
+          "type": "string",
+          "minLength": 1
+        },
+        "state_root": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "protocol_version",
+        "operation",
+        "intent",
+        "package_id",
+        "version",
+        "language",
+        "workflow",
+        "core_version",
+        "consumer_dir",
+        "state_root",
+        "target_receipt_digest"
+      ],
+      "properties": {
+        "protocol_version": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "operation": {
+          "type": "string",
+          "const": "rollback"
+        },
+        "intent": {
+          "type": "string",
+          "enum": [
+            "workflow_request",
+            "activation",
+            "detection"
+          ]
+        },
+        "package_id": {
+          "type": "string",
+          "pattern": "^@[a-z0-9-]+/[a-z0-9-]+$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "language": {
+          "type": "string",
+          "minLength": 1
+        },
+        "workflow": {
+          "type": "string",
+          "enum": [
+            "everyday_authoring",
+            "explicit_audit_repair"
+          ]
+        },
+        "core_version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "consumer_scope": {
+          "type": "string",
+          "minLength": 1
+        },
+        "consumer_dir": {
+          "type": "string",
+          "minLength": 1
+        },
+        "state_root": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target_receipt_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "protocol_version",
+        "operation",
+        "status",
+        "notice",
+        "tree_digest",
+        "manifest_digest",
+        "installed_path",
+        "receipt_digest"
+      ],
+      "properties": {
+        "protocol_version": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "operation": {
+          "type": "string",
+          "const": "resolve"
+        },
+        "status": {
+          "type": "string",
+          "const": "routed"
+        },
+        "notice": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tree_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "manifest_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "installed_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "receipt_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "protocol_version",
+        "operation",
+        "status",
+        "notice"
+      ],
+      "properties": {
+        "protocol_version": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "operation": {
+          "type": "string",
+          "const": "resolve"
+        },
+        "status": {
+          "type": "string",
+          "const": "stopped"
+        },
+        "notice": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "protocol_version",
+        "operation",
+        "status",
+        "notice",
+        "tree_digest",
+        "manifest_digest",
+        "installed_path",
+        "receipt_digest"
+      ],
+      "properties": {
+        "protocol_version": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "operation": {
+          "type": "string",
+          "const": "acquire_activate"
+        },
+        "status": {
+          "type": "string",
+          "const": "routed"
+        },
+        "notice": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tree_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "manifest_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "installed_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "receipt_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "protocol_version",
+        "operation",
+        "status",
+        "notice",
+        "tree_digest",
+        "manifest_digest",
+        "installed_path",
+        "receipt_digest"
+      ],
+      "properties": {
+        "protocol_version": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "operation": {
+          "type": "string",
+          "const": "acquire_activate"
+        },
+        "status": {
+          "type": "string",
+          "const": "activated"
+        },
+        "notice": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tree_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "manifest_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "installed_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "receipt_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "protocol_version",
+        "operation",
+        "status",
+        "notice"
+      ],
+      "properties": {
+        "protocol_version": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "operation": {
+          "type": "string",
+          "const": "acquire_activate"
+        },
+        "status": {
+          "type": "string",
+          "const": "stopped"
+        },
+        "notice": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "protocol_version",
+        "operation",
+        "status",
+        "notice",
+        "tree_digest",
+        "manifest_digest",
+        "installed_path",
+        "receipt_digest"
+      ],
+      "properties": {
+        "protocol_version": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "operation": {
+          "type": "string",
+          "const": "rollback"
+        },
+        "status": {
+          "type": "string",
+          "const": "rolled_back"
+        },
+        "notice": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tree_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "manifest_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "installed_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "receipt_digest": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "required": [
+        "protocol_version",
+        "operation",
+        "status",
+        "notice"
+      ],
+      "properties": {
+        "protocol_version": {
+          "type": "string",
+          "const": "1.0.0"
+        },
+        "operation": {
+          "type": "string",
+          "const": "rollback"
+        },
+        "status": {
+          "type": "string",
+          "const": "stopped"
+        },
+        "notice": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  ]
+}

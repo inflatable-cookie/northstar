@@ -99,6 +99,7 @@
       "type": "object",
       "required": [
         "entrypoint",
+        "invocation",
         "validated_profile_versions",
         "validated_schema_versions"
       ],
@@ -106,6 +107,41 @@
         "entrypoint": {
           "type": "string",
           "pattern": "^[a-zA-Z0-9_-][a-zA-Z0-9_.-]*(/[a-zA-Z0-9_-][a-zA-Z0-9_.-]*)*$"
+        },
+        "invocation": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": [
+                "type"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "direct"
+                }
+              },
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "required": [
+                "type",
+                "command"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "command"
+                },
+                "command": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
         },
         "validated_profile_versions": {
           "type": "array",

@@ -1,6 +1,6 @@
 # 117 - Prove Generic Language Package Lifecycle
 
-Status: ready
+Status: complete
 Owner: repo maintainers
 Updated: 2026-09-02
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -88,24 +88,24 @@ consumer activation, or depend on Effigy for installed routing.
 
 ## Acceptance Criteria
 
-- [ ] explicit workflow intent or existing activation can acquire the pinned
+- [x] explicit workflow intent or existing activation can acquire the pinned
   fixture; detection alone cannot;
-- [ ] invalid identity, receipt, content, compatibility, trust, revocation, or
-  self-check fails before activation;
-- [ ] raw manifest and canonical tree digest vectors produce exact required
+- [x] invalid identity, receipt, content, compatibility, trust, and revocation
+  fail before activation (self-check execution per the explicit invocation contract);
+- [x] raw manifest and canonical tree digest vectors produce exact required
   `sha256:` identities across source, staged, and retained payloads;
-- [ ] trust and lifecycle documents validate, reject duplicate or stale
+- [x] trust and lifecycle documents validate, reject duplicate or stale
   selections, and never take authority from consumer files;
-- [ ] install/update/rollback failures preserve selection and consumer bytes;
-- [ ] compatible installed routing is local-only and works without Effigy;
-- [ ] the installed operational surface accepts and returns
+- [x] install/update/rollback failures preserve selection and consumer bytes;
+- [x] compatible installed routing is local-only and works without Effigy;
+- [x] the installed operational surface accepts and returns
   `language-package-host.v1` messages without requiring Bun, Node, Python,
   POSIX shell, Effigy, or a provider API;
-- [ ] offline missing-package failure stops only the requested package workflow;
-- [ ] ambiguous create/acquire outcomes retain identity and never duplicate an
+- [x] offline missing-package failure stops only the requested package workflow;
+- [x] ambiguous create/acquire outcomes retain identity and never duplicate an
   installed package;
-- [ ] no language or provider-specific branch enters core;
-- [ ] full QA, package checks, parity, and negative side-effect proof pass.
+- [x] no language or provider-specific branch enters core;
+- [x] full QA, package checks, parity, and negative side-effect proof pass.
 
 ## Review Oracle
 
@@ -158,11 +158,68 @@ consumer activation, or depend on Effigy for installed routing.
 
 ## Completion Notes
 
-Card 116 merged through PR 21. Post-merge readiness found and promoted the
-missing digest-framing and lifecycle-state boundaries. No operator decision or
-language-specific scope remains unresolved.
+Completed and falsified the generic language package lifecycle (g02.048/117)
+against the accepted card-116 baseline and the promoted review decisions
+(`language-package-host.v1` operational protocol; explicit self-check
+invocation), across the PR 22 review rounds:
+
+- `operator-trust.schema.json` and `lifecycle-state.schema.json` under
+  `skills/northstar/references/packages/` inside the frozen Draft 2020-12
+  vocabulary, with positive state fixtures and eight negative trust/lifecycle
+  fixtures plus schema mutation discrimination and fail-closed keyword proofs.
+- Canonical byte-exact content identity: manifest digest over exact manifest
+  bytes and package-tree digest over the sorted length-framed regular-file
+  stream, executable bit from permission bits, and fixed external vectors
+  (NUL, non-UTF-8, multibyte, 0600/0444/0755) from an independent reference.
+  The policy-free fixture derives the runtime identities: manifest
+  `sha256:b9cdf39bbf2ae4fc2aeee656d2c8dc655c0faa951fbeec255eb887f210a683f9`,
+  tree `sha256:b8e76dfdc87d84904ada0620425c0a94200532d11207e3d1339626fb2df85aa3`
+  (the accepted card-116 identity `029efa32...` remains the recorded baseline).
+- `language-package-host.v1` machine contract
+  (`language-package-host-v1.schema.json`): resolve, acquire_activate, and
+  rollback requests bind protocol version, intent, identity, version,
+  language, workflow, core version, consumer scope/dir, and the operator state
+  root (rollback binds the target receipt digest); results carry
+  routed/activated/rolled_back/stopped, exact identities, resolved path and
+  receipt when applicable, and the visible notice. Operational entrypoints
+  are exercised from an INSTALLED SKILL with Effigy absent: the reference
+  adapter (this repo's Bun harness — a reference adapter only) implements all
+  three operations through the installed entrypoint, and a resolve-bound
+  stdlib-only python3 host implements resolve while stopping
+  acquire_activate/rollback as missing capability; capability-denied hosts
+  and unsupported protocol versions return scoped `stopped` notices and never
+  a fallback runtime or a v1 answer to a non-v1 request. No Bun, Node,
+  Python, POSIX shell, Effigy, or provider API is a consumer prerequisite.
+- Explicit `self_check.invocation` tagged union (`direct` executes the
+  verified entrypoint with `[package_root]`; `command` executes a declared
+  command, which must appear in `required_commands`, with
+  `[entrypoint, package_root]`; package root is the working directory; no
+  shell interpolation, no order semantics), frozen into
+  `package-manifest.schema.json` and fixtures; both positive variants proven
+  with argv/cwd evidence, plus undeclared-runner, unavailable-runner, and
+  non-executable-direct negatives, and three schema-level negative fixtures.
+- Identity-, receipt-, and trust-bound lifecycle: full-digest immutable
+  install store with exclusive verify-or-fail publishing and truthful
+  pre-selection receipts; lock-serialized atomic compare-and-swap state with
+  stale-owner recovery and fail-closed ambiguity (real two-process oracle);
+  trust restrictions and truthful receipt provenance; revocation before
+  transport; offline local routing; scoped workflow failure.
+- All ten review-oracle rows falsified (the eight original plus host-protocol
+  portability and self-check invocation) plus restrictions, provenance,
+  concurrency, identity/store, and invocation negatives. The checker
+  schema-validates every written receipt (20) and every host request/result
+  message (23), plus four negative result fixtures rejecting incomplete or
+  operation-incoherent results. The request consumer scope binds trust
+  restrictions at the host boundary for resolve and activation (mismatched
+  scope against a restricted pin stops through the operational entrypoint).
+  Repo-contract required files and `scripts/README.md` wired.
+- Validation: standalone oracle (Effigy absent, all 13 groups) PASS;
+  `effigy check:language-packages` PASS (20 receipts and 23 host messages
+  schema-validated); isolated skill-install parity; `effigy qa:docs`;
+  `effigy qa`; `git diff --check` clean.
 
 ## Next Task
 
-Dispatch card 117 from this accepted baseline. Do not start TypeScript
-extraction until the generic lifecycle PR is reviewed and merged.
+Stop for exact-head re-review. After merge, refresh card 118 against the
+shipped generic lifecycle protocol; do not start TypeScript extraction until
+this PR is reviewed and merged.

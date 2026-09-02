@@ -80,13 +80,19 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02.047` is complete; card 115 diversified model routing across workers,
   delegates, and fresh orchestrators with focused ten-row oracle assertions.
   PR 20 merged at `08ad810` after exact-head review.
-- `g02.048` is active; card 116 freezes the machine package contracts before
-  the generic lifecycle and language extraction cards can run.
+- `g02.048` is active; card 117 proved the generic lifecycle against the
+  promoted host-protocol decisions (byte-exact digest vectors, operator trust
+  and lifecycle state, the `language-package-host.v1` machine contract with
+  operational entrypoints from an installed skill, explicit self-check
+  invocation, atomic CAS, identity-bound routing, transactional
+  acquire/update/rollback, offline routing, revocable trust) with all ten
+  review-oracle rows falsified. PR 22 is open for exact-head re-review.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Execute ready card `g02.048/116`. The generic lifecycle, TypeScript, Rust, and
-embedded-removal cards remain planned and must not start early.
+Re-review the open `g02.048/117` PR 22 at its new exact head. Card 118
+(TypeScript canary) stays blocked until the PR is accepted and merged; cards
+119-120 remain planned behind it.

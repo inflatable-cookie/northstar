@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0.0",
+  "revision": "1",
+  "allowlist": [
+    {
+      "package_id": "@northstar/language-fixture",
+      "version": "0.1.0",
+      "source_identity": {
+        "type": "local_path",
+        "path": "/local/fixtures/policy-free-fixture"
+      },
+      "tree_digest": "sha256:b8e76dfdc87d84904ada0620425c0a94200532d11207e3d1339626fb2df85aa3",
+      "manifest_digest": "sha256:b9cdf39bbf2ae4fc2aeee656d2c8dc655c0faa951fbeec255eb887f210a683f9",
+      "compatible_core_range": ">=0.2.0 <1.0.0",
+      "actor": "operator",
+      "timestamp": "2026-09-02T00:00:00Z",
+      "reason": "duplicate allowlist specimen entry"
+    },
+    {
+      "package_id": "@northstar/language-fixture",
+      "version": "0.1.0",
+      "source_identity": {
+        "type": "local_path",
+        "path": "/local/fixtures/policy-free-fixture"
+      },
+      "tree_digest": "sha256:b8e76dfdc87d84904ada0620425c0a94200532d11207e3d1339626fb2df85aa3",
+      "manifest_digest": "sha256:b9cdf39bbf2ae4fc2aeee656d2c8dc655c0faa951fbeec255eb887f210a683f9",
+      "compatible_core_range": ">=0.2.0 <1.0.0",
+      "actor": "operator",
+      "timestamp": "2026-09-02T00:00:00Z",
+      "reason": "duplicate allowlist specimen entry"
+    }
+  ],
+  "revocations": []
+}

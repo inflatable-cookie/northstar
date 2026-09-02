@@ -21,13 +21,16 @@
     "optional_effigy_selectors": []
   },
   "self_check": {
-    "entrypoint": "scripts/self-check.rhai",
+    "entrypoint": "scripts/self-check.sh",
     "validated_profile_versions": [
       "1.0.0"
     ],
     "validated_schema_versions": [
       "1.0.0"
-    ]
+    ],
+    "invocation": {
+      "type": "direct"
+    }
   },
   "evidence_providers": []
 }

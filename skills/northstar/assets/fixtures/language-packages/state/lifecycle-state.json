@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0.0",
+  "state_revision": "2",
+  "packages": [
+    {
+      "package_id": "@northstar/language-fixture",
+      "version": "0.0.9",
+      "tree_digest": "sha256:1111111111111111111111111111111111111111111111111111111111111111",
+      "manifest_digest": "sha256:2222222222222222222222222222222222222222222222222222222222222222",
+      "receipt_digest": "sha256:3333333333333333333333333333333333333333333333333333333333333333",
+      "installed_path": "/operator/state/packages/language-fixture-0.0.9",
+      "selection": "retained",
+      "installed_at": "2026-09-01T18:00:00Z"
+    },
+    {
+      "package_id": "@northstar/language-fixture",
+      "version": "0.1.0",
+      "tree_digest": "sha256:b8e76dfdc87d84904ada0620425c0a94200532d11207e3d1339626fb2df85aa3",
+      "manifest_digest": "sha256:b9cdf39bbf2ae4fc2aeee656d2c8dc655c0faa951fbeec255eb887f210a683f9",
+      "receipt_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "installed_path": "/operator/state/packages/language-fixture-0.1.0",
+      "selection": "selected",
+      "installed_at": "2026-09-02T00:00:00Z"
+    }
+  ]
+}

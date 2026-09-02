@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0.0",
+  "state_revision": "1",
+  "packages": [
+    {
+      "package_id": "@northstar/language-fixture",
+      "version": "0.1.0",
+      "tree_digest": "sha256:653ce7f63ddc46da3381314d561dea3657b4eaf59eb8aa1c57b4ba046d9f90f0",
+      "manifest_digest": "sha256:029efa327745aba66c3316714cfb28b29246c365459bb5c9d7e6526e409c64ef",
+      "receipt_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "selection": "selected",
+      "installed_at": "2026-09-02T00:00:00Z"
+    }
+  ]
+}

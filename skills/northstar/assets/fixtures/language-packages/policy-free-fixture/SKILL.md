@@ -15,4 +15,5 @@ activation, and routing contracts without carrying production language rules.
 
 - `northstar-package.json`: machine-readable package manifest
 - `references/modes/fixture-audit.md`: explicit audit-and-repair workflow reference
-- `scripts/self-check.rhai`: package-owned self-check entrypoint
+- `scripts/self-check.sh`: package-owned self-check entrypoint (executed by the
+  declared `sh` runtime command)

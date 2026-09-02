@@ -1,6 +1,6 @@
 # 048 - Extract Modular Language Quality Packages
 
-Status: active; card 116 complete; card 117 ready
+Status: active; card 117 complete; card 118 planned
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.033`, promoted spec 034
@@ -91,7 +91,14 @@ before it becomes ready.
 
 ## Next Task
 
-Card `g02.048/116` merged through PR 21 at `eaeac88`. The post-merge readiness
-repair promoted canonical digest framing and operator-owned trust/lifecycle
-state. Card 117 is ready against the exact accepted baseline. Do not start
-TypeScript extraction until card 117 is reviewed and merged.
+Card `g02.048/117` implemented and falsified the generic lifecycle proof
+against the promoted host-protocol decisions: byte-exact digest vectors,
+operator trust and lifecycle schemas, the `language-package-host.v1`
+request/result machine contract with operational resolve/acquire_activate/
+rollback entrypoints proven from an installed skill by the reference adapter
+and a stdlib-only python3 host (no runtime prerequisite for consumers), the
+explicit `self_check.invocation` direct/command tagged union with both
+variants and negatives, atomic CAS state, identity-bound routing,
+transactional acquire/update/rollback, offline routing, revocable trust, and
+real two-process concurrency. PR 22 is open for exact-head re-review; card
+118 must not start before it is accepted and merged.

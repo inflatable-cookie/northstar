@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0.0",
+  "revision": "1",
+  "allowlist": [],
+  "revocations": [
+    {
+      "package_id": "@northstar/retired-fixture",
+      "version": "0.1.0",
+      "tree_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "manifest_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "actor": "operator",
+      "timestamp": "2026-09-02T00:00:00Z",
+      "reason": "duplicate revocation specimen entry"
+    },
+    {
+      "package_id": "@northstar/retired-fixture",
+      "version": "0.1.0",
+      "tree_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "manifest_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "actor": "operator",
+      "timestamp": "2026-09-02T00:00:00Z",
+      "reason": "duplicate revocation specimen entry"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "protocol_version": "1.0.0",
+  "status": "routed",
+  "notice": "n",
+  "tree_digest": "sha256:b8e76dfdc87d84904ada0620425c0a94200532d11207e3d1339626fb2df85aa3",
+  "manifest_digest": "sha256:b9cdf39bbf2ae4fc2aeee656d2c8dc655c0faa951fbeec255eb887f210a683f9",
+  "installed_path": "/x",
+  "receipt_digest": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+}

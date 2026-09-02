@@ -27,7 +27,10 @@
     ],
     "validated_schema_versions": [
       "1.0.0"
-    ]
+    ],
+    "invocation": {
+      "type": "direct"
+    }
   },
   "evidence_providers": []
 }

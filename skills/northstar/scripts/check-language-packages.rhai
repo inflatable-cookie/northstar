@@ -1310,9 +1310,293 @@ fn scan_forbidden_dependencies(target_skill_root) {
     }
 }
 
-// -----------------------------------------------------------------------------
+// =============================================================================
+// Card 117: Generic Installed-Package Runtime (checker driver)
+//
+// The generic lifecycle surface ships as a provider-neutral Bun CLI:
+// `skills/northstar/scripts/language-package-lifecycle.ts`. It owns canonical
+// byte-exact digest framing, operator trust/lifecycle documents, atomic
+// compare-and-swap state, immutable receipts, identity-bound routing,
+// transactional acquisition/rollback, revocation, offline routing, and
+// declared self-check execution. The exact same surface is exercised both
+// with Effigy absent (`bun run language-package-lifecycle.ts oracle ...`)
+// and from this checker (exec::run over the same CLI); this section drives
+// it and validates its outputs against the frozen schemas.
+
+fn validate_trust_document(doc, schema, context) {
+    validate_schema_node(doc, schema, context);
+
+    let seen_allow = [];
+    for entry in trust_allowlist_entries(doc) {
+        require_canonical_digest(entry["tree_digest"], context + " allowlist");
+        require_canonical_digest(entry["manifest_digest"], context + " allowlist");
+        let key = entry["package_id"] + "@" + entry["version"] + "|" + entry["tree_digest"] + "|" + entry["manifest_digest"];
+        if seen_allow.contains(key) {
+            let err = context;
+            err += " contains duplicate allowlist entry: ";
+            err += key;
+            throw(err);
+        }
+        seen_allow.push(key);
+    }
+
+    let seen_rev = [];
+    for rec in trust_revocation_entries(doc) {
+        require_canonical_digest(rec["tree_digest"], context + " revocation");
+        require_canonical_digest(rec["manifest_digest"], context + " revocation");
+        let key = rec["package_id"] + "|" + rec["tree_digest"] + "|" + rec["manifest_digest"];
+        if seen_rev.contains(key) {
+            let err = context;
+            err += " contains duplicate revocation entry: ";
+            err += key;
+            throw(err);
+        }
+        seen_rev.push(key);
+    }
+}
+
+fn validate_lifecycle_document(doc, schema, context) {
+    validate_schema_node(doc, schema, context);
+
+    let seen_refs = [];
+    let selected_by_pkg = #{};
+    for ref in doc["packages"] {
+        let ref_tree = ref["tree_digest"];
+        let ref_manifest = ref["manifest_digest"];
+        let ref_receipt = ref["receipt_digest"];
+        require_canonical_digest(ref_tree, context + " reference");
+        require_canonical_digest(ref_manifest, context + " reference");
+        require_canonical_digest(ref_receipt, context + " reference");
+        if seen_refs.contains(ref_receipt) {
+            let err = context;
+            err += " contains duplicate receipt reference: ";
+            err += ref_receipt;
+            throw(err);
+        }
+        seen_refs.push(ref_receipt);
+        let ref_pkg = ref["package_id"];
+        if ref["selection"] == "selected" {
+            if selected_by_pkg.contains(ref_pkg) {
+                let err = context;
+                err += " selects more than one receipt for package: ";
+                err += ref_pkg;
+                throw(err);
+            }
+            selected_by_pkg[ref_pkg] = true;
+        }
+    }
+}
+
+fn trust_allowlist_entries(trust_doc) {
+    if trust_doc.contains("allowlist") && type_of(trust_doc["allowlist"]) == "array" {
+        return trust_doc["allowlist"];
+    }
+    []
+}
+
+fn trust_revocation_entries(trust_doc) {
+    if trust_doc.contains("revocations") && type_of(trust_doc["revocations"]) == "array" {
+        return trust_doc["revocations"];
+    }
+    []
+}
+
+fn require_canonical_digest(digest, context) {
+    if type_of(digest) != "string" || !regex::is_match("^sha256:[0-9a-f]{64}$", digest) {
+        let err = context;
+        err += " uses non-canonical digest spelling: '";
+        err += digest;
+        err += "' (required sha256:<64 lowercase hex>)";
+        throw(err);
+    }
+}
+
+fn expect_trust_rejection(label, doc, schema, expected_reason) {
+    let rejected = false;
+    try {
+        validate_trust_document(doc, schema, label);
+    } catch (error) {
+        rejected = true;
+        let message = error.to_string();
+        if !message.contains(expected_reason) {
+            let err = label;
+            err += " rejected for wrong reason: ";
+            err += message;
+            throw(err);
+        }
+    }
+    if !rejected {
+        let err = label;
+        err += " unexpectedly passed";
+        throw(err);
+    }
+}
+
+fn expect_lifecycle_rejection(label, doc, schema, expected_reason) {
+    let rejected = false;
+    try {
+        validate_lifecycle_document(doc, schema, label);
+    } catch (error) {
+        rejected = true;
+        let message = error.to_string();
+        if !message.contains(expected_reason) {
+            let err = label;
+            err += " rejected for wrong reason: ";
+            err += message;
+            throw(err);
+        }
+    }
+    if !rejected {
+        let err = label;
+        err += " unexpectedly passed";
+        throw(err);
+    }
+}
+
+fn test_lifecycle_schema_fail_closed(valid_trust, trust_schema, valid_lifecycle, lifecycle_schema) {
+    // Trust schema mutation: narrowing a supported constraint rejects the instance.
+    let mutated_trust = json::parse(json::stringify(trust_schema));
+    mutated_trust["properties"]["allowlist"]["items"]["properties"]["workflows"]["items"]["enum"] = ["everyday_authoring"];
+    let trust_rejected = false;
+    try {
+        validate_trust_document(valid_trust, mutated_trust, "mutated-trust");
+    } catch (err) {
+        trust_rejected = err.to_string().contains("not in allowed enum");
+    }
+    require(trust_rejected, "trust schema mutation did not reject the instance");
+
+    // Lifecycle schema mutation: an unsupported keyword fails closed.
+    let mutated_lifecycle = json::parse(json::stringify(lifecycle_schema));
+    mutated_lifecycle["properties"]["state_revision"]["maxLength"] = 2;
+    let lifecycle_failed_closed = false;
+    try {
+        validate_lifecycle_document(valid_lifecycle, mutated_lifecycle, "mutated-lifecycle");
+    } catch (err) {
+        lifecycle_failed_closed = err.to_string().contains("unsupported schema keyword: maxLength");
+    }
+    require(lifecycle_failed_closed, "lifecycle schema unsupported keyword did not fail closed");
+}
+
+fn require_comment_stripped_source(source, comment_prefix) {
+    let code_lines = [];
+    for line in str::split_lines(source) {
+        let trimmed = str::trim(line);
+        if !str::starts_with(trimmed, comment_prefix) {
+            code_lines.push(line);
+        }
+    }
+    let code = "";
+    for line in code_lines {
+        code += line;
+        code += "\n";
+    }
+    code
+}
+
+fn require_clean_code(code, label) {
+    require(!regex::is_match("(?i)\\b(effigy|rust|cargo|typescript|svelte|clippy|eslint|biome|claude|codex|openai|anthropic)\\b", code),
+        label + " contains a forbidden dependency, provider name, or language branch");
+    require(!code.contains("process::") && !code.contains("command::"),
+        label + " can launch a subprocess");
+}
+
+fn require_surface_clean(surface_source, label) {
+    // Only the marked surface slice is scanned: the oracle harness below the
+    // marker is the adversarial proof and legitimately names production
+    // language files (for example the Cargo detection counterexample).
+    let begin = surface_source.index_of("GENERIC-SURFACE-SCAN-BEGIN");
+    let end = surface_source.index_of("GENERIC-SURFACE-SCAN-END");
+    require(begin >= 0 && end > begin, label + " is missing the surface scan markers");
+    let slice = surface_source.sub_string(begin, end - begin);
+    // Strip comments so the scan proves the executable code carries no
+    // language branch, Effigy dependency, or provider name, not that prose
+    // never names them.
+    let code = require_comment_stripped_source(slice, "//");
+    require_clean_code(code, label);
+}
+
+fn require_python_host_clean(python_source, label) {
+    // Python comments start with '#': strip them and scan the executable code.
+    let code = require_comment_stripped_source(python_source, "#");
+    require_clean_code(code, label);
+}
+
+fn validate_host_messages(oracle_dir, host_schema) {
+    let validated = 0;
+    for file in fs::list_recursive(oracle_dir) {
+        if str::ends_with(file, ".json") &&
+            (file.contains("/host-protocol/requests/") || file.contains("/host-protocol/results/")) {
+            let message = json::read_file(file);
+            validate_schema_node(message, host_schema, "host message " + file);
+            validated += 1;
+        }
+    }
+    require(validated > 0, "oracle produced no language-package-host.v1 messages to validate");
+    log("card-117 host messages: OK (" + validated + " request/result messages schema-validated)");
+}
+
+fn validate_oracle_receipts(oracle_dir, receipt_schema) {
+    let validated = 0;
+    for file in fs::list_recursive(oracle_dir) {
+        if str::ends_with(file, ".json") && file.contains("/receipts/") {
+            let receipt = json::read_file(file);
+            validate_receipt_instance(receipt, receipt_schema, "oracle receipt " + file);
+            validated += 1;
+        }
+    }
+    require(validated > 0, "oracle produced no receipts to validate");
+    log("card-117 oracle receipts: OK (" + validated + " receipts schema-validated)");
+}
+
+fn run_card_117_oracle(northstar_skill_root, manifest_schema) {
+    let surface_path = path::join(northstar_skill_root, "scripts/language-package-lifecycle.ts");
+    require(fs::is_file(surface_path), "missing generic lifecycle surface: " + surface_path);
+
+    // The surface and the conforming python3 host are provider-neutral: scan
+    // their code (comments stripped) for language branches, Effigy, providers,
+    // and subprocess escape.
+    require_surface_clean(fs::read_file(surface_path), "language-package-lifecycle.ts");
+    let python_host_path = path::join(northstar_skill_root, "scripts/language-package-host.py");
+    require(fs::is_file(python_host_path), "missing conforming host: " + python_host_path);
+    require_python_host_clean(fs::read_file(python_host_path), "language-package-host.py");
+
+    let fixture_root = path::join(northstar_skill_root, "assets/fixtures/language-packages/policy-free-fixture");
+    let oracle_dir = fs::make_temp_dir("northstar-oracle-");
+    let report = exec::run(
+        ["bun", "run", surface_path, "oracle", fixture_root, oracle_dir],
+        #{ run_in: "host", cwd: repo_root },
+    );
+    require(report["success"], "card-117 surface oracle failed: " + report["stderr"] + report["stdout"]);
+    let output = report["stdout"] + "\n" + report["stderr"];
+    for marker in [
+        "card-117 vectors: PASS",
+        "oracle-1 detection-is-not-authority: PASS",
+        "oracle-2 content-identity-canonical: PASS",
+        "oracle-3 activation-transactional: PASS",
+        "oracle-4 operator-owned-compare-and-swap: PASS",
+        "oracle-5 offline-is-local: PASS",
+        "oracle-6 failure-is-scoped: PASS",
+        "oracle-7 trust-is-revocable: PASS",
+        "oracle-8 routing-is-generic: PASS",
+        "oracle-9 trust-restrictions-and-receipt-provenance: PASS",
+        "oracle-10 concurrency-atomic-cas: PASS",
+        "oracle-11 self-check-invocation: PASS",
+        "oracle-12 identity-binding-and-immutable-store: PASS",
+        "oracle-13 host-protocol-portable: PASS",
+        "card-117 oracle: PASS",
+    ] {
+        require(output.contains(marker), "card-117 oracle missing marker: " + marker);
+    }
+    log("card-117 surface oracle: PASS (bun, Effigy absent; same surface driven from the checker)");
+    log("card-117 oracle notices:\n" + output);
+    oracle_dir
+}
+
+// =============================================================================
 // Main Execution
-// -----------------------------------------------------------------------------
+// =============================================================================
+// Main Execution
+// =============================================================================
 
 let northstar_skill_root = path::join(repo_root, "skills/northstar");
 if !fs::is_dir(path::join(northstar_skill_root, "references/packages")) {
@@ -1341,4 +1625,88 @@ test_receipt_conformance_variants(receipt_schema);
 run_negative_oracle_suite(northstar_skill_root, manifest_schema, registry_schema, receipt_schema);
 scan_forbidden_dependencies(northstar_skill_root);
 
-log("Northstar language package machine contracts: OK (3 Draft 2020-12 schemas, bounded evaluator for frozen vocabulary across all variants, schema mutation & fail-closed proof, SemVer numeric ranges, path containment, trust/source receipt variants, deep policy-free proof, staged sibling isolation proof, 9 mandatory negative oracle invariants, portable contracts)");
+// -----------------------------------------------------------------------------
+// Card 117: Generic lifecycle proof
+// -----------------------------------------------------------------------------
+
+let trust_schema = load_and_validate_schema_file(packages_ref_root, "operator-trust.schema.json", "language-package-operator-trust");
+let lifecycle_schema = load_and_validate_schema_file(packages_ref_root, "lifecycle-state.schema.json", "language-package-lifecycle-state");
+
+let state_fixtures_root = path::join(northstar_skill_root, "assets/fixtures/language-packages/state");
+let trust_fixture_doc = json::read_file(path::join(state_fixtures_root, "operator-trust.json"));
+validate_trust_document(trust_fixture_doc, trust_schema, "operator-trust.json");
+let lifecycle_fixture_doc = json::read_file(path::join(state_fixtures_root, "lifecycle-state.json"));
+validate_lifecycle_document(lifecycle_fixture_doc, lifecycle_schema, "lifecycle-state.json");
+
+let negative_trust_root = path::join(northstar_skill_root, "assets/fixtures/language-packages/negative/trust");
+expect_trust_rejection("duplicate-allowlist",
+    json::read_file(path::join(negative_trust_root, "duplicate-allowlist.json")), trust_schema, "duplicate allowlist entry");
+expect_trust_rejection("duplicate-revocation",
+    json::read_file(path::join(negative_trust_root, "duplicate-revocation.json")), trust_schema, "duplicate revocation entry");
+expect_trust_rejection("trust-missing-fields",
+    json::read_file(path::join(negative_trust_root, "missing-fields.json")), trust_schema, "missing required field");
+expect_trust_rejection("trust-bare-hex-digest",
+    json::read_file(path::join(negative_trust_root, "bare-hex-digest.json")), trust_schema, "does not match pattern");
+
+let negative_lifecycle_root = path::join(northstar_skill_root, "assets/fixtures/language-packages/negative/lifecycle");
+expect_lifecycle_rejection("duplicate-selection",
+    json::read_file(path::join(negative_lifecycle_root, "duplicate-selection.json")), lifecycle_schema, "selects more than one receipt");
+expect_lifecycle_rejection("duplicate-references",
+    json::read_file(path::join(negative_lifecycle_root, "duplicate-references.json")), lifecycle_schema, "duplicate receipt reference");
+expect_lifecycle_rejection("lifecycle-missing-required",
+    json::read_file(path::join(negative_lifecycle_root, "missing-required.json")), lifecycle_schema, "missing required field");
+expect_lifecycle_rejection("lifecycle-bare-hex-digest",
+    json::read_file(path::join(negative_lifecycle_root, "bare-hex-digest.json")), lifecycle_schema, "does not match pattern");
+
+test_lifecycle_schema_fail_closed(trust_fixture_doc, trust_schema, lifecycle_fixture_doc, lifecycle_schema);
+
+// Drive the provider-neutral lifecycle surface (Bun CLI, no Effigy involved)
+// and validate its outputs against the frozen schemas.
+let host_schema = load_and_validate_schema_file(packages_ref_root, "language-package-host-v1.schema.json", "language-package-host-v1");
+
+let invocation_negatives_root = path::join(northstar_skill_root, "assets/fixtures/language-packages/negative/manifest-invocation");
+expect_manifest_rejection("missing-invocation",
+    json::read_file(path::join(invocation_negatives_root, "missing-invocation.json")), manifest_schema, "missing required field");
+expect_manifest_rejection("unknown-invocation-type",
+    json::read_file(path::join(invocation_negatives_root, "unknown-invocation-type.json")), manifest_schema, "failed oneOf schema validation");
+expect_manifest_rejection("command-without-command",
+    json::read_file(path::join(invocation_negatives_root, "command-without-command.json")), manifest_schema, "failed oneOf schema validation");
+
+// Result schema mutation/fixture negatives: incomplete or
+// operation-incoherent results must be rejected by the discriminated grammar.
+fn expect_host_result_rejection(label, doc, host_schema, expected_reason) {
+    let rejected = false;
+    try {
+        validate_schema_node(doc, host_schema, label);
+    } catch (error) {
+        rejected = true;
+        let message = error.to_string();
+        if !message.contains(expected_reason) {
+            let err = label;
+            err += " rejected for wrong reason: ";
+            err += message;
+            throw(err);
+        }
+    }
+    if !rejected {
+        let err = label;
+        err += " unexpectedly passed";
+        throw(err);
+    }
+}
+
+let host_result_negatives_root = path::join(northstar_skill_root, "assets/fixtures/language-packages/negative/host-result");
+expect_host_result_rejection("activated-without-identity",
+    json::read_file(path::join(host_result_negatives_root, "activated-without-identity.json")), host_schema, "failed oneOf schema validation");
+expect_host_result_rejection("stopped-with-identity",
+    json::read_file(path::join(host_result_negatives_root, "stopped-with-identity.json")), host_schema, "contains forbidden additional property");
+expect_host_result_rejection("incoherent-op-status",
+    json::read_file(path::join(host_result_negatives_root, "incoherent-op-status.json")), host_schema, "failed oneOf schema validation");
+expect_host_result_rejection("missing-operation",
+    json::read_file(path::join(host_result_negatives_root, "missing-operation.json")), host_schema, "failed oneOf schema validation");
+
+let oracle_dir = run_card_117_oracle(northstar_skill_root, manifest_schema);
+validate_oracle_receipts(oracle_dir, receipt_schema);
+validate_host_messages(oracle_dir, host_schema);
+
+log("Northstar language package machine contracts: OK (3 Draft 2020-12 schemas, bounded evaluator for frozen vocabulary across all variants, schema mutation & fail-closed proof, SemVer numeric ranges, path containment, trust/source receipt variants, deep policy-free proof, staged sibling isolation proof, 9 mandatory negative oracle invariants, portable contracts; card 117: provider-neutral Bun lifecycle surface with canonical byte-exact digest vectors, operator trust & lifecycle schemas, atomic CAS lifecycle state, immutable receipts, identity-bound routing, transactional acquire/update/rollback, offline local routing, revocable trust, generic manifest-field routing, declared self-check execution, 8 review-oracle rows plus restrictions/provenance/concurrency falsified)");

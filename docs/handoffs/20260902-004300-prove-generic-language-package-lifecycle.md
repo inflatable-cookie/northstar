@@ -5,7 +5,7 @@ handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
 handoff: single-file-path-only
-status: active
+status: complete; PR 22 re-review pending
 owner: repo maintainers
 created: 2026-09-02
 updated: 2026-09-02
@@ -113,3 +113,44 @@ and fixture proof against the eight-row review oracle.
 7. Report the PR URL and exact head through Paseo. Do not merge. If review asks
    for changes, remain on this branch and repair only the classified in-bounds
    findings.
+
+## Completion Record
+
+- PR: https://github.com/inflatable-cookie/northstar/pull/22
+  (`main` <- `worker/prove-generic-language-package-lifecycle`).
+- The operator accepted both round-2 planning decisions and promoted them on
+  main at `54208e9` (settle language package host protocol). This branch
+  integrated origin/main and implemented card 117 against that authority:
+  - `language-package-host.v1` JSON request/result machine contract
+    (`language-package-host-v1.schema.json`) with operational
+    resolve/acquire_activate/rollback entrypoints exercised from an
+    INSTALLED SKILL with Effigy absent: the reference adapter implements all
+    three operations through the installed entrypoint; a resolve-bound
+    stdlib-only python3 host stops acquire_activate/rollback as missing
+    capability. Capability-denied hosts and unsupported protocol versions
+    return scoped `stopped` notices; the request consumer scope binds trust
+    restrictions at the host boundary; no Bun/Node/Python/POSIX
+    shell/Effigy/provider API is a consumer prerequisite (Bun remains only a
+    reference adapter).
+  - Explicit `self_check.invocation` direct/command tagged union in
+    `package-manifest.schema.json` and fixtures: direct executes the verified
+    entrypoint with `[package_root]`; command executes a declared command
+    (which must appear in `runtime_capabilities.required_commands`) with
+    `[entrypoint, package_root]`; both use the package root as cwd with no
+    shell interpolation and no capability-list order semantics. Both
+    positive variants proven with argv/cwd evidence; undeclared-runner,
+    unavailable-runner, and non-executable-direct negatives; schema-level
+    negative fixtures.
+  - Prior accepted repairs retained: byte-exact digest vectors, operator
+    trust/lifecycle schemas, identity/receipt/trust-bound lifecycle, atomic
+    CAS (real two-process oracle), immutable full-digest install store,
+    truthful pre-selection receipts, offline routing, revocation, scoped
+    failure, generic routing.
+- Card 117, dated log, and dependent front doors reconciled to complete;
+  blocked/overstrong claims removed after proof. Validation on the new exact
+  head: standalone oracle (Effigy absent, 13 groups) PASS;
+  `effigy check:language-packages` PASS (20 receipts, 23 host messages);
+  isolated skill-install parity; `effigy qa:docs`; `effigy qa`;
+  `git diff --check` clean.
+- Next: exact-head orchestrator re-review. Do not merge; do not start card
+  118 until this PR is accepted and merged.
