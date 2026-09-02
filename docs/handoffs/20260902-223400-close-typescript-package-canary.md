@@ -1,11 +1,13 @@
 ---
 title: Close TypeScript package canary worker handoff
-status: ready
+status: complete
 handoff_mode: worker
 branch: worker/close-typescript-package-canary
 worktree_slug: close-typescript-package-canary
 base_branch: main
 handoff_path: /Users/tom/Dev/projects/northstar/docs/handoffs/20260902-223400-close-typescript-package-canary.md
+pr_url: pending
+tested_head: pending
 ---
 
 # Close TypeScript Package Canary
@@ -83,3 +85,9 @@ Leave cards 119–120 closed and return a review-only Northstar PR.
 Commit and push one reviewable branch, open a PR to `main`, and report the PR
 URL plus exact tested head. Stop for orchestrator exact-head review. Do not
 merge.
+
+## Worker Closeout
+
+The documentation/evidence reconciliation is complete. The reviewable PR URL
+and exact tested head will be filled after the final validation commit; no
+implementation worker was launched and cards 119-120 remain closed.

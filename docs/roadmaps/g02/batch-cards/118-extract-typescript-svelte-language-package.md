@@ -1,6 +1,6 @@
 # 118 - Extract TypeScript/Svelte Language Package
 
-Status: core fallback notice repaired; Jetstream forced-fallback rerun serial
+Status: complete
 Owner: repo maintainers
 Updated: 2026-09-02
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -110,7 +110,7 @@ external mutations; workers must stop at reviewable heads.
   contains only the named TypeScript/Svelte package;
 - [x] revision-S behavior, nine normative rules, evaluation-only boundary,
   overlays, scope, and retained limitations remain exact;
-- [ ] valid consumer files remain byte-identical and existing evidence remains
+- [x] valid consumer files remain byte-identical and existing evidence remains
   readable;
 - [x] package tasks resolve their installed source separately from the consumer
   target;
@@ -125,8 +125,10 @@ external mutations; workers must stop at reviewable heads.
   a decoy consumer; the fresh Jetstream route remains serial;
 - [x] all new TypeScript package development lands externally during overlap;
 - [x] root fallback is frozen and visibly identified, not silently preferred;
-- [ ] full Northstar, package, and consumer QA pass; Northstar and package QA
-  pass on the replacement identity, consumer QA (Jetstream) remains serial.
+- [x] Northstar and package QA pass on the replacement identity; the accepted
+  Jetstream canary proves installed routing, bounded fallback, and byte
+  preservation, with its pre-existing editor and validation limits recorded
+  below rather than upgraded to a green consumer gate.
 
 ## Review Oracle
 
@@ -156,7 +158,9 @@ external mutations; workers must stop at reviewable heads.
 ## Continuation Envelope
 
 - Auto-start next card: no.
-- In-bounds next card: 119 only after canary review and protocol reconciliation.
+- In-bounds next card: 119 only after this closeout reaches the
+  orchestrator/operator checkpoint and card 119 receives a separate readiness
+  refresh; it is not part of this handoff.
 - Remaining ready chain after this card: 0.
 - Transition proof: accepted TypeScript package and no unresolved protocol finding.
 
@@ -165,7 +169,8 @@ external mutations; workers must stop at reviewable heads.
 - Current card ends budgeted run: yes.
 - Further operator decision required after this card: if the canary requires a
   contract or package-shape change.
-- Pause signal if run stops here: lane-complete.
+- Pause signal if run stops here: operator checkpoint; no automatic start of
+  card 119.
 
 ## Stop Conditions
 
@@ -316,9 +321,25 @@ version; both negatives run through the CLI itself. Checker schema-count
 wording derives the live `references/packages` schema inventory. Jetstream
 remains paused. Cards 119-120 stay closed.
 
+TypeScript canary closeout (2026-09-02): Northstar fallback repair PR 24 passed
+exact-head review and merged as
+`a99e87f7eccf69671687b9e9394a0bf757d06f0b`. Jetstream PR 4 passed exact-head
+review at `177b75c80e5310d84fdd227d0229b261d59d6271` and squash-merged as
+`dbf7561d3845bf344f9ae4fae3296d1601b074bf`. The accepted installed-package
+canary used the replacement package identity, emitted the exact visible
+bounded-overlap fallback notice from a correlated stopped acquisition,
+rejected detection fallback, and preserved consumer and package bytes.
+
+Hydrated editor validation reproduced four pre-existing failures out of 67;
+Vite/Tauri built successfully. The build temporarily rewrote `Cargo.lock`,
+which was restored before commit. Full validation reaches the pre-existing
+current-Poodle `ResolvedIconGeometry` API drift. Jetstream PR 4 changed one
+evidence log and no source, policy, manifest, or lockfile; its Paseo workspace
+is archived and its worktree removed. This closes Batch B without making
+consumer QA fully green or starting card 119.
+
 ## Next Task
 
-Review and merge the Northstar fallback-notice PR. Resume the existing
-Jetstream PR 4 worker for forced-fallback and hydrated editor validation, then
-re-review its exact head. Do not create a replacement Jetstream lane. Cards
-119-120 remain closed.
+Stop at the orchestrator/operator checkpoint. Refresh and review card 119
+separately before any Rust extraction; do not start or promote it automatically.
+Cards 119-120 remain closed.

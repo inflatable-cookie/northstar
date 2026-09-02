@@ -97,11 +97,13 @@ Northstar system:
   inventory are accepted, and the reviewed installed-invocation repair merged
   as `d18dc33b` (package PR 2). Core PR 23 repins that replacement identity
   (registry version `1.2.0`) and adds the non-vacuous installed setup/record
-  operational proof through the exact public `effigy skill run --path`
-  surface; it merged as `5951dfb`. Jetstream PR 4 exposed a missing operational
-  frozen-fallback notice after the host stop. The core repair adds a generic
-  fallback decision on the stopped acquisition pair, now with request-ID
-  correlation and a schema-validated exact-version overlap registry; Jetstream
-  PR 4 stays paused until that PR merges. Cards 119-120 stay closed.
+  operational proof through the exact public `effigy skill run --path` surface;
+  it merged as `5951dfb`. Jetstream PR 4 passed exact-head review at
+  `177b75c80e5310d84fdd227d0229b261d59d6271` and squash-merged as
+  `dbf7561d3845bf344f9ae4fae3296d1601b074bf`. Its bounded fallback,
+  installed-audit, and byte-preservation proof is accepted; four pre-existing
+  editor failures and current-Poodle `ResolvedIconGeometry` API drift remain
+  limits. Cards 119-120 stay closed; stop at the operator checkpoint before
+  any card-119 readiness or dispatch.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

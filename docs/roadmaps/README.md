@@ -81,15 +81,18 @@ Roadmaps sequence contract-backed work for Northstar itself.
   delegates, and fresh orchestrators with focused ten-row oracle assertions.
   PR 20 merged at `08ad810` after exact-head review.
 - `g02.048` is active; card 117's generic lifecycle proof merged through PR 22
-  at `75db6f5`. Card 118's public package repository is bootstrapped and its
-  package-source worker is in flight. Registry promotion and Jetstream proof
-  remain serial.
+  at `75db6f5`. Card 118's public package repository, reviewed installed-
+  invocation repair, core registry/routing, and Jetstream canary are complete.
+  Batch B's bounded proof is accepted with four pre-existing editor failures
+  and current-Poodle `ResolvedIconGeometry` API drift recorded as limits.
+  Cards 119-120 remain closed.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Await and exact-head review `g02.048/118`'s package-source PR. Return in-bounds
-findings to its originating worker. Registry promotion and Jetstream proof are
-serial behind accepted immutable heads; cards 119-120 remain planned.
+Stop at the orchestrator/operator checkpoint after `g02.048/118`'s accepted
+TypeScript canary closeout. Refresh card 119 against the reconciled evidence
+before deciding whether to make Rust extraction ready; do not start or promote
+it automatically. Cards 119-120 remain closed.

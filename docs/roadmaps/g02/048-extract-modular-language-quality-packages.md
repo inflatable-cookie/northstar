@@ -1,6 +1,6 @@
 # 048 - Extract Modular Language Quality Packages
 
-Status: active; card 118 core fallback notice repaired; Jetstream rerun serial
+Status: active; Batch B complete; Batch C remains a separate operator checkpoint
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.033`, promoted spec 034
@@ -11,10 +11,10 @@ Governing refs: `docs/architecture/system-architecture.md`,
 
 ## Problem
 
-Rust and TypeScript quality remain inside the root Northstar skill. The
-promoted package contract now settles how optional packages are identified,
-trusted, installed, routed, released, and removed from core, but no machine
-protocol or independently installable package exists yet.
+Rust quality and the remaining embedded language payloads remain inside the
+root Northstar skill. TypeScript/Svelte now has an independently installable
+package under the promoted machine protocol; the remaining Rust extraction and
+root reduction are still sequenced behind it.
 
 ## Generation Runway
 
@@ -30,7 +30,7 @@ before it becomes ready.
 
 - [x] prove the generic package schema, registry, receipt, trust, lifecycle,
   discovery, and routing boundary with a policy-free fixture;
-- [ ] extract TypeScript/Svelte as the first independent official package;
+- [x] extract TypeScript/Svelte as the first independent official package;
 - [ ] extract Rust without weakening its everyday or explicit-audit evidence;
 - [ ] remove both embedded implementations and their bounded migration
   fallbacks from the root payload;
@@ -43,15 +43,16 @@ before it becomes ready.
 - [x] **Batch A — fixture protocol:** card 116 freezes machine contracts and
   the policy-free fixture; card 117 implements and falsifies generic discovery,
   verification, installation, activation, rollback, offline, and routing.
-- [ ] **Batch B — TypeScript canary:** card 118 publishes, pins, installs, and
-  proves the TypeScript/Svelte explicit-audit package under one bounded overlap.
-  Registry/routing is implemented in core PR 23, now repinned to the reviewed
-  installed-invocation repair (`d18dc33b`, registry version `1.2.0`) with the
-  non-vacuous installed setup/record operational proof added. PR 23 merged as
-  `5951dfb`. Jetstream PR 4 exposed a missing operational fallback notice;
-  the core repair adds the generic fallback decision, request-ID correlation,
-  and a schema-validated exact-version overlap registry.
-  Overlap closure remains serial on the retained Jetstream worker.
+- [x] **Batch B — TypeScript canary:** card 118 published, pinned, installed,
+  and proved the TypeScript/Svelte explicit-audit package under one bounded
+  overlap. Registry/routing merged in core PR 23 as `5951dfb` after the
+  installed-invocation repair (`d18dc33b`, registry version `1.2.0`). The
+  retained Jetstream PR 4 then passed exact-head review at
+  `177b75c80e5310d84fdd227d0229b261d59d6271` and squash-merged as
+  `dbf7561d3845bf344f9ae4fae3296d1601b074bf`. Its bounded fallback,
+  installed-audit, byte-preservation, and hydrated-build evidence is accepted;
+  four pre-existing editor failures and current-Poodle API drift remain
+  recorded limits. Batch C stays behind a separate operator checkpoint.
 - [ ] **Batch C — Rust extraction:** card 119 publishes, pins, installs, and
   proves Rust everyday authoring plus explicit audit and its Cargo engine.
 - [ ] **Batch D — root reduction:** card 120 removes both frozen embedded
@@ -98,6 +99,7 @@ before it becomes ready.
 
 ## Next Task
 
-Review and merge the Northstar fallback-notice PR from handoff
-`20260902-212756`. Resume the retained Jetstream PR 4 worker for exact
-fallback and hydrated editor evidence. Do not start card 119 automatically.
+Stop at the orchestrator/operator checkpoint. Refresh card 119 against the
+accepted TypeScript canary before deciding whether to make Rust extraction
+ready. Do not start or promote card 119 automatically; cards 119-120 remain
+closed.
