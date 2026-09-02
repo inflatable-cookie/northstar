@@ -204,6 +204,27 @@ The checker validates:
    ambiguous receipts);
 10. portable contracts (scanning for forbidden LLM provider dependencies).
 
+Card 117 extends the same checker with the generic installed-package runtime:
+11. canonical `sha256:` digest vectors: manifest identity over the exact manifest bytes
+    and the package-tree identity over the sorted length-framed regular-file stream
+    (rejecting non-portable paths, symlinks, special files, case-fold collisions, and
+    digest spelling drift), proven identical across source, staged, and retained payloads;
+12. `operator-trust.schema.json` (exact allowlist entries and revocations) and
+    `lifecycle-state.schema.json` (revisioned state with immutable receipt references
+    and at most one selected receipt per package), including duplicate/stale-selection
+    rejection and fail-closed vocabulary proofs;
+13. generic discovery and routing by manifest fields (`kind`, `supported_languages`,
+    `available_workflows`, core compatibility) with no language-specific core branch,
+    no Effigy dependency, and read-only route selection;
+14. transactional acquisition and rollback: staged identity verification, trust and
+    revocation gates before transport, deterministic self-check, immutable
+    digest-addressed receipts, compare-and-swap lifecycle replacement, and byte-exact
+    preservation of selection and consumer files on every failure;
+15. visible notices for acquisition, local-only routing, and scoped workflow failure;
+16. eight review-oracle falsifications (detection is not authority, canonical content
+    identity, transactional activation, operator-owned compare-and-swap state, offline
+    local routing, scoped failure, revocable trust, generic routing).
+
 ## Agent-instruction audit (`check:agent-instructions`)
 
 The read-only agent-instruction checker measures root or supplied `AGENTS.md`

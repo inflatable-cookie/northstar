@@ -390,5 +390,8 @@ the fixture protocol, TypeScript, Rust, and embedded-removal batches.
 
 The design gate is satisfied and card 113 is closed. Roadmap g02.048 is
 compiled. Card 116 merged through PR 21; its readiness review promoted the
-missing digest and lifecycle-state boundary. Card 117 is ready. Cards 118-120
+missing digest and lifecycle-state boundary. Card 117 proved the generic
+lifecycle (canonical digest vectors, operator trust and lifecycle state,
+transactional acquire/update/rollback, offline routing, revocable trust,
+generic routing) and its PR is open for exact-head review. Cards 118-120
 remain blocked until their named dependencies and readiness refreshes pass.

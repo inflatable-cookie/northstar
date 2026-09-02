@@ -1,6 +1,6 @@
 # 117 - Prove Generic Language Package Lifecycle
 
-Status: ready
+Status: complete
 Owner: repo maintainers
 Updated: 2026-09-02
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -69,21 +69,21 @@ consumer activation, or depend on Effigy for installed routing.
 
 ## Acceptance Criteria
 
-- [ ] explicit workflow intent or existing activation can acquire the pinned
+- [x] explicit workflow intent or existing activation can acquire the pinned
   fixture; detection alone cannot;
-- [ ] invalid identity, receipt, content, compatibility, trust, revocation, or
+- [x] invalid identity, receipt, content, compatibility, trust, revocation, or
   self-check fails before activation;
-- [ ] raw manifest and canonical tree digest vectors produce exact required
+- [x] raw manifest and canonical tree digest vectors produce exact required
   `sha256:` identities across source, staged, and retained payloads;
-- [ ] trust and lifecycle documents validate, reject duplicate or stale
+- [x] trust and lifecycle documents validate, reject duplicate or stale
   selections, and never take authority from consumer files;
-- [ ] install/update/rollback failures preserve selection and consumer bytes;
-- [ ] compatible installed routing is local-only and works without Effigy;
-- [ ] offline missing-package failure stops only the requested package workflow;
-- [ ] ambiguous create/acquire outcomes retain identity and never duplicate an
+- [x] install/update/rollback failures preserve selection and consumer bytes;
+- [x] compatible installed routing is local-only and works without Effigy;
+- [x] offline missing-package failure stops only the requested package workflow;
+- [x] ambiguous create/acquire outcomes retain identity and never duplicate an
   installed package;
-- [ ] no language or provider-specific branch enters core;
-- [ ] full QA, package checks, parity, and negative side-effect proof pass.
+- [x] no language or provider-specific branch enters core;
+- [x] full QA, package checks, parity, and negative side-effect proof pass.
 
 ## Review Oracle
 
@@ -134,11 +134,62 @@ consumer activation, or depend on Effigy for installed routing.
 
 ## Completion Notes
 
-Card 116 merged through PR 21. Post-merge readiness found and promoted the
-missing digest-framing and lifecycle-state boundaries. No operator decision or
-language-specific scope remains unresolved.
+Completed and falsified the generic language package lifecycle (g02.048/117)
+against the accepted card-116 baseline:
+
+- Added `operator-trust.schema.json` and `lifecycle-state.schema.json` under
+  `skills/northstar/references/packages/` inside the frozen Draft 2020-12
+  vocabulary, with positive state fixtures and eight negative trust/lifecycle
+  fixtures (duplicate allowlist, duplicate revocation, missing fields, digest
+  spelling drift, duplicate selection, duplicate receipt references, missing
+  required fields, bare-hex digests) plus schema mutation discrimination and
+  fail-closed keyword proofs.
+- Implemented the canonical content identity: manifest digest over exact
+  manifest bytes and the package-tree digest over the sorted length-framed
+  regular-file stream `F\0<path-len>\0<path>\0<executable>\0<content-len>\0<content>`,
+  with required `sha256:` spelling, rejection of non-portable paths, symlinks
+  (never followed), special files, and case-fold collisions, and the
+  executable bit as the only retained mode. The policy-free fixture derives the
+  first runtime tree identity `sha256:653ce7f63ddc46da3381314d561dea3657b4eaf59eb8aa1c57b4ba046d9f90f0`
+  (manifest `sha256:029efa327745aba66c3316714cfb28b29246c365459bb5c9d7e6526e409c64ef`),
+  proven identical across source, staged, and retained payloads and across
+  reordered cross-adapter materialization.
+- Implemented the generic installed-package runtime in
+  `check-language-packages.rhai`: local-only discovery and routing by manifest
+  fields (no language switch, no Effigy dependency, read-only route selection
+  proven by scan slices), operator-owned lifecycle state with immutable
+  digest-addressed receipts and compare-and-swap replacement, transactional
+  acquisition/update/rollback with deterministic staged self-check, revocation
+  gating before any transport, and visible acquisition/routing/failure notices.
+- Falsified all eight review-oracle rows with deterministic fixtures:
+  detection-is-not-authority transport spy (zero calls), canonical identity
+  vectors and path-type negatives, transactional activation with before/after
+  hashes, operator-owned compare-and-swap with a stale-writer conflict, offline
+  network-denied local routing, scoped dual-workflow failure, revocable trust
+  with retained evidence/bytes, and synthetic `quantum-lang` manifest-field
+  routing.
+- Lifecycle transition matrix proven: init -> installed -> updated (prior
+  retained) -> rolled back -> revoked, with every failed install/update/rollback
+  leaving selection, state revision, receipts, and consumer bytes byte-identical.
+- Wired the new schemas and fixtures into the repo-contract required files and
+  documented the extended check in `scripts/README.md`.
+- Validated with `effigy check:language-packages` (all 8 oracles), isolated
+  skill-install parity (168 files), `effigy qa:docs`, `effigy qa`, and
+  `git diff --check`.
+
+Known limits: the runtime proof executes the deterministic protocol self-check
+gate over the staged payload rather than arbitrary package code (the policy-free
+fixture carries no runnable engine; real package execution is the card 118
+canary boundary). The case-fold collision negative is proven through the same
+fold-registration predicate the walker executes because the host filesystem is
+case-insensitive and cannot materialize two case-only names. Receipt documents
+are validated for schema conformance by the harness against every written
+receipt; the runtime constructs them from its fixed template (Effigy Rhai caps
+call depth at eight frames, which oneOf recursion inside the runtime would
+exceed).
 
 ## Next Task
 
-Dispatch card 117 from this accepted baseline. Do not start TypeScript
-extraction until the generic lifecycle PR is reviewed and merged.
+Stop for exact-head review. After merge, refresh card 118 against the shipped
+generic lifecycle protocol; do not start TypeScript extraction until the
+generic lifecycle PR is reviewed and merged.

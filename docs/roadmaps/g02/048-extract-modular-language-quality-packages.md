@@ -1,6 +1,6 @@
 # 048 - Extract Modular Language Quality Packages
 
-Status: active; card 116 complete; card 117 ready
+Status: active; card 117 complete; card 118 planned
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.033`, promoted spec 034
@@ -91,7 +91,10 @@ before it becomes ready.
 
 ## Next Task
 
-Card `g02.048/116` merged through PR 21 at `eaeac88`. The post-merge readiness
-repair promoted canonical digest framing and operator-owned trust/lifecycle
-state. Card 117 is ready against the exact accepted baseline. Do not start
-TypeScript extraction until card 117 is reviewed and merged.
+Card `g02.048/117` implemented the generic lifecycle proof: canonical
+manifest/tree digest vectors, operator trust and lifecycle schemas,
+transactional acquire/update/rollback with compare-and-swap state, offline
+local routing, revocable trust, generic manifest-field routing, and all eight
+review-oracle rows falsified. Its PR is open for exact-head review. Card 118
+remains blocked until the generic lifecycle PR is reviewed and merged; do not
+start TypeScript extraction before that refresh.

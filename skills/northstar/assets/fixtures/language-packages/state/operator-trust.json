@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0.0",
+  "revision": "1",
+  "allowlist": [
+    {
+      "package_id": "@northstar/language-fixture",
+      "version": "0.1.0",
+      "source_identity": {
+        "type": "git",
+        "repository": "https://github.com/inflatable-cookie/northstar.git",
+        "subpath": "skills/northstar/assets/fixtures/language-packages/policy-free-fixture",
+        "commit": "8f4a0d639c59900e9b7e4ba746776fe0f0cfb9c6"
+      },
+      "tree_digest": "sha256:653ce7f63ddc46da3381314d561dea3657b4eaf59eb8aa1c57b4ba046d9f90f0",
+      "manifest_digest": "sha256:029efa327745aba66c3316714cfb28b29246c365459bb5c9d7e6526e409c64ef",
+      "compatible_core_range": ">=0.2.0 <1.0.0",
+      "workflows": [
+        "explicit_audit_repair"
+      ],
+      "actor": "operator",
+      "timestamp": "2026-09-02T00:00:00Z",
+      "reason": "card 117 policy-free fixture pin"
+    }
+  ],
+  "revocations": [
+    {
+      "package_id": "@northstar/retired-fixture",
+      "version": "0.1.0",
+      "tree_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "manifest_digest": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "actor": "operator",
+      "timestamp": "2026-09-02T00:00:00Z",
+      "reason": "specimen revocation record for a retired fixture identity"
+    }
+  ]
+}
