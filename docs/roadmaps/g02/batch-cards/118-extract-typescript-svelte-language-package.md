@@ -290,6 +290,17 @@ frozen payload. Jetstream remains paused on PR 4 until this Northstar PR
 merges; then the same worker reruns forced fallback and hydrated editor
 validation. Cards 119-120 stay closed.
 
+Fallback repair review (2026-09-02, Northstar PR 24 at `7a240ca`): CHANGES
+REQUIRED. The separate core decision and notice text are sound, but the frozen
+v1 result grammar carries no request correlation, so unrelated stopped results
+can be paired and accepted. The decision also accepts detection intent and any
+syntactically valid TypeScript package version; its new overlap registry has no
+schema. The orchestrator settled the pre-release correction on `main`: every
+host request/result now shares a caller-generated `request_id`; the overlap
+registry is schema-validated and binds exact package version; detection and
+mismatches fail closed. The same PR 24 worker integrates that authority and
+repairs only these findings.
+
 ## Next Task
 
 Review and merge the Northstar fallback-notice PR. Resume the existing

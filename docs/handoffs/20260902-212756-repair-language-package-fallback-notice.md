@@ -64,6 +64,13 @@ fallback pass the canary.
 - Preserve the separation between the provider-neutral host and Northstar's
   bounded-overlap policy. Do not disguise fallback as a successful host result
   or make the host claim it executed embedded policy.
+- Review-authorized protocol correction: add a caller-generated `request_id`
+  to every host request and echo it from every result. Update both reference
+  hosts, the v1 schema, all fixtures and installed parity together; reject a
+  fallback pair whose IDs differ.
+- Add a schema for the overlap-window registry. Each open entry binds language,
+  package ID and exact version to its frozen-payload label. Reject detection
+  intent and a request version outside that exact window.
 - Fail closed when the result is not `stopped`, request/result operations or
   identities disagree, required identity is absent, the language has no frozen
   overlap payload, or the embedded fallback window is closed.
@@ -114,9 +121,9 @@ worker for forced-fallback and hydrated editor validation. Do not start card
 7. Integrate current `main` if it moved, revalidate, push, and open a PR with
    the exact tested head. Report through Paseo. Do not merge or start card 119.
 
-Stop if the repair needs new fallback semantics, changes the host protocol,
-requires language-specific core code beyond registered overlap metadata, or
-validation changes the plan.
+Stop if the repair needs fallback semantics beyond the authorized request-ID
+correlation and exact-version overlap registry, requires language-specific core
+code beyond registered overlap metadata, or validation changes the plan.
 
 ## Vision Target Delta
 
