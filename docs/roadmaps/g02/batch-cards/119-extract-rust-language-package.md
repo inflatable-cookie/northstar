@@ -1,8 +1,8 @@
 # 119 - Extract Rust Language Package
 
-Status: planned; blocked on card 118
+Status: planned; awaiting operator checkpoint and Rust inventory/readiness refresh
 Owner: repo maintainers
-Updated: 2026-09-01
+Updated: 2026-09-02
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
 Governing refs: `docs/roadmaps/g02/048-extract-modular-language-quality-packages.md`,
 `docs/architecture/system-architecture.md`,
@@ -11,7 +11,7 @@ Auto-start next card: no
 
 ## Ready-State Checks
 
-- [ ] TypeScript canary is accepted and protocol findings are reconciled;
+- [x] TypeScript canary is accepted and protocol findings are reconciled;
 - [ ] current Rust payload, engine, install, and consumer cohort are inventoried;
 - [x] strict everyday authoring and explicit audit remain separate workflows;
 - [x] Cargo-native engine, six normative rules, evaluation input, authority,
@@ -105,9 +105,13 @@ lifecycle, or install unrelated package payloads.
 
 ## Completion Notes
 
-Pending TypeScript canary and readiness refresh.
+Card 118's accepted TypeScript prerequisite is complete. The bounded canary
+proof, fallback visibility, installed audit, byte preservation, and known
+consumer limits are recorded in card 118 and its closeout log. Card 119 remains
+planned and not ready; the next step is the operator checkpoint followed by a
+current Rust inventory and readiness refresh.
 
 ## Next Task
 
-After card 118 merges, reconcile the exact Rust inventory and apply the
-ready-state rubric.
+At the operator checkpoint, reconcile the current Rust inventory and apply the
+ready-state rubric. Do not mark this card ready or launch it automatically.

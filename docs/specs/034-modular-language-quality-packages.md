@@ -449,7 +449,10 @@ promoted here (byte-exact digest vectors, operator trust and lifecycle state,
 the `language-package-host.v1` machine contract with operational entrypoints
 from an installed skill, explicit self-check invocation, atomic CAS,
 identity-bound routing, transactional acquire/update/rollback, offline
-routing, revocable trust). PR 22 merged at `75db6f5`. Card 118's public source
-repository is bootstrapped and its package-source worker is in flight against
-the accepted protocol and settled first-canary identity; cards 119-120 remain
-blocked behind their named dependencies and readiness refreshes.
+routing, revocable trust). PR 22 merged at `75db6f5`. Card 118's TypeScript
+package, core registry/routing, and accepted Jetstream canary are complete;
+core PR 23 merged as `5951dfb`, and Jetstream PR 4 squash-merged after
+exact-head review at
+`177b75c80e5310d84fdd227d0229b261d59d6271` as
+`dbf7561d3845bf344f9ae4fae3296d1601b074bf`. Cards 119-120 remain closed; card
+119 awaits the operator checkpoint and current Rust inventory/readiness refresh.
