@@ -262,12 +262,16 @@ Card 117 extends the same checker with the generic installed-package runtime:
     routing, drift stops instead of silently routing, rollback reopens the
     route without fetching, and the official pin outranks the operator
     allowlist. A separate core fallback decision consumes a stopped
-    `acquire_activate` pair plus `overlap-windows.json` and emits the exact
-    frozen-payload notice; the Jetstream-shaped host stop (manual/local-path,
-    no `@version`, no frozen clause) is not fallback evidence. Mutation
-    tests fail closed for missing version, wrong identity, non-stopped
-    results, disagreeing operations, a closed overlap window, and a language
-    with no frozen payload. The package's own reviewed
+    `acquire_activate` pair plus schema-validated `overlap-windows.json` and
+    emits the exact frozen-payload notice; every host request/result shares a
+    caller-generated `request_id`, and mixed pairs fail closed. The
+    Jetstream-shaped host stop (manual/local-path, no `@version`, no frozen
+    clause) is not fallback evidence. Mutation tests fail closed for missing
+    version, wrong identity, mismatched `request_id`, detection intent, a
+    request version outside the exact window, non-stopped results, disagreeing
+    operations, a closed overlap window, and a language with no frozen payload.
+    The overlap registry schema rejects extra properties and a missing window
+    version. The package's own reviewed
     `prove-installed-invocation.sh` (pinned in the package) supplies the
     non-vacuous installed setup/record proof through the public
     `effigy skill run --path <installed_path>` surface against a decoy

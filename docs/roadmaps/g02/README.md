@@ -115,8 +115,10 @@ its reviewed installed-invocation repair merged as `d18dc33b` (package PR 2).
 PR 23 pins the replacement identity at registry version `1.2.0`, adds the
 non-vacuous installed setup/record operational proof, and merged as `5951dfb`.
 Jetstream PR 4 exposed a missing operational frozen-fallback notice after the
-host stop. The core repair is on `worker/repair-language-package-fallback-notice`;
-cards 119-120 remain serial behind merge, consumer re-review and reconciliation.
+host stop. The core repair is on `worker/repair-language-package-fallback-notice`
+and now includes request-ID correlation plus a schema-validated exact-version
+overlap registry; cards 119-120 remain serial behind merge, consumer re-review
+and reconciliation.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and

@@ -100,7 +100,8 @@ Northstar system:
   operational proof through the exact public `effigy skill run --path`
   surface; it merged as `5951dfb`. Jetstream PR 4 exposed a missing operational
   frozen-fallback notice after the host stop. The core repair adds a generic
-  fallback decision on the stopped acquisition pair; Jetstream PR 4 stays
-  paused until that PR merges. Cards 119-120 stay closed.
+  fallback decision on the stopped acquisition pair, now with request-ID
+  correlation and a schema-validated exact-version overlap registry; Jetstream
+  PR 4 stays paused until that PR merges. Cards 119-120 stay closed.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

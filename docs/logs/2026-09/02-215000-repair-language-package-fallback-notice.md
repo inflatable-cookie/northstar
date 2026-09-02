@@ -9,8 +9,10 @@ Status: core fallback notice repaired; Jetstream forced-fallback rerun serial
 
 Card 118's missing operational fallback notice is repaired on
 `worker/repair-language-package-fallback-notice`. The worker ran from the
-launcher-provided clean worktree against pushed `origin/main` at `e638eb42`,
-with the tracked handoff verified before mutation.
+launcher-provided clean worktree against pushed `origin/main`, with the tracked
+handoff verified before mutation. After exact-head review of PR 24 at
+`7a240ca`, this same worker integrated `main` at `9a0e5fc` and repaired the
+four classified findings.
 
 - Core fallback decision: `decideFrozenFallback` on the generic lifecycle
   surface consumes a stopped `acquire_activate` request/result pair and
@@ -18,8 +20,13 @@ with the tracked handoff verified before mutation.
   `package-id@version`, the host stop reason, and the frozen embedded payload.
   The host status grammar is unchanged. A host `stopped` result is not the
   fallback notice.
-- Registered overlap metadata: `references/packages/overlap-windows.json` pins
-  TypeScript `@northstar/typescript-quality` as `open`.
+- Request correlation: every host request carries a caller-generated
+  `request_id`; every result from both reference hosts echoes it. Fallback
+  rejects a mismatched pair before the notice.
+- Registered overlap metadata: schema-validated
+  `references/packages/overlap-windows.json` pins TypeScript
+  `@northstar/typescript-quality` `0.1.0` as `open`. Detection intent and a
+  request version outside that exact window fail closed.
 - Host catch prose now includes `@version`. It still does not claim overlap
   fallback or embedded policy.
 - CLI: `language-package-lifecycle.ts fallback <request> <result> <overlap>
@@ -46,19 +53,23 @@ fallback evidence was the card-118 oracle miss.
   still not fallback evidence; in-process decision and CLI both emit
   `@northstar/typescript-quality@0.1.0`, the host reason, and `using the frozen
   embedded TypeScript payload during the bounded overlap window`.
-- Fail-closed mutations: missing version, wrong identity, non-stopped result,
-  disagreeing operations, closed overlap window, language with no frozen
-  payload.
+- Fail-closed mutations: missing version, wrong identity, mismatched
+  `request_id`, detection intent, wrong version, non-stopped result, disagreeing
+  operations, closed overlap window, language with no frozen payload.
+- Overlap schema: live document validates through the frozen evaluator;
+  extra-property and missing-version negatives fail closed.
 - Checker independently drives the same CLI against those fixtures and pins
-  the overlap window to the accepted TypeScript identity.
+  the overlap window to the accepted TypeScript identity and version.
 - `oracle-14` still proves the host acquisition stop, now with `@version` and
-  an assertion that the host notice does not contain `frozen embedded`.
+  an assertion that the host notice does not contain `frozen embedded`. Both
+  hosts echo `request_id`.
 
 ## Validation
 
 `effigy check:language-packages` passed, including oracle-15 and the
-independent fallback CLI board. Isolated skill-install parity passed (188
-files). `effigy qa:docs`, `effigy qa`, and `git diff --check` passed.
+independent fallback CLI board (nine fail-closed mutations plus overlap-schema
+negatives). Isolated skill-install parity passed (194 files). `effigy qa:docs`,
+`effigy qa`, and `git diff --check` passed.
 
 ## Limits
 

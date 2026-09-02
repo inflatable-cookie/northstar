@@ -301,6 +301,15 @@ registry is schema-validated and binds exact package version; detection and
 mismatches fail closed. The same PR 24 worker integrates that authority and
 repairs only these findings.
 
+Protocol-correction repair (2026-09-02): every host request/result now carries
+a caller-generated `request_id`; both reference hosts echo it; fallback rejects
+a mismatched pair before the notice. The overlap registry is schema-validated
+and binds exact package version `0.1.0`. Detection intent and a request version
+outside that window fail closed. Non-vacuous fixtures cover mismatched
+`request_id`, detection, wrong version, extra overlap properties, and a missing
+window version. Jetstream remains paused on PR 4 until this Northstar PR
+merges. Cards 119-120 stay closed.
+
 ## Next Task
 
 Review and merge the Northstar fallback-notice PR. Resume the existing

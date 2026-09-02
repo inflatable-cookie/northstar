@@ -39,19 +39,22 @@ fallback pass the canary.
 - Repository: `/Users/tom/Dev/projects/northstar`.
 - Worker worktree: `/Users/tom/.paseo/worktrees/37pj4ag8/repair-language-package-fallback-notice`.
 - Worker branch: `worker/repair-language-package-fallback-notice`.
-- Dispatch base `82489d47` is an ancestor of pushed `origin/main` `e638eb42`.
+- Dispatch base `82489d47` is an ancestor of pushed `origin/main` `9a0e5fc`.
 - Implementation: `decideFrozenFallback` plus `fallback` CLI on the generic
-  lifecycle surface; overlap windows pin TypeScript
-  `@northstar/typescript-quality` as `open`; host catch prose includes
-  `@version` without claiming overlap fallback.
+  lifecycle surface. Every host request/result carries a caller-generated
+  `request_id`; both reference hosts echo it. Overlap windows are
+  schema-validated and pin TypeScript `@northstar/typescript-quality` `0.1.0`
+  as `open`. Detection, mismatched IDs, and a version outside that exact window
+  fail closed. Host catch prose includes `@version` without claiming overlap
+  fallback.
 - Pre-fix counterexample recorded: stopped
   `@northstar/typescript-quality` `0.1.0` with
   `manual or local-path installation route required`, no `@0.1.0`, no frozen
   clause. `oracle-15` and the checker CLI convert that pair into the exact
-  notice and fail closed on the six mutations.
+  notice and fail closed on the nine mutations plus overlap-schema negatives.
 - Evidence: `docs/logs/2026-09/02-215000-repair-language-package-fallback-notice.md`.
 - Jetstream PR 4 remains paused on its existing branch.
-- Merge authority: absent. The worker opens a PR and stops.
+- Merge authority: absent. The worker pushes the same PR and stops.
 
 ## Boundaries
 

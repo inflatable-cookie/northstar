@@ -1411,6 +1411,27 @@ fn require_canonical_digest(digest, context) {
     }
 }
 
+fn expect_schema_rejection(label, doc, schema, expected_reason) {
+    let rejected = false;
+    try {
+        validate_schema_node(doc, schema, label);
+    } catch (error) {
+        rejected = true;
+        let message = error.to_string();
+        if !message.contains(expected_reason) {
+            let err = label;
+            err += " rejected for wrong reason: ";
+            err += message;
+            throw(err);
+        }
+    }
+    if !rejected {
+        let err = label;
+        err += " unexpectedly passed";
+        throw(err);
+    }
+}
+
 fn expect_trust_rejection(label, doc, schema, expected_reason) {
     let rejected = false;
     try {
@@ -1664,17 +1685,26 @@ for key in canary_expectations.keys() {
         "official-registry.json canary entry field '" + key + "' drifted from the accepted card-118 identity");
 }
 
+let overlap_schema = load_and_validate_schema_file(packages_ref_root, "overlap-windows.schema.json", "language-package-overlap-windows");
 let overlap_path = path::join(packages_ref_root, "overlap-windows.json");
 require(fs::is_file(overlap_path), "missing overlap-windows.json");
 let overlap_doc = json::read_file(overlap_path);
+validate_schema_node(overlap_doc, overlap_schema, "overlap-windows.json");
 require(overlap_doc["schema_version"] == "1.0.0", "overlap-windows.json schema_version drifted");
 require(overlap_doc["windows"].len() == 1, "overlap-windows.json must contain exactly the TypeScript overlap window");
 let overlap_window = overlap_doc["windows"][0];
 require(overlap_window["language"] == "typescript" &&
     overlap_window["package_id"] == "@northstar/typescript-quality" &&
+    overlap_window["version"] == "0.1.0" &&
     overlap_window["payload_label"] == "TypeScript" &&
     overlap_window["window"] == "open",
     "overlap-windows.json drifted from the accepted TypeScript overlap window");
+
+let overlap_negatives_root = path::join(northstar_skill_root, "assets/fixtures/language-packages/negative/overlap");
+expect_schema_rejection("overlap-extra-property",
+    json::read_file(path::join(overlap_negatives_root, "extra-property.json")), overlap_schema, "contains forbidden additional property");
+expect_schema_rejection("overlap-missing-version",
+    json::read_file(path::join(overlap_negatives_root, "missing-version.json")), overlap_schema, "missing required field");
 
 let fixture_root = path::join(northstar_skill_root, "assets/fixtures/language-packages/policy-free-fixture");
 validate_policy_free_fixture_deep(fixture_root, manifest_schema);
@@ -1795,9 +1825,21 @@ require(fallback_notice.contains("using the frozen embedded TypeScript payload d
 expect_fallback_cli_failure("missing-version", surface_path,
     path::join(fallback_fixtures, "missing-version-request.json"),
     path::join(fallback_fixtures, "jetstream-shaped-result.json"),
-    overlap_path, "required package version is absent");
+    overlap_path, "fallback request.version must be a string");
 expect_fallback_cli_failure("wrong-identity", surface_path,
     path::join(fallback_fixtures, "wrong-identity-request.json"),
+    path::join(fallback_fixtures, "jetstream-shaped-result.json"),
+    overlap_path, "request/result identities disagree");
+expect_fallback_cli_failure("mismatched-request-id", surface_path,
+    path::join(fallback_fixtures, "jetstream-shaped-request.json"),
+    path::join(fallback_fixtures, "mismatched-request-id-result.json"),
+    overlap_path, "request/result identities disagree");
+expect_fallback_cli_failure("detection-intent", surface_path,
+    path::join(fallback_fixtures, "detection-intent-request.json"),
+    path::join(fallback_fixtures, "jetstream-shaped-result.json"),
+    overlap_path, "detection never authorizes a fallback runtime");
+expect_fallback_cli_failure("wrong-version", surface_path,
+    path::join(fallback_fixtures, "wrong-version-request.json"),
     path::join(fallback_fixtures, "jetstream-shaped-result.json"),
     overlap_path, "request/result identities disagree");
 expect_fallback_cli_failure("non-stopped", surface_path,
@@ -1817,6 +1859,6 @@ expect_fallback_cli_failure("no-payload", surface_path,
     path::join(fallback_fixtures, "no-payload-request.json"),
     path::join(fallback_fixtures, "jetstream-shaped-result.json"),
     overlap_path, "language has no frozen overlap payload");
-log("card-118 operational fallback CLI: PASS (Jetstream-shaped notice plus six fail-closed mutations)");
+log("card-118 operational fallback CLI: PASS (Jetstream-shaped notice plus nine fail-closed mutations)");
 
 log("Northstar language package machine contracts: OK (3 Draft 2020-12 schemas, bounded evaluator for frozen vocabulary across all variants, schema mutation & fail-closed proof, SemVer numeric ranges, path containment, trust/source receipt variants, deep policy-free proof, staged sibling isolation proof, 9 mandatory negative oracle invariants, portable contracts; card 117: provider-neutral Bun lifecycle surface with canonical byte-exact digest vectors, operator trust & lifecycle schemas, atomic CAS lifecycle state, immutable receipts, identity-bound routing, transactional acquire/update/rollback, offline local routing, revocable trust, generic manifest-field routing, declared self-check execution, 8 review-oracle rows plus restrictions/provenance/concurrency falsified)");

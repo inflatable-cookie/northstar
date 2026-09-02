@@ -1,5 +1,6 @@
 {
   "protocol_version": "1.0.0",
+  "request_id": "req-jetstream-ts-quality-01",
   "operation": "acquire_activate",
   "intent": "workflow_request",
   "package_id": "@northstar/language-fixture",

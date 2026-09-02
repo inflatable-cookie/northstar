@@ -6,7 +6,8 @@
       "package_id": "@northstar/typescript-quality",
       "version": "0.1.0",
       "payload_label": "TypeScript",
-      "window": "closed"
+      "window": "open",
+      "note": "extra"
     }
   ]
 }

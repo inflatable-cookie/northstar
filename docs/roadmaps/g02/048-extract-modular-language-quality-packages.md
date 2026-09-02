@@ -49,7 +49,8 @@ before it becomes ready.
   installed-invocation repair (`d18dc33b`, registry version `1.2.0`) with the
   non-vacuous installed setup/record operational proof added. PR 23 merged as
   `5951dfb`. Jetstream PR 4 exposed a missing operational fallback notice;
-  the core repair adds the generic fallback decision and exact notice proof.
+  the core repair adds the generic fallback decision, request-ID correlation,
+  and a schema-validated exact-version overlap registry.
   Overlap closure remains serial on the retained Jetstream worker.
 - [ ] **Batch C — Rust extraction:** card 119 publishes, pins, installs, and
   proves Rust everyday authoring plus explicit audit and its Cargo engine.
