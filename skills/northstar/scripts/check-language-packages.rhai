@@ -1,7 +1,7 @@
 // Focused validation for Northstar language package machine contracts (card 116).
 //
 // Validates:
-// 1. Structure across all 3 schema files (JSON Schema Draft 2020-12 dialect).
+// 1. Structure across every Draft 2020-12 schema under references/packages.
 // 2. Bounded schema-instance evaluation engine evaluating frozen schema vocabulary directly.
 // 3. Schema mutation discrimination proofs (supported keyword mutations reject instances,
 //    unsupported schema keywords fail closed).
@@ -1649,6 +1649,13 @@ if !fs::is_dir(path::join(northstar_skill_root, "references/packages")) {
 }
 
 let packages_ref_root = path::join(northstar_skill_root, "references/packages");
+let package_schema_count = 0;
+for entry in fs::list(packages_ref_root) {
+    if str::ends_with(entry, ".schema.json") {
+        package_schema_count += 1;
+    }
+}
+require(package_schema_count > 0, "references/packages has no Draft 2020-12 schema files");
 let manifest_schema = load_and_validate_schema_file(packages_ref_root, "package-manifest.schema.json", "language-package-manifest");
 let registry_schema = load_and_validate_schema_file(packages_ref_root, "official-registry.schema.json", "language-package-official-registry");
 let receipt_schema = load_and_validate_schema_file(packages_ref_root, "installation-receipt.schema.json", "language-package-installation-receipt");
@@ -1859,6 +1866,16 @@ expect_fallback_cli_failure("no-payload", surface_path,
     path::join(fallback_fixtures, "no-payload-request.json"),
     path::join(fallback_fixtures, "jetstream-shaped-result.json"),
     overlap_path, "language has no frozen overlap payload");
-log("card-118 operational fallback CLI: PASS (Jetstream-shaped notice plus nine fail-closed mutations)");
+expect_fallback_cli_failure("overlap-extra-property", surface_path,
+    path::join(fallback_fixtures, "jetstream-shaped-request.json"),
+    path::join(fallback_fixtures, "jetstream-shaped-result.json"),
+    path::join(overlap_negatives_root, "extra-property.json"),
+    "contains forbidden additional property");
+expect_fallback_cli_failure("overlap-missing-version", surface_path,
+    path::join(fallback_fixtures, "jetstream-shaped-request.json"),
+    path::join(fallback_fixtures, "jetstream-shaped-result.json"),
+    path::join(overlap_negatives_root, "missing-version.json"),
+    "missing required field");
+log("card-118 operational fallback CLI: PASS (Jetstream-shaped notice plus eleven fail-closed mutations)");
 
-log("Northstar language package machine contracts: OK (3 Draft 2020-12 schemas, bounded evaluator for frozen vocabulary across all variants, schema mutation & fail-closed proof, SemVer numeric ranges, path containment, trust/source receipt variants, deep policy-free proof, staged sibling isolation proof, 9 mandatory negative oracle invariants, portable contracts; card 117: provider-neutral Bun lifecycle surface with canonical byte-exact digest vectors, operator trust & lifecycle schemas, atomic CAS lifecycle state, immutable receipts, identity-bound routing, transactional acquire/update/rollback, offline local routing, revocable trust, generic manifest-field routing, declared self-check execution, 8 review-oracle rows plus restrictions/provenance/concurrency falsified)");
+log("Northstar language package machine contracts: OK (" + package_schema_count + " Draft 2020-12 schemas under references/packages, bounded evaluator for frozen vocabulary across all variants, schema mutation & fail-closed proof, SemVer numeric ranges, path containment, trust/source receipt variants, deep policy-free proof, staged sibling isolation proof, 9 mandatory negative oracle invariants, portable contracts; card 117: provider-neutral Bun lifecycle surface with canonical byte-exact digest vectors, operator trust & lifecycle schemas, atomic CAS lifecycle state, immutable receipts, identity-bound routing, transactional acquire/update/rollback, offline local routing, revocable trust, generic manifest-field routing, declared self-check execution, 8 review-oracle rows plus restrictions/provenance/concurrency falsified)");

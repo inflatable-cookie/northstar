@@ -74,13 +74,14 @@ language-package-lifecycle.ts fallback <request.json> <result.json> <overlap-win
 ```
 
 The decision accepts only a correlated `stopped` acquisition for explicit
-workflow or activation intent. It fails closed when the request/result
-`request_id` values differ, the intent is detection, the result is not
-`stopped`, operations or identities disagree, required identity is absent, the
-request version is outside the exact open window, the language has no frozen
-overlap payload, or the embedded fallback window is closed. Each open overlap
-entry binds one language to an exact package ID and version. It does not change
-the host status or claim the host executed embedded policy.
+workflow or activation intent. It fails closed when the overlap registry is
+schema-invalid (extra properties or a missing required field), the
+request/result `request_id` values differ, the intent is detection, the result
+is not `stopped`, operations or identities disagree, required identity is
+absent, the request version is outside the exact open window, the language has
+no frozen overlap payload, or the embedded fallback window is closed. Each open
+overlap entry binds one language to an exact package ID and version. It does
+not change the host status or claim the host executed embedded policy.
 
 Never silently prefer, update, refresh, or hide fallback use. The embedded
 payload receives no fixes or new rules during the window; a fallback defect

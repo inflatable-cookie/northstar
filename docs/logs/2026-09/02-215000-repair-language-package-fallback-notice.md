@@ -53,13 +53,17 @@ fallback evidence was the card-118 oracle miss.
   still not fallback evidence; in-process decision and CLI both emit
   `@northstar/typescript-quality@0.1.0`, the host reason, and `using the frozen
   embedded TypeScript payload during the bounded overlap window`.
-- Fail-closed mutations: missing version, wrong identity, mismatched
+- Fail-closed mutations: missing request version, wrong identity, mismatched
   `request_id`, detection intent, wrong version, non-stopped result, disagreeing
-  operations, closed overlap window, language with no frozen payload.
+  operations, closed overlap window, language with no frozen payload, extra
+  overlap property, missing overlap-window version.
 - Overlap schema: live document validates through the frozen evaluator;
-  extra-property and missing-version negatives fail closed.
+  extra-property and missing-version negatives fail that evaluator and the
+  operational `fallback` CLI.
 - Checker independently drives the same CLI against those fixtures and pins
-  the overlap window to the accepted TypeScript identity and version.
+  the overlap window to the accepted TypeScript identity and version. Its
+  success line derives the live Draft 2020-12 schema count under
+  `references/packages` instead of a stale "3 schemas" claim.
 - `oracle-14` still proves the host acquisition stop, now with `@version` and
   an assertion that the host notice does not contain `frozen embedded`. Both
   hosts echo `request_id`.
@@ -67,9 +71,10 @@ fallback evidence was the card-118 oracle miss.
 ## Validation
 
 `effigy check:language-packages` passed, including oracle-15 and the
-independent fallback CLI board (nine fail-closed mutations plus overlap-schema
-negatives). Isolated skill-install parity passed (194 files). `effigy qa:docs`,
-`effigy qa`, and `git diff --check` passed.
+independent fallback CLI board (eleven fail-closed mutations, including
+extra-property and missing-version overlap registries through the CLI). Isolated
+skill-install parity passed (194 files). `effigy qa:docs`, `effigy qa`, and
+`git diff --check` passed.
 
 ## Limits
 

@@ -270,8 +270,9 @@ Card 117 extends the same checker with the generic installed-package runtime:
     version, wrong identity, mismatched `request_id`, detection intent, a
     request version outside the exact window, non-stopped results, disagreeing
     operations, a closed overlap window, and a language with no frozen payload.
-    The overlap registry schema rejects extra properties and a missing window
-    version. The package's own reviewed
+    The operational `fallback` CLI itself rejects a schema-invalid overlap
+    registry (extra properties and a missing window version), not only the
+    checker evaluator. The package's own reviewed
     `prove-installed-invocation.sh` (pinned in the package) supplies the
     non-vacuous installed setup/record proof through the public
     `effigy skill run --path <installed_path>` surface against a decoy

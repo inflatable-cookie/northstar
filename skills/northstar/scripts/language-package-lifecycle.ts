@@ -214,6 +214,15 @@ function asRecord(value: unknown, context: string): Record<string, unknown> {
   return value;
 }
 
+function requireClosedObject(doc: Record<string, unknown>, required: string[], context: string): void {
+  for (const key of required) {
+    check(Object.keys(doc).includes(key), context + " missing required field: " + key);
+  }
+  for (const key of Object.keys(doc)) {
+    check(required.includes(key), context + " contains forbidden additional property: " + key);
+  }
+}
+
 function notice(message: string): void {
   console.log("[northstar:language-packages] notice: " + message);
 }
@@ -1327,6 +1336,7 @@ function executeHostRequest(request: HostRequest, registryPath: string | null, c
 
 function parseOverlapRegistry(raw: unknown, context: string): OverlapWindow[] {
   const doc = asRecord(raw, context);
+  requireClosedObject(doc, ["schema_version", "windows"], context);
   check(asString(doc.schema_version, context + ".schema_version") === "1.0.0", context + " has unsupported schema_version");
   check(Array.isArray(doc.windows), context + ".windows must be an array");
   const seen: string[] = [];
@@ -1335,6 +1345,7 @@ function parseOverlapRegistry(raw: unknown, context: string): OverlapWindow[] {
   for (const item of doc.windows as unknown[]) {
     const wctx = context + ".windows[" + String(i) + "]";
     const w = asRecord(item, wctx);
+    requireClosedObject(w, ["language", "package_id", "version", "payload_label", "window"], wctx);
     const language = asString(w.language, wctx + ".language");
     check(language.length > 0, wctx + ".language is empty");
     check(!seen.includes(language), context + " contains duplicate language: " + language);
@@ -3358,8 +3369,17 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
       JSON.parse(fs.readFileSync(path.join(fixtureDir, "no-payload-request.json"), "utf8")),
       JSON.parse(fs.readFileSync(path.join(fixtureDir, "jetstream-shaped-result.json"), "utf8")),
       overlap, "language has no frozen overlap payload");
+    const overlapNegDir = path.join(skillRoot, "assets/fixtures/language-packages/negative/overlap");
+    expectFail("overlap-extra-property",
+      jetstreamRequest, jetstreamResult,
+      JSON.parse(fs.readFileSync(path.join(overlapNegDir, "extra-property.json"), "utf8")),
+      "contains forbidden additional property");
+    expectFail("overlap-missing-version",
+      jetstreamRequest, jetstreamResult,
+      JSON.parse(fs.readFileSync(path.join(overlapNegDir, "missing-version.json"), "utf8")),
+      "missing required field");
 
-    console.log("oracle-15 frozen-fallback-notice: PASS (Jetstream-shaped host stop is not fallback evidence; exact overlap notice; missing version, wrong identity, mismatched request_id, detection, wrong version, non-stopped, operations disagree, closed window, and no frozen payload fail closed)");
+    console.log("oracle-15 frozen-fallback-notice: PASS (Jetstream-shaped host stop is not fallback evidence; exact overlap notice; missing version, wrong identity, mismatched request_id, detection, wrong version, non-stopped, operations disagree, closed window, no frozen payload, extra overlap property, and missing overlap version fail closed)");
   }
 
   console.log("card-117 oracle: PASS (8 review rows + transitions + restrictions + provenance + concurrency + self-check + identity-binding/store negatives)");

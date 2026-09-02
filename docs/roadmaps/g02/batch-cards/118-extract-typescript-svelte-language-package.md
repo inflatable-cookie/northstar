@@ -310,6 +310,12 @@ outside that window fail closed. Non-vacuous fixtures cover mismatched
 window version. Jetstream remains paused on PR 4 until this Northstar PR
 merges. Cards 119-120 stay closed.
 
+Exact-head follow-up repair (2026-09-02, PR 24 at `0679765`): the operational
+`fallback` CLI now fail-closes extra overlap properties and a missing window
+version; both negatives run through the CLI itself. Checker schema-count
+wording derives the live `references/packages` schema inventory. Jetstream
+remains paused. Cards 119-120 stay closed.
+
 ## Next Task
 
 Review and merge the Northstar fallback-notice PR. Resume the existing

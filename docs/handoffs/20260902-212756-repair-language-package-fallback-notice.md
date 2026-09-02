@@ -43,15 +43,18 @@ fallback pass the canary.
 - Implementation: `decideFrozenFallback` plus `fallback` CLI on the generic
   lifecycle surface. Every host request/result carries a caller-generated
   `request_id`; both reference hosts echo it. Overlap windows are
-  schema-validated and pin TypeScript `@northstar/typescript-quality` `0.1.0`
-  as `open`. Detection, mismatched IDs, and a version outside that exact window
-  fail closed. Host catch prose includes `@version` without claiming overlap
-  fallback.
+  schema-validated at the operational parser: extra properties and a missing
+  window version fail the CLI. The live registry pins TypeScript
+  `@northstar/typescript-quality` `0.1.0` as `open`. Detection, mismatched IDs,
+  and a version outside that exact window fail closed. Host catch prose
+  includes `@version` without claiming overlap fallback.
 - Pre-fix counterexample recorded: stopped
   `@northstar/typescript-quality` `0.1.0` with
   `manual or local-path installation route required`, no `@0.1.0`, no frozen
   clause. `oracle-15` and the checker CLI convert that pair into the exact
   notice and fail closed on the nine mutations plus overlap-schema negatives.
+  The operational CLI now also rejects extra-property and missing-version
+  overlap registries.
 - Evidence: `docs/logs/2026-09/02-215000-repair-language-package-fallback-notice.md`.
 - Jetstream PR 4 remains paused on its existing branch.
 - Merge authority: absent. The worker pushes the same PR and stops.
