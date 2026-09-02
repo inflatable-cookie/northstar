@@ -85,9 +85,9 @@ workers, delegates, and fresh orchestrators; PR 20 merged at `08ad810` after
 exact-head review. Spec 034's modular-language-package design is promoted and
 compiled into `g02.048`. Card 116 merged through PR 21 at `eaeac88`. Card 117
 merged its generic lifecycle proof through PR 22 at `75db6f5`. Card 118's
-public source repository is bootstrapped and its package-source worker is in
-flight for `@northstar/typescript-quality` `0.1.0`. Registry promotion and
-Jetstream proof remain serial; cards 119-120 remain dependency-ordered behind
+public source repository merged package PR 1 as `09ef174` for
+`@northstar/typescript-quality` `0.1.0`. Registry/routing is the ready edge;
+Jetstream proof remains serial, with cards 119-120 dependency-ordered behind
 the canary.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native

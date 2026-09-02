@@ -1,6 +1,6 @@
 # 118 - Extract TypeScript/Svelte Language Package
 
-Status: in progress; package-source worker in flight
+Status: in progress; registry/routing worker ready
 Owner: repo maintainers
 Updated: 2026-09-02
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -106,20 +106,20 @@ external mutations; workers must stop at reviewable heads.
 
 ## Acceptance Criteria
 
-- [ ] package source contains the exact 20-file shape and the installed payload
+- [x] package source contains the exact 20-file shape and the installed payload
   contains only the named TypeScript/Svelte package;
-- [ ] revision-S behavior, nine normative rules, evaluation-only boundary,
+- [x] revision-S behavior, nine normative rules, evaluation-only boundary,
   overlays, scope, and retained limitations remain exact;
 - [ ] valid consumer files remain byte-identical and existing evidence remains
   readable;
-- [ ] package tasks resolve their installed source separately from the consumer
+- [x] package tasks resolve their installed source separately from the consumer
   target;
-- [ ] the declared direct self-check executes from the installed package with
+- [x] the declared direct self-check executes from the installed package with
   its runtime capabilities enforced;
 - [ ] package source/install parity and immutable registry promotion pass;
 - [ ] installed, offline, rollback, acquisition-failure fallback, and fresh
   Jetstream routes pass;
-- [ ] all new TypeScript package development lands externally during overlap;
+- [x] all new TypeScript package development lands externally during overlap;
 - [ ] root fallback is frozen and visibly identified, not silently preferred;
 - [ ] full Northstar, package, and consumer QA pass.
 
@@ -177,12 +177,22 @@ external mutations; workers must stop at reviewable heads.
 Readiness refreshed on 2026-09-02 after PR 22 merged. The operator selected the
 public shared-repository topology and Jetstream canary. The public repository
 was bootstrapped at source base `9e307f5`; its committed worker handoff is at
-`ad5db1b`. Paseo workspace `wks_de87f5ee3ff4e5ab` and originating worker
-`daaee385-9fd9-46e4-b94a-4753927de19d` own the package-source lane. No registry
-pin or consumer branch exists.
+`ad5db1b`. Package PR 1 was accepted at exact head
+`2982d0e40f1ded9d96975b1dd53d6feec5d2a26d` and squash-merged as
+`09ef1743dd8fc18bae3bf04fae791f1d7d4e5daf`. The accepted package identity is
+tree digest
+`sha256:0fcd5c58296f168895b66f2472621d49761f7786ea2ad1ebeefb801040967d6b`
+and manifest digest
+`sha256:ed95883c428ef43f0f02d38d60bf8d50e6e29313f5751c1b2a5744157a5b5362`.
+The source-list digest remains
+`7e3ff26cd9319743fee5b0433d79b0cea6515347aa5780f68f2fcbb6eb664d26`.
+The source worker workspace was archived and its Paseo-owned worktree removed.
+No registry pin or consumer branch exists.
 
 ## Next Task
 
-Await the package-source PR, review its exact head, and return any in-bounds
-findings to the originating worker. Do not start Northstar registry or
-Jetstream work until their named predecessors are accepted and merged.
+Dispatch the Northstar registry/routing worker from
+`docs/handoffs/20260902-191918-pin-typescript-package-canary.md`. Pin only the
+accepted immutable source, implement installed-package routing plus visible
+frozen fallback, and stop at a reviewable Northstar PR. Jetstream remains
+serial behind the accepted registry/routing head.

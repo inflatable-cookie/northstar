@@ -109,10 +109,9 @@ rollover signal.
 ## Next Task
 
 `g02.048/117` merged through PR 22 at `75db6f5` after proving the generic
-lifecycle. Card 118's public repository is bootstrapped and its package-source
-worker is in flight for `@northstar/typescript-quality` `0.1.0`. Await and
-review its PR; registry promotion, Jetstream proof, and cards 119-120 remain
-serial behind the canary.
+lifecycle. Card 118's public repository merged package PR 1 as `09ef174` for
+`@northstar/typescript-quality` `0.1.0`. Registry/routing is now ready;
+Jetstream proof and cards 119-120 remain serial behind the accepted canary.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and
