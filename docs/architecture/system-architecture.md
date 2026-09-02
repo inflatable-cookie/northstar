@@ -82,10 +82,11 @@ The portable runtime boundary is the versioned `language-package-host.v1`
 request/result protocol, not a bundled language-runtime executable. A host
 adapter supplies its native catalogue, byte/file metadata, atomic state,
 transport, and process-execution capabilities behind that protocol. The core
-operations are resolve, acquire-and-activate, and rollback; requests bind
-intent, package identity, language, workflow, core version, consumer scope, and
-the operator-supplied state root, and results carry a bounded status, exact
-identity, resolved path or receipt where applicable, and visible notice.
+operations are resolve, acquire-and-activate, and rollback; requests bind a
+caller-generated request ID, intent, package identity, language, workflow, core
+version, consumer scope, and the operator-supplied state root. Results echo the
+request ID and carry a bounded status, exact identity, resolved path or receipt
+where applicable, and visible notice; mixed request/result pairs fail closed.
 Effigy, Bun, Node, Python, POSIX shell, and provider APIs may implement an
 adapter or reference harness, but none is a Northstar consumer prerequisite.
 When no conforming host adapter is available, only the requested package

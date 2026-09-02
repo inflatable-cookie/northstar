@@ -62,11 +62,13 @@ Core exposes package lifecycle behavior through the provider-neutral
 Node, Python, POSIX shell, Effigy, or a provider runtime. A conforming host maps
 its native catalogue, filesystem identity, atomic state, acquisition, and
 process capabilities onto resolve, acquire-and-activate, and rollback
-operations. Requests carry explicit intent, package ID/version, language,
-workflow, core version, optional consumer scope, and the host-supplied
-operator-state root. Results carry `routed`, `activated`, `rolled_back`, or
-`stopped`, the exact selected identity and resolved path/receipt when relevant,
-and the visible notice. Missing host capability stops only the requested
+operations. Requests carry a caller-generated request ID, explicit intent,
+package ID/version, language, workflow, core version, optional consumer scope,
+and the host-supplied operator-state root. Every result echoes the request ID;
+results carry `routed`, `activated`, `rolled_back`, or `stopped`, the exact
+selected identity and resolved path/receipt when relevant, and the visible
+notice. A consumer must reject a response whose request ID does not match the
+request it is resolving. Missing host capability stops only the requested
 package workflow and never authorizes a fallback runtime or acquisition.
 
 Language, framework, dependency, manifest, or source-file detection alone does

@@ -163,10 +163,12 @@ plainly when the host cannot provide it.
 `language-package-host.v1` is the operational boundary. It is a versioned JSON
 request/result protocol implemented by the current harness or another host
 adapter, not a requirement for a particular executable runtime. V1 operations
-are `resolve`, `acquire_activate`, and `rollback`. Every request names the
-operation, explicit intent, package ID and version, language, workflow, core
-version, optional consumer scope, and operator-supplied state root. A host may
-add adapter-private transport input outside the reusable message, but it cannot
+are `resolve`, `acquire_activate`, and `rollback`. Every request names a
+caller-generated request ID, operation, explicit intent, package ID and
+version, language, workflow, core version, optional consumer scope, and
+operator-supplied state root. Every result echoes that request ID so persisted
+or asynchronous request/result pairs fail closed when mixed. A host may add
+adapter-private transport input outside the reusable message, but it cannot
 turn detection into intent or consumer data into trust.
 
 Results use `routed`, `activated`, `rolled_back`, or `stopped`; successful
@@ -335,6 +337,13 @@ the failed package identity and acquisition reason. It must not call that
 fallback the package, update it independently, or hide that the external route
 failed. An unsafe defect in the fallback pauses cutover planning rather than
 creating an open-ended dual-maintenance promise.
+
+The overlap-window registry is a schema-validated core machine contract. Each
+open window binds one language to an exact package ID and version plus the
+human-facing frozen-payload label. The fallback decision accepts only a
+correlated `stopped` acquisition response for explicit workflow or activation
+intent. Detection, a mismatched request ID, another package/version, a closed
+window, or an unregistered language fails before the fallback notice.
 
 Existing consumer activation markers, profile and deviation paths, rule IDs,
 workflow intent, and evidence formats remain valid across extraction. Package
