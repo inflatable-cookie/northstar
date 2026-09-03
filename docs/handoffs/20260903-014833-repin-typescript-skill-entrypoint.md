@@ -1,6 +1,6 @@
 ---
 title: Repin TypeScript package skill entrypoint worker handoff
-status: ready
+status: awaiting-review
 handoff_mode: worker
 branch: worker/repin-typescript-skill-entrypoint
 worktree_slug: repin-typescript-skill-entrypoint
@@ -84,6 +84,13 @@ package-local, and return a review-only PR. Stop before card 119 readiness.
 
 ## Completion Protocol
 
-Commit and push one reviewable branch, open a PR to `main`, and report the PR
-URL plus exact tested head. Stop for orchestrator exact-head review. Do not
-merge or start card 119.
+Northstar half of card `g02.048/121` is implemented on
+`worker/repin-typescript-skill-entrypoint`. Registry version `1.3.0` pins
+merge `c9ef2a2` with independently reproduced tree
+`sha256:259cccdbacd7e2e293389efaf72cab005d0c275bd7cb600c99f30bfbfe071843`
+and unchanged manifest
+`sha256:e5e32f2baeda2e901b8c327436adf0bfd5955a9de080887660684ad4583185ca`.
+The superseded tree is rejected before acceptance. Installed adapter, mode,
+and command remain package-local. Commit, push, and open a review-only PR
+against `main`. Stop for orchestrator exact-head review. Do not merge or
+start card 119.
