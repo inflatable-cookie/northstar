@@ -3,7 +3,7 @@
 Date: 2026-09-03
 Roadmap: `g02.048`
 Card: `g02.048/120`
-Status: ready; dispatching
+Status: ready; handoff published
 
 ## Result
 
@@ -23,5 +23,6 @@ retain aliases and silent fallbacks.
 
 ## Next Task
 
-Publish the card-120 worker handoff, launch one day-to-day child worker in a
-dedicated Paseo worktree workspace, then stop for its reviewable PR.
+Launch the card-120 day-to-day child worker from
+`docs/handoffs/20260903-144604-remove-embedded-language-quality-payloads.md` in
+a dedicated Paseo worktree workspace, then stop for its reviewable PR.

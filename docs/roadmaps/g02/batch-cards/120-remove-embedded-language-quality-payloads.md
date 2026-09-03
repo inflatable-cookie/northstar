@@ -1,6 +1,6 @@
 # 120 - Remove Embedded Language Quality Payloads
 
-Status: ready; dispatching
+Status: ready; handoff published
 Owner: repo maintainers
 Updated: 2026-09-03
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
