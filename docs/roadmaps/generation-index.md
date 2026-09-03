@@ -111,9 +111,9 @@ merged as `7ebaa9c`; installed-skill parity is current. Card 120 then removed
 the embedded payloads and fallback, closing `g02.048`'s Batch D: core is
 generic-only (111-file payload) and both installed routes are proven; the PR
 awaits exact-head review and merge, and the installed-skill refresh follows
-merge. Spec 035 / `g02.050` / card 124 compiles a chatterbox intake channel
-and stays serial behind the card-120 skill/router/command ownership that this
-removal transfers.
+merge as `aa9a005`; the installed skill was refreshed to the 111-file generic
+core. Spec 035 / `g02.050` / card 124 now owns the released
+skill/router/command surfaces and its worker handoff is published.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed

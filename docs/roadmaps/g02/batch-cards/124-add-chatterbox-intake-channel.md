@@ -1,6 +1,6 @@
 # 124 - Add Chatterbox Intake Channel
 
-Status: compiled; not ready — blocked on card 120
+Status: ready; handoff published
 Owner: repo maintainers
 Created: 2026-09-03
 Updated: 2026-09-03
@@ -44,9 +44,9 @@ fan-out, or promoting any triage note.
 
 - [x] operator settled the name, shared checkout, and idle-only ping;
 - [x] spec 035 records authority, git protocol, spawn, and ping;
-- [ ] card 120 has merged and no longer owns the skill/router/command
+- [x] card 120 has merged and no longer owns the skill/router/command
       surface or shared closeout front doors;
-- [ ] no other worker owns orchestrator mode, router, command adapters, or
+- [x] no other worker owns orchestrator mode, router, command adapters, or
       this card's closeout surfaces.
 
 ## Lane Runway Context
@@ -95,6 +95,7 @@ review.
 
 ## Next Task
 
-Do not launch this card while 120 is the ready implementation lane. After
-120 merges and the installed skill is refreshed, mark this card ready,
-publish a worker handoff, and dispatch.
+Launch one worker from
+`docs/handoffs/20260903-181459-add-chatterbox-intake-channel.md`. Stop for
+orchestrator exact-head review of its PR; do not begin a queue plugin or live
+operator-use follow-up from this card.

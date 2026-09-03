@@ -5,7 +5,7 @@ handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
 handoff: single-file-path-only
-status: implementation complete; PR 30 opened for exact-head review
+status: complete; PR 30 merged as aa9a005
 owner: repo maintainers
 created: 2026-09-03
 updated: 2026-09-03

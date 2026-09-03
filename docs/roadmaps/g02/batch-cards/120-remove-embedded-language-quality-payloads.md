@@ -1,6 +1,6 @@
 # 120 - Remove Embedded Language Quality Payloads
 
-Status: complete; PR opened for exact-head review
+Status: complete; merged through PR 30 as `aa9a005`
 Owner: repo maintainers
 Updated: 2026-09-03
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -136,12 +136,11 @@ integration surfaces were rewired to the generic installed-package route; the
 two-package/core-only proof. Full evidence, including the negative inventory
 scan and the serialization caveat on the frozen hashes, is in
 `docs/logs/2026-09/03-154324-remove-embedded-language-quality-payloads.md`.
-Review and merge are the orchestrator's; the installed-skill refresh follows
-merge.
+Exact-head review accepted `4f54da0`; PR 30 squash-merged as `aa9a005`. The
+installed skill was refreshed from the tracked merge tree and now contains the
+111-file generic core.
 
 ## Next Task
 
-Orchestrator: exact-head review of the card-120 PR against `main`, merge, and
-refresh the installed skill. Do not start a new language or Sentrux
-integration from this lane; the next planning checkpoint reassesses spec 034
-retention and the open Sentrux triage note.
+Card 120's lane is closed. Card 124 is the next ready implementation lane under
+`g02.050`; new-language and Sentrux work remain separate operator checkpoints.

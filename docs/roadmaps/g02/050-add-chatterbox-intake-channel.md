@@ -1,6 +1,6 @@
 # 050 - Add Chatterbox Intake Channel
 
-Status: compiled; not ready — blocked on card 120 skill/router ownership
+Status: ready; card 124 handoff published
 Owner: repo maintainers
 Created: 2026-09-03
 Depends on: `g02.049`, spec 026, spec 030, spec 035
@@ -37,7 +37,7 @@ and write triage notes without interrupting the main runway.
 
 ## Execution Plan
 
-- [ ] **Wait for card 120 merge.** Chatterbox implementation shares the
+- [x] **Wait for card 120 merge.** Chatterbox implementation shares the
       installable skill, router, command adapters, and several closeout
       front doors with the root-reduction lane. Do not launch this card
       while 120 is the ready/in-flight owner of those surfaces.
@@ -69,5 +69,6 @@ acceptance during review.
 
 ## Next Task
 
-Keep card 120 as the ready implementation dispatch. After that lane merges
-and the installed skill is refreshed, mark card 124 ready and launch it.
+Launch card 124 from
+`docs/handoffs/20260903-181459-add-chatterbox-intake-channel.md`, then stop for
+its reviewable PR.

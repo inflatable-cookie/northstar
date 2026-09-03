@@ -3,7 +3,7 @@
 Date: 2026-09-03
 Roadmap: `g02.048`
 Card: `g02.048/120`
-Status: complete; reviewable PR pending orchestrator review
+Status: complete; merged through PR 30 as `aa9a005`
 
 ## Result
 
@@ -185,11 +185,10 @@ head after fixing the blank line at EOF this log's first head introduced in
 - Spec 034 stays retained as planning history with the extraction lane closed;
   the Sentrux triage note and any new-language cohort remain operator
   decisions, out of this lane's scope.
-- The live installed skill at `~/.agents/skills/northstar` was not synced from
-  this lane; the orchestrator owns the installed-skill refresh after merge.
+- The orchestrator refreshed the live installed skill from the tracked merge
+  tree after PR 30 merged; source/install payload is 111 files.
 
 ## Next Task
 
-Orchestrator: exact-head review of the PR against `main`, then merge and
-refresh the installed skill. No new language or Sentrux integration starts
-from this lane.
+Card 120 is closed. Card 124 is ready under `g02.050`; no new language or
+Sentrux integration starts from this lane.

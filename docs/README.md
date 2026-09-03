@@ -124,11 +124,11 @@ Northstar system:
   package discovery, registry, trust, lifecycle, and routing; the payload is
   111 files; `check:language-package-routes` proves core-only operation,
   scoped missing-package containment, and both installed routes. Milestone
-  `g02.048` is complete pending the PR's exact-head review and merge; the
-  installed-skill refresh follows merge.
+  `g02.048` completed through PR 30 as `aa9a005`; the installed skill now
+  matches the 111-file generic core.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup
-- chatterbox intake is compiled as spec 035 / `g02.050` / card 124 and waits
-  on card 120. Independent operator-facing threads will write unique
+- chatterbox intake is ready as spec 035 / `g02.050` / card 124, with its
+  worker handoff published. Independent operator-facing threads will write unique
   `docs/triage/` notes and idle-ping the orchestrator; they must not
   implement, promote, or dispatch
