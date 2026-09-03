@@ -162,12 +162,14 @@ source-payload tamper rejection. Evidence is in
 `docs/logs/2026-09/03-033950-pin-rust-package-candidate.md`.
 
 PR 27 exact-head review required two repairs, both landed: both Rust router
-sections now route through the generic installed-package route with the exact
-official identity, visible bounded fallback, per-section checker
-discrimination, and four fail-closed mutations; and the real-package replay
-is committed as the deterministic `check:rust-package-pin` oracle wired into
-authoritative `qa` (installed skill stays independent of the package-source
-sibling).
+sections now route through the generic installed-package route by package
+ID, version, and workflow with the visible bounded fallback (the exact
+commit/tree/manifest pin stays owned by the official registry); and the
+real-package replay is committed as the deterministic `check:rust-package-pin`
+oracle wired into authoritative `qa` (installed skill stays independent of
+the package-source sibling). A second review round removed the router's
+registry-owned digest duplication and the prose-coupled checker assertions
+as prohibited prose-coupled validation.
 
 ## Next Task
 

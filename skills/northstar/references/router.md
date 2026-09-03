@@ -31,8 +31,7 @@ authoring and never activates from ordinary coding alone.
 
 Route through the installed package before using embedded content. The
 official registry pins `@northstar/rust-quality` as the official Rust choice
-(`explicit_audit_repair`, `rust`, tree
-`sha256:e5cf9c5da4a30c0f5164f2ea0c5e9d87d544c0c32f09f3c139a386c56154dba0`).
+(`explicit_audit_repair`, `rust`).
 Run the generic installed-package route
 ([`packages/installed-package-route.md`](./packages/installed-package-route.md))
 for that identity: a `routed` result executes the package's declared audit
@@ -51,8 +50,7 @@ production-valid `strict`.
 
 Route through the installed package before using embedded content. The
 official registry pins `@northstar/rust-quality` as the official Rust choice
-(`everyday_authoring`, `rust`, tree
-`sha256:e5cf9c5da4a30c0f5164f2ea0c5e9d87d544c0c32f09f3c139a386c56154dba0`).
+(`everyday_authoring`, `rust`).
 Run the generic installed-package route
 ([`packages/installed-package-route.md`](./packages/installed-package-route.md))
 for that identity: a `routed` result follows the package's declared authoring

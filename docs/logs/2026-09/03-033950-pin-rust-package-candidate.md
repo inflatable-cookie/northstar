@@ -44,16 +44,16 @@ unmodified.
 ## Router installed-package wiring
 
 `references/router.md` now routes both Rust sections through the generic
-installed-package route (`packages/installed-package-route.md`) with the exact
-official identity and pinned tree digest: a `routed` result executes the
+installed-package route (`packages/installed-package-route.md`) by
+`@northstar/rust-quality@0.1.0` and workflow: a `routed` result executes the
 package's declared entrypoint from `installed_path`, and embedded mode content
 runs only after the route doc's visible fallback notice. Explicit-audit
 precedence over everyday authoring is preserved, and the everyday section
-still forbids audit tranches. The checker discriminates per section — exact
-identity, route reference, fallback clause, workflow/entrypoint separation,
-and embedded-after-fallback ordering — and fails closed on four mutated
-router copies (route deleted, fallback bypassed, identity drifted, workflow
-crossed).
+still forbids audit tranches. The prose names only the package ID, version,
+and workflow — the exact commit/tree/manifest identity stays owned by
+`official-registry.json` and is read from it by the route doc, matching the
+accepted TypeScript route. Routing correctness is human-review
+responsibility; no prose parsing was added to the checker.
 
 ## Real-package lifecycle transcript (committed as `check:rust-package-pin`)
 
@@ -126,9 +126,8 @@ CHANGES REQUIRED on `847e6c1`, two findings, both repaired on this branch:
 
 - **`execution-miss` — Rust pin unreachable from the Northstar routes:**
   repaired by wiring both Rust router sections through the generic
-  installed-package route with the exact official identity and the visible
-  bounded fallback (see "Router installed-package wiring"), plus per-section
-  positive and negative checker discrimination.
+  installed-package route with the visible bounded fallback (see "Router
+  installed-package wiring").
 - **`oracle-gap` — real-package proof existed only as prose:** repaired by
   committing the replay as the deterministic `check:rust-package-pin`
   validation oracle wired into authoritative `qa`, covering the exact
@@ -136,6 +135,21 @@ CHANGES REQUIRED on `847e6c1`, two findings, both repaired on this branch:
   routing, drift, refusal, retained inventory, and the package's
   installed-route proof. The oracle lives under `scripts/`, so the isolated
   installed skill stays independent of the package-source sibling.
+
+Second review round (on `99e4feb`) found two integration findings in the
+router repair, both repaired:
+
+- **`integration-drift` — router duplicated registry-owned identity:** the
+  tree digest is removed from the routing prose; the sections name
+  `@northstar/rust-quality@0.1.0` and the workflow, and the exact
+  commit/tree/manifest pin stays owned by `official-registry.json` per
+  contract 004, spec 034, and the route doc, matching the TypeScript route.
+- **`validation-gap` — prose-coupled router parser/mutation assertions:**
+  the Markdown-parsing checker block and its manufactured mutations are
+  removed as prohibited prose-coupled validation; routing currentness stays
+  human-review responsibility. Kept: link and required-path validation owned
+  by docs QA, exact registry assertions, the operational Rust fallback CLI
+  oracle, and the real-package lifecycle board.
 
 ## Limits
 
