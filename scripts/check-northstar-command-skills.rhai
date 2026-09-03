@@ -180,6 +180,26 @@ for file in fs::list_recursive(root) {
 require(!all_skill_text.contains("northstar-reframe"), "retired Northstar-prefixed reframe name remains in installable skill tree");
 require(!all_skill_text.contains("northstar wayfinder"), "retired natural-language Wayfinder alias remains in installable skill tree");
 require(!all_skill_text.contains("northstar-wayfinder"), "retired slash Wayfinder alias remains in installable skill tree");
+// Card 120: the embedded language modes are gone. No skill surface may route
+// to a deleted mode file, and the public entry surfaces must select language
+// work only through the generic installed-package route.
+for deleted_mode in [
+    "modes/rust-quality-audit.md",
+    "modes/rust-quality-authoring.md",
+    "modes/typescript-quality-audit.md",
+    "Rust explicit audit",
+    "TypeScript/Svelte explicit audit",
+    "Rust everyday authoring",
+] {
+    require(!all_skill_text.contains(deleted_mode),
+        "deleted embedded language mode still routed in the skill tree: " + deleted_mode);
+}
+let main_instructions = fs::read_file(path::join(root, "SKILL.md")) +
+    fs::read_file(path::join(root, "agents/openai.yaml"));
+require(main_instructions.contains("installed-package-route.md"),
+    "skill entry surfaces do not name the generic installed-package route");
+require(fs::is_file(path::join(root, "references/packages/installed-package-route.md")),
+    "installed-package route file missing from the payload");
 
 let router_text = fs::read_file(path::join(root, "references/router.md"));
 let handoff_contract_text = fs::read_file(path::join(root, "references/handoff-contract.md"));

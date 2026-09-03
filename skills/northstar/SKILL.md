@@ -11,12 +11,14 @@ mode up front.
 ## First step (required)
 
 Open [`references/router.md`](./references/router.md), classify intent, then
-open **one** [`references/modes/`](./references/modes/) file and follow it.
+follow exactly one route: open **one** [`references/modes/`](./references/modes/)
+file and follow it, or — for a supported language quality workflow — follow the
+router's generic language section into the installed-package route at
+`references/packages/installed-package-route.md`.
 
 | Mode | When |
 | --- | --- |
-| TypeScript/Svelte explicit audit | User explicitly requests a TypeScript or Svelte quality audit, no-slop pass, or audit-and-fix action |
-| Rust explicit audit | User explicitly requests a Rust quality audit, no-slop pass, or audit-and-fix action |
+| Language quality workflow | User explicitly requests a supported language quality audit, no-slop pass, or audit-and-fix action; or requests ordinary supported-language work and the repository already carries a registered activation |
 | Handoff | User explicitly asks for a continuation brief / fresh thread |
 | Project refresh | User asks for `northstar refresh` or `northstar project refresh` to bring an existing project up to date |
 | Architecture refocus | User asks for `northstar architecture refocus` or a bounded codebase architecture improvement review |
@@ -24,7 +26,6 @@ open **one** [`references/modes/`](./references/modes/) file and follow it.
 | Planning readiness review | User asks for `northstar planning readiness review` on an existing project |
 | Atlas | User asks for `northstar atlas` or discovery-first long-horizon direction |
 | Agent instruction review | User asks for a `northstar AGENTS file review`, or to review/optimize `AGENTS.md`/`CLAUDE.md` |
-| Rust everyday authoring | Northstar is requested for ordinary Rust work, or an applicable repository instruction already activates Rust quality |
 | Pre-execution discovery | Readiness mapping, intent rounds, project language, decision prototypes, questionnaires, or reframe |
 | PR review | User asks a thread to review an existing PR |
 | Orchestrator | User wants question-led planning plus a separate worker/PR loop, or a committed orchestrator-continuation handoff |
@@ -71,13 +72,13 @@ preflight. The source yields the transferred lane after pushed dispatch.
 
 - **Planning:** coherent architecture/contracts/roadmaps; no invented system
   behavior; ready cards only when rubric satisfied.
-- **TypeScript/Svelte explicit audit:** package- and overlay-resolved scope,
-  deterministic finding-first records, authority-bounded repair, dirty-state
-  preservation, and repository-owned tool evidence. Ordinary coding never
-  activates it.
-- **Rust explicit audit:** resolved worktree or repository scope, deterministic
-  finding-first records, authority-bounded repair waves, preservation proof,
-  and repository-native validation. It never activates from ordinary coding.
+- **Language quality workflow:** selected generically from explicit intent or
+  an exact registered activation marker, routed through an installed package's
+  declared entrypoint: package- and overlay-resolved scope, deterministic
+  finding-first records, authority-bounded repair, dirty-state preservation,
+  and repository-owned tool evidence. With no compatible package installed,
+  only that workflow stops, naming the identity and the local install route.
+  Ordinary coding never activates an audit.
 - **Planning readiness review:** read-only verdict on whether an existing
   project's planning is incomplete, drifted, materially ambiguous, or coherent,
   with one routed next step.
@@ -99,9 +100,6 @@ preflight. The source yields the transferred lane after pushed dispatch.
 - **PR review:** independent review of an existing PR with the verdict and every
   required change posted on the provider review surface before chat summary.
 - **Research:** promoted decisions in architecture/contracts, not stranded memos.
-- **Rust everyday authoring:** agent-installed activation plus strict,
-  profile-resolved guidance for the current Rust task and changed tranche; no
-  wider audit authority.
 - **Recovery:** trustworthy planning surfaces and canonical refs restored.
 - **Normalize:** baseline or strict spine installed/maintained; Effigy-first QA.
 - **Orchestrator:** question-led planning, parallel-first dispatch of the whole

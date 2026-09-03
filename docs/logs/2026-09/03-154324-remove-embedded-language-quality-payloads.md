@@ -101,22 +101,79 @@ pins from the read-only sibling and falsifies the card oracle:
   TypeScript while Rust keeps routing, and both pass their own reviewed
   `prove-installed-invocation.sh`;
 - consumer authority: Northstar's own consumer profile and deviations are
-  byte-identical to the pre-change HEAD; Jetstream and Convergence activation
-  markers (`northstar:rust-quality`) are untouched in their repositories, and
-  the checker proves those exact markers still select their registry entries;
+  byte-identical to the pre-change HEAD. Real consumer activation: Jetstream's
+  TypeScript explicit-audit marker (`northstar:typescript-quality`) lives in
+  `editor-ui/AGENTS.md` and its Rust everyday/audit marker
+  (`northstar:rust-quality`) in the root `AGENTS.md`; Convergence's Rust
+  marker is in its root `AGENTS.md`. All are untouched, and the checker plus
+  the rerun harness prove those exact markers still select their registry
+  entries;
+- bounded real-consumer reruns (see below) pass with before/after policy and
+  evidence hashes;
 - no compatibility theatre: deleted mode/adapter/tool paths have zero
   references anywhere in the payload; the router's generic section states the
   no-fallback rule; the lifecycle oracle's host-stop assertion rejects any
   frozen-payload claim.
 
+### Bounded real-consumer reruns (review remediation)
+
+`scripts/tests/language-package-routes/validate_consumer_reruns.py` runs each
+accepted package's real workflow against a disposable copy of its real
+consumer, wired into `check:language-package-routes`:
+
+- **Jetstream (TypeScript/Svelte explicit audit).** The consumer's real
+  `northstar:typescript-quality` marker in `editor-ui/AGENTS.md` selects the
+  exact TypeScript pin through the shipped registry. The installed package's
+  setup re-applies at `editor-ui` scope without changing one policy or
+  activation byte, and the recorder runs the full explicit-audit flow (init,
+  assess, complete, finalize) on the real unit `editor-ui/src/color.ts`,
+  writing only `.effigy/typescript-quality/audits/card120-jetstream-rerun/`.
+  Record hashes: manifest
+  `sha256:b3ad36ae29e175ff4addc36e7bc769982a0c9b413097ab4d1eb3aa131c089369`
+  (harness run; manifest embeds run-local paths), result
+  `sha256:3c0ef2eb7d95a9dc8506616629c30d4945cbf69cf0495ce9ff8bbe7ba12d61e0`.
+- **Convergence (Rust ledger).** The consumer's real `northstar:rust-quality`
+  marker selects the exact Rust pin. The installed package's engine runs
+  inspect, plan, init (consumer profile and deviations), assess, collect
+  (`cargo test --offline -p converge-model`; 41 passed, 1 excluded by name so
+  the engine's warning scanner is not tripped by a test literally named
+  `...divergence_warning`; lints capped for the same reason), the audited
+  repair restores the anchor byte-for-byte, and complete + finalize close the
+  ledger with `"status": "clean"`. The ledger lives under the consumer's
+  runtime state at `.git/northstar/rust-quality/audits/card120-convergence-rerun/`;
+  its result/closeout digest is
+  `sha256:f347765aee43d40a5b94bb114f35a5fdad6e49325ecfd07035339d3bb595702d`.
+- Both consumer copies keep every policy file (`docs/contracts/*-quality-*`)
+  and every activation block (`AGENTS.md`, `editor-ui/AGENTS.md`)
+  byte-identical before and after; both original siblings are hashed before
+  and after and are untouched.
+
+### Installed-skill language routing (review remediation)
+
+`SKILL.md` now routes language work through one generic "Language quality
+workflow" table row and outcome into the router's generic language section,
+`agents/openai.yaml` names the installed-package route instead of the deleted
+audit modes and the removed skill-local setup task, and the router's required
+first step admits exactly two route shapes: one mode file, or the
+installed-package route. `check:command-skills` fails the build if any skill
+surface routes to a deleted mode again. On a fresh isolated install: the
+router carries the generic language section and route link, zero deleted-mode
+references, zero language mode files, and the installed registry selects both
+real consumer markers plus explicit TS/Rust intents (including the Svelte
+overlay) to their exact pins.
+
 ## Validation
 
 `effigy qa` passes end to end: `check:bundle`, `check:language-packages`
-(6 schemas), `check:language-package-routes`, `test:paseo-worktree`,
-`check:repo-contract-wiring`, `check:repo-contract`, `test:repo-contract`
-(11 fixtures), `check:readiness-map`, `check:command-skills` (7 adapters),
-`check:model-routing`, and `qa:docs`. `git diff --check` is clean on the
-branch.
+(6 schemas), `check:language-package-routes` (two-package routes oracle plus
+the consumer reruns), `test:paseo-worktree`, `check:repo-contract-wiring`,
+`check:repo-contract`, `test:repo-contract` (11 fixtures),
+`check:readiness-map`, `check:command-skills` (7 adapters),
+`check:model-routing`, and `qa:docs`. `check:posture-advisory` reports zero
+warnings. The exact base-to-head command
+`git diff --check origin/main...HEAD` is clean on the pushed remediation
+head after fixing the blank line at EOF this log's first head introduced in
+`references/packages/installed-package-route.md`.
 
 ## Limits and disposition
 

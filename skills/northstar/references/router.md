@@ -1,8 +1,11 @@
 # Northstar mode router
 
-**Required first step** for every `northstar` invocation. Pick exactly one mode,
-then open only that mode file under `references/modes/` (plus mode-specific
-refs under `references/setup/` or `references/handoff-contract.md`).
+**Required first step** for every `northstar` invocation. Pick exactly one
+route: a mode file under `references/modes/` (plus mode-specific refs under
+`references/setup/` or `references/handoff-contract.md`), or — for a supported
+language quality workflow — the installed-package route in
+[`packages/installed-package-route.md`](./packages/installed-package-route.md)
+via the language section below.
 
 ## Language quality workflow (explicit intent or existing activation)
 

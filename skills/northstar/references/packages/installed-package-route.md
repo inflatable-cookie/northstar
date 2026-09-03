@@ -87,4 +87,3 @@ package content.
   Planning, orchestration, review, and documentation workflows continue.
 - Revocation outranks registry and allowlist trust. A revoked identity stops
   and names the revocation record.
-
