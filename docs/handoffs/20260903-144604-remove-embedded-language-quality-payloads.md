@@ -100,11 +100,12 @@ breaking planning, orchestration, review, or existing consumer evidence.
   `effigy qa:docs`; `effigy qa`; `git diff --check`.
 - **PR base/head:** `main` <- `worker/remove-embedded-language-quality-payloads`
 - **PR URL:** https://github.com/inflatable-cookie/northstar/pull/30
-- **Review state:** implementation complete. Three commits at head
-  `d4e0dc4` (`380d20b` removal + generic rewiring + replacement routes proof;
-  `9c8fe2f` closeout docs; `d4e0dc4` handoff PR record). All required
-  validation passed on the pushed head, including the six-row card oracle
-  falsified in
+- **Review state:** implementation complete. Three commits after base
+  `57dab4d`: `380d20b` (removal + generic rewiring + replacement routes
+  proof), `9c8fe2f` (closeout docs), `d4e0dc4` (handoff PR record), plus the
+  last handoff bookkeeping commit. Review the exact pushed PR head. All
+  required validation passed on the working tree of this branch, including
+  the six-row card oracle falsified in
   `docs/logs/2026-09/03-154324-remove-embedded-language-quality-payloads.md`.
   Awaiting exact-head review and merge by the orchestrator; installed-skill
   refresh follows merge.
