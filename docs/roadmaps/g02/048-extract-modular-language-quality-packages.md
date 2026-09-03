@@ -1,6 +1,6 @@
 # 048 - Extract Modular Language Quality Packages
 
-Status: active; Batch C registry pin proved, consumer canary next
+Status: active; Batch C consumer canary in flight
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.033`, promoted spec 034
@@ -64,8 +64,8 @@ before it becomes ready.
   at tree `sha256:e5cf9c5d...54dba0`. Card 119's registry promotion pinned
   that identity at registry version `1.4.0`, opened the bounded Rust overlap
   window, and proved the real-package lifecycle transcript and installed-route
-  engine integrity; the Convergence consumer canary remains serial behind its
-  reviewed merge.
+  engine integrity. PR 27 merged as `256d0f7`; the Convergence consumer canary
+  now runs under its own `g02.031/102` evidence-only lane.
 - [ ] **Batch D — root reduction:** card 120 removes both frozen embedded
   payloads and fallback branches, then proves core-only operation and installed
   package routing.
@@ -110,6 +110,5 @@ before it becomes ready.
 
 ## Next Task
 
-After card 119's registry promotion merges, dispatch the Convergence
-real-consumer canary for the pinned Rust package. Card 120 stays blocked
-until both overlap-close gates are reviewed.
+Review the in-flight Convergence real-consumer canary for the pinned Rust
+package. Card 120 stays blocked until both overlap-close gates are reviewed.

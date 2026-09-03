@@ -1,6 +1,6 @@
 # 119 - Extract Rust Language Package
 
-Status: active; registry pin proved, Convergence canary next
+Status: active; registry pin merged, Convergence canary in flight
 Owner: repo maintainers
 Updated: 2026-09-03
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -171,10 +171,12 @@ the package-source sibling). A second review round removed the router's
 registry-owned digest duplication and the prose-coupled checker assertions
 as prohibited prose-coupled validation.
 
+PR 27 passed the final exact-head review at `63353b1` and squash-merged as
+`256d0f7`. Convergence milestone `g02.031` and card 102 were committed at
+`c8f513f`; its evidence-only canary is running in a dedicated Paseo worktree.
+
 ## Next Task
 
-Run the Convergence real-consumer canary against the promoted registry pin:
-installed everyday-authoring and explicit-audit runs, consumer
-policy/evidence compatibility, and the before/after hashes. It stays a
-separate serial step behind exact-head review and merge of the registry
-promotion; card 120 remains blocked.
+Review the Convergence real-consumer canary at its reported exact head. Card
+120 remains blocked until the installed everyday-authoring, explicit-audit,
+consumer-policy/evidence, and before/after-hash proof is accepted.

@@ -5,7 +5,7 @@ handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
 handoff: single-file-path-only
-status: ready-to-launch
+status: complete
 owner: repo maintainers
 created: 2026-09-03
 updated: 2026-09-03
@@ -71,8 +71,8 @@ overlap without loading the TypeScript package or changing consumer authority.
   `effigy check:skill-install skills/northstar`, `effigy qa:docs`, `effigy qa`,
   `git diff --check`.
 - **PR base/head:** `main` <- `worker/pin-rust-package-candidate`.
-- **PR URL:** pending.
-- **Review state:** implementation complete; awaiting exact-head review
+- **PR URL:** `https://github.com/inflatable-cookie/northstar/pull/27`.
+- **Review state:** accepted at `63353b1`; squash-merged as `256d0f7`
 - **Merge path:** orchestrator after accepted current-head review and checks.
 
 ## Boundaries

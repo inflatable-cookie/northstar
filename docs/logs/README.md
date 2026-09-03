@@ -32,6 +32,7 @@ Use logs as the third step in closeout:
 
 ## Recent active-lane evidence
 
+- `2026-09/03-083100-dispatch-convergence-rust-package-canary.md`
 - `2026-09/03-033950-pin-rust-package-candidate.md`
 - `2026-09/03-020500-refresh-rust-package-readiness-after-repin.md`
 - `2026-09/03-015500-repin-typescript-package-identity.md`

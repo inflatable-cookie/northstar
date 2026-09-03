@@ -98,10 +98,10 @@ TypeScript package's standalone `SKILL.md` loaded an absent router.
 Package-source PR 3 repaired it and merged as `c9ef2a2`; card 121's registry
 `1.3.0` pin merged as `69e4d5d`. Rust package-source PR 4 passed review at
 `7cc4cd0` and merged as `56b2e11`; card 119's registry promotion pinned that
-identity at registry version `1.4.0` with the reproduced 59-file tree and
-proved the real-package lifecycle transcript and installed engine integrity.
-The Convergence consumer canary is next. Card 120 remains blocked behind Rust
-consumer proof.
+identity at registry version `1.4.0` with the reproduced 59-file tree, proved
+the real-package lifecycle transcript and installed engine integrity, and
+merged as `256d0f7`. The Convergence `g02.031/102` consumer canary is in
+flight. Card 120 remains blocked behind Rust consumer proof.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed

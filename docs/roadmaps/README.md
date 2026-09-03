@@ -89,14 +89,13 @@ Roadmaps sequence contract-backed work for Northstar itself.
   adapter and merged as `c9ef2a2`. Card 121's registry `1.3.0` pin merged as
   `69e4d5d`. Card 119's registry promotion pinned the Rust identity at
   registry version `1.4.0` and proved the real-package lifecycle and
-  engine-integrity transcripts; the Convergence consumer canary is next and
-  card 120 remains blocked behind Rust consumer proof.
+  engine-integrity transcripts. PR 27 merged as `256d0f7`; the Convergence
+  consumer canary is in flight and card 120 remains blocked behind it.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Dispatch `g02.048/119`'s external Rust package-source lane from Northstar
-`69e4d5d`. Stop after the reviewed immutable candidate before registry and
-consumer work.
+Review the in-flight Convergence `g02.031/102` installed Rust package canary.
+Card 120 remains blocked until its exact-head evidence is accepted.
