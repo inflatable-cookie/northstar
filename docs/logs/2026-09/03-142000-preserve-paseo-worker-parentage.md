@@ -3,7 +3,7 @@
 Date: 2026-09-03
 Roadmap: `g02.049`
 Card: `g02.049/123`
-Status: complete; awaiting orchestrator review
+Status: complete; merged as `7ebaa9c`
 
 ## Result
 
@@ -61,5 +61,6 @@ fallback without pretending parentage exists.
 
 ## Next Task
 
-Stop for exact-head orchestrator review. After reviewed merge and
-installed-skill refresh, resume card 120's bounded root-reduction lane.
+PR 29 passed exact-head review at `dca5126` and squash-merged as `7ebaa9c`.
+The installed skill was refreshed and passed 199-file source parity. Dispatch
+card 120's bounded root-reduction lane.

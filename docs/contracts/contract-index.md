@@ -75,5 +75,6 @@ as `69e4d5d`; card 119 and the Convergence canary are complete. The removal
 inventory exposed a missing generic intent/activation selector. Card 122
 implemented that selector and merged through PR 28 as `ddaae0d`; card 120 is
 ready after its post-merge refresh. Spec 026 now also settles cross-workspace
-Paseo child-agent ownership; card 123 is revising the propagation after review
-rejected a prose-coupled checker. Card 120 remains serial behind it.
+Paseo child-agent ownership; card 123 rejected its prose-coupled checker and
+merged the corrected propagation as `7ebaa9c`. Card 120 is now ready to remove
+the embedded language payloads.

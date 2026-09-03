@@ -120,6 +120,7 @@ Northstar system:
   first to correct Paseo worker creation: dedicated workspace isolation and
   child-agent parentage coexist, with finish notifications enabled and all six
   oracle rows proven through live launch, exact-head source review, and
-  same-child revision.
+  same-child revision. PR 29 merged that correction as `7ebaa9c`; the installed
+  199-file skill copy now matches source. Card 120 is the sole ready lane.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

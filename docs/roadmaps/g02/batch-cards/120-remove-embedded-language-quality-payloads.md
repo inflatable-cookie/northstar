@@ -1,6 +1,6 @@
 # 120 - Remove Embedded Language Quality Payloads
 
-Status: ready
+Status: ready; dispatching
 Owner: repo maintainers
 Updated: 2026-09-03
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -130,4 +130,5 @@ ready-state checks now pass.
 ## Next Task
 
 Dispatch one card-120 implementation worker from the frozen 95-file deletion
-inventory. Do not start a new language or Sentrux integration.
+inventory. It is the sole ready lane. Do not start a new language or Sentrux
+integration.

@@ -118,8 +118,9 @@ rollover signal.
 
 ## Next Task
 
-Reviewed merge of `g02.049/123` and installed-skill refresh, then resume card
-120's bounded root-reduction lane.
+Dispatch card 120's bounded root-reduction lane. PR 29 merged the preceding
+Paseo worker-parentage correction as `7ebaa9c`, and installed-skill parity is
+current at 199 files.
 
 `g02.048/117` merged through PR 22 at `75db6f5` after proving the generic
 lifecycle. Card 118's public repository merged package PR 1 as `09ef174`, and
@@ -140,8 +141,8 @@ the real-package lifecycle and installed engine-integrity transcripts, and
 merged as `256d0f7`. Convergence PR 4 passed exact-head review at `792a7c2`
 and merged as `dff19c9`. The removal refresh froze 95 deletion targets and 19
 integration surfaces. Card 122 repaired the missing data-driven selector and
-merged as `ddaae0d`. Card 120 is ready but serial behind card 123's bounded
-worker-parentage revision and reviewed merge.
+merged as `ddaae0d`. Card 123's parentage correction merged as `7ebaa9c` and
+the installed skill was refreshed. Card 120 is now the sole ready lane.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and

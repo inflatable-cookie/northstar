@@ -103,5 +103,6 @@ evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Reviewed merge of `g02.049/123` and installed-skill refresh, then resume card
-120's bounded root-reduction lane.
+Dispatch card 120's bounded root-reduction lane. PR 29 merged the preceding
+Paseo worker-parentage correction as `7ebaa9c`, and installed-skill parity is
+current at 199 files.
