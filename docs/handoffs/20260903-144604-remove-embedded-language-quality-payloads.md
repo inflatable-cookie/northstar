@@ -5,7 +5,7 @@ handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
 handoff: single-file-path-only
-status: ready-to-launch
+status: implementation complete; PR 30 opened for exact-head review
 owner: repo maintainers
 created: 2026-09-03
 updated: 2026-09-03
@@ -99,8 +99,15 @@ breaking planning, orchestration, review, or existing consumer evidence.
   parity; `effigy check:command-skills`; `effigy check:language-packages`;
   `effigy qa:docs`; `effigy qa`; `git diff --check`.
 - **PR base/head:** `main` <- `worker/remove-embedded-language-quality-payloads`
-- **PR URL:** pending.
-- **Review state:** implementation not started.
+- **PR URL:** https://github.com/inflatable-cookie/northstar/pull/30
+- **Review state:** implementation complete. Two commits at head
+  `9c8fe2fc18f13eb32940eb345576cf86a8341b0a` (`380d20b` removal + generic
+  rewiring + replacement routes proof; `9c8fe2f` closeout docs). All required
+  validation passed on the pushed head, including the six-row card oracle
+  falsified in
+  `docs/logs/2026-09/03-154324-remove-embedded-language-quality-payloads.md`.
+  Awaiting exact-head review and merge by the orchestrator; installed-skill
+  refresh follows merge.
 - **Merge path:** orchestrator after accepted review of the current head and
   passing required checks.
 
