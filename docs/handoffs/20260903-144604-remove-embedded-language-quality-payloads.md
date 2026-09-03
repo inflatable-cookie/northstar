@@ -100,12 +100,19 @@ breaking planning, orchestration, review, or existing consumer evidence.
   `effigy qa:docs`; `effigy qa`; `git diff --check`.
 - **PR base/head:** `main` <- `worker/remove-embedded-language-quality-payloads`
 - **PR URL:** https://github.com/inflatable-cookie/northstar/pull/30
-- **Review state:** implementation complete. Three commits after base
-  `57dab4d`: `380d20b` (removal + generic rewiring + replacement routes
-  proof), `9c8fe2f` (closeout docs), `d4e0dc4` (handoff PR record), plus the
-  last handoff bookkeeping commit. Review the exact pushed PR head. All
-  required validation passed on the working tree of this branch, including
-  the six-row card oracle falsified in
+- **Review state:** revision 2 after the changes-required exact-head review of
+  `48661c7`. All three findings addressed on this branch: (1) `SKILL.md` and
+  `agents/openai.yaml` route language work through the generic
+  installed-package route with a checker guard against deleted modes, proven
+  on a fresh isolated install; (2) bounded real-consumer reruns for Jetstream
+  (TypeScript record flow) and Convergence (Rust engine ledger) run inside
+  `check:language-package-routes` with before/after policy and activation
+  hashes and untouched siblings, with the consumers' real markers recorded
+  accurately (Jetstream TS marker in `editor-ui/AGENTS.md`, Rust marker in
+  its root `AGENTS.md`; Convergence Rust marker in its root `AGENTS.md`);
+  (3) the EOF blank line is fixed and
+  `git diff --check origin/main...HEAD` exits 0. New tested head:
+  `92245369acaed2c604faa7aea5787b7c8f59715c`. Evidence updated in
   `docs/logs/2026-09/03-154324-remove-embedded-language-quality-payloads.md`.
   Awaiting exact-head review and merge by the orchestrator; installed-skill
   refresh follows merge.
