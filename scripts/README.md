@@ -23,17 +23,10 @@ effigy qa
 Scripts remain implementation detail until the helper flow is stable enough to
 expose as a first-class Effigy task.
 
-## Production qualification regression
-
-`scripts/tests/rust-quality-production/` retains the compact deterministic
-Rust v2 qualification harness after the disposable research corpus was
-retired. Run it through `effigy test:rust-v2-production-harness`; runtime
-cohorts remain outside the repository.
-
 ## Installed skill parity
 
-Install the package at full depth so the front door and explicit adapters become
-separate activatable skill entries:
+Install the package so the `northstar` front door becomes an activatable skill
+entry:
 
 ```bash
 npx skills add https://github.com/inflatable-cookie/northstar/tree/main/skills/northstar \
@@ -45,19 +38,14 @@ Replace `codex` with the current harness's Skills CLI agent ID, or pass several
 IDs after `--agent`. `--all` is intentionally absent because it targets every
 supported harness.
 
-After a published Northstar skill change, rerun the full-depth install. A named
-`skills update northstar` refreshes only the front door, not sibling adapters.
-
+An install is complete when `skills list` includes `northstar`. The front door
+is the single distributable skill entry.
 ```bash
 npx skills add https://github.com/inflatable-cookie/northstar/tree/main/skills/northstar \
   --full-depth --skill '*' --agent codex -g -y
 npx skills list -g --json
 effigy check:skill-install /path/to/installed/northstar
 ```
-
-An install is incomplete unless `skills list` includes `northstar`,
-`northstar-rust-audit`, and `northstar-typescript-audit`. The adapters delegate
-to the main payload; they do not duplicate its standards or audit procedure.
 
 The Skills CLI follows the configured published source. It cannot see
 uncommitted or unpushed changes in this checkout. During local skill
@@ -71,8 +59,7 @@ rsync -a --delete skills/northstar/ /path/to/installed/northstar/
 Restart agent sessions after updating an installed skill so they reload the
 new instructions.
 
-Install parity ignores only skill-local runtime state: `.effigy/` receipts and
-the Cargo build cache at `tools/rust-quality/target/`.
+Install parity ignores only skill-local runtime state: `.effigy/` receipts.
 
 The published skill also carries a minimal Effigy catalog for the consumer-safe
 agent-instruction audit. When the target repository has no local task, select the
@@ -86,26 +73,13 @@ This catalog is intentionally narrower than the Northstar source repository's
 full QA catalog. It exists so the audit helper resolves from the installed skill
 rather than incorrectly depending on the Northstar source checkout.
 
-Rust activation is also skill-local and agent-owned:
-
-```bash
-effigy --repo /path/to/installed/northstar \
-  northstar/rust-quality:setup apply /absolute/path/to/project [scope-directory]
-```
-
-`northstar/test:rust-quality-setup` proves install, preservation, repeat-run
-idempotency, and fail-closed conflicts on disposable repositories.
-
-TypeScript/Svelte explicit-audit activation uses the same agent-owned boundary:
-
-```bash
-effigy --repo /path/to/installed/northstar \
-  northstar/typescript-quality:setup apply /absolute/path/to/project [scope-directory]
-```
-
-`northstar/test:typescript-quality-setup` proves rootless nested packages,
-workspace ownership, conditional overlays, preservation, idempotency, and
-fail-closed conflicts. It installs no project dependencies.
+Language quality activation is not a skill-local setup task. Language
+catalogues, modes, engines, and templates live in installed packages, and the
+generic route in the installed skill (`references/packages/installed-package-route.md`)
+selects and runs them from explicit workflow intent or an existing consumer
+activation marker. With no compatible package installed, only the requested
+language workflow stops; it names the exact identity and the local
+installation route.
 
 ## Repo contract (`qa:docs`)
 
@@ -137,17 +111,17 @@ changes.
 
 Run `effigy check:command-skills` directly or through `effigy qa:docs`.
 
-The command-surface checker validates the nine thin adapters under
+The command-surface checker validates the seven thin adapters under
 `skills/northstar/commands/`: their names, description budgets, router and mode
 references and ordering, one-mode wiring, aggregate prompt footprint,
 retired-alias removal, thin-body/procedure guards, authority boundaries, and
 exact adapter count. It also asserts the eight fresh-orchestrator continuation
 oracle rows against the installable router, handoff contract, orchestrator
 mode, generic template, and skill outcome. The set includes
-`/northstar-cleanup` for safe inspection and reworking of `/docs` drift,
-`/northstar-rust-audit` for explicit Rust audit, and explicit-only
-`/northstar-typescript-audit` for TypeScript/Svelte. It is included in
-`effigy qa:docs`.
+`/northstar-cleanup` for safe inspection and reworking of `/docs` drift.
+Language quality commands are not adapters: explicit audit-and-repair and
+everyday authoring route through installed language packages via the generic
+installed-package route. It is included in `effigy qa:docs`.
 
 ## Readiness-map frontier (`check:readiness-map`)
 
@@ -251,40 +225,25 @@ Card 117 extends the same checker with the generic installed-package runtime:
     routing, host-protocol portability, and self-check invocation, plus
     restricted-workflow/consumer, provenance, overlapping-writer,
     interrupted-write, and identity/store negatives.
-18. card 118 official registry pin, route, and operational fallback notice:
-    the shipped registry carries exactly the accepted
-    `@northstar/typescript-quality` `0.1.0` canary identity (replacement
-    commit `c9ef2a2` from the reviewed standalone-adapter repair) at
-    registry version 1.3.0 (schema conformance plus exact-value assertions),
-    official receipts record the actual authorizing registry version and
-    entry digest, and the oracle proves the official-pin route: visible
-    acquisition stop on failure, detection never acquires, installed offline
-    routing, drift stops instead of silently routing, rollback reopens the
-    route without fetching, and the official pin outranks the operator
-    allowlist. A separate core fallback decision consumes a stopped
-    `acquire_activate` pair plus schema-validated `overlap-windows.json` and
-    emits the exact frozen-payload notice; every host request/result shares a
-    caller-generated `request_id`, and mixed pairs fail closed. The
-    Jetstream-shaped host stop (manual/local-path, no `@version`, no frozen
-    clause) is not fallback evidence. Mutation tests fail closed for missing
-    version, wrong identity, mismatched `request_id`, detection intent, a
-    request version outside the exact window, non-stopped results, disagreeing
-    operations, a closed overlap window, and a language with no frozen payload.
-    The operational `fallback` CLI itself rejects a schema-invalid overlap
-    registry (extra properties and a missing window version), not only the
-    checker evaluator. The package's own reviewed
-    `prove-installed-invocation.sh` (pinned in the package) supplies the
-    non-vacuous installed setup/record proof through the public
-    `effigy skill run --path <installed_path>` surface against a decoy
-    consumer.
-19. card 119 Rust registry pin and frozen fallback: the shipped registry
-    carries the accepted `@northstar/rust-quality` `0.1.0` identity
-    (language-packs PR 4, commit `56b2e11`) beside the unchanged TypeScript
-    canary at registry version 1.4.0, with exact-value assertions for both
-    entries; `overlap-windows.json` carries both open windows; and the
-    fallback CLI proves the Rust-shaped stopped pair emits the exact notice
-    naming the failed identity, the manual route, and the frozen embedded
-    Rust payload without claiming the TypeScript payload.
+18. card 118 official registry pin and route: the shipped registry carries
+    exactly the accepted `@northstar/typescript-quality` `0.1.0` canary
+    identity (replacement commit `c9ef2a2` from the reviewed standalone-adapter
+    repair) and official receipts record the actual authorizing registry
+    version and entry digest. The oracle proves the official-pin route:
+    visible acquisition stop on failure, detection never acquires, installed
+    offline routing, drift stops instead of silently routing, rollback reopens
+    the route without fetching, and the official pin outranks the operator
+    allowlist. Every host request/result shares a caller-generated
+    `request_id`, and mixed pairs fail closed; a stopped host result is the
+    scoped workflow stop itself — core has no frozen-payload fallback decision
+    behind it. The package's own reviewed `prove-installed-invocation.sh`
+    (pinned in the package) supplies the non-vacuous installed setup/record
+    proof through the public `effigy skill run --path <installed_path>`
+    surface against a decoy consumer.
+19. card 119 Rust registry pin: the shipped registry carries the accepted
+    `@northstar/rust-quality` `0.1.0` identity (language-packs PR 4, commit
+    `56b2e11`) beside the TypeScript canary, with exact-value assertions for
+    both entries and no per-language branch anywhere in the checker.
 
 The exact same surface is exercised with Effigy absent
 (`bun run skills/northstar/scripts/language-package-lifecycle.ts oracle
@@ -292,29 +251,28 @@ The exact same surface is exercised with Effigy absent
 also schema-validates every receipt and every host request/result message the
 surface writes.
 
-## Rust package pin oracle (`check:rust-package-pin`)
+## Language package routes oracle (`check:language-package-routes`)
 
-The card-119 registry promotion is replayed deterministically against the real
-accepted package. `scripts/tests/rust-package-pin/validate_rust_package_pin.py`
+The two accepted registry pins are replayed deterministically against the real
+packages. `scripts/tests/language-package-routes/validate_language_package_routes.py`
 resolves the read-only package-source sibling (override with
 `NORTHSTAR_LANGUAGE_PACKS_ROOT`; default `../northstar-language-packs` beside
-the repository root), materializes pinned merge `56b2e11`, reproduces both
-spec-034 digests with an independent framing implementation, and drives the
-public `language-package-host.v1` surface through: visible official-acquisition
-stop, detection refusal, allowlist non-bypass, real acquisition including the
-package's declared self-check, offline and registry resolve for both
-workflows, drift stop/restore, TypeScript-under-Rust and wrong tree/manifest
-refusals, the version-drifted variant refusal, the frozen-Rust fallback
-notice, and the Rust-only retained inventory. It then runs the package's
-reviewed `prove-installed-invocation.sh` on the lifecycle `installed_path`
-(54-source parity at `69e4d5d`, cross-boundary v2 ledger migration, engine
-source-payload tamper rejection, probe `verify-install`). The oracle lives
-under `scripts/`, so the installed core skill never depends on the package
-source sibling; wired into `qa` through `validate`. Runtime is roughly half a
-minute (two cargo builds inside the package prover).
+the repository root), materializes pinned merges `c9ef2a2` (TypeScript) and
+`56b2e11` (Rust), reproduces all four spec-034 digests with an independent
+framing implementation, and proves the reduced core end to end: with no
+package installed, each language workflow stops visibly with the manual
+installation route and never claims the other language; with both packages
+installed into one shared state root, each activates and resolves through its
+exact pinned identity at an independent address, receipts record truthful
+provenance, installed payloads carry no foreign-language files, a drift stop
+on one package leaves the other routable, and each package's reviewed
+`prove-installed-invocation.sh` passes on its installed payload. The oracle
+lives under `scripts/`, so the installed core skill never depends on the
+package source sibling; wired into `qa` through `validate`. Runtime is roughly
+half a minute (cargo builds inside the Rust package prover).
 
 ```bash
-effigy check:rust-package-pin
+effigy check:language-package-routes
 ```
 
 ## Agent-instruction audit (`check:agent-instructions`)

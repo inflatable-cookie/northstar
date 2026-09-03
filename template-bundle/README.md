@@ -46,40 +46,27 @@ stay outside this docs-only bundle. The helper can recreate sibling repositories
 from Effigy's machine-local dependency-link ledger before bootstrap and replay
 those links afterward.
 
-### Optional strict Rust quality activation
+### Optional language quality packages
 
-Rust quality is an optional scoped activation supplied by the single installed
-Northstar skill, not a second docs bundle or installable skill. The agent runs
-the installed `northstar/rust-quality:setup` task when Rust authoring or audit
-first needs activation. Humans do not copy the Rust assets or populate
-discoverable paths.
+Language quality (Rust, TypeScript/Svelte) is not part of the docs bundle or
+the core Northstar skill. Each language is an independently installable
+official package under the generic package protocol in contract 004. Northstar
+core plans, orchestrates, reviews, and normalizes docs with no language
+package installed.
 
-The task installs a marked scoped instruction block, strict profile, and
-deviations contract while preserving existing files. It discovers Cargo and
-explicit toolchain paths and stops when repository-owned MSRV or exclusion
-policy is genuinely unresolved. Northstar's Rust 1.95 benchmark floor is never
-used as the consumer MSRV.
+When the operator explicitly requests a language quality workflow — or the
+repository already carries a registered activation marker — the agent routes
+through the installed-package procedure in the Northstar skill
+(`references/packages/installed-package-route.md`): generic registry-owned
+selection, visible acquisition notice, and a `routed` result executing the
+package's declared entrypoint from its installed path. Repository-owned
+profiles, deviations, toolchains, and exclusions stay in the repository; the
+package never rewrites them.
 
-### Optional strict TypeScript/Svelte explicit audit
-
-TypeScript/Svelte quality is another optional scoped activation inside the same
-installed Northstar skill. It is explicit-audit-only: ordinary TypeScript or
-Svelte coding does not activate it. On an explicit worktree or repository audit,
-the agent runs the skill-local `northstar/typescript-quality:setup` task at the
-narrowest package-owning scope. Humans do not copy its activation or profile
-templates.
-
-Setup discovers root packages, declared workspaces, and independent nested
-packages, then resolves Svelte 5 and SvelteKit 2 only where the owning package
-and semantic source surface support them. It installs no dependencies and
-preserves existing valid instructions and contracts. Unregistered packages,
-unsupported framework versions, and unresolved ownership fail closed or remain
-reported limitations.
-
-The public explicit entrypoint is `/northstar-typescript-audit` with `worktree`
-or `repository` scope. Only `strict` is production-valid. Everyday TypeScript
-authoring, deferred toolchain/testing rules, blanket fixing, slop-only mutation,
-and certification claims remain unsupported.
+If no compatible package is installed and acquisition fails, only that
+language workflow stops. The stop names the exact package identity and the
+local installation route; every other Northstar workflow continues. There is
+no embedded fallback and no compatibility alias in core.
 
 ## Standard docs spines
 

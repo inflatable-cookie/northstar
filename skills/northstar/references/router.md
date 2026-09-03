@@ -4,74 +4,24 @@
 then open only that mode file under `references/modes/` (plus mode-specific
 refs under `references/setup/` or `references/handoff-contract.md`).
 
-## TypeScript/Svelte explicit audit-and-repair (explicit only)
+## Language quality workflow (explicit intent or existing activation)
 
-Use only when the operator explicitly requests a TypeScript or Svelte quality
-audit, no-slop pass, whole-codebase review, or audit-and-fix action. Resolve
-`worktree` or `repository` scope and package-local Svelte overlays. It never
-activates from ordinary TypeScript or Svelte coding.
+Use only when the operator explicitly requests a language quality audit,
+no-slop pass, whole-codebase review, audit-and-fix action, or everyday
+authoring for a supported language — or when the consumer repository already
+carries a registered activation marker for one. There is no embedded language
+payload in core: the workflow routes through an installed package or stops.
 
-Route through the installed package before using embedded content. Package
-selection is registry-owned and generic — routing never names a package ID.
-Supply explicit intent (`typescript` + `explicit_audit_repair`, plus any
-requested `base`, `svelte`, or `sveltekit` overlay) to the generic selection
-procedure in
-[`packages/installed-package-route.md`](./packages/installed-package-route.md);
-it selects the one exact official entry, or an existing registered activation
-marker in the consumer selects it directly. Run the generic installed-package
-route for the selected identity: a `routed` result executes the package's
-declared audit entrypoint from `installed_path`; a stopped route falls back to
-the frozen embedded payload only after the route doc's visible fallback
-notice.
-
-→ [`modes/typescript-quality-audit.md`](./modes/typescript-quality-audit.md)
-
-## Rust explicit audit-and-repair (explicit only)
-
-Use only when the operator explicitly requests a Rust quality audit, no-slop
-pass, whole-codebase review, or audit-and-fix action. Resolve `worktree` or
-`repository` scope. Explicit audit intent takes precedence over everyday Rust
-authoring and never activates from ordinary coding alone.
-
-Route through the installed package before using embedded content. Package
-selection is registry-owned and generic — routing never names a package ID.
-Supply explicit intent (`rust` + `explicit_audit_repair`) to the generic
-selection procedure in
-[`packages/installed-package-route.md`](./packages/installed-package-route.md);
-it selects the one exact official entry, or an existing registered activation
-marker in the consumer selects it directly. Run the generic installed-package
-route for the selected identity: a `routed` result executes the package's
-declared audit entrypoint from `installed_path`; a stopped route falls back to
-the frozen embedded payload only after the route doc's visible fallback
-notice.
-
-→ [`modes/rust-quality-audit.md`](./modes/rust-quality-audit.md)
-
-## Rust everyday authoring (self-activating)
-
-Use when Northstar is requested for ordinary Rust writing, review, or
-refactoring, or when applicable target-repository instructions already activate
-Northstar Rust quality. If activation is missing, the mode installs it from the
-loaded skill before editing. The repository profile must then resolve to
-production-valid `strict`.
-
-Route through the installed package before using embedded content. Package
-selection is registry-owned and generic — routing never names a package ID.
-Supply explicit intent (`rust` + `everyday_authoring`) to the generic
-selection procedure in
-[`packages/installed-package-route.md`](./packages/installed-package-route.md);
-it selects the one exact official entry, or an existing registered activation
-marker in the consumer selects it directly. Run the generic installed-package
-route for the selected identity: a `routed` result follows the package's
-declared authoring entrypoint from `installed_path`; a stopped route falls
-back to the frozen embedded payload only after the route doc's visible
-fallback notice.
-
-Do **not** use this route for a requested quality audit, no-slop pass, whole
-codebase review, or audit-and-fix tranche. Select the explicit audit route for
-that intent.
-
-→ [`modes/rust-quality-authoring.md`](./modes/rust-quality-authoring.md)
+Package selection is registry-owned and generic — routing never names a
+package ID or a language branch. Supply explicit intent (language + workflow,
+plus any requested overlay) or the consumer's exact activation marker to the
+generic selection and installed-package route in
+[`packages/installed-package-route.md`](./packages/installed-package-route.md).
+A `routed` result executes the installed package's declared entrypoint from
+`installed_path`. A stopped result scopes the failure to that language
+workflow, reports the exact identity and the local installation route, and
+leaves every other Northstar workflow usable. No embedded copy, alias, or
+silent substitute exists.
 
 ## 1. Handoff (explicit only)
 

@@ -62,8 +62,11 @@ invalid and fail at registry parse, before any host invocation.
    version, source, target, and workflow, then continues without a
    confirmation pause. Acquisition verifies registry identity and runs the
    declared self-check before anything routes.
-5. On `stopped` after a failed acquisition attempt: apply the frozen fallback
-   rule below.
+5. On `stopped` after a failed acquisition attempt: stop only the requested
+   language workflow. Report the exact package identity, the stop reason, and
+   the local installation route. Core planning, orchestration, review, and
+   documentation workflows continue normally. There is no embedded fallback
+   and no substitute package.
 
 Detection alone never routes or acquires. A `resolve` or `acquire_activate`
 request with detection intent stops without fetching, installing, or loading
@@ -73,7 +76,7 @@ package content.
 
 - The package is the task source; the consumer repository stays the target.
   Package-owned tasks, scripts, and references resolve below `installed_path`,
-  never from the consumer checkout or from core's embedded payload.
+  never from the consumer checkout.
 - Run only workflows the installed manifest declares. A workflow the manifest
   does not declare is unavailable; do not synthesize it.
 - Registry discovery metadata must agree with the verified installed manifest
@@ -85,42 +88,3 @@ package content.
 - Revocation outranks registry and allowlist trust. A revoked identity stops
   and names the revocation record.
 
-## Frozen fallback rule (bounded overlap window)
-
-During a language's extraction overlap window, core retains a frozen embedded
-payload for that language. When resolve and acquisition both stop, the
-requesting mode continues with that frozen embedded payload after emitting one
-visible notice that names:
-
-- the failed package identity (ID and version, plus the stop reason),
-- that the frozen embedded fallback is in use.
-
-Notice template:
-
-```text
-[northstar:language-packages] notice: <package-id>@<version> unavailable (<stop reason>); using the frozen embedded <language> payload during the bounded overlap window
-```
-
-A host `stopped` result is not this notice. The requesting mode obtains it by
-running the core fallback decision on the stopped `acquire_activate`
-request/result pair and the registered overlap windows
-(`references/packages/overlap-windows.json`):
-
-```text
-language-package-lifecycle.ts fallback <request.json> <result.json> <overlap-windows.json> [notice.txt]
-```
-
-The decision accepts only a correlated `stopped` acquisition for explicit
-workflow or activation intent. It fails closed when the overlap registry is
-schema-invalid (extra properties or a missing required field), the
-request/result `request_id` values differ, the intent is detection, the result
-is not `stopped`, operations or identities disagree, required identity is
-absent, the request version is outside the exact open window, the language has
-no frozen overlap payload, or the embedded fallback window is closed. Each open
-overlap entry binds one language to an exact package ID and version. It does
-not change the host status or claim the host executed embedded policy.
-
-Never silently prefer, update, refresh, or hide fallback use. The embedded
-payload receives no fixes or new rules during the window; a fallback defect
-pauses the cutover rather than bending the package. After the overlap closes,
-the embedded payload and this fallback rule are removed together.

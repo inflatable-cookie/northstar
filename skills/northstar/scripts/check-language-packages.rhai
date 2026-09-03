@@ -1617,7 +1617,6 @@ fn run_card_117_oracle(northstar_skill_root, manifest_schema) {
         "oracle-12 identity-binding-and-immutable-store: PASS",
         "oracle-13 host-protocol-portable: PASS",
         "oracle-14 official-pin-route: PASS",
-        "oracle-15 frozen-fallback-notice: PASS",
         "card-117 oracle: PASS",
         "card-118 oracle: PASS",
         "oracle-16 registry-selection-intent: PASS",
@@ -1629,28 +1628,6 @@ fn run_card_117_oracle(northstar_skill_root, manifest_schema) {
     }
     log("card-117 surface oracle: PASS (bun, Effigy absent; same surface driven from the checker)");
     oracle_dir
-}
-
-fn expect_fallback_cli_failure(label, surface_path, request_path, result_path, overlap_path, reason) {
-    let failed = false;
-    let output = "";
-    try {
-        let report = exec::run(
-            ["bun", "run", surface_path, "fallback", request_path, result_path, overlap_path],
-            #{ run_in: "host", cwd: repo_root },
-        );
-        if !report["success"] {
-            failed = true;
-            output = report["stderr"] + report["stdout"];
-        } else {
-            output = report["stdout"] + report["stderr"];
-        }
-    } catch (error) {
-        failed = true;
-        output = error.to_string();
-    }
-    require(failed, label + " unexpectedly passed");
-    require(output.contains(reason), label + " rejected for wrong reason: " + output);
 }
 
 // Card 122: drive the generic registry-owned selection CLI exactly as the
@@ -1902,36 +1879,6 @@ for entry in registry_packages {
     }
 }
 log("card-122 registry discovery binding: OK (registry_version 1.5.0, both accepted entries carry discovery, registry stays exactly selectable)");
-
-let overlap_schema = load_and_validate_schema_file(packages_ref_root, "overlap-windows.schema.json", "language-package-overlap-windows");
-
-let overlap_path = path::join(packages_ref_root, "overlap-windows.json");
-require(fs::is_file(overlap_path), "missing overlap-windows.json");
-let overlap_doc = json::read_file(overlap_path);
-validate_schema_node(overlap_doc, overlap_schema, "overlap-windows.json");
-require(overlap_doc["schema_version"] == "1.0.0", "overlap-windows.json schema_version drifted");
-require(overlap_doc["windows"].len() == 2, "overlap-windows.json must contain exactly the TypeScript and Rust overlap windows");
-let overlap_window = overlap_doc["windows"][0];
-require(overlap_window["language"] == "typescript" &&
-    overlap_window["package_id"] == "@northstar/typescript-quality" &&
-    overlap_window["version"] == "0.1.0" &&
-    overlap_window["payload_label"] == "TypeScript" &&
-    overlap_window["window"] == "open",
-    "overlap-windows.json drifted from the accepted TypeScript overlap window");
-let rust_window = overlap_doc["windows"][1];
-require(rust_window["language"] == "rust" &&
-    rust_window["package_id"] == "@northstar/rust-quality" &&
-    rust_window["version"] == "0.1.0" &&
-    rust_window["payload_label"] == "Rust" &&
-    rust_window["window"] == "open",
-    "overlap-windows.json drifted from the accepted card-119 Rust overlap window");
-
-let overlap_negatives_root = path::join(northstar_skill_root, "assets/fixtures/language-packages/negative/overlap");
-expect_schema_rejection("overlap-extra-property",
-    json::read_file(path::join(overlap_negatives_root, "extra-property.json")), overlap_schema, "contains forbidden additional property");
-expect_schema_rejection("overlap-missing-version",
-    json::read_file(path::join(overlap_negatives_root, "missing-version.json")), overlap_schema, "missing required field");
-
 let fixture_root = path::join(northstar_skill_root, "assets/fixtures/language-packages/policy-free-fixture");
 validate_policy_free_fixture_deep(fixture_root, manifest_schema);
 
@@ -2027,99 +1974,6 @@ expect_host_result_rejection("missing-operation",
 let oracle_dir = run_card_117_oracle(northstar_skill_root, manifest_schema);
 validate_oracle_receipts(oracle_dir, receipt_schema);
 validate_host_messages(oracle_dir, host_schema);
-
-let surface_path = path::join(northstar_skill_root, "scripts/language-package-lifecycle.ts");
-let fallback_fixtures = path::join(northstar_skill_root, "assets/fixtures/language-packages/fallback");
-let fallback_notice_path = path::join(fs::make_temp_dir("northstar-fallback-notice-"), "notice.txt");
-let fallback_report = exec::run(
-    ["bun", "run", surface_path, "fallback",
-        path::join(fallback_fixtures, "jetstream-shaped-request.json"),
-        path::join(fallback_fixtures, "jetstream-shaped-result.json"),
-        overlap_path,
-        fallback_notice_path],
-    #{ run_in: "host", cwd: repo_root },
-);
-require(fallback_report["success"], "fallback CLI failed on the Jetstream-shaped pair: " + fallback_report["stderr"] + fallback_report["stdout"]);
-let fallback_notice = fs::read_file(fallback_notice_path);
-require(fallback_notice.contains("@northstar/typescript-quality@0.1.0"),
-    "fallback CLI omitted @northstar/typescript-quality@0.1.0");
-require(fallback_notice.contains("manual or local-path installation route required"),
-    "fallback CLI omitted the host stop reason");
-require(fallback_notice.contains("using the frozen embedded TypeScript payload during the bounded overlap window"),
-    "fallback CLI omitted the frozen payload clause");
-
-// Card 119: the same generic frozen-fallback decision must serve the Rust
-// overlap window without a language branch: the Rust-shaped stopped pair
-// names the failed official identity, the host stop reason, and the frozen
-// embedded Rust payload, and never claims the TypeScript payload.
-let rust_fallback_notice_path = path::join(fs::make_temp_dir("northstar-fallback-notice-"), "notice.txt");
-let rust_fallback_report = exec::run(
-    ["bun", "run", surface_path, "fallback",
-        path::join(fallback_fixtures, "rust-quality-shaped-request.json"),
-        path::join(fallback_fixtures, "rust-quality-shaped-result.json"),
-        overlap_path,
-        rust_fallback_notice_path],
-    #{ run_in: "host", cwd: repo_root },
-);
-require(rust_fallback_report["success"], "fallback CLI failed on the Rust-shaped pair: " + rust_fallback_report["stderr"] + rust_fallback_report["stdout"]);
-let rust_fallback_notice = fs::read_file(rust_fallback_notice_path);
-require(rust_fallback_notice.contains("@northstar/rust-quality@0.1.0"),
-    "fallback CLI omitted @northstar/rust-quality@0.1.0");
-require(rust_fallback_notice.contains("manual or local-path installation route required"),
-    "Rust fallback CLI omitted the host stop reason");
-require(rust_fallback_notice.contains("using the frozen embedded Rust payload during the bounded overlap window"),
-    "Rust fallback CLI omitted the frozen payload clause");
-require(!rust_fallback_notice.contains("TypeScript"),
-    "Rust fallback notice claimed the TypeScript payload");
-log("card-119 Rust frozen fallback CLI: PASS (Rust-shaped notice, no TypeScript payload claim)");
-expect_fallback_cli_failure("missing-version", surface_path,
-    path::join(fallback_fixtures, "missing-version-request.json"),
-    path::join(fallback_fixtures, "jetstream-shaped-result.json"),
-    overlap_path, "fallback request.version must be a string");
-expect_fallback_cli_failure("wrong-identity", surface_path,
-    path::join(fallback_fixtures, "wrong-identity-request.json"),
-    path::join(fallback_fixtures, "jetstream-shaped-result.json"),
-    overlap_path, "request/result identities disagree");
-expect_fallback_cli_failure("mismatched-request-id", surface_path,
-    path::join(fallback_fixtures, "jetstream-shaped-request.json"),
-    path::join(fallback_fixtures, "mismatched-request-id-result.json"),
-    overlap_path, "request/result identities disagree");
-expect_fallback_cli_failure("detection-intent", surface_path,
-    path::join(fallback_fixtures, "detection-intent-request.json"),
-    path::join(fallback_fixtures, "jetstream-shaped-result.json"),
-    overlap_path, "detection never authorizes a fallback runtime");
-expect_fallback_cli_failure("wrong-version", surface_path,
-    path::join(fallback_fixtures, "wrong-version-request.json"),
-    path::join(fallback_fixtures, "jetstream-shaped-result.json"),
-    overlap_path, "request/result identities disagree");
-expect_fallback_cli_failure("non-stopped", surface_path,
-    path::join(fallback_fixtures, "jetstream-shaped-request.json"),
-    path::join(fallback_fixtures, "non-stopped-result.json"),
-    overlap_path, "fallback requires a stopped package route");
-expect_fallback_cli_failure("operations-disagree", surface_path,
-    path::join(fallback_fixtures, "jetstream-shaped-request.json"),
-    path::join(fallback_fixtures, "operations-disagree-result.json"),
-    overlap_path, "request/result operations disagree");
-expect_fallback_cli_failure("closed-overlap", surface_path,
-    path::join(fallback_fixtures, "jetstream-shaped-request.json"),
-    path::join(fallback_fixtures, "jetstream-shaped-result.json"),
-    path::join(fallback_fixtures, "overlap-closed.json"),
-    "embedded fallback window is closed");
-expect_fallback_cli_failure("no-payload", surface_path,
-    path::join(fallback_fixtures, "no-payload-request.json"),
-    path::join(fallback_fixtures, "jetstream-shaped-result.json"),
-    overlap_path, "language has no frozen overlap payload");
-expect_fallback_cli_failure("overlap-extra-property", surface_path,
-    path::join(fallback_fixtures, "jetstream-shaped-request.json"),
-    path::join(fallback_fixtures, "jetstream-shaped-result.json"),
-    path::join(overlap_negatives_root, "extra-property.json"),
-    "contains forbidden additional property");
-expect_fallback_cli_failure("overlap-missing-version", surface_path,
-    path::join(fallback_fixtures, "jetstream-shaped-request.json"),
-    path::join(fallback_fixtures, "jetstream-shaped-result.json"),
-    path::join(overlap_negatives_root, "missing-version.json"),
-    "missing required field");
-log("card-118 operational fallback CLI: PASS (Jetstream-shaped notice plus eleven fail-closed mutations)");
 
 run_card_122_selection_proofs(northstar_skill_root, official_registry_path);
 

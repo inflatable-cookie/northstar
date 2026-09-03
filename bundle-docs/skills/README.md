@@ -1,8 +1,8 @@
 # Skill Architecture
 
-Northstar ships **one distributable skill package**. It installs the `northstar`
-front door plus thin named adapters so explicit commands are activatable across
-agent harnesses.
+Northstar ships **one distributable skill package**: the `northstar` front
+door. Language quality lives in independently installed packages, not in this
+skill.
 
 Human operators use [`protocol-kernel.md`](../protocol-kernel.md), the
 [visual map](../visual-map.md), and [operator quick start](../operators/operator-quick-start.md).
@@ -14,7 +14,7 @@ before loading a mode.
 
 | Source | Role |
 | --- | --- |
-| `skills/northstar/` | One package containing the front door, modes, tools, and adapters |
+| `skills/northstar/` | One package containing the front door and generic mode routing |
 
 The package exposes thin explicit command adapters under `commands/`:
 
@@ -27,18 +27,15 @@ The package exposes thin explicit command adapters under `commands/`:
 | `/northstar-architecture-refocus` | Bounded architecture refocus |
 | `/northstar-refresh` | Broad project planning/docs refresh |
 | `/northstar-cleanup` | Inspect and safely rework `/docs` drift |
-| `/northstar-rust-audit` | Explicit worktree or repository Rust quality audit-and-repair |
-| `/northstar-typescript-audit` | Explicit worktree or repository TypeScript/Svelte audit-and-repair |
 
-The Skills CLI installs each adapter as a named skill entry because nested files
-inside `northstar` are not independently activatable. They remain adapters, not
-separate standards or planning authorities. Each loads the central router and
-one canonical mode. Atlas is strategic and plan-only; readiness review is
-intentionally smaller and audits planning that already exists.
+Language quality workflows are not commands in this package. Explicit
+audit-and-repair and everyday authoring route through installed language
+packages via the generic installed-package route in
+`skills/northstar/references/packages/installed-package-route.md`.
 
 ## Distribution and update
 
-Install the published package at full depth so every named adapter is surfaced:
+Install the published package so the `northstar` front door is activatable:
 
 ```bash
 npx skills add https://github.com/inflatable-cookie/northstar/tree/main/skills/northstar \
@@ -50,39 +47,33 @@ Replace `codex` with the current harness's Skills CLI agent ID, or pass several
 IDs after `--agent`. Do not use `--all`: that targets every supported harness,
 not every skill in this package.
 
-After a published source update, rerun the same full-depth command. Updating
-only `northstar` leaves separately installed adapters stale.
-
 ```bash
 npx skills add https://github.com/inflatable-cookie/northstar/tree/main/skills/northstar \
   --full-depth --skill '*' --agent codex -g -y
 npx skills list -g --json
 ```
 
-The first list must include `northstar`, `northstar-rust-audit`, and
-`northstar-typescript-audit`; a top-level-only install is incomplete. `skills
-list` also shows the configured source and installed agent targets. A source
-checkout can verify the main payload with:
+The first list must include `northstar`; a missing front door is an
+incomplete install. `skills list` also shows the configured source and
+installed agent targets. A source checkout can verify the payload with:
 
 ```bash
 effigy check:skill-install /path/to/installed/northstar
 ```
 
-The parity checker compares the distributable skill payload and ignores Effigy
-receipts under `.effigy/` plus Cargo build output under
-`tools/rust-quality/target/`; neither is part of the installed skill. A direct
-`rsync -a --delete` from `skills/northstar/` is reserved for local development
-before the change is published. Restart agent sessions after an update.
+The parity checker compares the distributable skill payload and ignores
+Effigy receipts under `.effigy/`; they are not part of the installed skill. A
+direct `rsync -a --delete` from `skills/northstar/` is reserved for local
+development before the change is published. Restart agent sessions after an
+update.
 
-The current source package contains 125 distributable files. Installed copies
-remain separate parity targets and may lag until an explicit update. Rust v2
-replaces the skill-local Rhai recorder with the Cargo-native engine;
-TypeScript retains its Rhai recorder. This count is evidence for the current
-payload, not a stable public contract.
+The current source package contains 111 distributable files. Installed copies
+remain separate parity targets and may lag until an explicit update. This
+count is evidence for the current payload, not a stable public contract.
 
 The installed skill also carries a minimal Effigy catalog for consumer-safe
-checks plus Rust and TypeScript quality activation/recording. It validates the
-agent-instruction surface and inert language-quality packages. When a consumer repository has no local
+checks. It validates the agent-instruction surface and the generic
+language-package machine contracts. When a consumer repository has no local
 `check:agent-instructions` task, select the installed skill explicitly:
 
 ```bash
@@ -92,76 +83,21 @@ effigy --repo /path/to/installed/northstar northstar/check:agent-instructions /p
 This is an execution surface inside the one package, not a second standards
 authority or a replacement for the source repository's full QA catalog.
 
-Rust catalogue and projection parity is checked without loading those files as
-agent instructions:
 
-```bash
-effigy --repo /path/to/installed/northstar northstar/check:rust-quality
-```
+### Language quality packages
 
-TypeScript catalogue and strict-audit parity is checked the same way:
+Rust and TypeScript/Svelte quality live in independently installed official
+packages, not in this skill. Explicit audit-and-repair intent or an existing
+consumer activation marker routes through the generic installed-package route
+(`skills/northstar/references/packages/installed-package-route.md`): generic
+registry-owned selection, a visible acquisition notice, and execution of the
+package's declared entrypoint from its installed path. Consumer repositories
+keep owning their profiles, deviations, toolchains, and exclusions.
 
-```bash
-effigy --repo /path/to/installed/northstar northstar/check:typescript-quality
-```
-
-### Agent-owned strict Rust activation
-
-The operator does not copy or configure template files. When Northstar is
-requested for Rust work, the agent checks the target repository and runs:
-
-```bash
-effigy --repo /path/to/installed/northstar \
-  northstar/rust-quality:setup apply /absolute/path/to/project [scope-directory]
-```
-
-The agent chooses the narrowest Rust-owning scope. The setup task discovers
-Cargo manifests and explicit toolchain files, appends a marked compact block to
-an existing `AGENTS.md` without replacing it, creates only missing profile and
-deviation contracts, and is byte-idempotent. Existing valid contracts remain
-unchanged. Conflicts fail closed.
-
-Only `strict` is production-valid. The repository owns its MSRV, exclusions,
-architecture, and accepted deviations; Northstar does not infer or replace
-them. The agent asks only when that policy is not recoverable from repository
-state. Ordinary Rust work then routes through the compact authoring mode. An
-explicit whole-codebase or current-worktree audit uses:
-
-```text
-/northstar-rust-audit repository
-/northstar-rust-audit worktree
-```
-
-The audit records findings before mutation and preserves unrelated dirty state.
-It does not authorize ordinary or high-assurance profiles, unsafe/FFI repair,
-blanket fixing, or certification claims.
-
-### Agent-owned TypeScript/Svelte explicit audit activation
-
-TypeScript and Svelte activate only for an explicit quality audit, no-slop pass,
-or audit-and-fix request. Ordinary TypeScript coding does not load the catalogue
-or audit procedure. The agent chooses the narrowest package-owning scope and
-runs:
-
-```bash
-effigy --repo /path/to/installed/northstar \
-  northstar/typescript-quality:setup apply /absolute/path/to/project [scope-directory]
-```
-
-Setup discovers root packages, declared workspaces, independent nested packages,
-and package-local Svelte 5/SvelteKit 2 evidence. It installs no dependencies,
-preserves valid instructions and contracts, and fails closed on malformed or
-conflicting setup. Explicit audit then uses:
-
-```text
-/northstar-typescript-audit repository
-/northstar-typescript-audit worktree
-```
-
-Only strict explicit audit is production-valid. Everyday TypeScript authoring,
-older or unresolved framework overlays, Deno-only/source-only roots, deferred
-toolchain/testing rules, slop-only mutation, and certification claims remain
-unavailable.
+With no compatible package installed, only the requested language workflow
+stops, naming the exact identity and the local installation route; all other
+Northstar workflows continue. Core carries no embedded language payload and no
+compatibility alias for one.
 
 Retired top-level skills (`northstar-setup`, `northstar-plan`,
 `northstar-recover`, `northstar-research`, `northstar-handoff`) were merged
@@ -185,9 +121,6 @@ compatibility aliases.
 | `sweep-audit-repair.md` | Structured sweep pass |
 | `handoff.md` | User **explicitly** asks for handoff / fresh thread |
 | `atlas.md` | User-guided long-horizon direction and a coarse strategic runway |
-| `rust-quality-authoring.md` | Self-activating ordinary Rust writing, review, or refactoring |
-| `rust-quality-audit.md` | Explicit Rust worktree or repository audit-and-repair |
-| `typescript-quality-audit.md` | Explicit TypeScript/Svelte worktree or repository audit-and-repair |
 
 Setup references live under `skills/northstar/references/setup/`.
 Templates live under `skills/northstar/assets/templates/`.
@@ -199,17 +132,10 @@ Templates live under `skills/northstar/assets/templates/`.
   language in the user message — covered by the `northstar` skill description.
 - **Handoff:** only when the user clearly wants a continuation brief or fresh
   thread. The router and handoff mode forbid compaction-only or bare `continue`.
-- **Rust everyday authoring:** only when applicable repository instructions
-  activate the strict Rust profile and the task writes, reviews, or refactors
-  Rust. The mode loads individual rule references by trigger. Explicit audit or
-  no-slop intent is reserved for the audit route and cannot fall back here.
-- **Rust explicit audit:** only for an explicit quality audit, no-slop pass, or
-  audit-and-fix request. It loads the audit projection and deterministic record
-  contract on demand, resolves worktree or repository scope, and cannot
-  activate from ordinary coding.
-- **TypeScript/Svelte explicit audit:** only for an explicit quality audit,
-  no-slop pass, or audit-and-fix request. It resolves package-local overlays and
-  cannot activate from ordinary coding; no everyday TypeScript projection ships.
+- **Language quality:** explicit audit-and-repair or everyday authoring
+  intent — or an exact registered activation marker in the consumer — routes
+  through installed language packages. Detection of a language alone never
+  installs or activates anything.
 - **Triage:** orchestrator and refresh conversations capture unresolved useful
   threads in `docs/triage/YYYYMMDD-HHMMSS-<slug>.md`; cleanup and refresh promote,
   merge, or remove them over time.

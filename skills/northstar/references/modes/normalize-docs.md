@@ -50,11 +50,13 @@ Optional: `effigy check:posture-advisory` after structural edits.
    adopt/upgrade — before release-candidate / exact-SHA prep, not during tag
    closeout after a green clean-tree SHA. Verify native Effigy with
    `effigy docs --help` before assuming compat mode.
-   For Rust quality activation, do not hand-copy the three Rust assets. Run the
-   loaded skill's `northstar/rust-quality:setup apply <absolute-target-root>
-   [scope-directory]`; let it preserve existing files and discover Cargo and
-   toolchain paths. Ask only for repository policy the task cannot recover.
-   When the repo is a Paseo project, merge the optional `paseo.json` template.
+   For a language quality activation, do not copy language assets or templates.
+   Route through the installed language package: supply explicit workflow
+   intent or the consumer's exact activation marker to the generic selection
+   and installed-package route in `references/packages/installed-package-route.md`
+   of the loaded skill, and let the installed package own its setup at the
+   narrowest owning scope. Ask only for repository policy the task cannot
+   recover.
    Keep the repo's real setup task between sibling preparation and Effigy link
    replay. The lifecycle implementation stays in the installed Northstar skill
    and is invoked with `effigy skill run`; do not copy it into the consumer.

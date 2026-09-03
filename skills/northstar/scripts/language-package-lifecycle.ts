@@ -1298,14 +1298,6 @@ interface HostResult {
   receipt_digest?: string;
 }
 
-interface OverlapWindow {
-  language: string;
-  package_id: string;
-  version: string;
-  payload_label: string;
-  window: "open" | "closed";
-}
-
 type HostCapability = "catalogue" | "identity" | "atomic" | "process" | "acquisition";
 
 const OP_CAPABILITIES: Record<HostRequest["operation"], HostCapability[]> = {
@@ -1465,56 +1457,6 @@ function executeHostRequest(request: HostRequest, registryPath: string | null, c
     const n = "workflow " + request.workflow + " for " + request.package_id + "@" + request.version + " stopped: " + (err as Error).message + "; manual or local-path installation route required";
     return hostStopped(request, n);
   }
-}
-
-function parseOverlapRegistry(raw: unknown, context: string): OverlapWindow[] {
-  const doc = asRecord(raw, context);
-  requireClosedObject(doc, ["schema_version", "windows"], context);
-  check(asString(doc.schema_version, context + ".schema_version") === "1.0.0", context + " has unsupported schema_version");
-  check(Array.isArray(doc.windows), context + ".windows must be an array");
-  const seen: string[] = [];
-  const windows: OverlapWindow[] = [];
-  let i = 0;
-  for (const item of doc.windows as unknown[]) {
-    const wctx = context + ".windows[" + String(i) + "]";
-    const w = asRecord(item, wctx);
-    requireClosedObject(w, ["language", "package_id", "version", "payload_label", "window"], wctx);
-    const language = asString(w.language, wctx + ".language");
-    check(language.length > 0, wctx + ".language is empty");
-    check(!seen.includes(language), context + " contains duplicate language: " + language);
-    seen.push(language);
-    const packageId = asString(w.package_id, wctx + ".package_id");
-    check(PACKAGE_ID.test(packageId), wctx + " has invalid package_id");
-    const version = asString(w.version, wctx + ".version");
-    check(SEMVER.test(version), wctx + " has invalid version");
-    const payloadLabel = asString(w.payload_label, wctx + ".payload_label");
-    check(payloadLabel.length > 0, wctx + ".payload_label is empty");
-    const window = asString(w.window, wctx + ".window");
-    check(window === "open" || window === "closed", wctx + ".window must be open or closed");
-    windows.push({ language, package_id: packageId, version, payload_label: payloadLabel, window: window as "open" | "closed" });
-    i += 1;
-  }
-  return windows;
-}
-
-function decideFrozenFallback(requestRaw: unknown, resultRaw: unknown, overlapRaw: unknown): string {
-  const request = parseHostRequest(requestRaw, "fallback request");
-  const result = parseHostResult(resultRaw, "fallback result");
-  check(request.request_id === result.request_id, "request/result identities disagree");
-  check(request.intent === "workflow_request" || request.intent === "activation", "detection never authorizes a fallback runtime");
-  const windows = parseOverlapRegistry(overlapRaw, "fallback overlap");
-  check(request.operation === result.operation, "request/result operations disagree");
-  check(request.operation === "acquire_activate", "fallback requires a stopped acquisition route");
-  check(result.status === "stopped", "fallback requires a stopped package route");
-  const matches = windows.filter((entry) => entry.language === request.language);
-  check(matches.length === 1, "language has no frozen overlap payload");
-  const selected = matches[0];
-  check(selected.package_id === request.package_id && selected.version === request.version, "request/result identities disagree");
-  check(selected.window === "open", "embedded fallback window is closed");
-  check(result.notice.length > 0, "fallback requires a stopped package route");
-  const body = request.package_id + "@" + request.version + " unavailable (" + result.notice + "); using the frozen embedded " + selected.payload_label + " payload during the bounded overlap window";
-  notice(body);
-  return body;
 }
 
 const FULL_HOST_CAPABILITIES = new Set<HostCapability>(["catalogue", "identity", "atomic", "process", "acquisition"]);
@@ -3424,102 +3366,6 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
     console.log("oracle-14 official-pin-route: PASS (visible acquisition stop, route intent, installed offline route, drift stop, rollback recovery, registry-version provenance)");
   }
 
-  // ---- frozen-fallback notice: core overlap decision, not a host status ----
-  {
-    const skillRoot = path.dirname(path.dirname(process.argv[1]));
-    const overlapPath = path.join(skillRoot, "references/packages/overlap-windows.json");
-    const fixtureDir = path.join(skillRoot, "assets/fixtures/language-packages/fallback");
-    const overlap = JSON.parse(fs.readFileSync(overlapPath, "utf8"));
-    const jetstreamRequest = JSON.parse(fs.readFileSync(path.join(fixtureDir, "jetstream-shaped-request.json"), "utf8"));
-    const jetstreamResult = JSON.parse(fs.readFileSync(path.join(fixtureDir, "jetstream-shaped-result.json"), "utf8"));
-    check(jetstreamResult.status === "stopped" &&
-      jetstreamResult.notice.includes("manual or local-path installation route required") &&
-      !jetstreamResult.notice.includes("@northstar/typescript-quality@0.1.0") &&
-      !jetstreamResult.notice.includes("frozen embedded"),
-      "Jetstream-shaped host stop is no longer the pre-fix counterexample: " + jetstreamResult.notice);
-
-    const decided = decideFrozenFallback(jetstreamRequest, jetstreamResult, overlap);
-    check(decided.includes("@northstar/typescript-quality@0.1.0"),
-      "fallback notice omitted package-id@version: " + decided);
-    check(decided.includes("manual or local-path installation route required"),
-      "fallback notice omitted the host stop reason: " + decided);
-    check(decided.includes("using the frozen embedded TypeScript payload during the bounded overlap window"),
-      "fallback notice omitted the frozen payload clause: " + decided);
-
-    const out = path.join(outRoot, "r15-frozen-fallback");
-    mkdirP(path.join(out, "host-protocol/requests"));
-    mkdirP(path.join(out, "host-protocol/results"));
-    const noticeFile = path.join(out, "jetstream-shaped-notice.txt");
-    const cli = spawnSync("bun", ["run", process.argv[1], "fallback",
-      path.join(fixtureDir, "jetstream-shaped-request.json"),
-      path.join(fixtureDir, "jetstream-shaped-result.json"),
-      overlapPath,
-      noticeFile], { encoding: "utf8" });
-    check(cli.status === 0, "fallback CLI failed on the Jetstream-shaped pair: " + String(cli.stderr) + String(cli.stdout));
-    const cliNotice = fs.readFileSync(noticeFile, "utf8");
-    check(cliNotice.includes("@northstar/typescript-quality@0.1.0") &&
-      cliNotice.includes("manual or local-path installation route required") &&
-      cliNotice.includes("using the frozen embedded TypeScript payload during the bounded overlap window"),
-      "fallback CLI did not emit the exact overlap notice: " + cliNotice);
-    fs.writeFileSync(path.join(out, "host-protocol/requests", "jetstream-shaped.json"), JSON.stringify(jetstreamRequest));
-    fs.writeFileSync(path.join(out, "host-protocol/results", "jetstream-shaped.json"), JSON.stringify(jetstreamResult));
-
-    const expectFail = (label: string, request: unknown, result: unknown, overlapDoc: unknown, reason: string): void => {
-      let failed = false;
-      try {
-        decideFrozenFallback(request, result, overlapDoc);
-      } catch (err) {
-        failed = String((err as Error).message).includes(reason);
-        if (!failed) {
-          throw new Error(label + " rejected for wrong reason: " + String((err as Error).message));
-        }
-      }
-      check(failed, label + " unexpectedly passed");
-    };
-    expectFail("missing-version",
-      JSON.parse(fs.readFileSync(path.join(fixtureDir, "missing-version-request.json"), "utf8")),
-      jetstreamResult, overlap, "fallback request.version must be a string");
-    expectFail("wrong-identity",
-      JSON.parse(fs.readFileSync(path.join(fixtureDir, "wrong-identity-request.json"), "utf8")),
-      jetstreamResult, overlap, "request/result identities disagree");
-    expectFail("mismatched-request-id",
-      jetstreamRequest,
-      JSON.parse(fs.readFileSync(path.join(fixtureDir, "mismatched-request-id-result.json"), "utf8")),
-      overlap, "request/result identities disagree");
-    expectFail("detection-intent",
-      JSON.parse(fs.readFileSync(path.join(fixtureDir, "detection-intent-request.json"), "utf8")),
-      jetstreamResult, overlap, "detection never authorizes a fallback runtime");
-    expectFail("wrong-version",
-      JSON.parse(fs.readFileSync(path.join(fixtureDir, "wrong-version-request.json"), "utf8")),
-      jetstreamResult, overlap, "request/result identities disagree");
-    expectFail("non-stopped",
-      jetstreamRequest,
-      JSON.parse(fs.readFileSync(path.join(fixtureDir, "non-stopped-result.json"), "utf8")),
-      overlap, "fallback requires a stopped package route");
-    expectFail("operations-disagree",
-      jetstreamRequest,
-      JSON.parse(fs.readFileSync(path.join(fixtureDir, "operations-disagree-result.json"), "utf8")),
-      overlap, "request/result operations disagree");
-    expectFail("closed-overlap",
-      jetstreamRequest, jetstreamResult,
-      JSON.parse(fs.readFileSync(path.join(fixtureDir, "overlap-closed.json"), "utf8")),
-      "embedded fallback window is closed");
-    expectFail("no-payload",
-      JSON.parse(fs.readFileSync(path.join(fixtureDir, "no-payload-request.json"), "utf8")),
-      JSON.parse(fs.readFileSync(path.join(fixtureDir, "jetstream-shaped-result.json"), "utf8")),
-      overlap, "language has no frozen overlap payload");
-    const overlapNegDir = path.join(skillRoot, "assets/fixtures/language-packages/negative/overlap");
-    expectFail("overlap-extra-property",
-      jetstreamRequest, jetstreamResult,
-      JSON.parse(fs.readFileSync(path.join(overlapNegDir, "extra-property.json"), "utf8")),
-      "contains forbidden additional property");
-    expectFail("overlap-missing-version",
-      jetstreamRequest, jetstreamResult,
-      JSON.parse(fs.readFileSync(path.join(overlapNegDir, "missing-version.json"), "utf8")),
-      "missing required field");
-
-    console.log("oracle-15 frozen-fallback-notice: PASS (Jetstream-shaped host stop is not fallback evidence; exact overlap notice; missing version, wrong identity, mismatched request_id, detection, wrong version, non-stopped, operations disagree, closed window, no frozen payload, extra overlap property, and missing overlap version fail closed)");
-  }
   // ---- card 122: generic registry-owned intent/activation selection ----
   //
   // The selection procedure is data-driven over discovery metadata: no
@@ -3879,7 +3725,7 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
 
 
   console.log("card-117 oracle: PASS (8 review rows + transitions + restrictions + provenance + concurrency + self-check + identity-binding/store negatives)");
-  console.log("card-118 oracle: PASS (official registry pin route: visible acquisition stop, operational frozen-fallback notice, route intent, installed offline route, drift stop, rollback recovery, registry-version provenance)");
+  console.log("card-118 oracle: PASS (official registry pin route: visible acquisition stop, route intent, installed offline route, drift stop, rollback recovery, registry-version provenance)");
   console.log("card-122 oracle: PASS (generic registry-owned selection: explicit intent and exact activation markers select one data-driven entry; unsupported work, ambiguity, drift, and detection fail closed before acquisition)");
 }
 
@@ -3975,23 +3821,7 @@ async function main(): Promise<void> {
       " tree=" + entry.tree_digest + " manifest=" + entry.manifest_digest);
     return;
   }
-  if (command === "fallback") {
-    // fallback <request-file> <result-file> <overlap-file> [notice-file]:
-    // core-owned overlap decision. Consumes a stopped acquisition pair and
-    // emits the frozen-fallback notice, or fails closed.
-    check(args[1] !== undefined && args[2] !== undefined && args[3] !== undefined,
-      "usage: language-package-lifecycle.ts fallback <request-file> <result-file> <overlap-file> [notice-file]");
-    const body = decideFrozenFallback(
-      JSON.parse(fs.readFileSync(args[1], "utf8")),
-      JSON.parse(fs.readFileSync(args[2], "utf8")),
-      JSON.parse(fs.readFileSync(args[3], "utf8")),
-    );
-    if (args[4] !== undefined) {
-      fs.writeFileSync(args[4], body + "\n");
-    }
-    return;
-  }
-  throw new Error("usage: language-package-lifecycle.ts oracle <fixture-root> <out-dir> | vectors <fixture-root> | cas-race <state-root> <observed> <payload-file> <hold|attempt> | host <request-file> <result-file> [registry-path] | fallback <request-file> <result-file> <overlap-file> [notice-file] | select <registry-file> (--language <l> --workflow <w> [--overlay <o>] | --marker <m>) [--core-version <v>] [--json <out>]");
+  throw new Error("usage: language-package-lifecycle.ts oracle <fixture-root> <out-dir> | vectors <fixture-root> | cas-race <state-root> <observed> <payload-file> <hold|attempt> | host <request-file> <result-file> [registry-path] | select <registry-file> (--language <l> --workflow <w> [--overlay <o>] | --marker <m>) [--core-version <v>] [--json <out>]");
 }
 
 await main();
