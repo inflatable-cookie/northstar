@@ -14,6 +14,7 @@ worked through.
 - [029 - Northstar Long-Horizon Planning](./029-northstar-long-horizon-planning.md)
 - [030 - Conversational Triage And Docs Cleanup](./030-conversational-triage-and-docs-cleanup.md)
 - [035 - Chatterbox Intake Channel](./035-chatterbox-intake-channel.md)
+- [036 - Economical Orchestrator Coordination](./036-economical-orchestrator-coordination.md)
 - [Related translation memo](../../bundle-docs/research/translation-memos/matt-pocock-skills-audit-to-northstar.md)
 - [Rust quality translation memo](../../bundle-docs/research/translation-memos/rust-quality-skills-and-audit.md)
 - [TypeScript/Svelte quality translation memo](../../bundle-docs/research/translation-memos/typescript-quality-and-svelte-overlay.md)

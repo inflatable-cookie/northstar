@@ -22,6 +22,7 @@ to adopt.
 - [specs/030-conversational-triage-and-docs-cleanup.md](./specs/030-conversational-triage-and-docs-cleanup.md)
 - [specs/034-modular-language-quality-packages.md](./specs/034-modular-language-quality-packages.md)
 - [specs/035-chatterbox-intake-channel.md](./specs/035-chatterbox-intake-channel.md)
+- [specs/036-economical-orchestrator-coordination.md](./specs/036-economical-orchestrator-coordination.md)
 - [triage/README.md](./triage/README.md)
 - [roadmaps/generation-index.md](./roadmaps/generation-index.md)
 - [handoffs/README.md](./handoffs/README.md)
@@ -56,10 +57,10 @@ Northstar system:
 - work should not be called done without real evidence
 - agents should be able to continue through ready batch cards without needing
   repeated "continue" prompts from the operator
-- frontier orchestrators may delegate settled mechanical documentation batches
-  to fast/low-cost subagents, but retain planning and full-diff semantic review
-- frontier orchestrators may delegate an operator-facing planning conversation,
-  but canonical promotion and readiness remain with the orchestrator
+- spec 036 plans an economical coordinator default: material discovery moves to
+  operator-confirmed chatterbox packets, canonical promotion stays bounded and
+  mechanical, and substantive PR review moves to independent child reviewers;
+  card 125 is ready and the ten-PR trial remains blocked
 - `g02.041/109` repaired partial Rust evidence collection and merged; Signal
   owns the originating papercut closure
 - dependency-frontier, parallel-first worker scheduling is the orchestrator

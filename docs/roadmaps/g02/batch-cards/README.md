@@ -74,6 +74,8 @@ refresh selected Convergence and froze a 54-file source boundary, but found the
 TypeScript package's agent-facing `SKILL.md` loads an absent router. Card 121
 merged as `69e4d5d`, card 119 merged as `256d0f7`, and card 122 merged as
 `ddaae0d`.
-Paseo worker-parentage correction `g02.049/123` merged as `7ebaa9c`; card 120 is
-the sole ready card and owns the bounded root reduction. Chatterbox intake
-`g02.050/124` is compiled and not ready until that lane merges.
+Paseo worker-parentage correction `g02.049/123` merged as `7ebaa9c`; modular
+language-package extraction closed through card 120 and PR 30 at `aa9a005`.
+Chatterbox intake `g02.050/124` merged through PR 31 at `d1b162e`. Economical
+orchestrator coordination `g02.051/125` is ready; card 126 is blocked behind
+its merge and installed-skill refresh.

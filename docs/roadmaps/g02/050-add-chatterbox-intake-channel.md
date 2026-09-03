@@ -1,6 +1,6 @@
 # 050 - Add Chatterbox Intake Channel
 
-Status: in review; card 124 reviewable PR pending
+Status: complete; card 124 merged
 Owner: repo maintainers
 Created: 2026-09-03
 Updated: 2026-09-03
@@ -71,6 +71,5 @@ acceptance during review.
 
 ## Next Task
 
-Launch card 124 from
-`docs/handoffs/20260903-181459-add-chatterbox-intake-channel.md`, then stop for
-its reviewable PR.
+Closed through PR 31 at `d1b162e`. Follow-on orchestration authority belongs to
+`g02.051`; no further chatterbox implementation is implied here.

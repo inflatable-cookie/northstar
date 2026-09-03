@@ -80,7 +80,7 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02.047` is complete; card 115 diversified model routing across workers,
   delegates, and fresh orchestrators with focused ten-row oracle assertions.
   PR 20 merged at `08ad810` after exact-head review.
-- `g02.048` is complete pending review; card 117's generic lifecycle proof
+- `g02.048` is complete; card 117's generic lifecycle proof
   merged through PR 22 at `75db6f5`. Card 118's public package repository,
   reviewed installed-invocation repair, core registry/routing, and Jetstream
   canary are complete. Batch B's bounded proof is accepted with four
@@ -93,22 +93,24 @@ Roadmaps sequence contract-backed work for Northstar itself.
   as `256d0f7`; Convergence PR 4 repaired its evidence gap and merged as
   `dff19c9`. Card 122 merged the generic selector as `ddaae0d`. Card 120 then
   removed the embedded payloads and fallback and proved core-only and
-  two-package routing; the PR awaits exact-head review and merge.
+  two-package routing; PR 30 merged as `aa9a005`.
 - `g02.049` is complete; card 123 preserves Paseo worker parentage across
   dedicated worktree workspace placement, keeps finish notifications enabled,
   resumes same-child identity on revision, and proves all six oracle rows
   through live launch, exact-head source review, and same-child revision.
-- `g02.050` is implemented; card 124 added the chatterbox intake mode and
+- `g02.050` is complete; card 124 added the chatterbox intake mode and
   `/northstar-chatterbox` adapter, shared-checkout exact-path git commit
   isolation with temporary-repository fixture proof, and non-assignment
   orchestrator intake handling (v1 starts no automatic orchestrator turn).
-  The reviewable PR is pending orchestrator exact-head review.
+  PR 31 merged as `d1b162e`.
+- `g02.051` is planned; card 125 is ready to make economical coordination the
+  orchestrator default, with material planning in operator-confirmed
+  chatterbox packets and semantic PR review in independent child reviewers.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Review card 124 PR for chatterbox intake channel at exact head. Card 120 merged
-the generic-core reduction as `aa9a005`, and installed-skill parity is current
-at 113 files.
+Launch card 125 from its committed handoff. Card 126 remains blocked until the
+authority split merges and the installed skill is refreshed.

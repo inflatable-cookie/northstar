@@ -1,6 +1,6 @@
 # 124 - Add Chatterbox Intake Channel
 
-Status: complete; reviewable PR pending
+Status: complete; merged through PR 31 at `d1b162e`
 Owner: repo maintainers
 Created: 2026-09-03
 Updated: 2026-09-03
@@ -100,7 +100,4 @@ review.
 
 ## Next Task
 
-Launch one worker from
-`docs/handoffs/20260903-181459-add-chatterbox-intake-channel.md`. Stop for
-orchestrator exact-head review of its PR; do not begin a queue plugin or live
-operator-use follow-up from this card.
+Closed through PR 31 at `d1b162e`. The queue-plugin triage note remains separate.
