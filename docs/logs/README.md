@@ -32,6 +32,7 @@ Use logs as the third step in closeout:
 
 ## Recent active-lane evidence
 
+- `2026-09/03-154324-remove-embedded-language-quality-payloads.md`
 - `2026-09/03-142000-preserve-paseo-worker-parentage.md`
 - `2026-09/03-144604-open-embedded-language-payload-removal.md`
 - `2026-09/03-140006-plan-paseo-worker-parentage.md`

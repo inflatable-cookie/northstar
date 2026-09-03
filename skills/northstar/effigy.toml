@@ -6,13 +6,5 @@ alias = "northstar"
 
 [tasks]
 "check:agent-instructions" = [{ rhai = "scripts/check-agent-instructions.rhai" }]
-"check:rust-quality" = [{ rhai = "scripts/check-rust-quality.rhai" }]
-"check:typescript-quality" = [{ rhai = "scripts/check-typescript-quality.rhai" }]
 "check:language-packages" = [{ rhai = "scripts/check-language-packages.rhai" }]
-"rust-quality:setup" = [{ rhai = "scripts/rust-quality-setup.rhai" }]
-"test:rust-quality-setup" = [{ task = "rust-quality:setup self-test" }]
-"typescript-quality:setup" = [{ rhai = "scripts/typescript-quality-setup.rhai" }]
-"typescript-quality:record" = [{ rhai = "scripts/typescript-quality-recorder.rhai" }]
-"test:typescript-quality-setup" = [{ task = "typescript-quality:setup self-test" }]
-"test:typescript-quality-recorder" = [{ task = "typescript-quality:record self-test" }]
 "paseo:worktree" = [{ rhai = "scripts/paseo-worktree.rhai" }]

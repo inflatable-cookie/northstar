@@ -80,19 +80,20 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02.047` is complete; card 115 diversified model routing across workers,
   delegates, and fresh orchestrators with focused ten-row oracle assertions.
   PR 20 merged at `08ad810` after exact-head review.
-- `g02.048` is active; card 117's generic lifecycle proof merged through PR 22
-  at `75db6f5`. Card 118's public package repository, reviewed installed-
-  invocation repair, core registry/routing, and Jetstream canary are complete.
-  Batch B's bounded proof is accepted with four pre-existing editor failures
-  and current-Poodle `ResolvedIconGeometry` API drift recorded as limits.
-  Package-source PR 3 repaired the TypeScript package's non-standalone command
-  adapter and merged as `c9ef2a2`. Card 121's registry `1.3.0` pin merged as
-  `69e4d5d`. Card 119's registry promotion pinned the Rust identity at
-  registry version `1.4.0` and proved the real-package lifecycle and
-  engine-integrity transcripts. PR 27 merged as `256d0f7`; Convergence PR 4
-  repaired its evidence gap and merged as `dff19c9`. Card 119 is complete; the
-  removal inventory is frozen, card 122 merged as `ddaae0d`, and card 120 is
-  ready for bounded root reduction.
+- `g02.048` is complete pending review; card 117's generic lifecycle proof
+  merged through PR 22 at `75db6f5`. Card 118's public package repository,
+  reviewed installed-invocation repair, core registry/routing, and Jetstream
+  canary are complete. Batch B's bounded proof is accepted with four
+  pre-existing editor failures and current-Poodle `ResolvedIconGeometry` API
+  drift recorded as limits. Package-source PR 3 repaired the TypeScript
+  package's non-standalone command adapter and merged as `c9ef2a2`. Card
+  121's registry `1.3.0` pin merged as `69e4d5d`. Card 119's registry
+  promotion pinned the Rust identity at registry version `1.4.0` and proved
+  the real-package lifecycle and engine-integrity transcripts. PR 27 merged
+  as `256d0f7`; Convergence PR 4 repaired its evidence gap and merged as
+  `dff19c9`. Card 122 merged the generic selector as `ddaae0d`. Card 120 then
+  removed the embedded payloads and fallback and proved core-only and
+  two-package routing; the PR awaits exact-head review and merge.
 - `g02.049` is complete; card 123 preserves Paseo worker parentage across
   dedicated worktree workspace placement, keeps finish notifications enabled,
   resumes same-child identity on revision, and proves all six oracle rows

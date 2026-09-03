@@ -5,7 +5,7 @@ handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
 handoff: single-file-path-only
-status: ready-to-launch
+status: implementation complete; PR 30 opened for exact-head review
 owner: repo maintainers
 created: 2026-09-03
 updated: 2026-09-03
@@ -99,8 +99,32 @@ breaking planning, orchestration, review, or existing consumer evidence.
   parity; `effigy check:command-skills`; `effigy check:language-packages`;
   `effigy qa:docs`; `effigy qa`; `git diff --check`.
 - **PR base/head:** `main` <- `worker/remove-embedded-language-quality-payloads`
-- **PR URL:** pending.
-- **Review state:** implementation not started.
+- **PR URL:** https://github.com/inflatable-cookie/northstar/pull/30
+- **Review state:** revision 2 after the changes-required exact-head review of
+  `48661c7`. All three findings addressed on this branch: (1) `SKILL.md` and
+  `agents/openai.yaml` route language work through the generic
+  installed-package route with a checker guard against deleted modes, proven
+  on a fresh isolated install; (2) bounded real-consumer reruns for Jetstream
+  (TypeScript record flow) and Convergence (Rust engine ledger) run inside
+  `check:language-package-routes` with before/after policy and activation
+  hashes and untouched siblings, with the consumers' real markers recorded
+  accurately (Jetstream TS marker in `editor-ui/AGENTS.md`, Rust marker in
+  its root `AGENTS.md`; Convergence Rust marker in its root `AGENTS.md`);
+  (3) the EOF blank line is fixed and
+  `git diff --check origin/main...HEAD` exits 0. The code-validation battery
+  ran at `9224536`; the only later commits are this handoff's own bookkeeping,
+  and full `effigy qa` plus the exact base-to-head diff check were rerun green
+  on the pushed tip. Evidence updated in
+  `docs/logs/2026-09/03-154324-remove-embedded-language-quality-payloads.md`.
+  Awaiting exact-head review and merge by the orchestrator; installed-skill
+  refresh follows merge. Integration refresh: `origin/main` advanced to
+  `287d26f` (spec 035 / `g02.050` / card 124, chatterbox intake) and was
+  merged into this branch with both states preserved on the shared front
+  doors; card 124 remains compiled and serial behind the skill/router/command
+  ownership this removal transfers, with no chatterbox implementation or
+  dispatch from this lane. Full validation rerun green after the merge.
+  Awaiting exact-head review and merge by the orchestrator; installed-skill
+  refresh follows merge.
 - **Merge path:** orchestrator after accepted review of the current head and
   passing required checks.
 

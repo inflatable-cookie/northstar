@@ -99,8 +99,6 @@ let commands = [
     ["northstar-refresh", "commands/northstar-refresh/SKILL.md", "references/modes/project-refresh.md"],
     ["northstar-cleanup", "commands/northstar-cleanup/SKILL.md", "references/modes/cleanup-docs.md"],
     ["northstar-atlas", "commands/northstar-atlas/SKILL.md", "references/modes/atlas.md"],
-    ["northstar-rust-audit", "commands/northstar-rust-audit/SKILL.md", "references/modes/rust-quality-audit.md"],
-    ["northstar-typescript-audit", "commands/northstar-typescript-audit/SKILL.md", "references/modes/typescript-quality-audit.md"],
 ];
 
 let aggregate_description_chars = 0;
@@ -169,23 +167,10 @@ for relative in actual_command_files {
 }
 require(aggregate_description_chars <= 460, "command descriptions exceed 460 aggregate characters");
 
-let typescript_policy = fs::read_file(path::join(
-    root,
-    "commands/northstar-typescript-audit/agents/openai.yaml",
-));
-require(typescript_policy.contains("allow_implicit_invocation: false"),
-    "TypeScript audit adapter must remain explicit-only");
-
 let distribution = fs::read_file(path::join(repo_root, "bundle-docs/skills/README.md"));
 require(distribution.contains("/tree/main/skills/northstar") &&
-    distribution.contains("--full-depth --skill '*' --agent codex -g -y") &&
     distribution.contains("Do not use `--all`"),
-    "published installation does not discover and install nested adapters");
-require(distribution.contains("`northstar-rust-audit`") &&
-    distribution.contains("`northstar-typescript-audit`") &&
-    distribution.contains("top-level-only install is incomplete"),
-    "published installation does not require explicit audit entrypoints");
-
+    "published installation instructions drifted");
 let all_skill_text = "";
 for file in fs::list_recursive(root) {
     if is_text_skill_surface(root, file) {
@@ -195,6 +180,26 @@ for file in fs::list_recursive(root) {
 require(!all_skill_text.contains("northstar-reframe"), "retired Northstar-prefixed reframe name remains in installable skill tree");
 require(!all_skill_text.contains("northstar wayfinder"), "retired natural-language Wayfinder alias remains in installable skill tree");
 require(!all_skill_text.contains("northstar-wayfinder"), "retired slash Wayfinder alias remains in installable skill tree");
+// Card 120: the embedded language modes are gone. No skill surface may route
+// to a deleted mode file, and the public entry surfaces must select language
+// work only through the generic installed-package route.
+for deleted_mode in [
+    "modes/rust-quality-audit.md",
+    "modes/rust-quality-authoring.md",
+    "modes/typescript-quality-audit.md",
+    "Rust explicit audit",
+    "TypeScript/Svelte explicit audit",
+    "Rust everyday authoring",
+] {
+    require(!all_skill_text.contains(deleted_mode),
+        "deleted embedded language mode still routed in the skill tree: " + deleted_mode);
+}
+let main_instructions = fs::read_file(path::join(root, "SKILL.md")) +
+    fs::read_file(path::join(root, "agents/openai.yaml"));
+require(main_instructions.contains("installed-package-route.md"),
+    "skill entry surfaces do not name the generic installed-package route");
+require(fs::is_file(path::join(root, "references/packages/installed-package-route.md")),
+    "installed-package route file missing from the payload");
 
 let router_text = fs::read_file(path::join(root, "references/router.md"));
 let handoff_contract_text = fs::read_file(path::join(root, "references/handoff-contract.md"));

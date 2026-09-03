@@ -242,11 +242,9 @@ machine_effigy += "[catalog]\nalias = \"northstar\"\n\n[tasks]\n";
 machine_effigy += "\"check:repo-contract-wiring\" = [{ rhai = \"scripts/check-northstar-repo-contract-wiring.rhai\" }]\n";
 machine_effigy += "\"check:repo-contract\" = [{ rhai = \"scripts/check-northstar-repo-contract.rhai\" }]\n";
 machine_effigy += "\"test:repo-contract\" = [{ rhai = \"scripts/test-northstar-repo-contract.rhai\" }]\n";
-machine_effigy += "\"check:readiness-map\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"test:readiness-map\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:command-skills\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:model-routing\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:language-packages\" = [{ rhai = \"scripts/noop.rhai\" }]\n";
-machine_effigy += "\"check:bundle\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:rust-quality\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:typescript-quality\" = [{ rhai = \"scripts/noop.rhai\" }]\n";
-machine_effigy += "\"test:rust-quality-setup\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"test:rust-v2-production-harness\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"test:typescript-quality-setup\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"test:typescript-quality-recorder\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"test:paseo-worktree\" = [{ rhai = \"scripts/noop.rhai\" }]\n";
+machine_effigy += "\"check:readiness-map\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"test:readiness-map\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:command-skills\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:model-routing\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:language-packages\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:bundle\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:language-package-routes\" = \"scripts/noop.sh\"\n\"test:paseo-worktree\" = [{ rhai = \"scripts/noop.rhai\" }]\n";
 machine_effigy += "\"qa:docs\" = " + full_qa_docs + "\n";
-machine_effigy += "validate = [{ task = \"check:repo-contract-wiring\" }, { task = \"check:bundle\" }, { task = \"check:rust-quality\" }, { task = \"check:typescript-quality\" }, { task = \"check:language-packages\" }, { task = \"test:rust-quality-setup\" }, { task = \"test:rust-v2-production-harness\" }, { task = \"test:typescript-quality-setup\" }, { task = \"test:typescript-quality-recorder\" }, { task = \"test:paseo-worktree\" }]\n";
+machine_effigy += "validate = [{ task = \"check:repo-contract-wiring\" }, { task = \"check:bundle\" }, { task = \"check:language-packages\" }, { task = \"check:language-package-routes\" }, { task = \"test:paseo-worktree\" }]\n";
 machine_effigy += "qa = [{ task = \"validate\" }, { task = \"qa:docs\" }]\n";
 let missing_claude_bridge = new_machine_fixture(
     "missing-claude-bridge",
