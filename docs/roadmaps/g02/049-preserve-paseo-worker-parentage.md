@@ -71,8 +71,6 @@ worker dispatch should exercise the corrected creation sequence.
 
 ## Review Oracle
 
-## Review Oracle
-
 | Invariant | Smallest adversarial counterexample | Expected response | Required proof | Status |
 | --- | --- | --- | --- | --- |
 | Isolation and parentage coexist. | A worker needs a new worktree workspace. | Create the workspace, then create a child from the orchestrator scope with its ID. | Live launch record names both IDs and the ordered calls. | PASS (live launch record) |

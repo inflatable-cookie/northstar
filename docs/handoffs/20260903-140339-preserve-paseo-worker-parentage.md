@@ -113,8 +113,9 @@ orchestrators from substituting a detached top-level launch.
 - **Decisions:** workspace placement and agent parentage are separate; a worker
   needs both isolation and parent ownership; manual dispatch stays valid only
   when the scoped tools are absent.
-- **Open tension:** focused tests must discriminate creation sequence and
-  invalid launch shapes without reverting to broad prose coupling.
+- **Open tension:** none; evidence boundary is accepted as live launch record,
+  exact-head source review, and same-child revision without editorial sentence
+  checkers or simulated control plane.
 - **Report after:** the reusable surfaces and six-row oracle are complete, or a
   documented Paseo capability mismatch stops the lane.
 - **Report to:** the originating orchestrator through Paseo finish notification.
@@ -137,9 +138,9 @@ Resume agent `3b92a429-64ec-4d31-a85b-bd97fd5b49d2` in workspace
 ## Suggested Next Move
 
 Run the worker preflight, then read `AGENTS.md`, spec 026, milestone 049, card
-123, working rules, doctrine 07, and the current command-skill checker. Inventory
-the existing dispatch wording before editing. Propagate the smallest coherent
-rule and make the negative proof distinguish a detached launch.
+123, working rules, and doctrine 07. Inventory the existing dispatch wording
+before editing. Propagate the smallest coherent rule and verify evidence via
+live launch, exact-head source review, and same-child revision.
 
 ## Completion Protocol
 
@@ -166,8 +167,9 @@ rule and make the negative proof distinguish a detached launch.
   and a child agent created from the orchestrator scope.
 - Keep the manual/provider-neutral fallback. Do not claim an unproven CLI path
   preserves parentage.
-- Use focused assertions that fail for a root launch or disabled finish
-  notification without policing unrelated editorial wording.
+- Frame evidence on the live launch record, exact-head source review, and
+  same-child revision; avoid editorial sentence checkers or simulated
+  control-plane proof.
 - Report a Paseo capability contradiction, scope expansion, or validation result
   that changes the plan instead of inventing behavior.
 
