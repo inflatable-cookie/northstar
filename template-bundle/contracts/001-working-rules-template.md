@@ -207,8 +207,15 @@ informal habits.
   do not promote an ordinary lane to frontier merely because its
   day-to-day route is unavailable. If no suitable route remains, pause only that
   lane, preserve its handoff and workspace, and continue every unrelated ready
-  lane. With no control plane, publish every selected handoff at once. Do not
-  record a fixed worker count, provider, or model.
+  lane. With no control plane or when scoped tools are absent, publish every
+  selected handoff at once for manual launch without pretending parentage
+  exists. Do not record a fixed worker count, provider, or model.
+- Workspace placement and agent parentage are separate axes: with Paseo,
+  create the dedicated worktree workspace first, then create the worker from the
+  orchestrator's agent-scoped tool context with that returned workspace ID.
+  Workspace placement does not detach parentage. Detached root, schedule,
+  generic detached, or unproven CLI launches are rejected. Finish
+  notifications remain enabled and review follow-up resumes the same child.
 - A worker-finish notification starts review of that lane; it does not refill a global launch queue.
   Keep doing non-overlapping planning, review, and closeout while workers run.
 - Same-repository PRs merge one at a time. Refresh the remaining heads against

@@ -637,6 +637,18 @@ reason to invent
 a speculative card, or to split one coherent issue-fix lane into diagnosis and
 repair workers.
 
+Paseo workspace isolation and agent parentage are separate axes. The
+orchestrator creates each worker lane's dedicated `branch-off` worktree
+workspace first, then creates the worker as a child agent from its own
+agent-scoped surface using that returned workspace ID. Workspace placement
+does not detach parentage: the child remains attached to the orchestrator, and
+Paseo delivers finish, error, and permission notifications to the parent. A
+top-level/root-agent launch, schedule, generic detached run, or unproven CLI
+path is rejected for automatic worker dispatch. Finish notifications remain
+structural and enabled; reject launch configuration before creation if
+notifications are disabled. Review follow-ups resume the same child agent
+identity rather than creating a detached replacement.
+
 A control-plane workspace or agent creation failure belongs to that lane's
 transport state. Preserve every returned workspace or agent identity so an
 ambiguous attempt is not duplicated, then continue launching unrelated lanes
@@ -646,13 +658,13 @@ Do not promote an ordinary lane to frontier merely
 because its day-to-day route is unavailable. If no suitable route remains,
 pause only that lane, preserve its committed handoff and workspace state,
 report the provider/profile gap, and continue every unrelated ready lane.
-Recovery reuses the retained authority chain; it does not create a duplicate
-worker or require a rebrief.
+Recovery reuses the retained authority chain; it does not trigger compensating
+polls, create a duplicate worker, or require a rebrief.
 
-Where no control plane is installed, the orchestrator publishes a handoff per
-selected lane and gives the operator every absolute path at once. Northstar
-names no fixed worker count, provider, model, or scheduler daemon, and never
-asks the operator to guess a count.
+Where no control plane or scoped tools are available, return the committed
+handoff's absolute path for manual launch without pretending parentage exists.
+Northstar names no fixed worker count, provider, model, or scheduler daemon,
+and never asks the operator to guess a count.
 
 While workers run, the orchestrator continues non-overlapping planning, review,
 revision routing, merge, and closeout rather than idling on one lane. A

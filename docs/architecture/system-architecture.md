@@ -579,21 +579,26 @@ subagent, which gets no worktree or Git/provider authority.
   prove that the current thread is running inside Paseo.
 - Injected control-plane orchestration tools authorize routine transport for
   ready worker lanes and explicitly requested planning delegates without a
-  second permission prompt. The orchestrator may select a current role profile, create one
-  isolated worktree workspace per lane, launch the target from the single
-  absolute handoff path, and carry notifications or follow-ups. Its IDs,
-  profiles, messages, and lifecycle state are transport metadata, not planning
-  or completion authority. This does not authorize unready work, material
-  permission requests, destructive workspace cleanup, review, merge, or
-  duplicate retries. Orchestrator merge authority comes from the accepted
-  review/check gate, not tool injection. Manual launch and operator relay remain
-  the fallback.
+  second permission prompt. The orchestrator may select a current role profile,
+  create one dedicated worktree workspace per worker lane, create the worker as
+  a child agent from its scoped surface with that returned workspace ID and
+  finish notifications enabled, and carry notifications or follow-ups.
+  Workspace placement does not detach parentage: detached root launches,
+  schedules, generic detached runs, or unproven CLI substitutes are rejected for
+  worker dispatch. Its IDs, profiles, messages, and lifecycle state are
+  transport metadata, not planning or completion authority. This does not
+  authorize unready work, material permission requests, destructive workspace
+  cleanup, review, merge, or duplicate retries. Orchestrator merge authority
+  comes from the accepted review/check gate, not tool injection. Manual launch
+  and operator relay remain the fallback when scoped tools are absent,
+  returning the absolute handoff path without pretending parentage exists.
 - A generic task-handoff helper must not expand a Northstar worker handoff into
   a second briefing. Adapters launch from the committed file path directly.
 - Posting requested changes on a PR does not wake a finished worker. The
   orchestrator retains the originating adapter identity and explicitly prompts
-  that same worker after the provider review is recorded. It never silently
-  launches a replacement when the original worker is unavailable.
+  that same worker after the provider review is recorded. Revisions resume the
+  same child agent; it never silently launches a replacement when the original
+  worker is unavailable.
 - Papercuts remain an observation queue, not a competing planning authority or
   automatic work queue.
 - Triage notes remain a temporary capture buffer, not a competing planning

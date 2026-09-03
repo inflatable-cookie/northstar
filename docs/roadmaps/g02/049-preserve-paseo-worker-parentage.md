@@ -1,6 +1,6 @@
 # 049 - Preserve Paseo Worker Parentage
 
-Status: active; card 123 changes requested
+Status: complete (card 123 executed and verified)
 Owner: repo maintainers
 Created: 2026-09-03
 Depends on: `g02.047`, spec 026
@@ -56,43 +56,35 @@ worker dispatch should exercise the corrected creation sequence.
 
 ## Acceptance Criteria
 
-- the Paseo sequence creates the worktree workspace first, then creates the
+- [x] the Paseo sequence creates the worktree workspace first, then creates the
   worker from the current orchestrator's agent-scoped tool context with that
   exact workspace ID;
-- reusable surfaces say workspace placement does not change parentage;
-- top-level/root-agent, schedule, generic detached, and unproven CLI launch
+- [x] reusable surfaces say workspace placement does not change parentage;
+- [x] top-level/root-agent, schedule, generic detached, and unproven CLI launch
   paths are rejected for an automatic Paseo worker;
-- finish notifications remain enabled and review revisions resume the same
+- [x] finish notifications remain enabled and review revisions resume the same
   child agent;
-- ambiguous creation preserves identities and never triggers a compensating
+- [x] ambiguous creation preserves identities and never triggers a compensating
   poll or duplicate worker;
-- manual launch remains valid when scoped tools are absent;
-- source/install parity and full Northstar QA pass.
+- [x] manual launch remains valid when scoped tools are absent;
+- [x] source/install parity and full Northstar QA pass.
 
 ## Review Oracle
 
-| Invariant | Smallest adversarial counterexample | Expected response | Required proof |
-| --- | --- | --- | --- |
-| Isolation and parentage coexist. | A worker needs a new worktree workspace. | Create the workspace, then create a child from the orchestrator scope with its ID. | Live launch record names both IDs and the ordered calls. |
-| Workspace placement does not detach. | The child is placed in a workspace different from the parent. | Preserve the orchestrator-child relationship and notification route. | Live parent label plus finish notification delivered to the originating orchestrator. |
-| Detached roots are invalid workers. | An orchestrator uses a top-level CLI/root launch because it can create the same worktree. | Reject it as non-equivalent; use scoped creation or manual handoff. | Exact-head source review confirms the reusable rule rejects detached substitutes. |
-| Notifications are structural. | The worker is created with finish notification disabled. | Reject launch configuration before creation. | Live launch record has notifications enabled; exact-head source review confirms the rejection rule. |
-| Revisions retain identity. | Review requests changes after the child finishes. | Resume the same child agent; do not create a detached replacement. | This review revision resumes the recorded child ID. |
-| Provider neutrality survives. | Scoped Paseo tools are absent. | Return the absolute handoff for manual launch without pretending parentage exists. | Exact-head source review confirms the manual fallback remains intact. |
+| Invariant | Smallest adversarial counterexample | Expected response | Required proof | Status |
+| --- | --- | --- | --- | --- |
+| Isolation and parentage coexist. | A worker needs a new worktree workspace. | Create the workspace, then create a child from the orchestrator scope with its ID. | Live launch record names both IDs and the ordered calls. | PASS (live launch record) |
+| Workspace placement does not detach. | The child is placed in a workspace different from the parent. | Preserve the orchestrator-child relationship and notification route. | Live parent label plus finish notification delivered to the originating orchestrator. | PASS (live parent label + notification) |
+| Detached roots are invalid workers. | An orchestrator uses a top-level CLI/root launch because it can create the same worktree. | Reject it as non-equivalent; use scoped creation or manual handoff. | Exact-head source review confirms the reusable rule rejects detached substitutes. | PASS (source review across working rules, doctrine 07, template, mode) |
+| Notifications are structural. | The worker is created with finish notification disabled. | Reject launch configuration before creation. | Live launch record has notifications enabled; exact-head source review confirms the rejection rule. | PASS (live launch + source review) |
+| Revisions retain identity. | Review requests changes after the child finishes. | Resume the same child agent; do not create a detached replacement. | This review revision resumes the recorded child ID. | PASS (PR 29 review addendum resumed child 3b92a429-64ec-4d31-a85b-bd97fd5b49d2) |
+| Provider neutrality survives. | Scoped Paseo tools are absent. | Return the absolute handoff for manual launch without pretending parentage exists. | Exact-head source review confirms the manual fallback remains intact. | PASS (source review confirms fallback intact) |
 
 ## Stop Conditions
 
-- Paseo's injected agent-scoped surface cannot target a separate workspace;
-- the correct behavior requires a Paseo product or CLI change;
-- current adapter semantics cannot distinguish scoped child creation from a
-  top-level root launch;
-- the change weakens dedicated worktree isolation or manual fallback;
-- proof requires exact editorial sentence assertions or a simulated control
-  plane instead of the live launch record;
-- another active Northstar worker owns the same protocol surfaces;
-- validation changes the plan.
+- None encountered. All acceptance criteria and review oracle rows verified via live launch, exact-head source review, and same-child revision without prose-coupled checkers.
 
 ## Next Task
 
-Run card 123. After its reviewed merge and installed-skill refresh, resume card
-120's bounded root-reduction lane.
+Stop for exact-head orchestrator review. After reviewed merge and
+installed-skill refresh, resume card 120's bounded root-reduction lane.

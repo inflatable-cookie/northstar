@@ -110,11 +110,16 @@ rollover signal.
   merged as `256d0f7`; Convergence PR 4 repaired its evidence gap and merged
   as `dff19c9`; card 122 merged the generic selector as `ddaae0d`; card 120 is
   ready after its post-merge readiness refresh)
-- `049-preserve-paseo-worker-parentage.md` (active; card 123 changes requested
-  after review rejected a prose-coupled checker while accepting the underlying
-  cross-workspace child rule)
+- `049-preserve-paseo-worker-parentage.md` (complete; card 123 preserves
+  Paseo worker parentage across dedicated worktree workspace placement, keeps
+  finish notifications enabled, resumes same-child identity on revision, and
+  proves all six oracle rows through live launch, exact-head source review, and
+  same-child revision)
 
 ## Next Task
+
+Reviewed merge of `g02.049/123` and installed-skill refresh, then resume card
+120's bounded root-reduction lane.
 
 `g02.048/117` merged through PR 22 at `75db6f5` after proving the generic
 lifecycle. Card 118's public repository merged package PR 1 as `09ef174`, and
