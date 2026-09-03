@@ -428,11 +428,11 @@ orchestrator's checkout, create unique timestamped `docs/triage/` notes, and
 isolate commits to exact paths after verifying clean pre-stage index state.
 They do not create worktrees, branches, or PRs. In Paseo, the orchestrator
 spawns a chatterbox in a `local` workspace for the same project/checkout, with
-label `Chatterbox=true` and `notifyOnFinish: false`. Automated idle-only pings
-are paused at planning pending an atomic queue API; chatterbox reports note paths
-in chat and the orchestrator inspects `docs/triage/` at normal triage
-checkpoints. Chatterboxes have no planning, readiness, implementation, review,
-merge, or dispatch authority.
+label `Chatterbox=true` and `notifyOnFinish: false`. Chatterbox v1 starts no
+automatic orchestrator turn; it reports the absolute note path and summary in
+chat, and the orchestrator inspects `docs/triage/` at normal triage checkpoints.
+Chatterboxes have no planning, readiness, implementation, review, merge, or
+dispatch authority.
 
 Each worker owns only the assigned ready cards in its dedicated worktree and
 branch. Model routing treats current profiles as a portfolio. For each run the

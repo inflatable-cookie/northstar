@@ -126,8 +126,9 @@ One-page reference for terms used across Northstar docs.
 **Chatterbox**
 : A secondary Northstar communication mode for direct, human intake chat and
   problem identification. Shares the orchestrator's checkout, writes only
-  unique timestamped triage files, and cannot implement, promote, review, merge,
-  or dispatch. Automated idle-only pings are paused pending an atomic queue API.
+  unique timestamped triage files with exact-path git commit isolation, reports
+  notes to the operator without starting an orchestrator turn in v1, and cannot
+  implement, promote, review, merge, or dispatch.
 
 ## Files and Naming
 

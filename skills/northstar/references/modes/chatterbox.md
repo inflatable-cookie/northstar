@@ -17,7 +17,7 @@ A chatterbox:
 - talks directly with the operator to identify and explore problems;
 - shares the orchestrator's checkout without creating a worktree, branch, or PR;
 - writes only unique timestamped `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` notes;
-- reports the note path to the operator in chat (automated pings are paused pending an atomic queue API);
+- reports the absolute note path and one-line summary to the operator in chat (v1 does not call `send_agent_prompt` or start an orchestrator turn);
 - remains non-authority: does not implement, promote, dispatch, review, or merge;
 - is not a planning delegate, worker, orchestrator continuation, handoff, or `paseo-advisor`.
 
@@ -80,27 +80,28 @@ Git protocol:
   the file on disk and tell the operator;
 - on same-second slug collisions, append `-2`, `-3`, etc.
 
-## Paseo idle-only intake ping (paused at planning)
+## Paseo notification boundary
 
-Automated Paseo intake pings are paused at planning pending an atomic queue API.
-
-Inspecting agent status via `get_agent_status` followed by `send_agent_prompt` is
-non-atomic; an orchestrator can become running between the status check and the
-prompt dispatch, and `send_agent_prompt` starts a follow-up turn. Because Paseo
-exposes no conditional "send only if still idle" primitive, a two-call
-status-then-send sequence cannot guarantee that a running orchestrator is never
-interrupted.
+Paseo has no atomic notify-only or send-if-idle operation.
+`send_agent_prompt` starts an orchestrator turn, and checking status before
+sending leaves a race in which the orchestrator can start work between the
+two calls. Chatterbox v1 therefore does not call `send_agent_prompt` or start
+an orchestrator turn.
 
 For v1 intake:
 1. Chatterbox writes and commits the triage note to `docs/triage/` on the shared
    checkout.
-2. Chatterbox reports the note path directly to the operator in chat.
-3. Automated pings are omitted until Paseo provides an atomic/non-interrupting
-   queue or the operator explicitly settles best-effort race behavior.
-4. The orchestrator discovers and inspects triage notes at its next normal
-   triage checkpoint. If an intake prompt is ever received, the orchestrator
-   treats it as intake only: it records the path, does not promote from the
-   ping, and does not change current work.
+2. Chatterbox reports the absolute note path and a one-line summary directly to
+   the operator in the chat thread.
+3. The operator may forward the path or leave it for the orchestrator's next
+   normal triage checkpoint.
+4. If an intake prompt or surfaced note is received by an orchestrator, the
+   orchestrator treats it as intake only: it records the path, does not
+   promote from the note, and does not change current work.
+
+A later atomic, non-interrupting queue or conditional-send adapter may add the
+small orchestrator notice. That is an adapter upgrade, not a protocol rewrite.
+The triage file remains the durable signal either way.
 
 ## Model routing
 
@@ -116,6 +117,6 @@ Stop, refuse, or inform the operator when:
 - asked to edit specs, cards, contracts, architecture, or production code;
 - asked to implement, promote, dispatch workers, review PRs, or merge;
 - asked to act as an orchestrator, worker, planning delegate, or `paseo-advisor`;
+- asked to call `send_agent_prompt` or start an orchestrator turn automatically;
 - `HEAD` is not the integration branch during git commit/push (leave file on disk);
-- git push fails after one retry (leave file on disk and report to operator);
-- an orchestrator ping would interrupt a running or ambiguous orchestrator.
+- git push fails after one retry (leave file on disk and report to operator).

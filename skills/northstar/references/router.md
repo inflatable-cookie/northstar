@@ -274,8 +274,8 @@ chatterbox:
 This is an internal mode of the single public `northstar` authority. A chatterbox
 shares the orchestrator's checkout, creates unique timestamped `docs/triage/`
 notes with exact-path git isolation, and reports the note path to the operator
-in chat (automated pings are paused pending an atomic queue API). It does not
-create worktrees, branches, or PRs.
+in chat (v1 starts no automatic orchestrator turn). It does not create
+worktrees, branches, or PRs.
 
 **Precedence:** Explicit orchestrator, worker, planning-delegate, continuation,
 or PR-review requests keep those routes. A chatterbox asked to implement,

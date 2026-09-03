@@ -823,11 +823,13 @@ feature proposals without interrupting active dispatch, review, or execution.
   exist, stage with `git add -- <exact-file>`, and commit with
   `git commit -- <exact-file>`. They never use `git add .`, edit `README.md` or
   code, create worktrees/branches/PRs, or modify non-triage files.
-- **Paseo ping status (paused at planning):** Automated idle-only Paseo pings
-  are paused at planning pending an atomic queue API. Status inspection plus
-  `send_agent_prompt` is non-atomic and cannot guarantee never prompting a
-  running orchestrator. Chatterbox v1 reports the note path directly to the
-  operator in chat.
+- **Paseo notification boundary:** Paseo has no atomic notify-only or
+  send-if-idle API. `send_agent_prompt` starts an orchestrator turn, and checking
+  status before sending leaves a race in which the orchestrator can start work
+  between the two calls. Chatterbox v1 therefore does not call
+  `send_agent_prompt` or start an orchestrator turn; it reports the absolute note
+  path and summary to the operator in chat. A future atomic queue or conditional
+  send remains triage only.
 - **Orchestrator intake handling:** The orchestrator discovers and inspects
   triage notes at its next normal triage checkpoint. If an intake prompt is ever
   received, it treats it as non-assignment information: it records the path,

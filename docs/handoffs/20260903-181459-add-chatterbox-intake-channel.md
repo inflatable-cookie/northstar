@@ -90,7 +90,7 @@ execution authority.
   diff --check`.
 - **PR base/head:** `main` <- `worker/add-chatterbox-intake-channel`
 - **PR URL:** https://github.com/inflatable-cookie/northstar/pull/31
-- **Review state:** revision 1 ready at `214c2b553aa898e4305f08bc933b66a31a5a794a` (PR #31 changes addressed: exact-path git commit isolation verified by fixture, prose-coupled checks removed from check:command-skills, automated Paseo ping paused at planning pending atomic queue).
+- **Review state:** revision 1 ready (PR #31 changes addressed: exact-path git commit isolation verified by fixture, prose-coupled checks removed from check:command-skills, settled notification boundary on origin/main integrated).
 - **Merge path:** orchestrator after accepted exact-head review and passing
   checks.
 
