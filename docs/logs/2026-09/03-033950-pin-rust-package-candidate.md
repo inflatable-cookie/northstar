@@ -8,11 +8,13 @@ Status: implemented; awaiting exact-head review
 ## Outcome
 
 The official registry pins the accepted Rust package identity at registry
-version `1.4.0`, the Rust overlap window is open, and the checker, oracle, and
-real-package transcripts prove acquisition, installed and offline routing,
-drift rejection, Rust-only retained inventory, source-payload engine
-integrity, and the exact visible frozen fallback. Convergence remains the
-next serial step; nothing in this batch executes the consumer canary.
+version `1.4.0`, the Rust overlap window is open, both Rust router sections
+route through the generic installed-package route, and the committed
+`check:rust-package-pin` oracle proves acquisition, installed and offline
+routing, drift rejection, Rust-only retained inventory, source-payload engine
+integrity, and the exact visible frozen fallback against the real accepted
+package. Convergence remains the next serial step; nothing in this batch
+executes the consumer canary.
 
 ## Registry pin
 
@@ -39,10 +41,27 @@ reproduced the same 59-file inventory and both digests exactly. The worker
 fetched the sibling's `origin/main`; its working tree stayed clean and
 unmodified.
 
-## Real-package lifecycle transcript
+## Router installed-package wiring
 
-Driven through the public `language-package-host.v1` CLI against the shipped
-registry and the materialized pinned tree:
+`references/router.md` now routes both Rust sections through the generic
+installed-package route (`packages/installed-package-route.md`) with the exact
+official identity and pinned tree digest: a `routed` result executes the
+package's declared entrypoint from `installed_path`, and embedded mode content
+runs only after the route doc's visible fallback notice. Explicit-audit
+precedence over everyday authoring is preserved, and the everyday section
+still forbids audit tranches. The checker discriminates per section — exact
+identity, route reference, fallback clause, workflow/entrypoint separation,
+and embedded-after-fallback ordering — and fails closed on four mutated
+router copies (route deleted, fallback bypassed, identity drifted, workflow
+crossed).
+
+## Real-package lifecycle transcript (committed as `check:rust-package-pin`)
+
+Replayable from this head via `effigy check:rust-package-pin`
+(`scripts/tests/rust-package-pin/`), which materializes the pinned merge from
+the read-only sibling, reproduces both digests independently, and drives the
+public `language-package-host.v1` CLI against the shipped registry and the
+materialized pinned tree:
 
 - official git-source acquire through the transport-less reference host stops
   visibly, names `@northstar/rust-quality@0.1.0` and the manual/local-path
@@ -92,12 +111,31 @@ adapter grammar and exact-command closure.
 ## Validation
 
 - `effigy check:language-packages`
+- `effigy check:rust-package-pin` (committed real-package oracle, wired into
+  `qa` through `validate`)
 - isolated `effigy check:skill-install skills/northstar`
 - `effigy qa:docs`
 - `effigy qa`
 - `git diff --check`
 
 All passed.
+
+## Exact-head review (2026-09-03, PR 27)
+
+CHANGES REQUIRED on `847e6c1`, two findings, both repaired on this branch:
+
+- **`execution-miss` — Rust pin unreachable from the Northstar routes:**
+  repaired by wiring both Rust router sections through the generic
+  installed-package route with the exact official identity and the visible
+  bounded fallback (see "Router installed-package wiring"), plus per-section
+  positive and negative checker discrimination.
+- **`oracle-gap` — real-package proof existed only as prose:** repaired by
+  committing the replay as the deterministic `check:rust-package-pin`
+  validation oracle wired into authoritative `qa`, covering the exact
+  accepted commit and digests, both workflows, the real self-check, offline
+  routing, drift, refusal, retained inventory, and the package's
+  installed-route proof. The oracle lives under `scripts/`, so the isolated
+  installed skill stays independent of the package-source sibling.
 
 ## Limits
 

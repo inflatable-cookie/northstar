@@ -5,6 +5,16 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 
 ## Open
 
+- **2026-09-03 — Rhai evaluator drops string values across helper boundaries:** in the
+  bundled Rhai host, statement-position script-function calls, loop variables,
+  and `replace` with a variable needle hand `()` to the next string operation
+  while the same calls work in expression position or with literal needles;
+  impact is silent type-confusion failures (`Function not found: contains
+  ((), ...)`) when checker helpers factor string logic into functions; plausible
+  fix is an upstream optimizer/ABI audit plus documenting native-chain-only
+  string handling in the Rhai guide; affected surfaces are
+  `scripts/check-language-packages.rhai` and future Rhai checker helpers.
+
 - **2026-09-03 — worker handoff omitted activation metadata and sibling-link field:** handoff
   `20260903-014833` declares `handoff_mode: worker` without
   `worker-pr-loop` / `worker_mode` / `dispatch_authority`, and has no

@@ -161,6 +161,14 @@ package's installed-route prover passed on the installed payload, including
 source-payload tamper rejection. Evidence is in
 `docs/logs/2026-09/03-033950-pin-rust-package-candidate.md`.
 
+PR 27 exact-head review required two repairs, both landed: both Rust router
+sections now route through the generic installed-package route with the exact
+official identity, visible bounded fallback, per-section checker
+discrimination, and four fail-closed mutations; and the real-package replay
+is committed as the deterministic `check:rust-package-pin` oracle wired into
+authoritative `qa` (installed skill stays independent of the package-source
+sibling).
+
 ## Next Task
 
 Run the Convergence real-consumer canary against the promoted registry pin:

@@ -292,6 +292,31 @@ The exact same surface is exercised with Effigy absent
 also schema-validates every receipt and every host request/result message the
 surface writes.
 
+## Rust package pin oracle (`check:rust-package-pin`)
+
+The card-119 registry promotion is replayed deterministically against the real
+accepted package. `scripts/tests/rust-package-pin/validate_rust_package_pin.py`
+resolves the read-only package-source sibling (override with
+`NORTHSTAR_LANGUAGE_PACKS_ROOT`; default `../northstar-language-packs` beside
+the repository root), materializes pinned merge `56b2e11`, reproduces both
+spec-034 digests with an independent framing implementation, and drives the
+public `language-package-host.v1` surface through: visible official-acquisition
+stop, detection refusal, allowlist non-bypass, real acquisition including the
+package's declared self-check, offline and registry resolve for both
+workflows, drift stop/restore, TypeScript-under-Rust and wrong tree/manifest
+refusals, the version-drifted variant refusal, the frozen-Rust fallback
+notice, and the Rust-only retained inventory. It then runs the package's
+reviewed `prove-installed-invocation.sh` on the lifecycle `installed_path`
+(54-source parity at `69e4d5d`, cross-boundary v2 ledger migration, engine
+source-payload tamper rejection, probe `verify-install`). The oracle lives
+under `scripts/`, so the installed core skill never depends on the package
+source sibling; wired into `qa` through `validate`. Runtime is roughly half a
+minute (two cargo builds inside the package prover).
+
+```bash
+effigy check:rust-package-pin
+```
+
 ## Agent-instruction audit (`check:agent-instructions`)
 
 The read-only agent-instruction checker measures root or supplied `AGENTS.md`
