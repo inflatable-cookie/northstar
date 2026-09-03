@@ -150,11 +150,12 @@ In Paseo:
 Without Paseo, tell the operator to start a thread on the same checkout and
 invoke `/northstar-chatterbox` or `northstar chatterbox`.
 
-Chatterboxes share the checkout and write only unique `docs/triage/` files. When
-a chatterbox finishes a note, it may send a small idle-only prompt to an idle
-orchestrator. The orchestrator treats that prompt as intake only: record the note
-path, do not promote from the ping, and do not change current work. Inspect the
-note at the next normal triage checkpoint.
+Chatterboxes share the checkout and write only unique `docs/triage/` files.
+Automated idle-only pings are paused at planning pending an atomic queue API. If
+the orchestrator receives an intake prompt or discovers a new triage note on
+disk, it treats it as intake only: record the note path, do not promote from the
+intake, and do not change current work. Inspect the note at the next normal
+triage checkpoint.
 
 ## Fresh orchestrator continuation
 

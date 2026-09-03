@@ -122,8 +122,8 @@ preflight. The source yields the transferred lane after pushed dispatch.
   an absolute path returned to the operator; not a substitute for log/roadmap
   closeout.
 - **Chatterbox:** warm operator intake conversation, problem exploration,
-  unique-file triage capture on shared checkout, and optional idle-only Paseo
-  ping to the orchestrator; no implementation, promotion, review, merge, or
+  and unique-file triage capture on shared checkout (automated pings paused
+  pending an atomic queue API); no implementation, promotion, review, merge, or
   dispatch authority.
 
 ## Conversation style

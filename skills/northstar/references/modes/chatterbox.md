@@ -17,7 +17,7 @@ A chatterbox:
 - talks directly with the operator to identify and explore problems;
 - shares the orchestrator's checkout without creating a worktree, branch, or PR;
 - writes only unique timestamped `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` notes;
-- optionally sends a tiny idle-only intake ping to an idle `Orchestrator=true` agent;
+- reports the note path to the operator in chat (automated pings are paused pending an atomic queue API);
 - remains non-authority: does not implement, promote, dispatch, review, or merge;
 - is not a planning delegate, worker, orchestrator continuation, handoff, or `paseo-advisor`.
 
@@ -57,17 +57,22 @@ request. It does not authorize work or reserve a topic.
 ## Shared checkout and Git protocol
 
 Chatterboxes share the orchestrator's checkout. Because they only create unique
-new triage files, they do not content-conflict with the orchestrator or other
-chatterboxes.
+new triage files and isolate commits to exact paths, they do not
+content-conflict with the orchestrator or other chatterboxes.
 
 Git protocol:
 - write only the new `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` file;
 - do not edit `docs/triage/README.md`, specs, cards, code, or any other path;
 - stop before writing if asked to edit non-triage files or open a PR;
-- commit only with `git add -- <exact-new-file>`; never use `git add .`, `git add -A`,
-  amend, reset, stash, or force-push;
-- leave unrelated dirty files untouched in the working tree;
-- commit and push to the integration branch (`main` unless repo config specifies
+- before staging, check `git diff --cached --name-only`; if the index contains
+  pre-existing staged paths, fail closed: do not commit, leave the triage note
+  on disk, and report to the operator;
+- stage only the exact new file with `git add -- <exact-new-file>`; never use
+  `git add .`, `git add -A`, amend, reset, stash, or force-push;
+- commit with exact path: `git commit -m "docs(triage): <summary>" -- <exact-new-file>`;
+- leave unrelated dirty files (staged or unstaged) untouched in the working tree
+  and index;
+- push to the integration branch (`main` unless repo config specifies
   otherwise);
 - if `HEAD` is not the integration branch, leave the file on disk and tell the
   operator; do not switch branches;
@@ -75,26 +80,27 @@ Git protocol:
   the file on disk and tell the operator;
 - on same-second slug collisions, append `-2`, `-3`, etc.
 
-## Paseo idle-only intake ping
+## Paseo idle-only intake ping (paused at planning)
 
-In Paseo, a `send_agent_prompt` starts a new turn on the target agent. Therefore,
-chatterboxes must never ping a running orchestrator.
+Automated Paseo intake pings are paused at planning pending an atomic queue API.
 
-After a note is written (and committed when possible):
-1. look for an agent in the same project with label `Orchestrator=true`;
-2. if that orchestrator agent is **idle**, send a small intake prompt:
-   - include the absolute note path;
-   - include a one-line summary;
-   - include an explicit instruction not to change current work;
-   - set `notifyOnFinish: false` on the ping;
-3. if the orchestrator is **running**, missing, or ambiguous, skip the ping and
-   tell the operator the note is ready on disk.
+Inspecting agent status via `get_agent_status` followed by `send_agent_prompt` is
+non-atomic; an orchestrator can become running between the status check and the
+prompt dispatch, and `send_agent_prompt` starts a follow-up turn. Because Paseo
+exposes no conditional "send only if still idle" primitive, a two-call
+status-then-send sequence cannot guarantee that a running orchestrator is never
+interrupted.
 
-The orchestrator treats this prompt as intake only: it records the path, does not
-promote from the ping, does not change the current task, and inspects the note at
-its next normal triage checkpoint.
-
-Without Paseo, report the note path directly to the operator in chat.
+For v1 intake:
+1. Chatterbox writes and commits the triage note to `docs/triage/` on the shared
+   checkout.
+2. Chatterbox reports the note path directly to the operator in chat.
+3. Automated pings are omitted until Paseo provides an atomic/non-interrupting
+   queue or the operator explicitly settles best-effort race behavior.
+4. The orchestrator discovers and inspects triage notes at its next normal
+   triage checkpoint. If an intake prompt is ever received, the orchestrator
+   treats it as intake only: it records the path, does not promote from the
+   ping, and does not change current work.
 
 ## Model routing
 

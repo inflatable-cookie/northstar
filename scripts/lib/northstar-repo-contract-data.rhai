@@ -80,6 +80,8 @@ fn required_files() {
         "skills/northstar/assets/fixtures/language-packages/synthetic-language/SKILL.md",
         "skills/northstar/assets/fixtures/language-packages/synthetic-language/northstar-package.json",
         "scripts/test-northstar-readiness-map.rhai",
+        "scripts/tests/chatterbox-git-isolation/self-test.sh",
+        "scripts/tests/chatterbox-git-isolation/validate_chatterbox_git_isolation.py",
         "template-bundle/README.md",
         "template-bundle/triage/README.md",
         "template-bundle/minimal/triage/README.md",
