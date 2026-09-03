@@ -111,7 +111,8 @@ Northstar system:
   promotion pinned that identity at registry version `1.4.0` with the
   reproduced 59-file tree, proved the real-package lifecycle and installed
   engine-integrity transcripts, and opened the bounded Rust overlap window.
-  PR 27 merged as `256d0f7`; the Convergence `g02.031/102` consumer canary is
-  now in flight. Card 120 remains blocked behind its accepted proof.
+  PR 27 merged as `256d0f7`; Convergence PR 4 is changes-required on a bounded
+  pre-extraction-evidence oracle gap. Card 120 remains blocked behind its
+  accepted proof.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

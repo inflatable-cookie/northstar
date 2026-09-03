@@ -1,6 +1,6 @@
 # 119 - Extract Rust Language Package
 
-Status: active; registry pin merged, Convergence canary in flight
+Status: active; registry pin merged, Convergence canary changes required
 Owner: repo maintainers
 Updated: 2026-09-03
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -173,10 +173,16 @@ as prohibited prose-coupled validation.
 
 PR 27 passed the final exact-head review at `63353b1` and squash-merged as
 `256d0f7`. Convergence milestone `g02.031` and card 102 were committed at
-`c8f513f`; its evidence-only canary is running in a dedicated Paseo worktree.
+`c8f513f`; its evidence-only PR 4 is in changes-required review. Repository
+validation is green, but the first head cited the package's generic migration
+fixture for the stronger Convergence-specific pre-extraction evidence claim.
+The retained worker is proving that boundary against a disposable Convergence
+materialization or will narrow the claim honestly if the original ledger is
+unavailable.
 
 ## Next Task
 
-Review the Convergence real-consumer canary at its reported exact head. Card
-120 remains blocked until the installed everyday-authoring, explicit-audit,
-consumer-policy/evidence, and before/after-hash proof is accepted.
+Re-review Convergence PR 4 after the retained worker repairs the
+pre-extraction-evidence oracle gap. Card 120 remains blocked until the
+installed everyday-authoring, explicit-audit, consumer-policy/evidence, and
+before/after-hash proof is accepted.
