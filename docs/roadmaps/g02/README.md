@@ -104,8 +104,9 @@ rollover signal.
 - `047-diversify-model-routing-across-runs.md` (complete; PR 20 merged at
   `08ad810` after exact-head review)
 - `048-extract-modular-language-quality-packages.md` (active; cards 117-118
-  complete, card 121 ready to repair the TypeScript standalone adapter, and
-  cards 119-120 blocked behind it)
+  complete, the TypeScript standalone adapter repaired in package-source merge
+  `c9ef2a2`, card 121 ready for its registry repin, and cards 119-120 blocked
+  behind it)
 
 ## Next Task
 
@@ -121,9 +122,9 @@ audit, byte-preservation, and hydrated-build evidence is accepted; four
 pre-existing editor failures and current-Poodle `ResolvedIconGeometry` API
 drift remain limits. The card-119 readiness refresh froze the 54-file Rust
 boundary and selected Convergence, but found that the accepted TypeScript
-package's `SKILL.md` loads an absent `references/router.md`. Card 121 is ready
-for the bounded package repair and replacement registry pin. Cards 119-120
-remain blocked.
+package's `SKILL.md` loaded an absent `references/router.md`. Package-source PR
+3 repaired that boundary and merged as `c9ef2a2`; card 121 is ready for the
+replacement registry pin. Cards 119-120 remain blocked.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and

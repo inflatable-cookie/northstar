@@ -105,7 +105,8 @@ Northstar system:
   editor failures and current-Poodle `ResolvedIconGeometry` API drift remain
   limits. The Rust readiness refresh selected Convergence and froze the
   54-file source boundary, but found the external package's agent-facing
-  `SKILL.md` loads an absent router. Card 121 is ready for that bounded repair
-  and replacement registry pin; cards 119-120 remain blocked.
+  `SKILL.md` loaded an absent router. Package-source PR 3 repaired it and
+  merged as `c9ef2a2`; card 121 is ready for the replacement registry pin;
+  cards 119-120 remain blocked.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

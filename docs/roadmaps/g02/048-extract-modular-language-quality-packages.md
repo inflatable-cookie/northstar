@@ -55,9 +55,10 @@ before it becomes ready.
   installed-audit, byte-preservation, and hydrated-build evidence is accepted;
   four pre-existing editor failures and current-Poodle API drift remain
   recorded limits. Batch C stays behind a separate operator checkpoint.
-- [ ] **Batch B.1 — standalone adapter repair:** card 121 repairs the accepted
-  package's missing local router reference, proves installed adapter path
-  closure, and repins the replacement identity without changing policy.
+- [ ] **Batch B.1 — standalone adapter repair:** package-source PR 3 repaired
+  the missing local router reference and merged as `c9ef2a2`; card 121 now
+  repins that accepted identity and proves installed adapter path closure
+  without changing policy.
 - [ ] **Batch C — Rust extraction:** card 119 publishes, pins, installs, and
   proves Rust everyday authoring plus explicit audit and its Cargo engine.
 - [ ] **Batch D — root reduction:** card 120 removes both frozen embedded
@@ -104,6 +105,7 @@ before it becomes ready.
 
 ## Next Task
 
-Execute card 121's bounded package-source repair and replacement registry pin.
-Then refresh card 119 against the merged identity and the frozen 54-file Rust
-inventory. Do not start Rust extraction before that dependency clears.
+Execute card 121's replacement registry pin against accepted package-source
+merge `c9ef2a2`. Then refresh card 119 against the merged identity and the
+frozen 54-file Rust inventory. Do not start Rust extraction before that
+dependency clears.

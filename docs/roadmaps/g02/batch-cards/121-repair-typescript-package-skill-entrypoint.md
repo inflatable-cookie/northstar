@@ -1,6 +1,6 @@
 # 121 - Repair TypeScript Package Skill Entrypoint
 
-Status: ready
+Status: ready - source repair accepted; registry repin remains
 Owner: repo maintainers
 Updated: 2026-09-03
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -41,13 +41,13 @@ everyday authoring, or change the generic package protocol.
 
 ## Acceptance Criteria
 
-- [ ] the installed TypeScript `SKILL.md` references only files present inside
+- [x] the installed TypeScript `SKILL.md` references only files present inside
   its own package;
-- [ ] direct `$northstar-typescript-audit` metadata points to that same
+- [x] direct `$northstar-typescript-audit` metadata points to that same
   package-local authority;
-- [ ] a missing or escaping adapter path fails package QA;
-- [ ] the package version and manifest semantics remain unchanged;
-- [ ] source/install parity and existing setup/record proofs still pass;
+- [x] a missing or escaping adapter path fails package QA;
+- [x] the package version and manifest semantics remain unchanged;
+- [x] source/install parity and existing setup/record proofs still pass;
 - [ ] Northstar's official registry pins the reviewed replacement commit and
   exact digests;
 - [ ] package QA, Northstar QA, skill-install parity, and `git diff --check`
@@ -74,5 +74,10 @@ everyday authoring, or change the generic package protocol.
 
 ## Next Task
 
-Dispatch the package-source repair first. After its accepted merge, repin the
-replacement identity in Northstar. Stop before card 119 readiness refresh.
+Repin package-source merge `c9ef2a2e3b70dc68de670767048f26b01b08f929`
+with tree digest
+`sha256:259cccdbacd7e2e293389efaf72cab005d0c275bd7cb600c99f30bfbfe071843`
+and unchanged manifest digest
+`sha256:e5e32f2baeda2e901b8c327436adf0bfd5955a9de080887660684ad4583185ca`.
+Prove the installed adapter remains package-local. Stop before card 119
+readiness refresh.
