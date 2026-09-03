@@ -102,8 +102,9 @@ identity at registry version `1.4.0` with the reproduced 59-file tree, proved
 the real-package lifecycle transcript and installed engine integrity, and
 merged as `256d0f7`. The Convergence `g02.031/102` consumer canary repaired its
 evidence gap and merged as `dff19c9`. Card 119 is complete. The exact removal
-inventory exposed a missing generic intent/activation selector; card 122 is
-ready and card 120 remains blocked behind it.
+inventory exposed a missing generic intent/activation selector. Card 122
+implemented it and merged as `ddaae0d`; card 120 is ready after its post-merge
+refresh.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed

@@ -1,6 +1,6 @@
 # 122 - Bind Generic Language Intent Discovery
 
-Status: in review; implementation complete
+Status: complete; PR 28 merged as `ddaae0d`
 Owner: repo maintainers
 Updated: 2026-09-03
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -140,5 +140,5 @@ drift), not only a later resolve.
 
 ## Next Task
 
-Dispatch one implementation worker. Stop after a review-only PR; do not start
-card 120 from that worker.
+Card 120 passed its post-merge readiness refresh and is ready. Do not start it
+from this completed worker lane.

@@ -1,6 +1,6 @@
 # 048 - Extract Modular Language Quality Packages
 
-Status: active; generic cutover discovery in review before Batch D
+Status: active; Batch D ready
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.033`, promoted spec 034
@@ -73,7 +73,8 @@ before it becomes ready.
   `1.5.0`), a generic fail-closed selection CLI and route, and
   registry/manifest drift rejection, so card 120 can remove the three
   package-specific root branches without stranding missing-package
-  acquisition or existing activations.
+  acquisition or existing activations. PR 28 passed exact-head review at
+  `183b55b` and merged as `ddaae0d`.
 - [ ] **Batch D — root reduction:** card 120 removes both frozen embedded
   payloads and fallback branches, then proves core-only operation and installed
   package routing.
@@ -118,7 +119,6 @@ before it becomes ready.
 
 ## Next Task
 
-Card 122's generic discovery repair is implemented and in review; orchestrator
-exact-head review of its PR is the current stop. After the reviewed merge and
-a final readiness refresh, card 120 removes the embedded payloads. Card 120
-stays blocked until then.
+Card 122 merged as `ddaae0d`, and card 120 passed its post-merge readiness
+refresh. Dispatch card 120's bounded root-reduction worker; do not start a new
+language or Sentrux integration.

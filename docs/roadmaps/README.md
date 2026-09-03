@@ -91,13 +91,13 @@ Roadmaps sequence contract-backed work for Northstar itself.
   registry version `1.4.0` and proved the real-package lifecycle and
   engine-integrity transcripts. PR 27 merged as `256d0f7`; Convergence PR 4
   repaired its evidence gap and merged as `dff19c9`. Card 119 is complete; the
-  removal inventory is frozen, card 122 is ready, and card 120 remains blocked
-  behind generic language intent/activation discovery.
+  removal inventory is frozen, card 122 merged as `ddaae0d`, and card 120 is
+  ready for bounded root reduction.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Run card 122's generic language intent/activation discovery repair. Do not
-start card 120 until that PR is accepted and its readiness is refreshed.
+Dispatch card 120's bounded root-reduction worker. Do not start a new language
+or Sentrux integration.

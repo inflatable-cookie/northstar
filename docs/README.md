@@ -113,9 +113,9 @@ Northstar system:
   engine-integrity transcripts, and opened the bounded Rust overlap window.
   PR 27 merged as `256d0f7`; Convergence PR 4 repaired its evidence gap and
   merged as `dff19c9`. Card 119 is complete. The exact embedded-removal
-  inventory exposed a missing generic intent/activation selection layer;
-  card 122 implemented it (registry `1.5.0` discovery binding, generic
-  fail-closed intent/activation-marker selection, drift rejection) and is in
-  orchestrator review; card 120 remains blocked behind its reviewed merge.
+  inventory exposed a missing generic intent/activation selection layer.
+  Card 122 implemented it, closed three first-review defects, and merged
+  through PR 28 as `ddaae0d`; card 120 passed its readiness refresh and is
+  ready for bounded root reduction.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

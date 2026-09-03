@@ -1,8 +1,8 @@
 # 120 - Remove Embedded Language Quality Payloads
 
-Status: planned; blocked on card 122
+Status: ready
 Owner: repo maintainers
-Updated: 2026-09-01
+Updated: 2026-09-03
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
 Governing refs: `docs/roadmaps/g02/048-extract-modular-language-quality-packages.md`,
 `docs/architecture/system-architecture.md`,
@@ -14,7 +14,7 @@ Auto-start next card: no
 - [x] TypeScript and Rust packages pass every overlap-close proof;
 - [x] exact embedded catalogues, modes, scripts, tools, adapters, templates,
   fixtures, router branches, parity entries, and fallback paths are inventoried;
-- [ ] generic intent and existing-activation discovery can select one exact
+- [x] generic intent and existing-activation discovery can select one exact
   registry entry without a language-specific core branch;
 - [x] deletion and core-only behavior are governed by architecture and contract;
 - [x] no new-language implementation is in scope;
@@ -118,14 +118,16 @@ embedded package-source files, 17 bounded-fallback files, and 7 root-only Rust
 production-harness files are deletion targets; 19 integration surfaces require
 replacement or mutation.
 
-The refresh exposed one stop condition. The current root chooses the official
-package through three language-specific router branches. Registry entries bind
-identity but carry no language, overlay, workflow, or existing-activation
-discovery metadata. Removing those branches would make a missing package
-undiscoverable and would strand current consumer activation blocks. Card 122
-owns the generic registry-selection repair before this deletion card.
+The refresh exposed one stop condition: package selection still depended on
+three language-specific router branches. Card 122 replaced that seam with
+registry-owned language, overlay, workflow, and activation-marker discovery,
+closed its three first-review defects, passed exact-head review at `183b55b`,
+and merged through PR 28 as `ddaae0d`. The selector now returns the immutable
+pin, rejects malformed or ambiguous intent before acquisition, and checks
+registry/manifest agreement before package code or lifecycle mutation. All
+ready-state checks now pass.
 
 ## Next Task
 
-Complete card 122, then refresh this rubric against its generic discovery
-surface. Do not start deletion, a new language, or Sentrux integration.
+Dispatch one card-120 implementation worker from the frozen 95-file deletion
+inventory. Do not start a new language or Sentrux integration.

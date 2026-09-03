@@ -72,5 +72,6 @@ merged as `5951dfb`, and Jetstream PR 4 squash-merged after exact-head review
 at `177b75c80e5310d84fdd227d0229b261d59d6271` as
 `dbf7561d3845bf344f9ae4fae3296d1601b074bf`. Card 121's replacement pin merged
 as `69e4d5d`; card 119 and the Convergence canary are complete. The removal
-inventory exposed a missing generic intent/activation selector, so card 122 is
-ready and card 120 remains blocked behind it.
+inventory exposed a missing generic intent/activation selector. Card 122
+implemented that selector and merged through PR 28 as `ddaae0d`; card 120 is
+ready after its post-merge refresh.

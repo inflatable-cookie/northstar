@@ -32,6 +32,8 @@ Use logs as the third step in closeout:
 
 ## Recent active-lane evidence
 
+- `2026-09/03-130752-review-generic-language-discovery.md`
+- `2026-09/03-123500-bind-generic-language-selection.md`
 - `2026-09/03-095021-refresh-embedded-removal-readiness.md`
 - `2026-09/03-092117-close-rust-package-canary.md`
 - `2026-09/03-090700-review-convergence-rust-package-canary.md`

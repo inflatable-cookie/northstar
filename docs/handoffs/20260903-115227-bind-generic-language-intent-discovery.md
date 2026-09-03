@@ -5,7 +5,7 @@ handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
 handoff: single-file-path-only
-status: ready-to-launch
+status: complete
 owner: repo maintainers
 created: 2026-09-03
 updated: 2026-09-03
@@ -87,9 +87,9 @@ Here is the state the worker is inheriting:
   (validation exact head `91d953acfe5290dd58325f81c4c06e57feb00a7e` after
   round-1 review repairs; handoff-state-only commits may advance the tip
   beyond it without touching code, schemas, registry, or fixtures).
-- **Review state:** round-1 findings repaired and revalidated; awaiting
-  orchestrator re-review. All required validation passed at the recorded
-  head; card 120 remains blocked.
+- **Review state:** accepted at exact head `183b55b`; PR 28 squash-merged as
+  `ddaae0d` after focused and full QA passed. Card 120 passed its post-merge
+  readiness refresh.
 - **Merge path:** orchestrator after accepted review of the current head and
   passing required checks.
 
