@@ -1,6 +1,6 @@
 # 048 - Extract Modular Language Quality Packages
 
-Status: active; Batch C registry promotion ready
+Status: active; Batch C registry pin proved, consumer canary next
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.033`, promoted spec 034
@@ -61,8 +61,11 @@ before it becomes ready.
   adapter path closure without changing policy.
 - [ ] **Batch C — Rust extraction:** package-source PR 4 passed exact-head
   review at `7cc4cd0` and merged as `56b2e11`, fixing the immutable candidate
-  at tree `sha256:e5cf9c5d...54dba0`. Card 119 now pins and proves that accepted
-  source before the separate Convergence canary.
+  at tree `sha256:e5cf9c5d...54dba0`. Card 119's registry promotion pinned
+  that identity at registry version `1.4.0`, opened the bounded Rust overlap
+  window, and proved the real-package lifecycle transcript and installed-route
+  engine integrity; the Convergence consumer canary remains serial behind its
+  reviewed merge.
 - [ ] **Batch D — root reduction:** card 120 removes both frozen embedded
   payloads and fallback branches, then proves core-only operation and installed
   package routing.
@@ -107,5 +110,6 @@ before it becomes ready.
 
 ## Next Task
 
-Dispatch card 119's Northstar registry-promotion step for accepted Rust source
-merge `56b2e11`. Stop after its reviewed merge before the Convergence canary.
+After card 119's registry promotion merges, dispatch the Convergence
+real-consumer canary for the pinned Rust package. Card 120 stays blocked
+until both overlap-close gates are reviewed.

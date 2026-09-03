@@ -277,6 +277,14 @@ Card 117 extends the same checker with the generic installed-package runtime:
     non-vacuous installed setup/record proof through the public
     `effigy skill run --path <installed_path>` surface against a decoy
     consumer.
+19. card 119 Rust registry pin and frozen fallback: the shipped registry
+    carries the accepted `@northstar/rust-quality` `0.1.0` identity
+    (language-packs PR 4, commit `56b2e11`) beside the unchanged TypeScript
+    canary at registry version 1.4.0, with exact-value assertions for both
+    entries; `overlap-windows.json` carries both open windows; and the
+    fallback CLI proves the Rust-shaped stopped pair emits the exact notice
+    naming the failed identity, the manual route, and the frozen embedded
+    Rust payload without claiming the TypeScript payload.
 
 The exact same surface is exercised with Effigy absent
 (`bun run skills/northstar/scripts/language-package-lifecycle.ts oracle

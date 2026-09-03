@@ -87,8 +87,10 @@ Roadmaps sequence contract-backed work for Northstar itself.
   and current-Poodle `ResolvedIconGeometry` API drift recorded as limits.
   Package-source PR 3 repaired the TypeScript package's non-standalone command
   adapter and merged as `c9ef2a2`. Card 121's registry `1.3.0` pin merged as
-  `69e4d5d`. The Rust inventory is frozen, Convergence is selected, and card
-  119 is ready; card 120 remains blocked behind Rust proof.
+  `69e4d5d`. Card 119's registry promotion pinned the Rust identity at
+  registry version `1.4.0` and proved the real-package lifecycle and
+  engine-integrity transcripts; the Convergence consumer canary is next and
+  card 120 remains blocked behind Rust consumer proof.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.

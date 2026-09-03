@@ -105,8 +105,9 @@ rollover signal.
   `08ad810` after exact-head review)
 - `048-extract-modular-language-quality-packages.md` (active; cards 117-118
   complete, the TypeScript standalone adapter repaired in package-source merge
-  `c9ef2a2`, card 121 merged the registry `1.3.0` pin as `69e4d5d`, card 119
-  ready, and card 120 blocked behind Rust proof)
+  `c9ef2a2`, card 121 merged the registry `1.3.0` pin as `69e4d5d`, card 119's
+  registry promotion proved the Rust pin at registry version `1.4.0`, and
+  card 120 blocked behind Rust consumer proof)
 
 ## Next Task
 
@@ -123,8 +124,11 @@ pre-existing editor failures and current-Poodle `ResolvedIconGeometry` API
 drift remain limits. Package-source PR 3 repaired the TypeScript adapter and
 merged as `c9ef2a2`; card 121's registry `1.3.0` pin merged as `69e4d5d`.
 Card 119's package source passed exact-head review at `7cc4cd0` and merged as
-`56b2e11`, with accepted tree `sha256:e5cf9c5d...54dba0`. Dispatch the
-Northstar registry-promotion step next; Convergence remains serial behind it.
+`56b2e11`, with accepted tree `sha256:e5cf9c5d...54dba0`. The Northstar
+registry promotion pinned that identity at registry version `1.4.0`, proved
+the real-package lifecycle and installed engine-integrity transcripts, and
+opened the bounded Rust overlap window. Dispatch the Convergence consumer
+canary next; card 120 remains serial behind it.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and

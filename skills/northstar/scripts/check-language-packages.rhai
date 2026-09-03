@@ -1665,17 +1665,18 @@ require(fs::is_file(official_registry_path), "missing official-registry.json");
 let registry = json::read_file(official_registry_path);
 validate_registry_instance(registry, registry_schema, "official-registry.json");
 
-// Card 121: the official registry carries exactly the accepted TypeScript
-// canary identity pinned by the reviewed registry change. Schema conformance
-// above proves shape; these assertions pin the accepted values themselves so
-// identity drift fails the checker rather than silently re-pinning. The
-// replacement identity follows the reviewed standalone-adapter repair
-// (language-packs PR 3, commit c9ef2a2).
-require(registry["registry_version"] == "1.3.0",
-    "official-registry.json must record registry_version 1.3.0 for the card-121 replacement pin");
+// Card 119: the official registry carries exactly the accepted TypeScript
+// canary identity (card 121) and the accepted Rust package identity. Schema
+// conformance above proves shape; these assertions pin the accepted values
+// themselves so identity drift fails the checker rather than silently
+// re-pinning. The TypeScript identity follows the reviewed standalone-adapter
+// repair (language-packs PR 3, commit c9ef2a2); the Rust identity follows the
+// reviewed package-source merge (language-packs PR 4, commit 56b2e11).
+require(registry["registry_version"] == "1.4.0",
+    "official-registry.json must record registry_version 1.4.0 for the card-119 Rust pin");
 let registry_packages = registry["packages"];
-require(registry_packages.len() == 1,
-    "official-registry.json must contain exactly the accepted canary entry, found " + registry_packages.len());
+require(registry_packages.len() == 2,
+    "official-registry.json must contain exactly the accepted TypeScript and Rust entries, found " + registry_packages.len());
 let canary = registry_packages[0];
 let canary_expectations = #{
     "package_id": "@northstar/typescript-quality",
@@ -1691,6 +1692,21 @@ for key in canary_expectations.keys() {
     require(canary.contains(key) && canary[key] == canary_expectations[key],
         "official-registry.json canary entry field '" + key + "' drifted from the accepted card-121 identity");
 }
+let rust_pin = registry_packages[1];
+let rust_expectations = #{
+    "package_id": "@northstar/rust-quality",
+    "version": "0.1.0",
+    "repository": "https://github.com/inflatable-cookie/northstar-language-packs",
+    "subpath": "packages/rust",
+    "commit": "56b2e1107b80f369807cff88e1b0253df035c700",
+    "tree_digest": "sha256:e5cf9c5da4a30c0f5164f2ea0c5e9d87d544c0c32f09f3c139a386c56154dba0",
+    "manifest_digest": "sha256:dd71d04efd67cc7805f417a79666dd920ea1811ee252d941108dfbeca8aab612",
+    "compatible_core_range": ">=0.2.0 <1.0.0",
+};
+for key in rust_expectations.keys() {
+    require(rust_pin.contains(key) && rust_pin[key] == rust_expectations[key],
+        "official-registry.json Rust entry field '" + key + "' drifted from the accepted card-119 identity");
+}
 
 let overlap_schema = load_and_validate_schema_file(packages_ref_root, "overlap-windows.schema.json", "language-package-overlap-windows");
 let overlap_path = path::join(packages_ref_root, "overlap-windows.json");
@@ -1698,7 +1714,7 @@ require(fs::is_file(overlap_path), "missing overlap-windows.json");
 let overlap_doc = json::read_file(overlap_path);
 validate_schema_node(overlap_doc, overlap_schema, "overlap-windows.json");
 require(overlap_doc["schema_version"] == "1.0.0", "overlap-windows.json schema_version drifted");
-require(overlap_doc["windows"].len() == 1, "overlap-windows.json must contain exactly the TypeScript overlap window");
+require(overlap_doc["windows"].len() == 2, "overlap-windows.json must contain exactly the TypeScript and Rust overlap windows");
 let overlap_window = overlap_doc["windows"][0];
 require(overlap_window["language"] == "typescript" &&
     overlap_window["package_id"] == "@northstar/typescript-quality" &&
@@ -1706,6 +1722,13 @@ require(overlap_window["language"] == "typescript" &&
     overlap_window["payload_label"] == "TypeScript" &&
     overlap_window["window"] == "open",
     "overlap-windows.json drifted from the accepted TypeScript overlap window");
+let rust_window = overlap_doc["windows"][1];
+require(rust_window["language"] == "rust" &&
+    rust_window["package_id"] == "@northstar/rust-quality" &&
+    rust_window["version"] == "0.1.0" &&
+    rust_window["payload_label"] == "Rust" &&
+    rust_window["window"] == "open",
+    "overlap-windows.json drifted from the accepted card-119 Rust overlap window");
 
 let overlap_negatives_root = path::join(northstar_skill_root, "assets/fixtures/language-packages/negative/overlap");
 expect_schema_rejection("overlap-extra-property",
@@ -1828,6 +1851,31 @@ require(fallback_notice.contains("manual or local-path installation route requir
     "fallback CLI omitted the host stop reason");
 require(fallback_notice.contains("using the frozen embedded TypeScript payload during the bounded overlap window"),
     "fallback CLI omitted the frozen payload clause");
+
+// Card 119: the same generic frozen-fallback decision must serve the Rust
+// overlap window without a language branch: the Rust-shaped stopped pair
+// names the failed official identity, the host stop reason, and the frozen
+// embedded Rust payload, and never claims the TypeScript payload.
+let rust_fallback_notice_path = path::join(fs::make_temp_dir("northstar-fallback-notice-"), "notice.txt");
+let rust_fallback_report = exec::run(
+    ["bun", "run", surface_path, "fallback",
+        path::join(fallback_fixtures, "rust-quality-shaped-request.json"),
+        path::join(fallback_fixtures, "rust-quality-shaped-result.json"),
+        overlap_path,
+        rust_fallback_notice_path],
+    #{ run_in: "host", cwd: repo_root },
+);
+require(rust_fallback_report["success"], "fallback CLI failed on the Rust-shaped pair: " + rust_fallback_report["stderr"] + rust_fallback_report["stdout"]);
+let rust_fallback_notice = fs::read_file(rust_fallback_notice_path);
+require(rust_fallback_notice.contains("@northstar/rust-quality@0.1.0"),
+    "fallback CLI omitted @northstar/rust-quality@0.1.0");
+require(rust_fallback_notice.contains("manual or local-path installation route required"),
+    "Rust fallback CLI omitted the host stop reason");
+require(rust_fallback_notice.contains("using the frozen embedded Rust payload during the bounded overlap window"),
+    "Rust fallback CLI omitted the frozen payload clause");
+require(!rust_fallback_notice.contains("TypeScript"),
+    "Rust fallback notice claimed the TypeScript payload");
+log("card-119 Rust frozen fallback CLI: PASS (Rust-shaped notice, no TypeScript payload claim)");
 
 expect_fallback_cli_failure("missing-version", surface_path,
     path::join(fallback_fixtures, "missing-version-request.json"),
