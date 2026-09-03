@@ -81,7 +81,7 @@ orchestrators from substituting a detached top-level launch.
   `effigy check:skill-install skills/northstar`, `effigy qa:docs`, `effigy qa`,
   and `git diff --check`.
 - **PR base/head:** `main` <- `worker/preserve-paseo-worker-parentage`.
-- **PR URL:** pending.
+- **PR URL:** https://github.com/inflatable-cookie/northstar/pull/29.
 - **Review state:** implementation complete; awaiting orchestrator exact-head review.
 - **Merge path:** orchestrator after accepted review of the exact current head
   and passing required checks.
