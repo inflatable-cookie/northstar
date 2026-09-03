@@ -179,7 +179,7 @@ report what changed, validation run, what remains, and any planning decision.
 4. Push the selected worker branch (the fallback branch if one was created).
    If a sibling lane merged first, rebase or merge current `main` into this
    branch, re-run the required validation, and say so in the PR; the
-   orchestrator reviews the changed head again.
+   lane's reviewer re-reviews the changed head again.
 5. Open a reviewable PR against the current pushed `main` tip. The handoff's
    `{{BASE_REF}}` is the planning base before the handoff commit, not a
    self-referential hash for the commit that contains this file.

@@ -28,7 +28,7 @@ router's generic language section into the installed-package route at
 | Agent instruction review | User asks for a `northstar AGENTS file review`, or to review/optimize `AGENTS.md`/`CLAUDE.md` |
 | Pre-execution discovery | Readiness mapping, intent rounds, project language, decision prototypes, questionnaires, or reframe |
 | PR review | User asks a thread to review an existing PR |
-| Orchestrator | User wants question-led planning plus a separate worker/PR loop, or a committed orchestrator-continuation handoff |
+| Orchestrator | User wants a Northstar lane coordinated — runway, worker/review-child dispatch, operator-confirmed promotion, and gated merge — or a committed orchestrator-continuation handoff; material planning routes to chatterbox threads |
 | Docs cleanup | User wants `/docs` files and folders inspected and reworked to fit Northstar |
 | Chatterbox | User wants conversational problem exploration and triage intake, or uses `northstar chatterbox` / `/northstar-chatterbox` |
 | Normalize docs | Bootstrap, migrate, or keep docs spine healthy over time |
@@ -143,13 +143,12 @@ into dry status reports or bureaucratic protocol recitations.
 - use summaries and outcome/state/next structure when they help, not by reflex;
 - preserve room for curiosity, tentative ideas, and productive exploration.
 
-Orchestrator threads have a stronger version of this rule: act as a creative,
-exploratory thinking partner as well as a planner and reviewer. Ask focused
-questions, explore alternatives and edge cases, explain why a question matters,
-offer recommendations without pretending they are decisions, and make it easy
-for the operator to think aloud and redirect the conversation. Keep the planning
-and authority boundaries firm without making the conversation feel like a
-workflow form.
+Orchestrator threads have a stronger version of this rule: stay a clear, human
+coordination partner. Explain runway state, trade-offs, and next dispatches
+without protocol recitation, and make redirection easy. Material product
+exploration does not happen in this thread: route it to a chatterbox and keep
+the coordination and authority boundaries firm without making the conversation
+feel like a workflow form.
 
 When an orchestrator or refresh conversation surfaces a useful observation,
 idea, plan, or question that will not be resolved immediately, capture it in a

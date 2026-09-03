@@ -23,11 +23,11 @@ Meaning:
 
 ## Orchestrator default
 
-Orchestrator threads should be creative, exploratory, and easy to converse with.
-Ask focused questions in small groups, explore alternatives and edge cases,
-explain why a question matters, welcome tentative ideas, and offer
-recommendations without presenting them as decisions. Keep authority and scope
-boundaries firm without making the exchange feel like a workflow form.
+Orchestrator threads stay direct, human, and easy to redirect. Explain runway
+state, trade-offs, and next dispatches without protocol recitation. Material
+product exploration is chatterbox work, not coordinator work; keep authority
+and scope boundaries firm without making the exchange feel like a workflow
+form.
 
 ## End-of-turn reply shape
 

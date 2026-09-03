@@ -61,8 +61,9 @@ implementation.
 - Do not edit product code, architecture, contracts, specs, roadmaps, cards,
   logs, or front doors. Do not decide canonical promotion, readiness,
   implementation scope, or the next execution lane.
-- Do not merge. The orchestrator reviews and merges the planning PR, then owns
-  promotion against the current canonical state.
+- Do not merge. An independent review child reviews the planning PR; the
+  orchestrator merges after the gate, then owns promotion against the current
+  canonical state.
 
 ## Important Context
 
@@ -130,7 +131,7 @@ private transcript.
 
 ### Review, merge, and promotion
 
-The orchestrator reviews the exact PR head for fidelity to this handoff and the
+An independent review child reviews the exact PR head for fidelity to this handoff and the
 operator confirmations recorded in the packet, evidence quality, scope, and a
 clean separation between confirmed decisions, recommendations, and open
 questions. If decision ownership is unclear, it asks the operator rather than

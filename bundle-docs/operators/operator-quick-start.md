@@ -93,7 +93,7 @@ to pick one mode:
   `/northstar-typescript-audit worktree`
 - “Audit and fix this entire TypeScript/Svelte repository” ->
   `/northstar-typescript-audit repository`
-- **Create an orchestrator runway and worker PR loop** -> `northstar` (orchestrator mode)
+- **Coordinate a Northstar lane (runway, dispatch, gated merge)** -> `northstar` (orchestrator mode)
 
 Rust activation is agent-installed and repository-owned. The agent discovers
 Cargo and explicit toolchain paths, preserves existing instructions and
@@ -150,8 +150,8 @@ does not duplicate the agent. Without a control plane you simply get every
 absolute handoff path at once and launch as many as you want. You are never
 asked to guess a worker count. A lane that stays serial must come with a named
 reason — a dependency edge, a shared mutable or closeout surface, or unresolved
-authority. Same-repo PRs still merge one at a time, and the orchestrator
-re-reviews any remaining head that a merge changed.
+authority. Same-repo PRs still merge one at a time, and a changed or
+conflict-resolved remaining head goes back to review before it can merge.
 
 Ordinary workers draw from the cheapest adequate day-to-day pool, and the
 orchestrator varies provider/model identity between runs instead of reusing
@@ -168,8 +168,9 @@ instead of silently spending the expensive one.
 You can also ask the orchestrator to spin off a planning conversation for one
 topic. It launches a frontier planning delegate in a separate worktree/thread;
 you talk with that delegate directly while the orchestrator continues unrelated
-work. The delegate opens a triage/research-only PR. The orchestrator reviews and
-merges it, then separately promotes the settled meaning into canonical planning.
+work. The delegate opens a triage/research-only PR. An independent review child
+reviews it, the coordinator merges after the gate, and an operator-confirmed
+lane promotes the settled meaning into canonical planning.
 
 Worker PRs normally receive an independent review child: the orchestrator
 places it in a dedicated PR-head workspace, launches it as a child with finish

@@ -373,11 +373,11 @@ non-mutating by default.
 For material work that benefits from a separate implementation context, the
 preferred split is:
 
-`operator ↔ orchestrator thread -> canonical plan/runway -> worker thread/worktree -> PR -> orchestrator review -> merge/closeout`
+`operator ↔ orchestrator thread -> canonical plan/runway -> worker thread/worktree -> PR -> independent review child -> coordinator gate -> merge/closeout`
 
 A parallel planning-only branch is:
 
-`operator ↔ planning delegate/worktree -> triage/research PR -> orchestrator review/merge -> orchestrator promotion`
+`operator ↔ planning delegate/worktree -> triage/research PR -> review child -> coordinator merge -> operator-confirmed promotion lane`
 
 An explicit fresh-orchestrator transfer uses:
 
@@ -395,25 +395,28 @@ The normal worker-PR review path routes through an independent child:
 
 `worker PR -> review child (dedicated PR-head workspace) -> provider verdict naming the head -> coordinator merge gate -> merge/closeout`
 
-The orchestrator owns economical coordination: question-led discovery, promoted
+The orchestrator owns economical coordination: operator-routed discovery, promoted
 planning bounded by operator-confirmed authority, ready-state, launch
 preparation, revision routing, the merge gate, and merge. Substantive
 exact-head semantic review belongs to independent review children. After
-settling meaning — or receiving an operator-confirmed decision-ready packet —
-the coordinator may run one fast/low-cost documentation projection subagent
-serially in the planning context. That subagent applies an exact brief to named
-docs and deterministic checks; it does not choose authority, invent planning,
-decide state, touch product code, or perform Git/provider mutations, and it
-stops on semantic ambiguity. The coordinator reviews the resulting diff; a
-promotion batch driven by a confirmed packet is checked by an independent
-review child against that packet before the merge gate applies.
+settling meaning, the coordinator may run one fast/low-cost documentation
+projection subagent serially in the planning context for genuinely
+non-semantic edits. That subagent applies an exact brief to named docs and
+deterministic checks; it does not choose authority, invent planning, decide
+state, touch product code, or perform Git/provider mutations, and it stops on
+semantic ambiguity. The coordinator reviews the resulting helper diff and owns
+its Git mutations. A promotion batch driven by an operator-confirmed packet is
+different: it runs as a bounded branch/worktree/PR lane, where an independent
+review child checks the PR against the packet before the coordinator applies
+the merge gate.
 
 On explicit operator request, it may also launch one frontier planning delegate
 for a named topic. That delegate talks directly with the operator and owns only
 a bounded triage/research packet in an isolated branch. It may use read-only
 research subagents. The orchestrator reserves that topic, continues only
-non-overlapping work, reviews and merges the planning PR, then separately
-promotes its settled meaning against current `main`.
+non-overlapping work, routes the planning PR to an independent review child,
+merges after the coordination gate, then separately promotes settled meaning
+through an operator-confirmed lane against current `main`.
 
 On explicit operator request, an orchestrator may transfer its current planning
 and review lane to one fresh orchestrator thread. The source closes the live

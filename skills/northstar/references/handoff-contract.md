@@ -54,9 +54,9 @@ promotion_authority: orchestrator
 This activates an operator-facing planning conversation in a separate
 branch/worktree. It does not activate implementation worker mode. The delegate
 may write only the named triage/research packet, may use bounded read-only
-research subagents, and finishes with a PR for orchestrator review. Canonical
-promotion, readiness, implementation dispatch, review, and merge remain with
-the orchestrator.
+research subagents, and finishes with a PR for independent review. Canonical
+promotion, readiness, implementation dispatch, and merge remain with the
+orchestrator; substantive review routes to an independent review child.
 
 ### Orchestrator-continuation activation
 

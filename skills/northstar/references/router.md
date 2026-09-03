@@ -172,9 +172,9 @@ PR-head workspace and post a provider verdict naming the exact reviewed head.
 
 ## 8. Orchestrator thread
 
-Use when the user wants Northstar to own a question-led planning conversation,
-spin off a separate operator-facing planning delegate, prepare a worker
-thread/worktree, maintain a runway, or continue from a committed
+Use when the user wants Northstar to coordinate a lane: maintain the ready
+runway, spin off an operator-requested planning delegate, prepare worker
+threads/worktrees, or continue from a committed
 `orchestrator-continuation` handoff. Coordination is the normal job: keep the
 dependency frontier launching, route material meaning through operator-
 confirmed chatterbox packets, route substantive PR review to independent

@@ -298,9 +298,9 @@ Northstar should use a natural, human conversational tone in agent chat and
 normal thread replies. Keep useful recommendations and next steps, and make it
 easy for the operator to respond, think aloud, or redirect.
 
-Orchestrator threads should be especially creative and exploratory: ask focused
-questions, explore alternatives and edge cases, explain trade-offs, and welcome
-tentative ideas without weakening authority boundaries.
+Orchestrator threads stay direct and human — explain state, trade-offs, and
+next dispatches without protocol recitation — but material product exploration
+is chatterbox work, not coordinator work.
 
 Use compressed, high-density writing for internal execution artifacts:
 
@@ -738,10 +738,11 @@ operator-confirmed decisions, recommendations not yet accepted, evidence and
 alternatives, unresolved questions, and affected authority surfaces.
 Recommendations are not decisions. After the operator confirms the material
 meaning, the orchestrator compiles an exact promotion brief for a bounded
-planning-projection worker that edits canonical architecture, contracts,
-specs, roadmaps, and cards only as named; semantic ambiguity returns to the
-operator and the chatterbox. An independent review child checks the promotion
-against the confirmed packet before the normal exact-head merge gate applies.
+planning-projection worker running as its own branch/worktree/PR lane. The
+worker edits canonical architecture, contracts, specs, roadmaps, and cards
+only as named; semantic ambiguity returns to the operator and the chatterbox.
+An independent review child reviews the promotion PR against the confirmed
+packet, and the coordinator then applies the normal exact-head merge gate.
 
 Review path: every worker PR gets an independent review child unless the
 operator explicitly asks the current thread for a direct review. In Paseo the
@@ -787,15 +788,17 @@ orchestrator/implementation lanes. The delegate does not edit product code or
 canonical planning, choose promotion destinations, decide readiness, or launch
 implementation.
 
-The orchestrator reserves the topic and continues only non-overlapping work. It
-reviews the planning PR against the original handoff, operator confirmations
-recorded in the packet, evidence, current canonical state, and exact head. If
-decision ownership is still unclear, it asks the operator rather than relying on
-private thread history. Requested changes return to the same delegate. After
-accepted review and passing checks, the orchestrator may merge without another
-operator prompt, then separately reconcile and promote settled meaning against
-current `main`. The merged packet remains non-authoritative until promotion;
-resolved triage material is removed or split in that promotion batch.
+The orchestrator reserves the topic and continues only non-overlapping work.
+An independent review child reviews the planning PR against the original
+handoff, operator confirmations recorded in the packet, evidence, current
+canonical state, and exact head. If decision ownership is still unclear, the
+coordinator asks the operator rather than relying on private thread history.
+Requested changes return to the same delegate. After the accepted verdict
+names the current head and checks pass, the coordinator may merge without
+another operator prompt, then separately reconcile and promote settled meaning
+through an operator-confirmed lane against current `main`. The merged packet
+remains non-authoritative until promotion; resolved triage material is removed
+or split in that promotion batch.
 
 Select the delegate from the adequate frontier conversational-planning pool
 under the diversified-routing rule, rotating recent use like every other
@@ -832,11 +835,12 @@ part of the transfer.
 
 ## Mechanical documentation projection
 
-Keep high-cost frontier reasoning on discovery, planning, promotion, readiness,
-review-oracle design, worker routing, PR review, and merge. Once meaning is
-settled, an orchestrator may delegate a worthwhile batch of mechanical
-documentation projection to a fast, low-cost profile. Select by current role
-notes; do not make one provider model a Northstar dependency.
+Keep promotion authority, readiness judgment, review-oracle design, worker
+routing, the merge gate, and merge with the coordinator; route substantive
+review to independent review children. Once meaning is fully settled, an
+orchestrator may delegate genuinely non-semantic mechanical documentation
+edits to a fast, low-cost profile. Select by current role notes; do not make
+one provider model a Northstar dependency.
 
 The brief names the authority owner, settled decisions, canonical refs, allowed
 paths, exact evidence and state transitions, forbidden judgments, validation,
@@ -848,10 +852,15 @@ next state, resolve contradictions, edit product code, commit, push, review, or
 merge.
 
 Run it serially in the planning context, without a worker handoff or worktree.
-Capture dirty state and allowed paths before dispatch. The orchestrator reviews
-the complete diff for semantic fidelity and owns Git/provider mutations. Use the
-split for roughly three or more related surfaces, or another batch large enough
-to repay dispatch and review overhead; keep tiny edits local.
+This same-checkout helper carries no new product meaning. Capture dirty state
+and allowed paths before dispatch; the orchestrator reviews the complete diff
+before any Git/provider mutation, which it owns. Materializing an
+operator-confirmed decision-ready packet into canonical architecture,
+contracts, specs, roadmaps, and cards is different: that promotion runs as a
+bounded branch/worktree/PR lane with an independent review child and the
+coordination gate. Use the helper for roughly three or more related surfaces,
+or another batch large enough to repay dispatch and review overhead; keep tiny
+edits local.
 
 ## Chatterbox intake channel
 

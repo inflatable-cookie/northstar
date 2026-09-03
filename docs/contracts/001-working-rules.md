@@ -315,9 +315,9 @@ Work in this repo is not done unless:
 - Use a natural, human conversational tone in agent chat and normal thread
   replies. Keep recommendations and next steps, and make the exchange easy to
   respond to or redirect.
-- Orchestrator threads should be creative and exploratory: ask focused
-  questions, explore alternatives, explain trade-offs, and welcome tentative
-  ideas without weakening authority boundaries.
+- Orchestrator threads stay direct and human — explain state, trade-offs, and
+  next dispatches without protocol recitation — but material product
+  exploration is chatterbox work, not coordinator work.
 - Internal execution artifacts should remain compact and information-dense:
   - batch cards
   - roadmap milestones
@@ -453,14 +453,13 @@ rule or operator pause applies. Ambiguous, contradictory, missing, or stale
 review evidence stops merge. The operator may still explicitly ask the
 current orchestrator thread to perform a direct review.
 
-Material product meaning moves to operator-facing chatterboxes by default.
-Once the operator confirms the material meaning behind a decision-ready
 packet, the orchestrator compiles an exact promotion brief and dispatches a
-bounded planning-projection worker that may edit canonical architecture,
-contracts, specs, roadmaps, and cards only as the brief names them; semantic
-ambiguity returns to the operator and the chatterbox. An independent review
-child checks the promotion against the confirmed packet, and the normal
-exact-head merge gate applies. Readiness stays a canonical property of the
+bounded planning-projection worker as its own branch/worktree/PR lane. The
+worker may edit canonical architecture, contracts, specs, roadmaps, and cards
+only as the brief names; semantic ambiguity returns to the operator and the
+chatterbox. An independent review child reviews the promotion PR against the
+confirmed packet, and the coordinator applies the normal exact-head merge
+gate. Readiness stays a canonical property of the
 promoted card. Small operational clarifications that cannot change behavior,
 acceptance, public contract, or sequencing may still be handled directly by
 the orchestrator.
@@ -515,8 +514,9 @@ The delegate itself does not edit product or canonical planning surfaces,
 promote, decide readiness, or launch implementation. The orchestrator does not
 start work that depends on the topic while its planning PR is open.
 
-After exact-head review and checks, the orchestrator merges the planning PR,
-reconciles it against current `main`, and separately promotes settled meaning
+After an independent review child accepts the exact PR head and checks pass,
+the orchestrator merges the planning PR, reconciles it against current `main`,
+and separately promotes settled meaning through an operator-confirmed lane
 into architecture, contracts, specs, roadmaps, or cards. It removes or splits
 resolved triage notes during promotion. Merge of a planning packet is intake,
 not promotion or execution authority.
@@ -556,7 +556,9 @@ rules, decide readiness/completion/next work, resolve contradictions, edit
 product code, commit, push, review, or merge.
 
 Documentation projection runs serially in the orchestrator's planning context;
-it is not worker mode and needs no worker handoff or worktree. Capture existing
+it is not worker mode and needs no worker handoff or worktree, and it is only
+for genuinely non-semantic edits because operator-confirmed promotion runs as
+the bounded branch/worktree/PR lane above. Capture existing
 dirty state and allowed paths before dispatch. The orchestrator reviews the full
 diff for semantic fidelity and owns commit/push. Keep tiny edits local when
 dispatch and review would cost more than the projection.
@@ -612,7 +614,7 @@ handoff per selected lane and gives the operator every absolute path at once.
 Northstar does not encode a fixed worker count, provider, or model, and does not
 ask the operator to guess one.
 
-The orchestrator continues non-overlapping planning, review, revision routing,
+The orchestrator continues non-overlapping coordination, dispatch, revision routing,
 merge, and closeout while workers run. A worker-finish notification starts
 review of that lane; it does not refill a global launch queue.
 

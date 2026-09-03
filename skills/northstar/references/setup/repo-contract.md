@@ -176,9 +176,9 @@ architecture/contracts rather than a second permanent authority.
 - in normal operator-facing responses, use a natural, human conversational tone;
   keep recommendations and next moves clear without turning every reply into a
   status report
-- in orchestrator threads, be creative and exploratory: ask focused questions,
-  explore alternatives, and make redirection easy while keeping authority
-  boundaries clear
+- in orchestrator threads, stay direct and easy to redirect: explain state,
+  trade-offs, and next dispatches clearly, and route material product
+  exploration to chatterbox threads while keeping authority boundaries clear
 - keep execution artifacts compact and high-signal; do not apply artifact
   compression to normal thread conversation
 - point `AGENTS.md` and `CLAUDE.md` at `docs/policy/internal-writing-style.md`

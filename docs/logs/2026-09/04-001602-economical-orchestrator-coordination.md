@@ -85,6 +85,47 @@ orchestrator.
 | Failure stays lane-local. | One provider refusal halts unrelated ready work. | Parallel-scheduling doctrine, contract, and template keep provider/profile failures lane-local; unchanged by this batch. | Structural: doctrine 07 and template wording unchanged in that respect; `check:model-routing` failure-isolation row PASS. |
 | Trial does not rewrite policy by anecdote. | One successful cheap review is treated as permanent proof. | Doctrine section and spec 036 record the separate ten-PR cohort; card 126 stays blocked and unexecuted. | Structural: card 126 state verified in this diff. |
 
+## Review Remediation
+
+Exact-head review of `2cd1bcb` found four blocking findings; all were repaired
+on this branch:
+
+1. **Coordinator self-planning removed (`execution-miss`):** orchestrator mode
+   no longer opens as the conversational planning/review owner, teaches
+   creative exploration, or runs question-led discovery/promotion/runway
+   compilation in procedure steps 3-5. Material discovery now routes to
+   chatterbox threads and operator confirmation; only explicitly allowed small
+   operational clarifications stay local. SKILL activation, the stronger
+   conversation-style rule, router section 8, the working-rules compression
+   rule, doctrine 07, the style policy (live and copy-ready), and the setup
+   repo-contract guidance no longer instruct a coordinator to plan.
+2. **Promotion reached the review/merge topology (`execution-miss`):**
+   operator-confirmed canonical promotion is now a bounded
+   branch/worktree/PR lane — exact brief, bounded projection worker, fail-
+   closed ambiguity, independent review child on the PR head, coordinator
+   merge gate — across orchestrator mode, working rules, doctrine 07, the
+   copy-ready template, spec 026, architecture, and inventory. The
+   same-checkout subagent remains only for genuinely non-semantic mechanical
+   edits with orchestrator full-diff review and no review-child claims.
+3. **Concrete launch shape and provider-neutral fallback (`execution-miss`):**
+   Paseo review launch now names `create_workspace` with `isolation: worktree`
+   and `mode: checkout-pr` plus PR number, requires verifying the workspace
+   `HEAD` equals the exact PR head SHA before agent-scoped child creation
+   with notifications, and adds the manual fallback — a compact direct-review
+   launch request (PR URL, canonical refs, review oracle) for an
+   operator-started independent reviewer without pretending parentage exists.
+   The exact-head verdict gate holds in both routes (orchestrator mode section
+   and procedure step 11).
+4. **Live authority reconciled (`integration-drift`):** spec 026's target
+   operating model, review paragraph, roles table (now with a Review child
+   row), and projection scoping; inventory's orchestrator/projection rows and
+   a new promotion-lane interface; template delegation/projection/routing
+   bullets; doctrine 07 delegation/projection/style sections; quick-start
+   mode choice, parallel, and delegate paragraphs; delegate and worker handoff
+   templates; and the handoff contract no longer offer the superseded
+   ownership model. Historical logs, closed roadmap evidence, and research
+   memos are untouched.
+
 ## Validation
 
 - `effigy check:model-routing` — PASS (ten milestone 047 oracle rows)

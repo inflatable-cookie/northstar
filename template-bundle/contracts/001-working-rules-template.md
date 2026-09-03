@@ -240,10 +240,10 @@ informal habits.
   Record both reasons in the handoff and rotate within the frontier pool too.
   Priority alone, complexity alone, file count, duration, or a risk-domain
   label is insufficient.
-- Risky surfaces still need an explicit review oracle and frontier review. A
-  material but settled change may use a capable non-frontier worker while the
-  orchestrator keeps material review; worker price is not the review-strength
-  control.
+- Risky surfaces still need an explicit review oracle and material independent
+  review. A material but settled change may use a capable non-frontier worker
+  while its independent review child keeps material review; worker price is
+  not the review-strength control.
 - Unresolved designs return to planning. A refused route is removed only for
   that attempt; choose another adequate route from the lane's pool. If no
   adequate route remains, report the gap; do not silently escalate. An
@@ -266,9 +266,11 @@ informal habits.
   product code, or launch implementation.
 - Bounded research subagents are read-only and return sourced findings to the
   delegate. They do not write, contact the operator, or start nested lanes.
-- The delegate opens a PR. The orchestrator reviews and merges it, then
-  reconciles current `main` and separately promotes settled meaning. Packet
-  merge is not promotion or execution authority.
+- The delegate opens a PR. An independent review child reviews it against the
+  handoff and recorded operator confirmations; the coordinator merges after
+  the gate, then reconciles current `main` and separately promotes settled
+  meaning through an operator-confirmed lane. Packet merge is not promotion
+  or execution authority.
 
 ### Fresh orchestrator continuation
 
@@ -293,22 +295,24 @@ informal habits.
 
 ### Mechanical documentation projection
 
-- Keep discovery, planning, promotion, acceptance, readiness, review, and merge
-  with the orchestrator.
-- After meaning is settled, a fast/low-cost subagent may serially apply an exact
-  brief to a worthwhile batch of named documentation surfaces and deterministic
-  checks.
+- Keep promotion authority, readiness judgment, the merge gate, and merge with
+  the orchestrator; route substantive review to independent review children.
+- Same-checkout helper: after meaning is fully settled, a fast/low-cost
+  subagent may serially apply an exact brief to genuinely non-semantic edits
+  in the planning checkout — already-settled updates, exact wording sync, and
+  deterministic checks. The orchestrator reviews the full diff before any Git
+  mutation and owns those mutations. This helper carries no new product
+  meaning.
 - The brief must bound authority, settled meaning, canonical refs, allowed
-  paths, evidence/state transitions, forbidden judgments, validation, and stop
-  conditions.
-- The subagent does not choose authority or state, edit product code, commit,
-  push, review, or merge. It stops on ambiguity. The orchestrator reviews the
-  full diff and owns Git/provider mutations.
-- A promotion batch may materialize an explicitly operator-confirmed
-  decision-ready packet into canonical architecture, contracts, specs,
-  roadmaps, and cards only as the brief names; it stops on semantic
-  ambiguity, and an independent review child checks the promotion against
-  the packet.
+  paths, evidence/state transitions, forbidden judgments, validation, and
+  stop conditions. The subagent does not choose authority or state, edit
+  product code, commit, push, review, or merge, and stops on ambiguity.
+- Operator-confirmed promotion lane: materializing a decision-ready packet
+  into canonical architecture, contracts, specs, roadmaps, and cards runs as
+  a bounded branch/worktree/PR lane from an exact promotion brief. The
+  projection worker stops on semantic ambiguity; an independent review child
+  reviews the PR against the confirmed packet; the coordinator applies the
+  normal merge gate.
 
 ### Chatterbox intake channel
 
