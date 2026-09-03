@@ -29,24 +29,21 @@ fallback without pretending parentage exists.
 | `bundle-docs/sections/07-delivery-framework-and-autonomy.md` | Workspace creation failure handling without explicit child parentage rule | Dedicated section on separate workspace isolation and agent parentage axes; scoped child creation; enabled notifications; same-child revision resumption; manual fallback |
 | `template-bundle/contracts/001-working-rules-template.md` | General capacity and dispatch wording | Explicit clause: workspace placement and agent parentage are separate axes; scoped cross-workspace child creation; detached roots/schedules/CLI rejected; revisions resume same child; manual fallback |
 | `bundle-docs/operators/operator-quick-start.md` | "orchestrator commits and pushes... gives absolute path" | Explains Paseo cross-workspace child sequence, detached-root rejection, enabled notifications, same-child revision resumption, and manual fallback |
-| `skills/northstar/references/modes/orchestrator.md` | "place it in that workspace, leave finish notification enabled" | "place it in that workspace using the returned workspace ID... Workspace placement does not detach parentage: this must be the current orchestrator's agent-scoped `create_agent` call so Paseo delivers finish, error, and permission notifications to the parent. A top-level/root-agent launch, schedule, generic detached run, or CLI path without explicit parent attachment is rejected as non-equivalent; reject launch configuration if finish notifications are disabled" |
+| `skills/northstar/references/modes/orchestrator.md` | "place it in that workspace, leave finish notification enabled" | "place it in that workspace using the returned workspace ID... Workspace placement does not detach parentage: this must be the current orchestrator's agent-scoped `create_agent` call so Paseo delivers finish, error, and permission notifications to the parent. A top-level/root-agent launch, schedule, generic detached run, or CLI path without explicit parent attachment is rejected as non-equivalent; reject launch configuration if finish notifications are disabled"; clean revision follow-up without duplication |
 | `skills/northstar/SKILL.md` | Generic orchestrator summary | Adds: "Paseo worker parentage preserved across dedicated worktree workspace placement (scoped cross-workspace child creation, finish notifications enabled, no detached root launches, same-agent revision resume)" |
 | `bundle-docs/protocol-kernel.md` | No explicit entry for worker parentage | Added `Paseo worker parentage and cross-workspace child dispatch` pointing to doctrine 07 and working rules |
 | `docs/architecture/system-architecture.md` | Generic control-plane tool injection invariant | Invariant updated to bind dedicated worktree workspace creation to agent-scoped child creation with returned workspace ID, rejecting detached roots/schedules/unproven CLI |
-| `scripts/check-northstar-worker-parentage.rhai` | Did not exist | New focused checker: positive assertions for all six oracle rows across 9 surfaces plus negative scans |
-| `effigy.toml`, `scripts/lib/northstar-repo-contract-data.rhai`, `scripts/test-northstar-repo-contract.rhai` | `qa:docs` without worker-parentage assertions | `check:worker-parentage` task wired into `qa:docs`; machine-contract pin and fixture tests updated |
-| `scripts/README.md` | Unlisted | Documented `check:worker-parentage` task |
 
-## Six Oracle Rows Falsified
+## Six Oracle Rows Proven
 
-| Milestone 049 oracle row | Adversarial scenario | Result | Proof in `check:worker-parentage` |
+| Milestone 049 oracle row | Adversarial scenario | Result | Proof |
 | --- | --- | --- | --- |
-| 1. Isolation and parentage coexist | A worker needs a new worktree workspace | Create the workspace first, then create a child from the orchestrator scope with its ID | `require_row("isolation and parentage coexist", ...)` across 8 surfaces |
-| 2. Workspace placement does not detach | The child is placed in a workspace different from the parent | Preserve the orchestrator-child relationship and notification route | `require_row("workspace placement does not detach", ...)` across 8 surfaces |
-| 3. Detached roots are invalid workers | An orchestrator uses a top-level CLI/root launch because it can create the same worktree | Reject it as non-equivalent; use scoped creation or manual handoff | `require_row("detached roots are invalid workers", ...)` across 7 surfaces + `forbid` negative scan |
-| 4. Notifications are structural | The worker is created with finish notification disabled | Reject launch configuration before creation | `require_row("notifications are structural", ...)` across 7 surfaces + `forbid` negative scan |
-| 5. Revisions retain identity | Review requests changes after the child finishes | Resume the same child agent; do not create a detached replacement | `require_row("revisions retain identity", ...)` across 7 surfaces |
-| 6. Provider neutrality survives | Scoped Paseo tools are absent | Return the absolute handoff for manual launch without pretending parentage exists | `require_row("provider neutrality survives", ...)` across 7 surfaces |
+| 1. Isolation and parentage coexist | A worker needs a new worktree workspace | Create the workspace first, then create a child from the orchestrator scope with its ID | Live launch record names both IDs (`wks_0ac25c3a34f16567` and child `3b92a429-64ec-4d31-a85b-bd97fd5b49d2`) and ordered calls |
+| 2. Workspace placement does not detach | The child is placed in a workspace different from the parent | Preserve the orchestrator-child relationship and notification route | Live parent label `paseo.parent-agent-id=ea5b027e-e772-4209-861a-25aa8d12ca29` + finish notification delivered to orchestrator |
+| 3. Detached roots are invalid workers | An orchestrator uses a top-level CLI/root launch because it can create the same worktree | Reject it as non-equivalent; use scoped creation or manual handoff | Exact-head source review of working rules, doctrine 07, template, and mode |
+| 4. Notifications are structural | The worker is created with finish notification disabled | Reject launch configuration before creation | Live launch `notifyOnFinish: true` + exact-head source review of rejection rule |
+| 5. Revisions retain identity | Review requests changes after the child finishes | Resume the same child agent; do not create a detached replacement | Exact-head PR 29 review addendum explicitly resumed child `3b92a429-64ec-4d31-a85b-bd97fd5b49d2` in workspace `wks_0ac25c3a34f16567` |
+| 6. Provider neutrality survives | Scoped Paseo tools are absent | Return the absolute handoff for manual launch without pretending parentage exists | Exact-head source review confirms provider-neutral manual fallback remains intact |
 
 ## Live Launch Record
 
@@ -56,14 +53,13 @@ fallback without pretending parentage exists.
 
 ## Validation
 
-- `effigy check:worker-parentage` — PASS (six milestone 049 oracle rows verified across 9 surfaces with negative scans)
 - `effigy check:command-skills` — PASS (9 adapters, aggregate descriptions=460 chars)
 - `effigy check:skill-install skills/northstar` — PASS (199 files verified)
-- `effigy qa:docs` — PASS (repo-contract machine contracts, repo-contract checks & 11 fixture tests, readiness-map checks & 5 fixture tests, command-skills, model-routing, worker-parentage, language-packages machine contracts)
+- `effigy qa:docs` — PASS (repo-contract machine contracts, repo-contract checks & 11 fixture tests, readiness-map checks & 5 fixture tests, command-skills, model-routing, language-packages machine contracts)
 - `effigy qa` — PASS (full validation suite + docs QA)
 - `git diff --check` — clean (no whitespace or format errors)
 
 ## Next Task
 
 Stop for exact-head orchestrator review. After reviewed merge and
-installed-skill refresh, resume card 120's root-reduction lane.
+installed-skill refresh, resume card 120's bounded root-reduction lane.

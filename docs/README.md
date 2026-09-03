@@ -119,6 +119,7 @@ Northstar system:
   ready for bounded root reduction. Milestone `g02.049` (card 123) executed
   first to correct Paseo worker creation: dedicated workspace isolation and
   child-agent parentage coexist, with finish notifications enabled and all six
-  oracle rows falsified by `check:worker-parentage`.
+  oracle rows proven through live launch, exact-head source review, and
+  same-child revision.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

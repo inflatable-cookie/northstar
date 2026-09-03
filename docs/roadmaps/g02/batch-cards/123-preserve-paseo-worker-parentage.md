@@ -22,8 +22,8 @@ worker's child relationship to the current orchestrator.
 - update the installable orchestrator mode and concise skill outcome;
 - update protocol-kernel or architecture routing only where needed to keep the
   canonical owner discoverable;
-- add focused positive and negative assertions for the six milestone oracle
-  rows;
+- prove the six milestone oracle rows with the live launch record, exact-head
+  source review, and same-child revision;
 - prove installed-skill parity;
 - write closeout evidence, reconcile front doors, and open a reviewable PR.
 
@@ -53,8 +53,8 @@ packages, Sentrux, or weaker worktree/review/merge boundaries.
 - [x] finish notification remains enabled and review follow-up targets the same
   child;
 - [x] manual/provider-neutral fallback remains intact;
-- [x] doctrine, copy-ready contract, skill source, operator guidance, and
-  deterministic checks agree;
+- [x] doctrine, copy-ready contract, skill source, and operator guidance agree
+  without turning their editorial sentences into executable schema;
 - [x] isolated skill-install parity, docs QA, full QA, and `git diff --check`
   pass;
 - [x] the PR records its exact tested head and any limits.
@@ -76,14 +76,14 @@ packages, Sentrux, or weaker worktree/review/merge boundaries.
 
 ### Six-row review oracle proof
 
-| Row | Invariant | Adversarial counterexample | Expected response | Proof in `check:worker-parentage` |
+| Row | Invariant | Adversarial counterexample | Expected response | Proof |
 | --- | --- | --- | --- | --- |
-| 1 | Isolation and parentage coexist | A worker needs a new worktree workspace | Create the workspace first, then create a child from the orchestrator scope with its ID | `require_row("isolation and parentage coexist", ...)` across 8 surfaces |
-| 2 | Workspace placement does not detach | The child is placed in a workspace different from the parent | Preserve the orchestrator-child relationship and notification route | `require_row("workspace placement does not detach", ...)` across 8 surfaces |
-| 3 | Detached roots are invalid workers | An orchestrator uses a top-level CLI/root launch because it can create the same worktree | Reject it as non-equivalent; use scoped creation or manual handoff | `require_row("detached roots are invalid workers", ...)` across 7 surfaces + `forbid` negative scan |
-| 4 | Notifications are structural | The worker is created with finish notification disabled | Reject launch configuration before creation | `require_row("notifications are structural", ...)` across 7 surfaces + `forbid` negative scan |
-| 5 | Revisions retain identity | Review requests changes after the child finishes | Resume the same child agent; do not create a detached replacement | `require_row("revisions retain identity", ...)` across 7 surfaces |
-| 6 | Provider neutrality survives | Scoped Paseo tools are absent | Return the absolute handoff for manual launch without pretending parentage exists | `require_row("provider neutrality survives", ...)` across 7 surfaces |
+| 1 | Isolation and parentage coexist | A worker needs a new worktree workspace | Create the workspace first, then create a child from the orchestrator scope with its ID | Live launch record names both IDs (`wks_0ac25c3a34f16567` and child `3b92a429-64ec-4d31-a85b-bd97fd5b49d2`) and ordered calls |
+| 2 | Workspace placement does not detach | The child is placed in a workspace different from the parent | Preserve the orchestrator-child relationship and notification route | Live parent label `paseo.parent-agent-id=ea5b027e-e772-4209-861a-25aa8d12ca29` + finish notification delivered to orchestrator |
+| 3 | Detached roots are invalid workers | An orchestrator uses a top-level CLI/root launch because it can create the same worktree | Reject it as non-equivalent; use scoped creation or manual handoff | Exact-head source review of working rules, doctrine 07, template, and mode |
+| 4 | Notifications are structural | The worker is created with finish notification disabled | Reject launch configuration before creation | Live launch `notifyOnFinish: true` + exact-head source review of rejection rule |
+| 5 | Revisions retain identity | Review requests changes after the child finishes | Resume the same child agent; do not create a detached replacement | Exact-head PR 29 review addendum explicitly resumed child `3b92a429-64ec-4d31-a85b-bd97fd5b49d2` in workspace `wks_0ac25c3a34f16567` |
+| 6 | Provider neutrality survives | Scoped Paseo tools are absent | Return the absolute handoff for manual launch without pretending parentage exists | Exact-head source review confirms provider-neutral manual fallback remains intact |
 
 ### Live launch record
 
@@ -93,18 +93,17 @@ packages, Sentrux, or weaker worktree/review/merge boundaries.
 
 ### Validation
 
-- `effigy check:worker-parentage` — PASS (six milestone 049 oracle rows verified across 9 surfaces with negative scans)
 - `effigy check:command-skills` — PASS (9 adapters, aggregate descriptions=460 chars)
 - `effigy check:skill-install skills/northstar` — PASS (199 files verified)
-- `effigy qa:docs` — PASS (repo-contract machine contracts, repo-contract checks & 11 fixture tests, readiness-map checks & 5 fixture tests, command-skills, model-routing, worker-parentage, language-packages machine contracts)
+- `effigy qa:docs` — PASS (repo-contract machine contracts, repo-contract checks & 11 fixture tests, readiness-map checks & 5 fixture tests, command-skills, model-routing, language-packages machine contracts)
 - `effigy qa` — PASS (full validation suite + docs QA)
 - `git diff --check` — clean (no whitespace or format errors)
 
 ## Stop Conditions
 
-- None encountered. All acceptance criteria and review oracle rows passed.
+- None encountered. All acceptance criteria and review oracle rows verified via live launch, exact-head source review, and same-child revision without prose-coupled checkers.
 
 ## Next Task
 
 Stop for exact-head orchestrator review. After reviewed merge and
-installed-skill refresh, resume card 120's root-reduction lane.
+installed-skill refresh, resume card 120's bounded root-reduction lane.

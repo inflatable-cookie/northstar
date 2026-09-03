@@ -113,7 +113,8 @@ rollover signal.
 - `049-preserve-paseo-worker-parentage.md` (complete; card 123 preserves
   Paseo worker parentage across dedicated worktree workspace placement, keeps
   finish notifications enabled, resumes same-child identity on revision, and
-  falsifies all six oracle rows through `check:worker-parentage`)
+  proves all six oracle rows through live launch, exact-head source review, and
+  same-child revision)
 
 ## Next Task
 
@@ -139,8 +140,8 @@ the real-package lifecycle and installed engine-integrity transcripts, and
 merged as `256d0f7`. Convergence PR 4 passed exact-head review at `792a7c2`
 and merged as `dff19c9`. The removal refresh froze 95 deletion targets and 19
 integration surfaces. Card 122 repaired the missing data-driven selector and
-merged as `ddaae0d`. Card 120 is ready but serial behind card 123's urgent
-Paseo worker-parentage correction.
+merged as `ddaae0d`. Card 120 is ready but serial behind card 123's bounded
+worker-parentage revision and reviewed merge.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and

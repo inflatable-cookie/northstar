@@ -69,15 +69,14 @@ orchestrators from substituting a detached top-level launch.
 - **Canonical refs:** `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`;
   `docs/contracts/001-working-rules.md`;
   `bundle-docs/sections/07-delivery-framework-and-autonomy.md`.
-- **Review oracle:** milestone 049's six rows (all 6 rows falsified).
+- **Review oracle:** milestone 049's six rows (all 6 rows proved via live launch record, exact-head source review, and same-child revision).
 - **Model capability profile:** bounded documentation/skill propagation with
   deterministic checks; choose a cheap adequate non-frontier profile.
 - **Frontier-worker justification:** none.
 - **Tool/runtime restrictions:** no Paseo product/CLI changes, no
   `.github/workflows/`, release mutation, browser/computer-use, provider/model
   policy change, language-package change, or card-120 work.
-- **Required validation:** `effigy check:worker-parentage`,
-  `effigy check:command-skills`, isolated
+- **Required validation:** `effigy check:command-skills`, isolated
   `effigy check:skill-install skills/northstar`, `effigy qa:docs`, `effigy qa`,
   and `git diff --check`.
 - **PR base/head:** `main` <- `worker/preserve-paseo-worker-parentage`.
@@ -119,6 +118,21 @@ orchestrators from substituting a detached top-level launch.
 - **Report after:** the reusable surfaces and six-row oracle are complete, or a
   documented Paseo capability mismatch stops the lane.
 - **Report to:** the originating orchestrator through Paseo finish notification.
+
+## Exact-Head Review Addendum
+
+Review of PR 29 at `db29f2aab9713bbfd02c6aadcbcef7e2ab47fbf1`
+accepted the cross-workspace child rule and requested two bounded changes:
+
+- `planning-change`: remove `check:worker-parentage` and its wiring. Its exact
+  sentence assertions restore the prose coupling removed by `g02.045`; the live
+  launch record, exact-head source review, and same-child revision are the
+  behavioral proof.
+- `integration-drift`: remove stray spacing and duplicated replacement-worker
+  wording in orchestrator mode.
+
+Resume agent `3b92a429-64ec-4d31-a85b-bd97fd5b49d2` in workspace
+`wks_0ac25c3a34f16567`. Do not create a replacement worker.
 
 ## Suggested Next Move
 

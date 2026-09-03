@@ -95,8 +95,8 @@ Roadmaps sequence contract-backed work for Northstar itself.
   ready for bounded root reduction.
 - `g02.049` is complete; card 123 preserves Paseo worker parentage across
   dedicated worktree workspace placement, keeps finish notifications enabled,
-  resumes same-child identity on revision, and falsifies all six oracle rows
-  through `check:worker-parentage`.
+  resumes same-child identity on revision, and proves all six oracle rows
+  through live launch, exact-head source review, and same-child revision.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.

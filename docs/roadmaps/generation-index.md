@@ -105,8 +105,9 @@ evidence gap and merged as `dff19c9`. Card 119 is complete. The exact removal
 inventory exposed a missing generic intent/activation selector. Card 122
 implemented it and merged as `ddaae0d`; card 120 is ready after its post-merge
 refresh. Operator evidence then exposed detached Paseo root workers that do not
-notify their orchestrators; `g02.049/123` is the ready correction and runs
-before card 120 because both lanes own the skill payload and closeout surfaces.
+notify their orchestrators; `g02.049/123` is in bounded review revision after
+its prose-coupled checker was rejected. It runs before card 120 because both
+lanes own the skill payload and closeout surfaces.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed

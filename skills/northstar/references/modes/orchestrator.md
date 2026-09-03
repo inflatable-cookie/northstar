@@ -423,13 +423,13 @@ batch large enough to repay dispatch and review; keep tiny edits local.
    orchestrator repairs canonical planning.
    Posting review comments does not wake a finished worker. After every
    `changes requested` verdict is recorded on the PR, send an explicit follow-up
-   to the originating worker through the active adapter.    In Paseo, call
+   to the originating worker through the active adapter. In Paseo, call
    `send_agent_prompt` with the retained agent ID and tell it to read the posted
    PR findings, repair only the in-bounds requested scope, validate, push, and
-   notify on finish. Resume the same child agent; do not silently create a
-   replacement worker. If the original worker is unavailable, give the review to
-   the operator for relay; do not silently create a replacement worker. A
-   `planning-change` still returns to canonical planning before this follow-up.
+   notify on finish. Resume the same child agent rather than silently creating a
+   replacement worker; if the original worker is unavailable, give the review to
+   the operator for relay. A `planning-change` still returns to canonical
+   planning before this follow-up.
    For a planning-delegate PR, replace card/implementation conformance with the
    planning-packet checks above. Requested changes still wake the originating
    delegate; accepted merge is followed by a separate orchestrator promotion
