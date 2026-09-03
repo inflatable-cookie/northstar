@@ -309,13 +309,14 @@ informal habits.
   from the adequate conversational pool, apply the capitalized
   `Chatterbox=true` label, and set `notifyOnFinish: false`.
 - Chatterboxes share the orchestrator's checkout and write only unique
-  `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files, committed with exact-file
-  `git add`. They do not create worktrees, branches, or PRs.
-- Chatterboxes may send an idle-only intake ping to an idle `Orchestrator=true`
-  agent; running orchestrators are not interrupted.
-- The orchestrator treats chatterbox prompts as non-assignment intake, does not
-  promote or change work from the ping, and inspects the note at its next triage
-  checkpoint.
+  `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files, staged with `git add -- <exact-file>`
+  and committed with `git commit -- <exact-file>` after verifying no pre-existing
+  staged files in the index. They do not create worktrees, branches, or PRs.
+- Automated idle-only pings are paused at planning pending an atomic queue API;
+  the chatterbox reports the note path to the operator in chat.
+- The orchestrator treats chatterbox prompts or newly discovered triage notes as
+  non-assignment intake, does not promote or change work from the intake, and
+  inspects the note at its next triage checkpoint.
 
 ### Issue-fix dispatch
 

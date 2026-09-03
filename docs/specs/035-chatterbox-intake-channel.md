@@ -107,9 +107,14 @@ Git protocol:
 
 - write only that new file; do not edit `docs/triage/README.md` or any other
   path;
-- commit only with `git add -- <exact-new-file>`; never `git add .`, never
-  amend, reset, stash, or force-push;
-- leave unrelated dirty files untouched;
+- before staging, check `git diff --cached --name-only`; if the index contains
+  pre-existing staged paths, fail closed: do not commit, leave the triage note
+  on disk, and report to the operator;
+- stage only that new file with `git add -- <exact-new-file>`; never `git add .`,
+  never `git add -A`, amend, reset, stash, or force-push;
+- commit with exact path: `git commit -m "docs(triage): <summary>" -- <exact-new-file>`;
+- leave unrelated dirty files (staged or unstaged) untouched in the working tree
+  and index;
 - commit and push to the integration branch (`main` unless the repo says
   otherwise);
 - if HEAD is not that branch, leave the file on disk and tell the operator;
@@ -119,27 +124,26 @@ Git protocol:
 
 Same-second slug collisions keep the existing `-2`, `-3` rule.
 
-## Paseo ping
+## Paseo ping (paused at planning)
+
+Automated Paseo pings are paused at planning pending an atomic queue API.
 
 Paseo has no notify-without-a-new-turn API. `send_agent_prompt` starts an
-orchestrator turn, so chatterboxes must not ping a running orchestrator.
+orchestrator turn, and inspecting `get_agent_status` before `send_agent_prompt`
+is non-atomic; the target can begin running between the status check and prompt
+dispatch. A two-call sequence therefore cannot guarantee never interrupting a
+running orchestrator.
 
-After a note is written (committed when possible):
-
-1. find a same-project agent labelled `Orchestrator=true`;
-2. if it is idle, send a tiny intake prompt: absolute note path, one-line
-   summary, and an instruction not to change current work. Set
-   `notifyOnFinish` false on that ping;
-3. if it is running, missing, or ambiguous, skip the ping and tell the
-   operator the note is ready.
-
-The orchestrator treats that prompt as intake only: record the path, do not
-promote from the ping, do not change the current task. Read the note at the
-next triage checkpoint.
-
-A later non-interrupting queue plugin may replace this ping. That is an
-adapter upgrade, not a protocol rewrite. The triage file remains the
-durable signal either way.
+For v1 intake:
+1. Chatterbox writes and commits the triage note to `docs/triage/` on the shared
+   checkout.
+2. Chatterbox reports the note path directly to the operator in chat.
+3. Automated pings are omitted until Paseo provides an atomic/non-interrupting
+   queue or the operator explicitly settles best-effort race behavior.
+4. The orchestrator discovers and inspects triage notes at its next normal
+   triage checkpoint. If an intake prompt is ever received, the orchestrator
+   treats it as intake only: it records the path, does not promote from the
+   ping, and does not change current work.
 
 ## Router and command
 

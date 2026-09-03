@@ -117,19 +117,15 @@ rollover signal.
   finish notifications enabled, resumes same-child identity on revision, and
   proves all six oracle rows through live launch, exact-head source review, and
   same-child revision)
-- `050-add-chatterbox-intake-channel.md` (active; card 124 implementation
-  complete, PR pending orchestrator exact-head review)
-- `050-add-chatterbox-intake-channel.md` (ready; card 124 handoff published
-  after card 120 merged and the installed skill was refreshed)
+- `050-add-chatterbox-intake-channel.md` (active; card 124 in review; revision 1
+  pending planning resolution on Paseo ping)
 
 ## Next Task
 
-Launch card 124 from
-`docs/handoffs/20260903-181459-add-chatterbox-intake-channel.md`. Card 120
-merged through PR 30 as `aa9a005`; the installed skill was refreshed to the
-111-file generic core, so chatterbox now owns the released
-skill/router/command surfaces. The Sentrux triage note and any new-language
-cohort remain separate operator checkpoints.
+Review card 124 PR 31 revision 1 for chatterbox intake channel. Card 120
+merged through PR 30 as `aa9a005`; installed skill parity is current at 113
+files. The Sentrux triage note and any new-language cohort remain separate
+operator checkpoints.
 
 `g02.048/117` merged through PR 22 at `75db6f5` after proving the generic
 lifecycle. Card 118's public repository merged package PR 1 as `09ef174`, and

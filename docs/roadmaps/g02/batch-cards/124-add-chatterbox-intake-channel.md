@@ -1,6 +1,6 @@
 # 124 - Add Chatterbox Intake Channel
 
-Status: complete; reviewable PR pending
+Status: in review; revision 1 pending planning resolution on Paseo ping
 Owner: repo maintainers
 Created: 2026-09-03
 Updated: 2026-09-03
@@ -59,18 +59,21 @@ fan-out, or promoting any triage note.
 
 ## Acceptance Criteria
 
-- [x] all eight spec-035 oracle rows have deterministic proof in
-      `check:command-skills` or an equally focused checker;
 - [x] chatterbox mode and thin adapter exist; public skill count stays one;
 - [x] operator start needs no handoff;
 - [x] Paseo spawn uses a same-checkout `local` workspace,
       `Chatterbox=true`, and `notifyOnFinish` false;
-- [x] git protocol is exact-file add of a unique triage note on `main`;
-- [x] idle-only ping; running orchestrators are skipped;
+- [x] git protocol isolates exact-path commit of unique triage notes and
+      fails closed against pre-existing staged files (proven with temporary
+      repository fixture);
+- [ ] idle-only ping (paused at planning: status check plus send_agent_prompt is
+      non-atomic and cannot guarantee never prompting a running orchestrator
+      pending an atomic queue);
 - [x] orchestrator intake handling does not change current work;
 - [x] chatterbox refuses implement/promote/dispatch/review/merge;
 - [x] research-subagent copy no longer says "advisors";
-- [x] source/install parity, docs QA, full QA, and `git diff --check` pass.
+- [x] adapter/router wiring checks, fixture tests, docs QA, full QA, and
+      `git diff --check` pass.
 
 ## Review Oracle
 

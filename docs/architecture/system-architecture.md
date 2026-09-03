@@ -385,7 +385,7 @@ An explicit fresh-orchestrator transfer uses:
 
 A secondary conversational intake channel is:
 
-`operator ↔ chatterbox thread (shared checkout) -> unique docs/triage/ note -> optional idle orchestrator ping`
+`operator ↔ chatterbox thread (shared checkout) -> unique docs/triage/ note (file-on-disk intake)`
 
 A fresh direct-review thread uses the smaller path:
 
@@ -425,14 +425,14 @@ computer-use, or other UI automation.
 An operator may also start or request independent **chatterbox** threads for
 exploratory feature ideas, issues, or intake discussions. Chatterboxes share the
 orchestrator's checkout, create unique timestamped `docs/triage/` notes, and
-commit with exact-file `git add`. They do not create worktrees, branches, or
-PRs. In Paseo, the orchestrator spawns a chatterbox in a `local` workspace for
-the same project/checkout, with label `Chatterbox=true` and `notifyOnFinish: false`.
-When a note is written, a chatterbox may send an idle-only prompt to an idle
-orchestrator; running orchestrators are not interrupted. The orchestrator
-treats the prompt as intake only, leaving current work unchanged and inspecting
-the note at its next normal triage checkpoint. Chatterboxes have no planning,
-readiness, implementation, review, merge, or dispatch authority.
+isolate commits to exact paths after verifying clean pre-stage index state.
+They do not create worktrees, branches, or PRs. In Paseo, the orchestrator
+spawns a chatterbox in a `local` workspace for the same project/checkout, with
+label `Chatterbox=true` and `notifyOnFinish: false`. Automated idle-only pings
+are paused at planning pending an atomic queue API; chatterbox reports note paths
+in chat and the orchestrator inspects `docs/triage/` at normal triage
+checkpoints. Chatterboxes have no planning, readiness, implementation, review,
+merge, or dispatch authority.
 
 Each worker owns only the assigned ready cards in its dedicated worktree and
 branch. Model routing treats current profiles as a portfolio. For each run the

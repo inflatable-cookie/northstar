@@ -1,6 +1,6 @@
 # 050 - Add Chatterbox Intake Channel
 
-Status: in review; card 124 reviewable PR pending
+Status: in review; revision 1 pending planning resolution on Paseo ping
 Owner: repo maintainers
 Created: 2026-09-03
 Updated: 2026-09-03
@@ -42,16 +42,17 @@ and write triage notes without interrupting the main runway.
       installable skill, router, command adapters, and several closeout
       front doors with the root-reduction lane. Do not launch this card
       while 120 is the ready/in-flight owner of those surfaces.
-- [x] **Card 124** implements the mode, adapter, spawn/ping, doctrine,
-      contracts, inventory, checker oracles, parity, and closeout from spec
-      035.
+- [ ] **Card 124** implements the mode, adapter, spawn, git isolation fixture,
+      doctrine, contracts, inventory, and closeout from spec 035. (Revision 1
+      pending operator/orchestrator planning resolution on Paseo ping).
 
 ## Acceptance Criteria
 
-- [x] all eight spec-035 oracle rows have deterministic proof;
 - [x] operator start and orchestrator spawn match the spec;
-- [x] unique-file git protocol is explicit and negatively tested;
-- [x] idle-only ping and intake-only orchestrator handling are explicit;
+- [x] unique-file git protocol isolates exact-path commits and is verified
+      by a temporary-repository fixture;
+- [ ] idle-only ping paused at planning pending atomic queue;
+- [x] intake-only orchestrator handling is explicit;
 - [x] chatterbox cannot widen authority into planning or implementation;
 - [x] source/install parity and full Northstar QA pass.
 

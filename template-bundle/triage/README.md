@@ -24,9 +24,9 @@ of a conversation deeply, but do not treat a note as an approved contract,
 roadmap item, or implementation request.
 
 Chatterboxes share the working checkout and write only new unique triage files
-here without modifying `README.md` or any other path. They commit with
-`git add -- <exact-file>`. They do not create worktrees, branches, or PRs, and
-do not acquire promotion or execution authority.
+here without modifying `README.md` or any other path. They isolate commits to
+exact paths after verifying clean pre-stage index state. They do not create
+worktrees, branches, or PRs, and do not acquire promotion or execution authority.
 
 Refresh and cleanup should inspect every note and give it a disposition:
 promote or rework it into its canonical home, merge it with a useful note, or

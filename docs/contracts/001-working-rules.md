@@ -516,12 +516,14 @@ chat. In Paseo, the orchestrator creates a `local` workspace for the same
 project and checkout, selects an adequate conversational profile under the
 diversified-routing rule, sets the capitalized `Chatterbox=true` label, and sets
 `notifyOnFinish: false`. Chatterboxes share the orchestrator's checkout and
-write only unique `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files, committed with
-`git add -- <exact-file>`. They may send an idle-only intake prompt to an idle
-`Orchestrator=true` agent; running orchestrators are not pinged. The
-orchestrator treats chatterbox pings as intake only, does not promote or change
-current work from the ping, and inspects the note at its next normal triage
-checkpoint.
+write only unique `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files, staged with
+`git add -- <exact-file>` and committed with `git commit -- <exact-file>` after
+verifying no pre-existing staged files in the index. Automated idle-only pings
+are paused at planning pending an atomic queue API; the chatterbox reports the
+note path to the operator in chat, and the orchestrator inspects `docs/triage/`
+at its next normal triage checkpoint. If an intake prompt is received, the
+orchestrator treats it as intake only, does not promote or change current work
+from the ping, and inspects the note at its next normal triage checkpoint.
 
 The repository is the durable communication boundary. A worker must be able to
 re-enter from its worker handoff, `AGENTS.md`, canonical refs, cards, commits,

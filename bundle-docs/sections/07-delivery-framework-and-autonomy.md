@@ -818,17 +818,21 @@ feature proposals without interrupting active dispatch, review, or execution.
   `notifyOnFinish: false`, and selects from the adequate operator-facing
   conversational pool under the diversified-routing rule.
 - **Shared checkout and Git:** Chatterboxes share the orchestrator's checkout.
-  They write only unique `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files and
-  commit with `git add -- <exact-file>`. They never use `git add .`, edit
-  `README.md` or code, create worktrees/branches/PRs, or modify non-triage files.
-- **Idle-only Paseo ping:** When a note is written, a chatterbox may send a
-  small prompt to a same-project agent labelled `Orchestrator=true` only if that
-  orchestrator is **idle** (with `notifyOnFinish: false`). If the orchestrator is
-  running, ambiguous, or absent, the ping is skipped and the note remains on
-  disk.
-- **Orchestrator intake handling:** The orchestrator treats an intake prompt as
-  non-assignment information: it records the path, does not promote from the ping,
-  does not change current work, and inspects the note at its next triage checkpoint.
+  They write only unique `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files, check
+  `git diff --cached --name-only` to fail closed if pre-existing staged files
+  exist, stage with `git add -- <exact-file>`, and commit with
+  `git commit -- <exact-file>`. They never use `git add .`, edit `README.md` or
+  code, create worktrees/branches/PRs, or modify non-triage files.
+- **Paseo ping status (paused at planning):** Automated idle-only Paseo pings
+  are paused at planning pending an atomic queue API. Status inspection plus
+  `send_agent_prompt` is non-atomic and cannot guarantee never prompting a
+  running orchestrator. Chatterbox v1 reports the note path directly to the
+  operator in chat.
+- **Orchestrator intake handling:** The orchestrator discovers and inspects
+  triage notes at its next normal triage checkpoint. If an intake prompt is ever
+  received, it treats it as non-assignment information: it records the path,
+  does not promote from the intake, does not change current work, and inspects
+  the note at its next triage checkpoint.
 - **Authority boundary:** A chatterbox is not a planning delegate, worker,
   continuation, or `paseo-advisor`. It cannot implement, promote, review, merge,
   dispatch, or reserve topics.

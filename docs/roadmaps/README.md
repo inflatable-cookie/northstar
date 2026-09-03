@@ -98,11 +98,12 @@ Roadmaps sequence contract-backed work for Northstar itself.
   dedicated worktree workspace placement, keeps finish notifications enabled,
   resumes same-child identity on revision, and proves all six oracle rows
   through live launch, exact-head source review, and same-child revision.
-- `g02.050` is implemented; card 124 added the chatterbox intake mode and
-  `/northstar-chatterbox` adapter, shared-checkout git protocol, idle-only
-  Paseo ping, non-assignment orchestrator intake handling, and eight review
-  oracle assertions. The reviewable PR is pending orchestrator exact-head
-  review.
+- `g02.050` is in review; card 124 implemented the chatterbox intake mode
+  and `/northstar-chatterbox` adapter, shared-checkout exact-path git commit
+  isolation with temporary-repository fixture proof, and non-assignment
+  orchestrator intake handling. Automated idle-only Paseo pings are paused
+  at planning pending an atomic queue API. Revision 1 of PR 31 is pending
+  orchestrator review.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
