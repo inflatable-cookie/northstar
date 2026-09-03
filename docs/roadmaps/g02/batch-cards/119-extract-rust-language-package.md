@@ -66,7 +66,7 @@ lifecycle, or install unrelated package payloads.
 | Invariant | Adversarial counterexample | Expected failure or stop point | Required proof |
 | --- | --- | --- | --- |
 | Workflows remain distinct. | Ordinary Rust task enters repository audit. | Stay changed-tranche-only. | Everyday/audit route fixtures. |
-| Engine integrity survives extraction. | Installed engine source or binary differs from receipt. | Reject before audit execution. | Digest-tamper fixture. |
+| Engine source identity survives extraction. | The installed binary's embedded source-payload identity differs from the current package engine source. | Reject before audit execution. | Source-payload and embedded-identity tamper fixtures. |
 | Consumer owns MSRV. | Package infers or raises compiler floor. | Stop for repository policy. | Existing MSRV fixtures. |
 | Package is independent. | Shared repo includes TypeScript sibling. | Rust install retains no TypeScript payload. | Installed inventory. |
 | Evidence remains exact. | Existing v2 records are read after migration. | Preserve lifecycle and result meaning. | Compatibility fixtures. |

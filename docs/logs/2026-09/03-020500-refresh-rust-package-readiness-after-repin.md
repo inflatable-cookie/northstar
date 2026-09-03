@@ -34,10 +34,12 @@ merged commit and reproduced listing digest are the extraction authority.
 ## Readiness
 
 Convergence remains the selected real-consumer canary. Everyday authoring and
-explicit audit stay distinct. Cargo-engine integrity, consumer-owned MSRV,
-evidence compatibility, no-TypeScript isolation, visible fallback, and root
-reduction boundaries are settled in card 119. No open decision blocks the
-package-source phase.
+explicit audit stay distinct. Cargo-engine source-payload integrity,
+consumer-owned MSRV, evidence compatibility, no-TypeScript isolation, visible
+fallback, and root reduction boundaries are settled in card 119. The existing
+engine receipt binds the binary's embedded source-payload digest to the current
+package engine source; it does not claim a post-build binary-byte digest. No
+open decision blocks the package-source phase.
 
 The next lane is external source only. It ends at a reviewed immutable Rust
 package candidate. Core registry promotion and the Convergence canary remain
