@@ -81,11 +81,18 @@ installation route; other Northstar workflows remain usable.
 
 Core's official registry binds an approved package ID and version to an exact
 repository and subpath, immutable commit and tree digest, manifest digest, and
-compatible core range. Installation verifies these identities before package
-code or self-check execution, records them in a receipt, and re-verifies the
-installed content before routing. Mutable branches and tags, names alone,
-package self-claims, and unpublished registry choices cannot authorize
-no-prompt installation.
+compatible core range. Each entry also carries data-only discovery metadata —
+supported languages, overlays, workflows, and the exact consumer activation
+marker — which is selection data, not trust. Core selects exactly one entry
+from explicit workflow intent or from an exact registered activation marker
+already present in the consumer, without per-language selection code; zero,
+duplicate, ambiguous, or incompatible matches stop the requested workflow
+before any acquisition. Discovery metadata must agree with the verified
+installed manifest before routing; drift stops the route. Installation
+verifies these identities before package code or self-check execution, records
+them in a receipt, and re-verifies the installed content before routing.
+Mutable branches and tags, names alone, package self-claims, and unpublished
+registry choices cannot authorize no-prompt installation.
 
 The manifest declares self-check invocation explicitly. `direct` executes the
 verified package-relative entrypoint with one argument, the package root.

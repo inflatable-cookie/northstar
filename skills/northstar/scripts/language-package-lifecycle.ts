@@ -134,6 +134,13 @@ interface RegistryDoc {
   packages: RegistryEntry[];
 }
 
+interface RegistryDiscovery {
+  languages: string[];
+  overlays: string[];
+  workflows: string[];
+  activation_marker: string;
+}
+
 interface RegistryEntry {
   package_id: string;
   version: string;
@@ -143,6 +150,7 @@ interface RegistryEntry {
   tree_digest: string;
   manifest_digest: string;
   compatible_core_range: string;
+  discovery: RegistryDiscovery;
 }
 
 interface Pin {
@@ -737,6 +745,66 @@ function enforceRouteRestrictions(trustDoc: TrustDoc, registry: RegistryDoc, pac
   }
 }
 
+// ---- registry-owned generic selection (card 122) ----
+//
+// The official registry is the only authority that maps explicit workflow
+// intent or an exact activation marker to one package identity. Selection is
+// data-driven over discovery metadata: it names no package, no language
+// ecosystem, and no acquisition path. Selection never acquires, never runs
+// package code, and never mutates the consumer. Detection-only input is not a
+// query shape at all, so it can never select.
+
+type SelectionQuery =
+  | { kind: "intent"; language: string; workflow: string; overlay: string | null }
+  | { kind: "marker"; marker: string };
+
+function describeQuery(query: SelectionQuery): string {
+  if (query.kind === "marker") {
+    return "activation marker " + query.marker;
+  }
+  return "language " + query.language + " workflow " + query.workflow +
+    (query.overlay !== null ? " overlay " + query.overlay : "");
+}
+
+function selectRegistryEntry(registry: RegistryDoc, coreVersion: string, query: SelectionQuery): RegistryEntry {
+  const matches = registry.packages.filter((entry) => {
+    if (query.kind === "marker") {
+      return entry.discovery.activation_marker === query.marker;
+    }
+    if (!entry.discovery.languages.includes(query.language)) {
+      return false;
+    }
+    if (!entry.discovery.workflows.includes(query.workflow)) {
+      return false;
+    }
+    if (query.overlay !== null && !entry.discovery.overlays.includes(query.overlay)) {
+      return false;
+    }
+    return true;
+  });
+  check(matches.length > 0, query.kind === "marker"
+    ? "no official registry entry carries the activation marker " + query.marker + "; nothing was selected or acquired"
+    : "no official registry entry supports " + describeQuery(query) + "; the requested workflow stays unavailable and nothing was selected or acquired");
+  check(matches.length === 1, "official registry selection is ambiguous: " + String(matches.length) + " entries claim " + describeQuery(query) + "; nothing was selected or acquired");
+  const entry = matches[0];
+  check(checkSemverCompatibility(entry.compatible_core_range, coreVersion),
+    "the only registry entry claiming " + describeQuery(query) + " is incompatible with core " + coreVersion + "; the workflow stops before any acquisition");
+  return entry;
+}
+
+function sameStringSet(a: string[], b: string[]): boolean {
+  return [...a].sort().join("\u0000") === [...b].sort().join("\u0000");
+}
+
+// Registry discovery metadata must agree with the verified installed
+// manifest before routing: a manifest that dropped a declared language,
+// overlay, or workflow is metadata drift, and drift stops the route.
+function discoveryAgrees(entry: RegistryEntry, manifest: Manifest): boolean {
+  return sameStringSet(entry.discovery.languages, manifest.supported_languages) &&
+    sameStringSet(entry.discovery.overlays, manifest.supported_overlays) &&
+    sameStringSet(entry.discovery.workflows, manifest.available_workflows);
+}
+
 // ---- declared self-check execution ----
 
 function findCommand(cmd: string): string | null {
@@ -845,11 +913,42 @@ function parseManifest(raw: unknown, context: string): Manifest {
   return raw as Manifest;
 }
 
+const DISCOVERY_TOKEN = /^[a-z0-9][a-z0-9_-]*$/;
+const WORKFLOW_TOKEN = /^[a-z][a-z0-9_]*$/;
+const ACTIVATION_MARKER = /^[a-z0-9][a-z0-9:._-]*$/;
+
+// Discovery metadata is data, not trust: it selects, it never authorizes
+// acquisition or execution by itself.
+function parseRegistryDiscovery(raw: unknown, context: string): RegistryDiscovery {
+  const doc = asRecord(raw, context);
+  requireClosedObject(doc, ["languages", "overlays", "workflows", "activation_marker"], context);
+  const languages = asStringArray(doc.languages, context + ".languages");
+  const overlays = asStringArray(doc.overlays, context + ".overlays");
+  const workflows = asStringArray(doc.workflows, context + ".workflows");
+  const marker = asString(doc.activation_marker, context + ".activation_marker");
+  check(languages.length > 0, context + ".languages must not be empty");
+  check(workflows.length > 0, context + ".workflows must not be empty");
+  const tokenLists: Array<[string[], RegExp, string]> = [
+    [languages, DISCOVERY_TOKEN, "languages"],
+    [overlays, DISCOVERY_TOKEN, "overlays"],
+    [workflows, WORKFLOW_TOKEN, "workflows"],
+  ];
+  for (const [values, pattern, name] of tokenLists) {
+    for (const value of values) {
+      check(pattern.test(value), context + "." + name + " has invalid token: " + value);
+    }
+    check(new Set(values).size === values.length, context + "." + name + " contains duplicates");
+  }
+  check(ACTIVATION_MARKER.test(marker), context + ".activation_marker is invalid: " + marker);
+  return raw as RegistryDiscovery;
+}
+
 function parseRegistryDoc(raw: unknown, context: string): RegistryDoc {
   const doc = asRecord(raw, context);
   asString(doc.schema_version, context + ".schema_version");
   asString(doc.registry_version, context + ".registry_version");
   check(Array.isArray(doc.packages), context + " packages must be an array");
+  const seenMarkers: string[] = [];
   for (const rawEntry of doc.packages) {
     const entry = asRecord(rawEntry, context + " registry entry");
     check(PACKAGE_ID.test(asString(entry.package_id, context + " entry package_id")), context + " entry has invalid package_id");
@@ -857,6 +956,9 @@ function parseRegistryDoc(raw: unknown, context: string): RegistryDoc {
     requireCanonicalDigest(entry.tree_digest, context + " entry");
     requireCanonicalDigest(entry.manifest_digest, context + " entry");
     asString(entry.compatible_core_range, context + " entry range");
+    const discovery = parseRegistryDiscovery(entry.discovery, context + " entry discovery");
+    check(!seenMarkers.includes(discovery.activation_marker), context + " contains duplicate activation marker: " + discovery.activation_marker);
+    seenMarkers.push(discovery.activation_marker);
   }
   return raw as RegistryDoc;
 }
@@ -977,6 +1079,14 @@ function acquireAndActivate(opts: AcquireOptions): AcquireOutcome {
 
   const installed = resolveInstalledPackage(stateRoot, trustDoc, packageId, version, language, workflow, coreVersion);
   if (installed !== null) {
+    // Registry-owned discovery must agree with the verified installed
+    // manifest on every route, including the already-installed fast path.
+    const routedEntry = registry.packages.find((candidate) =>
+      candidate.package_id === packageId && candidate.version === version) ?? null;
+    if (routedEntry !== null && !discoveryAgrees(routedEntry, installed.manifest)) {
+      check(false, "registry discovery metadata disagrees with the verified installed manifest for " +
+        packageId + "@" + version + " (metadata drift); the route stops before execution");
+    }
     const identity = installed.reference.tree_digest;
     enforceRouteRestrictions(trustDoc, registry, packageId, version, identity, installed.reference.manifest_digest, workflow, consumerScope);
     const routeNotice = "routed " + packageId + " " + workflow + " local-only identity=" + identity;
@@ -1023,6 +1133,16 @@ function acquireAndActivate(opts: AcquireOptions): AcquireOutcome {
   // The staged manifest must declare the requested identity, version, and
   // compatibility range: a pin must never install a manifest that claims
   // another package, version, or range.
+  // Registry-owned discovery must agree with the identity-verified staged
+  // manifest BEFORE self-check, receipt, or any lifecycle mutation: a pin
+  // whose metadata drifted from the published manifest must never execute
+  // package code or reach the operator state root. Operator-allowlist pins
+  // carry no registry discovery and keep their behavior unchanged.
+  if (pin.source === "official" && "discovery" in pin.entry) {
+    check(discoveryAgrees(pin.entry as RegistryEntry, stagedManifest),
+      "registry discovery metadata disagrees with the verified staged manifest for " +
+      packageId + "@" + version + " (metadata drift); acquisition stopped before self-check, receipt, or lifecycle mutation");
+  }
   check(stagedManifest.package_id === packageId,
     "staged manifest declares identity " + stagedManifest.package_id + ", requested " + packageId);
   check(stagedManifest.version === version,
@@ -1273,6 +1393,19 @@ function executeHostRequest(request: HostRequest, registryPath: string | null, c
       const resolved = resolveInstalledPackage(request.state_root, trustDoc, request.package_id, request.version, request.language, request.workflow, request.core_version);
       if (resolved === null) {
         const n = "no compatible installed package for " + request.package_id + "@" + request.version + " (" + request.workflow + ")";
+        return hostStopped(request, n);
+      }
+      // Registry-owned discovery must agree with the verified installed
+      // manifest before routing. A registry entry claiming languages,
+      // overlays, or workflows the manifest no longer declares is metadata
+      // drift; drift stops the route instead of trusting the pin. Packages
+      // installed without a registry entry (operator-allowlisted content)
+      // keep routing exactly as before.
+      const selectedEntry = registry.packages.find((candidate) =>
+        candidate.package_id === request.package_id && candidate.version === request.version) ?? null;
+      if (selectedEntry !== null && !discoveryAgrees(selectedEntry, resolved.manifest)) {
+        const n = "registry discovery metadata disagrees with the verified installed manifest for " +
+          request.package_id + "@" + request.version + " (metadata drift); the route stops before execution";
         return hostStopped(request, n);
       }
       enforceRouteRestrictions(trustDoc, registry, request.package_id, request.version, resolved.reference.tree_digest, resolved.reference.manifest_digest, request.workflow, requestScope);
@@ -3111,6 +3244,12 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
       tree_digest: FIXTURE_TREE_DIGEST,
       manifest_digest: FIXTURE_MANIFEST_DIGEST,
       compatible_core_range: ">=0.2.0 <1.0.0",
+      discovery: {
+        languages: ["fixture-lang"],
+        overlays: ["base"],
+        workflows: ["explicit_audit_repair"],
+        activation_marker: "fixture:language-quality",
+      },
     };
     const officialRegistry: RegistryDoc = {
       schema_version: "1.0.0",
@@ -3381,9 +3520,367 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
 
     console.log("oracle-15 frozen-fallback-notice: PASS (Jetstream-shaped host stop is not fallback evidence; exact overlap notice; missing version, wrong identity, mismatched request_id, detection, wrong version, non-stopped, operations disagree, closed window, no frozen payload, extra overlap property, and missing overlap version fail closed)");
   }
+  // ---- card 122: generic registry-owned intent/activation selection ----
+  //
+  // The selection procedure is data-driven over discovery metadata: no
+  // package name, language ecosystem, or acquisition path appears in the
+  // selection implementation. These proofs use policy-free fixture entries.
+  {
+    const out = path.join(outRoot, "r16-generic-selection");
+    mkdirP(out);
+    const mkEntry = (packageId: string, version: string, coreRange: string, discovery: RegistryDiscovery): RegistryEntry => ({
+      package_id: packageId,
+      version,
+      tree_digest: FIXTURE_TREE_DIGEST,
+      manifest_digest: FIXTURE_MANIFEST_DIGEST,
+      compatible_core_range: coreRange,
+      discovery,
+    });
+    const alpha = mkEntry("@northstar/alpha-fixture", "0.1.0", ">=0.2.0 <1.0.0",
+      { languages: ["alpha"], overlays: ["alpha-ui"], workflows: ["audit_workflow"], activation_marker: "fixture:alpha-marker" });
+    const beta = mkEntry("@northstar/beta-fixture", "0.2.0", ">=0.2.0 <1.0.0",
+      { languages: ["beta"], overlays: [], workflows: ["audit_workflow", "authoring_workflow"], activation_marker: "fixture:beta-marker" });
+    const twoEntry: RegistryDoc = { schema_version: "1.0.0", registry_version: "1.5.0", packages: [alpha, beta] };
+
+    const expectSelectionStop = (label: string, coreVersion: string, registry: RegistryDoc, query: SelectionQuery, reason: string): void => {
+      let stopped = false;
+      try {
+        selectRegistryEntry(registry, coreVersion, query);
+      } catch (err) {
+        stopped = true;
+        check(String((err as Error).message).includes(reason), label + " stopped for the wrong reason: " + String((err as Error).message));
+      }
+      check(stopped, label + " did not stop selection");
+    };
+
+    // Explicit intent selects exactly one compatible entry, including
+    // overlay scoping and the everyday workflow of a partial pack.
+    check(selectRegistryEntry(twoEntry, CORE_VERSION, { kind: "intent", language: "alpha", workflow: "audit_workflow", overlay: null }).package_id === "@northstar/alpha-fixture",
+      "alpha audit intent did not select the alpha entry");
+    check(selectRegistryEntry(twoEntry, CORE_VERSION, { kind: "intent", language: "alpha", workflow: "audit_workflow", overlay: "alpha-ui" }).package_id === "@northstar/alpha-fixture",
+      "alpha overlay audit intent did not select the alpha entry");
+    check(selectRegistryEntry(twoEntry, CORE_VERSION, { kind: "intent", language: "beta", workflow: "audit_workflow", overlay: null }).package_id === "@northstar/beta-fixture",
+      "beta audit intent did not select the beta entry");
+    check(selectRegistryEntry(twoEntry, CORE_VERSION, { kind: "intent", language: "beta", workflow: "authoring_workflow", overlay: null }).package_id === "@northstar/beta-fixture",
+      "beta authoring intent did not select the beta entry");
+
+    // Unsupported work stays unavailable: no substitution, no acquisition.
+    expectSelectionStop("unsupported-workflow", CORE_VERSION, twoEntry,
+      { kind: "intent", language: "alpha", workflow: "authoring_workflow", overlay: null }, "stays unavailable");
+    expectSelectionStop("undeclared-overlay", CORE_VERSION, twoEntry,
+      { kind: "intent", language: "beta", workflow: "audit_workflow", overlay: "alpha-ui" }, "stays unavailable");
+
+    // Two entries claiming one language/workflow stop as ambiguous.
+    const gamma = mkEntry("@northstar/gamma-fixture", "0.3.0", ">=0.2.0 <1.0.0",
+      { languages: ["alpha"], overlays: [], workflows: ["audit_workflow"], activation_marker: "fixture:gamma-marker" });
+    const ambiguous: RegistryDoc = { schema_version: "1.0.0", registry_version: "1.5.0", packages: [alpha, beta, gamma] };
+    expectSelectionStop("ambiguous-intent", CORE_VERSION, ambiguous,
+      { kind: "intent", language: "alpha", workflow: "audit_workflow", overlay: null }, "ambiguous");
+    // A unique marker still selects exactly one entry from the three-entry
+    // registry; duplicate markers cannot reach selection because parse
+    // rejects them (proved below).
+    check(selectRegistryEntry(ambiguous, CORE_VERSION, { kind: "marker", marker: "fixture:gamma-marker" }).package_id === "@northstar/gamma-fixture",
+      "the unique gamma marker did not select the gamma entry");
+
+    // A single claiming entry outside the core range stops incompatible.
+    const future = mkEntry("@northstar/epsilon-fixture", "0.5.0", ">=9.0.0 <10.0.0",
+      { languages: ["epsilon"], overlays: [], workflows: ["audit_workflow"], activation_marker: "fixture:epsilon-marker" });
+    const futureRegistry: RegistryDoc = { schema_version: "1.0.0", registry_version: "1.5.0", packages: [future] };
+    expectSelectionStop("incompatible-core", CORE_VERSION, futureRegistry,
+      { kind: "intent", language: "epsilon", workflow: "audit_workflow", overlay: null }, "incompatible with core");
+    expectSelectionStop("incompatible-core-marker", CORE_VERSION, futureRegistry,
+      { kind: "marker", marker: "fixture:epsilon-marker" }, "incompatible with core");
+
+    // Duplicate activation markers fail closed at registry parse, before any
+    // host invocation.
+    const delta = mkEntry("@northstar/delta-fixture", "0.4.0", ">=0.2.0 <1.0.0",
+      { languages: ["delta"], overlays: [], workflows: ["audit_workflow"], activation_marker: "fixture:alpha-marker" });
+    let parseStopped = false;
+    try {
+      parseRegistryDoc({ schema_version: "1.0.0", registry_version: "1.5.0", packages: [alpha, delta] } as unknown, "duplicate-marker registry");
+    } catch (err) {
+      parseStopped = true;
+      check(String((err as Error).message).includes("duplicate activation marker"),
+        "duplicate marker registry stopped for the wrong reason: " + String((err as Error).message));
+    }
+    check(parseStopped, "duplicate activation markers did not fail registry parse");
+
+    // The selection CLI refuses detection-only input: a language without an
+    // explicit workflow is not a query shape and can never select.
+    const twoEntryPath = path.join(out, "two-entry-registry.json");
+    fs.writeFileSync(twoEntryPath, JSON.stringify(twoEntry));
+    const surfacePath = process.argv[1];
+    const runSelect = (cliArgs: string[]): { status: number | null; output: string } => {
+      const run = spawnSync("bun", ["run", surfacePath, "select", twoEntryPath, ...cliArgs], { encoding: "utf8" });
+      return { status: run.status, output: run.stdout + "\n" + run.stderr };
+    };
+    const cliPositive = runSelect(["--language", "alpha", "--workflow", "audit_workflow"]);
+    check(cliPositive.status === 0 && cliPositive.output.includes("selected @northstar/alpha-fixture@0.1.0"),
+      "selection CLI did not select the explicit-intent entry: " + cliPositive.output);
+    const cliDetection = runSelect(["--language", "alpha"]);
+    check(cliDetection.status !== 0 && cliDetection.output.includes("detection is not selection authority"),
+      "detection-only input did not fail closed at the selection CLI: " + cliDetection.output);
+    // The CLI enforces the documented two-shape grammar exactly.
+    const cliUnknownFlag = runSelect(["--language", "alpha", "--workflow", "audit_workflow", "--overaly", "alpha-ui"]);
+    check(cliUnknownFlag.status !== 0 && cliUnknownFlag.output.includes("unknown selection flag: --overaly"),
+      "unknown flag did not fail closed at the selection CLI: " + cliUnknownFlag.output);
+    const cliDuplicateFlag = runSelect(["--language", "alpha", "--language", "beta", "--workflow", "audit_workflow"]);
+    check(cliDuplicateFlag.status !== 0 && cliDuplicateFlag.output.includes("duplicate selection flag: --language"),
+      "duplicate flag did not fail closed at the selection CLI: " + cliDuplicateFlag.output);
+    const cliMixedShape = runSelect(["--marker", "fixture:alpha-marker", "--language", "beta", "--workflow", "audit_workflow"]);
+    check(cliMixedShape.status !== 0 && cliMixedShape.output.includes("mixed selection query"),
+      "mixed marker+intent query did not fail closed at the selection CLI: " + cliMixedShape.output);
+    const cliOverlayWithMarker = runSelect(["--marker", "fixture:alpha-marker", "--overlay", "alpha-ui"]);
+    check(cliOverlayWithMarker.status !== 0 && cliOverlayWithMarker.output.includes("mixed selection query"),
+      "shape-inapplicable flag did not fail closed at the selection CLI: " + cliOverlayWithMarker.output);
+    const cliMissingValue = runSelect(["--language", "alpha", "--workflow"]);
+    check(cliMissingValue.status !== 0 && cliMissingValue.output.includes("requires a value"),
+      "flag without a value did not fail closed at the selection CLI: " + cliMissingValue.output);
+
+    // The --json result carries the exact immutable identity, and the
+    // independent digest vectors prove it: an exact-value proof that fails
+    // if any identity field drifts while package ID and version stay fixed.
+    const cliJsonPath = path.join(out, "selection-identity.json");
+    const cliJson = runSelect(["--language", "alpha", "--workflow", "audit_workflow", "--json", cliJsonPath]);
+    check(cliJson.status === 0, "identity selection CLI failed: " + cliJson.output);
+    const identitySelection = JSON.parse(fs.readFileSync(cliJsonPath, "utf8")) as Record<string, unknown>;
+    check(identitySelection.package_id === "@northstar/alpha-fixture" &&
+      identitySelection.version === "0.1.0" &&
+      identitySelection.tree_digest === FIXTURE_TREE_DIGEST &&
+      identitySelection.manifest_digest === FIXTURE_MANIFEST_DIGEST,
+      "selection identity JSON does not carry the exact pinned identity: " + JSON.stringify(identitySelection));
+    const driftedReader = JSON.parse(JSON.stringify(twoEntry)) as RegistryDoc;
+    driftedReader.packages[0].tree_digest = "sha256:" + "0".repeat(64);
+    const driftedPath = path.join(out, "drifted-identity-registry.json");
+    fs.writeFileSync(driftedPath, JSON.stringify(driftedReader));
+    const driftedJsonRun = spawnSync("bun", ["run", surfacePath, "select", driftedPath,
+      "--language", "alpha", "--workflow", "audit_workflow", "--json", path.join(out, "drifted-selection.json")], { encoding: "utf8" });
+    check(driftedJsonRun.status === 0, "drifted-identity registry unexpectedly failed selection: " + driftedJsonRun.stderr);
+    const driftedSelection = JSON.parse(fs.readFileSync(path.join(out, "drifted-selection.json"), "utf8")) as Record<string, unknown>;
+    check(driftedSelection.package_id === identitySelection.package_id &&
+      driftedSelection.version === identitySelection.version &&
+      driftedSelection.tree_digest !== identitySelection.tree_digest,
+      "identity JSON did not distinguish a same-ID/version tree drift: " + JSON.stringify(driftedSelection));
+
+    console.log("oracle-16 registry-selection-intent: PASS (explicit language/workflow/overlay intent selects exactly one entry; unsupported workflow, undeclared overlay, ambiguous claims, incompatible core, duplicate-marker parse, detection-only input, unknown/duplicate/mixed/shape-inapplicable CLI flags, and valueless flags fail closed; selection --json carries the exact pinned identity)");
+
+    // Exact registered activation markers select their entries; anything
+    // that is not the exact marker string selects nothing.
+    check(selectRegistryEntry(twoEntry, CORE_VERSION, { kind: "marker", marker: "fixture:alpha-marker" }).package_id === "@northstar/alpha-fixture",
+      "the exact alpha marker did not select the alpha entry");
+    check(selectRegistryEntry(twoEntry, CORE_VERSION, { kind: "marker", marker: "fixture:beta-marker" }).package_id === "@northstar/beta-fixture",
+      "the exact beta marker did not select the beta entry");
+    expectSelectionStop("marker-prefix", CORE_VERSION, twoEntry,
+      { kind: "marker", marker: "fixture:alpha" }, "no official registry entry carries the activation marker");
+    expectSelectionStop("marker-unknown", CORE_VERSION, twoEntry,
+      { kind: "marker", marker: "fixture:unknown" }, "no official registry entry carries the activation marker");
+
+    console.log("oracle-17 registry-selection-marker: PASS (exact registered markers select their entries without consumer rewrites; prefix, unknown, and duplicate markers fail closed)");
+  }
+
+  // ---- oracle 18: registry/manifest discovery agreement before routing ----
+  //
+  // A registry entry whose discovery metadata disagrees with the verified
+  // installed manifest is metadata drift: the route stops instead of
+  // trusting the pin. Agreement reopens the route without refetching.
+  {
+    const out = path.join(outRoot, "r18-discovery-agreement");
+    mkdirP(out);
+    const emptyTrust: TrustDoc = { schema_version: "1.0.0", revision: "1", allowlist: [], revocations: [] };
+    const fixtureDiscovery: RegistryDiscovery = { languages: ["fixture-lang"], overlays: ["base"], workflows: ["explicit_audit_repair"], activation_marker: "fixture:language-quality" };
+    const agreeingEntry: RegistryEntry = {
+      package_id: "@northstar/language-fixture",
+      version: "0.1.0",
+      repository: "https://github.com/example/fixture-packs",
+      subpath: "packages/fixture",
+      commit: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      tree_digest: FIXTURE_TREE_DIGEST,
+      manifest_digest: FIXTURE_MANIFEST_DIGEST,
+      compatible_core_range: ">=0.2.0 <1.0.0",
+      discovery: fixtureDiscovery,
+    };
+    const drift = (mutate: (discovery: RegistryDiscovery) => void): string => {
+      const discovery = JSON.parse(JSON.stringify(fixtureDiscovery)) as RegistryDiscovery;
+      mutate(discovery);
+      const registry: RegistryDoc = {
+        schema_version: "1.0.0",
+        registry_version: "1.5.0",
+        packages: [{ ...agreeingEntry, discovery }],
+      };
+      const registryPath = path.join(out, "registry-drift.json");
+      fs.writeFileSync(registryPath, JSON.stringify(registry));
+      return registryPath;
+    };
+    const agreeingPath = path.join(out, "registry-agreeing.json");
+    fs.writeFileSync(agreeingPath, JSON.stringify({ schema_version: "1.0.0", registry_version: "1.5.0", packages: [agreeingEntry] }));
+
+    const stateRoot = path.join(out, "state");
+    mkdirP(stateRoot);
+    fs.writeFileSync(path.join(stateRoot, "operator-trust.json"), JSON.stringify(emptyTrust));
+    const consumer = consumerDir();
+    const beforeConsumer = snapshotHashes(consumer);
+    const installed = acquireAndActivate({
+      stateRoot,
+      consumerDir: consumer,
+      trustDoc: emptyTrust,
+      registry: { schema_version: "1.0.0", registry_version: "1.5.0", packages: [agreeingEntry] },
+      packageId: "@northstar/language-fixture",
+      version: "0.1.0",
+      language: "fixture-lang",
+      workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION,
+      adapter: fixtureAdapter(fixtureRoot),
+      intent: "workflow_request",
+    });
+    check(installed.status === "activated", "agreement fixture did not install: " + installed.notice);
+
+    const reqDir = path.join(out, "requests");
+    const resDir = path.join(out, "results");
+    mkdirP(reqDir);
+    mkdirP(resDir);
+    let callCount = 0;
+    const hostResolve = (registryPath: string): HostResult => {
+      callCount += 1;
+      const reqFile = path.join(reqDir, "resolve-" + String(callCount) + ".json");
+      const resFile = path.join(resDir, "resolve-" + String(callCount) + ".json");
+      fs.writeFileSync(reqFile, JSON.stringify({
+        protocol_version: "1.0.0",
+        request_id: "req-oracle18-route-" + String(callCount),
+        operation: "resolve",
+        intent: "workflow_request",
+        package_id: "@northstar/language-fixture",
+        version: "0.1.0",
+        language: "fixture-lang",
+        workflow: "explicit_audit_repair",
+        core_version: CORE_VERSION,
+        consumer_dir: consumer,
+        state_root: stateRoot,
+      }));
+      const run = spawnSync("bun", ["run", process.argv[1], "host", reqFile, resFile, registryPath], { encoding: "utf8" });
+      check(run.status === 0, "agreement host call failed: " + String(run.stderr));
+      return JSON.parse(fs.readFileSync(resFile, "utf8")) as HostResult;
+    };
+
+    const routed = hostResolve(agreeingPath);
+    check(routed.status === "routed", "agreeing metadata did not route: " + routed.notice);
+    check(hostResolve(drift((d) => { d.workflows = ["explicit_audit_repair", "authoring_workflow"]; })).status === "stopped" &&
+      fs.readFileSync(path.join(resDir, "resolve-" + String(callCount) + ".json"), "utf8").includes("metadata drift"),
+      "a registry claiming an undeclared workflow did not stop the route on metadata drift");
+    check(hostResolve(drift((d) => { d.languages = ["fixture-lang", "other-lang"]; })).status === "stopped",
+      "a registry claiming an undeclared language did not stop the route");
+    check(hostResolve(drift((d) => { d.overlays = ["base", "extra-ui"]; })).status === "stopped",
+      "a registry claiming an undeclared overlay did not stop the route");
+    check(hostResolve(drift((d) => { d.workflows = []; })).status === "stopped",
+      "a registry with empty discovery metadata did not stop the route");
+    const restored = hostResolve(agreeingPath);
+    check(restored.status === "routed", "restored agreement did not reopen the route: " + restored.notice);
+    requireHashesUnchanged("discovery-agreement", consumer, beforeConsumer);
+
+    // Acquisition-path counterexample (review finding 3): a registry whose
+    // discovery drifted from the identity-verified staged manifest must stop
+    // acquisition BEFORE self-check, receipt, or lifecycle mutation — not at
+    // a later resolve. A sentinel self-check proves package code never ran.
+    const sentinelPath = path.join(out, "self-check-executed.sentinel");
+    const acquisitionVariant = buildVariantPackage(fixtureRoot, "0.1.0", (manifest, root) => {
+      manifest.self_check.entrypoint = "scripts/sentinel-self-check.sh";
+      // The sentinel path is baked into the script: Bun's spawnSync does not
+      // inherit runtime process.env mutations, and the oracle must not
+      // depend on host environment behavior.
+      writeBytes(path.join(root, "scripts/sentinel-self-check.sh"),
+        Buffer.from("#!/bin/sh\ntouch \"" + sentinelPath + "\"\nexit 0\n", "utf8"), 0o755);
+    });
+    const variantEntryBase = {
+      package_id: "@northstar/language-fixture",
+      version: "0.1.0",
+      repository: "https://github.com/example/fixture-packs",
+      subpath: "packages/fixture",
+      commit: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      tree_digest: canonicalTreeDigest(acquisitionVariant, "acquisition variant"),
+      manifest_digest: manifestDigestOf(path.join(acquisitionVariant, "northstar-package.json")),
+      compatible_core_range: ">=0.2.0 <1.0.0",
+    };
+    const driftedVariantRegistryPath = path.join(out, "registry-drift-variant.json");
+    fs.writeFileSync(driftedVariantRegistryPath, JSON.stringify({
+      schema_version: "1.0.0",
+      registry_version: "1.5.0",
+      packages: [{ ...variantEntryBase, discovery: { ...fixtureDiscovery, workflows: ["explicit_audit_repair", "authoring_workflow"] } }],
+    }));
+    const agreeingVariantRegistryPath = path.join(out, "registry-agreeing-variant.json");
+    fs.writeFileSync(agreeingVariantRegistryPath, JSON.stringify({
+      schema_version: "1.0.0",
+      registry_version: "1.5.0",
+      packages: [{ ...variantEntryBase, discovery: fixtureDiscovery }],
+    }));
+
+    // Drifted acquisition: stops visibly, self-check unexecuted, no receipt,
+    // no lifecycle state, consumer byte-identical. The call drives
+    // acquireAndActivate directly with a conforming transport (like the
+    // oracle-14 real install), because the gate under test sits inside the
+    // acquisition transaction, not in the host transport layer.
+    const acquireDriftState = path.join(out, "acquire-drift-state");
+    mkdirP(acquireDriftState);
+    fs.writeFileSync(path.join(acquireDriftState, "operator-trust.json"), JSON.stringify(emptyTrust));
+    const driftConsumer = consumerDir();
+    const beforeDriftConsumer = snapshotHashes(driftConsumer);
+    fs.rmSync(sentinelPath, { force: true });
+    let driftStopped = false;
+    try {
+      acquireAndActivate({
+        stateRoot: acquireDriftState,
+        consumerDir: driftConsumer,
+        trustDoc: emptyTrust,
+        registry: JSON.parse(fs.readFileSync(driftedVariantRegistryPath, "utf8")) as RegistryDoc,
+        packageId: "@northstar/language-fixture",
+        version: "0.1.0",
+        workflow: "explicit_audit_repair",
+        coreVersion: CORE_VERSION,
+        adapter: fixtureAdapter(acquisitionVariant),
+        intent: "workflow_request",
+      });
+    } catch (err) {
+      driftStopped = String((err as Error).message).includes("metadata drift") &&
+        String((err as Error).message).includes("before self-check, receipt, or lifecycle mutation");
+    }
+    check(driftStopped, "drifted registry acquisition did not stop before self-check on metadata drift");
+    check(!fs.existsSync(sentinelPath), "package self-check executed during a drifted acquisition");
+    check(!fs.existsSync(path.join(acquireDriftState, "receipts")) &&
+      !fs.existsSync(path.join(acquireDriftState, "lifecycle-state.json")),
+      "drifted acquisition mutated the operator lifecycle state");
+    requireHashesUnchanged("acquisition-drift-consumer", driftConsumer, beforeDriftConsumer);
+
+    // Agreeing control: the same staged payload with agreeing metadata
+    // activates, the sentinel proves the self-check ran, and lifecycle state
+    // is written — the drift stop is the only difference.
+    const acquireAgreeState = path.join(out, "acquire-agree-state");
+    mkdirP(acquireAgreeState);
+    fs.writeFileSync(path.join(acquireAgreeState, "operator-trust.json"), JSON.stringify(emptyTrust));
+    const agreeConsumer = consumerDir();
+    fs.rmSync(sentinelPath, { force: true });
+    const agreeAcquire = acquireAndActivate({
+      stateRoot: acquireAgreeState,
+      consumerDir: agreeConsumer,
+      trustDoc: emptyTrust,
+      registry: JSON.parse(fs.readFileSync(agreeingVariantRegistryPath, "utf8")) as RegistryDoc,
+      packageId: "@northstar/language-fixture",
+      version: "0.1.0",
+      language: "fixture-lang",
+      workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION,
+      adapter: fixtureAdapter(acquisitionVariant),
+      intent: "workflow_request",
+    });
+    check(agreeAcquire.status === "activated", "agreeing acquisition control did not activate: " + agreeAcquire.notice);
+    check(fs.existsSync(sentinelPath), "sentinel self-check did not run during the agreeing control acquisition");
+    check(fs.existsSync(path.join(acquireAgreeState, "lifecycle-state.json")),
+      "agreeing acquisition did not write lifecycle state");
+
+    console.log("oracle-18 registry-discovery-agreement: PASS (agreeing metadata routes and activates; dropped, extra, or emptied languages/overlays/workflows stop resolve AND acquisition as metadata drift before self-check, receipt, or lifecycle mutation; sentinel proves package code never ran on drift; consumer stays byte-identical)");
+  }
+
 
   console.log("card-117 oracle: PASS (8 review rows + transitions + restrictions + provenance + concurrency + self-check + identity-binding/store negatives)");
   console.log("card-118 oracle: PASS (official registry pin route: visible acquisition stop, operational frozen-fallback notice, route intent, installed offline route, drift stop, rollback recovery, registry-version provenance)");
+  console.log("card-122 oracle: PASS (generic registry-owned selection: explicit intent and exact activation markers select one data-driven entry; unsupported work, ambiguity, drift, and detection fail closed before acquisition)");
 }
 
 async function main(): Promise<void> {
@@ -3412,6 +3909,72 @@ async function main(): Promise<void> {
     fs.writeFileSync(args[2], JSON.stringify(result));
     return;
   }
+  if (command === "select") {
+    // select <registry-file> (--language <l> --workflow <w> [--overlay <o>]
+    //   | --marker <m>) [--core-version <v>] [--json <out>]
+    // Generic registry-owned selection: explicit workflow intent or an exact
+    // activation marker selects one entry. Detection-only input (a language
+    // with no workflow, or any query without intent or marker) fails closed.
+    const registry = parseRegistryDoc(JSON.parse(fs.readFileSync(args[1], "utf8")), "selection registry");
+    // The CLI enforces the documented two-shape grammar exactly: known
+    // flags only, no duplicates, a value per flag, and exactly one query
+    // shape. Anything else fails closed before any selection.
+    const allowedFlags = new Set(["--language", "--workflow", "--overlay", "--marker", "--core-version", "--json"]);
+    const seenFlags: Record<string, string> = {};
+    for (let i = 2; i < args.length; i += 2) {
+      const flag = args[i];
+      check(flag !== undefined && flag.startsWith("--"),
+        "selection arguments must be <flag> <value> pairs; got " + String(flag));
+      check(allowedFlags.has(flag), "unknown selection flag: " + flag);
+      const value = args[i + 1];
+      check(value !== undefined && !value.startsWith("--"), "selection flag " + flag + " requires a value");
+      check(!(flag in seenFlags), "duplicate selection flag: " + flag);
+      seenFlags[flag] = value;
+    }
+    const coreVersion = seenFlags["--core-version"] ?? CORE_VERSION;
+    const marker = seenFlags["--marker"];
+    const language = seenFlags["--language"];
+    const workflow = seenFlags["--workflow"];
+    const overlay = seenFlags["--overlay"];
+    const intentShape = language !== undefined || workflow !== undefined || overlay !== undefined;
+    check(marker === undefined || !intentShape,
+      "mixed selection query: --marker cannot be combined with --language, --workflow, or --overlay; exactly one query shape is required");
+    let query: SelectionQuery;
+    if (marker !== undefined) {
+      query = { kind: "marker", marker };
+    } else if (language !== undefined && workflow !== undefined) {
+      query = { kind: "intent", language, workflow, overlay: overlay ?? null };
+    } else {
+      check(false, "detection is not selection authority: an explicit workflow request (--language with --workflow) or an exact activation marker (--marker) is required; nothing was selected or acquired");
+      return;
+    }
+    const entry = selectRegistryEntry(registry, coreVersion, query);
+    // The selection result carries the exact immutable identity the route
+    // needs, not just the human-facing ID/version: this project has
+    // repinned the same ID/version to new identities before.
+    const selection: Record<string, unknown> = {
+      package_id: entry.package_id,
+      version: entry.version,
+      compatible_core_range: entry.compatible_core_range,
+      tree_digest: entry.tree_digest,
+      manifest_digest: entry.manifest_digest,
+    };
+    if (entry.repository !== undefined) {
+      selection.repository = entry.repository;
+    }
+    if (entry.subpath !== undefined) {
+      selection.subpath = entry.subpath;
+    }
+    if (entry.commit !== undefined) {
+      selection.commit = entry.commit;
+    }
+    if (seenFlags["--json"] !== undefined) {
+      fs.writeFileSync(seenFlags["--json"], JSON.stringify(selection, null, 2) + "\n");
+    }
+    console.log("selected " + entry.package_id + "@" + entry.version + " for " + describeQuery(query) +
+      " tree=" + entry.tree_digest + " manifest=" + entry.manifest_digest);
+    return;
+  }
   if (command === "fallback") {
     // fallback <request-file> <result-file> <overlap-file> [notice-file]:
     // core-owned overlap decision. Consumes a stopped acquisition pair and
@@ -3428,7 +3991,7 @@ async function main(): Promise<void> {
     }
     return;
   }
-  throw new Error("usage: language-package-lifecycle.ts oracle <fixture-root> <out-dir> | vectors <fixture-root> | cas-race <state-root> <observed> <payload-file> <hold|attempt> | host <request-file> <result-file> [registry-path] | fallback <request-file> <result-file> <overlap-file> [notice-file]");
+  throw new Error("usage: language-package-lifecycle.ts oracle <fixture-root> <out-dir> | vectors <fixture-root> | cas-race <state-root> <observed> <payload-file> <hold|attempt> | host <request-file> <result-file> [registry-path] | fallback <request-file> <result-file> <overlap-file> [notice-file] | select <registry-file> (--language <l> --workflow <w> [--overlay <o>] | --marker <m>) [--core-version <v>] [--json <out>]");
 }
 
 await main();

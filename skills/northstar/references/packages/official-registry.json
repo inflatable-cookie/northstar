@@ -1,9 +1,15 @@
 {
   "schema_version": "1.0.0",
-  "registry_version": "1.4.0",
+  "registry_version": "1.5.0",
   "packages": [
     {
       "package_id": "@northstar/typescript-quality",
+      "discovery": {
+        "languages": ["typescript"],
+        "overlays": ["base", "svelte", "sveltekit"],
+        "workflows": ["explicit_audit_repair"],
+        "activation_marker": "northstar:typescript-quality"
+      },
       "version": "0.1.0",
       "repository": "https://github.com/inflatable-cookie/northstar-language-packs",
       "subpath": "packages/typescript",
@@ -14,6 +20,12 @@
     },
     {
       "package_id": "@northstar/rust-quality",
+      "discovery": {
+        "languages": ["rust"],
+        "overlays": [],
+        "workflows": ["everyday_authoring", "explicit_audit_repair"],
+        "activation_marker": "northstar:rust-quality"
+      },
       "version": "0.1.0",
       "repository": "https://github.com/inflatable-cookie/northstar-language-packs",
       "subpath": "packages/rust",

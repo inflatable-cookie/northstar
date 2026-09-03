@@ -83,8 +83,13 @@ Here is the state the worker is inheriting:
   `effigy check:skill-install skills/northstar`, `effigy qa:docs`, `effigy qa`,
   and `git diff --check`.
 - **PR base/head:** `main` <- `worker/bind-generic-language-intent-discovery`.
-- **PR URL:** pending.
-- **Review state:** awaiting worker PR.
+- **PR URL:** https://github.com/inflatable-cookie/northstar/pull/28
+  (validation exact head `91d953acfe5290dd58325f81c4c06e57feb00a7e` after
+  round-1 review repairs; handoff-state-only commits may advance the tip
+  beyond it without touching code, schemas, registry, or fixtures).
+- **Review state:** round-1 findings repaired and revalidated; awaiting
+  orchestrator re-review. All required validation passed at the recorded
+  head; card 120 remains blocked.
 - **Merge path:** orchestrator after accepted review of the current head and
   passing required checks.
 

@@ -1,6 +1,6 @@
 # 048 - Extract Modular Language Quality Packages
 
-Status: active; generic cutover discovery ready before Batch D
+Status: active; generic cutover discovery in review before Batch D
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.033`, promoted spec 034
@@ -68,10 +68,12 @@ before it becomes ready.
   first-head evidence gap, passed exact-head review at `792a7c2`, and merged
   as `dff19c9` with both workflows, representative pre-extraction ledger
   compatibility, consumer-policy preservation, and Rust-only inventory proven.
-- [ ] **Batch C.1 — generic cutover discovery:** card 122 adds registry-owned
-  language, overlay, workflow, and activation-marker discovery so card 120 can
-  remove the three package-specific root branches without stranding missing
-  package acquisition or existing activations.
+- [x] **Batch C.1 — generic cutover discovery:** card 122 added registry-owned
+  language, overlay, workflow, and activation-marker discovery (registry
+  `1.5.0`), a generic fail-closed selection CLI and route, and
+  registry/manifest drift rejection, so card 120 can remove the three
+  package-specific root branches without stranding missing-package
+  acquisition or existing activations.
 - [ ] **Batch D — root reduction:** card 120 removes both frozen embedded
   payloads and fallback branches, then proves core-only operation and installed
   package routing.
@@ -116,5 +118,7 @@ before it becomes ready.
 
 ## Next Task
 
-Run card 122's generic discovery repair. Card 120 stays blocked until its
-reviewed merge and a final readiness refresh.
+Card 122's generic discovery repair is implemented and in review; orchestrator
+exact-head review of its PR is the current stop. After the reviewed merge and
+a final readiness refresh, card 120 removes the embedded payloads. Card 120
+stays blocked until then.

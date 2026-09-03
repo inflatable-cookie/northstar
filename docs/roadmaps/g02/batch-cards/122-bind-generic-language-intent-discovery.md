@@ -1,6 +1,6 @@
 # 122 - Bind Generic Language Intent Discovery
 
-Status: ready
+Status: in review; implementation complete
 Owner: repo maintainers
 Updated: 2026-09-03
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -45,23 +45,61 @@ broaden third-party trust.
 
 ## Acceptance Criteria
 
-- [ ] the official registry schema carries portable discovery metadata and
+- [x] the official registry schema carries portable discovery metadata and
   both accepted entries populate it;
-- [ ] explicit Rust, TypeScript, and Svelte-overlay audit intent selects the
+- [x] explicit Rust, TypeScript, and Svelte-overlay audit intent selects the
   exact accepted entry without naming that package in selection code;
-- [ ] Rust everyday-authoring intent selects only the Rust package while
+- [x] Rust everyday-authoring intent selects only the Rust package while
   TypeScript everyday authoring remains unavailable;
-- [ ] the existing `northstar:rust-quality` and
+- [x] the existing `northstar:rust-quality` and
   `northstar:typescript-quality` activation markers select their registered
   entries without rewriting consumer files;
-- [ ] registry/manifest metadata drift, duplicate matches, unknown markers,
+- [x] registry/manifest metadata drift, duplicate matches, unknown markers,
   unsupported workflows, and detection-only input fail closed before
   acquisition;
-- [ ] installed local routing, official acquisition authority, revocation,
+- [x] installed local routing, official acquisition authority, revocation,
   offline behavior, and third-party trust remain unchanged;
-- [ ] core contains one generic selection path and no new per-language branch;
-- [ ] package lifecycle checks, isolated skill-install parity, full QA, and
+- [x] core contains one generic selection path and no new per-language branch;
+- [x] package lifecycle checks, isolated skill-install parity, full QA, and
   `git diff --check` pass.
+
+## Completion Notes
+
+Registry version advanced `1.4.0` → `1.5.0`. Each official entry now carries
+data-only `discovery` metadata (languages, overlays, workflows, exact
+activation marker) matching the verified manifests: TypeScript claims
+`typescript` with `base`/`svelte`/`sveltekit` overlays and
+`explicit_audit_repair`; Rust claims `rust` with `everyday_authoring` and
+`explicit_audit_repair`. Pinned identities, digests, and both overlap windows
+are byte-unchanged.
+
+`language-package-lifecycle.ts` gained the generic `selectRegistryEntry`
+procedure and a `select` CLI: explicit intent (language + workflow +
+optional overlay) or an exact activation marker selects one entry; zero,
+duplicate, ambiguous, incompatible-core, and detection-only inputs fail
+closed before acquisition, and duplicate markers fail at registry parse.
+Resolve now stops on registry/manifest discovery drift before routing;
+allowlist-only local routing is unchanged. No package name or language
+branch exists in the generic surface (portable scan unchanged and passing).
+
+The three package-specific router paragraphs in `references/router.md` and
+the route doc now delegate identity selection to the registry-owned
+procedure (`packages/installed-package-route.md` § Generic selection);
+embedded mode content remains reachable only through the bounded fallback.
+Negative fixtures cover duplicate markers and duplicate language/workflow
+claims; the checker pins discovery values, exactly-selectable shipped data,
+and sixteen selection CLI cases (positives plus fail-closed negatives);
+oracle-16/17/18 falsify the card's seven review rows inside the lifecycle
+oracle. Evidence: `docs/logs/2026-09/03-123500-bind-generic-language-selection.md`.
+
+First review round (PR 28) found three in-bounds defects, all repaired: the
+`select` CLI now enforces its two-shape grammar exactly (unknown, duplicate,
+mixed, shape-inapplicable, and valueless flags fail closed); the `--json`
+result returns the exact selected commit/tree/manifest identity, asserted
+against the accepted pins; and registry/manifest discovery agreement now
+gates acquisition before self-check, receipt, or lifecycle mutation (with a
+sentinel-self-check counterexample proving package code never runs on
+drift), not only a later resolve.
 
 ## Review Oracle
 

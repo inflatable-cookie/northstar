@@ -11,14 +11,18 @@ audit, no-slop pass, whole-codebase review, or audit-and-fix action. Resolve
 `worktree` or `repository` scope and package-local Svelte overlays. It never
 activates from ordinary TypeScript or Svelte coding.
 
-Route through the installed package before using embedded content. The
-official registry pins `@northstar/typescript-quality` as the official
-TypeScript choice (`explicit_audit_repair`, `typescript` with `base`,
-`svelte`, and `sveltekit` overlays). Run the generic installed-package route
-([`packages/installed-package-route.md`](./packages/installed-package-route.md))
-for that identity: a `routed` result executes the package's declared audit
-entrypoint from `installed_path`; a stopped route falls back to the frozen
-embedded payload only after the route doc's visible fallback notice.
+Route through the installed package before using embedded content. Package
+selection is registry-owned and generic — routing never names a package ID.
+Supply explicit intent (`typescript` + `explicit_audit_repair`, plus any
+requested `base`, `svelte`, or `sveltekit` overlay) to the generic selection
+procedure in
+[`packages/installed-package-route.md`](./packages/installed-package-route.md);
+it selects the one exact official entry, or an existing registered activation
+marker in the consumer selects it directly. Run the generic installed-package
+route for the selected identity: a `routed` result executes the package's
+declared audit entrypoint from `installed_path`; a stopped route falls back to
+the frozen embedded payload only after the route doc's visible fallback
+notice.
 
 → [`modes/typescript-quality-audit.md`](./modes/typescript-quality-audit.md)
 
@@ -29,14 +33,17 @@ pass, whole-codebase review, or audit-and-fix action. Resolve `worktree` or
 `repository` scope. Explicit audit intent takes precedence over everyday Rust
 authoring and never activates from ordinary coding alone.
 
-Route through the installed package before using embedded content. The
-official registry pins `@northstar/rust-quality` as the official Rust choice
-(`explicit_audit_repair`, `rust`).
-Run the generic installed-package route
-([`packages/installed-package-route.md`](./packages/installed-package-route.md))
-for that identity: a `routed` result executes the package's declared audit
-entrypoint from `installed_path`; a stopped route falls back to the frozen
-embedded payload only after the route doc's visible fallback notice.
+Route through the installed package before using embedded content. Package
+selection is registry-owned and generic — routing never names a package ID.
+Supply explicit intent (`rust` + `explicit_audit_repair`) to the generic
+selection procedure in
+[`packages/installed-package-route.md`](./packages/installed-package-route.md);
+it selects the one exact official entry, or an existing registered activation
+marker in the consumer selects it directly. Run the generic installed-package
+route for the selected identity: a `routed` result executes the package's
+declared audit entrypoint from `installed_path`; a stopped route falls back to
+the frozen embedded payload only after the route doc's visible fallback
+notice.
 
 → [`modes/rust-quality-audit.md`](./modes/rust-quality-audit.md)
 
@@ -48,14 +55,17 @@ Northstar Rust quality. If activation is missing, the mode installs it from the
 loaded skill before editing. The repository profile must then resolve to
 production-valid `strict`.
 
-Route through the installed package before using embedded content. The
-official registry pins `@northstar/rust-quality` as the official Rust choice
-(`everyday_authoring`, `rust`).
-Run the generic installed-package route
-([`packages/installed-package-route.md`](./packages/installed-package-route.md))
-for that identity: a `routed` result follows the package's declared authoring
-entrypoint from `installed_path`; a stopped route falls back to the frozen
-embedded payload only after the route doc's visible fallback notice.
+Route through the installed package before using embedded content. Package
+selection is registry-owned and generic — routing never names a package ID.
+Supply explicit intent (`rust` + `everyday_authoring`) to the generic
+selection procedure in
+[`packages/installed-package-route.md`](./packages/installed-package-route.md);
+it selects the one exact official entry, or an existing registered activation
+marker in the consumer selects it directly. Run the generic installed-package
+route for the selected identity: a `routed` result follows the package's
+declared authoring entrypoint from `installed_path`; a stopped route falls
+back to the frozen embedded payload only after the route doc's visible
+fallback notice.
 
 Do **not** use this route for a requested quality audit, no-slop pass, whole
 codebase review, or audit-and-fix tranche. Select the explicit audit route for
