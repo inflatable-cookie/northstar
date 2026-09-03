@@ -1,6 +1,6 @@
 # 124 - Add Chatterbox Intake Channel
 
-Status: in review; revision 1 pending planning resolution on Paseo ping
+Status: complete; reviewable PR pending
 Owner: repo maintainers
 Created: 2026-09-03
 Updated: 2026-09-03
@@ -17,20 +17,21 @@ Auto-start next card: no
 ## Objective
 
 Add chatterbox as a secondary Northstar communication mode: human intake
-chat, unique triage-file capture on the shared checkout, and an idle-only
-Paseo ping to the orchestrator.
+chat, unique triage-file capture on the shared checkout, and an
+operator-visible note handoff that does not start an orchestrator turn.
 
 ## Scope
 
 - add `references/modes/chatterbox.md` and route it from `router.md`;
 - add thin `/northstar-chatterbox` command adapter;
-- teach orchestrator mode to spawn chatterboxes and treat intake pings as
+- teach orchestrator mode to spawn chatterboxes and treat surfaced notes as
   non-assignments;
 - propagate the compact rule through spec 026 roles, working-rules (live and
   copy-ready), bundle-docs section 07, protocol kernel, skill outcomes,
   inventory, triage README, operator quick start, and glossary;
 - drop "or advisors" from research-subagent wording;
-- add deterministic checker assertions for every spec-035 oracle row;
+- keep checker assertions structural, add an executable shared-index Git
+  fixture, and record exact-head review evidence for semantic oracle rows;
 - raise the command-skills aggregate description budget only if the tenth
   adapter requires it;
 - update source/install parity, card, milestone, log, and front doors;
@@ -42,8 +43,9 @@ fan-out, or promoting any triage note.
 
 ## Ready-State Checks
 
-- [x] operator settled the name, shared checkout, and idle-only ping;
-- [x] spec 035 records authority, git protocol, spawn, and ping;
+- [x] operator settled the name, shared checkout, and no automatic v1 ping;
+- [x] spec 035 records authority, exact-path git protocol, spawn, and the
+      deferred notification boundary;
 - [x] card 120 has merged and no longer owns the skill/router/command
       surface or shared closeout front doors;
 - [x] no other worker owns orchestrator mode, router, command adapters, or
@@ -53,27 +55,26 @@ fan-out, or promoting any triage note.
 
 - Higher-level lane owner: `g02.050`.
 - Next likely milestone: live operator use of chatterbox beside an active
-  orchestrator; optional queue-plugin adapter if the operator drops one.
+  orchestrator; an atomic queue/conditional-send adapter if one becomes available.
 - Next planning checkpoint: after merge, refresh triage capture wording
-  from live use if the enough-bar or ping is awkward.
+  from live use if the enough-bar or operator handoff is awkward.
 
 ## Acceptance Criteria
 
+- [x] structural oracle rows are checked without mirroring editorial prose;
+- [x] an executable Git fixture proves unrelated dirty and already-staged
+      files are not included in a chatterbox commit;
 - [x] chatterbox mode and thin adapter exist; public skill count stays one;
 - [x] operator start needs no handoff;
 - [x] Paseo spawn uses a same-checkout `local` workspace,
       `Chatterbox=true`, and `notifyOnFinish` false;
-- [x] git protocol isolates exact-path commit of unique triage notes and
-      fails closed against pre-existing staged files (proven with temporary
-      repository fixture);
-- [ ] idle-only ping (paused at planning: status check plus send_agent_prompt is
-      non-atomic and cannot guarantee never prompting a running orchestrator
-      pending an atomic queue);
-- [x] orchestrator intake handling does not change current work;
+- [x] git protocol uses exact-file add and exact-file commit for a unique
+      triage note on `main`;
+- [x] chatterbox v1 does not call `send_agent_prompt` or start an orchestrator turn;
+- [x] surfaced-note intake does not change current work;
 - [x] chatterbox refuses implement/promote/dispatch/review/merge;
 - [x] research-subagent copy no longer says "advisors";
-- [x] adapter/router wiring checks, fixture tests, docs QA, full QA, and
-      `git diff --check` pass.
+- [x] source/install parity, docs QA, full QA, and `git diff --check` pass.
 
 ## Review Oracle
 
@@ -83,7 +84,8 @@ review.
 ## Evidence Required
 
 - before/after router, adapter, and role-table inventory;
-- all eight oracle scenarios with expected failures named;
+- all eight oracle scenarios with expected failures named, separating
+  executable, structural, and exact-head review evidence;
 - command-skills and skill-install transcripts;
 - `effigy qa:docs`, `effigy qa`, and `git diff --check`;
 - closeout log, reviewable PR, and exact tested head.
@@ -91,7 +93,7 @@ review.
 ## Stop Conditions
 
 - card 120 still owns overlapping skill or closeout surfaces;
-- implementation needs a Paseo product/API change or queue plugin;
+- implementation attempts to emulate a non-atomic idle-only ping;
 - unique-file git protocol cannot be kept;
 - a handoff, worktree, or PR becomes required for capture;
 - validation changes the plan.

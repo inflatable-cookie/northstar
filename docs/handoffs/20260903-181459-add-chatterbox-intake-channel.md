@@ -119,10 +119,10 @@ execution authority.
 - **Decisions and preferences:** operator-started threads need no handoff;
   orchestrator-spawned Paseo threads use a same-checkout local workspace,
   `Chatterbox=true`, and `notifyOnFinish: false`; capture writes only unique
-  triage files; pings are idle-only intake and never assignments.
-- **Open tensions:** Paseo has no notify-without-turn API, so running or
-  ambiguous orchestrators are not pinged. The queue-plugin idea remains a
-  separate triage note and is not a blocker.
+  triage files; v1 starts no orchestrator turn automatically.
+- **Open tensions:** Paseo has no atomic notify-only or send-if-idle API.
+  Report the note path to the operator and leave the queue/conditional-send
+  idea as a separate triage note.
 - **Report after:** coherent implementation plus falsification, then PR creation.
 - **Report to:** the originating orchestrator through Paseo finish notification.
 
@@ -152,16 +152,18 @@ adapter, spawn/intake rules, and deterministic oracle as one coherent batch.
 - Execute card 124 only and keep commits aligned with meaningful chunks.
 - Preserve one public Northstar skill. Chatterbox is an internal mode plus thin
   command adapter.
-- Implement exact unique-file git and idle-only ping semantics. Do not simulate
-  a new Paseo API, require a handoff/worktree for chatterbox capture, or turn a
-  ping into promotion authority.
+- Implement exact unique-file staging and exact-path commit semantics, with an
+  executable shared-index fixture. Do not simulate an idle-only Paseo API,
+  call `send_agent_prompt`, require a handoff/worktree for chatterbox capture,
+  or turn a surfaced note into promotion authority.
 - Stop if a product/API change, shared-file chatterbox protocol, or unresolved
   authority choice becomes necessary.
 
 ### When the assigned runway is complete
 
 1. Run every required validation named above.
-2. Falsify all eight spec-035 oracle rows and map each to concrete evidence.
+2. Falsify executable and structural oracle rows and map semantic rows to
+   exact-head review evidence; do not mirror editorial prose into a checker.
 3. Reconcile card 124, milestone 050, one closeout log, this handoff, and all
    affected front doors. Leave the queue-plugin triage note open.
 4. Integrate current `main` if it moved, rerun validation, push the worker

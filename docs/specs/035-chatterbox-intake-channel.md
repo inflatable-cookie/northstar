@@ -39,8 +39,8 @@ Add a **chatterbox**: a secondary Northstar communication mode.
 - It collects notes in the thread. When one issue is coherent enough for
   another agent to pick up, it writes a normal timestamped `docs/triage/`
   note.
-- In Paseo, it then gives the orchestrator a small idle-only intake ping.
-  The file is always the durable signal.
+- It reports the note path to the operator. The file is the durable signal;
+  v1 does not start an orchestrator turn automatically.
 
 Triage remains non-authority. The orchestrator still promotes, sequences,
 dispatches, reviews, and merges.
@@ -50,8 +50,8 @@ dispatches, reviews, and merges.
 | Role | Owns | Must not assume |
 | --- | --- | --- |
 | Operator | starts chatterbox threads, answers questions, may ask the orchestrator to spawn one | that a chatterbox can implement, promote, or dispatch |
-| Chatterbox | one direct operator conversation, problem identification, unique triage-file capture, optional idle orchestrator ping | canonical planning, readiness, implementation, review, merge, worker dispatch, or a reserved topic |
-| Orchestrator | the main runway, promotion of chatterbox notes, spawn on request, intake-ping handling | that a chatterbox ping is a new assignment or that private chatterbox chat is repository authority |
+| Chatterbox | one direct operator conversation, problem identification, unique triage-file capture, and operator-visible note handoff | canonical planning, readiness, implementation, review, merge, worker dispatch, or a reserved topic |
+| Orchestrator | the main runway, promotion of chatterbox notes, and spawn on request | that a chatterbox note is a new assignment or that private chatterbox chat is repository authority |
 
 A chatterbox is not a planning delegate, worker, orchestrator continuation,
 handoff, or `paseo-advisor`.
@@ -107,14 +107,10 @@ Git protocol:
 
 - write only that new file; do not edit `docs/triage/README.md` or any other
   path;
-- before staging, check `git diff --cached --name-only`; if the index contains
-  pre-existing staged paths, fail closed: do not commit, leave the triage note
-  on disk, and report to the operator;
-- stage only that new file with `git add -- <exact-new-file>`; never `git add .`,
-  never `git add -A`, amend, reset, stash, or force-push;
-- commit with exact path: `git commit -m "docs(triage): <summary>" -- <exact-new-file>`;
-- leave unrelated dirty files (staged or unstaged) untouched in the working tree
-  and index;
+- stage only with `git add -- <exact-new-file>` and commit only with
+  `git commit --only -- <exact-new-file>`; never `git add .`, never amend,
+  reset, stash, or force-push;
+- leave unrelated dirty files untouched;
 - commit and push to the integration branch (`main` unless the repo says
   otherwise);
 - if HEAD is not that branch, leave the file on disk and tell the operator;
@@ -124,26 +120,22 @@ Git protocol:
 
 Same-second slug collisions keep the existing `-2`, `-3` rule.
 
-## Paseo ping (paused at planning)
+## Paseo notification boundary
 
-Automated Paseo pings are paused at planning pending an atomic queue API.
+Paseo has no atomic notify-only or send-if-idle operation.
+`send_agent_prompt` starts an orchestrator turn, and checking status before
+sending leaves a race in which the orchestrator can start work between the
+two calls. Chatterbox v1 therefore does not call `send_agent_prompt` or start
+an orchestrator turn.
 
-Paseo has no notify-without-a-new-turn API. `send_agent_prompt` starts an
-orchestrator turn, and inspecting `get_agent_status` before `send_agent_prompt`
-is non-atomic; the target can begin running between the status check and prompt
-dispatch. A two-call sequence therefore cannot guarantee never interrupting a
-running orchestrator.
+After a note is written (committed when possible), report its absolute path
+and a one-line summary to the operator in the chatterbox thread. The operator
+may forward it or leave it for the orchestrator's next normal triage
+checkpoint. The orchestrator does not infer a new assignment from the file.
 
-For v1 intake:
-1. Chatterbox writes and commits the triage note to `docs/triage/` on the shared
-   checkout.
-2. Chatterbox reports the note path directly to the operator in chat.
-3. Automated pings are omitted until Paseo provides an atomic/non-interrupting
-   queue or the operator explicitly settles best-effort race behavior.
-4. The orchestrator discovers and inspects triage notes at its next normal
-   triage checkpoint. If an intake prompt is ever received, the orchestrator
-   treats it as intake only: it records the path, does not promote from the
-   ping, and does not change current work.
+A later atomic, non-interrupting queue or conditional-send adapter may add the
+small orchestrator notice. That is an adapter upgrade, not a protocol rewrite.
+The triage file remains the durable signal either way.
 
 ## Router and command
 
@@ -176,7 +168,7 @@ Northstar.
 - no canonical promotion, readiness, implementation, review, or merge;
 - no nested orchestrator, worker, or planning-delegate from a chatterbox;
 - no research-subagent fan-out in this first version;
-- no Paseo product change, queue plugin, or notify-only API as a blocker;
+- no Paseo product change, queue plugin, or notify-only API in v1;
 - no rename of the separate `paseo-advisor` skill;
 - no second public Northstar skill.
 
@@ -198,9 +190,10 @@ Northstar.
 - [ ] operator start needs no handoff; orchestrator spawn uses a local
       workspace, `Chatterbox=true`, and `notifyOnFinish` false;
 - [ ] durable output is only unique `docs/triage/` files on the shared
-      checkout, committed with exact-file add;
-- [ ] idle-only orchestrator ping; running orchestrators are not interrupted;
-- [ ] orchestrator intake pings do not change the current task;
+      checkout, committed with exact-file add and exact-file commit;
+- [ ] chatterbox v1 does not call `send_agent_prompt` or start an orchestrator
+      turn;
+- [ ] a surfaced chatterbox note does not change the orchestrator's current task;
 - [ ] chatterbox cannot implement, promote, dispatch, review, or merge;
 - [ ] doctrine, contracts, inventory, router, and command checks name the
       role and keep it distinct from planning-delegate and `paseo-advisor`;
@@ -213,11 +206,11 @@ Northstar.
 | --- | --- | --- | --- |
 | Chatterbox is not another role. | Thread routes through orchestrator, worker, planning-delegate, handoff, or `paseo-advisor`. | Router/mode refuses and stays in chatterbox or asks the operator to start the right thread. | Router and adapter assertions. |
 | Capture cannot widen authority. | Chatterbox edits a spec, card, or product file, or opens a PR. | Stop before the write. | Mode/contract negative path. |
-| Shared checkout stays unique-file-only. | Chatterbox runs `git add .` or commits an unrelated dirty file. | Stop; leave unrelated files unstaged. | Git-protocol assertion. |
+| Shared checkout stays unique-file-only. | Chatterbox runs `git add .` or commits an unrelated dirty or already-staged file. | Stop; leave unrelated files staged or unstaged exactly as found. | Executable temporary-repository fixture. |
 | No worktree is required. | Spawn uses `branch-off` isolation. | Reject the transport plan. | Paseo spawn assertion. |
 | Long-running chatterboxes do not spam. | Spawn enables `notifyOnFinish`. | Reject launch configuration. | Label/notification assertion. |
-| Pings do not interrupt live work. | Chatterbox `send_agent_prompt`s a running `Orchestrator=true` agent. | Skip the ping and tell the operator. | Idle-only ping assertion. |
-| Intake is not a new assignment. | Orchestrator starts promotion or dispatch from the ping. | Record the path only; continue current work. | Orchestrator intake assertion. |
+| Capture does not interrupt live work. | Chatterbox calls `send_agent_prompt` or otherwise starts an orchestrator turn. | Skip automation; report the note path to the operator. | Mode review plus absence of a prompt path. |
+| Intake is not a new assignment. | Orchestrator starts promotion or dispatch merely because the note is surfaced. | Record the path only; continue current work. | Orchestrator intake review. |
 | Notes remain non-authority. | A chatterbox triage file is treated as a ready card. | Orchestrator still promotes through the normal spine. | Triage lifecycle assertion. |
 
 ## Validation
@@ -228,7 +221,8 @@ Northstar.
 - `effigy qa:docs`
 - `effigy qa`
 - installed Northstar skill parity
-- deterministic oracle rows in the command-skills checker
+- structural adapter/router checks, an executable shared-index Git fixture,
+  and exact-head review evidence for semantic rows
 
 ## Next Task
 
