@@ -98,12 +98,17 @@ Roadmaps sequence contract-backed work for Northstar itself.
   dedicated worktree workspace placement, keeps finish notifications enabled,
   resumes same-child identity on revision, and proves all six oracle rows
   through live launch, exact-head source review, and same-child revision.
+- `g02.050` is implemented; card 124 added the chatterbox intake mode and
+  `/northstar-chatterbox` adapter, shared-checkout git protocol, idle-only
+  Paseo ping, non-assignment orchestrator intake handling, and eight review
+  oracle assertions. The reviewable PR is pending orchestrator exact-head
+  review.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Dispatch card 120's bounded root-reduction lane. PR 29 merged the preceding
-Paseo worker-parentage correction as `7ebaa9c`, and installed-skill parity is
-current at 199 files.
+Review card 124 PR for chatterbox intake channel at exact head. Card 120 merged
+the generic-core reduction as `aa9a005`, and installed-skill parity is current
+at 113 files.

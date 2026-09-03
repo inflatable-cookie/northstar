@@ -1,8 +1,9 @@
 # 050 - Add Chatterbox Intake Channel
 
-Status: ready; card 124 handoff published
+Status: in review; card 124 reviewable PR pending
 Owner: repo maintainers
 Created: 2026-09-03
+Updated: 2026-09-03
 Depends on: `g02.049`, spec 026, spec 030, spec 035
 Vision tags: `orchestration`, `triage`, `conversation`, `paseo`
 Governing refs: `docs/specs/035-chatterbox-intake-channel.md`,
@@ -41,18 +42,18 @@ and write triage notes without interrupting the main runway.
       installable skill, router, command adapters, and several closeout
       front doors with the root-reduction lane. Do not launch this card
       while 120 is the ready/in-flight owner of those surfaces.
-- [ ] **Card 124** implements the mode, adapter, spawn/ping, doctrine,
+- [x] **Card 124** implements the mode, adapter, spawn/ping, doctrine,
       contracts, inventory, checker oracles, parity, and closeout from spec
       035.
 
 ## Acceptance Criteria
 
-- [ ] all eight spec-035 oracle rows have deterministic proof;
-- [ ] operator start and orchestrator spawn match the spec;
-- [ ] unique-file git protocol is explicit and negatively tested;
-- [ ] idle-only ping and intake-only orchestrator handling are explicit;
-- [ ] chatterbox cannot widen authority into planning or implementation;
-- [ ] source/install parity and full Northstar QA pass.
+- [x] all eight spec-035 oracle rows have deterministic proof;
+- [x] operator start and orchestrator spawn match the spec;
+- [x] unique-file git protocol is explicit and negatively tested;
+- [x] idle-only ping and intake-only orchestrator handling are explicit;
+- [x] chatterbox cannot widen authority into planning or implementation;
+- [x] source/install parity and full Northstar QA pass.
 
 ## Review Oracle
 

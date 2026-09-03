@@ -90,7 +90,7 @@ execution authority.
   diff --check`.
 - **PR base/head:** `main` <- `worker/add-chatterbox-intake-channel`
 - **PR URL:** pending.
-- **Review state:** implementation not started.
+- **Review state:** implementation complete; reviewable PR pending.
 - **Merge path:** orchestrator after accepted exact-head review and passing
   checks.
 

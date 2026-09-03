@@ -1,6 +1,6 @@
 # 124 - Add Chatterbox Intake Channel
 
-Status: ready; handoff published
+Status: complete; reviewable PR pending
 Owner: repo maintainers
 Created: 2026-09-03
 Updated: 2026-09-03
@@ -59,18 +59,18 @@ fan-out, or promoting any triage note.
 
 ## Acceptance Criteria
 
-- [ ] all eight spec-035 oracle rows have deterministic proof in
+- [x] all eight spec-035 oracle rows have deterministic proof in
       `check:command-skills` or an equally focused checker;
-- [ ] chatterbox mode and thin adapter exist; public skill count stays one;
-- [ ] operator start needs no handoff;
-- [ ] Paseo spawn uses a same-checkout `local` workspace,
+- [x] chatterbox mode and thin adapter exist; public skill count stays one;
+- [x] operator start needs no handoff;
+- [x] Paseo spawn uses a same-checkout `local` workspace,
       `Chatterbox=true`, and `notifyOnFinish` false;
-- [ ] git protocol is exact-file add of a unique triage note on `main`;
-- [ ] idle-only ping; running orchestrators are skipped;
-- [ ] orchestrator intake handling does not change current work;
-- [ ] chatterbox refuses implement/promote/dispatch/review/merge;
-- [ ] research-subagent copy no longer says "advisors";
-- [ ] source/install parity, docs QA, full QA, and `git diff --check` pass.
+- [x] git protocol is exact-file add of a unique triage note on `main`;
+- [x] idle-only ping; running orchestrators are skipped;
+- [x] orchestrator intake handling does not change current work;
+- [x] chatterbox refuses implement/promote/dispatch/review/merge;
+- [x] research-subagent copy no longer says "advisors";
+- [x] source/install parity, docs QA, full QA, and `git diff --check` pass.
 
 ## Review Oracle
 

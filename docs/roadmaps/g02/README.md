@@ -14,7 +14,7 @@ single-pilot bucket.
 | Keep learning from operator-provided consumer feedback before treating stricter posture as settled doctrine. | active | `docs/contracts/001-working-rules.md`, `docs/specs/012-consumer-repo-autonomy-proof-and-adoption.md`, `docs/specs/013-stricter-consumer-repo-autonomy-adoption.md` | pending |
 | Harden setup, nested-authority adoption, and posture classification so downstream repos can install the spine without hand adaptation. | active | `docs/specs/020-formalize-nested-docs-authority-setup.md`, `docs/specs/022-formalize-repo-posture-classification.md` | pending |
 | Keep execution autonomy bounded by ready cards, lane budgets, pause signals, and a file-based orchestrator/worker PR boundary instead of ad-hoc continuation prompts. | active | `docs/contracts/001-working-rules.md`, `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `bundle-docs/sections/07-delivery-framework-and-autonomy.md` | accept operator-provided live feedback |
-| Keep the orchestrator on the main runway by giving the operator independent chatterbox threads for side issues and ideas. | active | `docs/specs/035-chatterbox-intake-channel.md`, `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `docs/specs/030-conversational-triage-and-docs-cleanup.md` | card 124 implementation |
+| Keep the orchestrator on the main runway by giving the operator independent chatterbox threads for side issues and ideas. | active; card 124 PR in review | `docs/specs/035-chatterbox-intake-channel.md`, `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `docs/specs/030-conversational-triage-and-docs-cleanup.md` | orchestrator exact-head review of card 124 PR |
 | Keep always-loaded agent context useful, human, and bounded while preserving safety, authority, and project intent. | complete | `docs/contracts/003-agent-instruction-surface.md`, `docs/specs/028-agent-instruction-surface-optimization.md` | accept later operator feedback |
 | Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | card 120 root reduction |
 | Add a genuinely long-horizon planning route without conflating it with readiness review. | active | `docs/specs/029-northstar-long-horizon-planning.md`, `skills/northstar/references/modes/atlas.md` | Non-Northstar scenario and operator confirmation |
@@ -117,6 +117,8 @@ rollover signal.
   finish notifications enabled, resumes same-child identity on revision, and
   proves all six oracle rows through live launch, exact-head source review, and
   same-child revision)
+- `050-add-chatterbox-intake-channel.md` (active; card 124 implementation
+  complete, PR pending orchestrator exact-head review)
 - `050-add-chatterbox-intake-channel.md` (ready; card 124 handoff published
   after card 120 merged and the installed skill was refreshed)
 
