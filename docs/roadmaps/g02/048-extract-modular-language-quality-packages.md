@@ -1,6 +1,6 @@
 # 048 - Extract Modular Language Quality Packages
 
-Status: active; Batch D ready
+Status: complete; Batch D closed, PR pending orchestrator review
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.033`, promoted spec 034
@@ -34,11 +34,11 @@ before it becomes ready.
 - [x] make the TypeScript package's advertised agent-facing skill standalone
   and repin its replacement identity;
 - [x] extract Rust without weakening its everyday or explicit-audit evidence;
-- [ ] remove both embedded implementations and their bounded migration
+- [x] remove both embedded implementations and their bounded migration
   fallbacks from the root payload;
-- [ ] keep existing consumer activation, profiles, deviations, rule IDs, and
+- [x] keep existing consumer activation, profiles, deviations, rule IDs, and
   evidence readable throughout the migration;
-- [ ] leave Northstar core useful when no language package is installed.
+- [x] leave Northstar core useful when no language package is installed.
 
 ## Execution Plan
 
@@ -75,9 +75,13 @@ before it becomes ready.
   package-specific root branches without stranding missing-package
   acquisition or existing activations. PR 28 passed exact-head review at
   `183b55b` and merged as `ddaae0d`.
-- [ ] **Batch D — root reduction:** card 120 removes both frozen embedded
-  payloads and fallback branches, then proves core-only operation and installed
-  package routing.
+- [x] **Batch D — root reduction:** card 120 deleted both frozen embedded
+  payloads and the bounded fallback (95-file frozen inventory), replaced the
+  three per-language router branches and fallback decision with the generic
+  installed-package route, and proved core-only operation, scoped
+  missing-package containment, and both installed routes through
+  `check:language-package-routes`. Commit `380d20b`; PR pending exact-head
+  review.
 
 ## Acceptance Criteria
 
@@ -119,6 +123,7 @@ before it becomes ready.
 
 ## Next Task
 
-Card 122 merged as `ddaae0d`, and card 120 passed its post-merge readiness
-refresh. Dispatch card 120's bounded root-reduction worker; do not start a new
-language or Sentrux integration.
+Orchestrator: exact-head review of the card-120 PR against `main`, merge, and
+refresh the installed skill. The next planning checkpoint reassesses spec 034
+retention and the open Sentrux triage note; no new language or Sentrux cohort
+starts without an operator decision.

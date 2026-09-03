@@ -1,6 +1,6 @@
 # 120 - Remove Embedded Language Quality Payloads
 
-Status: ready; handoff published
+Status: complete; PR opened for exact-head review
 Owner: repo maintainers
 Updated: 2026-09-03
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -51,20 +51,20 @@ or retain compatibility aliases for deleted embedded implementations.
 
 ## Acceptance Criteria
 
-- [ ] root source and installed payload contain no TypeScript/Rust catalogue,
+- [x] root source and installed payload contain no TypeScript/Rust catalogue,
   engine, workflow mode, setup, fixture, template, thin adapter, or hidden
   fallback implementation;
-- [ ] generic router recognizes declared workflow intent and activation without
+- [x] generic router recognizes declared workflow intent and activation without
   carrying language policy;
-- [ ] core planning, docs, orchestration, review, and setup remain usable with
+- [x] core planning, docs, orchestration, review, and setup remain usable with
   no language packages installed;
-- [ ] a missing package stops only that language workflow with the local install
+- [x] a missing package stops only that language workflow with the local install
   route;
-- [ ] installed TypeScript and Rust packages still pass their production and
+- [x] installed TypeScript and Rust packages still pass their production and
   real-consumer workflows;
-- [ ] existing consumer files and evidence remain valid;
-- [ ] source/install parity reflects the reduced core exactly;
-- [ ] full QA and negative root-payload inventory pass.
+- [x] existing consumer files and evidence remain valid;
+- [x] source/install parity reflects the reduced core exactly;
+- [x] full QA and negative root-payload inventory pass.
 
 ## Review Oracle
 
@@ -127,8 +127,21 @@ pin, rejects malformed or ambiguous intent before acquisition, and checks
 registry/manifest agreement before package code or lifecycle mutation. All
 ready-state checks now pass.
 
+## Closeout
+
+Implemented on `worker/remove-embedded-language-quality-payloads`. The 95-file
+frozen inventory was reproduced exactly and deleted with the fallback; the 19
+integration surfaces were rewired to the generic installed-package route; the
+`rust-package-pin` oracle was replaced by `check:language-package-routes`, the
+two-package/core-only proof. Full evidence, including the negative inventory
+scan and the serialization caveat on the frozen hashes, is in
+`docs/logs/2026-09/03-154324-remove-embedded-language-quality-payloads.md`.
+Review and merge are the orchestrator's; the installed-skill refresh follows
+merge.
+
 ## Next Task
 
-Dispatch one card-120 implementation worker from the frozen 95-file deletion
-inventory. It is the sole ready lane. Do not start a new language or Sentrux
-integration.
+Orchestrator: exact-head review of the card-120 PR against `main`, merge, and
+refresh the installed skill. Do not start a new language or Sentrux
+integration from this lane; the next planning checkpoint reassesses spec 034
+retention and the open Sentrux triage note.

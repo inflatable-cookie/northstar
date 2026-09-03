@@ -18,7 +18,7 @@ single-pilot bucket.
 | Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | card 120 root reduction |
 | Add a genuinely long-horizon planning route without conflating it with readiness review. | active | `docs/specs/029-northstar-long-horizon-planning.md`, `skills/northstar/references/modes/atlas.md` | Non-Northstar scenario and operator confirmation |
 | Preserve useful conversational context and keep `/docs` drift recoverable without blind deletion. | active | `docs/specs/030-conversational-triage-and-docs-cleanup.md`, `docs/contracts/001-working-rules.md`, `skills/northstar/references/modes/cleanup-docs.md` | live triage and cleanup feedback |
-| Raise language-code quality through evidence-bound routed workflows without making every implementation part of the root payload. | active | `docs/contracts/004-language-quality-pack.md`, `docs/architecture/system-architecture.md`, `docs/roadmaps/g02/048-extract-modular-language-quality-packages.md` | card 120 root reduction |
+| Raise language-code quality through evidence-bound routed workflows without making every implementation part of the root payload. | active; extraction complete, PR pending review | `docs/contracts/004-language-quality-pack.md`, `docs/architecture/system-architecture.md`, `docs/roadmaps/g02/048-extract-modular-language-quality-packages.md` | operator checkpoint: Sentrux cohort or new language |
 
 Update this runway only when generation-level intent changes, a milestone
 materially advances or closes a goal, or rollover is being considered. Do not
@@ -103,13 +103,14 @@ rollover signal.
 - `046-add-fresh-orchestrator-continuation.md` (complete; card 114 merged through PR 19 at `b99d19c`)
 - `047-diversify-model-routing-across-runs.md` (complete; PR 20 merged at
   `08ad810` after exact-head review)
-- `048-extract-modular-language-quality-packages.md` (active; cards 117-118
-  complete, the TypeScript standalone adapter repaired in package-source merge
-  `c9ef2a2`, card 121 merged the registry `1.3.0` pin as `69e4d5d`, card 119's
-  registry promotion proved the Rust pin at registry version `1.4.0` and
-  merged as `256d0f7`; Convergence PR 4 repaired its evidence gap and merged
-  as `dff19c9`; card 122 merged the generic selector as `ddaae0d`; card 120 is
-  ready after its post-merge readiness refresh)
+- `048-extract-modular-language-quality-packages.md` (complete pending PR
+  review; cards 117-118 complete, the TypeScript standalone adapter repaired
+  in package-source merge `c9ef2a2`, card 121 merged the registry `1.3.0` pin
+  as `69e4d5d`, card 119's registry promotion proved the Rust pin at registry
+  version `1.4.0` and merged as `256d0f7`; Convergence PR 4 repaired its
+  evidence gap and merged as `dff19c9`; card 122 merged the generic selector
+  as `ddaae0d`; card 120 removed the embedded payloads and fallback,
+  completing Batch D)
 - `049-preserve-paseo-worker-parentage.md` (complete; card 123 preserves
   Paseo worker parentage across dedicated worktree workspace placement, keeps
   finish notifications enabled, resumes same-child identity on revision, and
@@ -118,9 +119,10 @@ rollover signal.
 
 ## Next Task
 
-Dispatch card 120's bounded root-reduction lane. PR 29 merged the preceding
-Paseo worker-parentage correction as `7ebaa9c`, and installed-skill parity is
-current at 199 files.
+Orchestrator: exact-head review of the card-120 PR against `main`, merge, and
+refresh the installed skill (source payload is now 111 files). The operator
+checkpoint that follows owns the Sentrux triage note and any new-language
+cohort.
 
 `g02.048/117` merged through PR 22 at `75db6f5` after proving the generic
 lifecycle. Card 118's public repository merged package PR 1 as `09ef174`, and
@@ -142,7 +144,9 @@ merged as `256d0f7`. Convergence PR 4 passed exact-head review at `792a7c2`
 and merged as `dff19c9`. The removal refresh froze 95 deletion targets and 19
 integration surfaces. Card 122 repaired the missing data-driven selector and
 merged as `ddaae0d`. Card 123's parentage correction merged as `7ebaa9c` and
-the installed skill was refreshed. Card 120 is now the sole ready lane.
+the installed skill was refreshed. Card 120 removed the embedded payloads and
+fallback on `worker/remove-embedded-language-quality-payloads`, closing the
+extraction lane; its PR awaits exact-head review and merge.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and

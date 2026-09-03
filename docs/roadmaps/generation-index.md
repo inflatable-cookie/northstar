@@ -107,8 +107,11 @@ implemented it and merged as `ddaae0d`; card 120 is ready after its post-merge
 refresh. Operator evidence then exposed detached Paseo root workers that do not
 notify their orchestrators. `g02.049/123` rejected its prose-coupled checker,
 proved the behavior through the live child lane and same-child revisions, and
-merged as `7ebaa9c`; installed-skill parity is current. Card 120 is the sole
-ready lane.
+merged as `7ebaa9c`; installed-skill parity is current. Card 120 then removed
+the embedded payloads and fallback, closing `g02.048`'s Batch D: core is
+generic-only (111-file payload) and both installed routes are proven; the PR
+awaits exact-head review and merge, and the installed-skill refresh follows
+merge.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed

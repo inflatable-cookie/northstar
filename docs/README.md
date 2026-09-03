@@ -115,12 +115,15 @@ Northstar system:
   merged as `dff19c9`. Card 119 is complete. The exact embedded-removal
   inventory exposed a missing generic intent/activation selection layer.
   Card 122 implemented it, closed three first-review defects, and merged
-  through PR 28 as `ddaae0d`; card 120 passed its readiness refresh and is
-  ready for bounded root reduction. Milestone `g02.049` (card 123) executed
-  first to correct Paseo worker creation: dedicated workspace isolation and
-  child-agent parentage coexist, with finish notifications enabled and all six
-  oracle rows proven through live launch, exact-head source review, and
-  same-child revision. PR 29 merged that correction as `7ebaa9c`; the installed
-  199-file skill copy now matches source. Card 120 is the sole ready lane.
+  through PR 28 as `ddaae0d`; PR 29 merged the Paseo worker-parentage
+  correction as `7ebaa9c` and the installed 199-file skill copy matched
+  source. Card 120 then removed the embedded
+  payloads and fallback (95-file frozen inventory) on
+  `worker/remove-embedded-language-quality-payloads`: core keeps only generic
+  package discovery, registry, trust, lifecycle, and routing; the payload is
+  111 files; `check:language-package-routes` proves core-only operation,
+  scoped missing-package containment, and both installed routes. Milestone
+  `g02.048` is complete pending the PR's exact-head review and merge; the
+  installed-skill refresh follows merge.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup
