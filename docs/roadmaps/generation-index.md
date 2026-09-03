@@ -95,8 +95,9 @@ consumer/package bytes; four pre-existing editor failures and current-Poodle
 `ResolvedIconGeometry` API drift remain limits. The Rust readiness refresh
 selected Convergence and froze a 54-file source boundary, but also found the
 TypeScript package's standalone `SKILL.md` loaded an absent router.
-Package-source PR 3 repaired it and merged as `c9ef2a2`; card 121 is ready for
-the replacement registry pin. Cards 119-120 remain blocked.
+Package-source PR 3 repaired it and merged as `c9ef2a2`; card 121 pins that
+replacement identity at registry version `1.3.0`. Cards 119-120 remain blocked
+until a separate post-merge readiness refresh.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed

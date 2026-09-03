@@ -1,6 +1,6 @@
 # 121 - Repair TypeScript Package Skill Entrypoint
 
-Status: ready - source repair accepted; registry repin remains
+Status: complete; replacement identity pinned, awaiting exact-head review
 Owner: repo maintainers
 Updated: 2026-09-03
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -48,9 +48,9 @@ everyday authoring, or change the generic package protocol.
 - [x] a missing or escaping adapter path fails package QA;
 - [x] the package version and manifest semantics remain unchanged;
 - [x] source/install parity and existing setup/record proofs still pass;
-- [ ] Northstar's official registry pins the reviewed replacement commit and
+- [x] Northstar's official registry pins the reviewed replacement commit and
   exact digests;
-- [ ] package QA, Northstar QA, skill-install parity, and `git diff --check`
+- [x] package QA, Northstar QA, skill-install parity, and `git diff --check`
   pass.
 
 ## Review Oracle
@@ -72,12 +72,20 @@ everyday authoring, or change the generic package protocol.
 - replacement pinning changes fallback or lifecycle semantics;
 - validation changes the plan.
 
-## Next Task
+## Completion Notes
 
-Repin package-source merge `c9ef2a2e3b70dc68de670767048f26b01b08f929`
-with tree digest
+Northstar registry version `1.3.0` now pins package-source merge
+`c9ef2a2e3b70dc68de670767048f26b01b08f929` with independently reproduced tree
+digest
 `sha256:259cccdbacd7e2e293389efaf72cab005d0c275bd7cb600c99f30bfbfe071843`
 and unchanged manifest digest
 `sha256:e5e32f2baeda2e901b8c327436adf0bfd5955a9de080887660684ad4583185ca`.
-Prove the installed adapter remains package-local. Stop before card 119
-readiness refresh.
+The superseded `d18dc33b` tree is no longer routable. Installed adapter,
+mode, and `$northstar-typescript-audit` agree on the package-local
+entrypoint. Card 119 stays blocked for a separate post-merge readiness
+refresh.
+
+## Next Task
+
+Stop. Orchestrator exact-head review of this pin, then a separate card 119
+readiness refresh. Do not start Rust extraction from this lane.

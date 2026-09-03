@@ -5,7 +5,14 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 
 ## Open
 
-<!-- Keep entries short. Append newest entries at the top. Do not include secrets. -->
+- **2026-09-03 — worker handoff omitted activation metadata and sibling-link field:** handoff
+  `20260903-014833` declares `handoff_mode: worker` without
+  `worker-pr-loop` / `worker_mode` / `dispatch_authority`, and has no
+  `Required sibling worktree links` line; impact is that the worker startup
+  fast path cannot confirm dispatch metadata or distinguish omitted-from-`none`;
+  plausible fix is requiring those fields in the orchestrator-run template and
+  handoff checker; affected surface is
+  `docs/handoffs/20260903-014833-repin-typescript-skill-entrypoint.md`.
 
 - **2026-09-02 — worker handoff omitted required sibling-link field:** handoff
   `20260902-212756` has no `Required sibling worktree links` line (peer

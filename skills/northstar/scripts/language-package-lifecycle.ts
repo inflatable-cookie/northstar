@@ -3114,7 +3114,7 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
     };
     const officialRegistry: RegistryDoc = {
       schema_version: "1.0.0",
-      registry_version: "1.2.0",
+      registry_version: "1.3.0",
       packages: [officialEntry],
     };
     const officialRegistryPath = path.join(out, "official-registry.json");
@@ -3223,7 +3223,7 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
     const officialReceipt = loadReceipt(stateRoot, firstReceiptDigest);
     check(officialReceipt !== null, "official-pin receipt missing");
     const officialTrust = officialReceipt!.trust_class as Record<string, unknown>;
-    check(officialTrust.type === "official" && officialTrust.registry_version === "1.2.0",
+    check(officialTrust.type === "official" && officialTrust.registry_version === "1.3.0",
       "official receipt did not record the actual registry version: " + JSON.stringify(officialTrust));
     check(officialTrust.registry_entry_digest === registryEntryDigest(officialEntry),
       "official receipt did not record the registry entry digest: " + JSON.stringify(officialTrust));

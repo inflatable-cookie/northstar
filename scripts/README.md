@@ -254,8 +254,8 @@ Card 117 extends the same checker with the generic installed-package runtime:
 18. card 118 official registry pin, route, and operational fallback notice:
     the shipped registry carries exactly the accepted
     `@northstar/typescript-quality` `0.1.0` canary identity (replacement
-    commit `d18dc33b` from the reviewed installed-invocation repair) at
-    registry version 1.2.0 (schema conformance plus exact-value assertions),
+    commit `c9ef2a2` from the reviewed standalone-adapter repair) at
+    registry version 1.3.0 (schema conformance plus exact-value assertions),
     official receipts record the actual authorizing registry version and
     entry digest, and the oracle proves the official-pin route: visible
     acquisition stop on failure, detection never acquires, installed offline

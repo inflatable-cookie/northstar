@@ -1,6 +1,6 @@
 # 119 - Extract Rust Language Package
 
-Status: planned; blocked on card 121 TypeScript standalone-entrypoint repair
+Status: planned; blocked on post-merge card 121 readiness refresh
 Owner: repo maintainers
 Updated: 2026-09-03
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -130,11 +130,12 @@ and deviations digest
 
 The same review found that the accepted TypeScript package's agent-facing
 `SKILL.md` loads `references/router.md`, which is absent from the independently
-installed package. Its Effigy workflow proof did not exercise that adapter.
-Card 121 owns the bounded source repair, replacement identity, and core repin.
-Card 119 stays not ready until that serial prerequisite merges.
+installed package. Package-source PR 3 repaired that adapter and merged as
+`c9ef2a2`. Card 121 pins that replacement identity in Northstar. Card 119 stays
+not ready until that pin merges and a separate readiness refresh confirms the
+merged identity.
 
 ## Next Task
 
-Complete card 121, then refresh this card against the merged replacement
+After card 121 merges, refresh this card against the pinned replacement
 identity. Do not launch Rust package work before that dependency clears.
