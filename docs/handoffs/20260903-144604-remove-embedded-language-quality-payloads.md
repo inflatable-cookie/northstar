@@ -117,6 +117,13 @@ breaking planning, orchestration, review, or existing consumer evidence.
   on the pushed tip. Evidence updated in
   `docs/logs/2026-09/03-154324-remove-embedded-language-quality-payloads.md`.
   Awaiting exact-head review and merge by the orchestrator; installed-skill
+  refresh follows merge. Integration refresh: `origin/main` advanced to
+  `287d26f` (spec 035 / `g02.050` / card 124, chatterbox intake) and was
+  merged into this branch with both states preserved on the shared front
+  doors; card 124 remains compiled and serial behind the skill/router/command
+  ownership this removal transfers, with no chatterbox implementation or
+  dispatch from this lane. Full validation rerun green after the merge.
+  Awaiting exact-head review and merge by the orchestrator; installed-skill
   refresh follows merge.
 - **Merge path:** orchestrator after accepted review of the current head and
   passing required checks.
