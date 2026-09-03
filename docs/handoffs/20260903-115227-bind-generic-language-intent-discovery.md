@@ -84,9 +84,12 @@ Here is the state the worker is inheriting:
   and `git diff --check`.
 - **PR base/head:** `main` <- `worker/bind-generic-language-intent-discovery`.
 - **PR URL:** https://github.com/inflatable-cookie/northstar/pull/28
-  (exact tested head `431c496558e8b214f13036ed48e77060736a5052`).
-- **Review state:** worker PR open; awaiting orchestrator exact-head review.
-  All required validation passed at that head; card 120 remains blocked.
+  (validation exact head `91d953acfe5290dd58325f81c4c06e57feb00a7e` after
+  round-1 review repairs; handoff-state-only commits may advance the tip
+  beyond it without touching code, schemas, registry, or fixtures).
+- **Review state:** round-1 findings repaired and revalidated; awaiting
+  orchestrator re-review. All required validation passed at the recorded
+  head; card 120 remains blocked.
 - **Merge path:** orchestrator after accepted review of the current head and
   passing required checks.
 
