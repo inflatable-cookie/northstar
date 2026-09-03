@@ -90,13 +90,14 @@ Roadmaps sequence contract-backed work for Northstar itself.
   `69e4d5d`. Card 119's registry promotion pinned the Rust identity at
   registry version `1.4.0` and proved the real-package lifecycle and
   engine-integrity transcripts. PR 27 merged as `256d0f7`; Convergence PR 4
-  repaired its evidence gap and merged as `dff19c9`. Card 119 is complete;
-  card 120 needs its exact embedded-removal inventory.
+  repaired its evidence gap and merged as `dff19c9`. Card 119 is complete; the
+  removal inventory is frozen, card 122 is ready, and card 120 remains blocked
+  behind generic language intent/activation discovery.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Refresh card 120's exact embedded-removal inventory and apply its ready-state
-rubric. Do not start deletion until the card is ready.
+Run card 122's generic language intent/activation discovery repair. Do not
+start card 120 until that PR is accepted and its readiness is refreshed.

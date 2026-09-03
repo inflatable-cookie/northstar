@@ -15,10 +15,10 @@ single-pilot bucket.
 | Harden setup, nested-authority adoption, and posture classification so downstream repos can install the spine without hand adaptation. | active | `docs/specs/020-formalize-nested-docs-authority-setup.md`, `docs/specs/022-formalize-repo-posture-classification.md` | pending |
 | Keep execution autonomy bounded by ready cards, lane budgets, pause signals, and a file-based orchestrator/worker PR boundary instead of ad-hoc continuation prompts. | active | `docs/contracts/001-working-rules.md`, `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `bundle-docs/sections/07-delivery-framework-and-autonomy.md` | accept operator-provided live feedback |
 | Keep always-loaded agent context useful, human, and bounded while preserving safety, authority, and project intent. | complete | `docs/contracts/003-agent-instruction-surface.md`, `docs/specs/028-agent-instruction-surface-optimization.md` | accept later operator feedback |
-| Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | refresh embedded-removal readiness |
+| Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | card 122 generic language discovery |
 | Add a genuinely long-horizon planning route without conflating it with readiness review. | active | `docs/specs/029-northstar-long-horizon-planning.md`, `skills/northstar/references/modes/atlas.md` | Non-Northstar scenario and operator confirmation |
 | Preserve useful conversational context and keep `/docs` drift recoverable without blind deletion. | active | `docs/specs/030-conversational-triage-and-docs-cleanup.md`, `docs/contracts/001-working-rules.md`, `skills/northstar/references/modes/cleanup-docs.md` | live triage and cleanup feedback |
-| Raise language-code quality through evidence-bound routed workflows without making every implementation part of the root payload. | active | `docs/contracts/004-language-quality-pack.md`, `docs/architecture/system-architecture.md`, `docs/roadmaps/g02/048-extract-modular-language-quality-packages.md` | card 120 readiness inventory |
+| Raise language-code quality through evidence-bound routed workflows without making every implementation part of the root payload. | active | `docs/contracts/004-language-quality-pack.md`, `docs/architecture/system-architecture.md`, `docs/roadmaps/g02/048-extract-modular-language-quality-packages.md` | card 122 generic language discovery |
 
 Update this runway only when generation-level intent changes, a milestone
 materially advances or closes a goal, or rollover is being considered. Do not
@@ -108,7 +108,8 @@ rollover signal.
   `c9ef2a2`, card 121 merged the registry `1.3.0` pin as `69e4d5d`, card 119's
   registry promotion proved the Rust pin at registry version `1.4.0` and
   merged as `256d0f7`; Convergence PR 4 repaired its evidence gap and merged
-  as `dff19c9`; card 119 is complete and card 120 needs its removal inventory)
+  as `dff19c9`; card 119 is complete; the removal inventory is frozen, card
+  122 is ready, and card 120 remains blocked behind generic discovery)
 
 ## Next Task
 
@@ -129,8 +130,9 @@ Card 119's package source passed exact-head review at `7cc4cd0` and merged as
 registry promotion pinned that identity at registry version `1.4.0`, proved
 the real-package lifecycle and installed engine-integrity transcripts, and
 merged as `256d0f7`. Convergence PR 4 passed exact-head review at `792a7c2`
-and merged as `dff19c9`. Refresh card 120's exact embedded-removal inventory
-next; do not start deletion before readiness passes.
+and merged as `dff19c9`. The removal refresh froze 95 deletion targets and 19
+integration surfaces, then found the missing data-driven intent/activation
+selector. Run card 122 next; card 120 remains blocked.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and

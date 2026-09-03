@@ -1,19 +1,21 @@
 # 120 - Remove Embedded Language Quality Payloads
 
-Status: planned; readiness refresh required
+Status: planned; blocked on card 122
 Owner: repo maintainers
 Updated: 2026-09-01
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
 Governing refs: `docs/roadmaps/g02/048-extract-modular-language-quality-packages.md`,
 `docs/architecture/system-architecture.md`,
-`docs/contracts/004-language-quality-pack.md`, cards 116-119
+`docs/contracts/004-language-quality-pack.md`, cards 116-119 and 122
 Auto-start next card: no
 
 ## Ready-State Checks
 
 - [x] TypeScript and Rust packages pass every overlap-close proof;
-- [ ] exact embedded catalogues, modes, scripts, tools, adapters, templates,
+- [x] exact embedded catalogues, modes, scripts, tools, adapters, templates,
   fixtures, router branches, parity entries, and fallback paths are inventoried;
+- [ ] generic intent and existing-activation discovery can select one exact
+  registry entry without a language-specific core branch;
 - [x] deletion and core-only behavior are governed by architecture and contract;
 - [x] no new-language implementation is in scope;
 - [x] review oracle covers hidden fallback and core-only operation.
@@ -110,10 +112,20 @@ or retain compatibility aliases for deleted embedded implementations.
 ## Completion Notes
 
 Cards 116-119 are accepted. Convergence PR 4 supplied the final Rust consumer
-proof and merged as `dff19c9`. Exact embedded removal inventory remains the
-only unchecked readiness prerequisite.
+proof and merged as `dff19c9`. The exact removal inventory is frozen in
+`docs/logs/2026-09/03-095021-refresh-embedded-removal-readiness.md`: 71
+embedded package-source files, 17 bounded-fallback files, and 7 root-only Rust
+production-harness files are deletion targets; 19 integration surfaces require
+replacement or mutation.
+
+The refresh exposed one stop condition. The current root chooses the official
+package through three language-specific router branches. Registry entries bind
+identity but carry no language, overlay, workflow, or existing-activation
+discovery metadata. Removing those branches would make a missing package
+undiscoverable and would strand current consumer activation blocks. Card 122
+owns the generic registry-selection repair before this deletion card.
 
 ## Next Task
 
-Inventory the exact removal scope and apply the ready-state rubric. Do not
-start deletion, a new language, or Sentrux integration automatically.
+Complete card 122, then refresh this rubric against its generic discovery
+surface. Do not start deletion, a new language, or Sentrux integration.

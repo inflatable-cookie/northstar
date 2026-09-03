@@ -112,7 +112,8 @@ Northstar system:
   reproduced 59-file tree, proved the real-package lifecycle and installed
   engine-integrity transcripts, and opened the bounded Rust overlap window.
   PR 27 merged as `256d0f7`; Convergence PR 4 repaired its evidence gap and
-  merged as `dff19c9`. Card 119 is complete. Card 120 now needs its exact
-  embedded-removal inventory before implementation can start.
+  merged as `dff19c9`. Card 119 is complete. The exact embedded-removal
+  inventory exposed a missing generic intent/activation selection layer; card
+  122 is ready and card 120 remains blocked behind it.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup
