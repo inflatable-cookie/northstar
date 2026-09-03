@@ -413,9 +413,9 @@ following authority split:
   canonical planning, decide readiness, or implement;
 - a **chatterbox** owns one operator-facing intake conversation and problem
   identification, shares the orchestrator's checkout, writes only unique
-  timestamped triage files, and optionally sends an idle-only Paseo intake ping
-  to the orchestrator; it does not implement, promote, review, merge, dispatch,
-  or reserve topics;
+  timestamped triage files, and reports them to the operator with no
+  orchestrator turn in v1; it does not implement, promote, review, merge,
+  dispatch, or reserve topics;
 - the **operator** answers unresolved questions, may override worker-profile
   selection, starts or relays manual runs, resolves material permission
   requests, and may pause or override the lane before merge.

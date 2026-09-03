@@ -48,6 +48,7 @@ favor of stable structural/wiring checks and executable fixtures.
 | `docs/architecture/system-inventory.md` | No chatterbox thread or interface | Adds chatterbox thread to surfaces and Chatterbox intake to interfaces |
 | `docs/architecture/system-architecture.md` | Topology lacked chatterbox | Thread topology includes chatterbox intake; architecture describes role and git/intake protocol |
 | `docs/triage/README.md` & `template-bundle/triage/README.md` | General triage instructions | Adds chatterbox intake rule: shared checkout, unique files only, exact-path git isolation |
+| `docs/README.md` | Chatterbox listed with idle ping | Updates chatterbox intake to operator-visible note handoff with no orchestrator turn in v1 |
 | `bundle-docs/operators/operator-quick-start.md` | No chatterbox routing | Adds chatterbox to mode choices and prompt examples |
 | `bundle-docs/glossary.md` | No chatterbox definition | Defines Chatterbox under Agent and Thread Concepts |
 | `scripts/lib/northstar-repo-contract-data.rhai` | 6 active authority files, 111 required skill files | Adds spec 035, `chatterbox.md`, `commands/northstar-chatterbox/SKILL.md`, and chatterbox git isolation test fixtures |
