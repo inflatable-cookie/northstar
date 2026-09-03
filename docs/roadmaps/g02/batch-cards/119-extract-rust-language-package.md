@@ -1,6 +1,6 @@
 # 119 - Extract Rust Language Package
 
-Status: ready
+Status: active; package source accepted, registry promotion ready
 Owner: repo maintainers
 Updated: 2026-09-03
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -136,8 +136,21 @@ Card 121 pinned that identity at registry version `1.3.0` and merged as
 the superseded tree failed closed, and full Northstar QA passed. The serial
 prerequisite is clear.
 
+Rust package-source PR 4 passed exact-head review at
+`7cc4cd018e82f45a411bb40b300028925d649cb6` and squash-merged as
+`56b2e1107b80f369807cff88e1b0253df035c700`. The accepted 59-file
+`@northstar/rust-quality` `0.1.0` candidate has raw spec-034 tree digest
+`sha256:e5cf9c5da4a30c0f5164f2ea0c5e9d87d544c0c32f09f3c139a386c56154dba0`
+and manifest digest
+`sha256:dd71d04efd67cc7805f417a79666dd920ea1811ee252d941108dfbeca8aab612`.
+Independent review reproduced both identities, package/repository QA passed,
+and the pre-extraction engine produced a v2 ledger finalized by the installed
+engine. Registry promotion is now the ready serial step; the Convergence
+consumer canary remains behind its reviewed merge.
+
 ## Next Task
 
-Dispatch the external Rust package-source lane from the current 54-file source
-pin. Stop after a reviewed immutable package candidate; registry promotion and
-the Convergence canary remain later serial steps.
+Pin the accepted Rust package identity, prove generic acquisition, installed
+routing, rollback, offline behavior, the bounded visible fallback, and
+Rust-only retained inventory. Stop after exact-head review and merge; the
+Convergence canary remains a separate serial step.

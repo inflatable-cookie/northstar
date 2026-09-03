@@ -1,6 +1,6 @@
 # 048 - Extract Modular Language Quality Packages
 
-Status: active; Batch B.1 pin awaiting review; Batch C still blocked
+Status: active; Batch C registry promotion ready
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.033`, promoted spec 034
@@ -59,8 +59,10 @@ before it becomes ready.
   the missing local router reference and merged as `c9ef2a2`; card 121 pins
   that accepted identity at registry version `1.3.0` and proves installed
   adapter path closure without changing policy.
-- [ ] **Batch C — Rust extraction:** card 119 publishes, pins, installs, and
-  proves Rust everyday authoring plus explicit audit and its Cargo engine.
+- [ ] **Batch C — Rust extraction:** package-source PR 4 passed exact-head
+  review at `7cc4cd0` and merged as `56b2e11`, fixing the immutable candidate
+  at tree `sha256:e5cf9c5d...54dba0`. Card 119 now pins and proves that accepted
+  source before the separate Convergence canary.
 - [ ] **Batch D — root reduction:** card 120 removes both frozen embedded
   payloads and fallback branches, then proves core-only operation and installed
   package routing.
@@ -105,6 +107,5 @@ before it becomes ready.
 
 ## Next Task
 
-Dispatch card 119's external Rust package-source lane from Northstar
-`69e4d5d` and the frozen 54-file inventory. Stop after its reviewed immutable
-candidate before core registry promotion.
+Dispatch card 119's Northstar registry-promotion step for accepted Rust source
+merge `56b2e11`. Stop after its reviewed merge before the Convergence canary.

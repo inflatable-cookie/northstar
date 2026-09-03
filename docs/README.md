@@ -107,7 +107,8 @@ Northstar system:
   54-file source boundary, but found the external package's agent-facing
   `SKILL.md` loaded an absent router. Package-source PR 3 repaired it and
   merged as `c9ef2a2`; card 121's registry `1.3.0` pin merged as `69e4d5d`.
-  Card 119 is ready from the re-derived 54-file source boundary and selected
+  Rust package-source PR 4 merged as `56b2e11`; card 119's registry-promotion
+  step is ready from its accepted 59-file package identity and selected
   Convergence canary; card 120 remains blocked behind Rust proof.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup
