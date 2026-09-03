@@ -106,6 +106,35 @@ invariants in-process.
 
 All passed at the exact head recorded in the PR description.
 
+## Exact-head review round 2 (2026-09-03, PR 28)
+
+CHANGES REQUESTED on `8e9734b`, three findings, all repaired on this branch:
+
+- **`execution-miss` — select CLI accepted malformed queries:** the CLI now
+  enforces the documented two-shape grammar exactly. Unknown flags
+  (`--overaly`), duplicate flags, mixed marker+intent queries,
+  shape-inapplicable flags (`--overlay` with `--marker`), and valueless
+  flags all fail closed before any selection. CLI counterexamples live in
+  oracle-16 and five checker grammar cases.
+- **`oracle-gap` — selection result lacked immutable identity:** `--json`
+  now returns the exact selected identity — package ID, version, core
+  range, tree digest, manifest digest, plus repository, subpath, and commit
+  when pinned. The checker asserts the accepted card-119/121
+  commit/tree/manifest values exactly on two selection paths, so a same
+  ID/version repin to a drifted identity fails QA; oracle-16 additionally
+  proves the result distinguishes a same-ID/version tree drift against the
+  independent digest vectors.
+- **`execution-miss` + `oracle-gap` — drift gated only at resolve:**
+  `acquireAndActivate` now compares registry discovery with the
+  identity-verified staged manifest before self-check, receipt, or any
+  lifecycle mutation (official pins; allowlist behavior unchanged), and the
+  already-installed fast route applies the same gate. Oracle-18's
+  acquisition counterexample stages a sentinel-self-check variant: a
+  drifted registry stops acquisition with the pre-self-check boundary
+  named, the sentinel proves package code never executed, no receipt or
+  lifecycle state is written, and the consumer stays byte-identical; the
+  agreeing control activates with the sentinel present.
+
 ## Limits
 
 Card 120 is untouched: embedded payloads, the three mode files, and both

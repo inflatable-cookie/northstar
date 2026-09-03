@@ -92,6 +92,15 @@ and sixteen selection CLI cases (positives plus fail-closed negatives);
 oracle-16/17/18 falsify the card's seven review rows inside the lifecycle
 oracle. Evidence: `docs/logs/2026-09/03-123500-bind-generic-language-selection.md`.
 
+First review round (PR 28) found three in-bounds defects, all repaired: the
+`select` CLI now enforces its two-shape grammar exactly (unknown, duplicate,
+mixed, shape-inapplicable, and valueless flags fail closed); the `--json`
+result returns the exact selected commit/tree/manifest identity, asserted
+against the accepted pins; and registry/manifest discovery agreement now
+gates acquisition before self-check, receipt, or lifecycle mutation (with a
+sentinel-self-check counterexample proving package code never runs on
+drift), not only a later resolve.
+
 ## Review Oracle
 
 | Invariant | Smallest counterexample | Expected stop or proof |
