@@ -301,6 +301,22 @@ informal habits.
   push, review, or merge. It stops on ambiguity. The orchestrator reviews the
   full diff and owns Git/provider mutations.
 
+### Chatterbox intake channel
+
+- An operator may start a chatterbox directly without a handoff or worktree, or
+  ask the orchestrator to spawn one for exploratory problem intake.
+- In Paseo, create a `local` workspace for the same project and checkout, select
+  from the adequate conversational pool, apply the capitalized
+  `Chatterbox=true` label, and set `notifyOnFinish: false`.
+- Chatterboxes share the orchestrator's checkout and write only unique
+  `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files, committed with exact-file
+  `git add`. They do not create worktrees, branches, or PRs.
+- Chatterboxes may send an idle-only intake ping to an idle `Orchestrator=true`
+  agent; running orchestrators are not interrupted.
+- The orchestrator treats chatterbox prompts as non-assignment intake, does not
+  promote or change work from the ping, and inspects the note at its next triage
+  checkpoint.
+
 ### Issue-fix dispatch
 
 - Dispatch a reported defect as one outcome-scoped lane covering reproduction,

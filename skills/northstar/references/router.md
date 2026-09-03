@@ -260,6 +260,28 @@ Choose one:
 | Change still in provisional specs | [`shape-with-specs-and-promote.md`](./modes/shape-with-specs-and-promote.md) |
 | Canonical surfaces exist; need milestones/cards | [`compile-roadmaps.md`](./modes/compile-roadmaps.md) |
 
+## 15. Chatterbox intake
+
+Use when the operator wants an independent, conversational thinking partner to
+explore one feature, issue, or side idea, or when the thread is already a
+chatterbox:
+
+- `northstar chatterbox`;
+- `/northstar-chatterbox`;
+- "you're a chatterbox on X", or exploratory intake chat with no handoff;
+- an already-spawned chatterbox thread.
+
+This is an internal mode of the single public `northstar` authority. A chatterbox
+shares the orchestrator's checkout, creates unique timestamped `docs/triage/`
+notes with exact-file `git add`, and optionally sends an idle-only intake ping to
+an idle orchestrator. It does not create worktrees, branches, or PRs.
+
+**Precedence:** Explicit orchestrator, worker, planning-delegate, continuation,
+or PR-review requests keep those routes. A chatterbox asked to implement,
+promote, dispatch, review, or merge refuses and points at the orchestrator.
+
+→ [`modes/chatterbox.md`](./modes/chatterbox.md)
+
 ## Orchestrator-continuation activation
 
 This path applies **only** when a committed handoff declares all three fields:

@@ -5,8 +5,8 @@ Owner: repo maintainers
 Created: 2026-08-16
 Updated: 2026-09-03
 Related research: `bundle-docs/research/translation-memos/northstar-orchestrator-thread.md`
-Related specs: `docs/specs/035-chatterbox-intake-channel.md` (compiled; not yet
-implemented — operator-facing intake threads beside the orchestrator)
+Related specs: `docs/specs/035-chatterbox-intake-channel.md` (implemented —
+operator-facing intake threads beside the orchestrator)
 Governing architecture: `docs/architecture/system-architecture.md`
 Governing contracts: `docs/contracts/001-working-rules.md`, `docs/contracts/002-agent-local-paths.md`
 
@@ -165,6 +165,7 @@ before chat summarizes the result.
 | --- | --- | --- |
 | Operator | answers unresolved questions, may override the selected worker profile, starts or relays manual runs, resolves material permission requests, and may pause or override a merge | that one thread can see another thread's private history |
 | Orchestrator | discovery, intent summary, promoted planning, ready runway, per-worker handoff, optional adapter dispatch, PR review verdict, gated merge, closeout | that a worker's narrative or control-plane state substitutes for repository/diff/check evidence |
+| Chatterbox | direct operator intake conversation, problem exploration, unique triage-file capture on shared checkout, optional idle orchestrator ping | canonical planning, readiness, implementation, review, merge, worker dispatch, or a reserved topic |
 | Planning delegate | direct operator discovery for one named topic, bounded triage/research capture, read-only research coordination, commits, and planning PR | canonical promotion, readiness, implementation, merge, or authority outside its handoff |
 | Documentation projection subagent | mechanically materializes an exact orchestrator brief into named docs and deterministic validation | planning choices, semantic promotion, readiness/completion judgment, code edits, commit/push, review, or merge |
 | Worker | bounded diagnosis and implementation in its worktree, card execution, tests, commits, evidence, PR creation | new architecture, missing contracts, or scope expansion |
@@ -217,7 +218,7 @@ directly with the operator. It captures operator-confirmed decisions,
 recommendations, alternatives, evidence, non-goals, and unresolved questions
 distinctly.
 
-The delegate may spawn bounded read-only research subagents or advisors. They
+The delegate may spawn bounded read-only research subagents. They
 return sourced findings to the delegate and do not edit the repository, create
 worktrees/branches/PRs, contact the operator, or start nested orchestrator or
 implementation lanes. The delegate reconciles their results into the named

@@ -102,7 +102,7 @@ launches a manually isolated thread from the absolute handoff.
 
 The delegate records operator-confirmed decisions, its recommendations,
 alternatives, evidence, non-goals, and unresolved questions distinctly. It may
-spawn bounded read-only research subagents or advisors. They return sourced
+spawn bounded read-only research subagents. They return sourced
 findings to the delegate; they do not edit, create worktrees/branches/PRs,
 contact the operator, or start nested orchestrator or implementation lanes. The
 delegate reconciles their output before writing the packet. Select research
@@ -126,6 +126,35 @@ canonical destinations, promote settled meaning, and remove or split resolved
 triage notes. Only after that separate promotion batch may the orchestrator
 decide readiness or dispatch implementation. Mechanical documentation
 projection may materialize the already-settled promotion, but cannot choose it.
+
+## Chatterbox spawn and intake
+
+When the operator explicitly asks the orchestrator to spawn a chatterbox thread
+for an issue, feature idea, or exploratory chat, the orchestrator launches an
+independent intake thread without a handoff file.
+
+In Paseo:
+- create a separate `local` workspace for the same project and checkout;
+- reject the transport plan if it uses `branch-off` worktree isolation or a
+  different project path;
+- apply the capitalized label `Chatterbox=true` on the agent; reject launch
+  configuration if that label is omitted or lowercased;
+- set `notifyOnFinish: false` so long-running idle chatterbox turns do not spam
+  the parent orchestrator;
+- select from the adequate operator-facing conversational pool in current
+  profile notes under the diversified-routing rule; an explicitly named
+  profile overrides selection;
+- use the operator's topic as the initial prompt, naming chatterbox mode;
+- retain the returned workspace and agent identities; do not poll.
+
+Without Paseo, tell the operator to start a thread on the same checkout and
+invoke `/northstar-chatterbox` or `northstar chatterbox`.
+
+Chatterboxes share the checkout and write only unique `docs/triage/` files. When
+a chatterbox finishes a note, it may send a small idle-only prompt to an idle
+orchestrator. The orchestrator treats that prompt as intake only: record the note
+path, do not promote from the ping, and do not change current work. Inspect the
+note at the next normal triage checkpoint.
 
 ## Fresh orchestrator continuation
 
@@ -631,6 +660,8 @@ Select by capability:
 - orchestrator continuations and operator-facing planning delegates: the
   adequate orchestrator-role pool, rotated by the same rule; an explicitly
   named profile wins;
+- chatterbox threads: the adequate operator-facing conversational pool,
+  rotated by the same rule; an explicitly named profile wins;
 - orchestrator discovery, material review, and review-oracle design:
   frontier/high effort;
 - exact mechanical documentation projection: fast/low-cost profile, low or
@@ -699,6 +730,7 @@ Stop and return to planning or the operator when:
   duplicate workspace, worker, or successor orchestrator;
 - continuation launch would need a Paseo product/API change, a workspace-label
   field, or browser/computer-use pinning;
+- chatterbox spawn would use worktree isolation or enable finish notifications;
 - an implementation worker or ordinary subagent would need to start a nested
   orchestrator or worker lane. A planning delegate may use only the bounded
   read-only research subagents defined above;

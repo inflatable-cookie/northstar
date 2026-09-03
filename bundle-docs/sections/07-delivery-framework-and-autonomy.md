@@ -804,6 +804,35 @@ the complete diff for semantic fidelity and owns Git/provider mutations. Use the
 split for roughly three or more related surfaces, or another batch large enough
 to repay dispatch and review overhead; keep tiny edits local.
 
+## Chatterbox intake channel
+
+An operator may run independent conversational intake threads — called
+**chatterboxes** — beside the main orchestrator to explore ideas, issues, and
+feature proposals without interrupting active dispatch, review, or execution.
+
+- **Start:** The operator starts a chatterbox directly with no handoff file or
+  worktree, or asks the orchestrator to spawn one.
+- **Paseo spawn:** In Paseo, the orchestrator creates a `local` workspace for the
+  same project and checkout (rejecting `branch-off` isolation or a different
+  project path), applies the capitalized `Chatterbox=true` label, sets
+  `notifyOnFinish: false`, and selects from the adequate operator-facing
+  conversational pool under the diversified-routing rule.
+- **Shared checkout and Git:** Chatterboxes share the orchestrator's checkout.
+  They write only unique `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files and
+  commit with `git add -- <exact-file>`. They never use `git add .`, edit
+  `README.md` or code, create worktrees/branches/PRs, or modify non-triage files.
+- **Idle-only Paseo ping:** When a note is written, a chatterbox may send a
+  small prompt to a same-project agent labelled `Orchestrator=true` only if that
+  orchestrator is **idle** (with `notifyOnFinish: false`). If the orchestrator is
+  running, ambiguous, or absent, the ping is skipped and the note remains on
+  disk.
+- **Orchestrator intake handling:** The orchestrator treats an intake prompt as
+  non-assignment information: it records the path, does not promote from the ping,
+  does not change current work, and inspects the note at its next triage checkpoint.
+- **Authority boundary:** A chatterbox is not a planning delegate, worker,
+  continuation, or `paseo-advisor`. It cannot implement, promote, review, merge,
+  dispatch, or reserve topics.
+
 ## Orchestrator merge authority
 
 An operator who starts a Northstar orchestrator-owned worker or planning-

@@ -23,6 +23,11 @@ frontmatter or body shape. Capture a useful thought before following one branch
 of a conversation deeply, but do not treat a note as an approved contract,
 roadmap item, or implementation request.
 
+Chatterboxes share the working checkout and write only new unique triage files
+here without modifying `README.md` or any other path. They commit with
+`git add -- <exact-file>`. They do not create worktrees, branches, or PRs, and
+do not acquire promotion or execution authority.
+
 Refresh and cleanup should inspect every note and give it a disposition:
 promote or rework it into its canonical home, merge it with a useful note, or
 remove it when it is implemented, superseded, or no longer useful. Ask the
