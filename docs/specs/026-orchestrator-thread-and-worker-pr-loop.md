@@ -5,6 +5,8 @@ Owner: repo maintainers
 Created: 2026-08-16
 Updated: 2026-09-03
 Related research: `bundle-docs/research/translation-memos/northstar-orchestrator-thread.md`
+Related specs: `docs/specs/035-chatterbox-intake-channel.md` (compiled; not yet
+implemented — operator-facing intake threads beside the orchestrator)
 Governing architecture: `docs/architecture/system-architecture.md`
 Governing contracts: `docs/contracts/001-working-rules.md`, `docs/contracts/002-agent-local-paths.md`
 

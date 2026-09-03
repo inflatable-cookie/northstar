@@ -108,7 +108,8 @@ refresh. Operator evidence then exposed detached Paseo root workers that do not
 notify their orchestrators. `g02.049/123` rejected its prose-coupled checker,
 proved the behavior through the live child lane and same-child revisions, and
 merged as `7ebaa9c`; installed-skill parity is current. Card 120 is the sole
-ready lane.
+ready lane. Spec 035 / `g02.050` / card 124 compiles a chatterbox intake
+channel and stays serial behind card 120's skill/router/command ownership.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed
