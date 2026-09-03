@@ -71,6 +71,8 @@ Modular language-package extraction `g02.048` is active. Cards 117 and 118 are
 complete. The accepted Jetstream canary proved installed routing, the visible
 bounded fallback, and consumer/package byte preservation. The Rust readiness
 refresh selected Convergence and froze a 54-file source boundary, but found the
-TypeScript package's agent-facing `SKILL.md` loads an absent router. Card 121 is
-ready for that bounded source repair and replacement registry pin. Cards
-119-120 remain blocked.
+TypeScript package's agent-facing `SKILL.md` loads an absent router. Card 121
+merged as `69e4d5d`, card 119 merged as `256d0f7`, and card 122 merged as
+`ddaae0d`.
+Paseo worker-parentage correction `g02.049/123` is complete; card 120 is ready
+for bounded root reduction after card 123's reviewed merge.

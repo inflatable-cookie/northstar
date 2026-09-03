@@ -376,23 +376,31 @@ batch large enough to repay dispatch and review; keep tiny edits local.
      worker to discover a broken dependency topology;
    - materialize the selected profile into `create_agent`: combine its provider
      and model as the provider value, copy mode/thinking/features into settings,
-     place it in that workspace, leave finish notification enabled, and use only
-     `Read and follow <absolute-handoff-path>.` as the initial prompt;
+     place it in that workspace using the returned workspace ID, leave finish
+     notification enabled (`notifyOnFinish: true`), and use only
+     `Read and follow <absolute-handoff-path>.` as the initial prompt. Workspace
+     placement does not detach parentage: this must be the current
+     orchestrator's agent-scoped `create_agent` call so Paseo delivers finish,
+     error, and permission notifications to the parent. A top-level/root-agent
+     launch, schedule, generic detached run, or CLI path without explicit parent
+     attachment is rejected as non-equivalent; reject launch configuration if
+     finish notifications are disabled;
    - retain the returned agent and workspace IDs as lane transport state so
      review follow-ups target the originating worker rather than a replacement;
    - trust finish and permission notifications; do not poll agent status. Use
      `send_agent_prompt` on the same agent for bounded continuation or requested
-     changes;
+     changes; do not create a replacement worker when changes are requested;
    - return permission requests to the operator unless existing explicit
      authority settles the exact action.
 
    Do not invoke `/paseo-handoff` for a worker, planning delegate, or
    orchestrator continuation: it creates a
    second briefing and would compete with the committed Northstar handoff. If
-   required tools are absent, use manual
-   dispatch without treating `paseo.json` as a substitute runtime signal. If
-   setup fails, preserve and report any created workspace or agent identity; do
-   not silently retry into a duplicate worker.
+   required scoped tools are absent, use manual
+   dispatch with the absolute handoff path without pretending parentage exists
+   or treating `paseo.json` as a substitute runtime signal. If setup fails,
+   preserve and report any created workspace or agent identity; do not
+   silently retry into a duplicate worker or poll status.
 10. **Handle worker reports.** Treat direct adapter reports and operator-relayed
     reports as status evidence, not authority. After each chunk, reconcile
     card/log state and name the next report or action needed. If the worker
@@ -415,10 +423,11 @@ batch large enough to repay dispatch and review; keep tiny edits local.
    orchestrator repairs canonical planning.
    Posting review comments does not wake a finished worker. After every
    `changes requested` verdict is recorded on the PR, send an explicit follow-up
-   to the originating worker through the active adapter. In Paseo, call
+   to the originating worker through the active adapter.    In Paseo, call
    `send_agent_prompt` with the retained agent ID and tell it to read the posted
    PR findings, repair only the in-bounds requested scope, validate, push, and
-   notify on finish. If the original worker is unavailable, give the review to
+   notify on finish. Resume the same child agent; do not silently create a
+   replacement worker. If the original worker is unavailable, give the review to
    the operator for relay; do not silently create a replacement worker. A
    `planning-change` still returns to canonical planning before this follow-up.
    For a planning-delegate PR, replace card/implementation conformance with the

@@ -5,7 +5,7 @@ handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
 handoff: single-file-path-only
-status: ready-to-launch
+status: awaiting-review
 owner: repo maintainers
 created: 2026-09-03
 updated: 2026-09-03
@@ -45,14 +45,18 @@ orchestrators from substituting a detached top-level launch.
 - **Planning artifacts at the base:** updated spec 026, milestone `g02.049`,
   card 123, planning log, and front-door state.
 - **Worker branch:** `worker/preserve-paseo-worker-parentage`
-- **Worker worktree:** Paseo-managed dedicated worktree; use the actual launcher
-  path.
+- **Worker worktree:** Paseo-managed dedicated worktree at
+  `/Users/tom/.paseo/worktrees/37pj4ag8/preserve-paseo-worker-parentage` (workspace `wks_0ac25c3a34f16567`).
+- **Live launch record:** workspace `wks_0ac25c3a34f16567` created first;
+  child agent `3b92a429-64ec-4d31-a85b-bd97fd5b49d2` created from orchestrator
+  scope with `notifyOnFinish: true`; status snapshot records parent label
+  `paseo.parent-agent-id=ea5b027e-e772-4209-861a-25aa8d12ca29`.
 - **Worktree creation:** Paseo `branch-off` from pushed `origin/main`.
 - **Required sibling worktree links:** none.
 - **Active spec lane:** `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`
 - **Roadmap milestone:** `docs/roadmaps/g02/049-preserve-paseo-worker-parentage.md`
 - **Ready cards:** `docs/roadmaps/g02/batch-cards/123-preserve-paseo-worker-parentage.md`
-- **Allowed runway:** card 123 only; one card.
+- **Allowed runway:** card 123 only; one card (complete).
 - **Dispatch topology:** sole launched lane. Card 120 remains ready but serial
   behind this lane because both own the skill payload and closeout surfaces.
 - **Surfaces this lane owns:** working rules, reusable doctrine, copy-ready
@@ -65,19 +69,20 @@ orchestrators from substituting a detached top-level launch.
 - **Canonical refs:** `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`;
   `docs/contracts/001-working-rules.md`;
   `bundle-docs/sections/07-delivery-framework-and-autonomy.md`.
-- **Review oracle:** milestone 049's six rows.
+- **Review oracle:** milestone 049's six rows (all 6 rows falsified).
 - **Model capability profile:** bounded documentation/skill propagation with
   deterministic checks; choose a cheap adequate non-frontier profile.
 - **Frontier-worker justification:** none.
 - **Tool/runtime restrictions:** no Paseo product/CLI changes, no
   `.github/workflows/`, release mutation, browser/computer-use, provider/model
   policy change, language-package change, or card-120 work.
-- **Required validation:** `effigy check:command-skills`, isolated
+- **Required validation:** `effigy check:worker-parentage`,
+  `effigy check:command-skills`, isolated
   `effigy check:skill-install skills/northstar`, `effigy qa:docs`, `effigy qa`,
   and `git diff --check`.
 - **PR base/head:** `main` <- `worker/preserve-paseo-worker-parentage`.
 - **PR URL:** pending.
-- **Review state:** implementation not started.
+- **Review state:** implementation complete; awaiting orchestrator exact-head review.
 - **Merge path:** orchestrator after accepted review of the exact current head
   and passing required checks.
 

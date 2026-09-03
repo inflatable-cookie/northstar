@@ -567,9 +567,13 @@ Before a worker starts:
 - the operator receives that handoff's absolute path as the only dispatch
   artifact;
 - when the current orchestrator thread exposes the required control-plane
-  tools, the orchestrator gives that same path to a worker created in one
-  isolated workspace for the lane without another permission prompt; otherwise
-  the operator launches the worker manually;
+  tools, workspace placement and agent parentage are separate: the
+  orchestrator creates the lane's dedicated worktree workspace first, then
+  creates the worker as a child agent from its own scoped surface using that
+  returned workspace ID and finish notifications enabled, without another
+  permission prompt; top-level/root-agent launches, schedules, generic
+  detached runs, or unproven CLI substitutes are rejected; otherwise the
+  operator launches the worker manually;
 - the handoff lists required sibling worktree links (absolute primary
   checkouts and the link name in the worktree container directory) or `none`;
 - the worker performs a quick startup preflight before broad reads: repository
@@ -647,7 +651,8 @@ possible, followed by another review cycle. Provider review comments are durable
 evidence, not a worker wake-up mechanism: after posting a `changes requested`
 verdict, an orchestrator with an active control plane sends an explicit follow-up
 to the originating agent. Paseo uses `send_agent_prompt` with the retained agent
-ID. The orchestrator does not silently replace an unavailable worker.
+ID. The orchestrator resumes the same child agent; it does not silently replace
+an unavailable worker or create a detached replacement.
 
 Every merge-blocking finding is classified as `execution-miss`, `oracle-gap`,
 `planning-change`, `validation-gap`, or `integration-drift`. A
@@ -675,10 +680,14 @@ hosted coding agents. Those are optional adapters; they must not weaken the
 file-based planning, worktree, PR, and review boundaries. When the current
 orchestrator thread exposes the required control-plane tools, their injection
 authorizes routine transport for ready worker lanes: the orchestrator selects a
-current role profile, creates the lane's worktree workspace, launches a worker
-with the single absolute handoff path, trusts finish notifications instead of
-polling, and sends bounded follow-ups to the same agent without another
-permission prompt. An operator-named profile overrides automatic profile
+current role profile, creates the lane's dedicated worktree workspace, creates
+the worker as a child agent from its own agent-scoped tool context with that
+returned workspace ID, leaves finish notifications enabled (`notifyOnFinish: true`),
+trusts finish notifications instead of polling, and sends bounded follow-ups to
+the same child agent without another permission prompt. Workspace placement
+does not detach parentage. A top-level/root-agent launch, schedule, generic
+detached run, or CLI path without explicit parent attachment is rejected as
+non-equivalent. An operator-named profile overrides automatic profile
 selection. A repository `paseo.json` configures project lifecycle capability;
 it is not a substitute runtime signal. Adapter profile names, IDs, messages,
 and status are transport metadata, never repository authority. A generic
@@ -688,7 +697,9 @@ contract choices, material permission requests, destructive workspace cleanup,
 review, merge, or duplicate retries. Merge authority comes from the active
 orchestrator lane and its accepted review/check gate, not from Paseo. Permission
 requests return to the operator unless existing explicit authority settles the
-exact action. Manual launch and operator relay remain the required fallback.
+exact action. Manual launch and operator relay remain the required fallback when
+scoped tools are absent, returning the absolute handoff path without pretending
+parentage exists.
 
 ### Automation runtime policy
 

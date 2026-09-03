@@ -108,14 +108,17 @@ preflight. The source yields the transferred lane after pushed dispatch.
   safe ready dependency frontier without a global thread budget, lane-local
   provider/profile routing, diversified economical worker routing (adequate
   pool, cheapest adequate tier, recent-use rotation) with frontier workers
-  only when both escalation axes hold, optional
-  operator-facing frontier planning delegates with orchestrator-owned promotion,
-  optional fresh-orchestrator continuation through a pushed seven-section
-  handoff and a separate local workspace with `Orchestrator=true`,
-  one pushed worker handoff under `docs/handoffs/` per launched lane, optional
-  fast/low-cost mechanical documentation projection under frontier semantic
-  review, bounded PR review/revision, and accepted-review plus check-gated merge
-  without a second operator prompt.
+  only when both escalation axes hold, Paseo worker parentage preserved
+  across dedicated worktree workspace placement (scoped cross-workspace child
+  creation, finish notifications enabled, no detached root launches,
+  same-agent revision resume), optional operator-facing frontier planning
+  delegates with orchestrator-owned promotion, optional fresh-orchestrator
+  continuation through a pushed seven-section handoff and a separate local
+  workspace with `Orchestrator=true`, one pushed worker handoff under
+  `docs/handoffs/` per launched lane, optional fast/low-cost mechanical
+  documentation projection under frontier semantic review, bounded PR
+  review/revision, and accepted-review plus check-gated merge without a second
+  operator prompt.
 - **Handoff:** a human-friendly seven-section file under `docs/handoffs/`, with
   an absolute path returned to the operator; not a substitute for log/roadmap
   closeout.

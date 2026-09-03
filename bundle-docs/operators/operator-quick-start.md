@@ -125,6 +125,16 @@ operator receives each handoff's absolute path; no second prompt or copied
 context is needed. Each handoff lists sibling repos to symlink into the worktree
 container directory before project setup needs them.
 
+In Paseo, workspace isolation and agent parentage are separate: the
+orchestrator creates each lane's dedicated worktree workspace first, then
+creates the worker as a child agent from its own scoped surface using that
+returned workspace ID. Workspace placement does not detach parentage. Detached
+root launches, schedules, generic detached runs, or unproven CLI substitutes are
+rejected. Finish notifications remain enabled so the orchestrator receives
+completion and resumes the same child for revisions. Without Paseo or when
+scoped tools are absent, you get every absolute handoff path for manual launch
+without pretended parentage.
+
 You do not have to ask for parallel workers. The orchestrator plans ready work
 as a dependency graph and launches every safe lane without a global thread budget.
 A provider spend cap, quota, rate limit, or unavailable profile pauses

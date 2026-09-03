@@ -149,6 +149,23 @@ mode, generic template, and skill outcome. The set includes
 `/northstar-typescript-audit` for TypeScript/Svelte. It is included in
 `effigy qa:docs`.
 
+## Worker-parentage contract (`check:worker-parentage`)
+
+Run `effigy check:worker-parentage` directly or through `effigy qa:docs`.
+
+The worker-parentage checker asserts the six milestone `g02.049` (card 123)
+review oracle rows across spec 026, working rules, architecture, orchestrator
+mode, delivery doctrine, working-rules template, operator guidance, skill
+outcomes, and the protocol kernel:
+1. isolation and parentage coexist (ordered workspace then scoped child creation);
+2. workspace placement does not detach parentage;
+3. detached roots, schedules, generic detached runs, and unproven CLI launches are rejected;
+4. finish notifications are structural and enabled;
+5. revisions resume the same child agent identity;
+6. provider neutrality survives with manual fallback when scoped tools are absent.
+
+It is included in `effigy qa:docs`.
+
 ## Readiness-map frontier (`check:readiness-map`)
 
 The readiness-map checker is read-only and fail-closed. It scans live readiness

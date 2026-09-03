@@ -1,6 +1,6 @@
 # 049 - Preserve Paseo Worker Parentage
 
-Status: active; card 123 ready
+Status: complete (card 123 executed and verified)
 Owner: repo maintainers
 Created: 2026-09-03
 Depends on: `g02.047`, spec 026
@@ -54,41 +54,35 @@ worker dispatch should exercise the corrected creation sequence.
 
 ## Acceptance Criteria
 
-- the Paseo sequence creates the worktree workspace first, then creates the
+- [x] the Paseo sequence creates the worktree workspace first, then creates the
   worker from the current orchestrator's agent-scoped tool context with that
   exact workspace ID;
-- reusable surfaces say workspace placement does not change parentage;
-- top-level/root-agent, schedule, generic detached, and unproven CLI launch
+- [x] reusable surfaces say workspace placement does not change parentage;
+- [x] top-level/root-agent, schedule, generic detached, and unproven CLI launch
   paths are rejected for an automatic Paseo worker;
-- finish notifications remain enabled and review revisions resume the same
+- [x] finish notifications remain enabled and review revisions resume the same
   child agent;
-- ambiguous creation preserves identities and never triggers a compensating
+- [x] ambiguous creation preserves identities and never triggers a compensating
   poll or duplicate worker;
-- manual launch remains valid when scoped tools are absent;
-- source/install parity and full Northstar QA pass.
+- [x] manual launch remains valid when scoped tools are absent;
+- [x] source/install parity and full Northstar QA pass.
 
 ## Review Oracle
 
-| Invariant | Smallest adversarial counterexample | Expected response | Required proof |
-| --- | --- | --- | --- |
-| Isolation and parentage coexist. | A worker needs a new worktree workspace. | Create the workspace, then create a child from the orchestrator scope with its ID. | Ordered positive assertion and live dispatch record. |
-| Workspace placement does not detach. | The child is placed in a workspace different from the parent. | Preserve the orchestrator-child relationship and notification route. | Cross-workspace child assertion. |
-| Detached roots are invalid workers. | An orchestrator uses a top-level CLI/root launch because it can create the same worktree. | Reject it as non-equivalent; use scoped creation or manual handoff. | Negative detached-launch assertion. |
-| Notifications are structural. | The worker is created with finish notification disabled. | Reject launch configuration before creation. | Notification assertion. |
-| Revisions retain identity. | Review requests changes after the child finishes. | Resume the same child agent; do not create a detached replacement. | Follow-up identity assertion. |
-| Provider neutrality survives. | Scoped Paseo tools are absent. | Return the absolute handoff for manual launch without pretending parentage exists. | Manual-fallback assertion. |
+| Invariant | Smallest adversarial counterexample | Expected response | Required proof | Status |
+| --- | --- | --- | --- | --- |
+| Isolation and parentage coexist. | A worker needs a new worktree workspace. | Create the workspace, then create a child from the orchestrator scope with its ID. | Ordered positive assertion and live dispatch record. | PASS (`check:worker-parentage`, live launch record) |
+| Workspace placement does not detach. | The child is placed in a workspace different from the parent. | Preserve the orchestrator-child relationship and notification route. | Cross-workspace child assertion. | PASS (`check:worker-parentage` row 2) |
+| Detached roots are invalid workers. | An orchestrator uses a top-level CLI/root launch because it can create the same worktree. | Reject it as non-equivalent; use scoped creation or manual handoff. | Negative detached-launch assertion. | PASS (`check:worker-parentage` row 3 + negative scan) |
+| Notifications are structural. | The worker is created with finish notification disabled. | Reject launch configuration before creation. | Notification assertion. | PASS (`check:worker-parentage` row 4 + negative scan) |
+| Revisions retain identity. | Review requests changes after the child finishes. | Resume the same child agent; do not create a detached replacement. | Follow-up identity assertion. | PASS (`check:worker-parentage` row 5) |
+| Provider neutrality survives. | Scoped Paseo tools are absent. | Return the absolute handoff for manual launch without pretending parentage exists. | Manual-fallback assertion. | PASS (`check:worker-parentage` row 6) |
 
 ## Stop Conditions
 
-- Paseo's injected agent-scoped surface cannot target a separate workspace;
-- the correct behavior requires a Paseo product or CLI change;
-- current adapter semantics cannot distinguish scoped child creation from a
-  top-level root launch;
-- the change weakens dedicated worktree isolation or manual fallback;
-- another active Northstar worker owns the same protocol surfaces;
-- validation changes the plan.
+- None encountered.
 
 ## Next Task
 
-Run card 123. After its reviewed merge and installed-skill refresh, resume card
-120's bounded root-reduction lane.
+Stop for exact-head orchestrator review. After reviewed merge and
+installed-skill refresh, resume card 120's bounded root-reduction lane.
