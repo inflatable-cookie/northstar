@@ -111,8 +111,10 @@ breaking planning, orchestration, review, or existing consumer evidence.
   accurately (Jetstream TS marker in `editor-ui/AGENTS.md`, Rust marker in
   its root `AGENTS.md`; Convergence Rust marker in its root `AGENTS.md`);
   (3) the EOF blank line is fixed and
-  `git diff --check origin/main...HEAD` exits 0. New tested head:
-  `92245369acaed2c604faa7aea5787b7c8f59715c`. Evidence updated in
+  `git diff --check origin/main...HEAD` exits 0. The code-validation battery
+  ran at `9224536`; the only later commits are this handoff's own bookkeeping,
+  and full `effigy qa` plus the exact base-to-head diff check were rerun green
+  on the pushed tip. Evidence updated in
   `docs/logs/2026-09/03-154324-remove-embedded-language-quality-payloads.md`.
   Awaiting exact-head review and merge by the orchestrator; installed-skill
   refresh follows merge.
