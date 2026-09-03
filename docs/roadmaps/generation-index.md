@@ -103,15 +103,17 @@ the real-package lifecycle transcript and installed engine integrity, and
 merged as `256d0f7`. The Convergence `g02.031/102` consumer canary repaired its
 evidence gap and merged as `dff19c9`. Card 119 is complete. The exact removal
 inventory exposed a missing generic intent/activation selector. Card 122
-implemented it and merged as `ddaae0d`; card 120 is ready after its post-merge
-refresh. Operator evidence then exposed detached Paseo root workers that do not
+implemented it and merged as `ddaae0d`; card 120 passed its post-merge
+readiness refresh. Operator evidence then exposed detached Paseo root workers that do not
 notify their orchestrators. `g02.049/123` rejected its prose-coupled checker,
 proved the behavior through the live child lane and same-child revisions, and
 merged as `7ebaa9c`; installed-skill parity is current. Card 120 then removed
 the embedded payloads and fallback, closing `g02.048`'s Batch D: core is
 generic-only (111-file payload) and both installed routes are proven; the PR
 awaits exact-head review and merge, and the installed-skill refresh follows
-merge.
+merge. Spec 035 / `g02.050` / card 124 compiles a chatterbox intake channel
+and stays serial behind the card-120 skill/router/command ownership that this
+removal transfers.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed

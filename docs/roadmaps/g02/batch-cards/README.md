@@ -75,4 +75,5 @@ TypeScript package's agent-facing `SKILL.md` loads an absent router. Card 121
 merged as `69e4d5d`, card 119 merged as `256d0f7`, and card 122 merged as
 `ddaae0d`.
 Paseo worker-parentage correction `g02.049/123` merged as `7ebaa9c`; card 120 is
-the sole ready card and owns the bounded root reduction.
+the sole ready card and owns the bounded root reduction. Chatterbox intake
+`g02.050/124` is compiled and not ready until that lane merges.

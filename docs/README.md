@@ -21,6 +21,7 @@ to adopt.
 - [specs/028-agent-instruction-surface-optimization.md](./specs/028-agent-instruction-surface-optimization.md)
 - [specs/030-conversational-triage-and-docs-cleanup.md](./specs/030-conversational-triage-and-docs-cleanup.md)
 - [specs/034-modular-language-quality-packages.md](./specs/034-modular-language-quality-packages.md)
+- [specs/035-chatterbox-intake-channel.md](./specs/035-chatterbox-intake-channel.md)
 - [triage/README.md](./triage/README.md)
 - [roadmaps/generation-index.md](./roadmaps/generation-index.md)
 - [handoffs/README.md](./handoffs/README.md)
@@ -127,3 +128,7 @@ Northstar system:
   installed-skill refresh follows merge.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup
+- chatterbox intake is compiled as spec 035 / `g02.050` / card 124 and waits
+  on card 120. Independent operator-facing threads will write unique
+  `docs/triage/` notes and idle-ping the orchestrator; they must not
+  implement, promote, or dispatch
