@@ -128,7 +128,7 @@ Northstar system:
   matches the 111-file generic core.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup
-- chatterbox intake is ready as spec 035 / `g02.050` / card 124, with its
-  worker handoff published. Independent operator-facing threads will write unique
-  `docs/triage/` notes and idle-ping the orchestrator; they must not
-  implement, promote, or dispatch
+- chatterbox intake is implemented as spec 035 / `g02.050` / card 124.
+  Independent operator-facing threads write unique `docs/triage/` notes on the
+  shared checkout and report them to the operator without starting an
+  orchestrator turn in v1; they must not implement, promote, or dispatch

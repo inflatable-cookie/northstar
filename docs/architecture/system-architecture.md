@@ -383,6 +383,10 @@ An explicit fresh-orchestrator transfer uses:
 
 `operator ↔ source orchestrator -> committed continuation handoff -> fresh orchestrator/local workspace`
 
+A secondary conversational intake channel is:
+
+`operator ↔ chatterbox thread (shared checkout) -> unique docs/triage/ note (file-on-disk intake)`
+
 A fresh direct-review thread uses the smaller path:
 
 `operator -> existing PR -> direct review thread -> provider review record`
@@ -417,6 +421,18 @@ not get a worktree or worker preflight. Sidebar pin position is optional adapter
 state: use a native pin/reorder control only when one is explicitly exposed;
 otherwise tell the operator to place it manually and do not use browser,
 computer-use, or other UI automation.
+
+An operator may also start or request independent **chatterbox** threads for
+exploratory feature ideas, issues, or intake discussions. Chatterboxes share the
+orchestrator's checkout, create unique timestamped `docs/triage/` notes, and
+isolate commits to exact paths after verifying clean pre-stage index state.
+They do not create worktrees, branches, or PRs. In Paseo, the orchestrator
+spawns a chatterbox in a `local` workspace for the same project/checkout, with
+label `Chatterbox=true` and `notifyOnFinish: false`. Chatterbox v1 starts no
+automatic orchestrator turn; it reports the absolute note path and summary in
+chat, and the orchestrator inspects `docs/triage/` at normal triage checkpoints.
+Chatterboxes have no planning, readiness, implementation, review, merge, or
+dispatch authority.
 
 Each worker owns only the assigned ready cards in its dedicated worktree and
 branch. Model routing treats current profiles as a portfolio. For each run the

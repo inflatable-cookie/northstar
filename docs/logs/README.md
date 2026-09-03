@@ -32,6 +32,7 @@ Use logs as the third step in closeout:
 
 ## Recent active-lane evidence
 
+- `2026-09/03-183500-add-chatterbox-intake-channel.md`
 - `2026-09/03-181459-open-chatterbox-intake-channel.md`
 - `2026-09/03-154324-remove-embedded-language-quality-payloads.md`
 - `2026-09/03-142000-preserve-paseo-worker-parentage.md`

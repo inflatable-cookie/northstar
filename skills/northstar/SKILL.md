@@ -30,6 +30,7 @@ router's generic language section into the installed-package route at
 | PR review | User asks a thread to review an existing PR |
 | Orchestrator | User wants question-led planning plus a separate worker/PR loop, or a committed orchestrator-continuation handoff |
 | Docs cleanup | User wants `/docs` files and folders inspected and reworked to fit Northstar |
+| Chatterbox | User wants conversational problem exploration and triage intake, or uses `northstar chatterbox` / `/northstar-chatterbox` |
 | Normalize docs | Bootstrap, migrate, or keep docs spine healthy over time |
 | Research | Evidence → architecture/contracts |
 | Recovery | Drifted or changed planning state |
@@ -120,6 +121,10 @@ preflight. The source yields the transferred lane after pushed dispatch.
 - **Handoff:** a human-friendly seven-section file under `docs/handoffs/`, with
   an absolute path returned to the operator; not a substitute for log/roadmap
   closeout.
+- **Chatterbox:** warm operator intake conversation, problem exploration,
+  and unique-file triage capture on shared checkout with operator-visible note
+  handoff (v1 starts no automatic orchestrator turn); no implementation,
+  promotion, review, merge, or dispatch authority.
 
 ## Conversation style
 

@@ -54,7 +54,7 @@ implementation.
   delegate recommendations, evidence, and unresolved questions.
 - Capture the conversation in `docs/triage/`. Put durable sourced research in
   the named `docs/research/` paths only when this repository has that surface.
-- You may spawn bounded read-only research subagents or advisors. They return
+- You may spawn bounded read-only research subagents. They return
   findings and sources to you; they do not edit the worktree, create branches or
   PRs, contact the operator, or start another orchestrator or implementation
   worker.

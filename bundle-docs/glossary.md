@@ -123,6 +123,13 @@ One-page reference for terms used across Northstar docs.
 **Handoff**
 : A continuation brief created when one thread ends and another must continue.
 
+**Chatterbox**
+: A secondary Northstar communication mode for direct, human intake chat and
+  problem identification. Shares the orchestrator's checkout, writes only
+  unique timestamped triage files with exact-path git commit isolation, reports
+  notes to the operator without starting an orchestrator turn in v1, and cannot
+  implement, promote, review, merge, or dispatch.
+
 ## Files and Naming
 
 **Slug**

@@ -54,6 +54,8 @@ to pick one mode:
   `northstar architecture refocus`
 - A request needs clearer shared wording without advancing the work -> reframe:
   `northstar reframe`
+- Independent intake chat, problem exploration, or side ideas -> chatterbox:
+  `northstar chatterbox` or `/northstar-chatterbox`
 - Sound planning; need milestones or batches -> planning: `compile-roadmaps`
 - Plan was right but changed -> recovery: `replan-after-change`
 - Drifted or messy state -> recovery: `refocus-drifted-project` or `sweep-audit-repair`
@@ -74,6 +76,7 @@ to pick one mode:
 - “Refresh this project under Northstar” -> `northstar` (project-refresh)
 - “Refocus this subsystem's architecture” -> `northstar` (architecture-refocus)
 - “Restate that in project language” -> `northstar` (reframe)
+- “Explore this problem or side idea with me” -> `/northstar-chatterbox`
 - “Run a planning readiness review on this existing project” -> `northstar`
   (planning-readiness-review)
 - “Shape the long-horizon direction for this project with me” -> `northstar`

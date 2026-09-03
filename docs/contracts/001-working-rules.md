@@ -411,6 +411,11 @@ following authority split:
 - a **planning delegate** owns one operator-facing discovery conversation and
   its bounded triage/research packet in an isolated branch; it does not promote
   canonical planning, decide readiness, or implement;
+- a **chatterbox** owns one operator-facing intake conversation and problem
+  identification, shares the orchestrator's checkout, writes only unique
+  timestamped triage files, and reports them to the operator with no
+  orchestrator turn in v1; it does not implement, promote, review, merge,
+  dispatch, or reserve topics;
 - the **operator** answers unresolved questions, may override worker-profile
   selection, starts or relays manual runs, resolves material permission
   requests, and may pause or override the lane before merge.
@@ -504,6 +509,19 @@ it is not worker mode and needs no worker handoff or worktree. Capture existing
 dirty state and allowed paths before dispatch. The orchestrator reviews the full
 diff for semantic fidelity and owns commit/push. Keep tiny edits local when
 dispatch and review would cost more than the projection.
+
+An operator may start a chatterbox thread directly with no handoff or worktree,
+or ask the orchestrator to spawn one for a feature idea, issue, or exploratory
+chat. In Paseo, the orchestrator creates a `local` workspace for the same
+project and checkout, selects an adequate conversational profile under the
+diversified-routing rule, sets the capitalized `Chatterbox=true` label, and sets
+`notifyOnFinish: false`. Chatterboxes share the orchestrator's checkout and
+write only unique `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files, staged with
+`git add -- <exact-file>` and committed with `git commit -- <exact-file>`.
+Chatterbox v1 starts no automatic orchestrator turn; it reports the absolute
+note path and a one-line summary to the operator in chat. The orchestrator
+inspects `docs/triage/` at its next normal triage checkpoint and treats
+surfaced notes as non-assignments.
 
 The repository is the durable communication boundary. A worker must be able to
 re-enter from its worker handoff, `AGENTS.md`, canonical refs, cards, commits,

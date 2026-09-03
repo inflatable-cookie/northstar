@@ -1,6 +1,6 @@
 # 124 - Add Chatterbox Intake Channel
 
-Status: ready; handoff published
+Status: complete; reviewable PR pending
 Owner: repo maintainers
 Created: 2026-09-03
 Updated: 2026-09-03
@@ -61,20 +61,20 @@ fan-out, or promoting any triage note.
 
 ## Acceptance Criteria
 
-- [ ] structural oracle rows are checked without mirroring editorial prose;
-- [ ] an executable Git fixture proves unrelated dirty and already-staged
+- [x] structural oracle rows are checked without mirroring editorial prose;
+- [x] an executable Git fixture proves unrelated dirty and already-staged
       files are not included in a chatterbox commit;
-- [ ] chatterbox mode and thin adapter exist; public skill count stays one;
-- [ ] operator start needs no handoff;
-- [ ] Paseo spawn uses a same-checkout `local` workspace,
+- [x] chatterbox mode and thin adapter exist; public skill count stays one;
+- [x] operator start needs no handoff;
+- [x] Paseo spawn uses a same-checkout `local` workspace,
       `Chatterbox=true`, and `notifyOnFinish` false;
-- [ ] git protocol uses exact-file add and exact-file commit for a unique
+- [x] git protocol uses exact-file add and exact-file commit for a unique
       triage note on `main`;
-- [ ] chatterbox v1 does not call `send_agent_prompt` or start an orchestrator turn;
-- [ ] surfaced-note intake does not change current work;
-- [ ] chatterbox refuses implement/promote/dispatch/review/merge;
-- [ ] research-subagent copy no longer says "advisors";
-- [ ] source/install parity, docs QA, full QA, and `git diff --check` pass.
+- [x] chatterbox v1 does not call `send_agent_prompt` or start an orchestrator turn;
+- [x] surfaced-note intake does not change current work;
+- [x] chatterbox refuses implement/promote/dispatch/review/merge;
+- [x] research-subagent copy no longer says "advisors";
+- [x] source/install parity, docs QA, full QA, and `git diff --check` pass.
 
 ## Review Oracle
 

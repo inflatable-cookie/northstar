@@ -89,8 +89,8 @@ execution authority.
   check:skill-install skills/northstar`; `effigy qa:docs`; `effigy qa`; `git
   diff --check`.
 - **PR base/head:** `main` <- `worker/add-chatterbox-intake-channel`
-- **PR URL:** pending.
-- **Review state:** implementation not started.
+- **PR URL:** https://github.com/inflatable-cookie/northstar/pull/31
+- **Review state:** revision 1 ready (PR #31 changes addressed: exact-path git commit isolation verified by fixture, prose-coupled checks removed from check:command-skills, settled notification boundary on origin/main integrated).
 - **Merge path:** orchestrator after accepted exact-head review and passing
   checks.
 

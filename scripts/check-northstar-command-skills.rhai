@@ -99,6 +99,7 @@ let commands = [
     ["northstar-refresh", "commands/northstar-refresh/SKILL.md", "references/modes/project-refresh.md"],
     ["northstar-cleanup", "commands/northstar-cleanup/SKILL.md", "references/modes/cleanup-docs.md"],
     ["northstar-atlas", "commands/northstar-atlas/SKILL.md", "references/modes/atlas.md"],
+    ["northstar-chatterbox", "commands/northstar-chatterbox/SKILL.md", "references/modes/chatterbox.md"],
 ];
 
 let aggregate_description_chars = 0;
@@ -274,5 +275,10 @@ require(continuation_mode.contains("Without Paseo") &&
     continuation_mode.contains("Northstar remains") &&
     continuation_mode.contains("return the absolute handoff path for manual launch"),
     "continuation launch fails closed when Paseo tools are absent");
+
+// Research-subagent copy no longer says "or advisors"
+require(!orchestrator_text.contains("or advisors"), "orchestrator mode research-subagent copy still contains 'or advisors'");
+let delegate_template = fs::read_file(path::join(root, "assets/templates/northstar-discovery-delegate.md.template"));
+require(!delegate_template.contains("or advisors"), "discovery delegate template still contains 'or advisors'");
 
 log("Northstar command-skill surface: OK (" + commands.len() + " adapters, aggregate descriptions=" + aggregate_description_chars + " chars)");

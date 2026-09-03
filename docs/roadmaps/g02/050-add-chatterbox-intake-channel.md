@@ -1,8 +1,9 @@
 # 050 - Add Chatterbox Intake Channel
 
-Status: ready; card 124 handoff published
+Status: in review; card 124 reviewable PR pending
 Owner: repo maintainers
 Created: 2026-09-03
+Updated: 2026-09-03
 Depends on: `g02.049`, spec 026, spec 030, spec 035
 Vision tags: `orchestration`, `triage`, `conversation`, `paseo`
 Governing refs: `docs/specs/035-chatterbox-intake-channel.md`,
@@ -41,19 +42,19 @@ and write triage notes without interrupting the main runway.
       installable skill, router, command adapters, and several closeout
       front doors with the root-reduction lane. Do not launch this card
       while 120 is the ready/in-flight owner of those surfaces.
-- [ ] **Card 124** implements the mode, adapter, spawn/notification boundary, doctrine,
+- [x] **Card 124** implements the mode, adapter, spawn/notification boundary, doctrine,
       contracts, inventory, checker oracles, parity, and closeout from spec
       035.
 
 ## Acceptance Criteria
 
-- [ ] structural rows have deterministic proof, shared-index Git behavior has
+- [x] structural rows have deterministic proof, shared-index Git behavior has
       an executable fixture, and semantic rows have exact-head review evidence;
-- [ ] operator start and orchestrator spawn match the spec;
-- [ ] unique-file git protocol is explicit and negatively tested;
-- [ ] chatterbox v1 starts no orchestrator turn and intake-only handling is explicit;
-- [ ] chatterbox cannot widen authority into planning or implementation;
-- [ ] source/install parity and full Northstar QA pass.
+- [x] operator start and orchestrator spawn match the spec;
+- [x] unique-file git protocol is explicit and negatively tested;
+- [x] chatterbox v1 starts no orchestrator turn and intake-only handling is explicit;
+- [x] chatterbox cannot widen authority into planning or implementation;
+- [x] source/install parity and full Northstar QA pass.
 
 ## Review Oracle
 

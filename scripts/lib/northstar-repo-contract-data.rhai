@@ -6,6 +6,7 @@ fn current_active_authority_files() {
         "docs/specs/027-northstar-native-pre-execution-discovery.md",
         "docs/specs/029-northstar-long-horizon-planning.md",
         "docs/specs/034-modular-language-quality-packages.md",
+        "docs/specs/035-chatterbox-intake-channel.md",
     ]
 }
 
@@ -79,6 +80,8 @@ fn required_files() {
         "skills/northstar/assets/fixtures/language-packages/synthetic-language/SKILL.md",
         "skills/northstar/assets/fixtures/language-packages/synthetic-language/northstar-package.json",
         "scripts/test-northstar-readiness-map.rhai",
+        "scripts/tests/chatterbox-git-isolation/self-test.sh",
+        "scripts/tests/chatterbox-git-isolation/validate_chatterbox_git_isolation.py",
         "template-bundle/README.md",
         "template-bundle/triage/README.md",
         "template-bundle/minimal/triage/README.md",
@@ -105,7 +108,9 @@ fn required_files() {
         "skills/northstar/references/modes/atlas.md",
         "skills/northstar/references/modes/agent-instruction-review.md",
         "skills/northstar/references/modes/pr-review.md",
+        "skills/northstar/references/modes/chatterbox.md",
         "skills/northstar/commands/northstar-cleanup/SKILL.md",
+        "skills/northstar/commands/northstar-chatterbox/SKILL.md",
         "skills/northstar/references/modes/handoff.md",
         "skills/northstar/references/modes/plan-from-scratch.md",
         "skills/northstar/references/modes/shape-with-specs-and-promote.md",
