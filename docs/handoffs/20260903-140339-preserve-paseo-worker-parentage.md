@@ -115,6 +115,21 @@ orchestrators from substituting a detached top-level launch.
   documented Paseo capability mismatch stops the lane.
 - **Report to:** the originating orchestrator through Paseo finish notification.
 
+## Exact-Head Review Addendum
+
+Review of PR 29 at `db29f2aab9713bbfd02c6aadcbcef7e2ab47fbf1`
+accepted the cross-workspace child rule and requested two bounded changes:
+
+- `planning-change`: remove `check:worker-parentage` and its wiring. Its exact
+  sentence assertions restore the prose coupling removed by `g02.045`; the live
+  launch record, exact-head source review, and same-child revision are the
+  behavioral proof.
+- `integration-drift`: remove stray spacing and duplicated replacement-worker
+  wording in orchestrator mode.
+
+Resume agent `3b92a429-64ec-4d31-a85b-bd97fd5b49d2` in workspace
+`wks_0ac25c3a34f16567`. Do not create a replacement worker.
+
 ## Suggested Next Move
 
 Run the worker preflight, then read `AGENTS.md`, spec 026, milestone 049, card

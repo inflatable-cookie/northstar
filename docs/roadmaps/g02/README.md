@@ -110,8 +110,9 @@ rollover signal.
   merged as `256d0f7`; Convergence PR 4 repaired its evidence gap and merged
   as `dff19c9`; card 122 merged the generic selector as `ddaae0d`; card 120 is
   ready after its post-merge readiness refresh)
-- `049-preserve-paseo-worker-parentage.md` (active; card 123 ready to require
-  separate-workspace workers to remain child agents of their orchestrator)
+- `049-preserve-paseo-worker-parentage.md` (active; card 123 changes requested
+  after review rejected a prose-coupled checker while accepting the underlying
+  cross-workspace child rule)
 
 ## Next Task
 
@@ -134,8 +135,8 @@ the real-package lifecycle and installed engine-integrity transcripts, and
 merged as `256d0f7`. Convergence PR 4 passed exact-head review at `792a7c2`
 and merged as `dff19c9`. The removal refresh froze 95 deletion targets and 19
 integration surfaces. Card 122 repaired the missing data-driven selector and
-merged as `ddaae0d`. Card 120 is ready but serial behind card 123's urgent
-Paseo worker-parentage correction.
+merged as `ddaae0d`. Card 120 is ready but serial behind card 123's bounded
+worker-parentage revision and reviewed merge.
 
 `g02.025` is complete. `g02.024` is complete; its planning input was the
 consumer papercuts evidence. Cards `g02.026/075`, `g02.026/076`, and

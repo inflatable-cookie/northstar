@@ -1,6 +1,6 @@
 # 123 - Preserve Paseo Worker Parentage
 
-Status: ready
+Status: changes requested; planning corrected after exact-head review
 Owner: repo maintainers
 Created: 2026-09-03
 Master roadmap: `g02.049`
@@ -22,8 +22,8 @@ worker's child relationship to the current orchestrator.
 - update the installable orchestrator mode and concise skill outcome;
 - update protocol-kernel or architecture routing only where needed to keep the
   canonical owner discoverable;
-- add focused positive and negative assertions for the six milestone oracle
-  rows;
+- prove the six milestone oracle rows with the live launch record, exact-head
+  source review, and same-child revision;
 - prove installed-skill parity;
 - write closeout evidence, reconcile front doors, and open a reviewable PR.
 
@@ -53,8 +53,8 @@ packages, Sentrux, or weaker worktree/review/merge boundaries.
 - [ ] finish notification remains enabled and review follow-up targets the same
   child;
 - [ ] manual/provider-neutral fallback remains intact;
-- [ ] doctrine, copy-ready contract, skill source, operator guidance, and
-  deterministic checks agree;
+- [ ] doctrine, copy-ready contract, skill source, and operator guidance agree
+  without turning their editorial sentences into executable schema;
 - [ ] isolated skill-install parity, docs QA, full QA, and `git diff --check`
   pass;
 - [ ] the PR records its exact tested head and any limits.
@@ -62,10 +62,11 @@ packages, Sentrux, or weaker worktree/review/merge boundaries.
 ## Evidence Required
 
 - before/after inventory of Paseo worker creation wording;
-- six-row scenario matrix with positive and negative discrimination;
+- six-row scenario matrix bound to the live launch, exact-head source review,
+  and this same-child revision;
 - one live launch record showing separate workspace and child-agent ownership;
-- focused proof that disabling notifications or substituting a root launch is
-  rejected;
+- exact-head source review that disabling notifications or substituting a root
+  launch is rejected;
 - `effigy check:command-skills`, isolated `effigy check:skill-install`,
   `effigy qa:docs`, `effigy qa`, and `git diff --check`;
 - closeout log, reviewable PR, and exact tested head.
@@ -81,5 +82,7 @@ packages, Sentrux, or weaker worktree/review/merge boundaries.
 
 ## Next Task
 
-Implement this card in one worker lane and stop for exact-head orchestrator
-review. Do not start card 120 from the worker.
+Resume the existing child worker after it integrates the planning correction.
+Remove the prose-coupled checker and its wiring, repair the duplicated mode
+wording, then stop for exact-head re-review. Do not start card 120 from the
+worker.

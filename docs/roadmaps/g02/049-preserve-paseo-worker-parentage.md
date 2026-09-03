@@ -1,6 +1,6 @@
 # 049 - Preserve Paseo Worker Parentage
 
-Status: active; card 123 ready
+Status: active; card 123 changes requested
 Owner: repo maintainers
 Created: 2026-09-03
 Depends on: `g02.047`, spec 026
@@ -46,7 +46,9 @@ that the creation call itself must stay agent-scoped.
 
 Card `g02.049/123` propagates the settled spec meaning through doctrine,
 working rules, the installable orchestrator mode, copy-ready surfaces,
-operator guidance, focused assertions, installed-skill parity, and closeout.
+operator guidance, one live cross-workspace child launch, installed-skill parity,
+and closeout. The live launch is the behavioral proof. Editorial wording stays
+outside executable validation under `g02.045`.
 
 Card 120 remains ready but serial behind this correction: both lanes own the
 Northstar skill payload and roadmap/front-door closeout surfaces, and the next
@@ -71,12 +73,12 @@ worker dispatch should exercise the corrected creation sequence.
 
 | Invariant | Smallest adversarial counterexample | Expected response | Required proof |
 | --- | --- | --- | --- |
-| Isolation and parentage coexist. | A worker needs a new worktree workspace. | Create the workspace, then create a child from the orchestrator scope with its ID. | Ordered positive assertion and live dispatch record. |
-| Workspace placement does not detach. | The child is placed in a workspace different from the parent. | Preserve the orchestrator-child relationship and notification route. | Cross-workspace child assertion. |
-| Detached roots are invalid workers. | An orchestrator uses a top-level CLI/root launch because it can create the same worktree. | Reject it as non-equivalent; use scoped creation or manual handoff. | Negative detached-launch assertion. |
-| Notifications are structural. | The worker is created with finish notification disabled. | Reject launch configuration before creation. | Notification assertion. |
-| Revisions retain identity. | Review requests changes after the child finishes. | Resume the same child agent; do not create a detached replacement. | Follow-up identity assertion. |
-| Provider neutrality survives. | Scoped Paseo tools are absent. | Return the absolute handoff for manual launch without pretending parentage exists. | Manual-fallback assertion. |
+| Isolation and parentage coexist. | A worker needs a new worktree workspace. | Create the workspace, then create a child from the orchestrator scope with its ID. | Live launch record names both IDs and the ordered calls. |
+| Workspace placement does not detach. | The child is placed in a workspace different from the parent. | Preserve the orchestrator-child relationship and notification route. | Live parent label plus finish notification delivered to the originating orchestrator. |
+| Detached roots are invalid workers. | An orchestrator uses a top-level CLI/root launch because it can create the same worktree. | Reject it as non-equivalent; use scoped creation or manual handoff. | Exact-head source review confirms the reusable rule rejects detached substitutes. |
+| Notifications are structural. | The worker is created with finish notification disabled. | Reject launch configuration before creation. | Live launch record has notifications enabled; exact-head source review confirms the rejection rule. |
+| Revisions retain identity. | Review requests changes after the child finishes. | Resume the same child agent; do not create a detached replacement. | This review revision resumes the recorded child ID. |
+| Provider neutrality survives. | Scoped Paseo tools are absent. | Return the absolute handoff for manual launch without pretending parentage exists. | Exact-head source review confirms the manual fallback remains intact. |
 
 ## Stop Conditions
 
@@ -85,6 +87,8 @@ worker dispatch should exercise the corrected creation sequence.
 - current adapter semantics cannot distinguish scoped child creation from a
   top-level root launch;
 - the change weakens dedicated worktree isolation or manual fallback;
+- proof requires exact editorial sentence assertions or a simulated control
+  plane instead of the live launch record;
 - another active Northstar worker owns the same protocol surfaces;
 - validation changes the plan.
 
