@@ -3,10 +3,16 @@
 Status: active
 Owner: repo maintainers
 Created: 2026-08-16
-Updated: 2026-09-03
+Updated: 2026-09-04
 Related research: `bundle-docs/research/translation-memos/northstar-orchestrator-thread.md`
 Related specs: `docs/specs/035-chatterbox-intake-channel.md` (implemented —
 operator-facing intake threads beside the orchestrator)
+
+Spec 036 (`docs/specs/036-economical-orchestrator-coordination.md`) narrows the
+normal orchestrator job to economical coordination with independent review
+children; this spec remains the transport, handoff, and worker-PR-loop
+authority.
+
 Governing architecture: `docs/architecture/system-architecture.md`
 Governing contracts: `docs/contracts/001-working-rules.md`, `docs/contracts/002-agent-local-paths.md`
 

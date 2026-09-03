@@ -704,12 +704,13 @@ reasons in the handoff and rotate within the adequate frontier pool too.
 Priority alone, complexity alone, broad scope, or a risk-domain label is
 insufficient.
 
-Keep frontier/high effort for the orchestrator, material review, and
-operator-facing planning delegates. Risky surfaces still require a clear review
-oracle and frontier review; a material but settled lane may use a capable
-non-frontier worker while the orchestrator keeps material review. Worker price
-is not the review-strength control. Pause before dispatch when the review
-oracle is not explicit.
+Keep frontier/high effort for material operator-facing discovery, review-
+oracle design, and operator-facing planning delegates; the coordinator's own
+normal route is economical. Risky surfaces still require a clear review
+oracle and material independent review; a material but settled lane may use a
+capable non-frontier worker while its independent review child keeps material
+review. Worker price is not the review-strength control. Pause before dispatch
+when the review oracle is not explicit.
 
 When multiple plausible designs or an unresolved contract choice remain, return
 to planning rather than spending a frontier worker to choose architecture. A
@@ -718,6 +719,54 @@ from the lane's diversified pool instead of treating the refusal as global
 capacity. If no adequate route remains, report the profile gap instead of
 silently promoting the lane to frontier. An operator-named profile remains an
 explicit override even when rotation would choose differently.
+
+## Economical orchestrator coordination
+
+Coordination is the orchestrator's default job. It maintains the dependency
+frontier and launches every safe ready lane, creates and resumes child workers
+and reviewers in separate workspaces, routes unresolved product meaning to an
+operator-facing chatterbox, promotes only operator-confirmed meaning through a
+bounded projection lane, routes substantive exact-head review to an
+independent review child, and verifies the merge gate. It does not repeat full
+planning or semantic review for a settled lane; it escalates when the packet,
+review, or repository state leaves a real judgment unresolved. Small
+operational clarifications that cannot change behavior, acceptance, public
+contract, or sequencing stay with the coordinator.
+
+Planning path: a chatterbox note is decision-ready when it separates
+operator-confirmed decisions, recommendations not yet accepted, evidence and
+alternatives, unresolved questions, and affected authority surfaces.
+Recommendations are not decisions. After the operator confirms the material
+meaning, the orchestrator compiles an exact promotion brief for a bounded
+planning-projection worker that edits canonical architecture, contracts,
+specs, roadmaps, and cards only as named; semantic ambiguity returns to the
+operator and the chatterbox. An independent review child checks the promotion
+against the confirmed packet before the normal exact-head merge gate applies.
+
+Review path: every worker PR gets an independent review child unless the
+operator explicitly asks the current thread for a direct review. In Paseo the
+orchestrator creates a dedicated workspace at the PR head, launches the
+reviewer as a parent-attached child with finish notifications enabled, selects
+an economical adequate review route under the diversified-routing rule, and
+hands over the PR, canonical refs, and review oracle — not the worker's
+transcript. Requested changes return to the same worker; the revised exact
+head returns to the same reviewer when available; a replacement reviewer
+starts a fresh complete review. Before merge the coordinator independently
+verifies only the coordination gate: the durable accepted verdict names the
+exact current head, every blocking finding is resolved or explicitly
+superseded on the provider, required checks pass, base ancestry and
+mergeability are current, and no stricter repository rule or operator pause
+applies. Ambiguous, contradictory, missing, or stale review evidence stops
+merge.
+
+Model posture: the coordinator's normal route is an economical coordinator
+class — reliable tool use, concise state tracking, bounded verification.
+Expensive conversational routes are reserved for material operator-facing
+discovery, and frontier review for diffs whose residual risk planning,
+explicit oracles, tests, and an economical independent review cannot bound.
+Capability classes stay portable; no local profile, model, price, or allowance
+enters reusable policy. The separate ten-PR observation cohort decides
+whether the split holds; one anecdote never rewrites it.
 
 ## Conversational planning delegation
 
@@ -846,8 +895,10 @@ delegate lane pre-authorizes the orchestrator to merge that lane's PR after
 independent review. This is not auto-merge on PR creation. Merge is allowed only
 when:
 
-- the provider records an accepted orchestrator verdict for the exact current
-  PR head; a same-identity provider may use the canonical review comment;
+- the provider records an accepted review verdict for the exact current PR
+  head; the verdict names that head and comes from an independent review child
+  unless the operator explicitly asked the orchestrator thread to review
+  directly; a same-identity provider may use the canonical review comment;
 - every required check passes and the PR is mergeable into its intended base;
 - no head commit arrived after review;
 - no stricter repository rule or explicit operator pause requires human action.

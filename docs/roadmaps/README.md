@@ -103,14 +103,15 @@ Roadmaps sequence contract-backed work for Northstar itself.
   isolation with temporary-repository fixture proof, and non-assignment
   orchestrator intake handling (v1 starts no automatic orchestrator turn).
   PR 31 merged as `d1b162e`.
-- `g02.051` is planned; card 125 is ready to make economical coordination the
+- `g02.051` has card 125 implemented: economical coordination is the
   orchestrator default, with material planning in operator-confirmed
-  chatterbox packets and semantic PR review in independent child reviewers.
+  chatterbox packets and semantic PR review in independent child reviewers;
+  its PR awaits exact-head review.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Launch card 125 from its committed handoff. Card 126 remains blocked until the
-authority split merges and the installed skill is refreshed.
+Review and merge card 125's PR at its exact head, then refresh the installed
+skill. Card 126 remains blocked until both complete.

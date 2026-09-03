@@ -391,13 +391,22 @@ A fresh direct-review thread uses the smaller path:
 
 `operator -> existing PR -> direct review thread -> provider review record`
 
-The orchestrator owns question-led discovery, promoted planning, ready-state,
-launch preparation, semantic review, PR review, and merge. After settling
-meaning, it may run one fast/low-cost documentation projection subagent serially
-in the planning context. That subagent applies an exact brief to named docs and
-deterministic checks; it does not choose authority, invent planning, decide
-state, touch product code, or perform Git/provider mutations. The orchestrator
-reviews the resulting diff and retains semantic ownership.
+The normal worker-PR review path routes through an independent child:
+
+`worker PR -> review child (dedicated PR-head workspace) -> provider verdict naming the head -> coordinator merge gate -> merge/closeout`
+
+The orchestrator owns economical coordination: question-led discovery, promoted
+planning bounded by operator-confirmed authority, ready-state, launch
+preparation, revision routing, the merge gate, and merge. Substantive
+exact-head semantic review belongs to independent review children. After
+settling meaning — or receiving an operator-confirmed decision-ready packet —
+the coordinator may run one fast/low-cost documentation projection subagent
+serially in the planning context. That subagent applies an exact brief to named
+docs and deterministic checks; it does not choose authority, invent planning,
+decide state, touch product code, or perform Git/provider mutations, and it
+stops on semantic ambiguity. The coordinator reviews the resulting diff; a
+promotion batch driven by a confirmed packet is checked by an independent
+review child against that packet before the merge gate applies.
 
 On explicit operator request, it may also launch one frontier planning delegate
 for a named topic. That delegate talks directly with the operator and owns only
@@ -431,6 +440,11 @@ spawns a chatterbox in a `local` workspace for the same project/checkout, with
 label `Chatterbox=true` and `notifyOnFinish: false`. Chatterbox v1 starts no
 automatic orchestrator turn; it reports the absolute note path and summary in
 chat, and the orchestrator inspects `docs/triage/` at normal triage checkpoints.
+A note may be decision-ready when it separates operator-confirmed decisions,
+recommendations not yet accepted, evidence and alternatives, unresolved
+questions, and affected authority surfaces; only operator confirmation through
+the orchestrator makes it promotable.
+
 Chatterboxes have no planning, readiness, implementation, review, merge, or
 dispatch authority.
 
@@ -442,6 +456,10 @@ provider/model identity before reusing a recent route. Adapter-visible recent
 agent history is evidence when available; otherwise the orchestrator remembers
 only the routes it launched in the current run. Northstar keeps no durable usage
 ledger and stores no provider or model names.
+
+The coordinator's own route is an economical coordinator class; higher
+reasoning effort is an escalation, not the default. Review children select
+from their own adequate pools under the same rule.
 
 Ordinary implementation, bounded audits, mechanical work, and most settled
 material lanes use that economical pool. A frontier worker is a rare residual
@@ -574,9 +592,16 @@ subagent, which gets no worktree or Git/provider authority.
   authority, readiness, completion, or next work. The orchestrator captures
   dirty state first, reviews the full diff, and owns commit/push.
 - A worker's completion authority is a reviewable PR plus evidence, not a chat
-  claim. The orchestrator reviews the diff and checks against canonical refs and
-  records the verdict in the provider review surface; same-identity GitHub runs
-  use a PR comment because formal self-approval is unavailable.
+  claim. An independent review child reviews the diff and checks against
+  canonical refs and records the verdict in the provider review surface,
+  naming the exact reviewed head; same-identity GitHub runs use a PR comment
+  because formal self-approval is unavailable. The coordinator verifies the
+  verdict head, findings, checks, ancestry, mergeability, and pause state and
+  does not duplicate the full review; a replacement reviewer starts a fresh
+  complete review.
+- A decision-ready chatterbox packet separates operator-confirmed decisions
+  from recommendations; only operator-confirmed meaning enters a promotion
+  brief, and the bounded projection stops on semantic ambiguity.
 - A direct PR-review request authorizes review mutations on the named PR only.
   Every merge-blocking finding is posted on the provider review surface; chat
   summarizes that record and never becomes the only home of a required change.

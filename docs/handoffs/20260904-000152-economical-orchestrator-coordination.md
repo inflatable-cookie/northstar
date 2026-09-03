@@ -5,7 +5,7 @@ handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
 handoff: single-file-path-only
-status: ready-to-launch
+status: implemented; reviewable PR open
 owner: repo maintainers
 created: 2026-09-04
 updated: 2026-09-04

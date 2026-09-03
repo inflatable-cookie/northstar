@@ -1,0 +1,101 @@
+# Economical Orchestrator Coordination
+
+Date: 2026-09-04
+Roadmap: `g02.051`
+Card: `g02.051/125`
+Status: complete; reviewable PR pending
+
+## Result
+
+Implemented spec 036's economical coordinator split across the reusable rule
+surfaces. The public orchestrator role keeps its name and all merge-safety
+gates; its normal job is now economical coordination: maintain the dependency
+frontier, launch every safe ready lane, create and resume parent-attached child
+workers and reviewers in separate workspaces, route unresolved product meaning
+to operator-facing chatterboxes, promote only operator-confirmed meaning
+through a bounded fail-closed projection lane, route substantive exact-head PR
+review to independent review children, and verify the coordination gate before
+merging.
+
+Decision-ready chatterbox packets: a triage note is decision-ready when it
+separates operator-confirmed decisions, recommendations not yet accepted,
+evidence and alternatives, unresolved questions, and affected authority
+surfaces. Recommendations are never decisions; only explicit operator
+confirmation enters a promotion brief, and semantic ambiguity returns to the
+operator and the chatterbox.
+
+Independent review children: every worker PR receives one unless the operator
+explicitly asks the current thread for a direct review. The reviewer is a
+parent-attached child in a dedicated PR-head workspace with finish
+notifications enabled, selected from the adequate review pool under the
+diversified-routing rule, and receives the PR, canonical refs, and review
+oracle — never the worker's private transcript. Its posted provider verdict
+names the exact reviewed head. Revisions return to the same worker and the
+same reviewer when available; a replacement reviewer starts a fresh complete
+review. The coordinator verifies the verdict head, findings, checks, ancestry,
+mergeability, and pause state and does not duplicate the full review; stale,
+ambiguous, contradictory, or missing review evidence stops merge.
+
+Model posture stays portable: the coordinator's normal route is an economical
+coordinator class, review children and chatterboxes select from their own
+adequate pools, and frontier effort is an escalation for material
+operator-facing discovery, review-oracle design, and residual risk that
+settled planning, explicit oracles, tests, and an economical independent
+review cannot bound. No local profile, model, price, or allowance entered
+reusable policy. Card 126's ten-PR trial remains separate and blocked.
+
+## Changed Surfaces
+
+| Surface | Before | After |
+| --- | --- | --- |
+| `skills/northstar/references/modes/orchestrator.md` | Orchestrator owns discovery through semantic PR review; projection keeps "frontier orchestrator" framing | Operating posture names economical coordination the default job; `## Independent review children` defines PR-head workspace, parent-attached child launch, notification, identity retention, same-worker/same-reviewer reuse, fresh replacement reviews, and the six-part coordination gate; chatterbox intake adds decision-ready packets and the promotion path; projection section adds the operator-confirmed promotion boundary with a promotion review child; procedure step 11 routes review to the child and step 12 gates merge on the coordination gate; model routing adds the coordinator default, review-child pool, and frontier-escalation conditions; stop conditions add stale/ambiguous evidence and non-attachable reviewer launches |
+| `skills/northstar/references/modes/chatterbox.md` | Enough bar required confirmed-vs-tentative separation but named no decision-ready state | Decision-ready definition with the five required separations; still non-authoritative — only operator confirmation routed through the orchestrator promotes |
+| `skills/northstar/references/modes/pr-review.md` | Fresh-thread operator review only | Names the review-child launch shape, requires the verdict to name the exact reviewed head, and requires replacement reviewers to start a complete fresh review |
+| `skills/northstar/SKILL.md` | Orchestrator outcome listed semantic review as orchestrator-owned | Orchestrator outcome describes coordination, decision-ready packets, review children, and the coordinator gate; chatterbox outcome names decision-ready separation |
+| `skills/northstar/references/router.md` | Direct PR review was operator-facing only; orchestrator section implied review ownership | Section 7 routes review children through the same mode; section 8 describes coordination as the normal job |
+| `docs/contracts/001-working-rules.md` | Authority split assigned PR review and merge-gate verdicts to the orchestrator thread | Roles table adds review child and decision-ready chatterbox; review-path and planning-path paragraphs define launch shape, reuse, coordination gate, and fail-closed promotion; merge pre-authorization cites an independent verdict naming the exact head; model routing adds the coordinator default and review-child pools |
+| `template-bundle/contracts/001-working-rules-template.md` | No review-child doctrine | Adds `### Independent review children`; merge authority, projection, chatterbox, and economical-routing sections carry the split in copy-ready form |
+| `bundle-docs/sections/07-delivery-framework-and-autonomy.md` | Frontier effort assigned to the orchestrator by role | New `## Economical orchestrator coordination` section (coordination default, planning path, review path, model posture, trial boundary); merge authority cites the review child; routing section reassigns material review to the lane's reviewer |
+| `bundle-docs/protocol-kernel.md` | No canonical home for the coordinator split | Canonical homes table row points at the new doctrine section |
+| `bundle-docs/operators/operator-quick-start.md` | "Frontier orchestrator" framing; orchestrator keeps frontier review | Operator paragraphs describe review children, the coordination gate, decision-ready promotion batches, and portable capability classes |
+| `docs/architecture/system-architecture.md` | Thread topology and orchestrator ownership included semantic review | Review-child path added to topology; orchestrator ownership narrowed to coordination; chatterbox decision-ready sentence; coordinator route class; two new invariants |
+| `docs/architecture/system-inventory.md` | No review child surface | Adds review child surface and Independent review children interface; projection, PR review boundary, chatterbox, and PR review/merge rows updated |
+| `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md` | Spec assigned full semantic review to the orchestrator | Header note records that spec 036 narrows the normal orchestrator job while this spec stays the transport/handoff/worker-loop authority |
+| `docs/specs/036-economical-orchestrator-coordination.md` | Status planned | Status active; card 125 implemented, card 126 trial pending |
+| `docs/contracts/contract-index.md` | 001 boundary list without review children | Register names the independent-review-child boundary |
+| Front doors | Spec 036 planned, card 125 ready | `docs/README.md`, `docs/roadmaps/README.md`, `docs/roadmaps/generation-index.md`, `docs/roadmaps/g02/README.md` record implementation, PR-open state, and the still-blocked trial; `docs/logs/README.md` carries this log |
+| Card 125 / milestone 051 / handoff | ready / planned / ready-to-launch | implemented / card 125 implemented PR open / implemented; reviewable PR open; card 126 untouched and blocked |
+
+## Oracle Review Evidence
+
+Ten rows from the spec 036 review oracle. Structural rows map to deterministic
+checks; semantic rows are exact-head review evidence for the originating
+orchestrator.
+
+| Invariant | Smallest adversarial counterexample | Expected response | Required proof |
+| --- | --- | --- | --- |
+| Coordination is the default orchestrator job. | Orchestrator repeats full planning or semantic review for a settled lane. | Modes, contract, doctrine, and architecture route work to chatterbox/projection/reviewer and retain only the gate. | Exact-head role-boundary review of this PR; `check:model-routing` proves the routing contract wording on the touched surfaces. |
+| Recommendations are not decisions. | A chatterbox recommendation is promoted without operator confirmation. | Chatterbox mode, working rules, doctrine, and orchestrator mode stop promotion before canonical mutation without explicit operator confirmation. | Exact-head planning-path review. |
+| Promotion is mechanical. | Projection must choose between two plausible product meanings. | Projection stops on semantic ambiguity and returns the question to the operator and chatterbox; never chooses. | Exact-head projection handoff and stop-condition review. |
+| Review is independent. | Worker narrative is treated as acceptance, or the reviewer edits the branch. | Orchestrator mode, pr-review mode, working rules, and doctrine require a separate provider verdict and preserve branch ownership. | Exact-head review-mode and orchestrator-flow review. |
+| Review head is exact. | Accepted verdict names an older SHA. | Verdict must name the exact reviewed head; stale evidence stops merge; changed head requires re-review. | Exact-head merge-gate review of this PR. |
+| Parentage survives workspace isolation. | Reviewer is launched as a detached root thread. | Orchestrator mode and working rules reject detached root/schedule/CLI launches and require a parent-attached child in the dedicated PR-head workspace with finish notifications. | Exact-head Paseo launch-shape review. |
+| Economical routes are normal. | Coordinator or ordinary reviewer requires a frontier model by role name alone. | Coordinator default is the economical coordinator class; review children select from the adequate pool; frontier is reserved for residual unbounded risk; `check:model-routing` keeps local names out of the payload. | Model-posture review plus `check:model-routing` PASS. |
+| Merge safety is unchanged. | Coordinator merges with missing checks, unresolved findings, or ambiguous state. | The six-part coordination gate is mandatory in modes, contract, doctrine, and architecture; ambiguous/contradictory/missing/stale evidence stops merge. | Exact-head merge-gate review. |
+| Failure stays lane-local. | One provider refusal halts unrelated ready work. | Parallel-scheduling doctrine, contract, and template keep provider/profile failures lane-local; unchanged by this batch. | Structural: doctrine 07 and template wording unchanged in that respect; `check:model-routing` failure-isolation row PASS. |
+| Trial does not rewrite policy by anecdote. | One successful cheap review is treated as permanent proof. | Doctrine section and spec 036 record the separate ten-PR cohort; card 126 stays blocked and unexecuted. | Structural: card 126 state verified in this diff. |
+
+## Validation
+
+- `effigy check:model-routing` — PASS (ten milestone 047 oracle rows)
+- `effigy check:repo-contract` — PASS
+- `effigy check:command-skills` — PASS (8 adapters, 428 chars)
+- `effigy check:skill-install skills/northstar` — PASS (113 files)
+- `effigy qa:docs` — PASS (exit 0)
+- `effigy validate` — PASS (exit 0; with `effigy qa:docs` this is the full `effigy qa` board)
+- `git diff --check` — clean
+
+## Next Task
+
+Orchestrator exact-head review of this PR and merge, then the installed-skill
+refresh. Card 126 stays blocked until both complete.

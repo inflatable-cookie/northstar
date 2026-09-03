@@ -165,14 +165,20 @@ An explicit request to manage the surrounding discovery, planning, worker, or
 closeout loop remains **Orchestrator** mode. A direct review request does not
 activate worker mode or the worker startup preflight.
 
+Orchestrator-launched review children use this same mode from a dedicated
+PR-head workspace and post a provider verdict naming the exact reviewed head.
+
 → [`modes/pr-review.md`](./modes/pr-review.md)
 
 ## 8. Orchestrator thread
 
 Use when the user wants Northstar to own a question-led planning conversation,
 spin off a separate operator-facing planning delegate, prepare a worker
-thread/worktree, maintain a runway, review a lane's PR, or continue from a
-committed `orchestrator-continuation` handoff. This is an internal
+thread/worktree, maintain a runway, or continue from a committed
+`orchestrator-continuation` handoff. Coordination is the normal job: keep the
+dependency frontier launching, route material meaning through operator-
+confirmed chatterbox packets, route substantive PR review to independent
+review children, and retain the merge gate. This is an internal
 mode of the single public authority; the operator relays messages between
 threads when no control-plane tools are available. When Paseo injects its
 orchestration tools, the mode uses them for routine dispatch without a separate

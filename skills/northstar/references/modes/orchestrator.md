@@ -14,6 +14,17 @@ unresolved choices visible; do not turn uncertainty into speculative cards.
 The operator remains the authority boundary; transport may be direct through an
 available control plane or operator-relayed.
 
+Your normal job is economical coordination: maintain the dependency frontier
+and launch every safe ready lane, create and resume child workers and
+reviewers in separate workspaces, route unresolved product meaning to an
+operator-facing chatterbox, promote only operator-confirmed meaning through a
+bounded projection lane, route substantive exact-head review to an independent
+review child, and verify the merge gate. Do not repeat full planning or
+semantic review for a settled lane merely to satisfy role ownership; escalate
+when the packet, review, or repository state leaves a real judgment
+unresolved. Small operational clarifications that cannot change behavior,
+acceptance, public contract, or sequencing stay with you.
+
 **Paseo dispatch is implicit inside Paseo.** When the current orchestrator
 thread exposes Paseo's profile, workspace, agent, and follow-up tools, that
 injected tool surface authorizes routine dispatch of an already-approved, ready
@@ -157,6 +168,59 @@ intake prompt or discovers a new triage note on disk, it treats it as intake
 only: record the note path, do not promote from the intake, and do not change
 current work. Inspect the note at the next normal triage checkpoint.
 
+A chatterbox note becomes decision-ready when it clearly separates
+operator-confirmed decisions, recommendations not yet accepted, evidence and
+alternatives, unresolved questions, and affected authority surfaces. Treat
+recommendations as recommendations: only explicit operator confirmation makes
+packet meaning promotable. Once the operator confirms the material meaning,
+compile an exact promotion brief and dispatch a bounded planning-projection
+worker; the projection may edit canonical architecture, contracts, specs,
+roadmaps, and cards only as the brief names, and any semantic ambiguity
+returns to the operator and the chatterbox instead of being resolved by
+projection or coordination. An independent review child checks the promotion
+against the confirmed packet before the normal exact-head merge gate applies.
+Readiness stays a canonical property of the promoted card.
+
+## Independent review children
+
+Every worker PR gets an independent review child unless the operator
+explicitly asks the current thread to perform a direct review. The review
+child owns substantive exact-head semantic review and posts the durable
+verdict on the provider. You do not duplicate the full diff review; you verify
+only the coordination gate before merge.
+
+In Paseo, launch the reviewer like this:
+
+- create a dedicated checkout/worktree workspace for the PR head;
+- create the reviewer through your agent-scoped creation call with that
+  workspace ID so it remains your child; keep finish notifications enabled.
+  A detached root launch, schedule, generic detached run, or unproven CLI path
+  is rejected;
+- select an economical adequate review route under the diversified-routing
+  rule; escalate to a frontier route only when the diff retains residual
+  risk that settled planning, the review oracle, tests, and an economical
+  independent review cannot bound;
+- give the reviewer the PR, the canonical refs, and the review oracle — not
+  the worker's private transcript;
+- retain the workspace and agent identities for revision routing.
+
+The reviewer works in Direct PR Review mode and its posted verdict names the
+exact head it reviewed. Changes requested return to the same implementation
+worker. The revised exact head returns to the same reviewer when available; a
+replacement reviewer starts a fresh complete review and never inherits an
+unseen verdict.
+
+Before merge you must independently verify only the coordination gate:
+
+- the durable accepted verdict names the exact current head;
+- every blocking finding is resolved or explicitly superseded on the provider;
+- required checks pass;
+- the PR targets the intended base and current base ancestry is acceptable;
+- the PR is mergeable;
+- no stricter repository rule or operator pause applies.
+
+Ambiguous, contradictory, missing, or stale review evidence stops the merge.
+
 ## Fresh orchestrator continuation
 
 This path starts only when the operator explicitly asks the current
@@ -226,13 +290,14 @@ archives, deletes, kills, or unpins the source workspace or thread
 automatically.
 
 ## Mechanical documentation projection
-
-Keep discovery, planning, promotion, readiness, review-oracle design, worker
-routing, PR review, and merge in the frontier orchestrator. After those choices
-are settled, a fast/low-cost subagent may project a meaningful mechanical batch
-into named documentation surfaces. Use the current profile notes rather than a
-hard-coded model name; a locally preferred profile is configuration, not a
-Northstar dependency.
+Keep discovery ownership, promotion authority, readiness, review-oracle
+design, worker routing, the merge gate, and merge with the coordinator; route
+substantive semantic review to independent review children. After meaning is
+settled — or the operator confirms it through a decision-ready packet — a
+fast/low-cost subagent may project a meaningful mechanical batch into named
+documentation surfaces. Use the current profile notes rather than a hard-coded
+model name; a locally preferred profile is configuration, not a Northstar
+dependency.
 
 When Paseo exposes profiles and agent creation, list current profiles, choose
 the one whose notes fit fast/low-cost documentation projection, and create the
@@ -255,6 +320,13 @@ The projection subagent must not choose a canonical home, invent or reinterpret
 intent, add acceptance/stop/review-oracle policy, decide ready/complete/next
 state, resolve a contradiction, edit product code, commit, push, review, or
 merge. It stops and returns the question when the brief does not settle a choice.
+
+A planning-promotion batch materializes an explicitly operator-confirmed
+decision-ready packet. It may edit canonical architecture, contracts, specs,
+roadmaps, and cards only as the confirmed brief names, and it stops on
+semantic ambiguity for the operator and the source chatterbox. An independent
+review child checks a promotion diff against the confirmed packet before the
+coordinator applies the merge gate.
 
 Run projection serially in the planning context, not as worker mode: no worker
 handoff, worktree, branch, or PR. Capture dirty state and allowed paths before
@@ -441,16 +513,15 @@ batch large enough to repay dispatch and review; keep tiny edits local.
     have launched at the dispatch checkpoint. Continue non-overlapping
     planning, dispatch, review, and closeout. The separate post-merge refresh
     in step 12 still applies to same-repository heads.
-11. **Review the PR.** On the PR URL, inspect metadata, commits, diff, checks, and
-   changed files against the spec, milestone, cards, and contracts. Review
-   independently of the worker narrative. Record an evidence-backed verdict in
-   the provider's review surface. If the orchestrator and worker share a GitHub
-   identity, formal self-approval is unavailable: post the verdict as a PR
-   comment and treat that comment as the canonical review record. Leave precise
-   comments when changes are needed. Classify each blocking finding as
-   `execution-miss`, `oracle-gap`, `planning-change`, `validation-gap`, or
-   `integration-drift`. A `planning-change` pauses worker revision while the
-   orchestrator repairs canonical planning.
+11. **Route the PR review.** Dispatch an independent review child unless the
+   operator explicitly asked this thread to review the PR directly. Create a
+   dedicated workspace at the PR head, launch the reviewer as your child with
+   finish notifications enabled, select an economical adequate review route
+   under the diversified-routing rule, and hand over the PR, canonical refs,
+   and review oracle — not the worker's private transcript. The reviewer uses
+   Direct PR Review mode and posts the verdict on the provider, naming the
+   exact head reviewed. For a planning-delegate PR, replace card/implementation
+   conformance with the planning-packet checks above.
    Posting review comments does not wake a finished worker. After every
    `changes requested` verdict is recorded on the PR, send an explicit follow-up
    to the originating worker through the active adapter. In Paseo, call
@@ -459,25 +530,26 @@ batch large enough to repay dispatch and review; keep tiny edits local.
    notify on finish. Resume the same child agent rather than silently creating a
    replacement worker; if the original worker is unavailable, give the review to
    the operator for relay. A `planning-change` still returns to canonical
-   planning before this follow-up.
-   For a planning-delegate PR, replace card/implementation conformance with the
-   planning-packet checks above. Requested changes still wake the originating
-   delegate; accepted merge is followed by a separate orchestrator promotion
-   batch.
+   planning before this follow-up. Route the revised exact head back to the
+   same reviewer when available; a replacement reviewer starts a fresh complete
+   review and never inherits an unseen verdict.
 12. **Merge and close out.** Before closeout, revisit the run's triage notes and
     give each one a clear disposition: promote or rework it into canonical docs,
     merge it with another note, keep it explicitly open, or remove it when it is
     implemented, superseded, or no longer useful. Ask the operator instead of
-    guessing when the disposition is uncertain. Once the provider holds an
-    accepted verdict for the exact current PR head, every required check passes,
-    the PR is mergeable into the intended base, and no stricter repository rule
-    or explicit operator pause applies, merge without asking for another
-    approval. If the head changed after review, review it again. If merge state
-    or the merge result is ambiguous, stop before retrying. Same-repository PRs
-    merge one at a time: after each merge, refresh every remaining head against
-    current `main` and re-review any head that changed or needed conflict
-    resolution. Do not wait for merge to start unrelated ready work; those lanes
-    should already have launched at the dispatch checkpoint.
+    guessing when the disposition is uncertain. Merge only after the
+    coordination gate holds: an accepted independent review verdict (or your
+    own operator-requested direct review) names the exact current PR head,
+    every blocking finding is resolved or explicitly superseded on the
+    provider, required checks pass, the PR is mergeable into the intended
+    base with acceptable ancestry, and no stricter repository rule or explicit
+    operator pause applies. If the head changed after review, review it again.
+    If merge state or the merge result is ambiguous, stop before retrying.
+    Same-repository PRs merge one at a time: after each merge, refresh every
+    remaining head against current `main` and re-review any head that changed
+    or needed conflict resolution. Do not wait for merge to start unrelated
+    ready work; those lanes should already have launched at the dispatch
+    checkpoint.
     Then update card, milestone, log, front-door currentness, continuation/pause
     state, and the single next task. If the lane continues, identify the next
     ready card; if it ends, name the next planning checkpoint.
@@ -658,15 +730,22 @@ allowance value.
 
 Select by capability:
 
+- the coordinator's own normal route: an economical coordinator capable of
+  reliable tool use, concise state tracking, and bounded verification; higher
+  reasoning effort is an escalation for material operator-facing discovery or
+  review-oracle design, not the default;
 - orchestrator continuations and operator-facing planning delegates: the
   adequate orchestrator-role pool, rotated by the same rule; an explicitly
   named profile wins;
 - chatterbox threads: the adequate operator-facing conversational pool,
   rotated by the same rule; an explicitly named profile wins;
-- orchestrator discovery, material review, and review-oracle design:
-  frontier/high effort;
+- review children: the cheapest adequate independent-review pool under the
+  diversified-routing rule; a frontier review route only when the diff
+  retains residual risk that settled planning, explicit oracles, tests, and
+  an economical independent review cannot bound;
 - exact mechanical documentation projection: fast/low-cost profile, low or
-  medium reasoning, with the orchestrator retaining semantic review;
+  medium reasoning, with promotion batches checked by an independent review
+  child against the confirmed packet;
 - ordinary bounded implementation: the cheapest adequate non-frontier
   day-to-day pool;
 - long audits, broad documentation, and other token-heavy mechanical jobs
@@ -685,9 +764,10 @@ Select by capability:
 Task size, file count, duration, or the bare presence of a security,
 persistence, concurrency, public-API, deployment, or multi-version surface
 does not by itself make a worker lane frontier work. Those surfaces still
-require a clear review oracle and frontier review; a material but settled lane
-may use a capable non-frontier worker while the orchestrator keeps material
-review. Worker price is not the review-strength control. Pause before dispatch
+require a clear review oracle and material independent review; a material but
+settled lane may use a capable non-frontier worker while its independent
+review child keeps material review. Worker price is not the review-strength
+control. Pause before dispatch
 when the review oracle is not explicit.
 
 When multiple plausible designs or an unresolved contract choice remain,
@@ -723,9 +803,13 @@ Stop and return to planning or the operator when:
 - the launcher supplied a dirty or `main` worktree; stop and report it rather
   than creating a second worktree behind the launcher's back;
 - the base/worktree/branch boundary remains unverifiable after fallback;
-- the current PR head lacks an accepted orchestrator verdict, required checks
-  are not passing, mergeability or target base is unclear, a stricter repository
-  rule requires human action, or the operator explicitly paused merge;
+- the current PR head lacks an accepted independent review verdict naming the
+  exact head, required checks are not passing, mergeability or target base is
+  unclear, a stricter repository rule requires human action, or the operator
+  explicitly paused merge;
+- review evidence is stale, ambiguous, contradictory, or missing;
+- a review child cannot launch as a parent-attached child in its own PR-head
+  workspace;
 - a manual worktree is needed but the local path contract has not been satisfied;
 - control-plane launch state is ambiguous enough that retrying could create a
   duplicate workspace, worker, or successor orchestrator;

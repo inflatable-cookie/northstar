@@ -14,6 +14,13 @@ commits, pushes, merge, closeout changes, or unrelated provider mutations.
 The provider review surface is the durable result. Chat is a short summary, not
 the only home of a finding. Never leave a blocking finding only in chat.
 
+An orchestrator may launch this mode in a dedicated review-child workspace for
+a worker PR. The boundaries are identical: independent review from the PR and
+canonical refs, no branch mutation, and the durable verdict posted on the
+provider. Name the exact head you reviewed in the posted verdict. A
+replacement reviewer starts a complete fresh review; it never inherits an
+unseen verdict.
+
 ## Procedure
 
 1. Resolve the named PR and target repository. Read the applicable `AGENTS.md`

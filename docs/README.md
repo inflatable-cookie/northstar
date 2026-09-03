@@ -57,10 +57,11 @@ Northstar system:
 - work should not be called done without real evidence
 - agents should be able to continue through ready batch cards without needing
   repeated "continue" prompts from the operator
-- spec 036 plans an economical coordinator default: material discovery moves to
-  operator-confirmed chatterbox packets, canonical promotion stays bounded and
-  mechanical, and substantive PR review moves to independent child reviewers;
-  card 125 is ready and the ten-PR trial remains blocked
+- spec 036's economical coordinator default is implemented: material discovery
+  moves to operator-confirmed chatterbox packets, canonical promotion stays
+  bounded and mechanical, and substantive PR review belongs to independent
+  child reviewers behind a coordinator merge gate; the ten-PR trial remains
+  blocked behind merge and the installed-skill refresh
 - `g02.041/109` repaired partial Rust evidence collection and merged; Signal
   owns the originating papercut closure
 - dependency-frontier, parallel-first worker scheduling is the orchestrator

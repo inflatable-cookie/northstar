@@ -103,28 +103,33 @@ preflight. The source yields the transferred lane after pushed dispatch.
 - **Research:** promoted decisions in architecture/contracts, not stranded memos.
 - **Recovery:** trustworthy planning surfaces and canonical refs restored.
 - **Normalize:** baseline or strict spine installed/maintained; Effigy-first QA.
-- **Orchestrator:** question-led planning, parallel-first dispatch of the whole
-  safe ready dependency frontier without a global thread budget, lane-local
-  provider/profile routing, diversified economical worker routing (adequate
-  pool, cheapest adequate tier, recent-use rotation) with frontier workers
-  only when both escalation axes hold, Paseo worker parentage preserved
-  across dedicated worktree workspace placement (scoped cross-workspace child
-  creation, finish notifications enabled, no detached root launches,
-  same-agent revision resume), optional operator-facing frontier planning
-  delegates with orchestrator-owned promotion, optional fresh-orchestrator
-  continuation through a pushed seven-section handoff and a separate local
-  workspace with `Orchestrator=true`, one pushed worker handoff under
-  `docs/handoffs/` per launched lane, optional fast/low-cost mechanical
-  documentation projection under frontier semantic review, bounded PR
-  review/revision, and accepted-review plus check-gated merge without a second
+- **Orchestrator:** economical coordination as the default job — parallel-first
+  dispatch of the whole safe ready dependency frontier without a global thread
+  budget, lane-local provider/profile routing, diversified economical routing
+  (adequate pool, cheapest adequate tier, recent-use rotation) with frontier
+  workers only when both escalation axes hold, Paseo worker parentage
+  preserved across dedicated worktree workspace placement (scoped
+  cross-workspace child creation, finish notifications enabled, no detached
+  root launches, same-agent revision resume), decision-ready chatterbox
+  packets promoted only after operator confirmation through a bounded
+  fail-closed projection lane, independent review children owning substantive
+  exact-head PR review while the coordinator verifies the verdict head,
+  findings, checks, ancestry, mergeability, and pause gate, optional
+  operator-facing frontier planning delegates with orchestrator-owned
+  promotion, optional fresh-orchestrator continuation through a pushed
+  seven-section handoff and a separate local workspace with
+  `Orchestrator=true`, one pushed worker handoff under `docs/handoffs/` per
+  launched lane, and accepted-review plus check-gated merge without a second
   operator prompt.
 - **Handoff:** a human-friendly seven-section file under `docs/handoffs/`, with
   an absolute path returned to the operator; not a substitute for log/roadmap
   closeout.
 - **Chatterbox:** warm operator intake conversation, problem exploration,
   and unique-file triage capture on shared checkout with operator-visible note
-  handoff (v1 starts no automatic orchestrator turn); no implementation,
-  promotion, review, merge, or dispatch authority.
+  handoff (v1 starts no automatic orchestrator turn); decision-ready packets
+  separate confirmed decisions from recommendations but stay
+  non-authoritative; no implementation, promotion, review, merge, or dispatch
+  authority.
 
 ## Conversation style
 
