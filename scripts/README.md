@@ -277,12 +277,45 @@ Card 117 extends the same checker with the generic installed-package runtime:
     non-vacuous installed setup/record proof through the public
     `effigy skill run --path <installed_path>` surface against a decoy
     consumer.
+19. card 119 Rust registry pin and frozen fallback: the shipped registry
+    carries the accepted `@northstar/rust-quality` `0.1.0` identity
+    (language-packs PR 4, commit `56b2e11`) beside the unchanged TypeScript
+    canary at registry version 1.4.0, with exact-value assertions for both
+    entries; `overlap-windows.json` carries both open windows; and the
+    fallback CLI proves the Rust-shaped stopped pair emits the exact notice
+    naming the failed identity, the manual route, and the frozen embedded
+    Rust payload without claiming the TypeScript payload.
 
 The exact same surface is exercised with Effigy absent
 (`bun run skills/northstar/scripts/language-package-lifecycle.ts oracle
 <fixture-root> <out-dir>`) and from `effigy check:language-packages`, which
 also schema-validates every receipt and every host request/result message the
 surface writes.
+
+## Rust package pin oracle (`check:rust-package-pin`)
+
+The card-119 registry promotion is replayed deterministically against the real
+accepted package. `scripts/tests/rust-package-pin/validate_rust_package_pin.py`
+resolves the read-only package-source sibling (override with
+`NORTHSTAR_LANGUAGE_PACKS_ROOT`; default `../northstar-language-packs` beside
+the repository root), materializes pinned merge `56b2e11`, reproduces both
+spec-034 digests with an independent framing implementation, and drives the
+public `language-package-host.v1` surface through: visible official-acquisition
+stop, detection refusal, allowlist non-bypass, real acquisition including the
+package's declared self-check, offline and registry resolve for both
+workflows, drift stop/restore, TypeScript-under-Rust and wrong tree/manifest
+refusals, the version-drifted variant refusal, the frozen-Rust fallback
+notice, and the Rust-only retained inventory. It then runs the package's
+reviewed `prove-installed-invocation.sh` on the lifecycle `installed_path`
+(54-source parity at `69e4d5d`, cross-boundary v2 ledger migration, engine
+source-payload tamper rejection, probe `verify-install`). The oracle lives
+under `scripts/`, so the installed core skill never depends on the package
+source sibling; wired into `qa` through `validate`. Runtime is roughly half a
+minute (two cargo builds inside the package prover).
+
+```bash
+effigy check:rust-package-pin
+```
 
 ## Agent-instruction audit (`check:agent-instructions`)
 

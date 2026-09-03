@@ -72,7 +72,7 @@ overlap without loading the TypeScript package or changing consumer authority.
   `git diff --check`.
 - **PR base/head:** `main` <- `worker/pin-rust-package-candidate`.
 - **PR URL:** pending.
-- **Review state:** implementation pending.
+- **Review state:** implementation complete; awaiting exact-head review
 - **Merge path:** orchestrator after accepted current-head review and checks.
 
 ## Boundaries

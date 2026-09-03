@@ -29,6 +29,15 @@ pass, whole-codebase review, or audit-and-fix action. Resolve `worktree` or
 `repository` scope. Explicit audit intent takes precedence over everyday Rust
 authoring and never activates from ordinary coding alone.
 
+Route through the installed package before using embedded content. The
+official registry pins `@northstar/rust-quality` as the official Rust choice
+(`explicit_audit_repair`, `rust`).
+Run the generic installed-package route
+([`packages/installed-package-route.md`](./packages/installed-package-route.md))
+for that identity: a `routed` result executes the package's declared audit
+entrypoint from `installed_path`; a stopped route falls back to the frozen
+embedded payload only after the route doc's visible fallback notice.
+
 → [`modes/rust-quality-audit.md`](./modes/rust-quality-audit.md)
 
 ## Rust everyday authoring (self-activating)
@@ -38,6 +47,15 @@ refactoring, or when applicable target-repository instructions already activate
 Northstar Rust quality. If activation is missing, the mode installs it from the
 loaded skill before editing. The repository profile must then resolve to
 production-valid `strict`.
+
+Route through the installed package before using embedded content. The
+official registry pins `@northstar/rust-quality` as the official Rust choice
+(`everyday_authoring`, `rust`).
+Run the generic installed-package route
+([`packages/installed-package-route.md`](./packages/installed-package-route.md))
+for that identity: a `routed` result follows the package's declared authoring
+entrypoint from `installed_path`; a stopped route falls back to the frozen
+embedded payload only after the route doc's visible fallback notice.
 
 Do **not** use this route for a requested quality audit, no-slop pass, whole
 codebase review, or audit-and-fix tranche. Select the explicit audit route for

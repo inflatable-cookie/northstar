@@ -1,6 +1,6 @@
 # 119 - Extract Rust Language Package
 
-Status: active; package source accepted, registry promotion ready
+Status: active; registry pin proved, Convergence canary next
 Owner: repo maintainers
 Updated: 2026-09-03
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -148,9 +148,33 @@ and the pre-extraction engine produced a v2 ledger finalized by the installed
 engine. Registry promotion is now the ready serial step; the Convergence
 consumer canary remains behind its reviewed merge.
 
+The Northstar registry promotion pinned that identity at registry version
+`1.4.0` and opened the bounded Rust overlap window. Two independent
+spec-034 implementations reproduced both digests over the 59-file tree. The
+real-package transcript proved visible official-acquisition stop,
+detection refusal, allowlist non-bypass, activation with the real self-check,
+offline routing for both workflows, drift stop/restore, TypeScript and
+wrong-identity staging refusals, the version-drifted variant refusal, the
+exact frozen-Rust fallback notice, and the Rust-only retained inventory. The
+package's installed-route prover passed on the installed payload, including
+54-source parity, cross-boundary v2 ledger migration, and engine
+source-payload tamper rejection. Evidence is in
+`docs/logs/2026-09/03-033950-pin-rust-package-candidate.md`.
+
+PR 27 exact-head review required two repairs, both landed: both Rust router
+sections now route through the generic installed-package route by package
+ID, version, and workflow with the visible bounded fallback (the exact
+commit/tree/manifest pin stays owned by the official registry); and the
+real-package replay is committed as the deterministic `check:rust-package-pin`
+oracle wired into authoritative `qa` (installed skill stays independent of
+the package-source sibling). A second review round removed the router's
+registry-owned digest duplication and the prose-coupled checker assertions
+as prohibited prose-coupled validation.
+
 ## Next Task
 
-Pin the accepted Rust package identity, prove generic acquisition, installed
-routing, rollback, offline behavior, the bounded visible fallback, and
-Rust-only retained inventory. Stop after exact-head review and merge; the
-Convergence canary remains a separate serial step.
+Run the Convergence real-consumer canary against the promoted registry pin:
+installed everyday-authoring and explicit-audit runs, consumer
+policy/evidence compatibility, and the before/after hashes. It stays a
+separate serial step behind exact-head review and merge of the registry
+promotion; card 120 remains blocked.
