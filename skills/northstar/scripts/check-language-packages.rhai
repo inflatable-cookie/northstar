@@ -1206,6 +1206,12 @@ fn run_negative_oracle_suite(target_skill_root, manifest_schema, registry_schema
                 tree_digest: "a6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9",
                 manifest_digest: "b6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9",
                 compatible_core_range: ">=0.2.0 <1.0.0",
+                discovery: #{
+                    languages: ["fixture-lang"],
+                    overlays: [],
+                    workflows: ["explicit_audit_repair"],
+                    activation_marker: "fixture:mutable-branch",
+                },
             }
         ]
     };
@@ -1224,6 +1230,12 @@ fn run_negative_oracle_suite(target_skill_root, manifest_schema, registry_schema
                 tree_digest: "a6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9",
                 manifest_digest: "b6c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9e0d1f3b5a7c9",
                 compatible_core_range: ">=0.2.0 <1.0.0",
+                discovery: #{
+                    languages: ["fixture-lang"],
+                    overlays: [],
+                    workflows: ["explicit_audit_repair"],
+                    activation_marker: "fixture:mutable-tag",
+                },
             }
         ]
     };
@@ -1608,6 +1620,10 @@ fn run_card_117_oracle(northstar_skill_root, manifest_schema) {
         "oracle-15 frozen-fallback-notice: PASS",
         "card-117 oracle: PASS",
         "card-118 oracle: PASS",
+        "oracle-16 registry-selection-intent: PASS",
+        "oracle-17 registry-selection-marker: PASS",
+        "oracle-18 registry-discovery-agreement: PASS",
+        "card-122 oracle: PASS",
     ] {
         require(output.contains(marker), "card-117 oracle missing marker: " + marker);
     }
@@ -1636,6 +1652,90 @@ fn expect_fallback_cli_failure(label, surface_path, request_path, result_path, o
     require(failed, label + " unexpectedly passed");
     require(output.contains(reason), label + " rejected for wrong reason: " + output);
 }
+
+// Card 122: drive the generic registry-owned selection CLI exactly as the
+// root router and lifecycle checker consume it. The shipped two-entry
+// official registry proves accepted-intent and existing-activation routing;
+// policy-free fixtures prove the selection logic stays generic and fails
+// closed on ambiguity, unsupported work, drift-shaped input, and detection.
+fn expect_selection_case(label, surface_path, registry_path, extra_args, expect_ok, expected_text) {
+    let argv = ["bun", "run", surface_path, "select", registry_path];
+    for a in extra_args {
+        argv.push(a);
+    }
+    let report = exec::run(argv, #{ run_in: "host", cwd: repo_root });
+    if expect_ok {
+        require(report["success"], "card-122 selection case '" + label + "' should select but failed: " + report["stderr"] + report["stdout"]);
+        require(report["stdout"].contains(expected_text), "card-122 selection case '" + label + "' selected the wrong identity: " + report["stdout"]);
+    } else {
+        require(!report["success"], "card-122 selection case '" + label + "' should fail closed but succeeded: " + report["stdout"]);
+        if expected_text != "" {
+            require(report["stdout"].contains(expected_text) || report["stderr"].contains(expected_text),
+                "card-122 selection case '" + label + "' stopped for the wrong reason: " + report["stdout"] + report["stderr"]);
+        }
+    }
+    log("card-122 selection case '" + label + "': OK");
+}
+
+fn run_card_122_selection_proofs(northstar_skill_root, official_registry_path) {
+    let surface_path = path::join(northstar_skill_root, "scripts/language-package-lifecycle.ts");
+
+    // Accepted explicit intent selects the exact accepted entry.
+    expect_selection_case("typescript-audit", surface_path, official_registry_path,
+        ["--language", "typescript", "--workflow", "explicit_audit_repair"], true, "selected @northstar/typescript-quality@0.1.0");
+    expect_selection_case("typescript-svelte-overlay-audit", surface_path, official_registry_path,
+        ["--language", "typescript", "--workflow", "explicit_audit_repair", "--overlay", "svelte"], true, "selected @northstar/typescript-quality@0.1.0");
+    expect_selection_case("rust-audit", surface_path, official_registry_path,
+        ["--language", "rust", "--workflow", "explicit_audit_repair"], true, "selected @northstar/rust-quality@0.1.0");
+    expect_selection_case("rust-everyday-authoring", surface_path, official_registry_path,
+        ["--language", "rust", "--workflow", "everyday_authoring"], true, "selected @northstar/rust-quality@0.1.0");
+
+    // Existing activation markers select their registered entries.
+    expect_selection_case("typescript-activation-marker", surface_path, official_registry_path,
+        ["--marker", "northstar:typescript-quality"], true, "selected @northstar/typescript-quality@0.1.0");
+    expect_selection_case("rust-activation-marker", surface_path, official_registry_path,
+        ["--marker", "northstar:rust-quality"], true, "selected @northstar/rust-quality@0.1.0");
+
+    // Unsupported work stays unavailable; no substitution across packages.
+    expect_selection_case("typescript-everyday-unavailable", surface_path, official_registry_path,
+        ["--language", "typescript", "--workflow", "everyday_authoring"], false, "stays unavailable");
+    expect_selection_case("cross-package-overlay-unavailable", surface_path, official_registry_path,
+        ["--language", "rust", "--workflow", "explicit_audit_repair", "--overlay", "sveltekit"], false, "stays unavailable");
+
+    // Detection-only input is not selection authority.
+    expect_selection_case("detection-only-language", surface_path, official_registry_path,
+        ["--language", "rust"], false, "detection is not selection authority");
+
+    // Unknown markers and incompatible core stop before any acquisition.
+    expect_selection_case("unknown-marker", surface_path, official_registry_path,
+        ["--marker", "northstar:unknown"], false, "carries the activation marker");
+    expect_selection_case("incompatible-core-marker", surface_path, official_registry_path,
+        ["--marker", "northstar:typescript-quality", "--core-version", "1.0.0"], false, "incompatible with core");
+
+    // The same procedure is generic over policy-free fixtures: two entries,
+    // neither named in selection code, select exactly by discovery data.
+    let selection_fixture = path::join(northstar_skill_root, "assets/fixtures/language-packages/selection/two-entry-registry.json");
+    require(fs::is_file(selection_fixture), "missing two-entry selection fixture: " + selection_fixture);
+    expect_selection_case("fixture-alpha-overlay-intent", surface_path, selection_fixture,
+        ["--language", "alpha", "--workflow", "audit_workflow", "--overlay", "alpha-ui"], true, "selected @northstar/alpha-fixture@0.1.0");
+    expect_selection_case("fixture-beta-authoring-intent", surface_path, selection_fixture,
+        ["--language", "beta", "--workflow", "authoring_workflow"], true, "selected @northstar/beta-fixture@0.2.0");
+    expect_selection_case("fixture-beta-marker", surface_path, selection_fixture,
+        ["--marker", "fixture:beta-marker"], true, "selected @northstar/beta-fixture@0.2.0");
+
+    // Ambiguous shipped data fails closed: duplicate markers die at registry
+    // parse; duplicate language/workflow claims die at selection.
+    let ambiguous_root = path::join(northstar_skill_root, "assets/fixtures/language-packages/negative/ambiguous-discovery");
+    expect_selection_case("duplicate-marker-parse", surface_path,
+        path::join(ambiguous_root, "duplicate-marker-registry.json"),
+        ["--marker", "fixture:shared-marker"], false, "duplicate activation marker");
+    expect_selection_case("duplicate-claim-ambiguous", surface_path,
+        path::join(ambiguous_root, "duplicate-claim-registry.json"),
+        ["--language", "alpha", "--workflow", "audit_workflow"], false, "ambiguous");
+
+    log("card-122 generic selection CLI: PASS (accepted intent, activation markers, policy-free generics, and nine fail-closed cases)");
+}
+
 
 // =============================================================================
 // Main Execution
@@ -1666,14 +1766,16 @@ let registry = json::read_file(official_registry_path);
 validate_registry_instance(registry, registry_schema, "official-registry.json");
 
 // Card 119: the official registry carries exactly the accepted TypeScript
-// canary identity (card 121) and the accepted Rust package identity. Schema
-// conformance above proves shape; these assertions pin the accepted values
-// themselves so identity drift fails the checker rather than silently
+// canary identity (card 121) and the accepted Rust package identity. Card
+// 122 advances the registry version and adds registry-owned discovery
+// metadata without changing either pinned identity. Schema conformance
+// above proves shape; these assertions pin the accepted values themselves
+// so identity or discovery drift fails the checker rather than silently
 // re-pinning. The TypeScript identity follows the reviewed standalone-adapter
 // repair (language-packs PR 3, commit c9ef2a2); the Rust identity follows the
 // reviewed package-source merge (language-packs PR 4, commit 56b2e11).
-require(registry["registry_version"] == "1.4.0",
-    "official-registry.json must record registry_version 1.4.0 for the card-119 Rust pin");
+require(registry["registry_version"] == "1.5.0",
+    "official-registry.json must record registry_version 1.5.0 for the card-122 discovery binding");
 let registry_packages = registry["packages"];
 require(registry_packages.len() == 2,
     "official-registry.json must contain exactly the accepted TypeScript and Rust entries, found " + registry_packages.len());
@@ -1707,8 +1809,47 @@ for key in rust_expectations.keys() {
     require(rust_pin.contains(key) && rust_pin[key] == rust_expectations[key],
         "official-registry.json Rust entry field '" + key + "' drifted from the accepted card-119 identity");
 }
+// Card 122: registry-owned discovery metadata is part of the accepted pin.
+// It is data for generic selection, not trust: it must agree with the pinned
+// package manifest and must keep the shipped registry exactly selectable.
+let canary_discovery = canary["discovery"];
+require(type_of(canary_discovery) == "map", "official-registry.json canary entry is missing discovery metadata");
+require(canary_discovery["languages"] == ["typescript"] &&
+    canary_discovery["overlays"] == ["base", "svelte", "sveltekit"] &&
+    canary_discovery["workflows"] == ["explicit_audit_repair"] &&
+    canary_discovery["activation_marker"] == "northstar:typescript-quality",
+    "official-registry.json canary discovery metadata drifted from the accepted card-122 values");
+let rust_discovery = rust_pin["discovery"];
+require(type_of(rust_discovery) == "map", "official-registry.json Rust entry is missing discovery metadata");
+require(rust_discovery["languages"] == ["rust"] &&
+    rust_discovery["overlays"] == [] &&
+    rust_discovery["workflows"] == ["everyday_authoring", "explicit_audit_repair"] &&
+    rust_discovery["activation_marker"] == "northstar:rust-quality",
+    "official-registry.json Rust discovery metadata drifted from the accepted card-122 values");
+
+// Exactly selectable: no two shipped entries may claim the same activation
+// marker or the same language/workflow pair, or generic selection would be
+// ambiguous before any host invocation.
+let seen_markers122 = [];
+let seen_claim_pairs = [];
+for entry in registry_packages {
+    let disc = entry["discovery"];
+    require(type_of(disc) == "map", "official-registry.json entry is missing discovery metadata");
+    let marker = disc["activation_marker"];
+    require(!seen_markers122.contains(marker), "official registry activation marker is ambiguous: " + marker);
+    seen_markers122.push(marker);
+    for language in disc["languages"] {
+        for workflow in disc["workflows"] {
+            let claim_pair = language + "/" + workflow;
+            require(!seen_claim_pairs.contains(claim_pair), "official registry language/workflow claim is ambiguous: " + claim_pair);
+            seen_claim_pairs.push(claim_pair);
+        }
+    }
+}
+log("card-122 registry discovery binding: OK (registry_version 1.5.0, both accepted entries carry discovery, registry stays exactly selectable)");
 
 let overlap_schema = load_and_validate_schema_file(packages_ref_root, "overlap-windows.schema.json", "language-package-overlap-windows");
+
 let overlap_path = path::join(packages_ref_root, "overlap-windows.json");
 require(fs::is_file(overlap_path), "missing overlap-windows.json");
 let overlap_doc = json::read_file(overlap_path);
@@ -1925,4 +2066,6 @@ expect_fallback_cli_failure("overlap-missing-version", surface_path,
     "missing required field");
 log("card-118 operational fallback CLI: PASS (Jetstream-shaped notice plus eleven fail-closed mutations)");
 
-log("Northstar language package machine contracts: OK (" + package_schema_count + " Draft 2020-12 schemas under references/packages, bounded evaluator for frozen vocabulary across all variants, schema mutation & fail-closed proof, SemVer numeric ranges, path containment, trust/source receipt variants, deep policy-free proof, staged sibling isolation proof, 9 mandatory negative oracle invariants, portable contracts; card 117: provider-neutral Bun lifecycle surface with canonical byte-exact digest vectors, operator trust & lifecycle schemas, atomic CAS lifecycle state, immutable receipts, identity-bound routing, transactional acquire/update/rollback, offline local routing, revocable trust, generic manifest-field routing, declared self-check execution, 8 review-oracle rows plus restrictions/provenance/concurrency falsified)");
+run_card_122_selection_proofs(northstar_skill_root, official_registry_path);
+
+log("Northstar language package machine contracts: OK (" + package_schema_count + " Draft 2020-12 schemas under references/packages, bounded evaluator for frozen vocabulary across all variants, schema mutation & fail-closed proof, SemVer numeric ranges, path containment, trust/source receipt variants, deep policy-free proof, staged sibling isolation proof, 9 mandatory negative oracle invariants, portable contracts; card 117: provider-neutral Bun lifecycle surface with canonical byte-exact digest vectors, operator trust & lifecycle schemas, atomic CAS lifecycle state, immutable receipts, identity-bound routing, transactional acquire/update/rollback, offline local routing, revocable trust, generic manifest-field routing, declared self-check execution, 8 review-oracle rows plus restrictions/provenance/concurrency falsified; card 122: registry-owned discovery binding, exactly-selectable shipped registry, generic intent/activation-marker selection with fail-closed ambiguity, drift, and detection negatives)");

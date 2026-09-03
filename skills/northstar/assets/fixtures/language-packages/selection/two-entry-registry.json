@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0.0",
+  "registry_version": "1.0.0",
+  "packages": [
+    {
+      "package_id": "@northstar/alpha-fixture",
+      "version": "0.1.0",
+      "tree_digest": "sha256:b8e76dfdc87d84904ada0620425c0a94200532d11207e3d1339626fb2df85aa3",
+      "manifest_digest": "sha256:b9cdf39bbf2ae4fc2aeee656d2c8dc655c0faa951fbeec255eb887f210a683f9",
+      "compatible_core_range": ">=0.2.0 <1.0.0",
+      "discovery": {
+        "languages": ["alpha"],
+        "overlays": ["alpha-ui"],
+        "workflows": ["audit_workflow"],
+        "activation_marker": "fixture:alpha-marker"
+      }
+    },
+    {
+      "package_id": "@northstar/beta-fixture",
+      "version": "0.2.0",
+      "tree_digest": "sha256:b8e76dfdc87d84904ada0620425c0a94200532d11207e3d1339626fb2df85aa3",
+      "manifest_digest": "sha256:b9cdf39bbf2ae4fc2aeee656d2c8dc655c0faa951fbeec255eb887f210a683f9",
+      "compatible_core_range": ">=0.2.0 <1.0.0",
+      "discovery": {
+        "languages": ["beta"],
+        "overlays": [],
+        "workflows": ["audit_workflow", "authoring_workflow"],
+        "activation_marker": "fixture:beta-marker"
+      }
+    }
+  ]
+}
