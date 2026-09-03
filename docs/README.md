@@ -106,8 +106,8 @@ Northstar system:
   limits. The Rust readiness refresh selected Convergence and froze the
   54-file source boundary, but found the external package's agent-facing
   `SKILL.md` loaded an absent router. Package-source PR 3 repaired it and
-  merged as `c9ef2a2`; card 121 pins that replacement identity at registry
-  version `1.3.0`; cards 119-120 remain blocked until post-merge readiness
-  refresh.
+  merged as `c9ef2a2`; card 121's registry `1.3.0` pin merged as `69e4d5d`.
+  Card 119 is ready from the re-derived 54-file source boundary and selected
+  Convergence canary; card 120 remains blocked behind Rust proof.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

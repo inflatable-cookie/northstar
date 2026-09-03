@@ -105,6 +105,6 @@ before it becomes ready.
 
 ## Next Task
 
-After card 121's replacement pin merges, refresh card 119 against that
-identity and the frozen 54-file Rust inventory. Do not start Rust extraction
-before that dependency clears.
+Dispatch card 119's external Rust package-source lane from Northstar
+`69e4d5d` and the frozen 54-file inventory. Stop after its reviewed immutable
+candidate before core registry promotion.

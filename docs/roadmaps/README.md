@@ -86,15 +86,15 @@ Roadmaps sequence contract-backed work for Northstar itself.
   Batch B's bounded proof is accepted with four pre-existing editor failures
   and current-Poodle `ResolvedIconGeometry` API drift recorded as limits.
   Package-source PR 3 repaired the TypeScript package's non-standalone command
-  adapter and merged as `c9ef2a2`. Card 121 pins that replacement identity at
-  registry version `1.3.0`. The Rust inventory is frozen and Convergence selected,
-  but cards 119-120 remain blocked behind post-merge readiness refresh.
+  adapter and merged as `c9ef2a2`. Card 121's registry `1.3.0` pin merged as
+  `69e4d5d`. The Rust inventory is frozen, Convergence is selected, and card
+  119 is ready; card 120 remains blocked behind Rust proof.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-After `g02.048/121`'s registry pin merges, refresh card 119 against the merged
-replacement identity; do not start Rust extraction before that dependency
-clears.
+Dispatch `g02.048/119`'s external Rust package-source lane from Northstar
+`69e4d5d`. Stop after the reviewed immutable candidate before registry and
+consumer work.

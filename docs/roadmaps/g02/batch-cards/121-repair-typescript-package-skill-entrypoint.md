@@ -1,6 +1,6 @@
 # 121 - Repair TypeScript Package Skill Entrypoint
 
-Status: complete; replacement identity pinned, awaiting exact-head review
+Status: complete; merged as `69e4d5d`
 Owner: repo maintainers
 Updated: 2026-09-03
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -87,5 +87,5 @@ refresh.
 
 ## Next Task
 
-Stop. Orchestrator exact-head review of this pin, then a separate card 119
-readiness refresh. Do not start Rust extraction from this lane.
+Merged after exact-head review as `69e4d5d`. Card 119's separate readiness
+refresh is complete and the Rust source lane is ready.

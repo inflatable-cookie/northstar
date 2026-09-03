@@ -1,6 +1,6 @@
 # 119 - Extract Rust Language Package
 
-Status: planned; blocked on post-merge card 121 readiness refresh
+Status: ready
 Owner: repo maintainers
 Updated: 2026-09-03
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -12,7 +12,7 @@ Auto-start next card: no
 ## Ready-State Checks
 
 - [x] TypeScript canary is accepted and protocol findings are reconciled;
-- [ ] the TypeScript package's agent-facing `SKILL.md` is standalone and the
+- [x] the TypeScript package's agent-facing `SKILL.md` is standalone and the
   replacement identity is pinned through card 121;
 - [x] current Rust payload, engine, install, and consumer cohort are inventoried;
 - [x] strict everyday authoring and explicit audit remain separate workflows;
@@ -113,13 +113,15 @@ Card 118's accepted TypeScript prerequisite is complete. The bounded canary
 proof, fallback visibility, installed audit, byte preservation, and known
 consumer limits are recorded in card 118 and its closeout log.
 
-The 2026-09-03 readiness refresh froze a 54-file Rust extraction boundary at
-Northstar `4f534b204211b241fd5da17f4a7b845f969b0bc`: 24 language references,
+The post-merge readiness refresh re-derived the 54-file Rust extraction
+boundary at Northstar `69e4d5dea3daa4f6133d7363d39c1a0f72848435`: 24 language references,
 two modes, two Rhai scripts, 22 Cargo-engine files, one explicit command skill,
 and three templates. The SHA-256 of the sorted GNU `sha256sum` listing is
 `2f8515afce33c87e9b38f103b9c41440ed7f182142fc2c65fed4d10d9264040b`.
 The historical 120-file figure is whole-skill distribution parity, not the
-package source boundary.
+package source boundary. The earlier readiness log's `4f534b...` object is not
+retrievable; current merged `main` reproduces its exact 54-file listing digest
+and is the extraction source pin.
 
 The operator selected Convergence as the real-consumer canary. Its clean
 checkout was at `1f05db1e507aa67f73a68eccc2325e23dfc1d478`, with six Cargo
@@ -128,14 +130,14 @@ manifests, active everyday and explicit-audit instructions, profile digest
 and deviations digest
 `d6d876aeb6e70da9fec368201350b6d16f345a7363309dde4169284c51c2fcd0`.
 
-The same review found that the accepted TypeScript package's agent-facing
-`SKILL.md` loads `references/router.md`, which is absent from the independently
-installed package. Package-source PR 3 repaired that adapter and merged as
-`c9ef2a2`. Card 121 pins that replacement identity in Northstar. Card 119 stays
-not ready until that pin merges and a separate readiness refresh confirms the
-merged identity.
+Package-source PR 3 repaired the TypeScript adapter and merged as `c9ef2a2`.
+Card 121 pinned that identity at registry version `1.3.0` and merged as
+`69e4d5d`. Independent review reproduced the package tree and manifest digests,
+the superseded tree failed closed, and full Northstar QA passed. The serial
+prerequisite is clear.
 
 ## Next Task
 
-After card 121 merges, refresh this card against the pinned replacement
-identity. Do not launch Rust package work before that dependency clears.
+Dispatch the external Rust package-source lane from the current 54-file source
+pin. Stop after a reviewed immutable package candidate; registry promotion and
+the Convergence canary remain later serial steps.
