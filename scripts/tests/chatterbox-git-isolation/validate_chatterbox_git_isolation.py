@@ -41,7 +41,7 @@ def test_git_isolation():
         run(["git", "init", "-q"], cwd=temp_dir)
         run(["git", "config", "user.name", "Chatterbox Test"], cwd=temp_dir)
         run(["git", "config", "user.email", "chatterbox@northstar.invalid"], cwd=temp_dir)
-        
+
         # Create initial commit on main
         run(["git", "checkout", "-q", "-b", "main"], cwd=temp_dir)
         init_file = os.path.join(temp_dir, "tracked.txt")
@@ -66,7 +66,7 @@ def test_git_isolation():
         # Stage and commit exact path
         run(["git", "add", "--", note_1_rel], cwd=temp_dir)
         run(["git", "commit", "-q", "-m", "docs(triage): idea one", "--", note_1_rel], cwd=temp_dir)
-        
+
         head_commit_files = run(["git", "diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD"], cwd=temp_dir).stdout.strip().splitlines()
         assert_true(head_commit_files == [note_1_rel], "clean commit contains only the triage note")
 
