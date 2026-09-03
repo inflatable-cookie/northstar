@@ -1,6 +1,6 @@
 # 048 - Extract Modular Language Quality Packages
 
-Status: active; Batch C consumer canary changes required
+Status: active; Batch C complete, Batch D readiness refresh
 Owner: repo maintainers
 Created: 2026-09-01
 Depends on: `g02.033`, promoted spec 034
@@ -33,7 +33,7 @@ before it becomes ready.
 - [x] extract TypeScript/Svelte as the first independent official package;
 - [x] make the TypeScript package's advertised agent-facing skill standalone
   and repin its replacement identity;
-- [ ] extract Rust without weakening its everyday or explicit-audit evidence;
+- [x] extract Rust without weakening its everyday or explicit-audit evidence;
 - [ ] remove both embedded implementations and their bounded migration
   fallbacks from the root payload;
 - [ ] keep existing consumer activation, profiles, deviations, rule IDs, and
@@ -59,14 +59,15 @@ before it becomes ready.
   the missing local router reference and merged as `c9ef2a2`; card 121 pins
   that accepted identity at registry version `1.3.0` and proves installed
   adapter path closure without changing policy.
-- [ ] **Batch C — Rust extraction:** package-source PR 4 passed exact-head
+- [x] **Batch C — Rust extraction:** package-source PR 4 passed exact-head
   review at `7cc4cd0` and merged as `56b2e11`, fixing the immutable candidate
   at tree `sha256:e5cf9c5d...54dba0`. Card 119's registry promotion pinned
   that identity at registry version `1.4.0`, opened the bounded Rust overlap
   window, and proved the real-package lifecycle transcript and installed-route
-  engine integrity. PR 27 merged as `256d0f7`; Convergence PR 4 now has a
-  bounded changes-required finding because its first head cited the generic
-  package fixture rather than a Convergence-specific pre-extraction ledger.
+  engine integrity. PR 27 merged as `256d0f7`; Convergence PR 4 repaired its
+  first-head evidence gap, passed exact-head review at `792a7c2`, and merged
+  as `dff19c9` with both workflows, representative pre-extraction ledger
+  compatibility, consumer-policy preservation, and Rust-only inventory proven.
 - [ ] **Batch D — root reduction:** card 120 removes both frozen embedded
   payloads and fallback branches, then proves core-only operation and installed
   package routing.
@@ -111,5 +112,5 @@ before it becomes ready.
 
 ## Next Task
 
-Re-review Convergence PR 4 after its pre-extraction-evidence oracle is repaired.
-Card 120 stays blocked until both overlap-close gates are reviewed.
+Refresh card 120 against the accepted overlap-close evidence and inventory the
+exact embedded removal surface. Do not start deletion until it is ready.

@@ -1,6 +1,6 @@
 # 119 - Extract Rust Language Package
 
-Status: active; registry pin merged, Convergence canary changes required
+Status: complete
 Owner: repo maintainers
 Updated: 2026-09-03
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -49,17 +49,17 @@ lifecycle, or install unrelated package payloads.
 
 ## Acceptance Criteria
 
-- [ ] installed payload contains only the named Rust package;
-- [ ] strict everyday and explicit-audit behavior plus revision-E evidence stay
+- [x] installed payload contains only the named Rust package;
+- [x] strict everyday and explicit-audit behavior plus revision-E evidence stay
   exact;
-- [ ] Cargo-native engine remains payload-addressed, checksum-verified, and
+- [x] Cargo-native engine remains payload-addressed, checksum-verified, and
   independent of consumer Effigy catalogues;
-- [ ] valid consumer policy/evidence remain byte-compatible;
-- [ ] source/install parity, registry promotion, installed, rollback, offline,
+- [x] valid consumer policy/evidence remain byte-compatible;
+- [x] source/install parity, registry promotion, installed, rollback, offline,
   fallback, and real-consumer proofs pass;
-- [ ] no TypeScript payload is fetched or loaded;
-- [ ] all new Rust package development lands externally during overlap;
-- [ ] full package and Northstar QA pass.
+- [x] no TypeScript payload is fetched or loaded;
+- [x] all new Rust package development lands externally during overlap;
+- [x] full package and Northstar QA pass.
 
 ## Review Oracle
 
@@ -180,9 +180,16 @@ The retained worker is proving that boundary against a disposable Convergence
 materialization or will narrow the claim honestly if the original ledger is
 unavailable.
 
+Convergence PR 4 repaired that oracle gap by creating a representative
+repository-scope ledger with the pinned pre-extraction engine against the
+unchanged Convergence tree, then reading, completing, and finalizing it with
+the installed package engine. The original `convergence-20260831-rust-audit`
+ledger remains explicitly unavailable. The replacement head `792a7c2` passed
+exact-head review and merged as `dff19c9`; 364 tests passed with 4 skipped,
+consumer policy bytes stayed exact, and the evidence-only lane changed no
+product source.
+
 ## Next Task
 
-Re-review Convergence PR 4 after the retained worker repairs the
-pre-extraction-evidence oracle gap. Card 120 remains blocked until the
-installed everyday-authoring, explicit-audit, consumer-policy/evidence, and
-before/after-hash proof is accepted.
+Refresh card 120 readiness by inventorying the exact embedded removal surface.
+Do not start deletion until that inventory and the ready-state rubric pass.

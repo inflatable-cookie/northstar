@@ -1,6 +1,6 @@
 # 120 - Remove Embedded Language Quality Payloads
 
-Status: planned; blocked on card 119
+Status: planned; readiness refresh required
 Owner: repo maintainers
 Updated: 2026-09-01
 Master spec refs: `docs/specs/034-modular-language-quality-packages.md`
@@ -11,7 +11,7 @@ Auto-start next card: no
 
 ## Ready-State Checks
 
-- [ ] TypeScript and Rust packages pass every overlap-close proof;
+- [x] TypeScript and Rust packages pass every overlap-close proof;
 - [ ] exact embedded catalogues, modes, scripts, tools, adapters, templates,
   fixtures, router branches, parity entries, and fallback paths are inventoried;
 - [x] deletion and core-only behavior are governed by architecture and contract;
@@ -109,9 +109,11 @@ or retain compatibility aliases for deleted embedded implementations.
 
 ## Completion Notes
 
-Pending cards 116-119.
+Cards 116-119 are accepted. Convergence PR 4 supplied the final Rust consumer
+proof and merged as `dff19c9`. Exact embedded removal inventory remains the
+only unchecked readiness prerequisite.
 
 ## Next Task
 
-After card 119 merges, inventory exact removal scope and apply the ready-state
-rubric. Do not start a new language or Sentrux integration automatically.
+Inventory the exact removal scope and apply the ready-state rubric. Do not
+start deletion, a new language, or Sentrux integration automatically.

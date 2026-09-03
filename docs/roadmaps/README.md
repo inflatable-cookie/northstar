@@ -89,15 +89,14 @@ Roadmaps sequence contract-backed work for Northstar itself.
   adapter and merged as `c9ef2a2`. Card 121's registry `1.3.0` pin merged as
   `69e4d5d`. Card 119's registry promotion pinned the Rust identity at
   registry version `1.4.0` and proved the real-package lifecycle and
-  engine-integrity transcripts. PR 27 merged as `256d0f7`; Convergence PR 4 is
-  changes-required on a bounded pre-extraction-evidence oracle gap and card 120
-  remains blocked behind it.
+  engine-integrity transcripts. PR 27 merged as `256d0f7`; Convergence PR 4
+  repaired its evidence gap and merged as `dff19c9`. Card 119 is complete;
+  card 120 needs its exact embedded-removal inventory.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
 
 ## Next Task
 
-Re-review Convergence PR 4 after the retained worker repairs its
-pre-extraction-evidence oracle. Card 120 remains blocked until its exact-head
-evidence is accepted.
+Refresh card 120's exact embedded-removal inventory and apply its ready-state
+rubric. Do not start deletion until the card is ready.
