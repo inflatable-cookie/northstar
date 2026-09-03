@@ -1079,6 +1079,14 @@ function acquireAndActivate(opts: AcquireOptions): AcquireOutcome {
 
   const installed = resolveInstalledPackage(stateRoot, trustDoc, packageId, version, language, workflow, coreVersion);
   if (installed !== null) {
+    // Registry-owned discovery must agree with the verified installed
+    // manifest on every route, including the already-installed fast path.
+    const routedEntry = registry.packages.find((candidate) =>
+      candidate.package_id === packageId && candidate.version === version) ?? null;
+    if (routedEntry !== null && !discoveryAgrees(routedEntry, installed.manifest)) {
+      check(false, "registry discovery metadata disagrees with the verified installed manifest for " +
+        packageId + "@" + version + " (metadata drift); the route stops before execution");
+    }
     const identity = installed.reference.tree_digest;
     enforceRouteRestrictions(trustDoc, registry, packageId, version, identity, installed.reference.manifest_digest, workflow, consumerScope);
     const routeNotice = "routed " + packageId + " " + workflow + " local-only identity=" + identity;
@@ -1125,6 +1133,16 @@ function acquireAndActivate(opts: AcquireOptions): AcquireOutcome {
   // The staged manifest must declare the requested identity, version, and
   // compatibility range: a pin must never install a manifest that claims
   // another package, version, or range.
+  // Registry-owned discovery must agree with the identity-verified staged
+  // manifest BEFORE self-check, receipt, or any lifecycle mutation: a pin
+  // whose metadata drifted from the published manifest must never execute
+  // package code or reach the operator state root. Operator-allowlist pins
+  // carry no registry discovery and keep their behavior unchanged.
+  if (pin.source === "official" && "discovery" in pin.entry) {
+    check(discoveryAgrees(pin.entry as RegistryEntry, stagedManifest),
+      "registry discovery metadata disagrees with the verified staged manifest for " +
+      packageId + "@" + version + " (metadata drift); acquisition stopped before self-check, receipt, or lifecycle mutation");
+  }
   check(stagedManifest.package_id === packageId,
     "staged manifest declares identity " + stagedManifest.package_id + ", requested " + packageId);
   check(stagedManifest.version === version,
@@ -3602,8 +3620,49 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
     const cliDetection = runSelect(["--language", "alpha"]);
     check(cliDetection.status !== 0 && cliDetection.output.includes("detection is not selection authority"),
       "detection-only input did not fail closed at the selection CLI: " + cliDetection.output);
+    // The CLI enforces the documented two-shape grammar exactly.
+    const cliUnknownFlag = runSelect(["--language", "alpha", "--workflow", "audit_workflow", "--overaly", "alpha-ui"]);
+    check(cliUnknownFlag.status !== 0 && cliUnknownFlag.output.includes("unknown selection flag: --overaly"),
+      "unknown flag did not fail closed at the selection CLI: " + cliUnknownFlag.output);
+    const cliDuplicateFlag = runSelect(["--language", "alpha", "--language", "beta", "--workflow", "audit_workflow"]);
+    check(cliDuplicateFlag.status !== 0 && cliDuplicateFlag.output.includes("duplicate selection flag: --language"),
+      "duplicate flag did not fail closed at the selection CLI: " + cliDuplicateFlag.output);
+    const cliMixedShape = runSelect(["--marker", "fixture:alpha-marker", "--language", "beta", "--workflow", "audit_workflow"]);
+    check(cliMixedShape.status !== 0 && cliMixedShape.output.includes("mixed selection query"),
+      "mixed marker+intent query did not fail closed at the selection CLI: " + cliMixedShape.output);
+    const cliOverlayWithMarker = runSelect(["--marker", "fixture:alpha-marker", "--overlay", "alpha-ui"]);
+    check(cliOverlayWithMarker.status !== 0 && cliOverlayWithMarker.output.includes("mixed selection query"),
+      "shape-inapplicable flag did not fail closed at the selection CLI: " + cliOverlayWithMarker.output);
+    const cliMissingValue = runSelect(["--language", "alpha", "--workflow"]);
+    check(cliMissingValue.status !== 0 && cliMissingValue.output.includes("requires a value"),
+      "flag without a value did not fail closed at the selection CLI: " + cliMissingValue.output);
 
-    console.log("oracle-16 registry-selection-intent: PASS (explicit language/workflow/overlay intent selects exactly one entry; unsupported workflow, undeclared overlay, ambiguous claims, incompatible core, duplicate-marker parse, and detection-only input fail closed without acquisition)");
+    // The --json result carries the exact immutable identity, and the
+    // independent digest vectors prove it: an exact-value proof that fails
+    // if any identity field drifts while package ID and version stay fixed.
+    const cliJsonPath = path.join(out, "selection-identity.json");
+    const cliJson = runSelect(["--language", "alpha", "--workflow", "audit_workflow", "--json", cliJsonPath]);
+    check(cliJson.status === 0, "identity selection CLI failed: " + cliJson.output);
+    const identitySelection = JSON.parse(fs.readFileSync(cliJsonPath, "utf8")) as Record<string, unknown>;
+    check(identitySelection.package_id === "@northstar/alpha-fixture" &&
+      identitySelection.version === "0.1.0" &&
+      identitySelection.tree_digest === FIXTURE_TREE_DIGEST &&
+      identitySelection.manifest_digest === FIXTURE_MANIFEST_DIGEST,
+      "selection identity JSON does not carry the exact pinned identity: " + JSON.stringify(identitySelection));
+    const driftedReader = JSON.parse(JSON.stringify(twoEntry)) as RegistryDoc;
+    driftedReader.packages[0].tree_digest = "sha256:" + "0".repeat(64);
+    const driftedPath = path.join(out, "drifted-identity-registry.json");
+    fs.writeFileSync(driftedPath, JSON.stringify(driftedReader));
+    const driftedJsonRun = spawnSync("bun", ["run", surfacePath, "select", driftedPath,
+      "--language", "alpha", "--workflow", "audit_workflow", "--json", path.join(out, "drifted-selection.json")], { encoding: "utf8" });
+    check(driftedJsonRun.status === 0, "drifted-identity registry unexpectedly failed selection: " + driftedJsonRun.stderr);
+    const driftedSelection = JSON.parse(fs.readFileSync(path.join(out, "drifted-selection.json"), "utf8")) as Record<string, unknown>;
+    check(driftedSelection.package_id === identitySelection.package_id &&
+      driftedSelection.version === identitySelection.version &&
+      driftedSelection.tree_digest !== identitySelection.tree_digest,
+      "identity JSON did not distinguish a same-ID/version tree drift: " + JSON.stringify(driftedSelection));
+
+    console.log("oracle-16 registry-selection-intent: PASS (explicit language/workflow/overlay intent selects exactly one entry; unsupported workflow, undeclared overlay, ambiguous claims, incompatible core, duplicate-marker parse, detection-only input, unknown/duplicate/mixed/shape-inapplicable CLI flags, and valueless flags fail closed; selection --json carries the exact pinned identity)");
 
     // Exact registered activation markers select their entries; anything
     // that is not the exact marker string selects nothing.
@@ -3717,7 +3776,105 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
     check(restored.status === "routed", "restored agreement did not reopen the route: " + restored.notice);
     requireHashesUnchanged("discovery-agreement", consumer, beforeConsumer);
 
-    console.log("oracle-18 registry-discovery-agreement: PASS (agreeing metadata routes; dropped, extra, or emptied languages/overlays/workflows stop as metadata drift before execution; consumer stays byte-identical)");
+    // Acquisition-path counterexample (review finding 3): a registry whose
+    // discovery drifted from the identity-verified staged manifest must stop
+    // acquisition BEFORE self-check, receipt, or lifecycle mutation — not at
+    // a later resolve. A sentinel self-check proves package code never ran.
+    const sentinelPath = path.join(out, "self-check-executed.sentinel");
+    const acquisitionVariant = buildVariantPackage(fixtureRoot, "0.1.0", (manifest, root) => {
+      manifest.self_check.entrypoint = "scripts/sentinel-self-check.sh";
+      // The sentinel path is baked into the script: Bun's spawnSync does not
+      // inherit runtime process.env mutations, and the oracle must not
+      // depend on host environment behavior.
+      writeBytes(path.join(root, "scripts/sentinel-self-check.sh"),
+        Buffer.from("#!/bin/sh\ntouch \"" + sentinelPath + "\"\nexit 0\n", "utf8"), 0o755);
+    });
+    const variantEntryBase = {
+      package_id: "@northstar/language-fixture",
+      version: "0.1.0",
+      repository: "https://github.com/example/fixture-packs",
+      subpath: "packages/fixture",
+      commit: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      tree_digest: canonicalTreeDigest(acquisitionVariant, "acquisition variant"),
+      manifest_digest: manifestDigestOf(path.join(acquisitionVariant, "northstar-package.json")),
+      compatible_core_range: ">=0.2.0 <1.0.0",
+    };
+    const driftedVariantRegistryPath = path.join(out, "registry-drift-variant.json");
+    fs.writeFileSync(driftedVariantRegistryPath, JSON.stringify({
+      schema_version: "1.0.0",
+      registry_version: "1.5.0",
+      packages: [{ ...variantEntryBase, discovery: { ...fixtureDiscovery, workflows: ["explicit_audit_repair", "authoring_workflow"] } }],
+    }));
+    const agreeingVariantRegistryPath = path.join(out, "registry-agreeing-variant.json");
+    fs.writeFileSync(agreeingVariantRegistryPath, JSON.stringify({
+      schema_version: "1.0.0",
+      registry_version: "1.5.0",
+      packages: [{ ...variantEntryBase, discovery: fixtureDiscovery }],
+    }));
+
+    // Drifted acquisition: stops visibly, self-check unexecuted, no receipt,
+    // no lifecycle state, consumer byte-identical. The call drives
+    // acquireAndActivate directly with a conforming transport (like the
+    // oracle-14 real install), because the gate under test sits inside the
+    // acquisition transaction, not in the host transport layer.
+    const acquireDriftState = path.join(out, "acquire-drift-state");
+    mkdirP(acquireDriftState);
+    fs.writeFileSync(path.join(acquireDriftState, "operator-trust.json"), JSON.stringify(emptyTrust));
+    const driftConsumer = consumerDir();
+    const beforeDriftConsumer = snapshotHashes(driftConsumer);
+    fs.rmSync(sentinelPath, { force: true });
+    let driftStopped = false;
+    try {
+      acquireAndActivate({
+        stateRoot: acquireDriftState,
+        consumerDir: driftConsumer,
+        trustDoc: emptyTrust,
+        registry: JSON.parse(fs.readFileSync(driftedVariantRegistryPath, "utf8")) as RegistryDoc,
+        packageId: "@northstar/language-fixture",
+        version: "0.1.0",
+        workflow: "explicit_audit_repair",
+        coreVersion: CORE_VERSION,
+        adapter: fixtureAdapter(acquisitionVariant),
+        intent: "workflow_request",
+      });
+    } catch (err) {
+      driftStopped = String((err as Error).message).includes("metadata drift") &&
+        String((err as Error).message).includes("before self-check, receipt, or lifecycle mutation");
+    }
+    check(driftStopped, "drifted registry acquisition did not stop before self-check on metadata drift");
+    check(!fs.existsSync(sentinelPath), "package self-check executed during a drifted acquisition");
+    check(!fs.existsSync(path.join(acquireDriftState, "receipts")) &&
+      !fs.existsSync(path.join(acquireDriftState, "lifecycle-state.json")),
+      "drifted acquisition mutated the operator lifecycle state");
+    requireHashesUnchanged("acquisition-drift-consumer", driftConsumer, beforeDriftConsumer);
+
+    // Agreeing control: the same staged payload with agreeing metadata
+    // activates, the sentinel proves the self-check ran, and lifecycle state
+    // is written — the drift stop is the only difference.
+    const acquireAgreeState = path.join(out, "acquire-agree-state");
+    mkdirP(acquireAgreeState);
+    fs.writeFileSync(path.join(acquireAgreeState, "operator-trust.json"), JSON.stringify(emptyTrust));
+    const agreeConsumer = consumerDir();
+    fs.rmSync(sentinelPath, { force: true });
+    const agreeAcquire = acquireAndActivate({
+      stateRoot: acquireAgreeState,
+      consumerDir: agreeConsumer,
+      trustDoc: emptyTrust,
+      registry: JSON.parse(fs.readFileSync(agreeingVariantRegistryPath, "utf8")) as RegistryDoc,
+      packageId: "@northstar/language-fixture",
+      version: "0.1.0",
+      language: "fixture-lang",
+      workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION,
+      adapter: fixtureAdapter(acquisitionVariant),
+      intent: "workflow_request",
+    });
+    check(agreeAcquire.status === "activated", "agreeing acquisition control did not activate: " + agreeAcquire.notice);
+    check(fs.existsSync(sentinelPath), "sentinel self-check did not run during the agreeing control acquisition");
+    check(fs.existsSync(path.join(acquireAgreeState, "lifecycle-state.json")),
+      "agreeing acquisition did not write lifecycle state");
+
+    console.log("oracle-18 registry-discovery-agreement: PASS (agreeing metadata routes and activates; dropped, extra, or emptied languages/overlays/workflows stop resolve AND acquisition as metadata drift before self-check, receipt, or lifecycle mutation; sentinel proves package code never ran on drift; consumer stays byte-identical)");
   }
 
 
@@ -3759,28 +3916,63 @@ async function main(): Promise<void> {
     // activation marker selects one entry. Detection-only input (a language
     // with no workflow, or any query without intent or marker) fails closed.
     const registry = parseRegistryDoc(JSON.parse(fs.readFileSync(args[1], "utf8")), "selection registry");
-    const flags: Record<string, string | null> = {};
+    // The CLI enforces the documented two-shape grammar exactly: known
+    // flags only, no duplicates, a value per flag, and exactly one query
+    // shape. Anything else fails closed before any selection.
+    const allowedFlags = new Set(["--language", "--workflow", "--overlay", "--marker", "--core-version", "--json"]);
+    const seenFlags: Record<string, string> = {};
     for (let i = 2; i < args.length; i += 2) {
-      check(args[i]?.startsWith("--") === true && args[i + 1] !== undefined,
-        "usage: language-package-lifecycle.ts select <registry-file> (--language <l> --workflow <w> [--overlay <o>] | --marker <m>) [--core-version <v>] [--json <out>]");
-      flags[args[i]!.slice(2)] = args[i + 1]!;
+      const flag = args[i];
+      check(flag !== undefined && flag.startsWith("--"),
+        "selection arguments must be <flag> <value> pairs; got " + String(flag));
+      check(allowedFlags.has(flag), "unknown selection flag: " + flag);
+      const value = args[i + 1];
+      check(value !== undefined && !value.startsWith("--"), "selection flag " + flag + " requires a value");
+      check(!(flag in seenFlags), "duplicate selection flag: " + flag);
+      seenFlags[flag] = value;
     }
-    const coreVersion = flags["core-version"] ?? CORE_VERSION;
+    const coreVersion = seenFlags["--core-version"] ?? CORE_VERSION;
+    const marker = seenFlags["--marker"];
+    const language = seenFlags["--language"];
+    const workflow = seenFlags["--workflow"];
+    const overlay = seenFlags["--overlay"];
+    const intentShape = language !== undefined || workflow !== undefined || overlay !== undefined;
+    check(marker === undefined || !intentShape,
+      "mixed selection query: --marker cannot be combined with --language, --workflow, or --overlay; exactly one query shape is required");
     let query: SelectionQuery;
-    if (flags["marker"] !== undefined && flags["marker"] !== null) {
-      query = { kind: "marker", marker: flags["marker"] };
-    } else if (flags["language"] !== undefined && flags["language"] !== null && flags["workflow"] !== undefined && flags["workflow"] !== null) {
-      query = { kind: "intent", language: flags["language"], workflow: flags["workflow"], overlay: flags["overlay"] ?? null };
+    if (marker !== undefined) {
+      query = { kind: "marker", marker };
+    } else if (language !== undefined && workflow !== undefined) {
+      query = { kind: "intent", language, workflow, overlay: overlay ?? null };
     } else {
       check(false, "detection is not selection authority: an explicit workflow request (--language with --workflow) or an exact activation marker (--marker) is required; nothing was selected or acquired");
       return;
     }
     const entry = selectRegistryEntry(registry, coreVersion, query);
-    const selection = { package_id: entry.package_id, version: entry.version, compatible_core_range: entry.compatible_core_range };
-    if (flags["json"] !== undefined && flags["json"] !== null) {
-      fs.writeFileSync(flags["json"], JSON.stringify(selection, null, 2) + "\n");
+    // The selection result carries the exact immutable identity the route
+    // needs, not just the human-facing ID/version: this project has
+    // repinned the same ID/version to new identities before.
+    const selection: Record<string, unknown> = {
+      package_id: entry.package_id,
+      version: entry.version,
+      compatible_core_range: entry.compatible_core_range,
+      tree_digest: entry.tree_digest,
+      manifest_digest: entry.manifest_digest,
+    };
+    if (entry.repository !== undefined) {
+      selection.repository = entry.repository;
     }
-    console.log("selected " + entry.package_id + "@" + entry.version + " for " + describeQuery(query));
+    if (entry.subpath !== undefined) {
+      selection.subpath = entry.subpath;
+    }
+    if (entry.commit !== undefined) {
+      selection.commit = entry.commit;
+    }
+    if (seenFlags["--json"] !== undefined) {
+      fs.writeFileSync(seenFlags["--json"], JSON.stringify(selection, null, 2) + "\n");
+    }
+    console.log("selected " + entry.package_id + "@" + entry.version + " for " + describeQuery(query) +
+      " tree=" + entry.tree_digest + " manifest=" + entry.manifest_digest);
     return;
   }
   if (command === "fallback") {

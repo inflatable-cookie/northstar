@@ -1666,6 +1666,7 @@ fn expect_selection_case(label, surface_path, registry_path, extra_args, expect_
     let report = exec::run(argv, #{ run_in: "host", cwd: repo_root });
     if expect_ok {
         require(report["success"], "card-122 selection case '" + label + "' should select but failed: " + report["stderr"] + report["stdout"]);
+
         require(report["stdout"].contains(expected_text), "card-122 selection case '" + label + "' selected the wrong identity: " + report["stdout"]);
     } else {
         require(!report["success"], "card-122 selection case '" + label + "' should fail closed but succeeded: " + report["stdout"]);
@@ -1675,6 +1676,31 @@ fn expect_selection_case(label, surface_path, registry_path, extra_args, expect_
         }
     }
     log("card-122 selection case '" + label + "': OK");
+}
+// Exact immutable identity proof (review finding 2): the --json selection
+// result must return the accepted commit, tree digest, and manifest digest.
+// If the same package ID and version were ever repinned to a drifted
+// identity while discovery stayed equal, these assertions fail.
+fn expect_selection_identity(label, surface_path, registry_path, extra_args, id_segment, expected_commit, expected_tree, expected_manifest) {
+    let json_path = path::join(fs::make_temp_dir("northstar-selection-identity-"), "selection.json");
+    let argv = ["bun", "run", surface_path, "select", registry_path];
+    for a in extra_args {
+        argv.push(a);
+    }
+    argv.push("--json");
+    argv.push(json_path);
+    let report = exec::run(argv, #{ run_in: "host", cwd: repo_root });
+    require(report["success"], "card-122 identity case '" + label + "' should select but failed: " + report["stderr"] + report["stdout"]);
+    let identity = json::read_file(json_path);
+    require(identity["package_id"].contains(id_segment),
+        "card-122 identity case '" + label + "' selected an unexpected package: " + identity["package_id"]);
+    require(identity["tree_digest"] == expected_tree,
+        "card-122 identity case '" + label + "' returned a drifted tree digest: " + identity["tree_digest"]);
+    require(identity["manifest_digest"] == expected_manifest,
+        "card-122 identity case '" + label + "' returned a drifted manifest digest: " + identity["manifest_digest"]);
+    require(identity["commit"] == expected_commit,
+        "card-122 identity case '" + label + "' returned a drifted commit: " + identity["commit"]);
+    log("card-122 selection identity case '" + label + "': OK (exact accepted commit/tree/manifest identity)");
 }
 
 fn run_card_122_selection_proofs(northstar_skill_root, official_registry_path) {
@@ -1711,6 +1737,35 @@ fn run_card_122_selection_proofs(northstar_skill_root, official_registry_path) {
         ["--marker", "northstar:unknown"], false, "carries the activation marker");
     expect_selection_case("incompatible-core-marker", surface_path, official_registry_path,
         ["--marker", "northstar:typescript-quality", "--core-version", "1.0.0"], false, "incompatible with core");
+
+    // The CLI enforces the documented two-shape grammar exactly (review
+    // finding 1): unknown flags, duplicate flags, mixed query shapes, and
+    // shape-inapplicable flags all fail closed.
+    expect_selection_case("unknown-flag", surface_path, official_registry_path,
+        ["--language", "rust", "--workflow", "explicit_audit_repair", "--overaly", "sveltekit"], false, "unknown selection flag: --overaly");
+    expect_selection_case("duplicate-flag", surface_path, official_registry_path,
+        ["--language", "rust", "--language", "typescript", "--workflow", "explicit_audit_repair"], false, "duplicate selection flag: --language");
+    expect_selection_case("mixed-marker-intent", surface_path, official_registry_path,
+        ["--marker", "northstar:rust-quality", "--language", "typescript", "--workflow", "explicit_audit_repair"], false, "mixed selection query");
+    expect_selection_case("overlay-with-marker", surface_path, official_registry_path,
+        ["--marker", "northstar:rust-quality", "--overlay", "sveltekit"], false, "mixed selection query");
+    expect_selection_case("flag-without-value", surface_path, official_registry_path,
+        ["--language", "rust", "--workflow"], false, "requires a value");
+
+    // Exact immutable identity (review finding 2): the --json result must
+    // carry the accepted commit/tree/manifest identity, not just ID/version.
+    // These exact-value assertions fail if the same package ID and version
+    // is ever repinned to a different identity.
+    expect_selection_identity("typescript-audit-identity", surface_path, official_registry_path,
+        ["--language", "typescript", "--workflow", "explicit_audit_repair", "--overlay", "svelte"],
+        "typescript-quality", "c9ef2a2e3b70dc68de670767048f26b01b08f929",
+        "sha256:259cccdbacd7e2e293389efaf72cab005d0c275bd7cb600c99f30bfbfe071843",
+        "sha256:e5e32f2baeda2e901b8c327436adf0bfd5955a9de080887660684ad4583185ca");
+    expect_selection_identity("rust-marker-identity", surface_path, official_registry_path,
+        ["--marker", "northstar:rust-quality"],
+        "rust-quality", "56b2e1107b80f369807cff88e1b0253df035c700",
+        "sha256:e5cf9c5da4a30c0f5164f2ea0c5e9d87d544c0c32f09f3c139a386c56154dba0",
+        "sha256:dd71d04efd67cc7805f417a79666dd920ea1811ee252d941108dfbeca8aab612");
 
     // The same procedure is generic over policy-free fixtures: two entries,
     // neither named in selection code, select exactly by discovery data.
