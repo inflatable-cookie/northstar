@@ -116,6 +116,8 @@ Northstar system:
   inventory exposed a missing generic intent/activation selection layer.
   Card 122 implemented it, closed three first-review defects, and merged
   through PR 28 as `ddaae0d`; card 120 passed its readiness refresh and is
-  ready for bounded root reduction.
+  ready for bounded root reduction. Card 123 runs first to correct Paseo worker
+  creation: a dedicated workspace must still hold a child agent of the current
+  orchestrator so finish and review notifications return to it.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup

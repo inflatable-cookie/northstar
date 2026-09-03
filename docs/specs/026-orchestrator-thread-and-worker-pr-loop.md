@@ -3,7 +3,7 @@
 Status: active
 Owner: repo maintainers
 Created: 2026-08-16
-Updated: 2026-09-01
+Updated: 2026-09-03
 Related research: `bundle-docs/research/translation-memos/northstar-orchestrator-thread.md`
 Governing architecture: `docs/architecture/system-architecture.md`
 Governing contracts: `docs/contracts/001-working-rules.md`, `docs/contracts/002-agent-local-paths.md`
@@ -76,6 +76,16 @@ contract says planning or operator intent is required. When the assigned runway
 is complete, it opens a PR against the prepared base and returns the URL plus
 evidence.
 
+Paseo workspace isolation and agent parentage are separate axes. The
+orchestrator first creates the lane's dedicated worktree workspace, then uses
+its own agent-scoped `create_agent` surface to create a child agent in that
+returned workspace. Passing the new `workspaceId` changes placement without
+detaching ownership. A top-level/root-agent launch, schedule, generic detached
+run, or CLI path that cannot prove attachment to the current orchestrator is
+not an equivalent worker launch. Finish notifications stay enabled so the
+parent orchestrator receives completion, error, and permission events and can
+resume the same child for review revisions.
+
 Worker reports and the PR URL return through the active control plane when
 it supports direct parent/child messaging; otherwise the operator relays them.
 The orchestrator reviews the exact diff and checks against the canonical refs, then
@@ -117,6 +127,8 @@ before chat summarizes the result.
   OpenCode adapters.
 - Use an available control plane automatically for profile selection, worktree
   placement, notifications, and follow-ups without making it protocol authority.
+- In Paseo, keep every worker in its own worktree workspace while creating it
+  as a child of the current orchestrator, never as a detached root agent.
 - Keep frontier reasoning on discovery, planning, review, and merge while a
   fast/low-cost subagent handles bounded mechanical documentation projection.
 - Let an operator-requested frontier planning delegate explore one topic in a
@@ -130,6 +142,7 @@ before chat summarizes the result.
 ## Non-goals
 
 - requiring automatic cross-session messaging or one named control plane;
+- requiring parent/child transport when the active adapter does not expose it;
 - requiring sidebar pin/reorder support or automating the Paseo UI when it is
   absent;
 - a second public Northstar skill;
@@ -410,13 +423,23 @@ orchestrator uses them automatically for a ready lane:
    managed worktree's container directory before project bootstrap needs it;
    it stops on a missing source, wrong symlink, or conflicting path;
 4. creates the worker in that workspace with finish notification enabled and
-   the single initial prompt `Read and follow <absolute-handoff-path>.`;
+   the single initial prompt `Read and follow <absolute-handoff-path>.`. This
+   must be the current orchestrator's agent-scoped creation call with the
+   returned workspace ID. A top-level/root-agent launch, schedule, generic
+   detached run, or CLI path without explicit parent attachment is rejected;
 5. retains the returned agent and workspace IDs as lane transport state;
 6. trusts the finish/permission notification instead of polling, reconciles the
    returned report with canonical state, and uses a follow-up prompt on the same
    agent for bounded continuation or requested changes;
 7. returns permission requests to the operator unless existing explicit
    authority already settles the exact action.
+
+Workspace placement does not imply detachment. A child created from the
+orchestrator's scoped surface remains its child in a different workspace, so
+Paseo can deliver finish, error, and permission notifications to the parent.
+Keep finish notification enabled and use that same child agent for requested
+changes. Do not compensate for a detached launch by polling or by creating a
+second worker.
 
 For an operator-requested planning delegate, use the same injected-tool signal
 without another permission prompt, but select a frontier conversational-
