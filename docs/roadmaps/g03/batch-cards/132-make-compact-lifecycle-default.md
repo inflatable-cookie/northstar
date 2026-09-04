@@ -42,9 +42,14 @@ Owned mutable paths:
 - this card's compact closeout.
 
 Card 131 owns Northstar live generation/log/handoff compaction and current
-front doors. Neither sibling may edit the other's paths. If a direct caller
-outside these surfaces must change, stop and return the exact collision to
-Chatterbox.
+front doors. It also exclusively owns these deletion-coupled callers:
+`scripts/lib/northstar-repo-contract-data.rhai`,
+`scripts/check-northstar-model-routing.rhai`,
+`scripts/check-northstar-command-skills.rhai`,
+`scripts/test-northstar-repo-contract.rhai`, and
+`scripts/fixtures/readiness-map/**`. Card 132 must not edit them. Neither sibling
+may edit the other's paths. Any other direct caller outside these surfaces
+returns to Chatterbox.
 
 ## Required work
 

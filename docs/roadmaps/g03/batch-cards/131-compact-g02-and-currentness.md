@@ -1,6 +1,6 @@
 # 131 - Compact g02 and Currentness
 
-Status: blocked-ready; card 130 merge required
+Status: ready to resume same worker after Chatterbox scope ruling
 Owner: repo maintainers
 Created: 2026-09-04
 Master roadmap: `g03.001`
@@ -16,7 +16,8 @@ only current `g03` authority and work.
 ## Approved dispatch manifest
 
 - **Lane:** `g03.001/131`
-- **State:** blocked-ready until card 130 merges; then ready
+- **State:** ready; resume the existing paused worker at its clean pre-mutation
+  head after the promoted scope ruling
 - **Prerequisites:** card 130 merged and lifecycle checks green
 - **Completion:** `g02` is rolled up, classified old artifacts are pruned, and
   every current front door is `g03`-only
@@ -38,11 +39,20 @@ Owned mutable paths:
   destination table;
 - `docs/logs/**` and `docs/handoffs/**` only from a frozen, classified deletion
   manifest tied to closed `g01`/`g02` work;
+- these exact checker callers that currently require deleted `g02` or pre-`g03`
+  planning paths:
+  - `scripts/lib/northstar-repo-contract-data.rhai`;
+  - `scripts/check-northstar-model-routing.rhai`;
+  - `scripts/check-northstar-command-skills.rhai`;
+  - `scripts/test-northstar-repo-contract.rhai`;
+  - `scripts/fixtures/readiness-map/**`;
 - direct Northstar-only links broken by those exact removals;
 - this card's compact closeout.
 
 Card 132 owns `bundle-docs/**`, `template-bundle/**`, `skills/northstar/**`, and
-reusable posture checks. Neither sibling may edit the other's paths.
+reusable posture/lifecycle checks. The five exact checker/fixture surfaces above
+are reserved to card 131 and excluded from card 132. Neither sibling may edit
+the other's paths.
 
 ## Required work
 
@@ -54,6 +64,14 @@ reusable posture checks. Neither sibling may edit the other's paths.
    selected material evidence, and rehomed commitments in one `g02` roll-up.
 4. Remove expanded `g02` and classified transient/routine artifacts.
 5. Rewrite current front doors as bounded `g03` navigation, not history.
+6. Modernize only the named checker callers so they test current durable
+   authority and behavior without requiring historical files:
+   - repo-contract authority/currentness data points to the compact live spine;
+   - model-routing and command-skill assertions load current contracts,
+     architecture, and installed mode surfaces rather than superseded specs;
+   - repo-contract and readiness fixtures use current or fixture-local canonical
+     references, never live `g02` paths;
+   - preserve the checks' behavioral coverage and intended negative cases.
 
 ## Acceptance evidence and review oracle
 
@@ -63,6 +81,11 @@ reusable posture checks. Neither sibling may edit the other's paths.
 - [ ] no current or unresolved meaning exists only in removed files;
 - [ ] every removed pre-`g03` spec has the destination named by spec 038 and
       current-link/parity proof;
+- [ ] exact search proves no named checker or readiness fixture requires a
+      removed `g02` or pre-`g03` planning path;
+- [ ] `effigy check:repo-contract`, `effigy check:command-skills`,
+      `effigy check:model-routing`, and `effigy test:readiness-map` retain their
+      positive and negative coverage against current or fixture-local authority;
 - [ ] material `g02` outcomes remain traceable through selected evidence;
 - [ ] a fresh reader answers authority/current/next without opening an archive;
 - [ ] `git diff --check`, `effigy qa:docs`, and `effigy qa` pass;
@@ -72,5 +95,7 @@ reusable posture checks. Neither sibling may edit the other's paths.
 
 - an old artifact cannot be classified confidently;
 - a current caller still depends on executable-looking historical prose;
+- checker modernization would change behavior beyond replacing the removed
+  historical dependency or weaken an intended negative case;
 - sibling path ownership collides;
 - validation changes the plan.
