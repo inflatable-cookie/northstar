@@ -134,4 +134,7 @@ Northstar system:
 - chatterbox intake is implemented as spec 035 / `g02.050` / card 124.
   Independent operator-facing threads write unique `docs/triage/` notes on the
   shared checkout and report them to the operator without starting an
-  orchestrator turn in v1; they must not implement, promote, or dispatch
+  orchestrator turn in v1; they must not implement, promote, or dispatch.
+  The `g02.052`/card 127 correction makes spawned chatterboxes parent-
+  attached sibling agent tabs in the coordinator's workspace instead of
+  separate `local` workspaces; the review PR is open.

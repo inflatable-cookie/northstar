@@ -151,12 +151,16 @@ choice.
 
 When the operator explicitly asks the orchestrator to spawn a chatterbox thread
 for an issue, feature idea, or exploratory chat, the orchestrator launches an
-independent intake thread without a handoff file.
+independent intake thread without a handoff file. Spawned chatterboxes live in
+this coordinator's own workspace as sibling agent tabs; several independent
+chatterboxes may coexist there.
 
 In Paseo:
-- create a separate `local` workspace for the same project and checkout;
-- reject the transport plan if it uses `branch-off` worktree isolation or a
-  different project path;
+- create the chatterbox as a parent-attached child agent through your
+  agent-scoped creation call into your current workspace; do not create a
+  new workspace for it;
+- reject the transport plan if it creates a separate workspace, uses
+  `branch-off` worktree isolation, or attaches a different project path;
 - apply the capitalized label `Chatterbox=true` on the agent; reject launch
   configuration if that label is omitted or lowercased;
 - set `notifyOnFinish: false` so long-running idle chatterbox turns do not spam
@@ -165,7 +169,7 @@ In Paseo:
   profile notes under the diversified-routing rule; an explicitly named
   profile overrides selection;
 - use the operator's topic as the initial prompt, naming chatterbox mode;
-- retain the returned workspace and agent identities; do not poll.
+- retain the returned agent identity; do not poll.
 
 Without Paseo, tell the operator to start a thread on the same checkout and
 invoke `/northstar-chatterbox` or `northstar chatterbox`.

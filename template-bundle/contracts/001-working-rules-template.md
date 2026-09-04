@@ -318,9 +318,10 @@ informal habits.
 
 - An operator may start a chatterbox directly without a handoff or worktree, or
   ask the orchestrator to spawn one for exploratory problem intake.
-- In Paseo, create a `local` workspace for the same project and checkout, select
-  from the adequate conversational pool, apply the capitalized
-  `Chatterbox=true` label, and set `notifyOnFinish: false`.
+- In Paseo, spawn the chatterbox as a parent-attached child agent in the
+  coordinator's current workspace (a sibling agent tab; never a separate
+  workspace), select from the adequate conversational pool, apply the
+  capitalized `Chatterbox=true` label, and set `notifyOnFinish: false`.
 - Chatterboxes share the orchestrator's checkout and write only unique
   `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files, staged with `git add -- <exact-file>`
   and committed with `git commit -- <exact-file>`. They do not create worktrees,

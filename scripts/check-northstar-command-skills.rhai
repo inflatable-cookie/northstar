@@ -276,6 +276,15 @@ require(continuation_mode.contains("Without Paseo") &&
     continuation_mode.contains("return the absolute handoff path for manual launch"),
     "continuation launch fails closed when Paseo tools are absent");
 
+// Card 127: chatterbox spawn is a parent-attached sibling child in the
+// coordinator's current workspace; it never creates a workspace.
+let chatterbox_spawn = h2_section(orchestrator_text, "## Chatterbox spawn and intake");
+require(chatterbox_spawn.contains("parent-attached child agent") &&
+    chatterbox_spawn.contains("current workspace") &&
+    chatterbox_spawn.contains("agent-scoped creation call") &&
+    !chatterbox_spawn.contains("`local` workspace"),
+    "chatterbox spawn must stay a sibling child in the coordinator workspace");
+
 // Research-subagent copy no longer says "or advisors"
 require(!orchestrator_text.contains("or advisors"), "orchestrator mode research-subagent copy still contains 'or advisors'");
 let delegate_template = fs::read_file(path::join(root, "assets/templates/northstar-discovery-delegate.md.template"));

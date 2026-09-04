@@ -32,6 +32,7 @@ Use logs as the third step in closeout:
 
 ## Recent active-lane evidence
 
+- `2026-09/04-093820-chatterbox-sibling-agent-tabs.md`
 - `2026-09/04-001602-economical-orchestrator-coordination.md`
 - `2026-09/03-183500-add-chatterbox-intake-channel.md`
 - `2026-09/03-181459-open-chatterbox-intake-channel.md`

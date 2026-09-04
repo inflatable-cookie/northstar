@@ -566,10 +566,12 @@ dispatch and review would cost more than the projection.
 
 An operator may start a chatterbox thread directly with no handoff or worktree,
 or ask the orchestrator to spawn one for a feature idea, issue, or exploratory
-chat. In Paseo, the orchestrator creates a `local` workspace for the same
-project and checkout, selects an adequate conversational profile under the
-diversified-routing rule, sets the capitalized `Chatterbox=true` label, and sets
-`notifyOnFinish: false`. Chatterboxes share the orchestrator's checkout and
+chat. In Paseo, the orchestrator spawns the chatterbox as a parent-attached
+child agent in its current workspace — a sibling agent tab, never a separate
+workspace — selects an adequate conversational profile under the
+diversified-routing rule, sets the capitalized `Chatterbox=true` label, and
+sets `notifyOnFinish: false`.
+Chatterboxes share the orchestrator's checkout and
 write only unique `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files, staged with
 `git add -- <exact-file>` and committed with `git commit -- <exact-file>`.
 Chatterbox v1 starts no automatic orchestrator turn; it reports the absolute
