@@ -1,6 +1,6 @@
 # 126 - Dogfood Economical Orchestrator Coordination
 
-Status: active; passive observation started after card 129 merge
+Status: rehomed; passive observation now lives in the `g03` bounded watchlist
 Owner: repo maintainers
 Created: 2026-09-04
 Updated: 2026-09-04
@@ -74,6 +74,6 @@ durable token accounting, or encoding local model prices and quotas.
 
 ## Next task
 
-Collect passive evidence from natural project lanes. Stop at the tenth natural
-lane or `2026-09-18 17:00 Europe/London`, whichever comes first. This card must
-not block or synthesize work in Northstar or any consumer project.
+Do not dispatch this historical card. The unchanged passive evidence obligation
+is in `docs/roadmaps/g03/README.md`; Chatterbox reconciles it at the original
+stop boundary.

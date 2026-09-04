@@ -949,8 +949,13 @@ parentage exists.
 
 ### Generation posture
 
-- Treat roadmap generations as substantial sequencing eras, not tiny buckets of
-  one or two milestone files.
+- Use one compact strict lifecycle. Light, baseline, lane-first, mixed, and
+  full-strict labels may describe historical or incremental adoption state, but
+  they are not separate supported steady-state protocols.
+- Treat the live docs tree as working memory. Git and provider records retain
+  full history; `HEAD` retains current authority, actionable work, unresolved
+  meaning, and material evidence only.
+- Treat roadmap generations as substantial sequencing eras, not tiny buckets.
 - Each active generation's `docs/roadmaps/gNN/README.md` owns its
   `## Generation Runway`.
 - Keep the generation runway coarse and stable. Write it for a long-lived
@@ -968,33 +973,36 @@ parentage exists.
 - Finishing a batch, suite, or lane of roadmaps does **not** close the
   generation. After one batch closes, compile or continue the next batch inside
   the same generation.
-- Treat rollover as full generation closeout:
-  - every roadmap in the old generation must be explicitly closed, superseded,
-    or moved to backlog
-  - the roadmap front doors must reflect that closed state before the next
-    generation opens
-  - stale specs from the closing generation must be archived or removed from
-    `docs/specs/` so the new generation does not inherit old lane debris. Batch
-    cards stay with their generation under `docs/roadmaps/gNN/batch-cards/` and
-    do not need separate archiving.
+- Treat rollover as full generation closeout. A closure record may disposition
+  old milestones and cards individually or in explicit groups; it becomes the
+  authority over stale status text inside the closed generation.
+- Move passive observations, future feedback requests, and other unresolved
+  commitments to the new generation's bounded watchlist or another current
+  destination. They do not keep an old sequencing era open.
+- After closeout, keep only the active sequential generation expanded. Replace
+  each closed generation with one non-authoritative roll-up containing outcomes,
+  current authority destinations, rehomed commitments, material limits, and
+  selected evidence. Do not copy old execution instructions into the roll-up.
+- Remove completed generation cards, routine logs, and consumed handoffs after
+  their durable meaning and material provenance have passed the preservation
+  oracle in the governing lifecycle spec.
+- Remove promoted specs or reduce them to non-procedural tombstones only when a
+  stable external reference requires one. Superseded procedural prose must not
+  remain in the default read path.
 - If those closeout conditions are not satisfied, repair the current generation
   instead of opening a new one.
 
-### Strict-compliance audit and rollout
+### Incremental adoption
 
-- When a mature repo is moving toward full strict compliance, keep that
-  migration inside the normal planning spine.
-- Use one active migration spec to record:
-  - current posture
-  - satisfied checkpoints
-  - blocking gaps
-  - whether mixed posture is still valid migration state or has become drift
-  - current tranche
-  - next tranche
-  - the evidence needed to close the current tranche
-- Use one active roadmap milestone to sequence the migration batches.
-- Use normal batch logs to prove completed migration tranches.
-- Do not invent a detached governance tracker for this.
+- A mature repo may adopt the compact lifecycle in bounded tranches, but the
+  destination remains the same single protocol.
+- Keep migration inside the normal planning spine. One active migration spec or
+  roadmap records satisfied capabilities, blocking gaps, the current tranche,
+  the next tranche, and the evidence needed to advance.
+- Do not backfill closed history merely to imitate the current file shape.
+- Close ordinary migration work on its card. Retain a separate migration log
+  only when the evidence is materially useful after the generation rolls up.
+- Do not invent a detached governance tracker or a permanent mixed posture.
 
 ### Currentness surfaces
 

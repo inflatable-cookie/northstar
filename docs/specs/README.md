@@ -1,78 +1,24 @@
 # Specs
 
-Use this folder for master specs while a change is still being
-worked through.
-
-## Artifact types
-
-- `NNN-<slug>.md`
-  master specs for material goals or epics
+Specs hold material planning until durable meaning is promoted into
+architecture, contracts, and executable roadmaps.
 
 ## Active planning
 
-- [027 - Northstar Native Pre-Execution Discovery](./027-northstar-native-pre-execution-discovery.md)
-- [029 - Northstar Long-Horizon Planning](./029-northstar-long-horizon-planning.md)
-- [030 - Conversational Triage And Docs Cleanup](./030-conversational-triage-and-docs-cleanup.md)
-- [037 - Chatterbox-Led Planning And Mechanical Coordination](./037-chatterbox-led-planning-and-mechanical-coordination.md)
-- [Related translation memo](../../bundle-docs/research/translation-memos/matt-pocock-skills-audit-to-northstar.md)
-- [Rust quality translation memo](../../bundle-docs/research/translation-memos/rust-quality-skills-and-audit.md)
-- [TypeScript/Svelte quality translation memo](../../bundle-docs/research/translation-memos/typescript-quality-and-svelte-overlay.md)
+- [`038-compact-default-lifecycle-and-generation-rollup.md`](./038-compact-default-lifecycle-and-generation-rollup.md)
+  governs `g03.001`.
 
-## Promoted planning history
+## Lifecycle
 
-- [034 - Modular Language Quality Packages](./034-modular-language-quality-packages.md) — promoted into system architecture and contract 004; retained through roadmap g02.048 extraction
-- [026 - Orchestrator Thread And Worker PR Loop](./026-orchestrator-thread-and-worker-pr-loop.md), [035 - Chatterbox Intake Channel](./035-chatterbox-intake-channel.md), and [036 - Economical Orchestrator Coordination](./036-economical-orchestrator-coordination.md) — initial delivery topology retained as history; spec 037 is current
+- Use a spec only when a goal needs material discovery or crosses several
+  execution batches.
+- Promote lasting system shape to architecture and lasting behavior to
+  contracts before implementation depends on it.
+- Remove a fully promoted spec after current links and unique meaning have been
+  checked. Keep a non-procedural tombstone only for a real stable-reference
+  requirement.
+- Historical and superseded procedure is not authority. Git retains full
+  provenance.
 
-## Rules
-
-- Use a master spec when a goal spans multiple meaningful batches, changes
-  user-facing behavior, or introduces non-trivial execution policy.
-- Treat the stricter `specs/` plus batch-card layer as the surface for the full
-  continuation-envelope, lane-budget, and pause-signal model. A roadmap-only
-  repo can still route live work well, but it should not pretend to carry the
-  same explicit autonomy state.
-- Promote durable structural outcomes into `docs/architecture/`.
-- Promote durable behavioral or policy rules into `docs/contracts/`.
-- Once promoted, roadmap execution should rely on architecture and contracts,
-  not only on the raw spec text.
-- Keep `docs/specs/` tidy so it mostly reflects active planning:
-  keep active or still-useful specs, and archive or remove stale ones once the
-  canonical surfaces already carry the durable truth.
-- Before roadmap generation rollover, purge stale generation-specific specs
-  from the active tree so the next generation does not inherit dead planning
-  debris. Batch cards live under `docs/roadmaps/gNN/batch-cards/` and stay with
-  their generation.
-- Use explicit lifecycle states for specs:
-  - `active` for live planning
-  - `retired-in-place` for short-lived traceability near active work
-  - `archived` for closed planning artifacts that should be preserved but no
-    longer belong in the active tree
-- Prefer `docs/specs/archive/` over indefinite in-place accumulation once a
-  closed planning artifact no longer governs live work.
-- Keep the archive lean and do not treat it as a second live planning surface.
-
-## Retired in place
-
-- [031 - Rust Quality Authoring And Audit](./031-rust-quality-authoring-and-audit.md)
-  — durable behavior is in contract 004 and system architecture; retained here
-  for the production-evidence history.
-- [032 - TypeScript And Svelte Explicit Audit](./032-typescript-svelte-explicit-audit.md)
-  — the explicit-only route is distributed; retained for the revision-S
-  production-evidence history.
-- [033 - Rust Audit V2 Tool Enforcement](./033-rust-audit-v2-tool-enforcement.md)
-  — the Cargo-native v2 route is distributed; retained for the revision-E
-  production-evidence and tool-boundary history.
-
-## Archive layout
-
-When archive is warranted, use:
-
-- `archive/NNN-<slug>.md`
-
-Mirror only the minimum grouping needed to preserve traceability.
-
-## Current strict posture note
-
-- Optional drift check: `effigy check:posture-advisory`
-- Recent evidence:
-  `docs/logs/2026-05/19-172500-add-posture-advisory-effigy-checks.md`
+Card `g03.001/131` owns the classified removal of pre-`g03` specs using spec
+038's destination table.

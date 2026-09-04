@@ -1,5 +1,32 @@
 # g02
 
+Status: closed; sequencing moved to `g03` on 2026-09-04
+
+`g02` established external consumer proof, strict execution, routed quality
+packages, economical worker coordination, and Chatterbox-led planning. Its
+expanded files remain temporarily only as card 131's frozen compaction input.
+They are historical and not execution authority.
+
+## Closure disposition
+
+- Completed milestones `g02.001` through `g02.054` are closed historical work.
+- Deferred card `g02.026/078` returns only through fresh Chatterbox planning if
+  operator-provided evidence makes it relevant; it is not ready work.
+- Atlas, triage/cleanup, and language-package observations move to the `g03`
+  bounded watchlist and remain operator-evidence inputs, not execution lanes.
+- Card 126's passive economical-coordinator observation moves to the `g03`
+  bounded watchlist with its original ten-lane or 2026-09-18 stop condition.
+- No milestone, card, or `Next Task` text below this closure record may be
+  dispatched. `docs/roadmaps/g03/README.md` is the active runway.
+
+## Compaction
+
+Card `g03.001/131` will replace this expanded tree with
+`docs/roadmaps/archive/g02.md` after the preservation oracle passes.
+
+<!-- Historical expanded content below is intentionally retained only until
+card 131 freezes and reviews its deletion inventory. -->
+
 `g02` is the first external-proof generation for Northstar after the internal
 foundation work in `g01`.
 
