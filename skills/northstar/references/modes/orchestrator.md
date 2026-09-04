@@ -66,21 +66,16 @@ Material discovery — exploring product ideas, alternatives, and edge cases —
 is not this thread's job. When the operator starts exploring product meaning,
 route to Chatterbox for that conversation and keep this thread on coordination.
 
-## Triage checkpoints
+## Triage boundary
 
-Treat `docs/triage/` as the durable scratchpad for the conversation. Read its
-open notes during the initial authority load and before choosing a new planning
-branch. While coordinating, whenever a useful observation, alternative, plan,
-edge case, or question will not be resolved in the current exchange, capture it
-in a new or existing timestamped note before following the current thread more
-deeply.
+The coordinator's narrow fast path does not load, reconcile, edit, or prune open
+`docs/triage/` notes. Raw triage notes are never authority for coordinator
+execution, and the coordinator never chooses a planning branch from them.
 
-Chatterbox owns triage reconciliation and canonical planning promotion. The
-coordinator does not promote triage material into canonical surfaces and does
-not remove notes that carry unresolved meaning. Only genuinely administrative
-cleanup that cannot change meaning — such as a duplicate or empty note — may be
-handled directly. Raw triage notes are never authority for coordinator
-execution.
+Chatterbox owns triage and canonical planning promotion. When coordination
+surfaces a useful unresolved observation, the coordinator sends Chatterbox a
+provenance-labelled recommendation or includes it in a context-complete
+escalation. It does not turn the observation into a plan or triage write.
 
 ## Conversational planning delegates
 
@@ -89,9 +84,10 @@ operator or coordinator may launch a lightweight planning delegate. This is an
 optional same-workspace conversation (in Paseo, a visible agent tab in the
 current project workspace; not a separate worktree workspace).
 
-The delegate talks directly with the operator, writes only unique timestamped
-`docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files using exact-path Git isolation,
-and reports its note path and summary to Chatterbox. It may spawn bounded
+The delegate talks directly with the operator, creates one unique timestamped
+`docs/triage/YYYYMMDD-HHMMSS-<slug>.md` file, may update that same note for its
+bounded issue using exact-path Git isolation, and reports its note path and
+summary to Chatterbox. It may spawn bounded
 read-only research subagents that return sourced findings to it. The delegate
 does not edit canonical planning, open a planning PR, promote, decide
 readiness, or contact the coordinator. Chatterbox reconciles the note and
@@ -574,10 +570,14 @@ Select by capability:
 - exact mechanical documentation projection: fast/low-cost profile, low or
   medium reasoning;
 - ordinary bounded implementation: the cheapest adequate non-frontier
-  day-to-day pool;
-- long audits, broad documentation, and other token-heavy mechanical jobs
-  whose decisions and repair boundaries are already settled: fast/low-cost or
-  mechanically oriented profiles;
+  day-to-day implementation pool. The selected profile's live notes must
+  explicitly fit implementation or general day-to-day work;
+- audit, documentation-grind, review, planning, and coordinator profiles are
+  excluded from implementation lanes even when the work is long,
+  documentation-heavy, or touches many files;
+- actual audits and exact non-semantic documentation projection whose decisions
+  and repair boundaries are already settled: fast/low-cost or mechanically
+  oriented profiles;
 - reconnaissance and log reduction: fast/low effort or a deterministic command;
 - frontier implementation worker: only when the lane is both highest-priority
   or materially consequential **and** the handoff can explain why planning,

@@ -132,9 +132,9 @@ One-page reference for terms used across Northstar docs.
 
 **Planning delegate**
 : An optional lightweight same-workspace conversation for exploring one issue
-  in parallel. Writes only unique timestamped triage files under exact-path Git
-  isolation and reports to Chatterbox; does not open planning PRs or contact the
-  coordinator.
+  in parallel. Creates one unique timestamped triage file, may keep that note
+  current for the bounded issue under exact-path Git isolation, and reports to
+  Chatterbox; does not open planning PRs or contact the coordinator.
 
 **Coordinator**
 : The mechanical delivery manager. Performs factual preflight, launches the

@@ -280,8 +280,9 @@ the coordinator; or when the thread is already a chatterbox:
 
 This is an internal mode of the single public `northstar` authority. A chatterbox
 is the primary human-facing planning authority. It shares the checkout, creates
-unique timestamped `docs/triage/` notes with exact-path git isolation,
-reconciles triage notes, directly promotes canonical planning on the
+unique timestamped `docs/triage/` notes for new issues, updates existing notes
+in place, and prunes them during promotion with exact-path git isolation. It
+reconciles triage notes and directly promotes canonical planning on the
 integration branch after explicit operator confirmation, and sends
 provenance-labelled direction to the coordinator. It does not implement
 product/runtime code, supervise workers, review PRs, or merge.

@@ -7,6 +7,9 @@ Proves:
 2. Unrelated dirty unstaged and untracked files remain untouched in the working tree.
 3. Fail-closed index protection: detecting pre-existing staged paths via `git diff --cached --name-only`
    prevents automatic commit and leaves the triage file on disk.
+4. An existing triage note can be updated in place without creating a correction note.
+5. Canonical promotion deletes a fully promoted note and reduces a partially promoted
+   note to its unresolved remainder in the same commit.
 """
 
 import os
@@ -149,6 +152,40 @@ def test_git_isolation():
         # Verify tracked.txt is STILL staged in the index, NOT committed
         post_commit_cached = run(["git", "diff", "--cached", "--name-only"], cwd=temp_dir).stdout.strip().splitlines()
         assert_true(post_commit_cached == ["tracked.txt"], "pre-staged tracked.txt remains staged in index after exact-path commit")
+
+        # Clear the fixture's unrelated staged state with its own commit.
+        run(["git", "commit", "-q", "-m", "fixture: settle unrelated change", "--", "tracked.txt"], cwd=temp_dir)
+
+        # Scenario 5: update an existing note in place.
+        with open(note_1_abs, "w") as f:
+            f.write("# Idea One\n\nCorrected current meaning.\n")
+        run(["git", "add", "--", note_1_rel], cwd=temp_dir)
+        run(["git", "commit", "-q", "-m", "docs(triage): update idea one", "--", note_1_rel], cwd=temp_dir)
+        update_files = run(["git", "diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD"], cwd=temp_dir).stdout.strip().splitlines()
+        assert_true(update_files == [note_1_rel], "existing triage note updates in place")
+        triage_files = sorted(os.listdir(triage_dir))
+        assert_true(not any("correction" in name or "deprecated" in name for name in triage_files),
+                    "in-place update creates no corrective note")
+
+        # Scenario 6: one promotion commit fully prunes note 1 and partially
+        # prunes note 2 to its unresolved remainder.
+        canonical_dir = os.path.join(temp_dir, "docs", "specs")
+        os.makedirs(canonical_dir, exist_ok=True)
+        canonical_rel = os.path.join("docs", "specs", "001-promoted-ideas.md")
+        with open(os.path.join(temp_dir, canonical_rel), "w") as f:
+            f.write("# Promoted Ideas\n\nSettled meaning from ideas one and two.\n")
+        os.remove(note_1_abs)
+        with open(note_2_abs, "w") as f:
+            f.write("# Idea Two\n\n## Unresolved\n\nOne remaining question.\n")
+        run(["git", "add", "--", canonical_rel, note_1_rel, note_2_rel], cwd=temp_dir)
+        run(["git", "commit", "-q", "-m", "docs: promote settled ideas", "--", canonical_rel, note_1_rel, note_2_rel], cwd=temp_dir)
+        promotion_files = run(["git", "diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD"], cwd=temp_dir).stdout.strip().splitlines()
+        assert_true(sorted(promotion_files) == sorted([canonical_rel, note_1_rel, note_2_rel]),
+                    "promotion commit contains canonical write and exact triage dispositions")
+        assert_true(not os.path.exists(note_1_abs), "fully promoted note is deleted")
+        with open(note_2_abs) as f:
+            assert_true(f.read() == "# Idea Two\n\n## Unresolved\n\nOne remaining question.\n",
+                        "partially promoted note contains only unresolved meaning")
 
     print(f"\nchatterbox git isolation fixture: {'PASS' if failures == 0 else 'FAIL'} ({failures} failures out of {total_tests} assertions)")
     return failures == 0

@@ -109,10 +109,11 @@ dependencies. Everyday TypeScript authoring, deferred toolchain/testing rules,
 unsupported framework versions, slop-only mutation, and certification remain
 unavailable.
 
-During an orchestrator or refresh conversation, ask the agent to check
-`docs/triage/` for open capture notes. Useful unresolved observations should be
-written there before the agent follows one branch deeply; refresh and cleanup
-should give each note a disposition.
+During Chatterbox, planning-delegate, refresh, or cleanup work, use
+`docs/triage/` for unresolved capture. Update an existing note when the same
+issue changes; do not create corrective notes around it. Full promotion deletes
+the note, while partial promotion leaves only unresolved meaning. The mechanical
+coordinator does not scan triage or choose work from it.
 
 If Paseo manages the project, copy or merge the optional `paseo.json` starter
 from `skills/northstar/assets/templates/`. Its lifecycle invokes the helper in
@@ -154,9 +155,11 @@ reason — a dependency edge, a shared mutable or closeout surface, or unresolve
 authority. Same-repo PRs still merge one at a time, and a changed or
 conflict-resolved remaining head goes back to review before it can merge.
 
-Ordinary workers draw from the cheapest adequate day-to-day pool, and the
+Ordinary workers draw from the cheapest adequate day-to-day implementation pool, and the
 orchestrator varies provider/model identity between runs instead of reusing
-one remembered route. Frontier workers are rare: the lane must be both
+one remembered route. Audit, documentation-grind, review, planning, and
+coordinator profiles are not implementation workers, even for large or
+documentation-heavy changes. Frontier workers are rare: the lane must be both
 exceptionally difficult after planning and highest-priority or materially
 consequential, and the handoff records both
 reasons. A risky but well-specified change can still use a capable non-frontier
@@ -167,8 +170,9 @@ override. If no adequate profile fits, the orchestrator reports that gap
 instead of silently spending the expensive one.
 
 You can also spin off a lightweight planning delegate for one topic. It runs as
-a same-workspace conversation, captures unique triage notes, and reports them to
-Chatterbox for reconciliation and direct promotion.
+a same-workspace conversation, creates one unique triage note, may keep that
+note current during its bounded discussion, and reports it to Chatterbox for
+reconciliation and direct promotion.
 
 Worker PRs normally receive an independent review child: the coordinator
 creates it in the existing worker workspace with finish notifications and a

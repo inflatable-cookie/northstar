@@ -26,10 +26,15 @@ tentative interpretations, links, or a possible canonical destination.
 Triage is an intake buffer, not an execution authority. Do not treat an idea in
 this folder as an approved contract, roadmap item, or implementation request.
 
-Chatterboxes share the working checkout and write only new unique triage files
-here without modifying `README.md` or any other path. They isolate commits to
-exact paths after verifying clean pre-stage index state. They do not create
-worktrees, branches, or PRs, and do not acquire promotion or execution authority.
+Triage notes are mutable. Chatterboxes create a unique file for a new issue and
+update that same file when later conversation corrects or develops the issue.
+They do not create one-line correction, addendum, or deprecation notes for
+content that belongs in an existing note. The original filename remains stable.
+
+Chatterboxes share the working checkout and isolate triage-only commits to the
+exact note paths after verifying clean pre-stage index state. They do not modify
+this `README.md`, create worktrees, branches, or PRs, or acquire implementation
+authority.
 
 ## Lifecycle
 
@@ -37,7 +42,9 @@ Every note needs a disposition over time:
 
 1. inspect it during refresh, cleanup, or another relevant Northstar run;
 2. promote or rework useful content into its canonical home;
-3. merge duplicates or remove notes that are implemented, superseded, or no
+3. delete a fully promoted note in the same coherent promotion commit, or edit
+   a partially promoted note down to only its unresolved remainder;
+4. merge duplicates or remove notes that are implemented, superseded, or no
    longer useful.
 
 Keeping a note explicitly open is an interim state, not a permanent home. Give
@@ -45,9 +52,9 @@ an open note a next check or owner when possible, and eventually promote,
 implement, or remove it.
 
 If the destination, ownership, or removal decision is unclear, ask the operator
-before changing or deleting the note. Once a note has been promoted, remove the
-scratch copy; keep a link from a log only when the capture itself matters as
-evidence.
+before changing or deleting the note. The directory holds unresolved current
+meaning, not stale history. Git history and logs preserve provenance after a
+note is corrected or removed.
 
 The `README.md` anchor is not a triage note. Other files or folders here should
 be treated as cleanup findings until they are understood.

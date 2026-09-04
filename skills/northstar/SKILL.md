@@ -57,8 +57,9 @@ creates them before project setup; only the manual fallback worker creates an
 absent link after preflight.
 
 A planning delegate is distinct from worker mode. It is an optional
-same-workspace conversation for one bounded issue; it writes only unique
-triage files under exact-path Git isolation, reports to Chatterbox, and does not
+same-workspace conversation for one bounded issue; it creates one unique
+triage file and may update that file while the issue remains active under
+exact-path Git isolation, reports to Chatterbox, and does not
 activate worker preflight, create worktrees, or open PRs.
 
 A fresh orchestrator continuation is distinct from both. Its handoff declares
@@ -126,8 +127,8 @@ preflight. The source yields the transferred lane after pushed dispatch.
   an absolute path returned to the operator; not a substitute for log/roadmap
   closeout.
 - **Chatterbox:** primary planning authority, warm operator intake
-  conversation, problem exploration, unique-file triage capture on shared
-  checkout, triage reconciliation, direct canonical planning promotion on the
+  conversation, problem exploration, mutable triage capture on shared checkout,
+  in-place correction and promotion-time pruning, direct canonical planning promotion on the
   integration branch after operator confirmation, and provenance-labelled
   direction to the coordinator (`operator-confirmed direction`,
   `Chatterbox recommendation`, `administrative notice`); no product/runtime
@@ -152,11 +153,10 @@ exploration does not happen in this thread: route it to a chatterbox and keep
 the coordination and authority boundaries firm without making the conversation
 feel like a workflow form.
 
-When an orchestrator or refresh conversation surfaces a useful observation,
-idea, plan, or question that will not be resolved immediately, capture it in a
-timestamped `docs/triage/` note before following one branch deeply. Use natural
-topic shifts and checkpoints to keep the record current; do not rely on the
-final summary to reconstruct every discarded thread.
+When Chatterbox, a planning delegate, refresh, or cleanup surfaces a useful
+observation, idea, plan, or question that will not be resolved immediately,
+capture it in `docs/triage/`. Update the same note as the issue changes. The
+mechanical coordinator does not scan or reconcile triage.
 
 
 ## Papercuts loop (required during execution)

@@ -49,8 +49,11 @@ than filling in a workflow form.
 
 ## Discovery, triage, and reconciliation
 
-When an issue or idea is coherent enough for later reference, write one unique
-triage note under `docs/triage/YYYYMMDD-HHMMSS-<slug>.md`.
+When a new issue or idea is coherent enough for later reference, write one
+unique triage note under `docs/triage/YYYYMMDD-HHMMSS-<slug>.md`. If later
+conversation changes that same issue, update the existing note in place. Keep
+its original filename. Never create a correction, addendum, or deprecation note
+solely to supersede a line in another open triage note.
 
 The "enough" bar for a triage note:
 1. the issue or idea is named;
@@ -65,8 +68,16 @@ prior chats:
 - separate evidence, alternatives, operator-confirmed statements,
   recommendations, constraints, non-goals, and unresolved questions;
 - reconcile against current architecture, contracts, and roadmaps;
-- promote confirmed meaning into canonical surfaces, retain open leads with an
-  explicit next check, split multi-concern notes, or remove obsolete notes.
+- promote confirmed meaning into canonical surfaces;
+- after full promotion, delete the source triage note in the same coherent
+  planning commit;
+- after partial promotion, edit the note down to only its unresolved remainder;
+- retain open leads with an explicit next check, split multi-concern notes, or
+  remove obsolete notes.
+
+Triage is mutable live intake, not an append-only history. Its directory should
+contain unresolved current meaning only. Git history and delivery logs preserve
+provenance after correction or promotion.
 
 ## Canonical planning and promotion
 
@@ -128,14 +139,17 @@ owner; an empty runway caused by missing planning returns to Chatterbox.
 Chatterboxes share the working checkout.
 
 For triage capture:
-- write only the new `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` file;
+- create a unique note for a new issue, or update the existing note for the same
+  issue;
+- before updating, reread the note and verify that it still represents the
+  issue being discussed; do not overwrite unrelated concurrent changes;
 - do not edit `docs/triage/README.md`, specs, cards, code, or any other path;
 - before staging, check `git diff --cached --name-only`; if the index contains
   pre-existing staged paths, fail closed: do not commit, leave the triage note
   on disk, and report to the operator;
-- stage only the exact new file with `git add -- <exact-new-file>`; never use
+- stage only the exact note with `git add -- <exact-note>`; never use
   `git add .`, `git add -A`, amend, reset, stash, or force-push;
-- commit with exact path: `git commit -m "docs(triage): <summary>" -- <exact-new-file>`;
+- commit with exact path: `git commit -m "docs(triage): <summary>" -- <exact-note>`;
 - push to `main`;
 - on `index.lock` or commit/push failure, retry once; if it still fails, leave
   the file on disk and tell the operator;
@@ -143,6 +157,8 @@ For triage capture:
 
 For canonical planning promotion:
 - edit only the named canonical docs surfaces; do not touch production code;
+- prune each promoted triage note in the same commit: delete it when fully
+  promoted or edit it down to only unresolved meaning when partially promoted;
 - verify clean index before staging; stage explicit planning files;
 - commit with descriptive planning message and push to `main`.
 

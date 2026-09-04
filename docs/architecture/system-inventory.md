@@ -24,7 +24,7 @@ skills.
 | consumer language-quality profile | contract and policy surface | consumer maintainers | selected assurance profile, toolchain/MSRV, exclusions, deviations, and project architecture | repository-local configuration governed by `004-language-quality-pack` |
 | `docs/` | live planning surface | repo maintainers | Northstar's own planning and execution state | all files in this repo-local docs spine |
 | `docs/handoffs/` | fresh-thread coordination surface | handoff/orchestrator mode | timestamped takeover notes | handoff contract and templates |
-| `docs/triage/` | temporary conversational capture surface | orchestrator/chatterbox/refresh/cleanup modes | timestamped non-authoritative notes | triage contract, refresh lifecycle, cleanup route |
+| `docs/triage/` | mutable temporary conversational capture surface | chatterbox/planning-delegate/refresh/cleanup modes | timestamped non-authoritative notes kept current in place and pruned on promotion | triage contract, refresh lifecycle, cleanup route |
 | `scripts/` and `effigy` checks | validation surface | repo maintainers | repo integrity and enforcement hooks | `scripts/check-northstar-repo-contract.rhai`, roadmap evidence requirements |
 | root `PAPERCUTS.md` | agent feedback surface | executing agents + repo maintainers | owning repository root | `bundle-docs/papercuts.md`, agent templates, working rules |
 | `.agents.local.env` | local path registry | operator + agents | ignored machine-local paths only | `docs/contracts/002-agent-local-paths.md`, `.agents.local.env.example`, `AGENTS.md` |
@@ -75,7 +75,7 @@ skills.
 | Papercut loop | root queue, doctrine, templates, skill instruction, and QA coverage | repo maintainers | ready |
 | Published skill parity | Skills CLI update path, global install inspection, and source checker | repo maintainers | ready; 120-file configured parity proven |
 | Explicit command surface | Nine thin command adapters, canonical router/mode wiring, description budget, and retired-alias checks | repo maintainers | ready; source and installed discovery verified |
-| Triage lifecycle | `docs/triage/` anchors, timestamped naming, orchestrator/refresh capture, and cleanup dispositions | repo maintainers | ready; live operator feedback pending |
+| Triage lifecycle | `docs/triage/` anchors, timestamped naming, in-place correction, promotion-time pruning, and cleanup dispositions | repo maintainers | ready; live operator feedback applied |
 | Consumer feedback intake | operator-provided live-use evidence and manual triage boundary | repo maintainers + operator | operator-owned |
 | Orchestrator mode | per-worker committed handoff under `docs/handoffs/`, fresh worker worktree or safe temporary fallback, startup check, chunk report, PR, provider review record, and closeout evidence | repo maintainers + operator | operator validation complete; longer multi-card evidence pending |
 | Model-efficiency comparison | measured role routing, rework, review cycles, and relay burden | repo maintainers | one operator validation measured; broader comparison pending |

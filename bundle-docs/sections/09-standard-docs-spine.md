@@ -58,7 +58,10 @@ Northstar framework.
 - `logs/` capture batch-level evidence and decisions.
 - `handoffs/` hold friendly, timestamped notes for genuine thread takeovers.
 - `triage/` holds temporary conversational observations, ideas, plans, and
-  questions. It is a capture buffer, not an execution authority.
+  questions. It is a mutable capture buffer, not an execution authority. Update
+  the same note when an issue changes. Full promotion deletes the note; partial
+  promotion leaves only unresolved meaning. Git history and logs retain the
+  history.
 
 ## Nested Docs-Authority Repos
 

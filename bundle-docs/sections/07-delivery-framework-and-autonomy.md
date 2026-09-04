@@ -690,10 +690,12 @@ stores no profile, provider, model, price, balance, or allowance value.
 
 Task size, file count, duration, documentation churn, or the bare presence of a
 security, persistence, concurrency, public-API, deployment, or multi-version
-surface does not by itself make a worker lane frontier work. Long mechanical
-audits and broad documentation jobs prefer fast/low-cost or mechanically
-oriented profiles when their decisions and repair boundaries are already
-settled.
+surface does not by itself make a worker lane frontier work. An implementation
+profile must explicitly fit implementation or general day-to-day work. Audit,
+documentation-grind, review, planning, and coordinator profiles do not qualify
+merely because an implementation lane is long, documentation-heavy, or touches
+many files. Mechanically oriented profiles are for actual audits or exact
+non-semantic projection whose decisions and repair boundaries are settled.
 
 A frontier implementation worker is a conjunctive exception. Use it only when
 the lane is both highest-priority or materially consequential **and** the
@@ -788,9 +790,9 @@ whether the split holds; one anecdote never rewrites it.
 An operator may start a lightweight planning delegate for one issue in parallel
 while unrelated work continues. This is an optional same-workspace conversation,
 not an implementation worker and not a separate worktree workspace. In Paseo it
-is a visible agent tab in the current project workspace. It writes only unique
-timestamped `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files using exact-path Git
-isolation.
+is a visible agent tab in the current project workspace. It creates one unique
+timestamped `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` file and may update that
+same note for its bounded issue using exact-path Git isolation.
 
 The delegate talks directly with the operator, separates evidence,
 alternatives, operator-confirmed statements, recommendations, constraints,
@@ -863,13 +865,25 @@ graph design, and the approved parallel frontier.
   Chatterbox gives the operator a complete manual-relay message and absolute
   path.
 - **Shared checkout and Git:** Chatterboxes share the checkout. They write
-  only unique `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files, check
+  a unique `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` file for a new issue and
+  update the existing note when that issue changes. They never create a
+  correction, addendum, or deprecation note solely to supersede part of an open
+  note. They check
   `git diff --cached --name-only` to fail closed if pre-existing staged files
   exist, stage with `git add -- <exact-file>`, and commit with
   `git commit -- <exact-file>`. They never use `git add .`, edit `README.md` or
-  code, create worktrees/branches/PRs, or modify non-triage files.
+  code, create worktrees/branches/PRs, or modify non-triage files. Full
+  promotion deletes the source note in the same coherent commit; partial
+  promotion leaves only unresolved meaning. Git history and logs preserve the
+  discarded history.
 - **Authority boundary:** Chatterbox does not implement product/runtime code,
   supervise workers, review PRs, or merge.
+
+The coordinator does not load open triage on its narrow preflight path,
+reconcile it, or choose a planning branch from it. It receives promoted
+authority and typed Chatterbox direction only. Coordination observations return
+to Chatterbox as recommendations or context-complete escalations, not triage
+writes by the coordinator.
 
 ## Review children and serial workspace lease
 

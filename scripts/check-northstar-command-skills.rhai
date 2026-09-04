@@ -298,10 +298,23 @@ require(chatterbox_mode_text.contains("primary operator-facing planning authorit
     chatterbox_mode_text.contains("directly updates canonical planning"),
     "chatterbox mode missing primary planning and promotion authority");
 
+let chatterbox_triage = h2_section(chatterbox_mode_text, "## Discovery, triage, and reconciliation");
+require(chatterbox_triage.contains("update the existing note in place") &&
+    chatterbox_triage.contains("Never create a correction, addendum, or deprecation note") &&
+    chatterbox_triage.contains("after full promotion, delete the source triage note") &&
+    chatterbox_triage.contains("after partial promotion, edit the note down"),
+    "chatterbox mode missing mutable triage or promotion-time pruning");
+
 require(orchestrator_text.contains("mechanical delivery management") &&
     orchestrator_text.contains("canonical dispatch manifest published by Chatterbox") &&
     orchestrator_text.contains("narrow fast path"),
     "orchestrator mode missing mechanical coordination role");
+
+let orchestrator_triage = h2_section(orchestrator_text, "## Triage boundary");
+require(orchestrator_triage.contains("does not load, reconcile, edit, or prune") &&
+    orchestrator_triage.contains("never chooses a planning branch") &&
+    orchestrator_triage.contains("provenance-labelled recommendation"),
+    "coordinator triage boundary is not mechanical");
 
 let direction_section = h2_section(chatterbox_mode_text, "## Coordinator direction channel");
 require(direction_section.contains("operator-confirmed direction") &&

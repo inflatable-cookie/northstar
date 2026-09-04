@@ -39,6 +39,7 @@ let operators = load("bundle-docs/operators/operator-quick-start.md");
 let skill = load("skills/northstar/SKILL.md");
 let kernel = load("bundle-docs/protocol-kernel.md");
 let handoff = load("skills/northstar/references/handoff-contract.md");
+let spec_037 = load("docs/specs/037-chatterbox-led-planning-and-mechanical-coordination.md");
 
 // Row 1 — adequacy precedes preference (adequate-pool assertion).
 require_row("adequacy precedes preference", "spec 026", spec, "adequate profile pool");
@@ -56,7 +57,7 @@ require_row("cheap adequate routes are used", "orchestrator mode", mode, "cheape
 require_row("cheap adequate routes are used", "doctrine 07", doctrine, "cheapest adequate tier");
 require_row("cheap adequate routes are used", "working-rules template", template, "cheapest adequate tier");
 require_row("cheap adequate routes are used", "skill outcome", skill, "cheapest adequate tier");
-require_row("cheap adequate routes are used", "operator guidance", operators, "cheapest adequate day-to-day pool");
+require_row("cheap adequate routes are used", "operator guidance", operators, "cheapest adequate day-to-day implementation pool");
 
 // Row 3 — successful routes do not become permanent defaults (no-repeat
 // assertion).
@@ -130,7 +131,16 @@ require_row("route failure stays local", "doctrine 07", doctrine, "lane's divers
 require_row("route failure stays local", "working-rules template", template, "lane's diversified pool");
 require_row("route failure stays local", "operator guidance", operators, "lane's diversified pool");
 
-// Row 10 — Northstar stays portable (provider-neutral search plus parity).
+// Row 10 — implementation adequacy is role-first. Documentation volume does
+// not turn an implementation lane into an audit or documentation-grind job.
+require_row("implementation routing is role-first", "spec 037", spec_037, "profile qualifies only when its live description explicitly fits implementation or general day-to-day work");
+require_row("implementation routing is role-first", "working rules", contract, "Audit, documentation-grind, review, planning, and coordinator profiles do not qualify");
+require_row("implementation routing is role-first", "orchestrator mode", mode, "excluded from implementation lanes even when the work is long");
+require_row("implementation routing is role-first", "doctrine 07", doctrine, "profiles do not qualify merely because an implementation lane is long");
+require_row("implementation routing is role-first", "working-rules template", template, "profiles do not qualify merely because an implementation lane is long");
+require_row("implementation routing is role-first", "operator guidance", operators, "profiles are not implementation workers");
+
+// Row 11 — Northstar stays portable (provider-neutral search plus parity).
 // The per-surface assertions above cover both the live contract and the
 // copy-ready template with the same markers, so drift between them fails a
 // named row; the scans below reject local model names, prices, and the
@@ -160,4 +170,4 @@ for entry in scanned {
     forbid("northstar stays portable", entry["name"], entry["text"], "best-fit");
 }
 
-log("Northstar model-routing contract assertions: OK (ten milestone 047 oracle rows)");
+log("Northstar model-routing contract assertions: OK (eleven routing oracle rows)");

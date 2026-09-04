@@ -381,6 +381,12 @@ parallel frontier. Operator confirmation gates material promotion. Chatterbox
 commits the coherent planning state directly; no promotion-only worker sits
 between conversation and readiness.
 
+Triage is mutable live intake. Chatterbox updates the existing note when the
+same issue changes instead of creating correction or deprecation notes. Full
+promotion deletes the source note in the coherent planning commit; partial
+promotion leaves only unresolved meaning. Git history and logs retain the
+history.
+
 The optional parallel intake path is:
 
 `operator <-> planning delegate/current workspace -> unique triage note -> Chatterbox reconciliation/promotion`
@@ -397,6 +403,8 @@ continue across merge, closeout, and card boundaries while another canonical
 mechanical action is ready. It yields for child/external results, new authority,
 or an empty runway. No polling, open-turn waiting, or operator-`continue` edge
 exists. Only an empty runway notifies Chatterbox; waiting for a child does not.
+The coordinator's narrow preflight does not load or reconcile open triage and
+never chooses a planning branch from it.
 An already-authenticated repository-native write transport may replace a
 refused connector write after the unchanged gate, followed by provider-state
 verification; transport fallback never weakens merge authority.

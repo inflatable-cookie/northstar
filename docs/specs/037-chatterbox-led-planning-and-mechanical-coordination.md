@@ -70,10 +70,17 @@ routine second promotion lane.
 Chatterbox owns triage disposition. Raw triage is never coordinator execution
 authority.
 
+Triage is mutable live intake. A new issue gets one unique timestamped note;
+later changes to that issue update the same note. Chatterbox never creates a
+correction or deprecation note merely to supersede one line. Full promotion
+deletes the source note in the same coherent commit. Partial promotion leaves
+only the unresolved remainder. Git history and logs preserve provenance.
+
 An operator may start a lightweight planning delegate for one issue in parallel.
 In Paseo it is a visible agent tab in the current project workspace, not a new
-worktree workspace. It writes only unique timestamped triage files using the
-existing exact-path Git isolation. It may use bounded read-only research
+worktree workspace. It creates one unique timestamped triage file and may
+update that same note for its bounded issue using the existing exact-path Git
+isolation. It may use bounded read-only research
 subagents, but it does not open a planning PR or contact the coordinator.
 
 The note separates evidence, alternatives, operator-confirmed statements,
@@ -99,7 +106,8 @@ names:
 Chatterbox names the approved current frontier. The coordinator verifies only
 current facts: promoted commit, prerequisite completion, workspace/branch/path
 collisions, transport/profile availability, repository gates, and operator
-pauses. It launches every approved ready lane; it neither selects a convenient
+pauses. Its narrow fast path does not load or reconcile open triage and it never
+chooses a planning branch from triage. It launches every approved ready lane; it neither selects a convenient
 subset nor invents extra concurrency.
 
 Worker-profile selection is role-first. A profile qualifies only when its live
@@ -234,6 +242,9 @@ Luna does not reconstruct their semantics.
 | --- | --- | --- | --- |
 | Chatterbox promotes planning. | Coordinator launches a promotion child from confirmed triage. | Stop; Chatterbox promotes directly, then sends actual-worker frontier. | Route scenario and exact diff. |
 | Delegate stays lightweight. | Delegate edits a spec or opens a planning PR. | Stop before mutation; emit unique triage only. | Git-isolation fixture. |
+| Triage stays current. | Chatterbox writes a one-line correction note or leaves a fully promoted source note behind. | Update the original note, or prune it in the promotion commit. | Mutable-note and promotion-pruning fixtures. |
+| Coordinator stays mechanical. | Coordinator scans open triage or chooses a planning branch from it. | Return to the narrow promoted-authority path; route observations to Chatterbox. | Authority-load fixture. |
+| Worker routing is role-first. | A documentation-grind or audit profile authors an implementation lane because the diff is broad or docs-heavy. | Exclude it and choose an implementation-qualified profile or report the gap. | Role-adequacy fixture. |
 | Parallelism is planned. | Luna invents an edge or chooses only one of two approved lanes. | Launch the full verified frontier or return factual conflict. | Dependency fixture. |
 | Direction keeps provenance. | Recommendation changes active scope as operator authority. | Record intake; require confirmation. | Message-class fixture. |
 | Coordinator yields. | It polls or waits after child creation. | Report identities and end the turn. | Lifecycle trace. |

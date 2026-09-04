@@ -90,17 +90,24 @@ single-repo planning lane like this one.
 - Triage notes use the handoff filename shape
   `YYYYMMDD-HHMMSS-<slug>.md`. Their Markdown body is intentionally flexible;
   triage is for fast capture, not premature schema.
-- Orchestrator and refresh runs should capture useful unresolved threads before
-  following one branch deeply, then inspect triage at meaningful checkpoints.
+- Chatterbox, planning-delegate, refresh, and cleanup runs may capture useful
+  unresolved threads. The mechanical coordinator does not load or reconcile
+  triage during preflight and never chooses work from it.
 - Creating or updating a lightweight triage note is an allowed capture write;
   canonical promotion, rework, and removal still require the route's normal
   authorization boundary.
+- Update the existing note when the same issue changes. Do not create a
+  correction, addendum, or deprecation note merely to supersede content in an
+  open note. Keep the original filename.
 - Triage is not execution authority. Promote durable content into the normal
   architecture, contract, spec, roadmap, research, or log surface before using
   it to authorize work.
 - Refresh and cleanup must give each note a disposition: promote or rework it,
   merge it, keep it explicitly open, or remove it when implemented, superseded,
   or no longer useful.
+- Full promotion deletes the source note in the same coherent commit. Partial
+  promotion edits it down to only unresolved meaning. Triage holds current open
+  intake; Git history and logs hold history.
 - Keeping a note explicitly open is an interim state, not a permanent home; give
   it a next check or owner when possible, then promote, implement, or remove it.
 - Never delete an unclassified note or docs path based on age or filename alone.
@@ -409,14 +416,16 @@ Spec 037 governs the current planning and delivery topology.
   branch. It does not dispatch a promotion worker and does not implement
   product/runtime changes, accept reviews, or merge implementation PRs.
 - A **planning delegate** is an optional same-workspace conversation for one
-  bounded issue. It writes only unique triage notes under the exact-path Git
+  bounded issue. It creates one unique triage note and may update that note
+  while the issue remains active, under the exact-path Git
   isolation rule, may use bounded read-only research help, and reports its note
   to Chatterbox. It does not edit canonical planning, open a planning PR,
   contact the coordinator, promote, implement, review, or merge.
 - Chatterbox owns every triage disposition. Raw triage and external intake are
   never coordinator execution authority. Chatterbox reconciles them against
-  current authority, resolves conflicts with the operator, and promotes or
-  retains them.
+  current authority, resolves conflicts with the operator, and promotes,
+  updates, prunes, or removes them. It never creates a corrective note when the
+  existing note can be made current.
 - Chatterbox publishes each lane's outcome, prerequisites, mutable paths,
   reserved closeout surfaces, approved concurrent siblings, serial edges,
   worker capability, acceptance evidence, review oracle, and stop conditions.
@@ -509,8 +518,9 @@ following authority split:
   PR and posts the durable provider verdict naming the reviewed head; it does
   not mutate the branch, implement, merge, or accept a later head;
 - a **chatterbox** owns one operator-facing intake conversation and problem
-  identification, shares the orchestrator's checkout, writes only unique
-  timestamped triage files, and reports them to the operator with no
+  identification, shares the orchestrator's checkout, creates unique
+  timestamped triage files for new issues, updates existing notes in place, and
+  reports them to the operator with no
   orchestrator turn in v1; a note may be decision-ready when it separates
   operator-confirmed decisions, recommendations not yet accepted, evidence
   and alternatives, unresolved questions, and affected authority surfaces;
@@ -569,8 +579,13 @@ and bounded verification; higher reasoning effort is an escalation, not the
 default. Review children select from their own adequate pools under the same
 rule.
 
-Ordinary implementation, bounded audits, mechanical work, and most settled
-material lanes use that economical pool. A frontier implementation worker is a
+Ordinary implementation uses the economical day-to-day implementation pool. A
+profile qualifies only when its live notes explicitly fit implementation or
+general day-to-day work. Audit, documentation-grind, review, planning, and
+coordinator profiles do not qualify merely because an implementation lane is
+long, documentation-heavy, or touches many files. Mechanically oriented
+profiles are for actual audits or exact non-semantic projection with settled
+decisions and repair boundaries. A frontier implementation worker is a
 rare exception: record the material consequence and why planning, the review
 oracle, exact-head review, and repository validation cannot adequately bound
 the remaining reasoning. Priority, complexity, file count, duration, broad
@@ -589,8 +604,9 @@ adequate profile remains, preserve and pause only that lane.
 
 An operator may start a lightweight planning delegate for one issue in
 parallel. In Paseo it is a visible agent tab in the current project workspace,
-not a new worktree workspace. The delegate writes only unique timestamped
-`docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files using exact-path Git isolation.
+not a new worktree workspace. The delegate creates one unique timestamped
+`docs/triage/YYYYMMDD-HHMMSS-<slug>.md` file and may update that same note while
+the issue remains active, using exact-path Git isolation.
 It talks directly with the operator, separates confirmed decisions,
 recommendations, evidence, and open questions; it does not edit canonical
 planning, open a planning PR, promote, decide readiness, or contact the
@@ -626,9 +642,11 @@ explicit operator confirmation, Chatterbox edits, validates, commits, and pushes
 the coherent canonical planning batch directly on the integration branch. It
 does not dispatch a promotion worker and does not implement product/runtime
 changes, accept reviews, or merge implementation PRs. Chatterboxes share the
-checkout and write only unique `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files,
-staged with `git add -- <exact-file>` and committed with
-`git commit -- <exact-file>`.
+checkout. They create unique `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files for
+new issues and update existing notes in place as those issues change, staged
+with `git add -- <exact-file>` and committed with `git commit -- <exact-file>`.
+Full promotion deletes the source note; partial promotion leaves only the
+unresolved remainder.
 
 Chatterbox may send the named coordinator one provenance-labelled background
 direction message: `operator-confirmed direction` (changes planning/priority/
@@ -641,7 +659,8 @@ The **coordinator** checks only current facts: promoted commit, prerequisite
 completion, path/workspace/branch collisions, transport/profile availability,
 repository gates, and operator pauses. It loads only the instructions, promoted
 commit, selected cards, manifest, and named refs needed for factual preflight
-(narrow fast path). It launches the complete approved ready frontier published
+(narrow fast path), not open triage. It never reconciles triage or chooses a
+planning branch from it. It launches the complete approved ready frontier published
 in the dispatch manifest; it does not design lanes, dependency edges, or
 parallel groups. Coordinator turns are event-bounded: perform all immediately
 available coordination, report state and identities, then yield. Never poll,

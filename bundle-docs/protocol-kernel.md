@@ -13,8 +13,9 @@ Northstar is a **docs spine + execution grammar**: direction in `vision/`,
 shape in `architecture/`, durable rules in `contracts/`, time-ordered work in
 `roadmaps/`, evidence in `logs/`, and a temporary capture buffer in `triage/`.
 Optional `research/` and provisional `specs/` feed promotion into architecture
-and contracts before execution bets on them. Triage notes are not execution
-authority; they are promoted, merged, or removed during maintenance.
+and contracts before execution bets on them. Triage notes are mutable and are
+not execution authority; update them in place, then prune them as meaning is
+promoted, merged, or removed.
 
 Full picture: [visual-map.md](./visual-map.md) and [glossary.md](./glossary.md).
 

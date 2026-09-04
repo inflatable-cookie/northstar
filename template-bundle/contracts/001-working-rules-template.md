@@ -82,17 +82,24 @@ informal habits.
 - Triage notes use the handoff filename shape
   `YYYYMMDD-HHMMSS-<slug>.md`. Their Markdown body is intentionally flexible;
   triage is for fast capture, not premature schema.
-- Orchestrator and refresh runs should capture useful unresolved threads before
-  following one branch deeply, then inspect triage at meaningful checkpoints.
+- Chatterbox, planning-delegate, refresh, and cleanup runs may capture useful
+  unresolved threads. The mechanical coordinator does not load or reconcile
+  triage during preflight and never chooses work from it.
 - Creating or updating a lightweight triage note is an allowed capture write;
   canonical promotion, rework, and removal still require the route's normal
   authorization boundary.
+- Update the existing note when the same issue changes. Do not create a
+  correction, addendum, or deprecation note merely to supersede content in an
+  open note. Keep the original filename.
 - Triage is not execution authority. Promote durable content into the normal
   architecture, contract, spec, roadmap, research, or log surface before using
   it to authorize work.
 - Refresh and cleanup must give each note a disposition: promote or rework it,
   merge it, keep it explicitly open, or remove it when implemented, superseded,
   or no longer useful.
+- Full promotion deletes the source note in the same coherent commit. Partial
+  promotion edits it down to only unresolved meaning. Triage holds current open
+  intake; Git history and logs hold history.
 - Keeping a note explicitly open is an interim state, not a permanent home; give
   it a next check or owner when possible, then promote, implement, or remove it.
 - Never delete an unclassified note or docs path based on age or filename alone.
@@ -231,8 +238,12 @@ informal habits.
   only routes launched in the current orchestrator run. Do not create a
   durable usage ledger or encode local profile, provider, model, price,
   balance, or allowance values.
-- Long mechanical audits and documentation churn prefer fast/low-cost or
-  mechanically oriented profiles even when their scope is broad.
+- Implementation profiles must explicitly fit implementation or general
+  day-to-day work. Audit, documentation-grind, review, planning, and coordinator
+  profiles do not qualify merely because an implementation lane is long,
+  documentation-heavy, or touches many files. Mechanically oriented profiles
+  are for actual audits or exact non-semantic projection with settled decisions
+  and repair boundaries.
 - A frontier implementation worker requires both exceptional reasoning
   difficulty after planning and highest priority or material consequence,
   plus an explanation of why planning, the review oracle, exact-head review,
@@ -258,8 +269,9 @@ informal habits.
 - An operator may start a lightweight planning delegate for one issue in
   parallel. In Paseo it is a visible agent tab in the current project
   workspace, not a new worktree workspace.
-- The delegate writes only unique timestamped
-  `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files using exact-path Git isolation.
+- The delegate creates one unique timestamped
+  `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` file and may update that same note for
+  its current bounded issue using exact-path Git isolation.
 - It talks directly with the operator and separates confirmed decisions,
   recommendations, evidence, and open questions; it does not edit canonical
   planning, open a planning PR, promote, decide readiness, or contact the
@@ -300,10 +312,12 @@ informal habits.
   and pushes the coherent canonical planning batch directly on the integration
   branch. It does not dispatch a promotion worker and does not implement
   product/runtime changes, accept reviews, or merge implementation PRs.
-- Chatterboxes share the checkout and write only unique
-  `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files, staged with `git add -- <exact-file>`
-  and committed with `git commit -- <exact-file>`. They do not create worktrees,
-  branches, or PRs.
+- Chatterboxes share the checkout. They create unique
+  `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files for new issues and update
+  existing notes in place as those issues change, staged with
+  `git add -- <exact-file>` and committed with `git commit -- <exact-file>`.
+  Full promotion deletes the source note; partial promotion leaves only the
+  unresolved remainder. They do not create worktrees, branches, or PRs.
 - Chatterbox may send the named coordinator one provenance-labelled background
   message: `operator-confirmed direction` (changes planning/priority/pause),
   `Chatterbox recommendation` (unconfirmed intake), or `administrative notice`
@@ -318,7 +332,8 @@ informal habits.
   completion, path/workspace/branch collisions, transport/profile availability,
   repository gates, and operator pauses.
 - It loads only the instructions, promoted commit, selected cards, manifest,
-  and named refs needed for factual preflight (narrow fast path).
+  and named refs needed for factual preflight (narrow fast path), not open
+  triage. It never reconciles triage or chooses a planning branch from it.
 - It launches the complete approved ready frontier published in the dispatch
   manifest; it does not design lanes, dependency edges, or parallel groups.
 - Coordinator turns are event-bounded: perform all immediately available

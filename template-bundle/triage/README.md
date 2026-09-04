@@ -23,20 +23,28 @@ frontmatter or body shape. Capture a useful thought before following one branch
 of a conversation deeply, but do not treat a note as an approved contract,
 roadmap item, or implementation request.
 
-Chatterboxes and planning delegates share the working checkout and write only
-new unique triage files here without modifying `README.md` or any other path.
-They isolate commits to exact paths after verifying clean pre-stage index state.
-They do not create worktrees, branches, or PRs. Planning delegates report their
-notes to Chatterbox, which reconciles triage and directly promotes canonical
-planning after explicit operator confirmation. Raw triage is never coordinator
-execution authority.
+Triage notes are mutable. Chatterboxes create a unique file for a new issue and
+update that file when later conversation corrects or develops the issue. They do
+not create correction, addendum, or deprecation notes for content that belongs
+in an existing note. The original filename remains stable. Planning delegates
+may update the note for their current bounded issue; Chatterbox owns wider
+reconciliation.
+
+Chatterboxes and planning delegates share the working checkout and isolate
+triage-only commits to exact note paths after verifying clean pre-stage index
+state. They do not modify this `README.md`, create worktrees, branches, or PRs.
+Planning delegates report their notes to Chatterbox, which reconciles triage and
+directly promotes canonical planning after explicit operator confirmation. Raw
+triage is never coordinator execution authority.
 
 Refresh and cleanup should inspect every note and give it a disposition:
 promote or rework it into its canonical home, merge it with a useful note, or
-remove it when it is implemented, superseded, or no longer useful. Ask the
-operator when the destination, ownership, or removal decision is unclear.
-Keeping a note explicitly open is an interim state, not a permanent home; give
-it a next check or owner when possible, then promote, implement, or remove it.
+remove it when it is implemented, superseded, or no longer useful. Full
+promotion deletes the source note in the same coherent commit. Partial
+promotion edits it down to only unresolved meaning. Ask the operator when the
+destination, ownership, or removal decision is unclear. Keeping a note open is
+an interim state, not a permanent home. The directory holds unresolved current
+meaning; Git history and logs preserve provenance.
 
 The `README.md` anchor is not a triage note. Other files or folders here should
 be understood before they are changed or removed.
