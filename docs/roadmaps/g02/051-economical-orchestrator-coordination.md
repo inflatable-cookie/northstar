@@ -1,7 +1,7 @@
 # 051 - Economical Orchestrator Coordination
 
-Status: initial model superseded by g02.053; card 125 complete and card 126
-retained as the corrected-model observation lane
+Status: initial model superseded by g02.053/g02.054; card 126 retained as the
+bounded passive observation lane
 Owner: repo maintainers
 Created: 2026-09-04
 Updated: 2026-09-04
@@ -58,5 +58,5 @@ semantic role and merge boundaries remain exact-head review evidence.
 
 ## Next task
 
-Execute g02.053/card 128 before starting card 126's corrected-model observation
-window. Do not resume the failed promotion-worker loop.
+Execute g02.054/card 129, then start card 126's published passive observation
+window. Observation must not block normal project delivery.

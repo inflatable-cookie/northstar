@@ -393,13 +393,20 @@ operator direction carries authority; recommendations remain intake.
 The coordinator consumes the published plan. It verifies factual prerequisites
 and launches the complete approved frontier; it does not design lanes or decide
 parallelism. Its turns begin with an operator event or child notification and
-end after all immediately available coordination is reported. No polling or
-open-turn waiting edge exists.
+continue across merge, closeout, and card boundaries while another canonical
+mechanical action is ready. It yields for child/external results, new authority,
+or an empty runway. No polling, open-turn waiting, or operator-`continue` edge
+exists. Only an empty runway notifies Chatterbox; waiting for a child does not.
+An already-authenticated repository-native write transport may replace a
+refused connector write after the unchanged gate, followed by provider-state
+verification; transport fallback never weakens merge authority.
 
 Each worker retains its isolated workspace. Its independent reviewer is a
 coordinator-owned visible agent tab placed in that same workspace under a
 serial clean exact-head lease. Review produces a provider verdict; the
-coordinator checks the exact-head merge gate. A blocker needing the operator
+reviewer uses a different underlying provider/model identity from the worker,
+and the coordinator records both identities. The coordinator checks the exact-
+head merge gate. A blocker needing the operator
 travels as a self-contained escalation capsule produced by the discovering
 child, not as an unexplained log reference.
 

@@ -437,10 +437,18 @@ Spec 037 governs the current planning and delivery topology.
   delivery, and does not poll. It never uses this channel to dispatch, cancel,
   resume, review, or merge children itself.
 - Coordinator turns are event-bounded. After an operator event or child
-  notification, perform all immediately available coordination, report state
-  and identities, then yield. Never poll, invoke a wait primitive, hold the turn
-  open for a child, or repeatedly rescan unchanged state. Finish notifications
-  start the next bounded turn.
+  notification, perform all immediately available coordination and continue
+  across merge, closeout, and card boundaries while the canonical runway names
+  another ready mechanical action. Yield only for a child/external result, new
+  authority, or an empty runway. Never poll, invoke a wait primitive, hold the
+  turn open for a child, or repeatedly rescan unchanged state. Finish
+  notifications start the next bounded turn. Waiting for a child does not notify
+  Chatterbox; an empty runway does, once. Do not require an operator `continue`
+  between actionable steps.
+- A refused connector/provider write may use an already-authenticated,
+  repository-approved native write transport when the verified gate remains
+  current. Re-verify provider state afterward. Do not solicit credentials,
+  weaken the gate, or improvise an undeclared transport.
 - A complete ready lane should reach child creation in under two minutes when no
   conflict or transport failure exists. This is a dogfood diagnostic threshold,
   not a hard provider timeout.
@@ -451,6 +459,10 @@ Spec 037 governs the current planning and delivery topology.
   clean before and after review. The reviewer may inspect and run checks but
   cannot edit tracked files, commit, push, or change branches. Do not create a
   review-only workspace or fall back to the coordinator checkout.
+- The review child must use a different underlying provider/model identity from
+  the authoring worker. Profile renames, effort changes, and fresh threads do not
+  establish independence. Record both identities in the review handoff; if no
+  qualified distinct reviewer exists, fail closed and escalate context-completely.
 - The agent that discovers an operator-owned blocker supplies a plain-language
   escalation containing lane/PR/head state, observed versus intended behavior,
   why operator authority is required, impact, options, recommendation when

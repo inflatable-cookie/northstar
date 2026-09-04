@@ -1,6 +1,6 @@
 # 037 - Chatterbox-Led Planning and Mechanical Coordination
 
-Status: active; canonical planning promoted, implementation card 128 ready
+Status: active; card 128 complete, continuity correction card 129 ready
 Owner: repo maintainers
 Created: 2026-09-04
 Updated: 2026-09-04
@@ -149,9 +149,25 @@ a hard provider timeout.
 Coordinator turns are event-bounded. An operator message or child notification
 starts a turn. The coordinator performs every immediately available dispatch,
 revision, review, merge-gate, or closeout action, reports identities/state, then
-yields. It never polls, calls a wait primitive, holds a turn open for a child, or
-rescans unchanged state to appear busy. `notifyOnFinish: true` starts the next
-turn.
+yields only when further progress requires a child result, an external event, or
+new authority. A merge, closeout commit, card boundary, or successful local
+mechanical step is not a yield condition: recompute the canonical frontier and
+continue immediately while another action is ready. It never polls, calls a wait
+primitive, holds a turn open for a child, or rescans unchanged state to appear
+busy. `notifyOnFinish: true` starts the next turn.
+
+Waiting for active children does not notify Chatterbox. When the canonical
+runway is empty—no ready lane, active child, or already-published downstream
+lane—the coordinator sends Chatterbox one administrative notice with completed
+state and then yields. A blocked lane goes only to its named escalation owner;
+an empty runway caused by missing planning is a Chatterbox escalation. The
+coordinator does not require an operator `continue` between actionable steps.
+
+A provider/connector write refusal does not invalidate an otherwise-current
+coordination gate. When the repository already exposes an authenticated,
+approved native write transport, the coordinator may retry the same bounded
+mutation through it, then re-verify provider state. It does not request new
+credentials, weaken the gate, or improvise an undeclared transport.
 
 ## Review children
 
@@ -159,6 +175,12 @@ Review remains independent but uses the existing worker workspace. The
 coordinator creates a child reviewer with the worker `workspaceId`, preserving
 coordinator parentage, a visible agent tab, and `notifyOnFinish: true`. It does
 not create a review-only workspace.
+
+The reviewer must use a different underlying provider/model identity from the
+worker that authored the PR. A renamed profile, different reasoning level, or
+fresh thread using the same provider/model does not qualify. The coordinator
+records both identities in the review handoff and fails closed with a
+context-complete escalation when no qualified distinct reviewer is available.
 
 The worker and reviewer hold a serial workspace lease. Before review, the
 worker is idle, workspace `HEAD` equals the PR head, and index/tracked worktree
@@ -199,6 +221,9 @@ Luna does not reconstruct their semantics.
 - no coordinator lane design, semantic promotion, or substantive PR review;
 - no review-only workspace;
 - no polling or idle open coordinator turn;
+- no operator `continue` between actionable coordinator steps;
+- no Chatterbox notification merely because a child is running;
+- no worker/reviewer reuse of the same underlying provider/model identity;
 - no raw triage execution authority;
 - no provider/profile names in reusable policy;
 - no weakening of exact-head review, checks, mergeability, or operator pauses.
@@ -212,7 +237,10 @@ Luna does not reconstruct their semantics.
 | Parallelism is planned. | Luna invents an edge or chooses only one of two approved lanes. | Launch the full verified frontier or return factual conflict. | Dependency fixture. |
 | Direction keeps provenance. | Recommendation changes active scope as operator authority. | Record intake; require confirmation. | Message-class fixture. |
 | Coordinator yields. | It polls or waits after child creation. | Report identities and end the turn. | Lifecycle trace. |
+| Coordinator advances. | It stops after merge or closeout while a published next action is ready. | Recompute the frontier and perform the next mechanical action in the same turn. | Multi-stage lifecycle trace. |
+| Empty runway returns to planning. | It asks the operator to say `continue`, or pings Chatterbox while only waiting for a child. | Continue ready work; notify Chatterbox only when the canonical runway is empty. | Ready/waiting/empty lifecycle scenarios. |
 | Review reuses worker workspace safely. | New review workspace or concurrent worker/reviewer access. | Stop; enforce serial lease in existing workspace. | Paseo launch and Git-state fixture. |
+| Review is model-independent. | Worker and reviewer use the same provider/model behind different profiles or effort settings. | Select a qualified distinct model or fail closed. | Identity-routing fixtures. |
 | Questions carry context. | Operator receives only a finding ID and log path. | Return capsule for clarification. | Blind-reader scenario. |
 | Merge gate stays exact. | Accepted verdict names an old head. | Re-review current head. | Exact-head scenario. |
 
@@ -227,7 +255,11 @@ Luna does not reconstruct their semantics.
 - [ ] coordinator consumes an approved frontier and cannot design it;
 - [ ] no promotion-only worker or duplicate promotion handoff remains;
 - [ ] coordinator launches actual workers promptly, reports, and yields;
+- [ ] coordinator continues across actionable merge/closeout/card transitions,
+      notifies Chatterbox only on an empty runway, and needs no operator
+      `continue` prompt;
 - [ ] review children appear in worker workspaces with serial clean-head leases;
+- [ ] worker and reviewer underlying provider/model identities differ;
 - [ ] every operator escalation is self-contained;
 - [ ] card 126 records dispatch latency, time-to-actual-worker, polling, context,
       scheduling, and workspace evidence;
@@ -245,6 +277,7 @@ Luna does not reconstruct their semantics.
 
 ## Next task
 
-Execute card 128. Update every runtime/doctrine/template/check caller together,
-remove superseded promotion and planning-delegate worktree paths, validate the
-complete batch, and open one implementation PR.
+Execute card 129. Update reusable doctrine, coordinator/reviewer modes, fixtures,
+and installed parity for continuous actionable progression, empty-runway-only
+Chatterbox notification, cross-model review, and bounded authenticated write
+fallback. Start card 126's passive observation cohort only after that merge.

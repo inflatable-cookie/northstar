@@ -76,6 +76,10 @@ sequence.
 
 ## Next Task
 
+Dispatch `g02.054/129` to finish continuous coordinator delivery. After merge
+and installed parity, begin card 126's passive bounded observation without
+blocking normal project work.
+
 Roadmaps `g02.038` through `g02.047` are implemented. The
 first-principles audit and closed dogfood cohort produced the structural
 validation reduction, active-authority reconciliation, machine-contract checks,
@@ -120,8 +124,10 @@ operator cancellation. Spec 037 / `g02.053` supersedes that topology:
 Chatterbox owns canonical promotion and approved-frontier design; the
 coordinator dispatches actual workers mechanically. Card 128 merged through PR
 34 at `fd341aeb` after accepted exact-head review at `201c499b`; the installed
-skill is current and card 126 is next for bounded observation of the corrected
-model. The
+skill is current. Live use then exposed stop-after-merge and stop-after-closeout
+behavior. `g02.054/129` is ready to make actionable transitions continuous,
+notify Chatterbox only on an empty runway, require worker/reviewer model
+separation, and start card 126's passive bounded cohort after merge. The
 `g02.052` sibling-tab correction (card 127) merged through PR 33 as `7d3bfd1`;
 the installed skill is current.
 

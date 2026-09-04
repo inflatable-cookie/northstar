@@ -81,3 +81,7 @@ and merged through PR 34 at `fd341aeb`:
 Chatterbox promotes canonical planning directly, triage-only delegates feed
 Chatterbox, and the coordinator dispatches workers mechanically and yields. Card
 128 is complete; card 126 will execute under the corrected topology.
+Continuous coordinator delivery `g02.054/129` is ready: it removes operator
+`continue` pauses between actionable steps, notifies Chatterbox only when the
+runway is empty, requires a different reviewer model, and starts card 126's
+passive bounded observation after merge.

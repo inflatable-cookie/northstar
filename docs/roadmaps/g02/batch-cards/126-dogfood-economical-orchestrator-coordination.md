@@ -1,6 +1,6 @@
 # 126 - Dogfood Economical Orchestrator Coordination
 
-Status: ready for corrected observation setup
+Status: queued; bounded passive observation packet published
 Owner: repo maintainers
 Created: 2026-09-04
 Updated: 2026-09-04
@@ -39,7 +39,31 @@ durable token accounting, or encoding local model prices and quotas.
       coordinator polling/waiting, an opaque blocker question, and operator
       cancellation of both coordinator and promotion child;
 - [x] g02.053/card 128 implements the corrected role topology;
-- [ ] observation packet and stop date are published.
+- [x] observation packet and stop date are published;
+- [ ] g02.054/card 129 merged and installed parity verified.
+
+## Observation packet
+
+- **Cohort:** the first ten naturally occurring PR lanes coordinated under the
+  installed post-card-129 protocol across the operator's Northstar-managed
+  project work.
+- **Start:** card 129 merge plus verified installed-skill parity.
+- **Stop:** the tenth accepted/closed PR lane, or 2026-09-18 at 17:00
+  Europe/London, whichever comes first.
+- **Collection:** record only evidence already emitted by normal coordinator,
+  worker, reviewer, provider, and closeout activity. Do not create synthetic
+  lanes, delay dispatch, or add an observation approval gate.
+- **Per-lane fields:** project/lane/PR; coordinator, worker, and reviewer
+  capability plus provider/model identity; confirmation-to-worker latency;
+  review rounds/findings; coordinator interventions; `continue` prompts;
+  polling/open-turn incidents; Chatterbox notifications and runway state;
+  workspace/lease friction; write-transport refusal/fallback; post-acceptance
+  misses.
+- **Ownership:** coordinators emit their ordinary closeout facts; Chatterbox
+  reconciles the bounded cohort assessment after the stop condition. Missing
+  evidence stays missing and does not block project delivery.
+- **Change freeze:** urgent correctness fixes may proceed through normal
+  planning, but the assessment separates pre-change and post-change lanes.
 
 ## Acceptance criteria
 
@@ -50,5 +74,5 @@ durable token accounting, or encoding local model prices and quotas.
 
 ## Next task
 
-Publish the bounded observation packet and stop date before starting the
-corrected cohort.
+Merge card 129 and verify installed parity, then begin passive collection. This
+card must not block or synthesize work in Northstar or any consumer project.

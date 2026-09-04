@@ -57,5 +57,6 @@ worker-workspace reviewer leases, and context-complete escalations.
 
 Card 128 merged through PR 34 at `fd341aebd9c59bf1110f87deb4bce46cc3249d66`
 after accepted exact-head review at `201c499b9134b764eabd7953101af93d3891ae32`.
-The installed skill refresh and 111-file parity proof are complete. Publish
-card 126's bounded observation packet and stop date.
+The installed skill refresh and 111-file parity proof are complete. The live
+continuity correction and observation packet are promoted under g02.054/card
+129 and card 126.

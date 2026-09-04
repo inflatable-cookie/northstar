@@ -64,9 +64,11 @@ Northstar system:
   dependency design, and approved parallel frontiers. The coordinator consumes
   that plan mechanically, dispatches actual workers/reviewers, reports,
   yields, and applies the merge gate. `g02.053/128` implemented the
-  runtime/doctrine/template/check surfaces before the corrected card-126 trial;
-  card 128 merged through PR 34 at `fd341aeb`; the installed skill is refreshed
-  with verified 111-file parity.
+  runtime/doctrine/template/check surfaces and merged through PR 34 at
+  `fd341aeb`; installed parity is current. Live closeout then exposed repeated
+  operator-`continue` pauses. `g02.054/129` is ready to make actionable
+  progression continuous, enforce cross-model PR review, and begin card 126's
+  passive bounded observation without blocking other projects.
 - `g02.041/109` repaired partial Rust evidence collection and merged; Signal
   owns the originating papercut closure
 - dependency-frontier design is Chatterbox planning. The canonical dispatch
