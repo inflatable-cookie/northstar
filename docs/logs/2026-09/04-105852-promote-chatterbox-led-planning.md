@@ -30,6 +30,12 @@ Card 128 contains the exact single-lane dispatch manifest, allowed mutable
 surfaces, worker class, escalation owner, validation, and stop conditions. No
 promotion worker is required before implementation.
 
+The first implementation dispatch exposed an ambiguous worker-class phrase:
+the coordinator selected the slow Luna audit/documentation-grind profile because
+the lane touched many documentation surfaces. The operator rejected that
+routing before edits began. Spec 037 and card 128 now require role-first profile
+selection and exclude auditor-style profiles from implementation lanes.
+
 ## Workspace disposition
 
 Paseo workspace `wks_9a7941e458c92da3` and agent

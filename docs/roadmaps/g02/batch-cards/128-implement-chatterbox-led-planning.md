@@ -47,9 +47,12 @@ updates all semantic callers together rather than leaving compatibility aliases.
   surface set
 - **Serial edges:** card 126 follows card 128 merge and installed-skill refresh;
   no other semantic serial edge
-- **Worker class:** economical implementation agent capable of broad
-  documentation/skill/checker refactoring; frontier reasoning is not required
-  because spec 037 and this card settle the semantics
+- **Worker class:** fast, economical general or day-to-day implementation agent
+  capable of broad documentation/skill/checker refactoring; its live profile
+  description must explicitly fit implementation or general worker work;
+  exclude audit, documentation-grind, review, planning, and coordinator
+  profiles; frontier reasoning is not required because spec 037 and this card
+  settle the semantics
 - **Escalation owner:** Chatterbox for missing role, sequencing, authority,
   acceptance, or parallelism decisions; operator for destructive or material
   permission choices

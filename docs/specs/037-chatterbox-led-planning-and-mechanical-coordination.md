@@ -102,6 +102,14 @@ collisions, transport/profile availability, repository gates, and operator
 pauses. It launches every approved ready lane; it neither selects a convenient
 subset nor invents extra concurrency.
 
+Worker-profile selection is role-first. A profile qualifies only when its live
+description explicitly fits implementation or general day-to-day work at the
+capability named by the manifest. Audit, documentation-grind, review, planning,
+and coordinator profiles do not qualify for implementation lanes merely because
+the lane is large, documentation-heavy, or expected to consume many tokens.
+Among role-adequate profiles, the coordinator prefers the cheapest fast option
+that meets the named capability.
+
 Unexpected factual conflicts pause only affected lanes and return to Chatterbox
 through a context-complete escalation. Downstream launch evaluates published
 boolean prerequisites. Missing or ambiguous dependency design is planning and
