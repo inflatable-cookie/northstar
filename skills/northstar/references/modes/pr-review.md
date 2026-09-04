@@ -14,11 +14,16 @@ commits, pushes, merge, closeout changes, or unrelated provider mutations.
 The provider review surface is the durable result. Chat is a short summary, not
 the only home of a finding. Never leave a blocking finding only in chat.
 
-An orchestrator may launch this mode in a dedicated review-child workspace for
-a worker PR. The boundaries are identical: independent review from the PR and
-canonical refs, no branch mutation, and the durable verdict posted on the
-provider. Name the exact head you reviewed in the posted verdict. A
-replacement reviewer starts a complete fresh review; it never inherits an
+An orchestrator launches this mode in the existing worker workspace under a
+serial clean exact-head lease for a worker PR. The boundaries are identical:
+independent review from the PR and canonical refs, no branch mutation, and the
+durable verdict posted on the provider. Under that lease:
+- verify index and worktree are clean before review;
+- run inspection and test/check commands without editing tracked files,
+  committing, pushing, or changing branches;
+- post the durable verdict on the provider naming the exact head SHA reviewed.
+
+A replacement reviewer starts a complete fresh review; it never inherits an
 unseen verdict.
 
 ## Procedure

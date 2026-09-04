@@ -172,17 +172,15 @@ PR-head workspace and post a provider verdict naming the exact reviewed head.
 
 ## 8. Orchestrator thread
 
-Use when the user wants Northstar to coordinate a lane: maintain the ready
-runway, spin off an operator-requested planning delegate, prepare worker
-threads/worktrees, or continue from a committed
-`orchestrator-continuation` handoff. Coordination is the normal job: keep the
-dependency frontier launching, route material meaning through operator-
-confirmed chatterbox packets, route substantive PR review to independent
-review children, and retain the merge gate. This is an internal
-mode of the single public authority; the operator relays messages between
-threads when no control-plane tools are available. When Paseo injects its
-orchestration tools, the mode uses them for routine dispatch without a separate
-permission prompt.
+Use when the user wants Northstar to coordinate a lane: consume the canonical
+dispatch manifest, verify factual prerequisites, launch the approved frontier,
+place review children in worker workspaces with serial clean exact-head leases,
+and own the merge gate; or continue from a committed `orchestrator-continuation`
+handoff. Canonical planning and promotion belong to Chatterbox. This is an
+internal mode of the single public authority; the operator relays messages
+between threads when no control-plane tools are available. When Paseo injects
+its orchestration tools, the mode uses them for routine dispatch without a
+separate permission prompt.
 
 → [`modes/orchestrator.md`](./modes/orchestrator.md)
 
@@ -266,26 +264,28 @@ Choose one:
 | Change still in provisional specs | [`shape-with-specs-and-promote.md`](./modes/shape-with-specs-and-promote.md) |
 | Canonical surfaces exist; need milestones/cards | [`compile-roadmaps.md`](./modes/compile-roadmaps.md) |
 
-## 15. Chatterbox intake
+## 15. Chatterbox planning and intake
 
-Use when the operator wants an independent, conversational thinking partner to
-explore one feature, issue, or side idea, or when the thread is already a
-chatterbox:
+Use when the operator wants to explore problems, plan, reconcile triage notes,
+promote canonical planning directly after confirmation, or send direction to
+the coordinator; or when the thread is already a chatterbox:
 
 - `northstar chatterbox`;
 - `/northstar-chatterbox`;
-- "you're a chatterbox on X", or exploratory intake chat with no handoff;
+- "you're a chatterbox on X", or exploratory intake/planning chat;
 - an already-spawned chatterbox thread.
 
 This is an internal mode of the single public `northstar` authority. A chatterbox
-shares the orchestrator's checkout, creates unique timestamped `docs/triage/`
-notes with exact-path git isolation, and reports the note path to the operator
-in chat (v1 starts no automatic orchestrator turn). It does not create
-worktrees, branches, or PRs.
+is the primary human-facing planning authority. It shares the checkout, creates
+unique timestamped `docs/triage/` notes with exact-path git isolation,
+reconciles triage notes, directly promotes canonical planning on the
+integration branch after explicit operator confirmation, and sends
+provenance-labelled direction to the coordinator. It does not implement
+product/runtime code, supervise workers, review PRs, or merge.
 
 **Precedence:** Explicit orchestrator, worker, planning-delegate, continuation,
-or PR-review requests keep those routes. A chatterbox asked to implement,
-promote, dispatch, review, or merge refuses and points at the orchestrator.
+or PR-review requests keep those routes. A chatterbox asked to implement product
+code, review PRs, or merge refuses and points at the orchestrator.
 
 → [`modes/chatterbox.md`](./modes/chatterbox.md)
 
@@ -323,10 +323,10 @@ inspect `.agents.local.env` for worker purposes. Do not infer worker mode from a
 branch name, filesystem path, or harness presence. If the dispatch metadata is
 absent, stop the worker launch and report the missing handoff boundary.
 
-A planning delegate with `handoff_mode: planning-delegate` follows its own
-handoff's planning-worktree preflight. It does not activate this implementation
-worker fast path. An `orchestrator-continuation` handoff follows Orchestrator
-mode and does not activate this path.
+A planning delegate is an optional same-workspace conversation that captures
+unique triage notes and reports to Chatterbox. It does not activate this
+implementation worker fast path. An `orchestrator-continuation` handoff follows
+Orchestrator mode and does not activate this path.
 
 After worker mode is activated, before broad repository reads, run one quick
 read-only probe from the current context:

@@ -7,6 +7,7 @@ fn current_active_authority_files() {
         "docs/specs/029-northstar-long-horizon-planning.md",
         "docs/specs/034-modular-language-quality-packages.md",
         "docs/specs/035-chatterbox-intake-channel.md",
+        "docs/specs/037-chatterbox-led-planning-and-mechanical-coordination.md",
     ]
 }
 
@@ -128,8 +129,7 @@ fn required_files() {
         "skills/northstar/scripts/paseo-worktree.rhai",
         "skills/northstar/assets/templates/effigy.native.toml.template",
         "skills/northstar/assets/templates/northstar-handoff.md.template",
-        "skills/northstar/assets/templates/northstar-discovery-delegate.md.template",
-        "skills/northstar/assets/templates/northstar-documentation-projection.md.template",
+        "skills/northstar/assets/templates/northstar-orchestrator-run.md.template",
         "skills/northstar/assets/templates/docs/specs/templates/batch-card-template.md",
         "template-bundle/specs/templates/batch-card-template.md",
         "scripts/lib/northstar-repo-contract-data.rhai",

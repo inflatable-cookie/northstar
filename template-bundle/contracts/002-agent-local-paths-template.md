@@ -19,7 +19,7 @@ than in tracked docs, shell history, or ad hoc prompts.
 - `.agents.local.env.example` is tracked and documents supported keys.
 - `.agents.local.env` is local-only, ignored by Git, and created on first need.
 - `AGENTS.md` references this contract for orchestrator-dispatched implementation
-  workers and planning delegates.
+  workers.
 
 ## Supported keys
 
@@ -57,6 +57,5 @@ do not execute or `source` the file.
 
 An implementation worker or ordinary subagent must not start a second
 orchestrator workflow or create a nested worktree when a parent
-harness/orchestrator already owns the lane. A planning delegate may use only its
-handoff-bounded read-only research subagents; they get no worktree or
-Git/provider authority.
+harness/orchestrator already owns the lane. A planning delegate is a
+same-workspace conversation; it gets no worktree or Git/provider authority.

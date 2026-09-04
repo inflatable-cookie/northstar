@@ -28,9 +28,9 @@ router's generic language section into the installed-package route at
 | Agent instruction review | User asks for a `northstar AGENTS file review`, or to review/optimize `AGENTS.md`/`CLAUDE.md` |
 | Pre-execution discovery | Readiness mapping, intent rounds, project language, decision prototypes, questionnaires, or reframe |
 | PR review | User asks a thread to review an existing PR |
-| Orchestrator | User wants a Northstar lane coordinated — runway, worker/review-child dispatch, operator-confirmed promotion, and gated merge — or a committed orchestrator-continuation handoff; material planning routes to chatterbox threads |
+| Orchestrator | User wants a Northstar lane coordinated — manifest-defined frontier dispatch, review-child lease in worker workspace, and gated merge — or a committed orchestrator-continuation handoff; canonical planning and promotion belong to chatterbox |
 | Docs cleanup | User wants `/docs` files and folders inspected and reworked to fit Northstar |
-| Chatterbox | User wants conversational problem exploration and triage intake, or uses `northstar chatterbox` / `/northstar-chatterbox` |
+| Chatterbox | User wants primary planning authority, problem exploration, canonical promotion, triage reconciliation, or coordinator direction; or uses `northstar chatterbox` / `/northstar-chatterbox` |
 | Normalize docs | Bootstrap, migrate, or keep docs spine healthy over time |
 | Research | Evidence → architecture/contracts |
 | Recovery | Drifted or changed planning state |
@@ -56,11 +56,10 @@ tracked handoff lists in the worktree container directory. A launcher lifecycle
 creates them before project setup; only the manual fallback worker creates an
 absent link after preflight.
 
-A planning delegate is distinct from worker mode. Its handoff declares
-`handoff_mode: planning-delegate` and
-`planning_mode: conversational-discovery`; it follows that handoff's isolated
-planning-worktree preflight, writes only named triage/research paths, and cannot
-implement or promote.
+A planning delegate is distinct from worker mode. It is an optional
+same-workspace conversation for one bounded issue; it writes only unique
+triage files under exact-path Git isolation, reports to Chatterbox, and does not
+activate worker preflight, create worktrees, or open PRs.
 
 A fresh orchestrator continuation is distinct from both. Its handoff declares
 `handoff_mode: orchestrator-continuation`,
@@ -103,33 +102,31 @@ preflight. The source yields the transferred lane after pushed dispatch.
 - **Research:** promoted decisions in architecture/contracts, not stranded memos.
 - **Recovery:** trustworthy planning surfaces and canonical refs restored.
 - **Normalize:** baseline or strict spine installed/maintained; Effigy-first QA.
-- **Orchestrator:** economical coordination as the default job — parallel-first
-  dispatch of the whole safe ready dependency frontier without a global thread
-  budget, lane-local provider/profile routing, diversified economical routing
-  (adequate pool, cheapest adequate tier, recent-use rotation) with frontier
-  workers only when both escalation axes hold, Paseo worker parentage
+- **Orchestrator:** mechanical delivery management as the default job —
+  parallel-first dispatch of the whole approved ready frontier without a global
+  thread budget, lane-local provider/profile routing, diversified economical
+  routing (adequate pool, cheapest adequate tier, recent-use rotation) with
+  frontier workers only when both escalation axes hold, Paseo worker parentage
   preserved across dedicated worktree workspace placement (scoped
   cross-workspace child creation, finish notifications enabled, no detached
-  root launches, same-agent revision resume), decision-ready chatterbox
-  packets promoted only after operator confirmation through a bounded
-  fail-closed projection lane, independent review children owning substantive
-  exact-head PR review while the coordinator verifies the verdict head,
-  findings, checks, ancestry, mergeability, and pause gate, optional
-  operator-facing frontier planning delegates with orchestrator-owned
-  promotion, optional fresh-orchestrator continuation through a pushed
-  seven-section handoff and a separate local workspace with
-  `Orchestrator=true`, one pushed worker handoff under `docs/handoffs/` per
-  launched lane, and accepted-review plus check-gated merge without a second
-  operator prompt.
+  root launches, same-agent revision resume), independent review children in the
+  existing worker workspace with serial clean exact-head lease and coordination
+  gate verification, event-bounded turns with post-dispatch yield,
+  self-contained operator escalation relay, optional fresh-orchestrator
+  continuation through a pushed seven-section handoff and a separate local
+  workspace with `Orchestrator=true`, one pushed worker handoff under
+  `docs/handoffs/` per launched lane, and accepted-review plus check-gated merge
+  without a second operator prompt.
 - **Handoff:** a human-friendly seven-section file under `docs/handoffs/`, with
   an absolute path returned to the operator; not a substitute for log/roadmap
   closeout.
-- **Chatterbox:** warm operator intake conversation, problem exploration,
-  and unique-file triage capture on shared checkout with operator-visible note
-  handoff (v1 starts no automatic orchestrator turn); decision-ready packets
-  separate confirmed decisions from recommendations but stay
-  non-authoritative; no implementation, promotion, review, merge, or dispatch
-  authority.
+- **Chatterbox:** primary planning authority, warm operator intake
+  conversation, problem exploration, unique-file triage capture on shared
+  checkout, triage reconciliation, direct canonical planning promotion on the
+  integration branch after operator confirmation, and provenance-labelled
+  direction to the coordinator (`operator-confirmed direction`,
+  `Chatterbox recommendation`, `administrative notice`); no product/runtime
+  implementation, worker supervision, review, or merge authority.
 
 ## Conversation style
 
@@ -193,8 +190,6 @@ Northstar source repo, expanded doctrine lives at
 - Papercuts starter: `assets/templates/PAPERCUTS.md`
 - Handoff template: [`assets/templates/northstar-handoff.md.template`](./assets/templates/northstar-handoff.md.template)
 - Orchestrator worker handoff extension: [`assets/templates/northstar-orchestrator-run.md.template`](./assets/templates/northstar-orchestrator-run.md.template)
-- Orchestrator planning-delegate handoff: [`assets/templates/northstar-discovery-delegate.md.template`](./assets/templates/northstar-discovery-delegate.md.template)
-- Orchestrator documentation projection brief: [`assets/templates/northstar-documentation-projection.md.template`](./assets/templates/northstar-documentation-projection.md.template)
 - Handoff directory: `docs/handoffs/`
 - Triage directory: `docs/triage/`
 - Handoff contract: [`references/handoff-contract.md`](./references/handoff-contract.md)

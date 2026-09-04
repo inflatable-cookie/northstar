@@ -20,11 +20,6 @@ Use these top-level repo templates from this skill for the non-docs surfaces:
   SHA)
 - `paseo.json.template` (optional Paseo project settings; its worktree
   lifecycle invokes the installed Northstar skill through Effigy)
-- `northstar-documentation-projection.md.template` (bounded prompt for a
-  fast/low-cost subagent to project settled documentation under orchestrator
-  review)
-- `northstar-discovery-delegate.md.template` (frontier operator-facing discovery
-  lane that ends in a triage/research PR and orchestrator-owned promotion)
 - `CHANGELOG.md`
 - `README.md.template`
 - `scripts.README.md.template`

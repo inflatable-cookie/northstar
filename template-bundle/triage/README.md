@@ -23,10 +23,13 @@ frontmatter or body shape. Capture a useful thought before following one branch
 of a conversation deeply, but do not treat a note as an approved contract,
 roadmap item, or implementation request.
 
-Chatterboxes share the working checkout and write only new unique triage files
-here without modifying `README.md` or any other path. They isolate commits to
-exact paths after verifying clean pre-stage index state. They do not create
-worktrees, branches, or PRs, and do not acquire promotion or execution authority.
+Chatterboxes and planning delegates share the working checkout and write only
+new unique triage files here without modifying `README.md` or any other path.
+They isolate commits to exact paths after verifying clean pre-stage index state.
+They do not create worktrees, branches, or PRs. Planning delegates report their
+notes to Chatterbox, which reconciles triage and directly promotes canonical
+planning after explicit operator confirmation. Raw triage is never coordinator
+execution authority.
 
 Refresh and cleanup should inspect every note and give it a disposition:
 promote or rework it into its canonical home, merge it with a useful note, or

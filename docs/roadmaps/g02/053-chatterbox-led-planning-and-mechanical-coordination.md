@@ -1,6 +1,6 @@
 # 053 - Chatterbox-Led Planning and Mechanical Coordination
 
-Status: active; card 128 ready
+Status: active; card 128 complete in review
 Owner: repo maintainers
 Created: 2026-09-04
 Updated: 2026-09-04
@@ -36,7 +36,7 @@ dispatch.
 
 ## Execution plan
 
-- [ ] **Card 128** performs the one-shot role migration across doctrine,
+- [x] **Card 128** performs the one-shot role migration across doctrine,
       templates, skills, checks, trial surfaces, and source/install parity.
 
 ## Review oracle
@@ -55,5 +55,5 @@ worker-workspace reviewer leases, and context-complete escalations.
 
 ## Next task
 
-Dispatch card 128 as the actual implementation lane. Do not create a promotion
-worker or another planning artifact first.
+Review and merge card 128, refresh installed skill, and begin the revised
+card-126 observation window.
