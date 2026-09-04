@@ -1,6 +1,6 @@
 # 127 - Chatterbox Sibling Agent Tabs
 
-Status: complete; reviewable PR pending
+Status: complete; merged through PR 33 as `7d3bfd1`
 Owner: repo maintainers
 Created: 2026-09-04
 Updated: 2026-09-04
@@ -66,5 +66,6 @@ model routing, worker/review-child/continuation workspaces, card 126.
 
 ## Next task
 
-Exact-head review and merge of this PR; installed-skill refresh follows
-merge. Card 126 stays blocked on its observation packet and stop date.
+Complete. PR 33 passed independent exact-head review at `fcd882a6`, merged as
+`7d3bfd1`, and the installed 113-file skill payload matches the tracked merge
+archive. Card 126 stays blocked on its observation packet and stop date.

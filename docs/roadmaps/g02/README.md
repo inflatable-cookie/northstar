@@ -14,7 +14,7 @@ single-pilot bucket.
 | Keep learning from operator-provided consumer feedback before treating stricter posture as settled doctrine. | active | `docs/contracts/001-working-rules.md`, `docs/specs/012-consumer-repo-autonomy-proof-and-adoption.md`, `docs/specs/013-stricter-consumer-repo-autonomy-adoption.md` | pending |
 | Harden setup, nested-authority adoption, and posture classification so downstream repos can install the spine without hand adaptation. | active | `docs/specs/020-formalize-nested-docs-authority-setup.md`, `docs/specs/022-formalize-repo-posture-classification.md` | pending |
 | Keep execution autonomy bounded by ready cards, lane budgets, pause signals, and a file-based orchestrator/worker PR boundary instead of ad-hoc continuation prompts. | active | `docs/contracts/001-working-rules.md`, `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `bundle-docs/sections/07-delivery-framework-and-autonomy.md` | accept operator-provided live feedback |
-| Keep the orchestrator on the main runway by giving the operator independent chatterbox threads for side issues and ideas. | complete; card 124 merged; card 127 sibling-tab spawn correction in review | `docs/specs/035-chatterbox-intake-channel.md`, `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `docs/specs/030-conversational-triage-and-docs-cleanup.md` | observe normal use |
+| Keep the orchestrator on the main runway by giving the operator independent chatterbox threads for side issues and ideas. | complete; cards 124 and 127 merged | `docs/specs/035-chatterbox-intake-channel.md`, `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `docs/specs/030-conversational-triage-and-docs-cleanup.md` | observe normal use |
 | Make the orchestrator an economical coordinator while planning and semantic review use separate capable threads. | card 125 complete; PR 32 merged as `61d4cc2` | `docs/specs/036-economical-orchestrator-coordination.md`, `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `docs/contracts/001-working-rules.md` | publish card 126 observation packet and stop date |
 | Keep always-loaded agent context useful, human, and bounded while preserving safety, authority, and project intent. | complete | `docs/contracts/003-agent-instruction-surface.md`, `docs/specs/028-agent-instruction-surface-optimization.md` | accept later operator feedback |
 | Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | card 120 root reduction |
@@ -122,8 +122,8 @@ rollover signal.
   31 at `d1b162e`)
 - `051-economical-orchestrator-coordination.md` (card 125 complete through PR
   32 as `61d4cc2`; card 126 blocked on observation setup)
-- `052-chatterbox-sibling-agent-tabs.md` (card 127 complete; reviewable PR
-  open)
+- `052-chatterbox-sibling-agent-tabs.md` (complete; card 127 merged through PR
+  33 as `7d3bfd1`)
 
 ## Next Task
 

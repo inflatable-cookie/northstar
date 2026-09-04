@@ -115,8 +115,8 @@ generic core. Spec 035 / `g02.050` / card 124 merged through PR 31 as `d1b162e`.
 Spec 036 / `g02.051` delivered the economical coordinator split through card
 125 and PR 32 (`61d4cc2`). The installed skill matches the 113-file tracked
 payload; card 126 is blocked on its observation packet and stop date. The
-`g02.052` sibling-tab correction (card 127) is implemented and its reviewable
-PR is open.
+`g02.052` sibling-tab correction (card 127) merged through PR 33 as `7d3bfd1`;
+the installed skill is current.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed

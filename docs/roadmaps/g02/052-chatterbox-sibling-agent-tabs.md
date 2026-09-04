@@ -1,6 +1,6 @@
 # 052 - Chatterbox Sibling Agent Tabs
 
-Status: card 127 complete; reviewable PR open
+Status: complete; card 127 merged through PR 33 as `7d3bfd1`
 Owner: repo maintainers
 Created: 2026-09-04
 Updated: 2026-09-04
@@ -58,6 +58,5 @@ not need, because chatterboxes already share the coordinator's checkout.
 
 ## Next task
 
-Exact-head review and merge of the card-127 PR; installed-skill refresh
-follows merge. Card 126's observation packet and stop date remain the
-following open task.
+Complete. Card 126's observation packet and stop date remain the following
+open task.

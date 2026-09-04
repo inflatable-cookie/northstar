@@ -5,7 +5,7 @@ handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
 handoff: single-file-path-only
-status: ready-to-launch
+status: complete; merged through PR 33 as 7d3bfd1
 owner: repo maintainers
 created: 2026-09-04
 updated: 2026-09-04
@@ -98,10 +98,8 @@ separate-workspace instruction everywhere live.
 - **Closeout log:** `docs/logs/2026-09/04-093820-chatterbox-sibling-agent-tabs.md`
 - **PR base/head:** `main` <- `worker/chatterbox-sibling-agent-tabs`
 - **PR URL:** https://github.com/inflatable-cookie/northstar/pull/33
-- **Review state:** revision 1 implemented as one bounded batch; review-only,
-  this lane does not merge. Full validation board ran at implementation head
-  `092a0b7`; the fast boards were rerun clean at the final handoff-record
-  head.
-- **Merge path:** orchestrator applies the accepted exact-head review and the
-  normal merge gate; installed-skill refresh follows merge.
+- **Review state:** accepted by an independent review child at exact head
+  `fcd882a6`; zero blocking findings.
+- **Merge:** PR 33 merged as `7d3bfd1`; the installed 113-file skill payload
+  matches the tracked merge archive.
 - **Card 126:** unchanged and still blocked.

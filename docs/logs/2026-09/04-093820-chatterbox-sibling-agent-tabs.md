@@ -62,6 +62,8 @@ the card-124 handoff record the decisions made at their time.
 
 ## Next Task
 
-Exact-head review and merge of the card-127 PR against `main`; the installed
-skill refresh follows merge. Card 126 stays blocked on its observation packet
-and stop date.
+PR 33 passed independent exact-head review at `fcd882a6` with no blocking
+findings and merged as `7d3bfd1`. The installed Northstar skill was refreshed
+from the tracked merge archive; all 113 files match byte-for-byte.
+
+Card 126 stays blocked on its observation packet and stop date.

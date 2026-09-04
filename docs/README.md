@@ -137,4 +137,5 @@ Northstar system:
   orchestrator turn in v1; they must not implement, promote, or dispatch.
   The `g02.052`/card 127 correction makes spawned chatterboxes parent-
   attached sibling agent tabs in the coordinator's workspace instead of
-  separate `local` workspaces; the review PR is open.
+  separate `local` workspaces; PR 33 merged as `7d3bfd1` and the installed
+  skill is current.

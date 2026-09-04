@@ -111,7 +111,8 @@ Roadmaps sequence contract-backed work for Northstar itself.
 - `g02.052` has card 127 complete: Paseo chatterbox spawn is a parent-attached
   sibling child agent in the coordinator's current workspace, not a separate
   `local` workspace; label, notification, routing, manual fallback, and
-  exact-file Git isolation are unchanged. Its reviewable PR is open.
+  exact-file Git isolation are unchanged. PR 33 merged as `7d3bfd1`; the
+  installed skill is current.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.
