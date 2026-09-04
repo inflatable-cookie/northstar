@@ -20,7 +20,9 @@ was about to start another loop; the operator stopped both.
 
 Operator questions also arrived without enough context, review children created
 unnecessary workspaces, and Chatterbox could see but was forbidden to message
-the coordinator directly.
+the coordinator directly. A worker stopping before PR could still force the
+mechanical coordinator to interpret the blocker and question the operator
+itself, bypassing the human-facing planning authority.
 
 ## Goal
 
@@ -42,9 +44,9 @@ There is no normal promotion-worker hop.
 | Role | Owns | Must not assume |
 | --- | --- | --- |
 | Operator | material intent, confirmation, priorities, pauses, destructive choices | that a child report or recommendation is confirmed meaning |
-| Chatterbox | primary operator conversation, research direction, planning, canonical promotion, triage reconciliation, lane graph, approved parallel frontier, direction to coordinator | product/runtime implementation, worker supervision, PR acceptance, merge |
+| Chatterbox | primary operator conversation, research direction, planning, canonical promotion, triage reconciliation, lane graph, approved parallel frontier, pre-PR decision resolution, direction to coordinator | product/runtime implementation, worker supervision, PR acceptance, merge |
 | Planning delegate | one optional parallel operator conversation, bounded read-only research, unique triage capture, notice to Chatterbox | canonical edits, promotion, coordinator direction, implementation, review, merge |
-| Coordinator | factual prerequisite checks, worker/reviewer dispatch, identity/state tracking, revision routing, merge gate, merge, closeout, contextual operator relay | product meaning, canonical promotion, lane design, dependency edges, parallel groups, substantive review |
+| Coordinator | factual prerequisite checks, worker/reviewer dispatch, identity/state tracking, revision routing, merge gate, merge, closeout, blocker routing | product meaning, canonical promotion, lane design, dependency edges, parallel groups, substantive review, operator-facing semantic decisions |
 | Worker | implementation inside a ready card and isolated workspace, validation, evidence, commits, PR | planning or scope expansion |
 | Review child | independent exact-head review and provider verdict | branch mutation, implementation, merge, acceptance of a later head |
 
@@ -119,17 +121,37 @@ Among role-adequate profiles, the coordinator prefers the cheapest fast option
 that meets the named capability.
 
 Unexpected factual conflicts pause only affected lanes and return to Chatterbox
-through a context-complete escalation. Downstream launch evaluates published
-boolean prerequisites. Missing or ambiguous dependency design is planning and
-returns to Chatterbox.
+through a context-complete escalation. When a worker stops before opening a PR
+and says an operator decision is needed, the coordinator sends Chatterbox a
+`pre-PR decision request`; it does not interpret the choice or ask the operator
+itself. Downstream launch evaluates published boolean prerequisites. Missing or
+ambiguous dependency design is planning and returns to Chatterbox.
 
 ## Coordinator direction channel
+
+The channel is bidirectional at the planning boundary. A coordinator sends a
+worker's complete blocker capsule to the named Chatterbox as a **pre-PR
+decision request**, records the lane as paused, and yields without polling. It
+uses the control plane's follow-up surface so an idle Chatterbox gets a turn.
+This is a blocker route, not an empty-runway administrative notice.
+
+Chatterbox checks the capsule against canonical authority and prior confirmed
+operator direction. If one answer follows inside already delegated planning
+authority, it sends a provenance-labelled **Chatterbox ruling** with the exact
+authority citation and worker-resume instruction. It must not invent material
+intent. If a new operator-owned choice remains, Chatterbox—not the
+coordinator—explains the issue in its operator conversation, obtains the
+decision, promotes any durable planning change, and sends **operator-confirmed
+direction**. The coordinator then resumes the same worker with the ruling or
+confirmed direction and any promoted commit.
 
 Chatterbox may discover the named coordinator and send it one background,
 provenance-labelled message:
 
 - **operator-confirmed direction** changes planning, priority, pause, reroute,
   or accepted escalation state;
+- **Chatterbox ruling** resolves a pre-PR decision request only where existing
+  canonical or delegated planning authority already determines the answer;
 - **Chatterbox recommendation** is unconfirmed intake and cannot change active
   work;
 - **administrative notice** carries a note, commit, supersession, or routing
@@ -164,7 +186,8 @@ continue immediately while another action is ready. It never polls, calls a wait
 primitive, holds a turn open for a child, or rescans unchanged state to appear
 busy. `notifyOnFinish: true` starts the next turn.
 
-Waiting for active children does not notify Chatterbox. When the canonical
+Waiting for active children does not notify Chatterbox. The pre-PR decision
+route above is the only blocked-child exception. When the canonical
 runway is empty—no ready lane, active child, or already-published downstream
 lane—the coordinator sends Chatterbox one administrative notice with completed
 state and then yields. A blocked lane goes only to its named escalation owner;
@@ -216,10 +239,12 @@ The agent that discovers an operator-owned blocker supplies a capsule containing
 9. paused state and next action;
 10. supporting links after the explanation.
 
-The coordinator verifies current identities/state and relays the capsule. An
-operator must be able to understand and answer without opening a blocker log,
-PR thread, or file. Missing or opaque capsules return to the discovering child;
-Luna does not reconstruct their semantics.
+The coordinator verifies current identities/state. For a worker stopped before
+PR, it routes the capsule to Chatterbox as a pre-PR decision request. For other
+operator-owned blockers it relays the capsule under the named escalation path.
+An operator must be able to understand and answer without opening a blocker
+log, PR thread, or file. Missing or opaque capsules return to the discovering
+child; the coordinator does not reconstruct their semantics.
 
 ## Non-goals
 
@@ -231,6 +256,7 @@ Luna does not reconstruct their semantics.
 - no polling or idle open coordinator turn;
 - no operator `continue` between actionable coordinator steps;
 - no Chatterbox notification merely because a child is running;
+- no coordinator-to-operator semantic question for a worker stopped before PR;
 - no worker/reviewer reuse of the same underlying provider/model identity;
 - no raw triage execution authority;
 - no provider/profile names in reusable policy;
@@ -249,10 +275,11 @@ Luna does not reconstruct their semantics.
 | Direction keeps provenance. | Recommendation changes active scope as operator authority. | Record intake; require confirmation. | Message-class fixture. |
 | Coordinator yields. | It polls or waits after child creation. | Report identities and end the turn. | Lifecycle trace. |
 | Coordinator advances. | It stops after merge or closeout while a published next action is ready. | Recompute the frontier and perform the next mechanical action in the same turn. | Multi-stage lifecycle trace. |
-| Empty runway returns to planning. | It asks the operator to say `continue`, or pings Chatterbox while only waiting for a child. | Continue ready work; notify Chatterbox only when the canonical runway is empty. | Ready/waiting/empty lifecycle scenarios. |
+| Empty runway returns to planning. | It asks the operator to say `continue`, or pings Chatterbox while only waiting for a child. | Continue ready work; administrative completion notice goes to Chatterbox only when the canonical runway is empty, while a complete pre-PR decision request follows its separate blocker route. | Ready/waiting/empty lifecycle scenarios. |
 | Review reuses worker workspace safely. | New review workspace or concurrent worker/reviewer access. | Stop; enforce serial lease in existing workspace. | Paseo launch and Git-state fixture. |
 | Review is model-independent. | Worker and reviewer use the same provider/model behind different profiles or effort settings. | Select a qualified distinct model or fail closed. | Identity-routing fixtures. |
 | Questions carry context. | Operator receives only a finding ID and log path. | Return capsule for clarification. | Blind-reader scenario. |
+| Pre-PR decisions return to planning. | A worker stops before PR and the coordinator asks the operator to choose directly. | Send a complete pre-PR decision request to Chatterbox; Chatterbox rules from existing authority or converses with the operator, then the coordinator resumes the same worker. | Existing-authority and new-authority blocker scenarios. |
 | Merge gate stays exact. | Accepted verdict names an old head. | Re-review current head. | Exact-head scenario. |
 
 ## Acceptance criteria
@@ -272,6 +299,8 @@ Luna does not reconstruct their semantics.
 - [ ] review children appear in worker workspaces with serial clean-head leases;
 - [ ] worker and reviewer underlying provider/model identities differ;
 - [ ] every operator escalation is self-contained;
+- [ ] pre-PR worker decision blockers route through Chatterbox and return to
+      the same worker without coordinator semantic interpretation;
 - [ ] card 126 records dispatch latency, time-to-actual-worker, polling, context,
       scheduling, and workspace evidence;
 - [ ] source/install parity, docs QA, full QA, and exact-head review pass.

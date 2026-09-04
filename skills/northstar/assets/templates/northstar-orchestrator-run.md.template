@@ -165,6 +165,10 @@ report what changed, validation run, what remains, and any planning decision.
   risks, and blockers.
 - Stop and say so if a contract is missing, intent is ambiguous, scope expands,
   authority/access is missing, or validation changes the plan.
+- If that stop happens before PR and needs an operator-facing semantic
+  decision, send the coordinator the complete 10-part blocker capsule from the
+  working-rules contract. Do not ask the operator directly or open a placeholder
+  PR.
 - Do not quietly turn an open question into a new architecture.
 
 ### When the assigned runway is complete

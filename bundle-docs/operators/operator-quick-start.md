@@ -206,6 +206,13 @@ canonical work is actionable. Waiting for active children does not notify
 Chatterbox; when the canonical runway is empty, the coordinator sends
 Chatterbox one administrative notice with completed state and yields.
 
+If a worker stops before opening a PR and needs a semantic decision, the
+coordinator sends Chatterbox the complete blocker capsule and yields. Chatterbox
+rules immediately when existing planning authority settles it; otherwise it
+explains the issue and options in the Chatterbox conversation and asks the
+operator. The answer returns to the coordinator, which resumes the same worker.
+The coordinator does not ask the operator an out-of-context product question.
+
 Chatterbox directly promotes operator-confirmed canonical planning and sends
 the coordinator a provenance-labelled direction naming the promoted commit and
 approved ready frontier. The coordinator verifies factual preflight, dispatches

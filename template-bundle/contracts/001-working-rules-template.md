@@ -320,9 +320,10 @@ informal habits.
   unresolved remainder. They do not create worktrees, branches, or PRs.
 - Chatterbox may send the named coordinator one provenance-labelled background
   message: `operator-confirmed direction` (changes planning/priority/pause),
-  `Chatterbox recommendation` (unconfirmed intake), or `administrative notice`
-  (routing facts). Chatterbox inspects coordinator state once, sends once,
-  reports delivery, and does not poll.
+  `Chatterbox ruling` (a cited answer already fixed by canonical or delegated
+  planning authority), `Chatterbox recommendation` (unconfirmed intake), or
+  `administrative notice` (routing facts). Chatterbox inspects coordinator
+  state once, sends once, reports delivery, and does not poll.
 - Raw triage and external intake are never coordinator execution authority.
   Chatterbox reconciles them against current authority.
 
@@ -343,8 +344,10 @@ informal habits.
   or an empty runway. Never poll, invoke a wait primitive, hold a turn open, or
   repeatedly rescan unchanged state. `notifyOnFinish: true` drives the next
   bounded turn. Waiting for a child does not notify Chatterbox; an empty runway
-  sends Chatterbox one administrative notice with completed state. Do not
-  require an operator `continue` between actionable steps.
+  sends Chatterbox one administrative notice with completed state. A worker's
+  complete pre-PR decision request is the explicit blocked-child exception, not
+  a waiting notice. Do not require an operator `continue` between actionable
+  steps.
 - A refused connector or provider write may use an already-authenticated,
   repository-approved native write transport when the verified gate remains
   current. Re-verify provider state afterward. Do not solicit credentials,
@@ -399,9 +402,19 @@ informal habits.
   10-part capsule (headline, lane/PR/head state, observed vs intended behavior,
   why operator authority is required, impact, options, recommendation when
   supported, exact question, paused state/next action, supporting links).
-- The coordinator verifies identities/state and relays the capsule. The
-  operator must be able to answer without opening a blocker log or PR thread.
-  Missing or opaque capsules return to the discovering child.
+- If an implementation worker stopped before opening a PR, the coordinator
+  sends the complete capsule to the named Chatterbox as a `pre-PR decision
+  request`, starts an idle Chatterbox turn through the available follow-up
+  surface, records the lane as paused, and yields. It does not interpret the
+  choice or ask the operator directly.
+- Chatterbox returns a `Chatterbox ruling` only when cited canonical or
+  delegated planning authority already fixes the answer. Otherwise it explains
+  the issue to the operator, obtains the choice, promotes any durable planning
+  change, and returns `operator-confirmed direction`. The coordinator resumes
+  the same worker.
+- Other blockers follow their named escalation path. The operator must be able
+  to answer without opening a blocker log or PR thread. Missing or opaque
+  capsules return to the discovering child.
 
 ### Orchestrator merge authority
 

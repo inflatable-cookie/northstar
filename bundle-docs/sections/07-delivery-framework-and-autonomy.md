@@ -773,8 +773,14 @@ state. Finish notifications start the next bounded turn. Waiting for active
 children does not notify Chatterbox. When the canonical runway is empty—no ready
 lane, active child, or already-published downstream lane—the coordinator sends
 Chatterbox one administrative notice with completed state and then yields.
-Route genuine blockers to their named escalation owner. The coordinator does
-not require an operator `continue` between actionable steps.
+If an implementation worker stops before PR on an operator-facing semantic
+decision, send its complete capsule to Chatterbox as a `pre-PR decision
+request`, start an idle Chatterbox turn through the follow-up surface, record
+the lane as paused, and yield. This is the explicit blocked-child exception to
+the notification rule, not ordinary waiting. The coordinator does not ask the
+operator directly. Route other genuine blockers to their named escalation
+owner. The coordinator does not require an operator `continue` between
+actionable steps.
 
 Model posture: the coordinator's normal route is an economical coordinator
 class — reliable tool use, concise state tracking, bounded verification.
@@ -854,6 +860,8 @@ graph design, and the approved parallel frontier.
   it one background, provenance-labelled message:
   - `operator-confirmed direction` changes planning, priority, pause, reroute,
     or accepted escalation state;
+  - `Chatterbox ruling` resolves a pre-PR decision request only when cited
+    canonical or delegated planning authority already fixes the answer;
   - `Chatterbox recommendation` is unconfirmed intake and cannot change active
     work;
   - `administrative notice` carries a note, commit, supersession, or routing
@@ -864,6 +872,14 @@ graph design, and the approved parallel frontier.
   When no unambiguous coordinator or background messaging route exists,
   Chatterbox gives the operator a complete manual-relay message and absolute
   path.
+- **Pre-PR decision resolution:** On a complete coordinator request,
+  Chatterbox first checks canonical planning and prior confirmed direction. If
+  one answer follows within delegated planning authority, it returns a cited
+  `Chatterbox ruling`. If material intent remains open, Chatterbox explains the
+  issue and consequences in its operator conversation, obtains the answer,
+  promotes any durable planning change, and returns `operator-confirmed
+  direction`. The coordinator resumes the same worker; Chatterbox does not
+  implement or supervise it.
 - **Shared checkout and Git:** Chatterboxes share the checkout. They write
   a unique `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` file for a new issue and
   update the existing note when that issue changes. They never create a
@@ -931,10 +947,12 @@ capsule containing:
 9. paused state and next action;
 10. supporting links after the explanation.
 
-The coordinator verifies current identities/state and relays the capsule. An
-operator must be able to understand and answer without opening a blocker log,
-PR thread, or file. Missing or opaque capsules return to the discovering child;
-the coordinator does not reconstruct their semantics.
+The coordinator verifies current identities/state. A worker's pre-PR decision
+capsule goes to Chatterbox for a cited ruling or operator conversation; other
+blockers follow their named escalation path. An operator must be able to
+understand and answer without opening a blocker log, PR thread, or file.
+Missing or opaque capsules return to the discovering child; the coordinator
+does not reconstruct their semantics.
 
 ## Orchestrator merge authority
 

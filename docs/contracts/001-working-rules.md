@@ -439,8 +439,18 @@ Spec 037 governs the current planning and delivery topology.
 - An unexpected factual conflict pauses only its affected lane and returns to
   Chatterbox through a context-complete escalation. Missing dependency or
   ownership design is planning; the coordinator must not fill it.
+- If an implementation worker stops before opening a PR and needs an
+  operator-facing semantic decision, the coordinator sends the complete
+  capsule to the named Chatterbox as a `pre-PR decision request`, starts an idle
+  Chatterbox turn through the available follow-up surface, records the lane as
+  paused, and yields. It does not interpret the choice or ask the operator
+  directly. Chatterbox may return a `Chatterbox ruling` only when cited
+  canonical or delegated planning authority already fixes the answer;
+  otherwise Chatterbox converses with the operator and returns
+  `operator-confirmed direction`. The coordinator resumes the same worker.
 - Chatterbox may send a named coordinator one provenance-labelled background
   message. `operator-confirmed direction` carries operator authority;
+  `Chatterbox ruling` carries only cited existing planning authority;
   `Chatterbox recommendation` remains intake; `administrative notice` carries
   routing facts. Chatterbox resolves identity once, sends once, reports
   delivery, and does not poll. It never uses this channel to dispatch, cancel,
@@ -452,8 +462,9 @@ Spec 037 governs the current planning and delivery topology.
   authority, or an empty runway. Never poll, invoke a wait primitive, hold the
   turn open for a child, or repeatedly rescan unchanged state. Finish
   notifications start the next bounded turn. Waiting for a child does not notify
-  Chatterbox; an empty runway does, once. Do not require an operator `continue`
-  between actionable steps.
+  Chatterbox; an empty runway does, once. A pre-PR decision request is the
+  explicit blocked-child exception, not a waiting notice. Do not require an
+  operator `continue` between actionable steps.
 - A refused connector/provider write may use an already-authenticated,
   repository-approved native write transport when the verified gate remains
   current. Re-verify provider state afterward. Do not solicit credentials,
@@ -476,9 +487,11 @@ Spec 037 governs the current planning and delivery topology.
   escalation containing lane/PR/head state, observed versus intended behavior,
   why operator authority is required, impact, options, recommendation when
   supported, one exact question, paused state, next action, and supporting
-  links. The operator must be able to answer without opening a blocker log or
-  PR thread. Missing or opaque explanations return to the discovering child;
-  the coordinator does not reconstruct their semantics.
+  links. For a worker stopped before PR, this capsule goes to Chatterbox for a
+  ruling or operator conversation; other blockers follow their named escalation
+  path. The operator must be able to answer without opening a blocker log or PR
+  thread. Missing or opaque explanations return to the discovering child; the
+  coordinator does not reconstruct their semantics.
 - Exact-head provider verdict, resolved findings, required checks, intended
   base/ancestry, mergeability, repository rules, and operator pauses remain the
   merge gate.
@@ -650,10 +663,12 @@ unresolved remainder.
 
 Chatterbox may send the named coordinator one provenance-labelled background
 direction message: `operator-confirmed direction` (changes planning/priority/
-pause), `Chatterbox recommendation` (unconfirmed intake), or `administrative
-notice` (routing facts). Chatterbox inspects coordinator state once, sends
-once, reports delivery, and does not poll. Raw triage and external intake are
-never coordinator execution authority.
+pause from confirmed operator intent), `Chatterbox ruling` (a cited answer
+already fixed by canonical or delegated planning authority), `Chatterbox
+recommendation` (unconfirmed intake), or `administrative notice` (routing
+facts). Chatterbox inspects coordinator state once, sends once, reports
+delivery, and does not poll. Raw triage and external intake are never
+coordinator execution authority.
 
 The **coordinator** checks only current facts: promoted commit, prerequisite
 completion, path/workspace/branch collisions, transport/profile availability,
@@ -692,8 +707,10 @@ The agent discovering an operator-owned blocker supplies a self-contained
 10-part capsule (headline, lane/PR/head state, observed vs intended behavior,
 why operator authority is required, impact, options, recommendation when
 supported, exact question, paused state/next action, supporting links). The
-coordinator verifies identities/state and relays the capsule. Missing or opaque
-capsules return to the discovering child.
+coordinator verifies identities/state. A worker's pre-PR decision capsule goes
+to Chatterbox, which rules from cited existing authority or converses with the
+operator before returning direction; other capsules follow their named
+escalation path. Missing or opaque capsules return to the discovering child.
 
 The repository is the durable communication boundary. A worker must be able to
 re-enter from its worker handoff, `AGENTS.md`, canonical refs, cards, commits,

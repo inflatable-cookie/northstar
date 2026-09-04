@@ -118,7 +118,9 @@ preflight. The source yields the transferred lane after pushed dispatch.
   across merge, post-merge reconciliation, closeout, frontier recomputation,
   and next-ready dispatch without operator `continue`, prompt yield on children
   with `notifyOnFinish: true` and no child-wait Chatterbox noise, exactly one
-  administrative notice to Chatterbox on an empty runway, bounded authenticated
+  administrative notice to Chatterbox on an empty runway, pre-PR worker
+  decision requests routed to Chatterbox for a cited ruling or operator
+  conversation before same-worker resume, bounded authenticated
   native write fallback on connector refusal after an unchanged merge gate,
   self-contained operator escalation relay, optional fresh-orchestrator
   continuation through a pushed seven-section handoff and a separate local
@@ -132,9 +134,10 @@ preflight. The source yields the transferred lane after pushed dispatch.
   conversation, problem exploration, mutable triage capture on shared checkout,
   in-place correction and promotion-time pruning, direct canonical planning promotion on the
   integration branch after operator confirmation, and provenance-labelled
-  direction to the coordinator (`operator-confirmed direction`,
-  `Chatterbox recommendation`, `administrative notice`); no product/runtime
-  implementation, worker supervision, review, or merge authority.
+  direction to the coordinator (`operator-confirmed direction`, `Chatterbox
+  ruling`, `Chatterbox recommendation`, `administrative notice`); no
+  product/runtime implementation, worker supervision, review, or merge
+  authority.
 
 ## Conversation style
 

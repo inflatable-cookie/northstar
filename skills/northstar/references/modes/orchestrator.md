@@ -33,6 +33,8 @@ Your default job is mechanical coordination:
   authority, or an empty runway;
 - keep `notifyOnFinish: true` and never poll or call wait primitives; waiting
   for active children does not notify Chatterbox;
+- when a worker stops before PR on an operator decision, send its complete
+  capsule to Chatterbox as a pre-PR decision request and yield;
 - send Chatterbox exactly one administrative notice with completed state when
   the canonical runway is empty, then yield.
 
@@ -75,7 +77,9 @@ execution, and the coordinator never chooses a planning branch from them.
 Chatterbox owns triage and canonical planning promotion. When coordination
 surfaces a useful unresolved observation, the coordinator sends Chatterbox a
 provenance-labelled recommendation or includes it in a context-complete
-escalation. It does not turn the observation into a plan or triage write.
+escalation. A worker's pre-PR decision blocker always uses the decision-request
+route below. The coordinator does not turn the observation into a plan,
+operator question, or triage write.
 
 ## Conversational planning delegates
 
@@ -126,22 +130,35 @@ Without Paseo, tell the operator to start a thread on the same checkout and
 invoke `/northstar-chatterbox` or `northstar chatterbox`.
 
 Chatterbox direction channel:
+The coordinator-to-Chatterbox message type is **pre-PR decision request**. Use
+it only when an implementation worker has stopped before opening a PR and its
+complete capsule requires an operator-facing semantic decision. Verify the
+worker identity, branch head, absence of a PR, and paused state; send the
+capsule through the follow-up surface that starts an idle Chatterbox turn; mark
+the lane awaiting Chatterbox; then yield without polling. Do not ask the
+operator the question in the coordinator thread.
+
 Chatterbox may send the named coordinator one provenance-labelled background
 direction message:
 - **operator-confirmed direction:** changes planning, priority, pause,
   reroute, or accepted escalation state;
+- **Chatterbox ruling:** resolves a pre-PR request where cited canonical or
+  delegated planning authority already settles the answer;
 - **Chatterbox recommendation:** unconfirmed intake that cannot change active
   work;
 - **administrative notice:** carries a note, commit, supersession, or routing
   fact.
 
-Reconcile confirmed direction against current execution state without asking
-the operator to repeat it.
+Reconcile a ruling or confirmed direction against current execution state and
+resume the same worker with the exact answer, authority citation, promoted
+commit when any, and next action. Do not replace the worker or ask the operator
+to repeat the decision.
 
 When the canonical runway is empty—no ready lane, active child, or
 already-published downstream lane—the coordinator sends Chatterbox one
 administrative notice with completed state and then yields. Waiting for active
-children does not notify Chatterbox.
+children does not notify Chatterbox; a pre-PR decision request is the explicit
+blocked-child exception, not a waiting notice.
 
 ## Independent review children and serial workspace lease
 
@@ -226,10 +243,13 @@ supplies a self-contained 10-part capsule:
 9. paused state and next action;
 10. supporting links after the explanation.
 
-Verify current identities and state, then relay the capsule. The operator must
-be able to answer without opening a blocker log, PR thread, or file. Return
-opaque or incomplete capsules to the discovering child; do not reconstruct their
-semantics in the coordinator.
+Verify current identities and state. If an implementation worker stopped before
+PR and needs an operator-facing semantic decision, route the capsule to
+Chatterbox as a pre-PR decision request. Chatterbox either returns a cited
+ruling within existing authority or converses with the operator and returns
+operator-confirmed direction. Other blockers follow their named escalation
+path; do not reconstruct opaque or incomplete capsules. Return them to the
+discovering child.
 
 ## Fresh orchestrator continuation
 

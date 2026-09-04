@@ -40,6 +40,8 @@ let skill = load("skills/northstar/SKILL.md");
 let kernel = load("bundle-docs/protocol-kernel.md");
 let handoff = load("skills/northstar/references/handoff-contract.md");
 let spec_037 = load("docs/specs/037-chatterbox-led-planning-and-mechanical-coordination.md");
+let chatterbox_mode = load("skills/northstar/references/modes/chatterbox.md");
+let worker_template = load("skills/northstar/assets/templates/northstar-orchestrator-run.md.template");
 
 // Row 1 — adequacy precedes preference (adequate-pool assertion).
 require_row("adequacy precedes preference", "spec 026", spec, "adequate profile pool");
@@ -140,7 +142,20 @@ require_row("implementation routing is role-first", "doctrine 07", doctrine, "pr
 require_row("implementation routing is role-first", "working-rules template", template, "profiles do not qualify merely because an implementation lane is long");
 require_row("implementation routing is role-first", "operator guidance", operators, "profiles are not implementation workers");
 
-// Row 11 — Northstar stays portable (provider-neutral search plus parity).
+// Row 11 — pre-PR semantic blockers return to the human-facing planning
+// authority rather than making the mechanical coordinator interrogate the
+// operator or invent the decision.
+require_row("pre-PR decisions return to Chatterbox", "spec 037", spec_037, "pre-PR decision request");
+require_row("pre-PR decisions return to Chatterbox", "working rules", contract, "pre-PR decision request");
+require_row("pre-PR decisions return to Chatterbox", "orchestrator mode", mode, "Do not ask the operator the question in the coordinator thread");
+require_row("pre-PR decisions return to Chatterbox", "chatterbox mode", chatterbox_mode, "Chatterbox ruling");
+require_row("pre-PR decisions return to Chatterbox", "doctrine 07", doctrine, "pre-PR decision request");
+require_row("pre-PR decisions return to Chatterbox", "working-rules template", template, "pre-PR decision request");
+require_row("pre-PR decisions return to Chatterbox", "operator guidance", operators, "resumes the same worker");
+require_row("pre-PR decisions return to Chatterbox", "worker handoff template", worker_template, "complete 10-part blocker capsule");
+require_row("pre-PR decisions return to Chatterbox", "skill outcome", skill, "pre-PR worker decision requests routed to Chatterbox");
+
+// Row 12 — Northstar stays portable (provider-neutral search plus parity).
 // The per-surface assertions above cover both the live contract and the
 // copy-ready template with the same markers, so drift between them fails a
 // named row; the scans below reject local model names, prices, and the
@@ -170,4 +185,4 @@ for entry in scanned {
     forbid("northstar stays portable", entry["name"], entry["text"], "best-fit");
 }
 
-log("Northstar model-routing contract assertions: OK (eleven routing oracle rows)");
+log("Northstar model-routing contract assertions: OK (twelve routing oracle rows)");

@@ -21,7 +21,8 @@ first connector write refusal consumed an avoidable stop/fallback branch.
 
 - continue through every immediately actionable mechanical transition;
 - yield without polling while children or external results are outstanding;
-- notify Chatterbox only when the canonical runway is empty;
+- notify Chatterbox administratively only when the canonical runway is empty;
+  pre-PR semantic decision blockers use the separate context-complete request;
 - require a reviewer model distinct from the authoring worker model;
 - use an available authenticated repository-native write path as the bounded
   fallback after an otherwise-valid connector write refusal;

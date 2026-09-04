@@ -26,6 +26,9 @@ A chatterbox:
   to `main`;
 - discovers the named coordinator and sends one background, provenance-labelled
   direction message naming the promoted commit and approved ready frontier;
+- receives complete pre-PR decision requests from the coordinator, rules when
+  existing authority settles them, and otherwise resolves them with the
+  operator;
 - remains non-runtime: does not implement product/runtime code, supervise
   workers, review PRs, or merge PRs;
 - is not an implementation worker, coordinator, or `paseo-advisor`.
@@ -107,11 +110,33 @@ routine second promotion lane.
 
 ## Coordinator direction channel
 
+The coordinator may send a **pre-PR decision request** when an implementation
+worker has stopped before opening a PR. It must include the complete blocker
+capsule and verified paused identity/state. Handle it as follows:
+
+1. Check the question against canonical planning and prior confirmed operator
+   direction.
+2. If exactly one answer follows within already delegated planning authority,
+   send the coordinator a **Chatterbox ruling** citing that authority and the
+   same-worker resume instruction. Do not ask the operator merely to repeat a
+   settled choice.
+3. If material intent or a new operator-owned choice remains, explain the
+   blocker and consequences in this Chatterbox conversation, ask the one exact
+   question, and wait for the operator's answer.
+4. Promote any durable planning change after confirmation, then send
+   **operator-confirmed direction** with the answer, canonical commit when any,
+   and same-worker resume instruction.
+
+Do not implement the fix, supervise the worker, or turn an unconfirmed
+recommendation into a ruling.
+
 Chatterbox may discover the named coordinator and send it one background,
 provenance-labelled message:
 
 - **operator-confirmed direction:** changes planning, priority, pause,
   reroute, or accepted escalation state;
+- **Chatterbox ruling:** answers a pre-PR request only where cited canonical or
+  delegated planning authority already fixes the answer;
 - **Chatterbox recommendation:** unconfirmed intake that cannot change active
   work;
 - **administrative notice:** carries a note, commit, supersession, or routing
@@ -131,8 +156,10 @@ merge children itself.
 The coordinator sends Chatterbox one administrative notice with completed state
 only when the canonical runway is empty (no ready lane, active child, or
 already-published downstream lane), and then yields. Waiting for active children
-does not notify Chatterbox. Genuine blockers route to their named escalation
-owner; an empty runway caused by missing planning returns to Chatterbox.
+does not notify Chatterbox. A complete pre-PR decision request is the explicit
+blocked-child exception: resolve it here and return direction to the
+coordinator. Other blockers route to their named escalation owner; an empty
+runway caused by missing planning returns to Chatterbox.
 
 ## Shared checkout and Git protocol
 

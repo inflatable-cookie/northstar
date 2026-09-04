@@ -400,7 +400,8 @@ The optional parallel intake path is:
 Delegates may gather bounded read-only research but have no canonical,
 coordinator, PR, or execution edge. Chatterbox owns triage disposition and may
 send one provenance-labelled direction to the named coordinator. Confirmed
-operator direction carries authority; recommendations remain intake.
+operator direction carries operator authority; a Chatterbox ruling carries
+only cited existing planning authority; recommendations remain intake.
 
 The coordinator consumes the published plan. It verifies factual prerequisites
 and launches the complete approved frontier; it does not design lanes or decide
@@ -408,7 +409,9 @@ parallelism. Its turns begin with an operator event or child notification and
 continue across merge, closeout, and card boundaries while another canonical
 mechanical action is ready. It yields for child/external results, new authority,
 or an empty runway. No polling, open-turn waiting, or operator-`continue` edge
-exists. Only an empty runway notifies Chatterbox; waiting for a child does not.
+exists. Ordinary waiting does not notify Chatterbox. Empty-runway completion
+does, as does the explicit pre-PR decision route when a stopped worker needs an
+operator-facing semantic choice.
 The coordinator's narrow preflight does not load or reconcile open triage and
 never chooses a planning branch from it.
 An already-authenticated repository-native write transport may replace a
@@ -420,9 +423,11 @@ coordinator-owned visible agent tab placed in that same workspace under a
 serial clean exact-head lease. Review produces a provider verdict; the
 reviewer uses a different underlying provider/model identity from the worker,
 and the coordinator records both identities. The coordinator checks the exact-
-head merge gate. A blocker needing the operator
-travels as a self-contained escalation capsule produced by the discovering
-child, not as an unexplained log reference.
+head merge gate. A blocker needing the operator travels as a self-contained
+escalation capsule produced by the discovering child, not as an unexplained log
+reference. Before PR, that capsule goes from coordinator to Chatterbox:
+Chatterbox rules from cited existing planning authority or holds the operator
+conversation, then the coordinator resumes the same worker.
 
 ## Superseded thread topology
 
