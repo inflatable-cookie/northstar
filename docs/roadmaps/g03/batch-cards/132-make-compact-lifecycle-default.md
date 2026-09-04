@@ -1,6 +1,6 @@
 # 132 - Make Compact Lifecycle the Default
 
-Status: ready; merged implementation requires README follow-up
+Status: review; README follow-up implemented and ready for re-review
 Owner: repo maintainers
 Created: 2026-09-04
 Master roadmap: `g03.001`
@@ -16,7 +16,7 @@ steady-state protocols.
 ## Approved dispatch manifest
 
 - **Lane:** `g03.001/132`
-- **State:** ready for the bounded post-merge README correction below
+- **State:** ready for review; bounded post-merge README correction implemented
 - **Prerequisites:** card 130 merged and lifecycle checks green
 - **Completion:** reusable doctrine, templates, skills, setup, and checks expose
   one compact lifecycle with incremental adoption described only as migration;
@@ -125,7 +125,7 @@ correction merges, return to Chatterbox for full `g03.001` reconciliation.
 ## Acceptance evidence and review oracle
 
 - [x] setup and routing expose one normal compact lifecycle;
-- [ ] repository-wide search finds no supported alternative steady-state
+- [x] repository-wide search finds no supported alternative steady-state
       posture; historical evidence may name old terms only where clearly
       non-authoritative;
 - [x] a new consumer can start small without being classified into a lighter
@@ -161,10 +161,10 @@ correction merges, return to Chatterbox for full `g03.001` reconciliation.
 - Shipped one compact strict lifecycle as the single reusable Northstar default.
 - Retired baseline, light, lane-first, mixed, and full-strict posture variants as supported steady-state protocols.
 - Established standard core spine + consequence-triggered modules (specs, batch cards, guardrails, research, additional authority files) doctrine.
-- Removed and tightened two-spine wording across owned skill, setup, bundle, and template surfaces (`SKILL.md`, `assets/templates/README.md`, `assets/templates/docs.README.md.template`, `references/setup/workspace-container-example.md`, `template-bundle/README.md`, `template-bundle/contracts/README.md`, `bundle-docs/sections/09-standard-docs-spine.md`, `bundle-docs/sections/06-planning-and-contract-gates.md`, `bundle-docs/sections/07-delivery-framework-and-autonomy.md`). The repository-wide claim remains open: root `README.md` still publishes alternative postures.
+- Removed and tightened two-spine wording across owned skill, setup, bundle, and template surfaces (`SKILL.md`, `assets/templates/README.md`, `assets/templates/docs.README.md.template`, `references/setup/workspace-container-example.md`, `template-bundle/README.md`, `template-bundle/contracts/README.md`, `bundle-docs/sections/09-standard-docs-spine.md`, `bundle-docs/sections/06-planning-and-contract-gates.md`, `bundle-docs/sections/07-delivery-framework-and-autonomy.md`). Root `README.md` corrected in follow-up; repository-wide search confirms no supported alternative steady-state postures remain.
 - Implemented mandatory post-merge local integration reconciliation in contract 001 and orchestrator mode with full behavioral coverage in `scripts/tests/post-merge-reconciliation/` (35 assertions across 8 scenarios: happy path, unverified provider merge, fetch failure, dirty checkout with 100% untouched working tree/index preservation, wrong branch, divergent unpushed commit preservation, head mismatch, and coordinator stale-head dispatch rejection).
 - Wired post-merge reconciliation behavioral test and posture label rejection into lifecycle checker (`scripts/lib/northstar-lifecycle-checker.rhai`).
-- Preserved all card-131-owned paths (`scripts/check-northstar-command-skills.rhai`, `scripts/test-northstar-repo-contract.rhai`, `scripts/lib/northstar-repo-contract-data.rhai`, `scripts/check-northstar-model-routing.rhai`, `scripts/fixtures/readiness-map/**`, `README.md`) untouched.
+- Preserved all card-131-owned paths (`scripts/check-northstar-command-skills.rhai`, `scripts/test-northstar-repo-contract.rhai`, `scripts/lib/northstar-repo-contract-data.rhai`, `scripts/check-northstar-model-routing.rhai`, `scripts/fixtures/readiness-map/**`) untouched.
 - Synchronized installed Northstar skill (`~/.claude/skills/northstar`) to exact 100% parity (111 files).
 - Exact before/after template inventory:
   - `template-bundle/specs/templates/strict-compliance-migration-template.md`: deleted (-63 lines, -8 sections).
@@ -177,3 +177,22 @@ correction merges, return to Chatterbox for full `g03.001` reconciliation.
   - `scripts/tests/post-merge-reconciliation/self-test.sh`: PASS (35/35 assertions)
   - `effigy check:skill-install /Users/tom/.claude/skills/northstar`: PASS (111 files OK)
   - `git diff --check`: PASS (clean)
+
+### Post-merge README correction follow-up
+
+- Corrected root `README.md` setup/posture and directly coupled onboarding wording:
+  - Replaced `Choose your starting posture` with `Choose your bundle`;
+  - Replaced `Baseline vs Strict` and the posture migration ladder with `Compact Lifecycle and Modules`, teaching the single compact strict lifecycle default, consequence-triggered modules, and bounded migration;
+  - Replaced `Steps for any posture` with `Setup steps`;
+  - Updated minimal starter bundle link text from 5 folders to 7 core folders to match `template-bundle/minimal/`;
+  - Added compact lifecycle default and bounded migration bullets to root `README.md`'s `Operating Posture` section to align with `template-bundle/README.md`.
+- Repository-wide search confirms no supported alternative steady-state postures remain in root `README.md` or any active front door. Historical and test fixture references remain non-authoritative.
+- Preserved PR #38 and all prior merge/review history.
+- Noted outside-scope findings for Chatterbox:
+  - `template-bundle/README.md:196`: empty duplicate `## Operating posture` heading above the real section;
+  - `docs/contracts/001-working-rules.md:378`: legacy phrasing ("Baseline roadmap-only repos can still support...").
+- Replacement worker: implementation worker operating from clean synchronized main at `e3732c2e3837f54ac9f91051a17b9c07017f673f`.
+- Follow-up validation:
+  - `git diff --check`: PASS
+  - `effigy qa:docs`: PASS
+  - `effigy qa`: PASS
