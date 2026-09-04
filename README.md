@@ -73,7 +73,7 @@ repository.
 
 ## Quick Start (New Project)
 
-### Choose your starting posture
+### Choose your bundle
 
 | Situation | Start With | Command |
 |-----------|-----------|---------|
@@ -81,19 +81,31 @@ repository.
 | Want examples and templates | Full template bundle | `rsync -a template-bundle/ /path/to/your-project/docs/` |
 | Existing project, needs audit | Sweep pack | See [Migrate section](#migrate-an-existing-project) |
 
-### Baseline vs Strict
+### Compact Lifecycle and Modules
 
-**Baseline posture** -- use for most projects:
-- `vision/`, `architecture/`, `contracts/`, `roadmaps/`, `logs/`, `handoffs/`, `triage/`
-- Enough for normal routing, clear active-lane tracking, and dependable fresh-thread handoffs
+Northstar operates under one normal operating posture: the compact strict
+lifecycle. Starting small with the core standard spine (`vision/`,
+`architecture/`, `contracts/`, `roadmaps/`, `logs/`, `handoffs/`, `triage/`) is
+already the compact lifecycle, not a lighter protocol.
 
-**Strict posture** -- add when execution spans high-risk boundaries or needs longer autonomous runs:
-- Baseline plus `contracts/contract-index.md`, `contracts/001-working-rules-template.md`, `architecture/product-guardrails.md`, `specs/`
-- Enables continuation envelopes, lane budgets, pause signals, batch-card-driven autonomy
+Add consequence-triggered modules when specific conditions require them, rather
+than choosing an alternative posture:
+- `architecture/product-guardrails.md` -- when explicit execution constraints
+  and negative guardrails are required
+- `contracts/contract-index.md` and `contracts/001-working-rules-template.md` --
+  for formal contract indexing, ready-state checks, and execution grammar
+- `specs/` -- when provisional design shaping is needed before promoting
+  durable outcomes into architecture or contracts
+- `roadmaps/gNN/batch-cards/` -- for step-by-step execution detail under active
+  roadmap milestones
+- `research/` -- when comparative or source-backed exploration is needed before
+  commitments
 
-**Migration path**: baseline → lane-first stricter adoption → expanding strict coverage → full strict compliance
+**Bounded migration**: mature projects adopt the compact lifecycle in explicit
+tranches using one active migration spec and roadmap milestone. Migration state
+is bounded work, not a permanent mixed posture.
 
-### Steps for any posture
+### Setup steps
 
 1. Copy the bundle into your target project docs folder.
 2. Install the top-level agent starters from `skills/northstar/assets/templates/`,
@@ -154,7 +166,7 @@ repository.
 - Want terminology reference: [`bundle-docs/glossary.md`](./bundle-docs/glossary.md)
 - Want naming conventions fast: [`bundle-docs/cheat-sheet.md`](./bundle-docs/cheat-sheet.md)
 - Want the copy-ready docs bundle: [`template-bundle/README.md`](./template-bundle/README.md)
-- Want a minimal starter (5 folders, no examples): [`template-bundle/minimal/README.md`](./template-bundle/minimal/README.md)
+- Want a minimal starter (7 core folders, no examples): [`template-bundle/minimal/README.md`](./template-bundle/minimal/README.md)
 - Want Northstar's own live project docs: [`docs/README.md`](./docs/README.md)
 - Want the operator workflow: [`bundle-docs/operators/README.md`](./bundle-docs/operators/README.md)
 - Migrating or auditing a repo: [`bundle-docs/sweeps/README.md`](./bundle-docs/sweeps/README.md)
@@ -182,6 +194,10 @@ Northstar is intentionally lean:
 - keep installable skills portable as one folder; push doctrine back into
   `template-bundle/`, `bundle-docs/`, or Effigy product docs instead of letting
   skills sprawl
+- one compact lifecycle default: the core spine handles normal execution, with
+  consequence-triggered modules added when needed
+- incremental adoption moves mature projects into the compact lifecycle in
+  bounded tranches without creating a permanent mixed posture
 
 ## Next task
 
