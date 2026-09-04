@@ -74,9 +74,19 @@ The remaining execution scope supersedes the broad initial path list above:
   migration. Keep copy commands consistent with the shipped bundle.
 - Do not redesign the README or reopen other merged implementation surfaces.
   A repository-wide search finding outside this scope returns to Chatterbox.
-- Resume the retained card-132 worker from synchronized current main for a new
-  follow-up PR. Reuse its retained independent reviewer; do not amend the merged
-  PR, rewrite history, or create a new implementation lane.
+- The coordinator confirmed the original worker is closed and its workspace
+  is gone before this correction started. It may create one replacement worker
+  and workspace from clean synchronized current main for this same card and a
+  new follow-up PR. Use the declared worker class and normal dispatch preflight;
+  record replacement identity and this planning base in the dispatch handoff.
+- Retain the prior independent reviewer if it can use the replacement worker's
+  workspace. Otherwise create one replacement reviewer there with a different
+  underlying model from the worker. Preserve prior review evidence and apply
+  the full correction oracle to the new exact head.
+- This replaces unavailable execution identities only. Do not recreate missing
+  work, amend the merged PR, rewrite history, or create another lane. The
+  coordinator owns dispatch transport and records replacement provenance;
+  implementation scope remains root `README.md` and this card's evidence.
 - Validate the complete correction with `git diff --check`, `effigy qa:docs`,
   and `effigy qa`. Review must test a fresh consumer's setup path against the
   shipped kernel and search repository-wide for supported alternative postures.
