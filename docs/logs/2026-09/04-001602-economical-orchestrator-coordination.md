@@ -188,5 +188,12 @@ on this branch:
 
 ## Next Task
 
-Orchestrator exact-head review of this PR and merge, then the installed-skill
-refresh. Card 126 stays blocked until both complete.
+PR 32 was accepted at exact head `dd09b741` after three review revisions and
+merged as `61d4cc2`. The installed Northstar skill was refreshed from the
+tracked merge archive; all 113 files match byte-for-byte. The source-checkout
+parity task still sees ignored `.DS_Store` and Rust `target/` artifacts in the
+primary checkout, so tracked-archive parity is the truthful install result.
+Paseo exposes the operator-configured `Luna coordinator` profile.
+
+Publish card 126's observation packet and stop date. The cohort remains
+blocked until then.

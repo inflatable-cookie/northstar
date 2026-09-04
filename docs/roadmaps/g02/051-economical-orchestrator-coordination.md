@@ -1,6 +1,6 @@
 # 051 - Economical Orchestrator Coordination
 
-Status: card 125 implemented; PR open; card 126 blocked
+Status: card 125 complete; card 126 blocked on observation setup
 Owner: repo maintainers
 Created: 2026-09-04
 Updated: 2026-09-04
@@ -57,6 +57,5 @@ semantic role and merge boundaries remain exact-head review evidence.
 
 ## Next task
 
-Review and merge card 125's PR at its exact head, then refresh the installed
-skill. Card 126 stays blocked until both complete.
-
+Publish card 126's observation packet and stop date. The implementation merge,
+installed-skill refresh, and Paseo coordinator profile are complete.

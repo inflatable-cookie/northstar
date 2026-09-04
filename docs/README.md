@@ -60,8 +60,9 @@ Northstar system:
 - spec 036's economical coordinator default is implemented: material discovery
   moves to operator-confirmed chatterbox packets, canonical promotion stays
   bounded and mechanical, and substantive PR review belongs to independent
-  child reviewers behind a coordinator merge gate; the ten-PR trial remains
-  blocked behind merge and the installed-skill refresh
+  child reviewers behind a coordinator merge gate. PR 32 merged as `61d4cc2`,
+  the installed skill matches its 113-file tracked payload, and the ten-PR
+  trial remains blocked on its observation packet and stop date
 - `g02.041/109` repaired partial Rust evidence collection and merged; Signal
   owns the originating papercut closure
 - dependency-frontier, parallel-first worker scheduling is the orchestrator

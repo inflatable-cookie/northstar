@@ -5,7 +5,7 @@ handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
 handoff: single-file-path-only
-status: implemented; reviewable PR open
+status: complete; merged through PR 32 as 61d4cc2
 owner: repo maintainers
 created: 2026-09-04
 updated: 2026-09-04

@@ -1,6 +1,6 @@
 # 125 - Implement Economical Orchestrator Coordination
 
-Status: implemented; reviewable PR pending exact-head review
+Status: complete; merged through PR 32 as `61d4cc2`
 Owner: repo maintainers
 Created: 2026-09-04
 Updated: 2026-09-04
@@ -78,6 +78,6 @@ weakening review/merge requirements.
 
 ## Next task
 
-Implemented on `worker/economical-orchestrator-coordination`. Stop for
-orchestrator exact-head review and merge; do not start card 126.
-
+Complete. PR 32 passed three exact-head review revisions, merged as
+`61d4cc2`, and the installed 113-file skill payload matches the tracked merge
+archive. Card 126 remains blocked on its observation packet and stop date.

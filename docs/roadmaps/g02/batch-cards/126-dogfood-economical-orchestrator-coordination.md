@@ -1,6 +1,6 @@
 # 126 - Dogfood Economical Orchestrator Coordination
 
-Status: blocked; card 125 must merge and the installed skill must refresh
+Status: blocked; observation packet and stop date are not published
 Owner: repo maintainers
 Created: 2026-09-04
 Updated: 2026-09-04
@@ -27,9 +27,9 @@ durable token accounting, or encoding local model prices and quotas.
 
 ## Ready-state checks
 
-- [ ] card 125 merged;
-- [ ] installed Northstar skill refreshed and parity verified;
-- [ ] operator has updated the Paseo coordinator profile;
+- [x] card 125 merged through PR 32 as `61d4cc2`;
+- [x] installed Northstar skill refreshed and tracked-archive parity verified;
+- [x] operator updated Paseo with the `Luna coordinator` profile;
 - [ ] observation packet and stop date are published.
 
 ## Acceptance criteria
@@ -41,5 +41,5 @@ durable token accounting, or encoding local model prices and quotas.
 
 ## Next task
 
-Blocked. Refresh this card after card 125 merges; do not start the cohort from
-the implementation worker.
+Blocked. Publish the bounded observation packet and stop date before starting
+the cohort.
