@@ -96,8 +96,12 @@ separate-workspace instruction everywhere live.
 - **Roadmap milestone:** `docs/roadmaps/g02/052-chatterbox-sibling-agent-tabs.md`
 - **Ready card:** `docs/roadmaps/g02/batch-cards/127-chatterbox-sibling-agent-tabs.md`
 - **Closeout log:** `docs/logs/2026-09/04-093820-chatterbox-sibling-agent-tabs.md`
+- **PR base/head:** `main` <- `worker/chatterbox-sibling-agent-tabs`
+- **PR URL:** https://github.com/inflatable-cookie/northstar/pull/33
 - **Review state:** revision 1 implemented as one bounded batch; review-only,
-  this lane does not merge.
+  this lane does not merge. Full validation board ran at implementation head
+  `092a0b7`; the fast boards were rerun clean at the final handoff-record
+  head.
 - **Merge path:** orchestrator applies the accepted exact-head review and the
   normal merge gate; installed-skill refresh follows merge.
 - **Card 126:** unchanged and still blocked.
