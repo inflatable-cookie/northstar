@@ -173,7 +173,9 @@ Chatterbox for reconciliation and direct promotion.
 Worker PRs normally receive an independent review child: the coordinator
 creates it in the existing worker workspace with finish notifications and a
 serial clean exact-head lease, and hands it the PR, canonical refs, and review
-oracle. The reviewer posts the verdict on the provider, naming the exact
+oracle. The reviewer must use a different underlying provider/model identity
+from the authoring worker; profile renames and reasoning effort changes do not
+qualify. The reviewer posts the verdict on the provider, naming the exact
 reviewed head. The coordinator does not duplicate the review; it verifies the
 verdict head, findings, checks, ancestry, mergeability, and pause state before
 merging. You can still ask the orchestrator thread to review a PR directly.
@@ -196,7 +198,18 @@ When an independent review child accepts the exact current worker PR head and
 the coordinator's merge gate holds, the orchestrator may merge that lane
 without asking the operator again. A changed head, failed or pending check,
 stricter repository rule, explicit operator pause, or ambiguous merge state
-stops that path.
+stops that path. When a connector write is refused while the gate remains
+current, the coordinator retries through an already-authenticated, repository-
+approved native write transport and re-verifies provider state; it never
+weakens the gate or solicits credentials.
+
+Merge, post-merge reconciliation, closeout, frontier recomputation, and
+next-ready dispatch run in one continuous coordinator action chain. The
+coordinator yields promptly when progress requires a child, external event,
+new authority, or an empty runway, and never asks for "continue" while
+canonical work is actionable. Waiting for active children does not notify
+Chatterbox; when the canonical runway is empty, the coordinator sends
+Chatterbox one administrative notice with completed state and yields.
 
 Chatterbox directly promotes operator-confirmed canonical planning and sends
 the coordinator a provenance-labelled direction naming the promoted commit and

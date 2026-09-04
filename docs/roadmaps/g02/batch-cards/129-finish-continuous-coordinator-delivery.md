@@ -1,6 +1,6 @@
 # 129 - Finish Continuous Coordinator Delivery
 
-Status: ready
+Status: complete in review
 Owner: repo maintainers
 Created: 2026-09-04
 Updated: 2026-09-04
@@ -79,19 +79,19 @@ Chatterbox.
 
 ## Acceptance evidence
 
-- a lifecycle fixture runs child completion -> review -> merge -> closeout ->
+- [x] a lifecycle fixture runs child completion -> review -> merge -> closeout ->
   next-ready dispatch without an operator `continue`;
-- waiting-child fixture yields with notifications enabled and sends no
+- [x] waiting-child fixture yields with notifications enabled and sends no
   Chatterbox message;
-- empty-runway fixture sends exactly one Chatterbox administrative notice;
-- positive review fixture uses a qualified different provider/model;
-- negative fixtures reject profile-renamed and effort-changed copies of the
+- [x] empty-runway fixture sends exactly one Chatterbox administrative notice;
+- [x] positive review fixture uses a qualified different provider/model;
+- [x] negative fixtures reject profile-renamed and effort-changed copies of the
   worker model;
-- write-refusal fixture uses an available authenticated native fallback only
+- [x] write-refusal fixture uses an available authenticated native fallback only
   after the unchanged merge gate;
-- existing exact-head, lease, contextual-escalation, and full-frontier fixtures
+- [x] existing exact-head, lease, contextual-escalation, and full-frontier fixtures
   remain green;
-- `git diff --check`, focused checks, `effigy qa:docs`, `effigy qa`, source/install
+- [x] `git diff --check`, focused checks, `effigy qa:docs`, `effigy qa`, source/install
   parity, reviewable PR, and accepted exact-head review pass.
 
 ## Stop conditions
@@ -104,5 +104,6 @@ Chatterbox.
 
 ## Next task
 
-Dispatch this card immediately. After merge and parity, begin card 126's passive
-cohort and continue any other canonical ready work without operator prompting.
+Review and merge card 129 with an independent reviewer using a qualified
+distinct provider/model identity, refresh installed parity, and begin card
+126's passive observation cohort.

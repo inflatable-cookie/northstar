@@ -60,6 +60,7 @@ Here is the state the worker is inheriting:
 - **Canonical refs:** {{ARCHITECTURE_REFS}}; {{CONTRACT_REFS}}
 - **Review oracle:** `{{CARD_REVIEW_ORACLE_REFS_OR_NONE}}`
 - **Model capability profile:** `{{WORKER_PROFILE}}`
+- **Worker provider/model identity:** `{{WORKER_PROVIDER_MODEL}}`
 - **Frontier-worker justification:** `{{BOTH_AXES_OR_NONE}}`
   Write `none` unless this is a frontier implementation worker. If it is,
   record the exceptional-reasoning evidence after planning and the
@@ -191,7 +192,10 @@ report what changed, validation run, what remains, and any planning decision.
 
 The orchestrator launches an independent review child in this worker workspace
 under a serial clean exact-head lease to review the PR against the canonical
-refs, diff, review oracle, and checks.
+refs, diff, review oracle, and checks. The reviewer must use a different
+underlying provider/model identity from the authoring worker; profile renames,
+reasoning level changes, and fresh threads using the same provider/model do not
+qualify. Use the same distinct reviewer for revision rounds when available.
 Current review state: `{{AWAITING_REVIEW_OR_OTHER_STATE}}`.
 
 The reviewer records an evidence-backed verdict in the provider's review
@@ -207,7 +211,13 @@ card, milestone, spec, changed surfaces, evidence, validation, and unresolved
 items. When the exact reviewed head is still current, required checks pass, the
 PR is mergeable into the intended base, and no stricter repository rule or
 explicit operator pause applies, the orchestrator merges without another
-approval prompt.
+approval prompt. When an otherwise-valid merge gate holds and a
+connector/provider write is refused, the orchestrator may use an
+already-authenticated, repository-approved native write transport and re-verify
+provider state; it never weakens the gate, solicits credentials, or improvises
+an undeclared transport. Merge, closeout, frontier recomputation, and
+next-ready dispatch advance in one continuous coordinator action chain without
+an operator `continue`.
 
 - **Closeout refs:** `{{CARD_LOG_ROADMAP_FRONT_DOORS}}`
 

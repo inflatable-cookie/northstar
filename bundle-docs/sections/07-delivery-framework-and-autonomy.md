@@ -742,27 +742,37 @@ duplicate semantic handoff, or launch promotion-only workers.
 
 Review path: every worker PR gets an independent review child in the existing
 worker workspace with finish notifications enabled (`notifyOnFinish: true`),
-selecting an economical adequate review route under the diversified-routing
-rule, and handing over the PR, canonical refs, and review oracle — not the
-worker's transcript. The worker and reviewer hold a serial clean exact-head
-lease: the worker is idle, workspace `HEAD` equals the PR head, and
-index/tracked worktree are clean before review. The reviewer may inspect and run
-checks but cannot edit tracked files, commit, push, or change branches. It
-posts a provider verdict naming the exact head. Requested changes return to the
-same worker; the revised exact head returns to the same reviewer when available;
-a replacement reviewer starts a fresh complete review. Before merge the
-coordinator independently verifies only the coordination gate: the durable
-accepted verdict names the exact current head, every blocking finding is
-resolved or explicitly superseded on the provider, required checks pass, base
-ancestry and mergeability are current, and no stricter repository rule or
-operator pause applies. Ambiguous, contradictory, missing, or stale review
-evidence stops merge.
+selecting an economical adequate review route whose underlying provider/model
+identity differs from the worker under the diversified-routing rule, and handing
+over the PR, canonical refs, and review oracle — not the worker's transcript.
+The worker and reviewer hold a serial clean exact-head lease: the worker is
+idle, workspace `HEAD` equals the PR head, and index/tracked worktree are clean
+before review. The reviewer may inspect and run checks but cannot edit tracked
+files, commit, push, or change branches. It posts a provider verdict naming the
+exact head. Requested changes return to the same worker; the revised exact head
+returns to the same reviewer when available; a replacement reviewer starts a
+fresh complete review. Before merge the coordinator independently verifies only
+the coordination gate: the durable accepted verdict names the exact current
+head, every blocking finding is resolved or explicitly superseded on the
+provider, required checks pass, base ancestry and mergeability are current, and
+no stricter repository rule or operator pause applies. Ambiguous,
+contradictory, missing, or stale review evidence stops merge.
 
 Coordinator turns are event-bounded: an operator message or child notification
 starts a turn. The coordinator performs every immediately available dispatch,
 revision, review, merge-gate, or closeout action, reports identities and state,
-then yields. It never polls, calls a wait primitive, holds a turn open for a
-child, or rescans unchanged state to appear busy.
+and continues across merge, closeout, and card boundaries while the canonical
+runway names another ready mechanical action. Merge, post-merge reconciliation,
+closeout, frontier recomputation, and next-ready dispatch form one continuous
+coordinator action chain. It yields only when progress requires an active child,
+an external event, new authority, or an empty runway. It never polls, calls a
+wait primitive, holds a turn open for a child, or repeatedly rescans unchanged
+state. Finish notifications start the next bounded turn. Waiting for active
+children does not notify Chatterbox. When the canonical runway is empty—no ready
+lane, active child, or already-published downstream lane—the coordinator sends
+Chatterbox one administrative notice with completed state and then yields.
+Route genuine blockers to their named escalation owner. The coordinator does
+not require an operator `continue` between actionable steps.
 
 Model posture: the coordinator's normal route is an economical coordinator
 class — reliable tool use, concise state tracking, bounded verification.
@@ -880,6 +890,17 @@ The worker and reviewer hold a serial workspace lease:
 Wrong head, dirty state, concurrent access, missing parentage/notification, or a
 need for branch mutation stops review.
 
+The review child must use a different underlying provider/model identity from
+the authoring worker. Profile renames, effort changes, and fresh threads using
+the same provider/model do not establish independence. Carry the worker's
+provider/model identity into review dispatch; reject the same provider/model
+even behind another profile, reasoning level, or thread. Record both identities
+in the review handoff; if no qualified distinct reviewer exists, fail closed
+and escalate context-completely.
+
+Use the same distinct reviewer for revision rounds when available; a replacement
+reviewer starts a fresh complete review and never inherits an unseen verdict.
+
 ## Context-complete operator escalations
 
 The agent that discovers an operator-owned blocker supplies a self-contained
@@ -918,6 +939,12 @@ auto-merge on PR creation. Merge is allowed only when:
 A changed head requires another review. Ambiguous provider or merge state stops
 before retry. Workers and planning delegates never merge. A standalone direct-
 review thread does not inherit orchestrator merge authority.
+
+A refused connector or provider write does not invalidate an otherwise-current
+coordination gate. When the repository already exposes an authenticated,
+approved native write transport, the coordinator may retry the same bounded
+mutation through it, then re-verify provider state. Never weaken the gate,
+solicit credentials, or improvise an undeclared transport.
 
 ## Direct PR review boundary
 

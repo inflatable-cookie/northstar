@@ -23,8 +23,11 @@ durable verdict posted on the provider. Under that lease:
   committing, pushing, or changing branches;
 - post the durable verdict on the provider naming the exact head SHA reviewed.
 
-A replacement reviewer starts a complete fresh review; it never inherits an
-unseen verdict.
+The review child must use a different underlying provider/model identity from
+the authoring worker; profile renames, reasoning level changes, and fresh
+threads using the same provider/model do not qualify. Use the same distinct
+reviewer for revision rounds when available; a replacement reviewer starts a
+complete fresh review and never inherits an unseen verdict.
 
 ## Procedure
 

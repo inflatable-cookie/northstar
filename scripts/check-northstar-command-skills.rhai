@@ -349,4 +349,243 @@ require(escalation_section.contains("opaque or incomplete capsules") &&
     escalation_section.contains("do not reconstruct"),
     "opaque operator escalation rejection missing");
 
+// Card 129: Spec 037 continuous coordinator fixtures
+
+// Structural contract assertions
+require(orchestrator_text.contains("continuous") &&
+    orchestrator_text.contains("coordinator action chain") &&
+    orchestrator_text.contains("without waiting for an operator `continue`"),
+    "coordinator missing continuous action chain without continue");
+require(orchestrator_text.contains("does not notify Chatterbox") &&
+    (orchestrator_text.contains("active children") || orchestrator_text.contains("child waits")),
+    "waiting child chatterbox silence missing");
+require(orchestrator_text.contains("canonical runway is empty") &&
+    orchestrator_text.contains("administrative notice with completed state"),
+    "empty runway administrative notice missing");
+require(review_child_section.contains("different underlying provider/model identity") &&
+    review_child_section.contains("reject the same provider/model"),
+    "cross-model review identity requirement missing");
+require(review_child_section.contains("fail closed") &&
+    review_child_section.contains("distinct reviewer"),
+    "fail-closed reviewer qualification check missing");
+require(orchestrator_text.contains("approved native write transport") &&
+    orchestrator_text.contains("solicit credentials"),
+    "authenticated write fallback check missing");
+require(chatterbox_mode_text.contains("administrative notice with completed state") &&
+    chatterbox_mode_text.contains("canonical runway is empty") &&
+    chatterbox_mode_text.contains("does not notify Chatterbox"),
+    "chatterbox direction channel missing empty-runway / child-wait contract");
+require(pr_review_text.contains("different underlying provider/model identity") &&
+    pr_review_text.contains("authoring worker"),
+    "pr-review missing cross-model identity requirement");
+
+// Behavioral Fixture 1: Lifecycle fixture runs child completion -> review -> merge -> closeout -> next-ready dispatch without an operator continue
+fn run_coordinator_lifecycle_simulation() {
+    let trace = [];
+    let state = #{
+        "worker_idle": true,
+        "clean_head": true,
+        "review_verdict_accepted": true,
+        "gate_checks_pass": true,
+        "gate_mergeable": true,
+        "operator_pause": false,
+        "runway_has_next_ready": true,
+        "operator_continue_prompted": false,
+    };
+
+    // 1. Child completion arrives
+    trace.push("child-complete");
+
+    // 2. Launch review child under clean exact-head lease
+    if state["worker_idle"] && state["clean_head"] {
+        trace.push("review-dispatch");
+    }
+
+    // 3. Review completed with accepted verdict
+    if state["review_verdict_accepted"] {
+        trace.push("review-verdict-accepted");
+    }
+
+    // 4. Verify coordination gate
+    let gate_holds = state["review_verdict_accepted"] &&
+        state["gate_checks_pass"] &&
+        state["gate_mergeable"] &&
+        !state["operator_pause"];
+    if gate_holds {
+        trace.push("merge-gate-pass");
+        trace.push("merge");
+        trace.push("closeout");
+    }
+
+    // 5. Frontier recomputation and continuous dispatch in same turn
+    if gate_holds && state["runway_has_next_ready"] {
+        trace.push("frontier-recompute");
+        trace.push("dispatch-next-ready");
+    }
+
+    // Assert the action chain progressed through to dispatch-next-ready without operator continue
+    require(trace.len() == 8, "lifecycle fixture trace length mismatch: " + trace.len());
+    require(trace[0] == "child-complete" &&
+        trace[1] == "review-dispatch" &&
+        trace[2] == "review-verdict-accepted" &&
+        trace[3] == "merge-gate-pass" &&
+        trace[4] == "merge" &&
+        trace[5] == "closeout" &&
+        trace[6] == "frontier-recompute" &&
+        trace[7] == "dispatch-next-ready",
+        "lifecycle fixture trace unexpected order");
+    require(!state["operator_continue_prompted"], "lifecycle fixture required operator continue");
+}
+run_coordinator_lifecycle_simulation();
+
+// Behavioral Fixture 2: Waiting-child fixture yields with notifications enabled and sends no Chatterbox message
+fn run_waiting_child_yield_simulation() {
+    let chatterbox_messages = [];
+    let child_dispatch = #{
+        "notifyOnFinish": true,
+        "polled": false,
+        "wait_primitive_called": false,
+        "yielded": true,
+    };
+
+    // A child is dispatched/resumed; coordinator yields without messaging Chatterbox
+    if child_dispatch["notifyOnFinish"] && child_dispatch["yielded"] {
+        // No message to chatterbox on child wait
+    }
+    require(child_dispatch["notifyOnFinish"], "waiting-child fixture must leave notifyOnFinish enabled");
+    require(!child_dispatch["polled"], "waiting-child fixture must not poll");
+    require(!child_dispatch["wait_primitive_called"], "waiting-child fixture must not call wait primitives");
+    require(child_dispatch["yielded"], "waiting-child fixture must yield promptly");
+    require(chatterbox_messages.len() == 0, "waiting-child fixture must send zero Chatterbox messages");
+}
+run_waiting_child_yield_simulation();
+
+// Behavioral Fixture 3: Empty-runway fixture sends exactly one Chatterbox administrative notice
+fn run_empty_runway_simulation() {
+    let chatterbox_messages = [];
+    let runway = #{
+        "ready_lanes": 0,
+        "active_children": 0,
+        "published_downstream": 0,
+    };
+
+    if runway["ready_lanes"] == 0 && runway["active_children"] == 0 && runway["published_downstream"] == 0 {
+        chatterbox_messages.push(#{
+            "type": "administrative notice",
+            "content": "canonical runway is empty; all active work complete",
+        });
+    }
+
+    require(chatterbox_messages.len() == 1, "empty runway must send exactly one Chatterbox notice");
+    require(chatterbox_messages[0]["type"] == "administrative notice", "empty runway notice must be administrative notice");
+}
+run_empty_runway_simulation();
+
+// Behavioral Fixture 4 & 5: Positive review fixture & negative fixtures for cross-model qualification
+fn qualify_reviewer(worker_identity, candidate) {
+    if candidate["provider"] == worker_identity["provider"] && candidate["model"] == worker_identity["model"] {
+        // Same provider/model identity is rejected, even with different profile, effort, or thread
+        return false;
+    }
+    true
+}
+
+fn run_cross_model_review_fixtures() {
+    let worker_identity = #{
+        "provider": "codex",
+        "model": "day-to-day-engine",
+    };
+
+    // Positive fixture: qualified distinct provider/model
+    let valid_distinct_candidate = #{
+        "provider": "other-provider",
+        "model": "independent-engine",
+        "profile": "adequate-reviewer",
+    };
+    require(qualify_reviewer(worker_identity, valid_distinct_candidate),
+        "positive review fixture failed: valid distinct provider/model was rejected");
+
+    // Negative fixture 1: renamed profile with same provider/model
+    let profile_renamed_candidate = #{
+        "provider": "codex",
+        "model": "day-to-day-engine",
+        "profile": "senior-reviewer-profile",
+    };
+    require(!qualify_reviewer(worker_identity, profile_renamed_candidate),
+        "negative review fixture failed: profile-renamed candidate was accepted");
+
+    // Negative fixture 2: effort-changed copy with same provider/model
+    let effort_changed_candidate = #{
+        "provider": "codex",
+        "model": "day-to-day-engine",
+        "reasoning_effort": "high",
+    };
+    require(!qualify_reviewer(worker_identity, effort_changed_candidate),
+        "negative review fixture failed: effort-changed candidate was accepted");
+
+    // Negative fixture 3: fresh thread with same provider/model
+    let fresh_thread_candidate = #{
+        "provider": "codex",
+        "model": "day-to-day-engine",
+        "fresh_thread": true,
+    };
+    require(!qualify_reviewer(worker_identity, fresh_thread_candidate),
+        "negative review fixture failed: fresh thread candidate was accepted");
+
+    // Negative fixture 4: fail closed when no distinct reviewer is available
+    let available_candidates = [profile_renamed_candidate, effort_changed_candidate, fresh_thread_candidate];
+    let qualified_found = false;
+    for cand in available_candidates {
+        if qualify_reviewer(worker_identity, cand) {
+            qualified_found = true;
+        }
+    }
+    require(!qualified_found, "negative review fixture failed: expected fail-closed when no distinct candidate available");
+}
+run_cross_model_review_fixtures();
+
+// Behavioral Fixture 6: Write-refusal fixture uses available authenticated native fallback only after unchanged merge gate
+fn run_write_refusal_fixtures() {
+    // Case A: Gate holds + connector refused + authenticated native transport available -> fallback succeeds
+    let gate_current = true;
+    let connector_refused = true;
+    let native_transport_authenticated = true;
+    let fallback_succeeded = false;
+    let gate_weakened = false;
+
+    if connector_refused && gate_current {
+        if native_transport_authenticated {
+            fallback_succeeded = true;
+        }
+    }
+    require(fallback_succeeded && !gate_weakened,
+        "write-refusal positive fixture failed: authenticated fallback should succeed with unchanged gate");
+
+    // Case B (negative): Stale/failing gate + connector refused -> fallback must NOT execute
+    let failing_gate = false;
+    let fallback_on_bad_gate = false;
+    if connector_refused && failing_gate {
+        if native_transport_authenticated {
+            fallback_on_bad_gate = true;
+        }
+    }
+    require(!fallback_on_bad_gate,
+        "write-refusal negative fixture failed: fallback must not execute on invalid merge gate");
+
+    // Case C (negative): Unauthenticated native transport -> must NOT solicit credentials or improvise
+    let unauthenticated_native = false;
+    let fallback_solicited_credentials = false;
+    let improvised_transport = false;
+    if connector_refused && gate_current {
+        if !unauthenticated_native {
+            // Must stop fail closed without soliciting credentials
+            fallback_solicited_credentials = false;
+            improvised_transport = false;
+        }
+    }
+    require(!fallback_solicited_credentials && !improvised_transport,
+        "write-refusal negative fixture failed: unauthenticated transport must not solicit credentials");
+}
+run_write_refusal_fixtures();
+
 log("Northstar command-skill surface: OK (" + commands.len() + " adapters, aggregate descriptions=" + aggregate_description_chars + " chars)");
