@@ -193,7 +193,14 @@ coordination gate before merge.
 
 Review children run in the existing worker workspace under a serial clean
 exact-head lease using the worker `workspaceId`, with parentage preserved and
-`notifyOnFinish: true`. Do not create a review-only workspace.
+`notifyOnFinish: true`. This is an identity invariant, not a preference: record
+the worker's exact `workspaceId` in lane state, pass that same value explicitly
+to reviewer `create_agent`, and do not call `create_workspace` for review. Do
+not omit `workspaceId`; omission places the reviewer in the coordinator's
+current workspace and is invalid. After creation, require the returned
+reviewer `workspaceId` to equal the worker `workspaceId`. On an absent,
+mismatched, or ambiguous return, preserve any returned identities, stop review,
+and report the transport defect without retrying into a duplicate reviewer.
 
 The review child must use a different underlying provider/model identity from
 the authoring worker. A renamed profile, different reasoning level, or fresh
@@ -206,9 +213,12 @@ with a context-complete escalation.
 In Paseo, launch the reviewer like this:
 - verify the worker is idle, workspace `HEAD` equals the PR head SHA, and index
   and tracked worktree are clean;
+- read the worker's retained `workspaceId`; do not create or select another
+  workspace for review;
 - create the reviewer child through your agent-scoped creation call using the
-  worker `workspaceId` so it remains your child and appears as a visible tab in
-  that workspace; leave finish notifications enabled (`notifyOnFinish: true`);
+  worker's exact `workspaceId` so it remains your child and appears as a
+  visible tab beside the worker; leave finish notifications enabled
+  (`notifyOnFinish: true`), then verify the returned `workspaceId` is identical;
 - materialize the complete selected review profile, including its
   operator-configured full-accept `modeId`, in that creation call;
 - select an economical adequate review route whose underlying provider/model
@@ -233,9 +243,17 @@ verdict gate is identical in both routes.
 
 The reviewer works in Direct PR Review mode and its posted verdict names the
 exact head it reviewed. Changes requested return to the same implementation
-worker. Preserve the same distinct reviewer for revision rounds when available;
-a replacement reviewer starts a fresh complete review and never inherits an
-unseen verdict.
+worker. Retain the reviewer's `agentId`. After the worker pushes a revised head
+and yields the clean workspace lease, use `send_agent_prompt` on that exact
+reviewer `agentId` with the new head SHA and unresolved review state. Do not
+call `create_workspace` or `create_agent` for an ordinary re-review.
+
+A finished or idle reviewer is reusable and is not a reason to replace it.
+Create a replacement only when the original reviewer is definitively archived,
+deleted, non-resumable, or its route is unavailable. Ambiguous status stops
+before replacement. A justified replacement still uses the worker's same exact
+`workspaceId`, starts a fresh complete review, and records which reviewer it
+supersedes; it never inherits an unseen verdict.
 
 Before merge you must independently verify only the coordination gate:
 - the durable accepted verdict names the exact current head;
@@ -408,11 +426,14 @@ Chatterbox after operator confirmation.
      call wait primitives, or send Chatterbox notifications for child waits.
 8. **Handle child notifications and revision routing.** A finish notification
    starts review for that lane. Verify the worker is idle and index/tracked
-   worktree are clean, then launch the review child in that worker workspace
-   under a serial clean exact-head lease. Select a qualified reviewer whose
-   underlying provider/model identity differs from the worker; profile renames
-   and effort changes do not qualify. Use the same distinct reviewer for
-   revision rounds when available.
+   worktree are clean, then launch the review child with the worker's exact
+   retained `workspaceId` under a serial clean exact-head lease. Never create a
+   review workspace. Select a qualified reviewer whose underlying
+   provider/model identity differs from the worker; profile renames and effort
+   changes do not qualify. Retain its `agentId`; revision rounds use
+   `send_agent_prompt` on that same reviewer after the worker yields the revised
+   clean head. Replace it only on definitive unavailability, in the same worker
+   workspace.
 9. **Merge, close out, and advance continuously.** Merge only after the
    coordination gate holds: accepted exact-head review verdict on the provider,
    passing checks, clean ancestry, mergeability, and no operator pause. When a
@@ -684,6 +705,10 @@ Stop and return to planning or the operator when:
 - review evidence is stale, ambiguous, contradictory, or missing;
 - a review child cannot launch in the existing worker workspace under a serial
   clean exact-head lease;
+- reviewer creation omitted the worker `workspaceId`, returned a different or
+  ambiguous `workspaceId`, or would require a review-only workspace;
+- an ordinary re-review would create another reviewer instead of resuming the
+  retained reviewer `agentId`, or replacement availability is ambiguous;
 - no qualified reviewer whose underlying provider/model identity differs from
   the authoring worker is available, or review-model identity cannot be observed
   reliably;

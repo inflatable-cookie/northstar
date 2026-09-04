@@ -166,12 +166,15 @@ note current during its bounded discussion, and reports it to Chatterbox for
 reconciliation and direct promotion.
 
 Worker PRs normally receive an independent review child: the coordinator
-creates it in the existing worker workspace with finish notifications and a
-serial clean exact-head lease, and hands it the PR, canonical refs, and review
+passes the worker's exact `workspaceId`, creates no review workspace, verifies
+the returned placement, and keeps finish notifications plus a serial clean
+exact-head lease. It hands the reviewer the PR, canonical refs, and review
 oracle. The reviewer must use a different underlying provider/model identity
 from the authoring worker; profile renames and reasoning effort changes do not
 qualify. The reviewer posts the verdict on the provider, naming the exact
-reviewed head. The coordinator does not duplicate the review; it verifies the
+reviewed head. Revised heads return to the same reviewer agent; only definitive
+unavailability permits a replacement, still in the worker workspace. The
+coordinator does not duplicate the review; it verifies the
 verdict head, findings, checks, ancestry, mergeability, and pause state before
 merging. You can still ask the orchestrator thread to review a PR directly.
 

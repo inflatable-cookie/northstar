@@ -482,12 +482,19 @@ Spec 037 governs the current planning and delivery topology.
   orchestrators. It removes routine approval prompts but grants no authority
   beyond the child's Northstar role and handoff.
 - A review child is created by the coordinator in the existing worker workspace
-  using the worker `workspaceId`, remains a visible parent-attached child, and
-  keeps finish notifications enabled. Worker and reviewer use a serial lease:
+  using the worker's exact retained `workspaceId`, remains a visible
+  parent-attached child, and keeps finish notifications enabled. The coordinator
+  does not create a review workspace, never omits the `workspaceId`, and verifies
+  the returned placement before accepting the review run. Worker and reviewer use a serial lease:
   the worker is idle, `HEAD` equals the PR head, and index/tracked worktree are
   clean before and after review. The reviewer may inspect and run checks but
   cannot edit tracked files, commit, push, or change branches. Do not create a
   review-only workspace or fall back to the coordinator checkout.
+- Retain the reviewer `agentId`. Re-review after worker changes uses
+  `send_agent_prompt` on that same reviewer after the worker yields a clean new
+  head; finished or idle reviewers remain reusable. Replace only on definitive
+  unavailability, never ambiguous status, and put any justified replacement in
+  the same worker workspace for a fresh complete review.
 - The review child must use a different underlying provider/model identity from
   the authoring worker. Profile renames, effort changes, and fresh threads do not
   establish independence. Record both identities in the review handoff; if no
@@ -560,14 +567,17 @@ review — and every required check passes. A stricter repository rule or
 explicit operator pause still wins.
 
 Worker PRs normally receive an independent review child. The orchestrator
-creates a dedicated workspace at the PR head and launches the reviewer as a
-parent-attached child with finish notifications enabled, selects an economical
-adequate review route under the diversified-routing rule, and gives the
-reviewer the PR, canonical refs, and review oracle — not the worker's private
-transcript. The reviewer works in direct PR-review mode and its posted verdict
-names the exact reviewed head. Requested changes return to the same worker;
-the revised exact head returns to the same reviewer when available, and a
-replacement reviewer starts a fresh complete review. The orchestrator does not
+launches the reviewer as a parent-attached child in the worker's exact existing
+workspace, passing the retained worker `workspaceId` explicitly and creating no
+review workspace. It verifies the returned reviewer `workspaceId`, keeps finish
+notifications enabled, selects an economical adequate review route under the
+diversified-routing rule, and gives the reviewer the PR, canonical refs, and
+review oracle — not the worker's private transcript. The reviewer works in
+direct PR-review mode and its posted verdict names the exact reviewed head.
+Requested changes return to the same worker; after the revised clean exact head
+is ready, the orchestrator resumes the retained reviewer `agentId` rather than
+creating another thread. Replacement requires definitive unavailability, uses
+the same worker workspace, and starts a fresh complete review. The orchestrator does not
 duplicate the full diff review; before merge it independently verifies only
 the coordination gate: the durable accepted verdict names the exact current
 head, every blocking finding is resolved or explicitly superseded on the
@@ -705,7 +715,10 @@ product code, commit, push, review, or merge.
 
 Review children run in the existing worker workspace using the worker
 `workspaceId`, preserving parentage, visible tab placement, and
-`notifyOnFinish: true`. Do not create a review-only workspace. The worker and
+`notifyOnFinish: true`. Pass that exact ID explicitly, create no review
+workspace, and verify returned placement. Re-review resumes the retained
+reviewer `agentId`; only definitive unavailability permits a replacement, which
+still uses the same worker workspace. The worker and
 reviewer hold a serial clean exact-head lease: the worker is idle, `HEAD`
 equals the PR head SHA, and index/tracked worktree are clean before review. The
 reviewer inspects and runs checks without editing tracked files, committing,
@@ -865,8 +878,10 @@ checks pass, the PR is mergeable into the intended base, and no repository rule
 or operator instruction requires a human merge. A changed head invalidates the
 verdict and requires another review. Merge failure or ambiguous provider state
 stops before retry. Requested changes return to the same worker branch when
-possible, and the revised exact head returns to the same reviewer when
-available, followed by another review cycle. Provider review comments are
+possible, and the revised exact head returns through `send_agent_prompt` to the
+retained reviewer `agentId`, followed by another review cycle. Finished or idle
+reviewers remain reusable; only definitive unavailability permits a replacement
+in the same worker workspace. Provider review comments are
 durable evidence, not a worker wake-up mechanism: after posting a `changes
 requested` verdict, an orchestrator with an active control plane sends an
 explicit follow-up

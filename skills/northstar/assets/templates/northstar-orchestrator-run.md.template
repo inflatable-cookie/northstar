@@ -199,7 +199,9 @@ under a serial clean exact-head lease to review the PR against the canonical
 refs, diff, review oracle, and checks. The reviewer must use a different
 underlying provider/model identity from the authoring worker; profile renames,
 reasoning level changes, and fresh threads using the same provider/model do not
-qualify. Use the same distinct reviewer for revision rounds when available.
+qualify. The first review creates no separate workspace. Later review rounds
+resume the same reviewer agent in this workspace; replacement is allowed only
+when that agent is definitively unavailable, and still uses this workspace.
 Current review state: `{{AWAITING_REVIEW_OR_OTHER_STATE}}`.
 
 The reviewer records an evidence-backed verdict in the provider's review

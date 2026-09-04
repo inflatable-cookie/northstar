@@ -25,9 +25,11 @@ durable verdict posted on the provider. Under that lease:
 
 The review child must use a different underlying provider/model identity from
 the authoring worker; profile renames, reasoning level changes, and fresh
-threads using the same provider/model do not qualify. Use the same distinct
-reviewer for revision rounds when available; a replacement reviewer starts a
-complete fresh review and never inherits an unseen verdict.
+threads using the same provider/model do not qualify. Orchestrated revision
+rounds resume this same reviewer agent in the same worker workspace. Finished
+or idle remains resumable. Replacement requires definitive unavailability,
+still uses the worker workspace, starts a complete fresh review, and never
+inherits an unseen verdict.
 
 ## Procedure
 

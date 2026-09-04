@@ -168,9 +168,11 @@ An explicit request to manage the surrounding discovery, planning, worker, or
 closeout loop remains **Orchestrator** mode. A direct review request does not
 activate worker mode or the worker startup preflight.
 
-Orchestrator-launched review children use this same mode in the existing
-worker workspace under a serial clean exact-head lease and post a provider
-verdict naming the exact reviewed head.
+Orchestrator-launched review children use this same mode in the worker's exact
+existing workspace: creation passes the retained worker `workspaceId`, creates
+no review workspace, and verifies the returned placement. Re-review resumes the
+retained reviewer `agentId` in that workspace. The reviewer holds a serial clean
+exact-head lease and posts a provider verdict naming the exact reviewed head.
 
 → [`modes/pr-review.md`](./modes/pr-review.md)
 

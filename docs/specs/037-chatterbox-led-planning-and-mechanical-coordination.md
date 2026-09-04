@@ -203,9 +203,11 @@ credentials, weaken the gate, or improvise an undeclared transport.
 ## Review children
 
 Review remains independent but uses the existing worker workspace. The
-coordinator creates a child reviewer with the worker `workspaceId`, preserving
-coordinator parentage, a visible agent tab, and `notifyOnFinish: true`. It does
-not create a review-only workspace.
+coordinator records and passes the worker's exact `workspaceId` to child
+creation, preserving coordinator parentage, a visible agent tab, and
+`notifyOnFinish: true`. It does not create a review-only workspace or omit that
+ID, and it verifies the returned reviewer workspace matches before accepting the
+run.
 
 The reviewer must use a different underlying provider/model identity from the
 worker that authored the PR. A renamed profile, different reasoning level, or
@@ -223,6 +225,13 @@ before returning the lease to the worker for revisions.
 Wrong head, dirty state, concurrent access, missing parentage/notification, or a
 need for branch mutation stops review. Do not fall back to a coordinator or new
 review workspace.
+
+The coordinator retains the reviewer `agentId`. After requested changes, it
+resumes that same reviewer with `send_agent_prompt` once the worker yields the
+new clean exact head. Finished or idle reviewers remain reusable. A replacement
+is valid only after definitive unavailability, remains in the same worker
+workspace, and starts a fresh complete review; ambiguous status stops before
+replacement.
 
 ## Context-complete operator escalations
 

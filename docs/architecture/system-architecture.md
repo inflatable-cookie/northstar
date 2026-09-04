@@ -422,8 +422,12 @@ Each worker retains its isolated workspace. Its independent reviewer is a
 coordinator-owned visible agent tab placed in that same workspace under a
 serial clean exact-head lease. Review produces a provider verdict; the
 reviewer uses a different underlying provider/model identity from the worker,
-and the coordinator records both identities. The coordinator checks the exact-
-head merge gate. A blocker needing the operator travels as a self-contained
+and the coordinator records both identities plus the worker `workspaceId` and
+reviewer `agentId`. Reviewer creation passes and verifies that exact workspace
+ID without creating another workspace. Revised heads return to the same
+reviewer agent; replacement requires definitive unavailability and still uses
+the worker workspace. The coordinator checks the exact-head merge gate. A
+blocker needing the operator travels as a self-contained
 escalation capsule produced by the discovering child, not as an unexplained log
 reference. Before PR, that capsule goes from coordinator to Chatterbox:
 Chatterbox rules from cited existing planning authority or holds the operator
@@ -458,7 +462,7 @@ A fresh direct-review thread uses the smaller path:
 
 The normal worker-PR review path routes through an independent child:
 
-`worker PR -> review child (dedicated PR-head workspace) -> provider verdict naming the head -> coordinator merge gate -> merge/closeout`
+`worker PR -> review child (existing worker workspace) -> provider verdict naming the head -> coordinator merge gate -> merge/closeout`
 
 The orchestrator owns economical coordination: operator-routed discovery, promoted
 planning bounded by operator-confirmed authority, ready-state, launch
@@ -667,8 +671,9 @@ subagent, which gets no worktree or Git/provider authority.
   naming the exact reviewed head; same-identity GitHub runs use a PR comment
   because formal self-approval is unavailable. The coordinator verifies the
   verdict head, findings, checks, ancestry, mergeability, and pause state and
-  does not duplicate the full review; a replacement reviewer starts a fresh
-  complete review.
+  does not duplicate the full review. Revised heads resume the retained
+  reviewer agent; only definitive unavailability permits a fresh reviewer in
+  the same worker workspace.
 - A decision-ready chatterbox packet separates operator-confirmed decisions
   from recommendations; only operator-confirmed meaning enters a promotion
   brief, and the bounded projection stops on semantic ambiguity.

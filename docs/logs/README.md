@@ -32,6 +32,7 @@ Use logs as the third step in closeout:
 
 ## Recent active-lane evidence
 
+- `2026-09/04-191812-pin-reviews-to-worker-workspaces.md`
 - `2026-09/04-184641-preserve-paseo-profile-permissions.md`
 - `2026-09/04-141135-route-pre-pr-decisions-through-chatterbox.md`
 - `2026-09/04-132051-wire-installed-language-package-route.md`

@@ -756,17 +756,24 @@ path). It does not sweep unrelated planning, design dependency edges, compile a
 duplicate semantic handoff, or launch promotion-only workers.
 
 Review path: every worker PR gets an independent review child in the existing
-worker workspace with finish notifications enabled (`notifyOnFinish: true`),
+worker workspace with the worker's exact retained `workspaceId` passed
+explicitly and finish notifications enabled (`notifyOnFinish: true`),
 selecting an economical adequate review route whose underlying provider/model
 identity differs from the worker under the diversified-routing rule, and handing
 over the PR, canonical refs, and review oracle — not the worker's transcript.
+The coordinator does not create a review workspace and verifies that agent
+creation returns the same `workspaceId`; omission, mismatch, or ambiguity stops
+review without a duplicate retry.
 The worker and reviewer hold a serial clean exact-head lease: the worker is
 idle, workspace `HEAD` equals the PR head, and index/tracked worktree are clean
 before review. The reviewer may inspect and run checks but cannot edit tracked
 files, commit, push, or change branches. It posts a provider verdict naming the
-exact head. Requested changes return to the same worker; the revised exact head
-returns to the same reviewer when available; a replacement reviewer starts a
-fresh complete review. Before merge the coordinator independently verifies only
+exact head. Requested changes return to the same worker. The coordinator retains
+the reviewer's `agentId`; after the revised clean head is ready, it resumes that
+exact reviewer with `send_agent_prompt`. Finished or idle reviewers remain
+reusable. Replacement is allowed only after definitive unavailability, still
+uses the worker's exact workspace, and starts a fresh complete review. Before
+merge the coordinator independently verifies only
 the coordination gate: the durable accepted verdict names the exact current
 head, every blocking finding is resolved or explicitly superseded on the
 provider, required checks pass, base ancestry and mergeability are current, and
@@ -919,8 +926,11 @@ writes by the coordinator.
 Review remains independent but uses the existing worker workspace. The
 coordinator creates a child reviewer with the worker `workspaceId`,
 preserving coordinator parentage, a visible agent tab, and
-`notifyOnFinish: true`. It does not create a review-only workspace or fall back
-to the coordinator checkout.
+`notifyOnFinish: true`. It records the worker workspace identity first, passes
+that value explicitly, does not call workspace creation for review, and verifies
+the returned reviewer `workspaceId` matches. Omitted, mismatched, or ambiguous
+placement stops review without retrying into a duplicate child. It does not
+fall back to the coordinator checkout.
 
 The worker and reviewer hold a serial workspace lease:
 1. Before review, the worker is idle, workspace `HEAD` equals the PR head SHA,
@@ -941,8 +951,13 @@ even behind another profile, reasoning level, or thread. Record both identities
 in the review handoff; if no qualified distinct reviewer exists, fail closed
 and escalate context-completely.
 
-Use the same distinct reviewer for revision rounds when available; a replacement
-reviewer starts a fresh complete review and never inherits an unseen verdict.
+Retain the reviewer `agentId`. Each revision round resumes that same agent with
+`send_agent_prompt` after the worker yields the new clean exact head. Finished or
+idle is reusable, not unavailable. Replace only when the original is
+definitively archived, deleted, non-resumable, or its route is unavailable;
+ambiguous status stops replacement. The replacement still uses the worker's
+exact workspace, starts a fresh complete review, records the superseded
+reviewer, and never inherits an unseen verdict.
 
 ## Context-complete operator escalations
 

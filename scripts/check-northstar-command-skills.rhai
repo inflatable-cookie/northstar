@@ -361,8 +361,20 @@ for child_class in [
 let review_child_section = h2_section(orchestrator_text, "## Independent review children and serial workspace lease");
 require(review_child_section.contains("existing worker workspace") &&
     review_child_section.contains("serial clean") &&
-    review_child_section.contains("Do not create a review-only workspace"),
+    review_child_section.contains("pass that same value explicitly") &&
+    review_child_section.contains("do not call `create_workspace` for review") &&
+    review_child_section.contains("returned\nreviewer `workspaceId`") &&
+    review_child_section.contains("ordinary re-review") &&
+    review_child_section.contains("`create_agent`") &&
+    review_child_section.contains("`send_agent_prompt`") &&
+    review_child_section.contains("reviewer `agentId`") &&
+    review_child_section.contains("finished or idle reviewer is reusable"),
     "review child missing worker workspace placement or serial lease");
+require(!fs::read_file(path::join(repo_root, "docs/architecture/system-architecture.md"))
+        .contains("review child (dedicated PR-head workspace)") &&
+    !fs::read_file(path::join(repo_root, "docs/specs/036-economical-orchestrator-coordination.md"))
+        .contains("creates a dedicated checkout/worktree workspace for the PR head"),
+    "canonical docs retain superseded review-workspace creation instructions");
 
 let escalation_section = h2_section(orchestrator_text, "## Context-complete operator escalations");
 require(escalation_section.contains("10-part capsule") &&
@@ -682,5 +694,61 @@ fn run_paseo_profile_materialization_fixtures() {
         "ask-for-permission downgrade incorrectly passed child launch");
 }
 run_paseo_profile_materialization_fixtures();
+
+// Behavioral Fixture 8: first review uses the worker workspace exactly; an
+// omitted, split, or mismatched workspace fails closed.
+fn valid_first_review_launch(worker_workspace_id, create_workspace_calls, requested_workspace_id, returned_workspace_id) {
+    create_workspace_calls == 0 &&
+        requested_workspace_id == worker_workspace_id &&
+        returned_workspace_id == worker_workspace_id
+}
+
+fn run_review_workspace_fixtures() {
+    let worker_workspace_id = "worker-workspace-17";
+    require(valid_first_review_launch(worker_workspace_id, 0,
+            "worker-workspace-17", "worker-workspace-17"),
+        "first review rejected exact worker-workspace placement");
+    require(!valid_first_review_launch(worker_workspace_id, 1,
+            "review-workspace-99", "review-workspace-99"),
+        "separate review workspace incorrectly passed");
+    require(!valid_first_review_launch(worker_workspace_id, 0, "", "coordinator-workspace"),
+        "omitted reviewer workspaceId incorrectly passed");
+    require(!valid_first_review_launch(worker_workspace_id, 0,
+            "worker-workspace-17", "other-workspace"),
+        "mismatched returned reviewer workspaceId incorrectly passed");
+}
+run_review_workspace_fixtures();
+
+// Behavioral Fixture 9: a revised head resumes the retained reviewer. Only a
+// definitively unavailable reviewer may be replaced, in the same workspace.
+fn valid_rereview(existing_reviewer_status, retained_agent_id, prompted_agent_id,
+        create_agent_calls, worker_workspace_id, replacement_workspace_id) {
+    if existing_reviewer_status == "idle" || existing_reviewer_status == "finished" {
+        return prompted_agent_id == retained_agent_id && create_agent_calls == 0;
+    }
+    if existing_reviewer_status == "definitively-unavailable" {
+        return create_agent_calls == 1 && replacement_workspace_id == worker_workspace_id;
+    }
+    false
+}
+
+fn run_rereview_identity_fixtures() {
+    require(valid_rereview("finished", "reviewer-4", "reviewer-4", 0,
+            "worker-workspace-17", ""),
+        "finished reviewer was not reusable for revised head");
+    require(!valid_rereview("idle", "reviewer-4", "reviewer-5", 1,
+            "worker-workspace-17", "worker-workspace-17"),
+        "ordinary re-review incorrectly created a new reviewer");
+    require(!valid_rereview("ambiguous", "reviewer-4", "", 1,
+            "worker-workspace-17", "worker-workspace-17"),
+        "ambiguous reviewer state incorrectly allowed replacement");
+    require(valid_rereview("definitively-unavailable", "reviewer-4", "", 1,
+            "worker-workspace-17", "worker-workspace-17"),
+        "valid same-workspace replacement was rejected");
+    require(!valid_rereview("definitively-unavailable", "reviewer-4", "", 1,
+            "worker-workspace-17", "review-workspace-99"),
+        "replacement reviewer incorrectly used another workspace");
+}
+run_rereview_identity_fixtures();
 
 log("Northstar command-skill surface: OK (" + commands.len() + " adapters, aggregate descriptions=" + aggregate_description_chars + " chars)");

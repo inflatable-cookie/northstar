@@ -144,8 +144,8 @@ One-page reference for terms used across Northstar docs.
 
 **Review child**
 : An independent exact-head reviewer running in the existing worker workspace
-  under a serial clean lease. Posts a durable provider verdict naming the exact
-  head.
+  under a serial clean lease. The coordinator reuses its retained agent identity
+  for revised heads. Posts a durable provider verdict naming the exact head.
 
 **Dispatch manifest**
 : The canonical specification in ready planning naming lane outcome, readiness,

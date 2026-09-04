@@ -87,9 +87,11 @@ answer would change behavior, acceptance, public contract, or sequencing.
 Every worker PR gets an independent review child unless the operator explicitly
 asks the current thread to perform a direct review. In Paseo, the orchestrator:
 
-- creates a dedicated checkout/worktree workspace for the PR head;
-- creates the reviewer through the orchestrator's agent-scoped launch so it
-  remains a child and finish notifications return to the orchestrator;
+- reuses the worker's exact existing workspace and does not create a review
+  workspace;
+- creates the reviewer through the orchestrator's agent-scoped launch with the
+  worker `workspaceId`, verifies the returned placement, and keeps parentage and
+  finish notifications with the orchestrator;
 - selects an economical adequate review route under the diversified-routing
   rule, escalating only when the diff retains exceptional unresolved reasoning;
 - gives the reviewer the PR, canonical refs, and review oracle, not the worker's
@@ -98,8 +100,10 @@ asks the current thread to perform a direct review. In Paseo, the orchestrator:
 
 The review child uses Direct PR Review mode and posts its verdict on the provider.
 Changes requested return to the same implementation worker. The revised exact
-head returns to the same reviewer when available. A replacement reviewer starts
-a fresh complete review; it does not inherit an unseen verdict.
+head returns through `send_agent_prompt` to the retained reviewer `agentId`.
+Finished or idle reviewers remain reusable. A replacement reviewer requires
+definitive unavailability, uses the same worker workspace, starts a fresh
+complete review, and does not inherit an unseen verdict.
 
 The orchestrator does not duplicate the full diff review. Before merge it must
 independently verify only the coordination gate:
@@ -161,7 +165,7 @@ model names, prices, or subscription limits into reusable policy.
 | Promotion is mechanical. | Projection must choose between two plausible product meanings. | Return the ambiguity; do not choose. | Projection handoff and stop-condition review. |
 | Review is independent. | Worker narrative is treated as acceptance, or the reviewer edits the branch. | Require a separate provider verdict and preserve branch ownership. | Review-mode and orchestrator-flow review. |
 | Review head is exact. | Accepted verdict names an older SHA. | Re-review the current head. | Merge-gate scenario. |
-| Parentage survives workspace isolation. | Reviewer is launched as a detached root thread. | Reject launch; create a child in the dedicated workspace. | Paseo launch-shape review. |
+| Parentage survives workspace isolation. | Reviewer is launched as a detached root thread or in a new review workspace. | Reject launch; create a child with the worker's exact existing `workspaceId`. | Paseo launch-shape review. |
 | Economical routes are normal. | Coordinator or ordinary reviewer requires a frontier model by role name alone. | Build the adequate pool and escalate only for residual difficulty. | Model-posture review. |
 | Merge safety is unchanged. | Coordinator merges with missing checks, unresolved findings, or ambiguous state. | Stop before merge. | Merge-gate scenario. |
 | Failure stays lane-local. | One provider refusal halts unrelated ready work. | Reroute or pause only that lane. | Scheduling scenario. |

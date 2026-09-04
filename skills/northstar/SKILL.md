@@ -122,8 +122,10 @@ routine tool prompts; it does not expand the child's Northstar authority.
   preserved across dedicated worktree workspace placement (scoped
   cross-workspace child creation, finish notifications enabled, no detached
   root launches, same-agent revision resume), independent review children in the
-  existing worker workspace with serial clean exact-head lease and distinct
-  underlying provider/model identity, continuous coordinator action chain
+  worker's exact existing workspace (explicit retained `workspaceId`, no review
+  workspace creation, returned-placement verification) with serial clean
+  exact-head lease, distinct underlying provider/model identity, and same-agent
+  re-review through the retained reviewer `agentId`, continuous coordinator action chain
   across merge, post-merge reconciliation, closeout, frontier recomputation,
   and next-ready dispatch without operator `continue`, prompt yield on children
   with `notifyOnFinish: true` and no child-wait Chatterbox noise, exactly one
