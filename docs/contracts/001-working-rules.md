@@ -947,7 +947,7 @@ parentage exists.
 - Use `python` or another runtime only when a concrete technical requirement
   justifies it.
 
-### Generation posture
+### Generation posture and lifecycle
 
 - Use one compact strict lifecycle. Light, baseline, lane-first, mixed, and
   full-strict labels may describe historical or incremental adoption state, but
@@ -973,24 +973,86 @@ parentage exists.
 - Finishing a batch, suite, or lane of roadmaps does **not** close the
   generation. After one batch closes, compile or continue the next batch inside
   the same generation.
+
+### Planning artifact lifecycle classes and prune triggers
+
+Every planning artifact belongs to one lifecycle class and has a default
+disposition:
+
+| Class | Examples | Live-tree rule | Disposition trigger |
+| --- | --- | --- | --- |
+| durable authority | vision, architecture, contracts | retain while authoritative | replace or delete with all callers when superseded |
+| active execution | active roadmap, ready/in-flight cards | retain only while actionable | fold outcome/evidence into closure, then generation roll-up |
+| transient transport | triage notes, worker handoffs, questionnaires | retain only while carrying unresolved or unconsumed meaning | delete after promotion, consumption, abandonment, or transfer |
+| exceptional evidence | releases, incidents, material migrations | retain when the evidence itself remains operationally useful | roll up only when its durable value is preserved |
+| derived currentness | indexes, status tables, navigation projections | generate, bound, or remove | rebuild from canonical current state |
+
+- Normal delivery evidence belongs on the completed card: outcome, validation,
+  PR, commit, and material limits.
+- A separate log is justified only for an incident, release, migration,
+  cross-lane decision, or evidence set too large to keep the card legible.
+- Consumed worker handoffs are deleted after merge, abandonment, or ownership
+  transfer once any durable outcome has moved to the card or canonical docs.
+- Promoted specs are removed or reduced to a non-procedural tombstone only when
+  a stable external reference requires it. Superseded executable-looking prose
+  must not remain in the default read path.
+
+### Generation closure and roll-up
+
 - Treat rollover as full generation closeout. A closure record may disposition
   old milestones and cards individually or in explicit groups; it becomes the
   authority over stale status text inside the closed generation.
 - Move passive observations, future feedback requests, and other unresolved
   commitments to the new generation's bounded watchlist or another current
   destination. They do not keep an old sequencing era open.
+- Before compaction, the generation closure record must establish:
+  1. no milestone or card remains executable in the old generation;
+  2. durable decisions have canonical destinations;
+  3. unresolved and deferred work has an active destination or explicit removal;
+  4. current links and front doors no longer depend on files being removed;
+  5. material delivery remains traceable to selected PRs, commits, releases, or
+     retained evidence;
+  6. the preservation oracle passes.
 - After closeout, keep only the active sequential generation expanded. Replace
-  each closed generation with one non-authoritative roll-up containing outcomes,
-  current authority destinations, rehomed commitments, material limits, and
-  selected evidence. Do not copy old execution instructions into the roll-up.
-- Remove completed generation cards, routine logs, and consumed handoffs after
-  their durable meaning and material provenance have passed the preservation
-  oracle in the governing lifecycle spec.
-- Remove promoted specs or reduce them to non-procedural tombstones only when a
-  stable external reference requires one. Superseded procedural prose must not
-  remain in the default read path.
+  each closed generation with one non-authoritative
+  `docs/roadmaps/archive/gNN.md` roll-up.
+- The roll-up contains only:
+  - generation intent and boundary;
+  - shipped outcomes grouped by durable capability;
+  - current canonical destinations for lasting decisions;
+  - material migrations, compatibility limits, and retained risks;
+  - deferred/unresolved items and their new destinations;
+  - selected PR, commit, release, and validation references;
+  - the succeeding generation.
+- It must not reproduce old steps, card instructions, detailed status
+  narration, or superseded protocol. Git remains the full-fidelity archive.
 - If those closeout conditions are not satisfied, repair the current generation
   instead of opening a new one.
+
+### Currentness budget and structural rules
+
+- Default-read surfaces describe current authority, the active runway, the
+  approved frontier, bounded watch items, and recent governing evidence only.
+  They do not narrate completed lanes.
+- Structural checks reject:
+  - more than one expanded sequential generation;
+  - an active front door pointing at an archived execution instruction;
+  - completed handoffs retained without an explicit exceptional-evidence reason;
+  - repeated historical lane narration in current roadmap indexes;
+  - posture labels that imply multiple supported steady-state protocols.
+
+### Preservation oracle
+
+Each compaction lane must satisfy this preservation oracle:
+
+| Invariant | Counterexample that fails review | Evidence |
+| --- | --- | --- |
+| Current authority is unchanged or deliberately promoted. | A deleted file held the only current rule. | Before/after authority map and link check. |
+| Every open commitment remains reachable. | Deferred work exists only in removed history. | Destination inventory. |
+| Material outcomes remain traceable. | A lasting migration has no PR, commit, release, or evidence reference. | Roll-up evidence table. |
+| Historical procedure cannot be mistaken for current authority. | An archive contains runnable steps or active status. | Archive-content review. |
+| Current work is legible without archive reads. | The next lane or dependency requires opening a roll-up. | Fresh-reader current-state check. |
+| Deletion is exact and reviewable. | A broad cleanup removes an unclassified file. | Frozen deletion manifest and diff review. |
 
 ### Incremental adoption
 

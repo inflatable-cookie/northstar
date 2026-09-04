@@ -1,3 +1,5 @@
+import "scripts/lib/northstar-lifecycle-checker.rhai" as lifecycle;
+
 fn check_ok(report, message) {
     if !report["ok"] {
         throw(message);
@@ -96,4 +98,10 @@ fn check(repo_root, required_files, identical_file_pairs, machine_contracts) {
             throw(message);
         }
     }
+
+    lifecycle::check_lifecycle(repo_root);
+}
+
+fn check_lifecycle(repo_root) {
+    lifecycle::check_lifecycle(repo_root);
 }

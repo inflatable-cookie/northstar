@@ -135,6 +135,7 @@ fn required_files() {
         "scripts/lib/northstar-repo-contract-data.rhai",
         "scripts/lib/northstar-repo-contract-checker.rhai",
         "scripts/lib/northstar-readiness-map.rhai",
+        "scripts/lib/northstar-lifecycle-checker.rhai",
     ];
     for file in current_active_authority_files() {
         files.push(file);
