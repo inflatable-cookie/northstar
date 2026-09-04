@@ -649,6 +649,19 @@ structural and enabled; reject launch configuration before creation if
 notifications are disabled. Review follow-ups resume the same child agent
 identity rather than creating a detached replacement.
 
+Paseo profiles are complete launch bundles, not model aliases. For every
+Northstar-created child thread, materialize the selected profile's
+provider/model identity plus `modeId`, `thinkingOptionId`, and `featureValues`
+into the agent creation call. The effective permission mode must remain the
+operator-configured full-accept/full-access mode. A launch that omits the
+profile's `modeId`, falls back to the provider default, or downgrades to an
+ask-for-permission mode is invalid and stops before child creation. This rule
+applies to workers, review children, chatterboxes, planning delegates, bounded
+research children, mechanical projection workers, and successor orchestrators.
+It removes routine tool-approval interruptions without widening the child's
+Northstar authority, write scope, destructive-action authority, review role, or
+merge role.
+
 A control-plane workspace or agent creation failure belongs to that lane's
 transport state. Preserve every returned workspace or agent identity so an
 ambiguous attempt is not duplicated, then continue launching unrelated lanes

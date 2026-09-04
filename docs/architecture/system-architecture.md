@@ -693,9 +693,13 @@ subagent, which gets no worktree or Git/provider authority.
 - Injected control-plane orchestration tools authorize routine transport for
   ready worker lanes and explicitly requested planning delegates without a
   second permission prompt. The orchestrator may select a current role profile,
-  create one dedicated worktree workspace per worker lane, create the worker as
-  a child agent from its scoped surface with that returned workspace ID and
-  finish notifications enabled, and carry notifications or follow-ups.
+  materialize that profile's provider/model and complete runtime settings
+  (`modeId`, `thinkingOptionId`, and `featureValues`) without defaulting or
+  downgrading its operator-configured full-accept permission mode, create one
+  dedicated worktree workspace per worker lane, create the worker as a child
+  agent from its scoped surface with that returned workspace ID and finish
+  notifications enabled, and carry notifications or follow-ups. The same
+  complete-profile rule covers every other Northstar-created Paseo child.
   Workspace placement does not detach parentage: detached root launches,
   schedules, generic detached runs, or unproven CLI substitutes are rejected for
   worker dispatch. Its IDs, profiles, messages, and lifecycle state are

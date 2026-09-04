@@ -69,6 +69,15 @@ A fresh orchestrator continuation is distinct from both. Its handoff declares
 mode from that absolute path and does not run worker or planning-delegate
 preflight. The source yields the transferred lane after pushed dispatch.
 
+Whenever a Northstar mode creates a Paseo child from a selected profile,
+materialize the complete profile into the launch: provider/model plus `modeId`,
+`thinkingOptionId`, and `featureValues` mapped to the agent settings. Preserve
+the operator-configured full-accept/full-access permission mode; never omit or
+downgrade it to the provider default or an ask-for-permission mode. This applies
+to every spawned worker, reviewer, chatterbox, delegate, research child,
+mechanical projection worker, and successor orchestrator. Full accept removes
+routine tool prompts; it does not expand the child's Northstar authority.
+
 ## Outcomes by mode
 
 - **Planning:** coherent architecture/contracts/roadmaps; no invented system

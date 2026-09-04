@@ -199,6 +199,10 @@ let main_instructions = fs::read_file(path::join(root, "SKILL.md")) +
     fs::read_file(path::join(root, "agents/openai.yaml"));
 require(main_instructions.contains("installed-package-route.md"),
     "skill entry surfaces do not name the generic installed-package route");
+require(main_text.contains("materialize the complete profile") &&
+    main_text.contains("full-accept/full-access permission mode") &&
+    main_text.contains("does not expand the child's Northstar authority"),
+    "main skill does not carry the shared Paseo profile-permission invariant");
 require(fs::is_file(path::join(root, "references/packages/installed-package-route.md")),
     "installed-package route file missing from the payload");
 
@@ -327,6 +331,32 @@ require(orchestrator_posture.contains("complete approved ready frontier") &&
     orchestrator_posture.contains("event-bounded turns") &&
     orchestrator_posture.contains("never poll or call wait primitives"),
     "orchestrator missing full-frontier launch or post-dispatch yield");
+
+let paseo_launch_settings = h2_section(orchestrator_text, "## Paseo launch settings");
+require(paseo_launch_settings.contains("selected profile as a complete") &&
+    paseo_launch_settings.contains("launch bundle. Materialize"),
+    "Paseo child launch does not treat profiles as complete launch bundles");
+require(paseo_launch_settings.contains("`settings.modeId`") &&
+    paseo_launch_settings.contains("`settings.thinkingOptionId`") &&
+    paseo_launch_settings.contains("`settings.features`"),
+    "Paseo child launch does not materialize complete profile settings");
+require(paseo_launch_settings.contains("full-accept/full-access") &&
+    paseo_launch_settings.contains("ask-for-permission mode"),
+    "Paseo child launch does not preserve the profile permission mode");
+require(paseo_launch_settings.contains("does not widen"),
+    "Paseo child launch does not preserve the authority boundary");
+for child_class in [
+    "workers",
+    "reviewers",
+    "chatterboxes",
+    "planning delegates",
+    "bounded research",
+    "mechanical projection workers",
+    "successor orchestrators",
+] {
+    require(paseo_launch_settings.contains(child_class),
+        "Paseo launch-settings rule omits child class: " + child_class);
+}
 
 let review_child_section = h2_section(orchestrator_text, "## Independent review children and serial workspace lease");
 require(review_child_section.contains("existing worker workspace") &&
@@ -600,5 +630,57 @@ fn run_write_refusal_fixtures() {
         "write-refusal negative fixture failed: unauthenticated transport must not solicit credentials");
 }
 run_write_refusal_fixtures();
+
+// Behavioral Fixture 7: selected Paseo profile settings survive child launch;
+// omission or permission downgrade fails before creation.
+fn profile_settings_match(profile, launch) {
+    launch["provider"] == profile["provider"] + "/" + profile["model"] &&
+        launch["settings"]["modeId"] == profile["modeId"] &&
+        launch["settings"]["thinkingOptionId"] == profile["thinkingOptionId"] &&
+        launch["settings"]["features"] == profile["featureValues"]
+}
+
+fn run_paseo_profile_materialization_fixtures() {
+    let selected_profile = #{
+        "provider": "codex",
+        "model": "day-to-day-engine",
+        "modeId": "full-access",
+        "thinkingOptionId": "medium",
+        "featureValues": #{"fast_mode": true},
+    };
+    let valid_launch = #{
+        "provider": "codex/day-to-day-engine",
+        "settings": #{
+            "modeId": "full-access",
+            "thinkingOptionId": "medium",
+            "features": #{"fast_mode": true},
+        },
+    };
+    require(profile_settings_match(selected_profile, valid_launch),
+        "complete selected profile was not accepted for Paseo child launch");
+
+    let omitted_mode = #{
+        "provider": "codex/day-to-day-engine",
+        "settings": #{
+            "modeId": "",
+            "thinkingOptionId": "medium",
+            "features": #{"fast_mode": true},
+        },
+    };
+    require(!profile_settings_match(selected_profile, omitted_mode),
+        "profile modeId omission incorrectly passed child launch");
+
+    let downgraded_mode = #{
+        "provider": "codex/day-to-day-engine",
+        "settings": #{
+            "modeId": "ask",
+            "thinkingOptionId": "medium",
+            "features": #{"fast_mode": true},
+        },
+    };
+    require(!profile_settings_match(selected_profile, downgraded_mode),
+        "ask-for-permission downgrade incorrectly passed child launch");
+}
+run_paseo_profile_materialization_fixtures();
 
 log("Northstar command-skill surface: OK (" + commands.len() + " adapters, aggregate descriptions=" + aggregate_description_chars + " chars)");

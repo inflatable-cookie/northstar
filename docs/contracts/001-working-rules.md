@@ -472,6 +472,15 @@ Spec 037 governs the current planning and delivery topology.
 - A complete ready lane should reach child creation in under two minutes when no
   conflict or transport failure exists. This is a dogfood diagnostic threshold,
   not a hard provider timeout.
+- Every Northstar-created Paseo child materializes the selected profile as a
+  complete launch bundle: provider/model plus `modeId`, `thinkingOptionId`, and
+  `featureValues` mapped into the agent settings. Its effective permission mode
+  must remain the operator-configured full-accept/full-access mode. Missing,
+  defaulted, or downgraded ask-for-permission mode is a launch defect and stops
+  before creation. This covers workers, reviewers, chatterboxes, planning and
+  research delegates, mechanical projection workers, and successor
+  orchestrators. It removes routine approval prompts but grants no authority
+  beyond the child's Northstar role and handoff.
 - A review child is created by the coordinator in the existing worker workspace
   using the worker `workspaceId`, remains a visible parent-attached child, and
   keeps finish notifications enabled. Worker and reviewer use a serial lease:

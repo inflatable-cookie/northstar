@@ -456,11 +456,16 @@ orchestrator uses them automatically for a ready lane:
 3. verifies every handoff-declared sibling checkout is symlinked into the
    managed worktree's container directory before project bootstrap needs it;
    it stops on a missing source, wrong symlink, or conflicting path;
-4. creates the worker in that workspace with finish notification enabled and
-   the single initial prompt `Read and follow <absolute-handoff-path>.`. This
-   must be the current orchestrator's agent-scoped creation call with the
-   returned workspace ID. A top-level/root-agent launch, schedule, generic
-   detached run, or CLI path without explicit parent attachment is rejected;
+4. creates the worker in that workspace with the selected profile fully
+   materialized: provider/model plus profile `modeId`, `thinkingOptionId`, and
+   `featureValues` mapped into agent settings. The profile's effective
+   permission mode must remain the operator-configured full-accept/full-access
+   mode; a missing, defaulted, or ask-for-permission mode stops before launch.
+   Finish notification stays enabled and the single initial prompt is
+   `Read and follow <absolute-handoff-path>.`. This must be the current
+   orchestrator's agent-scoped creation call with the returned workspace ID. A
+   top-level/root-agent launch, schedule, generic detached run, or CLI path
+   without explicit parent attachment is rejected;
 5. retains the returned agent and workspace IDs as lane transport state;
 6. trusts the finish/permission notification instead of polling, reconciles the
    returned report with canonical state, and uses a follow-up prompt on the same
@@ -474,6 +479,12 @@ Paseo can deliver finish, error, and permission notifications to the parent.
 Keep finish notification enabled and use that same child agent for requested
 changes. Do not compensate for a detached launch by polling or by creating a
 second worker.
+
+The same complete-profile rule applies to every Northstar-created Paseo child:
+reviewers, chatterboxes, planning delegates and their bounded research
+children, mechanical projection workers, and successor orchestrators. Full
+accept removes routine tool-approval prompts; it does not expand any child's
+Northstar authority, write scope, destructive-action authority, or merge role.
 
 For an operator-requested planning delegate, use the same injected-tool signal
 without another permission prompt, but select a frontier conversational-

@@ -50,6 +50,27 @@ permission requests, destructive workspace cleanup, review, or merge. Merge
 authority comes from the orchestrator lane's accepted review/check gate, not
 from the transport adapter.
 
+## Paseo launch settings
+
+Every Northstar-created Paseo child uses the selected profile as a complete
+launch bundle. Materialize its provider/model identity and copy its `modeId`,
+`thinkingOptionId`, and `featureValues` into the `create_agent` call's
+`settings.modeId`, `settings.thinkingOptionId`, and `settings.features` fields.
+Omit only profile fields that are absent; never omit, replace, or downgrade a
+present `modeId` to the provider default or an ask-for-permission mode.
+
+For workers, reviewers, chatterboxes, planning delegates, bounded research
+children, mechanical projection workers, and successor orchestrators, require
+the effective selected-profile permission mode to be the operator-configured
+full-accept/full-access mode. Reject the child launch before creation when the
+profile has no such mode or the materialized call would differ from it. Report
+that profile/transport defect instead of launching a prompt-blocked thread.
+
+This removes routine tool-approval interruptions. It does not widen the child's
+handoff, planning, mutation, destructive-action, review, or merge authority;
+those Northstar boundaries still apply. Later follow-ups resume the existing
+agent with its effective settings instead of recreating or downgrading it.
+
 ## Conversation style
 
 Keep the exchange natural, direct, and easy to answer while preserving the
@@ -114,6 +135,8 @@ In Paseo:
 - create the chatterbox as a parent-attached child agent through your
   agent-scoped creation call into your current workspace; do not create a
   new workspace for it;
+- materialize the complete selected profile under the Paseo launch-settings
+  rule, including its operator-configured full-accept `modeId`;
 - reject the transport plan if it creates a separate workspace, uses
   `branch-off` worktree isolation, or attaches a different project path;
 - apply the capitalized label `Chatterbox=true` on the agent; reject launch
@@ -186,6 +209,8 @@ In Paseo, launch the reviewer like this:
 - create the reviewer child through your agent-scoped creation call using the
   worker `workspaceId` so it remains your child and appears as a visible tab in
   that workspace; leave finish notifications enabled (`notifyOnFinish: true`);
+- materialize the complete selected review profile, including its
+  operator-configured full-accept `modeId`, in that creation call;
 - select an economical adequate review route whose underlying provider/model
   identity differs from the worker under the diversified-routing rule; escalate
   to a frontier route only when the diff retains residual risk that settled
@@ -299,9 +324,10 @@ When Paseo tools are injected, the source:
    Reject the transport plan if it uses `branch-off` worktree isolation or a
    different project path;
 4. creates the successor agent there with the capitalized label
-   `Orchestrator=true`, copied profile settings, finish notifications enabled,
-   and the single absolute-handoff prompt. Reject launch configuration if that
-   label is omitted or lowercased;
+   `Orchestrator=true`, the complete selected profile materialized under the
+   Paseo launch-settings rule, finish notifications enabled, and the single
+   absolute-handoff prompt. Reject launch configuration if that label is
+   omitted or lowercased;
 5. retains and reports both returned identities without polling or duplicate
    retry. If workspace or agent creation returns an identity with an ambiguous
    error, preserve the identity and stop that launch attempt; do not retry into
@@ -374,8 +400,10 @@ Chatterbox after operator confirmation.
      operator-named profile wins;
    - call `create_workspace` with `isolation: worktree`, `mode: branch-off`,
      `baseBranch: origin/main`, and the intended branch;
-   - call `create_agent` with that workspace ID, `notifyOnFinish: true`, and the
-     prompt `Read and follow <absolute-handoff-path>.`;
+   - materialize the complete selected profile into `create_agent`, including
+     its operator-configured full-accept `modeId`; call it with that workspace
+     ID, `notifyOnFinish: true`, and the prompt
+     `Read and follow <absolute-handoff-path>.`;
    - retain identities, report to the operator, and **yield**. Do not poll,
      call wait primitives, or send Chatterbox notifications for child waits.
 8. **Handle child notifications and revision routing.** A finish notification
