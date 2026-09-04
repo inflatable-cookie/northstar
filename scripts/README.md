@@ -81,6 +81,23 @@ activation marker. With no compatible package installed, only the requested
 language workflow stops; it names the exact identity and the local
 installation route.
 
+The installed skill exposes the real operator adapter:
+
+```bash
+effigy --repo /path/to/installed/northstar northstar/language:route \
+  --consumer /path/to/consumer \
+  --language typescript \
+  --workflow explicit_audit_repair \
+  --overlay svelte
+```
+
+It returns the verified package `entrypoint_path`. The default store is
+`$XDG_DATA_HOME/northstar/language-packages` when XDG data is configured, or
+the operator's `.local/share/northstar/language-packages` directory otherwise.
+`NORTHSTAR_LANGUAGE_PACKAGE_STATE_ROOT` and `--state-root` provide explicit
+overrides. First use fetches and verifies the registry-pinned Git commit;
+subsequent routes are local-only.
+
 ## Repo contract (`qa:docs`)
 
 `check:repo-contract-wiring` validates the small machine-facing contract around

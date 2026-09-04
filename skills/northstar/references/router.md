@@ -20,8 +20,11 @@ package ID or a language branch. Supply explicit intent (language + workflow,
 plus any requested overlay) or the consumer's exact activation marker to the
 generic selection and installed-package route in
 [`packages/installed-package-route.md`](./packages/installed-package-route.md).
-A `routed` result executes the installed package's declared entrypoint from
-`installed_path`. A stopped result scopes the failure to that language
+A routed or newly activated result names the installed package's exact
+`entrypoint_path`; open it and follow that package authority. Use the installed
+skill's `northstar/language:route` task described in the package route. It owns
+the durable per-user package store and verified first acquisition. A stopped
+result scopes the failure to that language
 workflow, reports the exact identity and the local installation route, and
 leaves every other Northstar workflow usable. No embedded copy, alias, or
 silent substitute exists.

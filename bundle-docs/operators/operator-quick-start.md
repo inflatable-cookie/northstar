@@ -62,13 +62,11 @@ to pick one mode:
 - Research -> contracts/architecture -> `research`
 - Bootstrap, migrate, or spine hygiene -> `normalize-docs`
 - **Explicit** continuation brief / fresh thread -> `handoff` only (not bare `continue`)
-- Rust quality during ordinary coding -> ask Northstar to use strict Rust
-  quality; the agent installs missing activation, then continues the task
-- Explicit Rust worktree or whole-repository audit-and-repair ->
-  `/northstar-rust-audit worktree` or `/northstar-rust-audit repository`
-- Explicit TypeScript/Svelte worktree or whole-repository audit-and-repair ->
-  `/northstar-typescript-audit worktree` or
-  `/northstar-typescript-audit repository`
+- Rust quality during ordinary coding -> ask Northstar to use the registered
+  Rust package route; an exact repository activation marker also enables it
+- Explicit Rust or TypeScript/Svelte audit-and-repair -> ask Northstar for the
+  language and scope; core acquires the official package and follows its
+  declared audit entrypoint
 
 ## If You Want Clear Prompting, Say It Plainly
 
@@ -86,28 +84,21 @@ to pick one mode:
 - “Refocus this project under Northstar” -> `northstar` (refocus-drifted-project)
 - “Turn this memo into contracts” -> `northstar` (research)
 - “Audit and fix the current Rust tranche with no slop” ->
-  `/northstar-rust-audit worktree`
+  `northstar` (Rust package, explicit audit-and-repair)
 - “Audit and fix this entire Rust repository” ->
-  `/northstar-rust-audit repository`
+  `northstar` (Rust package, explicit repository audit-and-repair)
 - “Audit and fix the current TypeScript/Svelte tranche with no slop” ->
-  `/northstar-typescript-audit worktree`
+  `northstar` (TypeScript package, explicit audit-and-repair)
 - “Audit and fix this entire TypeScript/Svelte repository” ->
-  `/northstar-typescript-audit repository`
+  `northstar` (TypeScript package, explicit repository audit-and-repair)
 - **Coordinate a Northstar lane (runway, dispatch, gated merge)** -> `northstar` (orchestrator mode)
 
-Rust activation is agent-installed and repository-owned. The agent discovers
-Cargo and explicit toolchain paths, preserves existing instructions and
-contracts, and asks only when repository policy such as MSRV or exclusions is
-unresolved. Only `strict` is production-valid. Ordinary and high-assurance
-profiles, a combined default, observable compaction resilience, and
-certification remain unsupported.
-
-TypeScript/Svelte activation is also agent-installed, but only after an explicit
-audit request. The agent discovers root and nested package ownership, resolves
-Svelte 5 and SvelteKit 2 overlays per owning package, and installs no
-dependencies. Everyday TypeScript authoring, deferred toolchain/testing rules,
-unsupported framework versions, slop-only mutation, and certification remain
-unavailable.
+Language quality policy is package-owned. Northstar's installed
+`northstar/language:route` task selects the registry pin, acquires and verifies
+it in durable operator state, and returns the workflow entrypoint for the agent
+to follow. Consumer repositories still own activation markers, profiles,
+toolchains, exclusions, and dependency policy. Removing the former top-level
+language skills does not remove these workflows.
 
 During Chatterbox, planning-delegate, refresh, or cleanup work, use
 `docs/triage/` for unresolved capture. Update an existing note when the same

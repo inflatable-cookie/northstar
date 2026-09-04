@@ -333,6 +333,66 @@ def main():
                f"{package['label']} receipt records its provenance truthfully",
                json.dumps(receipt["trust_class"]))
 
+        # ---- public installed-skill route: durable state + official git pins ----
+        public_registry = json.loads(json.dumps(registry_doc))
+        for entry in public_registry["packages"]:
+            entry["repository"] = SIBLING
+        public_registry_path = os.path.join(ROOT, "public-registry.json")
+        with open(public_registry_path, "w") as handle:
+            json.dump(public_registry, handle)
+        public_state = os.path.join(ROOT, "public-state")
+        public_results = {}
+        for package in PACKAGES:
+            result_path = os.path.join(ROOT, f"public-{package['language']}.json")
+            routed = run([
+                "effigy", "--repo", os.path.join(REPO, "skills", "northstar"),
+                "northstar/language:route", "--",
+                "--registry", public_registry_path,
+                "--consumer", consumer,
+                "--state-root", public_state,
+                "--language", package["language"],
+                "--workflow", package["workflow"],
+                "--json", result_path,
+            ], check=False)
+            result = json.load(open(result_path)) if os.path.exists(result_path) else {}
+            ok(routed.returncode == 0 and result.get("status") == "activated" and
+               result.get("tree_digest") == package["tree"] and
+               os.path.isfile(result.get("entrypoint_path", "")),
+               f"public route acquires and resolves the {package['label']} entrypoint",
+               routed.stdout + routed.stderr)
+            public_results[package["package_id"]] = result
+        ok(public_results[TS["package_id"]].get("installed_path") !=
+           public_results[RUST["package_id"]].get("installed_path"),
+           "public route keeps official packages independently addressed")
+
+        marker_consumer = os.path.join(ROOT, "marker-consumer")
+        os.makedirs(marker_consumer)
+        with open(os.path.join(marker_consumer, "AGENTS.md"), "w") as handle:
+            handle.write("<!-- northstar:rust-quality:start -->\n<!-- northstar:rust-quality:end -->\n")
+        marker_result_path = os.path.join(ROOT, "public-marker.json")
+        marker_run = run([
+            "effigy", "--repo", os.path.join(REPO, "skills", "northstar"),
+            "northstar/language:route", "--",
+            "--registry", public_registry_path,
+            "--consumer", marker_consumer,
+            "--state-root", public_state,
+            "--marker", "northstar:rust-quality",
+            "--workflow", "everyday_authoring",
+            "--json", marker_result_path,
+        ], check=False)
+        marker_result = json.load(open(marker_result_path)) if os.path.exists(marker_result_path) else {}
+        ok(marker_run.returncode == 0 and marker_result.get("status") == "routed" and
+           marker_result.get("package_id") == RUST["package_id"] and
+           marker_result.get("workflow") == "everyday_authoring",
+           "public route honors an exact AGENTS activation marker from durable state",
+           marker_run.stdout + marker_run.stderr)
+        with open(os.path.join(public_state, "lifecycle-state.json")) as handle:
+            public_lifecycle = json.load(handle)
+        ok(len(public_lifecycle.get("packages", [])) == 2 and
+           all(ref.get("selection") == "selected" for ref in public_lifecycle["packages"]),
+           "public route persists both selected packages in one operator state root",
+           json.dumps(public_lifecycle))
+
         # ---- drift is scoped to one package; the other keeps routing ----
         ts_probe = os.path.join(activated[TS["package_id"]]["installed_path"],
                                 "references/language-quality/typescript/catalogue.json")

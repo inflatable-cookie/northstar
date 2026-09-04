@@ -31,10 +31,11 @@ import { createHash, randomUUID } from "node:crypto";
 import { spawn, spawnSync } from "node:child_process";
 import type { SpawnSyncReturns } from "node:child_process";
 import * as fs from "node:fs";
+import * as os from "node:os";
 import * as path from "node:path";
 
 const CORE_VERSION = "0.2.0";
-const TIMESTAMP = "2026-09-02T00:00:00Z";
+const TIMESTAMP = new Date().toISOString();
 const PORTABLE_PATH = /^[a-zA-Z0-9_-][a-zA-Z0-9_.-]*(?:\/[a-zA-Z0-9_-][a-zA-Z0-9_.-]*)*$/;
 const SEMVER = /^[0-9]+\.[0-9]+\.[0-9]+$/;
 const PACKAGE_ID = /^@[a-z0-9-]+\/[a-z0-9-]+$/;
@@ -188,6 +189,7 @@ interface AcquireOptions {
   coreVersion: string;
   adapter: (pin: Pin) => string;
   intent: "workflow_request" | "activation" | "detection";
+  activationMarker?: string;
   // Optional host-bound consumer scope: takes precedence over the activation
   // marker scope for trust restriction enforcement.
   consumerScopeHint?: string | null;
@@ -571,7 +573,11 @@ function manifestMatches(manifest: Manifest, language: string, workflow: string)
     manifest.available_workflows.includes(workflow);
 }
 
-function verifyInstalledIdentity(installedPath: string, reference: LifecycleRef, context: string): Manifest {
+function verifyInstalledIdentity(
+  installedPath: string,
+  reference: Pick<LifecycleRef, "tree_digest" | "manifest_digest">,
+  context: string,
+): Manifest {
   check(fs.existsSync(installedPath) && fs.statSync(installedPath).isDirectory(), context + ": installed path missing: " + installedPath);
   const manifestPath = path.join(installedPath, "northstar-package.json");
   check(fs.existsSync(manifestPath) && fs.statSync(manifestPath).isFile(), context + ": installed manifest missing");
@@ -701,6 +707,59 @@ function hostAcquisitionAdapter(): (pin: Pin) => string {
     const staged = stagedDir("northstar-staged-");
     copyTree(String(identity.path), staged);
     return staged;
+  };
+}
+
+function runGit(args: string[], cwd: string): string {
+  const git = findCommand("git");
+  check(git !== null, "git is required to acquire an official language package");
+  const result = spawnSync(git, args, {
+    cwd,
+    encoding: "utf8",
+    timeout: 120_000,
+    env: { ...process.env, GIT_TERMINAL_PROMPT: "0" },
+  });
+  check(result.error === undefined, "git acquisition failed to launch: " + String(result.error));
+  check(result.status === 0,
+    "git acquisition failed: git " + args.join(" ") + "\n" + String(result.stderr ?? "").trim());
+  return String(result.stdout ?? "").trim();
+}
+
+function publicAcquisitionAdapter(): (pin: Pin) => string {
+  return (pin: Pin): string => {
+    const identity = pin.entry.source_identity;
+    if (identity !== undefined && identity.type === "local_path") {
+      return hostAcquisitionAdapter()(pin);
+    }
+
+    check(pin.source === "official", "non-official package acquisition requires an operator local-path pin");
+    const entry = pin.entry as RegistryEntry;
+    check(isString(entry.repository) && entry.repository !== "", "official registry entry has no repository");
+    check(isString(entry.subpath) && isSafePackageRelativePath(entry.subpath), "official registry entry has invalid subpath");
+    check(isString(entry.commit) && /^[0-9a-f]{40}$/.test(entry.commit), "official registry entry has invalid immutable commit");
+
+    const checkoutParent = fs.mkdtempSync(path.join(process.env.TMPDIR ?? os.tmpdir(), "northstar-package-fetch-"));
+    const checkout = path.join(checkoutParent, "repo");
+    const staged = stagedDir("northstar-staged-");
+    try {
+      fs.mkdirSync(checkout);
+      runGit(["init", "-q"], checkout);
+      runGit(["remote", "add", "origin", entry.repository], checkout);
+      runGit(["fetch", "--depth", "1", "origin", entry.commit], checkout);
+      check(runGit(["rev-parse", "FETCH_HEAD"], checkout) === entry.commit,
+        "fetched package commit does not match the official registry pin");
+      runGit(["checkout", "-q", "--detach", "FETCH_HEAD"], checkout);
+      const source = path.join(checkout, entry.subpath);
+      check(fs.existsSync(source) && fs.statSync(source).isDirectory(),
+        "official package subpath missing at pinned commit: " + entry.subpath);
+      copyTree(source, staged);
+      return staged;
+    } catch (err) {
+      fs.rmSync(staged, { recursive: true, force: true });
+      throw err;
+    } finally {
+      fs.rmSync(checkoutParent, { recursive: true, force: true });
+    }
   };
 }
 
@@ -965,17 +1024,26 @@ function parseRegistryDoc(raw: unknown, context: string): RegistryDoc {
 
 // ---- consumer activation ----
 
-function consumerActivationValid(consumerDir: string, packageId: string, version: string): { valid: boolean; scope: string | null } {
+function consumerActivationValid(consumerDir: string, packageId: string, version: string, activationMarker?: string): { valid: boolean; scope: string | null } {
   const marker = path.join(consumerDir, "docs/contracts/language-quality-activation.json");
-  if (!fs.existsSync(marker)) {
-    return { valid: false, scope: null };
+  if (fs.existsSync(marker)) {
+    const raw: unknown = JSON.parse(fs.readFileSync(marker, "utf8"));
+    if (isRecord(raw) && raw.package_id === packageId && raw.version === version) {
+      return { valid: true, scope: isString(raw.scope) ? raw.scope : null };
+    }
   }
-  const raw: unknown = JSON.parse(fs.readFileSync(marker, "utf8"));
-  if (!isRecord(raw)) {
-    return { valid: false, scope: null };
+  if (activationMarker !== undefined) {
+    const instructions = path.join(consumerDir, "AGENTS.md");
+    if (fs.existsSync(instructions)) {
+      const text = fs.readFileSync(instructions, "utf8");
+      const start = "<!-- " + activationMarker + ":start -->";
+      const end = "<!-- " + activationMarker + ":end -->";
+      if (text.includes(start) && text.includes(end)) {
+        return { valid: true, scope: null };
+      }
+    }
   }
-  const valid = raw.package_id === packageId && raw.version === version;
-  return { valid, scope: isString(raw.scope) ? raw.scope : null };
+  return { valid: false, scope: null };
 }
 
 // ---- acquisition ----
@@ -1067,7 +1135,7 @@ function acquireAndActivate(opts: AcquireOptions): AcquireOutcome {
   // when both are present.
   let consumerScope: string | null = opts.consumerScopeHint !== undefined ? opts.consumerScopeHint : null;
   if (intent === "activation") {
-    const activation = consumerActivationValid(consumerDir, packageId, version);
+    const activation = consumerActivationValid(consumerDir, packageId, version, opts.activationMarker);
     check(activation.valid, "activation marker missing or invalid for " + packageId + "@" + version);
     if (consumerScope === null) {
       consumerScope = activation.scope;
@@ -3729,6 +3797,128 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
   console.log("card-122 oracle: PASS (generic registry-owned selection: explicit intent and exact activation markers select one data-driven entry; unsupported work, ambiguity, drift, and detection fail closed before acquisition)");
 }
 
+function parseRouteFlags(args: string[]): Record<string, string> {
+  const allowed = new Set([
+    "--consumer", "--language", "--workflow", "--overlay", "--marker",
+    "--core-version", "--state-root", "--registry", "--json",
+  ]);
+  const parsed: Record<string, string> = {};
+  for (let i = 0; i < args.length; i += 2) {
+    const flag = args[i];
+    check(flag !== undefined && allowed.has(flag), "unknown route flag: " + String(flag));
+    const value = args[i + 1];
+    check(value !== undefined && !value.startsWith("--"), "route flag " + flag + " requires a value");
+    check(!(flag in parsed), "duplicate route flag: " + flag);
+    parsed[flag] = value;
+  }
+  return parsed;
+}
+
+function defaultOperatorStateRoot(): string {
+  const explicit = process.env.NORTHSTAR_LANGUAGE_PACKAGE_STATE_ROOT;
+  if (explicit !== undefined && explicit.trim() !== "") {
+    return path.resolve(explicit);
+  }
+  const xdg = process.env.XDG_DATA_HOME;
+  if (xdg !== undefined && xdg.trim() !== "") {
+    check(path.isAbsolute(xdg), "XDG_DATA_HOME must be absolute");
+    return path.join(xdg, "northstar", "language-packages");
+  }
+  return path.join(os.homedir(), ".local", "share", "northstar", "language-packages");
+}
+
+function runPublicRoute(args: string[]): void {
+  const flags = parseRouteFlags(args);
+  const scriptRoot = path.resolve(path.dirname(process.argv[1]), "..");
+  const registryPath = path.resolve(flags["--registry"] ?? path.join(scriptRoot, "references/packages/official-registry.json"));
+  check(fs.existsSync(registryPath), "official registry missing: " + registryPath);
+  const registry = parseRegistryDoc(JSON.parse(fs.readFileSync(registryPath, "utf8")), "route registry");
+
+  const consumerFlag = flags["--consumer"];
+  check(consumerFlag !== undefined, "route requires --consumer <directory>");
+  const requestedConsumer = path.resolve(consumerFlag);
+  check(fs.existsSync(requestedConsumer), "consumer does not exist: " + requestedConsumer);
+  const consumerDir = fs.realpathSync(requestedConsumer);
+  check(fs.statSync(consumerDir).isDirectory(), "consumer is not a directory: " + consumerDir);
+
+  const workflow = flags["--workflow"];
+  check(workflow !== undefined, "route requires --workflow <workflow>");
+  const marker = flags["--marker"];
+  const requestedLanguage = flags["--language"];
+  let query: SelectionQuery;
+  if (marker !== undefined) {
+    query = { kind: "marker", marker };
+  } else {
+    check(requestedLanguage !== undefined,
+      "route requires either --language <language> or --marker <activation-marker>");
+    query = { kind: "intent", language: requestedLanguage, workflow, overlay: flags["--overlay"] ?? null };
+  }
+  const coreVersion = flags["--core-version"] ?? CORE_VERSION;
+  const entry = selectRegistryEntry(registry, coreVersion, query);
+  check(entry.discovery.workflows.includes(workflow),
+    "selected package does not declare workflow " + workflow);
+  const language = requestedLanguage ?? (entry.discovery.languages.length === 1 ? entry.discovery.languages[0] : undefined);
+  check(language !== undefined && entry.discovery.languages.includes(language),
+    "route must name one language declared by the selected package");
+  const overlay = flags["--overlay"];
+  if (overlay !== undefined) {
+    check(entry.discovery.overlays.includes(overlay), "selected package does not declare overlay " + overlay);
+  }
+
+  const stateRoot = path.resolve(flags["--state-root"] ?? defaultOperatorStateRoot());
+  fs.mkdirSync(stateRoot, { recursive: true, mode: 0o700 });
+  fs.chmodSync(stateRoot, 0o700);
+  const trustDoc = hostTrustDoc(stateRoot);
+  const outcome = acquireAndActivate({
+    stateRoot,
+    consumerDir,
+    trustDoc,
+    registry,
+    packageId: entry.package_id,
+    version: entry.version,
+    language,
+    workflow,
+    coreVersion,
+    adapter: publicAcquisitionAdapter(),
+    intent: marker === undefined ? "workflow_request" : "activation",
+    activationMarker: marker,
+  });
+  check(outcome.status === "activated" || outcome.status === "routed",
+    "language package did not route: " + outcome.notice);
+  check(outcome.installDir !== undefined, "language package route returned no installed path");
+  const manifest = verifyInstalledIdentity(outcome.installDir, {
+    tree_digest: entry.tree_digest,
+    manifest_digest: entry.manifest_digest,
+  }, "public route");
+  const entrypoint = manifest.entrypoints[workflow];
+  check(isString(entrypoint) && isSafePackageRelativePath(entrypoint),
+    "installed package has no valid entrypoint for workflow " + workflow);
+  const entrypointPath = path.join(outcome.installDir, entrypoint);
+  check(fs.existsSync(entrypointPath) && fs.statSync(entrypointPath).isFile(),
+    "installed workflow entrypoint is missing: " + entrypointPath);
+
+  const result = {
+    status: outcome.status,
+    package_id: entry.package_id,
+    version: entry.version,
+    language,
+    workflow,
+    overlay: overlay ?? null,
+    state_root: stateRoot,
+    installed_path: outcome.installDir,
+    entrypoint_path: entrypointPath,
+    tree_digest: outcome.treeDigest,
+    manifest_digest: outcome.manifestDigest,
+    receipt_digest: outcome.receiptDigest,
+    notice: outcome.notice,
+  };
+  const output = JSON.stringify(result, null, 2) + "\n";
+  if (flags["--json"] !== undefined) {
+    fs.writeFileSync(path.resolve(flags["--json"]), output);
+  }
+  process.stdout.write(output);
+}
+
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   const command = args[0];
@@ -3753,6 +3943,14 @@ async function main(): Promise<void> {
     const request = parseHostRequest(JSON.parse(fs.readFileSync(args[1], "utf8")), "host request");
     const result = executeHostRequest(request, args[3] ?? null, FULL_HOST_CAPABILITIES);
     fs.writeFileSync(args[2], JSON.stringify(result));
+    return;
+  }
+  if (command === "route") {
+    // route --consumer <dir> --workflow <workflow>
+    //   (--language <language> [--overlay <overlay>] | --marker <marker>)
+    //   [--state-root <dir>] [--registry <file>] [--core-version <v>]
+    //   [--json <file>]
+    runPublicRoute(args.slice(1));
     return;
   }
   if (command === "select") {
@@ -3821,7 +4019,7 @@ async function main(): Promise<void> {
       " tree=" + entry.tree_digest + " manifest=" + entry.manifest_digest);
     return;
   }
-  throw new Error("usage: language-package-lifecycle.ts oracle <fixture-root> <out-dir> | vectors <fixture-root> | cas-race <state-root> <observed> <payload-file> <hold|attempt> | host <request-file> <result-file> [registry-path] | select <registry-file> (--language <l> --workflow <w> [--overlay <o>] | --marker <m>) [--core-version <v>] [--json <out>]");
+  throw new Error("usage: language-package-lifecycle.ts route --consumer <dir> --workflow <w> (--language <l> [--overlay <o>] | --marker <m>) [--state-root <dir>] [--registry <file>] [--core-version <v>] [--json <out>] | oracle <fixture-root> <out-dir> | vectors <fixture-root> | cas-race <state-root> <observed> <payload-file> <hold|attempt> | host <request-file> <result-file> [registry-path] | select <registry-file> (--language <l> --workflow <w> [--overlay <o>] | --marker <m>) [--core-version <v>] [--json <out>]");
 }
 
 await main();

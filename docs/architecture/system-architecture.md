@@ -93,6 +93,12 @@ When no conforming host adapter is available, only the requested package
 workflow stops with a visible capability notice; ordinary Northstar routing
 continues.
 
+The distributable skill's `language:route` task is the default operator
+adapter. It selects from the core registry, supplies durable per-user state
+outside the consumer, acquires an exact official Git commit when needed, and
+returns the verified package workflow entrypoint. Subsequent routes use the
+selected local receipt without network access.
+
 Core carries a small official registry that pins each approved package version
 to an immutable repository and subpath, commit and tree digest, manifest
 digest, and compatible core range. The installer verifies those identities

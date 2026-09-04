@@ -79,6 +79,15 @@ version, source, target, and workflow, then continues without a confirmation
 pause. Failure stops only that language workflow and reports a manual or local
 installation route; other Northstar workflows remain usable.
 
+The installed Northstar skill supplies the default operator adapter. Its
+`language:route` task uses an explicit state-root override when provided,
+otherwise a task-specific environment override, then the XDG data directory,
+then the operator's `.local/share` data directory. It acquires official Git
+sources at the exact registry commit, verifies the isolated package subpath,
+runs self-check, persists receipt and selection, and returns the verified
+workflow entrypoint. The consumer repository never holds package lifecycle
+state.
+
 Core's official registry binds an approved package ID and version to an exact
 repository and subpath, immutable commit and tree digest, manifest digest, and
 compatible core range. Each entry also carries data-only discovery metadata —

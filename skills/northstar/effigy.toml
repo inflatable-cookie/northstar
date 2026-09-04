@@ -7,4 +7,5 @@ alias = "northstar"
 [tasks]
 "check:agent-instructions" = [{ rhai = "scripts/check-agent-instructions.rhai" }]
 "check:language-packages" = [{ rhai = "scripts/check-language-packages.rhai" }]
+"language:route" = "bun run scripts/language-package-lifecycle.ts route {args}"
 "paseo:worktree" = [{ rhai = "scripts/paseo-worktree.rhai" }]

@@ -17,6 +17,7 @@ setup = ["health"]
 "check:agent-instructions" = [{ rhai = "skills/northstar/scripts/check-agent-instructions.rhai" }]
 "check:language-packages" = [{ rhai = "skills/northstar/scripts/check-language-packages.rhai" }]
 "check:language-package-routes" = "scripts/tests/language-package-routes/self-test.sh"
+"language:route" = "bun run skills/northstar/scripts/language-package-lifecycle.ts route {args}"
 "check:chatterbox-git" = "scripts/tests/chatterbox-git-isolation/self-test.sh"
 "paseo:worktree" = [{ rhai = "skills/northstar/scripts/paseo-worktree.rhai" }]
 "test:paseo-worktree" = [{ task = "paseo:worktree self-test" }]

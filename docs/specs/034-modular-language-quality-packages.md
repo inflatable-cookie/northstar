@@ -244,8 +244,11 @@ must reconstruct this exact file inventory and digest before package code runs.
 ### Operator-owned lifecycle state
 
 Package state never lives in a consumer repository. The host or acquisition
-adapter supplies one operator-owned state root. Northstar does not invent a
-global path when the host has not supplied one. Card 117 freezes two additional
+adapter supplies one operator-owned state root. The installed-skill adapter
+uses an explicit override, then `NORTHSTAR_LANGUAGE_PACKAGE_STATE_ROOT`, then
+the XDG data directory, then `~/.local/share/northstar/language-packages`.
+Other hosts may supply their own location but may not place state in the
+consumer. Card 117 freezes two additional
 schemas under `references/packages/`:
 
 - `operator-trust.schema.json` contains exact allowlist entries and revocations.

@@ -68,6 +68,35 @@ invalid and fail at registry parse, before any host invocation.
    documentation workflows continue normally. There is no embedded fallback
    and no substitute package.
 
+## Installed-skill runtime adapter
+
+The installed Northstar skill exposes the complete operator route:
+
+```text
+effigy --repo <installed-northstar-skill> northstar/language:route \
+  --consumer <target-repository-or-owning-scope> \
+  --language <language> \
+  --workflow <workflow> \
+  [--overlay <overlay>]
+```
+
+For an existing activation, replace `--language` with
+`--marker <exact-registered-marker>` and still name the requested workflow. The
+consumer path must be the scope whose `AGENTS.md` contains the exact marker
+pair. The adapter returns JSON containing the verified `installed_path` and
+`entrypoint_path`; open that entrypoint and follow it as the selected package
+authority.
+
+The adapter uses `NORTHSTAR_LANGUAGE_PACKAGE_STATE_ROOT` when set, then
+`XDG_DATA_HOME/northstar/language-packages`, otherwise
+`~/.local/share/northstar/language-packages`. `--state-root <path>` is an
+explicit per-call override. It creates the state directory with private
+permissions, fetches only the registry-pinned immutable commit, reconstructs
+the named package subpath, verifies tree and manifest digests, runs the declared
+self-check, writes an immutable receipt, and activates by atomic state update.
+Later routes are local-only. A transport, identity, self-check, or state failure
+stops only that workflow.
+
 Detection alone never routes or acquires. A `resolve` or `acquire_activate`
 request with detection intent stops without fetching, installing, or loading
 package content.

@@ -74,12 +74,14 @@ preflight. The source yields the transferred lane after pushed dispatch.
 - **Planning:** coherent architecture/contracts/roadmaps; no invented system
   behavior; ready cards only when rubric satisfied.
 - **Language quality workflow:** selected generically from explicit intent or
-  an exact registered activation marker, routed through an installed package's
-  declared entrypoint: package- and overlay-resolved scope, deterministic
+  an exact registered activation marker. Run the installed skill's
+  `northstar/language:route` task; it resolves or securely acquires the pinned
+  package into durable operator state and returns the declared entrypoint:
+  package- and overlay-resolved scope, deterministic
   finding-first records, authority-bounded repair, dirty-state preservation,
-  and repository-owned tool evidence. With no compatible package installed,
-  only that workflow stops, naming the identity and the local install route.
-  Ordinary coding never activates an audit.
+  and repository-owned tool evidence. Acquisition failure stops only that
+  workflow, naming the identity and local install route. Ordinary coding never
+  activates an audit.
 - **Planning readiness review:** read-only verdict on whether an existing
   project's planning is incomplete, drifted, materially ambiguous, or coherent,
   with one routed next step.

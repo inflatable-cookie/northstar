@@ -91,13 +91,16 @@ packages, not in this skill. Explicit audit-and-repair intent or an existing
 consumer activation marker routes through the generic installed-package route
 (`skills/northstar/references/packages/installed-package-route.md`): generic
 registry-owned selection, a visible acquisition notice, and execution of the
-package's declared entrypoint from its installed path. Consumer repositories
-keep owning their profiles, deviations, toolchains, and exclusions.
+package's declared entrypoint from its installed path. The installed core
+skill exposes this as `northstar/language:route`; it acquires a missing official
+Git pin into durable operator state before returning `entrypoint_path`.
+Consumer repositories keep owning their profiles, deviations, toolchains, and
+exclusions.
 
-With no compatible package installed, only the requested language workflow
-stops, naming the exact identity and the local installation route; all other
-Northstar workflows continue. Core carries no embedded language payload and no
-compatibility alias for one.
+If acquisition or verification fails, only the requested language workflow
+stops and names the exact identity and reason; all other Northstar workflows
+continue. Core carries no embedded language payload and no compatibility alias
+for one.
 
 Retired top-level skills (`northstar-setup`, `northstar-plan`,
 `northstar-recover`, `northstar-research`, `northstar-handoff`) were merged
@@ -134,11 +137,13 @@ Templates live under `skills/northstar/assets/templates/`.
   thread. The router and handoff mode forbid compaction-only or bare `continue`.
 - **Language quality:** explicit audit-and-repair or everyday authoring
   intent — or an exact registered activation marker in the consumer — routes
-  through installed language packages. Detection of a language alone never
-  installs or activates anything.
-- **Triage:** orchestrator and refresh conversations capture unresolved useful
-  threads in `docs/triage/YYYYMMDD-HHMMSS-<slug>.md`; cleanup and refresh promote,
-  merge, or remove them over time.
+  through the installed core skill's `language:route` task. It securely
+  acquires a missing official package into durable operator state and returns
+  its verified entrypoint. Detection of a language alone never installs or
+  activates anything.
+- **Triage:** Chatterbox, planning-delegate, refresh, and cleanup conversations
+  capture unresolved useful threads in `docs/triage/`; the mechanical
+  coordinator does not scan or reconcile them.
 
 ## Structural rules
 

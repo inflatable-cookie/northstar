@@ -5,6 +5,14 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 
 ## Open
 
+- **2026-09-04 — language-package consumer oracle copied generated trees
+  (resolved):** the disposable Jetstream fixture excluded `target`,
+  `node_modules`, and `.effigy` but still copied 39 GB of `artifacts/` plus the
+  generated `build/` tree; impact was a multi-minute dead-looking validation
+  step before any relevant assertion ran; fixed by excluding both generated
+  directories from the read-only policy/route fixture; affected surface was
+  `scripts/tests/language-package-routes/validate_consumer_reruns.py`.
+
 - **2026-09-03 — Rhai evaluator drops string values across helper boundaries:** in the
   bundled Rhai host, statement-position script-function calls, loop variables,
   and `replace` with a variable needle hand `()` to the next string operation

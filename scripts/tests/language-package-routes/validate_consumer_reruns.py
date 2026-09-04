@@ -99,7 +99,8 @@ def make_disposable_copy(sibling, work, name):
     dest = os.path.join(work, name)
     subprocess.run(["rsync", "-a", "--exclude", ".git", "--exclude",
                     "node_modules", "--exclude", "target", "--exclude",
-                    ".effigy", sibling.rstrip("/") + "/", dest + "/"],
+                    ".effigy", "--exclude", "artifacts", "--exclude",
+                    "build", sibling.rstrip("/") + "/", dest + "/"],
                    check=True)
     run(["git", "init", "-q"], cwd=dest)
     run(["git", "config", "user.name", "Card120 Rerun"], cwd=dest)
