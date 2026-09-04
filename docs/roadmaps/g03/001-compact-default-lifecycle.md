@@ -21,7 +21,9 @@ meaning, or material provenance.
    - 131 compacts Northstar's closed `g02` and currentness surfaces;
    - 132 makes the compact lifecycle the reusable default and retires posture
      variants.
-3. Chatterbox reconciles the complete milestone after both sibling cards merge.
+3. Both siblings merged. Card 132 has a ready, bounded root-README correction
+   because its repository-wide posture requirement remains unsatisfied.
+4. Chatterbox reconciles the complete milestone after that correction merges.
 
 ## Non-goals
 

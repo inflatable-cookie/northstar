@@ -17,7 +17,7 @@ that Northstar provides to consumer projects.
 
 - Active generation: [`roadmaps/g03/README.md`](./roadmaps/g03/README.md)
 - Active milestone: [`roadmaps/g03/001-compact-default-lifecycle.md`](./roadmaps/g03/001-compact-default-lifecycle.md)
-- Active frontier: [`roadmaps/g03/batch-cards/131-compact-g02-and-currentness.md`](./roadmaps/g03/batch-cards/131-compact-g02-and-currentness.md) and [`roadmaps/g03/batch-cards/132-make-compact-lifecycle-default.md`](./roadmaps/g03/batch-cards/132-make-compact-lifecycle-default.md) (card 130 merged)
+- Active frontier: [`card 132 root-README correction`](./roadmaps/g03/batch-cards/132-make-compact-lifecycle-default.md); initial sibling implementations are merged, milestone reconciliation remains open
 - Intake: [`triage/README.md`](./triage/README.md)
 - Execution friction: [`../PAPERCUTS.md`](../PAPERCUTS.md)
 

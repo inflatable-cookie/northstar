@@ -10,14 +10,15 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 | Goal | State | Governing refs | Next milestone |
 | --- | --- | --- | --- |
 | Replace permanent live-tree history with lifecycle-bound artifacts and lossless operational compaction. | active | spec 038, contract 001 | `g03.001` |
-| Make the compact lifecycle the only normal consumer posture. | ready behind foundation | spec 038 | `g03.001/132` |
+| Make the compact lifecycle the only normal consumer posture. | README correction ready | spec 038 | `g03.001/132` |
 | Reduce repeated protocol enumerations and retire genuinely redundant modes without merging distinct behavior blindly. | planned | spec 038, later usage evidence | pending after `g03.001` |
 | Keep unresolved operator feedback visible without pinning old generations open. | watch | spec 038, contract 001 | bounded watchlist below |
 
 ## Approved frontier
 
-- Card 130 merged.
-- Cards `g03.001/131` and `g03.001/132` are the active concurrent frontier.
+- Cards 130 and 131 merged; card 132's initial implementation also merged.
+- Only card `g03.001/132`'s bounded root-README correction is ready.
+- Chatterbox owns milestone reconciliation after that correction.
 
 ## Bounded watchlist
 
@@ -35,4 +36,4 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 
 ## Next task
 
-Complete concurrent siblings `g03.001/131` and `g03.001/132`.
+Complete card `g03.001/132`'s root-README correction, then reconcile `g03.001`.

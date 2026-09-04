@@ -1,6 +1,6 @@
 # 132 - Make Compact Lifecycle the Default
 
-Status: completed
+Status: ready; merged implementation requires README follow-up
 Owner: repo maintainers
 Created: 2026-09-04
 Master roadmap: `g03.001`
@@ -16,13 +16,13 @@ steady-state protocols.
 ## Approved dispatch manifest
 
 - **Lane:** `g03.001/132`
-- **State:** blocked-ready until card 130 merges; then ready
+- **State:** ready for the bounded post-merge README correction below
 - **Prerequisites:** card 130 merged and lifecycle checks green
 - **Completion:** reusable doctrine, templates, skills, setup, and checks expose
   one compact lifecycle with incremental adoption described only as migration;
   coordinator closeout synchronizes and verifies the local integration checkout
   after every merge
-- **Approved concurrent siblings:** card 131 after the shared prerequisite
+- **Approved concurrent siblings:** none; cards 130 and 131 are merged
 - **Serial edges:** card 130 before dispatch
 - **Worker class:** economical general/day-to-day implementation agent with
   documentation and deterministic-check competence; not an auditor, planner,
@@ -50,6 +50,42 @@ front doors. It also exclusively owns these deletion-coupled callers:
 `scripts/fixtures/readiness-map/**`. Card 132 must not edit them. Neither sibling
 may edit the other's paths. Any other direct caller outside these surfaces
 returns to Chatterbox.
+
+## Post-merge README correction
+
+Chatterbox ruling, 2026-09-05: spec 038's single-lifecycle decision and this
+card's original repository-wide oracle require root `README.md` to agree with
+the reusable setup doctrine. This is completion of approved intent, not a new
+posture choice or a weaker acceptance rule.
+
+PR #38 merged at `8de64926351a47273cd4be66c51f3708888899ef` after acceptance
+of `6cc2ac0f4443922cb5e209bb072a1130b6b857ab`. The accepted review left root
+README posture wording as follow-up. That exception did not satisfy the
+repository-wide row. Preserve both provider records and merge history.
+
+The remaining execution scope supersedes the broad initial path list above:
+
+- Own root `README.md` only for compact-lifecycle setup, posture, and directly
+  coupled onboarding wording. Reserve that exact path away from card 131.
+- Own this card's follow-up evidence. Chatterbox reserves the milestone, spec,
+  and currentness front doors for reconciliation.
+- Replace Baseline versus Strict and the posture-selection migration ladder
+  with the single compact lifecycle, consequence-triggered modules, and bounded
+  migration. Keep copy commands consistent with the shipped bundle.
+- Do not redesign the README or reopen other merged implementation surfaces.
+  A repository-wide search finding outside this scope returns to Chatterbox.
+- Resume the retained card-132 worker from synchronized current main for a new
+  follow-up PR. Reuse its retained independent reviewer; do not amend the merged
+  PR, rewrite history, or create a new implementation lane.
+- Validate the complete correction with `git diff --check`, `effigy qa:docs`,
+  and `effigy qa`. Review must test a fresh consumer's setup path against the
+  shipped kernel and search repository-wide for supported alternative postures.
+- Close the open acceptance row only after that evidence and independent review
+  support it. Record the follow-up PR, accepted head, merge commit, and limits
+  here; synchronize local main before closeout.
+
+All original safety and acceptance requirements remain in force. After this
+correction merges, return to Chatterbox for full `g03.001` reconciliation.
 
 ## Required work
 
@@ -79,7 +115,7 @@ returns to Chatterbox.
 ## Acceptance evidence and review oracle
 
 - [x] setup and routing expose one normal compact lifecycle;
-- [x] repository-wide search finds no supported alternative steady-state
+- [ ] repository-wide search finds no supported alternative steady-state
       posture; historical evidence may name old terms only where clearly
       non-authoritative;
 - [x] a new consumer can start small without being classified into a lighter
@@ -115,7 +151,7 @@ returns to Chatterbox.
 - Shipped one compact strict lifecycle as the single reusable Northstar default.
 - Retired baseline, light, lane-first, mixed, and full-strict posture variants as supported steady-state protocols.
 - Established standard core spine + consequence-triggered modules (specs, batch cards, guardrails, research, additional authority files) doctrine.
-- Removed and tightened two-spine wording across owned skill, setup, bundle, and template surfaces (`SKILL.md`, `assets/templates/README.md`, `assets/templates/docs.README.md.template`, `references/setup/workspace-container-example.md`, `template-bundle/README.md`, `template-bundle/contracts/README.md`, `bundle-docs/sections/09-standard-docs-spine.md`, `bundle-docs/sections/06-planning-and-contract-gates.md`, `bundle-docs/sections/07-delivery-framework-and-autonomy.md`). Repository-wide search confirms no supported alternative steady-state postures remain.
+- Removed and tightened two-spine wording across owned skill, setup, bundle, and template surfaces (`SKILL.md`, `assets/templates/README.md`, `assets/templates/docs.README.md.template`, `references/setup/workspace-container-example.md`, `template-bundle/README.md`, `template-bundle/contracts/README.md`, `bundle-docs/sections/09-standard-docs-spine.md`, `bundle-docs/sections/06-planning-and-contract-gates.md`, `bundle-docs/sections/07-delivery-framework-and-autonomy.md`). The repository-wide claim remains open: root `README.md` still publishes alternative postures.
 - Implemented mandatory post-merge local integration reconciliation in contract 001 and orchestrator mode with full behavioral coverage in `scripts/tests/post-merge-reconciliation/` (35 assertions across 8 scenarios: happy path, unverified provider merge, fetch failure, dirty checkout with 100% untouched working tree/index preservation, wrong branch, divergent unpushed commit preservation, head mismatch, and coordinator stale-head dispatch rejection).
 - Wired post-merge reconciliation behavioral test and posture label rejection into lifecycle checker (`scripts/lib/northstar-lifecycle-checker.rhai`).
 - Preserved all card-131-owned paths (`scripts/check-northstar-command-skills.rhai`, `scripts/test-northstar-repo-contract.rhai`, `scripts/lib/northstar-repo-contract-data.rhai`, `scripts/check-northstar-model-routing.rhai`, `scripts/fixtures/readiness-map/**`, `README.md`) untouched.

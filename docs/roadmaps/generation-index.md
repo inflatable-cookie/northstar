@@ -1,7 +1,7 @@
 # Roadmap Generation Index
 
 Status: active
-Updated: 2026-09-04
+Updated: 2026-09-05
 Mode: sequential
 
 ## Active generation
@@ -9,7 +9,7 @@ Mode: sequential
 - `g03`
 - Runway: `g03/README.md`
 - Active milestone: `g03.001`
-- Approved frontier: card 131 (compact g02 and currentness) and card 132 (make compact lifecycle default) executing concurrently after card 130 merge
+- Approved frontier: card 132 root-README correction; initial sibling implementations are merged
 
 ## Generation log
 
@@ -29,4 +29,4 @@ preservation oracle in spec 038 passes.
 
 ## Next task
 
-Complete concurrent siblings `g03.001/131` and `g03.001/132`.
+Complete card `g03.001/132`'s root-README correction, then reconcile `g03.001`.
