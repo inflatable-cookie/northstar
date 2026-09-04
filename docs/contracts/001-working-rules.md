@@ -1122,7 +1122,7 @@ Execution must stop when:
 - Semantic contradiction, misleading currentness, and historical-authority
   judgment remain review responsibilities until a real structured contract
   exists.
-- `docs/specs/archive/001-northstar-delivery-layer.md` exists and matches these rules.
+- `docs/specs/038-compact-default-lifecycle-and-generation-rollup.md` exists and matches these rules.
 - at least one live batch card exists and is tied to an active roadmap
   milestone
 - `effigy qa`

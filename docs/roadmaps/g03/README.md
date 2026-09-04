@@ -12,7 +12,7 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 | Replace permanent live-tree history with lifecycle-bound artifacts and lossless operational compaction. | active | spec 038, contract 001 | `g03.001` |
 | Make the compact lifecycle the only normal consumer posture. | ready behind foundation | spec 038 | `g03.001/132` |
 | Reduce repeated protocol enumerations and retire genuinely redundant modes without merging distinct behavior blindly. | planned | spec 038, later usage evidence | pending after `g03.001` |
-| Keep unresolved operator feedback visible without pinning old generations open. | watch | spec 037 | bounded watchlist below |
+| Keep unresolved operator feedback visible without pinning old generations open. | watch | spec 038, contract 001 | bounded watchlist below |
 
 ## Approved frontier
 

@@ -141,6 +141,14 @@ All 35 completed handoffs from closed `g01`/`g02` work removed (`docs/handoffs/2
 - `scripts/test-northstar-repo-contract.rhai`: Authority fixture uses active spec 038; added negative assertions for `g02/README.md` and spec 034; all 15 fixture tests pass.
 - `scripts/fixtures/readiness-map/**`: Re-anchored fixture frontmatter from removed spec 027 and `g02` roadmap to active spec 038 and `g03/001-compact-default-lifecycle.md`; all 5 fixture tests pass with expected frontier and negative cases.
 
+### Canonical citation corrections after exact-head review
+
+Reconciled remaining live citations to deleted pre-`g03` specs across live authority surfaces:
+- `docs/contracts/001-working-rules.md`: retargeted validation spec reference to active spec 038;
+- `docs/roadmaps/g03/README.md`: retargeted watchlist governing ref from spec 037 to spec 038 / contract 001;
+- `docs/architecture/system-inventory.md`: retargeted elements and interfaces citing deleted specs 001, 026, 030, 031–033, and 037 to current durable destinations (`001-working-rules`, `004-language-quality-pack`, `system-architecture.md`, `archive/g01.md`, and mode references);
+- `docs/contracts/004-language-quality-pack.md`: retargeted tree-identity definition reference from deleted spec 034 to this contract and system architecture.
+
 ### Validation
 
 - `effigy check:repo-contract` — PASS
