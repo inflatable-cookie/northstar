@@ -23,6 +23,7 @@ to adopt.
 - [specs/034-modular-language-quality-packages.md](./specs/034-modular-language-quality-packages.md)
 - [specs/035-chatterbox-intake-channel.md](./specs/035-chatterbox-intake-channel.md)
 - [specs/036-economical-orchestrator-coordination.md](./specs/036-economical-orchestrator-coordination.md)
+- [specs/037-chatterbox-led-planning-and-mechanical-coordination.md](./specs/037-chatterbox-led-planning-and-mechanical-coordination.md)
 - [triage/README.md](./triage/README.md)
 - [roadmaps/generation-index.md](./roadmaps/generation-index.md)
 - [handoffs/README.md](./handoffs/README.md)
@@ -57,18 +58,20 @@ Northstar system:
 - work should not be called done without real evidence
 - agents should be able to continue through ready batch cards without needing
   repeated "continue" prompts from the operator
-- spec 036's economical coordinator default is implemented: material discovery
-  moves to operator-confirmed chatterbox packets, canonical promotion stays
-  bounded and mechanical, and substantive PR review belongs to independent
-  child reviewers behind a coordinator merge gate. PR 32 merged as `61d4cc2`,
-  the installed skill matches its 113-file tracked payload, and the ten-PR
-  trial remains blocked on its observation packet and stop date
+- spec 037 supersedes the first economical-coordinator split after live use
+  exposed a roughly twenty-minute promotion loop before actual-worker dispatch.
+  Chatterbox now owns human discovery, canonical planning promotion, triage,
+  dependency design, and approved parallel frontiers. The coordinator will
+  consume that plan mechanically, dispatch actual workers/reviewers, report,
+  yield, and apply the merge gate. `g02.053/128` is ready to implement the
+  runtime/doctrine/template/check surfaces before the corrected card-126 trial
 - `g02.041/109` repaired partial Rust evidence collection and merged; Signal
   owns the originating papercut closure
-- dependency-frontier, parallel-first worker scheduling is the orchestrator
-  default: every safe ready lane launches without a global thread budget, and a
-  serial lane must name its dependency, shared surface, or unresolved authority;
-  provider/profile availability pauses or reroutes only the affected lane
+- dependency-frontier design is Chatterbox planning. The canonical dispatch
+  manifest names approved parallel lanes and serial edges; the coordinator
+  verifies current facts and launches the complete approved frontier without a
+  global thread budget. Provider/profile availability pauses or reroutes only
+  the affected lane
 - `g02.042/110` delivered that default and merged through PR 14 at
   `8cfa0ae`
 - `g02.043/111` implemented economical day-to-day worker routing; frontier
@@ -131,11 +134,8 @@ Northstar system:
   matches the 111-file generic core.
 - unresolved conversational observations should be captured in `triage/` before
   a deeper branch is pursued, then managed during refresh and cleanup
-- chatterbox intake is implemented as spec 035 / `g02.050` / card 124.
-  Independent operator-facing threads write unique `docs/triage/` notes on the
-  shared checkout and report them to the operator without starting an
-  orchestrator turn in v1; they must not implement, promote, or dispatch.
-  The `g02.052`/card 127 correction makes spawned chatterboxes parent-
-  attached sibling agent tabs in the coordinator's workspace instead of
-  separate `local` workspaces; PR 33 merged as `7d3bfd1` and the installed
-  skill is current.
+- spec 035's intake-only Chatterbox is superseded by spec 037. Chatterbox is the
+  primary human-facing planner and canonical promoter; optional planning
+  delegates use the lightweight unique-triage shape and report to Chatterbox.
+  The existing sibling-tab transport from `g02.052/127` remains the base for
+  same-workspace planning conversations.

@@ -1,6 +1,7 @@
 # 026 - Orchestrator Thread And Worker PR Loop
 
-Status: active
+Status: superseded for current planning/coordination topology by spec 037;
+retained as implementation history
 Owner: repo maintainers
 Created: 2026-08-16
 Updated: 2026-09-04
@@ -15,6 +16,13 @@ authority.
 
 Governing architecture: `docs/architecture/system-architecture.md`
 Governing contracts: `docs/contracts/001-working-rules.md`, `docs/contracts/002-agent-local-paths.md`
+
+> Current authority: use
+> `docs/specs/037-chatterbox-led-planning-and-mechanical-coordination.md` for
+> Chatterbox, planning-delegate, promotion, parallel-frontier, coordinator,
+> review-child placement, turn-lifecycle, and escalation behavior. The body
+> below records the earlier rollout and must not authorize new lanes where it
+> conflicts with spec 037.
 
 ## Problem
 

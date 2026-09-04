@@ -1,6 +1,7 @@
 # 036 - Economical Orchestrator Coordination
 
-Status: active; card 125 implemented, card 126 trial pending
+Status: superseded by spec 037; card 125 records the initial implementation and
+card 126 will observe the corrected model
 Owner: repo maintainers
 Created: 2026-09-04
 Updated: 2026-09-04
@@ -8,6 +9,12 @@ Depends on: `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`,
 `docs/specs/035-chatterbox-intake-channel.md`
 Governing architecture: `docs/architecture/system-architecture.md`
 Governing contracts: `docs/contracts/001-working-rules.md`
+
+> Current authority: use
+> `docs/specs/037-chatterbox-led-planning-and-mechanical-coordination.md`. The
+> body below records the first economical-coordinator split; its promotion-
+> worker, coordinator-planning, and dedicated-review-workspace rules are no
+> longer current.
 
 ## Problem
 
@@ -171,4 +178,3 @@ model names, prices, or subscription limits into reusable policy.
 - [ ] capability language stays portable and names no local profile;
 - [ ] a separate ten-PR trial card is compiled but not auto-started;
 - [ ] source/install parity, docs QA, full QA, and `git diff --check` pass.
-

@@ -1,6 +1,7 @@
 # 051 - Economical Orchestrator Coordination
 
-Status: card 125 complete; card 126 blocked on observation setup
+Status: initial model superseded by g02.053; card 125 complete and card 126
+retained as the corrected-model observation lane
 Owner: repo maintainers
 Created: 2026-09-04
 Updated: 2026-09-04
@@ -57,5 +58,5 @@ semantic role and merge boundaries remain exact-head review evidence.
 
 ## Next task
 
-Publish card 126's observation packet and stop date. The implementation merge,
-installed-skill refresh, and Paseo coordinator profile are complete.
+Execute g02.053/card 128 before starting card 126's corrected-model observation
+window. Do not resume the failed promotion-worker loop.

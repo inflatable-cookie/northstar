@@ -13,8 +13,7 @@ worked through.
 - [027 - Northstar Native Pre-Execution Discovery](./027-northstar-native-pre-execution-discovery.md)
 - [029 - Northstar Long-Horizon Planning](./029-northstar-long-horizon-planning.md)
 - [030 - Conversational Triage And Docs Cleanup](./030-conversational-triage-and-docs-cleanup.md)
-- [035 - Chatterbox Intake Channel](./035-chatterbox-intake-channel.md)
-- [036 - Economical Orchestrator Coordination](./036-economical-orchestrator-coordination.md)
+- [037 - Chatterbox-Led Planning And Mechanical Coordination](./037-chatterbox-led-planning-and-mechanical-coordination.md)
 - [Related translation memo](../../bundle-docs/research/translation-memos/matt-pocock-skills-audit-to-northstar.md)
 - [Rust quality translation memo](../../bundle-docs/research/translation-memos/rust-quality-skills-and-audit.md)
 - [TypeScript/Svelte quality translation memo](../../bundle-docs/research/translation-memos/typescript-quality-and-svelte-overlay.md)
@@ -22,6 +21,7 @@ worked through.
 ## Promoted planning history
 
 - [034 - Modular Language Quality Packages](./034-modular-language-quality-packages.md) — promoted into system architecture and contract 004; retained through roadmap g02.048 extraction
+- [026 - Orchestrator Thread And Worker PR Loop](./026-orchestrator-thread-and-worker-pr-loop.md), [035 - Chatterbox Intake Channel](./035-chatterbox-intake-channel.md), and [036 - Economical Orchestrator Coordination](./036-economical-orchestrator-coordination.md) — initial delivery topology retained as history; spec 037 is current
 
 ## Rules
 

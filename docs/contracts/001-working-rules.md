@@ -397,7 +397,87 @@ Work in this repo is not done unless:
 - When that upper bound is reached cleanly, use `budget-exhausted` instead of
   implying that a hard stop condition fired.
 
-### Orchestrator and worker boundary
+### Chatterbox-led planning and mechanical coordination
+
+Spec 037 governs the current planning and delivery topology.
+
+- **Chatterbox** is the primary operator-facing planning authority. It owns
+  discovery, research direction, triage reconciliation, canonical planning
+  promotion, lane/dependency design, and the approved parallel frontier.
+- After explicit operator confirmation, Chatterbox edits, validates, commits,
+  and pushes the coherent canonical planning batch directly on the integration
+  branch. It does not dispatch a promotion worker and does not implement
+  product/runtime changes, accept reviews, or merge implementation PRs.
+- A **planning delegate** is an optional same-workspace conversation for one
+  bounded issue. It writes only unique triage notes under the exact-path Git
+  isolation rule, may use bounded read-only research help, and reports its note
+  to Chatterbox. It does not edit canonical planning, open a planning PR,
+  contact the coordinator, promote, implement, review, or merge.
+- Chatterbox owns every triage disposition. Raw triage and external intake are
+  never coordinator execution authority. Chatterbox reconciles them against
+  current authority, resolves conflicts with the operator, and promotes or
+  retains them.
+- Chatterbox publishes each lane's outcome, prerequisites, mutable paths,
+  reserved closeout surfaces, approved concurrent siblings, serial edges,
+  worker capability, acceptance evidence, review oracle, and stop conditions.
+  It names the approved current frontier.
+- The **coordinator** checks only current facts: promoted commit, prerequisite
+  completion, path/workspace/branch collisions, transport/profile availability,
+  repository gates, and operator pauses. It launches the complete approved
+  frontier, manages worker/reviewer identities and revisions, applies the merge
+  gate, merges, and closes out. It does not design lanes, dependency edges, or
+  parallel groups and does not launch promotion-only workers.
+- An unexpected factual conflict pauses only its affected lane and returns to
+  Chatterbox through a context-complete escalation. Missing dependency or
+  ownership design is planning; the coordinator must not fill it.
+- Chatterbox may send a named coordinator one provenance-labelled background
+  message. `operator-confirmed direction` carries operator authority;
+  `Chatterbox recommendation` remains intake; `administrative notice` carries
+  routing facts. Chatterbox resolves identity once, sends once, reports
+  delivery, and does not poll. It never uses this channel to dispatch, cancel,
+  resume, review, or merge children itself.
+- Coordinator turns are event-bounded. After an operator event or child
+  notification, perform all immediately available coordination, report state
+  and identities, then yield. Never poll, invoke a wait primitive, hold the turn
+  open for a child, or repeatedly rescan unchanged state. Finish notifications
+  start the next bounded turn.
+- A complete ready lane should reach child creation in under two minutes when no
+  conflict or transport failure exists. This is a dogfood diagnostic threshold,
+  not a hard provider timeout.
+- A review child is created by the coordinator in the existing worker workspace
+  using the worker `workspaceId`, remains a visible parent-attached child, and
+  keeps finish notifications enabled. Worker and reviewer use a serial lease:
+  the worker is idle, `HEAD` equals the PR head, and index/tracked worktree are
+  clean before and after review. The reviewer may inspect and run checks but
+  cannot edit tracked files, commit, push, or change branches. Do not create a
+  review-only workspace or fall back to the coordinator checkout.
+- The agent that discovers an operator-owned blocker supplies a plain-language
+  escalation containing lane/PR/head state, observed versus intended behavior,
+  why operator authority is required, impact, options, recommendation when
+  supported, one exact question, paused state, next action, and supporting
+  links. The operator must be able to answer without opening a blocker log or
+  PR thread. Missing or opaque explanations return to the discovering child;
+  the coordinator does not reconstruct their semantics.
+- Exact-head provider verdict, resolved findings, required checks, intended
+  base/ancestry, mergeability, repository rules, and operator pauses remain the
+  merge gate.
+
+The normal path is:
+
+`operator <-> Chatterbox -> canonical ready plan + approved frontier -> coordinator -> workers -> review children -> coordinator gate/merge`
+
+Optional parallel planning is:
+
+`operator <-> planning delegate -> unique triage -> Chatterbox reconciliation/promotion`
+
+There is no normal promotion-worker path.
+
+### Superseded orchestrator and worker boundary
+
+The remainder of this subsection records the specs 026/035/036 rollout. Spec
+037 and the current subsection above override it wherever planning,
+planning-delegate, promotion, frontier ownership, coordinator lifecycle,
+review-child placement, or escalation behavior conflicts.
 
 For material work that benefits from a separate implementation context, use the
 following authority split:

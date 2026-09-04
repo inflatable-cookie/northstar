@@ -368,7 +368,46 @@ glossary. Prototypes and questionnaires can inform decisions but cannot change
 execution authority. All four routes remain provider-neutral, plan-only, and
 non-mutating by default.
 
-## Thread topology
+## Chatterbox-led planning topology
+
+Spec 037 separates human planning from mechanical coordination:
+
+`operator <-> Chatterbox -> canonical plan + approved frontier -> coordinator -> worker workspaces -> reviewer tabs in worker workspaces -> coordinator gate/merge`
+
+Chatterbox is the primary planning and promotion node. It owns research
+direction, reconciliation of triage and external evidence, canonical planning
+writes, the dependency graph, mutable-surface partition, and the approved
+parallel frontier. Operator confirmation gates material promotion. Chatterbox
+commits the coherent planning state directly; no promotion-only worker sits
+between conversation and readiness.
+
+The optional parallel intake path is:
+
+`operator <-> planning delegate/current workspace -> unique triage note -> Chatterbox reconciliation/promotion`
+
+Delegates may gather bounded read-only research but have no canonical,
+coordinator, PR, or execution edge. Chatterbox owns triage disposition and may
+send one provenance-labelled direction to the named coordinator. Confirmed
+operator direction carries authority; recommendations remain intake.
+
+The coordinator consumes the published plan. It verifies factual prerequisites
+and launches the complete approved frontier; it does not design lanes or decide
+parallelism. Its turns begin with an operator event or child notification and
+end after all immediately available coordination is reported. No polling or
+open-turn waiting edge exists.
+
+Each worker retains its isolated workspace. Its independent reviewer is a
+coordinator-owned visible agent tab placed in that same workspace under a
+serial clean exact-head lease. Review produces a provider verdict; the
+coordinator checks the exact-head merge gate. A blocker needing the operator
+travels as a self-contained escalation capsule produced by the discovering
+child, not as an unexplained log reference.
+
+## Superseded thread topology
+
+The remainder of this section records the specs 026/035/036 rollout. Spec 037
+and the topology above override its planning-delegate, Chatterbox, promotion,
+frontier-ownership, coordinator-turn, reviewer-workspace, and escalation edges.
 
 For material work that benefits from a separate implementation context, the
 preferred split is:

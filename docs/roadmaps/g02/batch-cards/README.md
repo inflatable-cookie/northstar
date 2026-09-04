@@ -76,6 +76,7 @@ merged as `69e4d5d`, card 119 merged as `256d0f7`, and card 122 merged as
 `ddaae0d`.
 Paseo worker-parentage correction `g02.049/123` merged as `7ebaa9c`; modular
 language-package extraction closed through card 120 and PR 30 at `aa9a005`.
-Chatterbox intake `g02.050/124` merged through PR 31 at `d1b162e`. Economical
-orchestrator coordination `g02.051/125` is ready; card 126 is blocked behind
-its merge and installed-skill refresh.
+Chatterbox intake `g02.050/124` merged through PR 31 at `d1b162e`. The initial
+economical-coordinator model `g02.051/125` merged but failed live use through a
+recursive promotion loop. Spec 037 and `g02.053` supersede it; card 128 is ready
+for direct implementation-worker dispatch. Card 126 waits for that correction.

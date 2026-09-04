@@ -114,7 +114,12 @@ merged as `aa9a005`, and the installed skill was refreshed to the 111-file
 generic core. Spec 035 / `g02.050` / card 124 merged through PR 31 as `d1b162e`.
 Spec 036 / `g02.051` delivered the economical coordinator split through card
 125 and PR 32 (`61d4cc2`). The installed skill matches the 113-file tracked
-payload; card 126 is blocked on its observation packet and stop date. The
+payload. Live use then exposed a roughly twenty-minute recursive promotion path,
+coordinator polling, opaque escalation, and no actual-worker dispatch before
+operator cancellation. Spec 037 / `g02.053` supersedes that topology:
+Chatterbox owns canonical promotion and approved-frontier design; the
+coordinator dispatches actual workers mechanically. Card 128 is ready, and card
+126 waits for its merge before observing the corrected model. The
 `g02.052` sibling-tab correction (card 127) merged through PR 33 as `7d3bfd1`;
 the installed skill is current.
 

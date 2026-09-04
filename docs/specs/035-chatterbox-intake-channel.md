@@ -1,6 +1,6 @@
 # 035 - Chatterbox Intake Channel
 
-Status: active
+Status: superseded by spec 037; retained as implementation history
 Owner: repo maintainers
 Created: 2026-09-03
 Updated: 2026-09-04
@@ -8,6 +8,12 @@ Depends on: `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`,
 `docs/specs/030-conversational-triage-and-docs-cleanup.md`
 Governing architecture: `docs/architecture/system-architecture.md`
 Governing contracts: `docs/contracts/001-working-rules.md`
+
+> Current authority: Chatterbox is now the primary planning and canonical-
+> promotion role defined by
+> `docs/specs/037-chatterbox-led-planning-and-mechanical-coordination.md`. The
+> intake-only body below records the initial implementation and must not be used
+> as current authority where it conflicts with spec 037.
 
 ## Problem
 
