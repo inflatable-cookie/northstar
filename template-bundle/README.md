@@ -68,9 +68,9 @@ language workflow stops. The stop names the exact package identity and the
 local installation route; every other Northstar workflow continues. There is
 no embedded fallback and no compatibility alias in core.
 
-## Standard docs spines
+## Standard docs spine
 
-Baseline Northstar repos should use:
+Every Northstar repository uses the standard core spine:
 
 - `vision/`
 - `architecture/`
@@ -79,39 +79,30 @@ Baseline Northstar repos should use:
 - `logs/`
 - `handoffs/`
 - `triage/`
+- `policy/`
 
-That baseline mode is enough for normal routing, clear active-lane tracking,
-friendly fresh-thread takeovers, lightweight conversational capture, and shorter
-bounded work.
+The standard core spine handles direction, realized shape, durable rules,
+sequencing, evidence, friendly handoffs, and lightweight conversational capture.
 
-Stricter repos should keep the baseline spine and also use:
+Add consequence-triggered modules when specific conditions require them, rather
+than choosing a separate posture:
 
-- `architecture/product-guardrails.md`
-- `contracts/contract-index.md`
-- `contracts/001-working-rules-template.md`
-- `contracts/003-agent-instruction-surface-template.md`
-- `specs/`
+- `architecture/product-guardrails.md` -- when explicit execution constraints
+  and negative guardrails are required
+- `contracts/contract-index.md` -- when multiple contracts need formal indexing
+- `contracts/001-working-rules-template.md` -- for explicit execution grammar,
+  ready-state checks, and stop conditions
+- `contracts/003-agent-instruction-surface-template.md` -- when customizing the
+  AGENTS instruction surface
+- `specs/` -- when provisional design shaping is needed before promoting durable
+  outcomes into architecture/contracts
+- `roadmaps/gNN/batch-cards/` -- for step-by-step execution detail under active
+  roadmap milestones
+- `research/` -- when comparative or source-backed exploration is needed before
+  commitments
 
-Use the stricter spine when the repo needs the fuller execution layer:
-continuation envelopes, lane budgets, pause signals, and batch-card-driven
-autonomy that should stay explicit in file state.
-
-In a mature baseline repo, that stricter layer can be adopted lane-first for
-the active lane that actually needs it. Treat that as a normal migration
-pattern, not a half-complete repo state.
-
-Where a project is intended to live under the full strict Northstar doctrine,
-that lane-first posture should be treated as the way in, not the final resting
-state.
-
-The expected migration is:
-
-1. baseline posture
-2. lane-first stricter adoption
-3. expanding strict coverage
-4. full strict compliance
-
-Treat mixed posture as migration state, not the desired long-term end state.
+Starting small with the core spine does not classify a project into a lighter
+protocol; it is already the compact Northstar lifecycle.
 
 ## Nested Docs-Authority Mode
 
@@ -121,7 +112,7 @@ orchestration container and one nested repo clearly owns planning.
 
 In that shape:
 
-- keep the full baseline or stricter spine in the nested authority repo
+- keep the standard spine in the nested authority repo
 - keep the workspace root lean and link clearly into the authority repo
 - adapt native Effigy docs checks so file paths and docs-policy config are
   rooted correctly for the nested authority
@@ -129,9 +120,9 @@ In that shape:
 Do not treat this as a bespoke exception. It is a recurring setup mode for
 multi-repo systems.
 
-## Strict-compliance migration pattern
+## Incremental adoption pattern
 
-When a mature repo is moving toward full strict compliance, keep that migration
+When a mature repo is adopting the compact lifecycle, keep that migration
 inside the normal planning spine rather than inventing a detached governance
 surface.
 
@@ -143,16 +134,15 @@ Use:
 
 That migration spec should record:
 
-- current posture
-- satisfied checkpoints
+- satisfied compact lifecycle checkpoints
 - blocking gaps
-- whether mixed posture is still valid migration state or has become drift
+- whether migration state is still deliberate or has drifted
 - current tranche
 - next tranche
 - the evidence needed to close the current tranche
 
 Use the roadmap milestone to sequence the actual migration work and the logs to
-prove each closed tranche.
+prove each closed tranche. Do not invent a permanent mixed posture.
 
 ## Optional add-on folders
 
@@ -177,21 +167,21 @@ Section-local template folders such as `docs/roadmaps/templates/`, `docs/logs/te
   (when multi-repo), and `contracts/contract-index.md` as planning gate
   artifacts, not optional niceties.
 - Treat `contracts/001-working-rules-template.md` as the copy-ready starting
-  point for stricter repos that need an explicit execution grammar.
+  point for projects that need an explicit execution grammar.
 - Treat `specs/` as a planning add-on: use it when a change needs provisional
   shaping before its durable outcomes are promoted into architecture/contracts.
 - Treat specs as provisional planning surfaces rather than permanent authority:
   keep them while a lane is active or their history is still useful, and archive
   or remove them when they no longer add value beyond the promoted canonical
   surfaces.
-- For stricter projects, `architecture/product-guardrails.md` should be treated
-  as part of the default working surface rather than an optional extra.
+- Treat `architecture/product-guardrails.md` as part of the default working
+  surface rather than an optional extra when boundary rules must be explicit.
 - Keep research comparative, source-backed, and separate from architecture/roadmaps until translation memos are explicit.
 - Enforce clean migrations: no compatibility shim files in deprecated folders; update references and remove legacy files in the same batch. For code refactors, **before v1.0** avoid compatibility aliases and silent fallbacks and escalate breaking changes to the operator; **at v1.0+** default to preserving expected stable behavior unless policy says otherwise (see `contracts/001-working-rules-template.md`).
 - Treat per-project `meta/` docs as deprecated; extract useful content and link to Northstar docs.
 
 Examples should be seeded inside the relevant section content rather than in a separate top-level examples directory.
-The architecture and contracts sections include strict-planning specimens to
+The architecture and contracts sections include planning specimens to
 show how system inventory, repo authority, and contract readiness should work in
 practice.
 The roadmap and logs sections include a worked replan sequence showing how a
@@ -213,7 +203,7 @@ allowlists and internal writing-style guidance.
 
 ## Operating posture
 
-Northstar defaults to lean governance:
+Northstar defaults to lean, strict execution:
 - batch-based logging, not per-task logging
 - problem-led research, not collection-building for its own sake
 - manual-first evidence, automation only when recurring pain justifies it
@@ -222,10 +212,9 @@ Northstar defaults to lean governance:
 - clear active queue + backlog separation to prevent roadmap sprawl
 - specs are provisional; architecture and contracts are the canonical execution
   surfaces once a design is accepted
-- strict planning gates when execution spans multiple repos or high-risk seams:
-  stop on planning gaps instead of making up missing behavior
-- use the stricter docs spine when the project needs tighter guardrails and
-  longer autonomous runs
-- where the project is meant to live under the strict doctrine, move from the
-  first stricter lane toward project-level full compliance deliberately rather
-  than leaving mixed posture to drift
+- strict planning gates: stop on planning gaps instead of making up missing
+  behavior
+- one compact lifecycle default: the core spine handles normal execution, with
+  consequence-triggered modules added when needed
+- incremental adoption moves mature projects into the compact lifecycle in
+  bounded tranches without creating a permanent mixed posture

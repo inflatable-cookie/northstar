@@ -19,7 +19,7 @@ One-page reference for terms used across Northstar docs.
 **Roadmaps**
 : Turnkey milestone plans derived from vision, architecture, and contracts.
   Name the batch sequence for a material slice of work — typically several
-  batches and, in strict posture, several batch cards — not one agent turn.
+  batches and, when batch cards are used, several batch cards — not one agent turn.
   Use checkbox task lists in `## Execution Plan`, `## Goals`, and `## Acceptance
   Criteria`. Compiled after specs are promoted.
 
@@ -36,19 +36,16 @@ One-page reference for terms used across Northstar docs.
   are not execution authority, and must be promoted, merged, or removed over
   time.
 
-## Posture and Adoption
+## Lifecycle and Adoption
 
-**Baseline**
-: The standard seven-folder spine: `vision/`, `architecture/`, `contracts/`, `roadmaps/`, `logs/`, `handoffs/`, and `triage/`. Enough for normal routing, clear active-lane tracking, conversational capture, and dependable fresh-thread takeovers.
+**Compact lifecycle**
+: Northstar's single operating model. One compact strict lifecycle combining the standard seven-folder docs spine with consequence-triggered modules (specs, product guardrails, research) and execution protections (ready-state rubric, review oracles, fail-closed stops). Former alternative steady states (baseline, light, lane-first, mixed, full-strict) are retired.
 
-**Strict**
-: Baseline plus additional guardrails: `contracts/contract-index.md`, `contracts/001-working-rules-template.md`, `architecture/product-guardrails.md`, `specs/`. Used when execution spans high-risk boundaries or needs longer autonomous runs.
+**Incremental adoption**
+: Bounded migration of an existing mature repository into the compact lifecycle in explicit tranches. Migration state is not a permanent second protocol.
 
-**Posture**
-: The current compliance level of a repo. A repo may be baseline, strict, or in migration between them.
-
-**Lane-first adoption**
-: Adopting strict posture for one active lane first, then expanding. The normal migration path, not a half-complete state.
+**Posture (historical)**
+: Former classification into baseline, strict, or mixed operating protocols. Retired in favor of one compact lifecycle.
 
 ## Execution and Workflow
 

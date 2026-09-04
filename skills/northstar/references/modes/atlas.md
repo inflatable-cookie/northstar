@@ -23,7 +23,7 @@ Do not use Atlas for a small change, a single seam, a currentness audit, or a
 coherent plan that only needs milestones. Route those requests to the normal
 planning, architecture-refocus, readiness-review, or roadmap-compilation mode.
 
-## Authority and posture
+## Authority and principles
 
 Atlas is plan-only and operator-owned. It may inspect and elicit direction; once
 that direction is supplied or confirmed, it may offer options and synthesis. It

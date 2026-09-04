@@ -1,6 +1,6 @@
 # Product Guardrails
 
-**Type: REQUIRED** (strict posture) -- Define execution constraints for strict-posture repos.
+**Type: REQUIRED** -- Define execution constraints and negative boundaries for the repository.
 
 Status: draft
 Owner: <owner>

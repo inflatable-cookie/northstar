@@ -11,9 +11,9 @@ Leave the planning surfaces coherent again before execution resumes.
 
 1. Identify the contract, authority, or promoted-architecture change that
    invalidated the old plan.
-2. Classify whether the repo should end this pass as `strict-ready`,
-   `strict-paused`, `migration`, or `drifted` instead of assuming it returns to
-   execution automatically.
+2. Classify whether the repo should end this pass as `ready`, `paused`,
+   `migration`, or `drifted` instead of assuming it returns to execution
+   automatically.
 3. Update the affected contract first, or record a contract delta in the log
    flow when the change is still under review.
 4. Propagate the change into architecture, system inventory, repo authority

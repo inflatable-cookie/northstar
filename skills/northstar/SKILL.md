@@ -113,7 +113,7 @@ routine tool prompts; it does not expand the child's Northstar authority.
   required change posted on the provider review surface before chat summary.
 - **Research:** promoted decisions in architecture/contracts, not stranded memos.
 - **Recovery:** trustworthy planning surfaces and canonical refs restored.
-- **Normalize:** baseline or strict spine installed/maintained; Effigy-first QA.
+- **Normalize:** compact lifecycle spine installed/maintained; Effigy-first QA.
 - **Orchestrator:** mechanical delivery management as the default job —
   parallel-first dispatch of the whole approved ready frontier without a global
   thread budget, lane-local provider/profile routing, diversified economical

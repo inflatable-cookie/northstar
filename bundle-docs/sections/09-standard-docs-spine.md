@@ -25,26 +25,27 @@ This is the smallest standard spine that still gives a repo clear direction,
 realized structure, hard rules, execution sequencing, evidence, conversational
 capture, and a dependable place for fresh-thread handoffs.
 
-## Stricter Spine
+## Consequence-Triggered Modules
 
-Use the stricter spine when the repo is long-running, autonomy-sensitive,
-multi-surface, or otherwise prone to drift.
+The core standard spine handles direction, realized shape, durable rules,
+sequencing, evidence, handoffs, and conversational capture.
 
-That mode keeps the baseline spine and adds:
+Add consequence-triggered modules when specific conditions require them,
+rather than creating a separate posture:
 
-- `docs/architecture/product-guardrails.md`
-- `docs/contracts/contract-index.md`
-- `docs/contracts/001-working-rules.md`
-- `docs/specs/README.md`
-- `docs/specs/templates/`
+- `docs/architecture/product-guardrails.md` -- when explicit execution constraints
+  and negative guardrails are required
+- `docs/contracts/contract-index.md` and `docs/contracts/001-working-rules.md` --
+  for formal contract coverage and execution grammar
+- `docs/specs/README.md` and `docs/specs/templates/` -- when provisional shaping
+  is needed before promoting durable outcomes into architecture/contracts
+- `docs/roadmaps/gNN/batch-cards/` -- for step-by-step execution detail under
+  active roadmap milestones
+- `docs/research/` -- when comparative or source-backed exploration is needed
+  before architecture or roadmap commitments
 
-In a mature baseline repo, that stricter surface may be introduced lane-first
-for the active lane that actually needs it instead of forcing an all-at-once
-repo-wide rewrite.
-
-Treat that as a migration pattern, not a permanent excuse to avoid full
-stricter compliance where the project is expected to run under the strict
-Northstar framework.
+Starting small with the core spine does not classify a project into a lighter
+protocol; it is already the compact Northstar lifecycle.
 
 ## Surface Roles
 
@@ -77,23 +78,19 @@ Treat that as a normal Northstar mode when:
 
 In that shape:
 
-- the nested authority repo still carries the baseline or stricter spine
+- the nested authority repo still carries the standard spine
 - workspace-root front doors should point clearly into the authority repo
 - native Effigy docs checks must be wired for the nested root deliberately
 - setup should not frame this as a one-off exception
 
 ## Rules
 
-- Do not treat the stricter spine as optional when the repo needs longer
-  autonomous runs or tighter anti-drift guardrails.
-- Do not install `specs/` mechanically on tiny repos that do not need
-  provisional planning.
-- Do not describe the baseline spine as if it carries the full continuation,
-  lane-budget, and pause-signal model; that stricter autonomy state belongs in
-  repos that also carry `specs/` and batch cards.
-- Do not assume a mature baseline repo must switch all lanes at once; lane-
-  first adoption is valid when the need is local to one active lane.
-- Do not leave `specs/` present without also making the promotion rule clear.
+- Do not install `specs/` mechanically on repos that do not need provisional
+  planning; add them when material changes require shaping before promotion.
+- Do not describe a repo without batch cards as carrying full
+  continuation-envelope automation; batch cards carry step detail when explicit
+  autonomy state is needed.
+- Do not leave `specs/` present without making the promotion rule clear.
 - Do not let setup invent a bespoke docs structure when the standard spine is
   enough.
 - Do not force a workspace root to imitate a docs repo when a nested authority
@@ -101,35 +98,32 @@ In that shape:
 - Do not assume native Effigy docs-policy tasks written for a root-owned
   `docs/` spine will work unchanged inside a nested authority repo.
 
-## Migration posture
+## Incremental adoption
 
-When a project is expected to reach full strict compliance:
+When an existing mature repo adopts the compact lifecycle:
 
-- baseline mode is the starting point
-- lane-first stricter adoption is the proving step
-- the stricter spine should then expand to become the normal working surface
+- adopt the standard spine in bounded tranches
+- add consequence-triggered modules as needed
+- maintain the migration inside the normal planning spine
 
-Do not treat lane-first adoption as sufficient forever when the project is
-meant to live under the strict framework.
+Do not treat mixed-mode operation as a permanent state. Incremental adoption is
+a migration path, not a second steady-state protocol.
 
 ## Migration audit and rollout pattern
 
-When a mature repo is moving from baseline or lane-first posture to full strict
-compliance, keep that migration inside the standard spine rather than in a
-separate control surface.
+When a mature repo is adopting the compact lifecycle, keep that migration
+inside the standard spine rather than in a separate control surface.
 
 Use:
 
-- one active migration spec
-- one active roadmap milestone
+- one active migration spec or roadmap milestone
 - normal batch logs for completed migration tranches
 
-The migration spec should record:
+The migration planning artifact should record:
 
-- current posture
 - satisfied checkpoints
 - blocking gaps
-- whether mixed posture is still a valid migration state or has become drift
+- whether migration state is still deliberate or has drifted
 - current tranche
 - next tranche
 - tranche-close evidence
@@ -143,10 +137,10 @@ dependencies without becoming the live thread pointer.
 
 ## Template Impact
 
-The template bundle should make both modes copy-ready:
+The template bundle makes the compact lifecycle copy-ready:
 
-- the baseline spine should be obvious from the section layout
-- the stricter spine should have concrete starter files, not just doctrine
+- the standard docs spine is obvious from the section layout
+- consequence-triggered modules (such as working rules and specs) have concrete starter files, not just doctrine
 - `handoffs/README.md` is the copy-ready home for fresh-thread notes
 - `triage/README.md` is the copy-ready home for temporary capture notes; notes
   use `YYYYMMDD-HHMMSS-<slug>.md`, matching handoffs

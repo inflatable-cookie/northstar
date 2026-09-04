@@ -33,9 +33,9 @@ docs/
 ├── contracts/
 ├── roadmaps/
 │   ├── g01/
-│   │   └── batch-cards/  (strict posture)
+│   │   └── batch-cards/  (execution detail)
 │   ├── g02/
-│   │   └── batch-cards/  (strict posture)
+│   │   └── batch-cards/  (execution detail)
 │   ├── backlog/
 │   └── generation-index.md
 ├── logs/
@@ -46,16 +46,17 @@ docs/
 ├── schemas/           (optional)
 ├── templates/         (optional)
 ├── diagrams/          (optional)
-└── specs/             (strict posture only)
+└── specs/             (provisional planning)
 ```
 
-## Posture Quick Pick
+## Compact Lifecycle Quick Pick
 
 | Situation | Start With |
 |-----------|-----------|
-| Single repo, small team, clear scope | Baseline |
-| Multi-repo, high-risk boundaries, long autonomous runs | Strict |
-| Baseline repo needs tighter guardrails | Lane-first strict adoption |
+| Standard project | Core standard spine (`vision/`, `architecture/`, `contracts/`, `roadmaps/`, `logs/`, `handoffs/`, `triage/`) |
+| Provisional design shaping | Add `specs/` (promoted into architecture/contracts before execution) |
+| Multi-repo / execution constraints | Add `repo-authority-map.md`, `product-guardrails.md`, contract index |
+| Existing mature repo | Incremental adoption in bounded tranches |
 
 ## Core Rules
 

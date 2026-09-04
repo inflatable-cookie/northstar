@@ -1,6 +1,6 @@
 # 001 - Working Rules
 
-**Type: TEMPLATE** -- Required for strict posture. Copy, remove this header, and adapt to your repo.
+**Type: TEMPLATE** -- Copy, remove this header, and adapt to your repo.
 
 Status: active
 Owner: <owner>
@@ -55,9 +55,9 @@ informal habits.
 - Roadmap milestones are turnkey lane definitions: name a multi-batch execution
   plan (checkbox tasks), not one agent turn. Batch cards carry step detail.
   See `bundle-docs/sections/03-roadmaps.md` (*Scope and granularity rule*).
-- In a strict lane, a bare `continue` should resolve through the previous
-  closeout's `Next Task`, which should normally point at the current ready card
-  or an explicit stop/reassessment step.
+- A bare `continue` should resolve through the previous closeout's `Next Task`,
+  which should normally point at the current ready card or an explicit
+  stop/reassessment step.
 
 ### Papercuts feedback loop
 
@@ -430,6 +430,17 @@ informal habits.
   solicits credentials.
 - Merge, post-merge reconciliation, closeout, frontier recomputation, and
   next-ready dispatch form one continuous coordinator action chain.
+- Post-merge local integration reconciliation is mandatory before card closeout,
+  frontier recomputation, or another worker dispatch:
+  - resolve and verify the provider's merged PR and resulting `origin/main`;
+  - fetch the integration remote, fast-forward the project's local `main` checkout
+    to `origin/main`, and assert that local and remote heads match;
+  - base all later closeout, frontier recomputation, and worker dispatch facts on
+    that verified synchronized head;
+  - fail closed on dirty checkout, wrong branch, divergence, fetch failure, or head
+    mismatch: stop immediately, preserve the local integration checkout completely
+    untouched, and return a context-complete reconciliation blocker to Chatterbox;
+    never reset, stash, rebase, discard changes, or dispatch from stale local state.
 - A stricter repository rule or explicit operator pause still wins.
 - Workers, planning delegates, and standalone direct-review threads never merge.
 
@@ -454,41 +465,44 @@ informal habits.
 - Use `python` or another runtime only when a concrete technical requirement
   justifies it.
 
-### Generation posture
+### Compact lifecycle, artifact lifecycle classes, and prune triggers
 
-- Treat roadmap generations as substantial sequencing eras, not one-or-two-file
-  buckets.
-- Each active generation's `docs/roadmaps/gNN/README.md` owns its
+- Northstar operates under one compact strict lifecycle. Light, baseline,
+  lane-first, mixed, and full-strict labels describe historical or migration
+  state, not alternative supported steady-state protocols.
+- Treat the live docs tree as working memory. Git retains full history; HEAD
+  retains current authority, actionable work, unresolved meaning, and material
+  evidence only.
+- Treat roadmap generations as substantial sequencing eras (roughly 20 to 50
+  milestones), not one-or-two-file buckets.
+- Each active generation's `docs/roadmaps/gNN/README.md` owns its stable
   `## Generation Runway`.
-- Keep the generation runway coarse and stable. Write it for a long-lived
-  generation, not the next four or five roadmaps. Update it when
-  generation-level intent changes, a milestone materially advances or closes a
-  goal, or rollover is being considered.
-- Do not use the generation runway as a backlog, checkbox task list, or
-  per-turn currentness surface.
-- Default to sequential mode: keep one generation active across many milestones
-  until the sequencing baseline itself needs a reset.
-- Treat roughly 20 to 50 milestones as the normal scale of a healthy
-  generation before rollover is even worth discussing.
-- Finishing a batch, suite, or lane of roadmaps does **not** close the
-  generation. After one batch closes, compile or continue the next batch inside
-  the same generation.
-- Treat rollover as full generation closeout in sequential mode:
-  - every roadmap in the old generation must be explicitly closed, superseded,
-    or moved to backlog
-  - the roadmap front doors must reflect that closed state before the next
-    generation opens
-  - stale specs from the closing generation must be archived or removed from
-    `docs/specs/`
-- If those closeout conditions are not satisfied in sequential mode, repair the
-  current generation instead of opening a new one.
+- Finishing a batch, suite, or lane of roadmaps does not close the generation;
+  stay inside the active generation until the sequencing baseline needs a reset.
+
+Every planning artifact belongs to one lifecycle class with a default disposition:
+
+| Class | Examples | Live-tree rule | Disposition trigger |
+| --- | --- | --- | --- |
+| durable authority | vision, architecture, contracts | retain while authoritative | replace or delete with all callers when superseded |
+| active execution | active roadmap, ready/in-flight cards | retain only while actionable | fold outcome/evidence into closure, then generation roll-up |
+| transient transport | triage notes, worker handoffs, questionnaires | retain only while carrying unresolved or unconsumed meaning | delete after promotion, consumption, abandonment, or transfer |
+| exceptional evidence | releases, incidents, material migrations | retain when operationally useful | roll up only when durable value is preserved |
+| derived currentness | indexes, status tables, projections | generate, bound, or remove | rebuild from canonical current state |
+
+- Normal delivery evidence belongs on the completed card: outcome, validation,
+  PR, commit, and material limits.
+- Separate logs are justified only for incidents, releases, migrations,
+  cross-lane decisions, or oversized evidence sets.
+- Consumed worker handoffs are deleted after merge, abandonment, or ownership
+  transfer.
+- Promoted specs are removed or reduced to a non-procedural tombstone once
+  durable outcomes are promoted into architecture/contracts.
+- Rollover replaces each closed generation with one non-authoritative
+  `docs/roadmaps/archive/gNN.md` roll-up and purges closed/stale specs.
 - Allow parallel mode when genuinely independent work streams need separate
-  generations without blocking each other:
-  - each generation operates as its own queue with distinct lane context
-  - opening a new generation does not require closing prior active generations
-  - each generation's `gNN/README.md` remains the authoritative front door for
-    that thread
-  - front doors must accurately name all active generations and their milestones
+  generations without blocking each other; front doors must name all active
+  generations and milestones.
 
 ### Stop conditions
 

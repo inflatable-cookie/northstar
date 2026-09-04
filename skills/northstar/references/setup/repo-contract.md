@@ -144,13 +144,13 @@ Baseline docs spine:
 
 Do not collapse all three into a single generic planning note.
 
-For stricter or more failure-prone projects, adopt the stricter spine:
+For consequence-triggered modules, adopt as needed:
 
 - `architecture/product-guardrails.md`
 - `contracts/001-working-rules.md`
 - `contracts/contract-index.md`
 - `specs` as a provisional planning surface
-- `roadmaps/gNN/batch-cards/` for execution cards in strict posture
+- `roadmaps/gNN/batch-cards/` for execution cards when batch-card detail is needed
 
 In that mode, specs should be treated as a stepping stone to
 architecture/contracts rather than a second permanent authority.

@@ -11,7 +11,7 @@ active roadmap queue.
 ## Steps
 
 1. Audit the live planning and execution surfaces before editing.
-2. Classify the starting posture first and explain why it is no longer
+2. Classify the starting lifecycle state first and explain why it is no longer
    trustworthy enough to leave as-is.
 3. Identify drift explicitly: stale milestones, stale specs, missing contracts,
    repo authority ambiguity, research that never promoted, and logs that hide

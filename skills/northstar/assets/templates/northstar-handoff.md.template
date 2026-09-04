@@ -69,5 +69,9 @@ you finish, please:
 5. Call out unresolved risks or blockers plainly;
 6. Leave one clear next task for the following thread.
 
+Disposition trigger: transient transport; delete after promotion, merge,
+consumption, abandonment, or ownership transfer. Do not retain as routine
+history.
+
 If the same thread can continue after compaction, do not create another handoff
 just for that reason.

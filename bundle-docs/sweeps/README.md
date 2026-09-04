@@ -19,7 +19,7 @@ For each sweep:
 3. Apply fixes in meaningful batches.
 4. Re-run audit checks and confirm closure.
 5. Add one batch log in `docs/logs/YYYY-MM/` summarizing changes.
-6. Keep optional add-on folders (`research`, `schemas`, `templates`, `diagrams`, `specs`) out of baseline unless needed, but enforce Northstar structure if `docs/research/` is canonical.
+6. Keep optional add-on folders (`research`, `schemas`, `templates`, `diagrams`, `specs`) out of the core spine unless needed, but enforce Northstar structure if `docs/research/` is canonical.
 7. Treat planning gaps as stop conditions: if required architecture coverage, repo authority, or contracts are missing, fix planning before permitting roadmap execution.
 
 If no drift is found, record a no-op audit log.

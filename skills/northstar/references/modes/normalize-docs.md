@@ -1,8 +1,8 @@
-# Normalize docs posture
+# Normalize docs lifecycle
 
 Keep the repo's Northstar-shaped `docs/` tree correct over time—not only on
 first bootstrap. Use for greenfield setup, migration, and periodic spine
-hygiene when front doors, generation index, or strict surfaces drift.
+hygiene when front doors, generation index, or consequence-triggered surfaces drift.
 
 ## References (load as needed)
 
@@ -32,19 +32,21 @@ Optional: `effigy check:posture-advisory` after structural edits.
 
 ## Workflow
 
-1. Classify posture: baseline vs strict vs lane-first migration vs full strict
-   target; record blocking gaps in an active spec/milestone when migrating.
+1. Classify repo lifecycle state: `ready`, `paused`, `migration`, or `drifted`;
+   record blocking gaps in an active spec/milestone when migrating.
 2. Choose adoption mode (single repo, workspace container + docs authority, or
    compatibility only when the installed Effigy binary lacks needed surfaces).
 3. For bootstrap or template-copy work, locate a Northstar source checkout
-   explicitly and apply its `template-bundle/`—baseline or strict deliberately,
-   not a permanent mixed posture. Never resolve `template-bundle/` relative to
-   the installed skill. If no source checkout is available, stop and ask the
-   operator for its path instead of inventing the docs tree.
-4. When strict: install `product-guardrails`, `contract-index`,
-   `001-working-rules`, `specs/`, `specs/archive/README.md`, batch-cards as
-   warranted. Explain specs as provisional; archive when canonical surfaces
-   carry truth.
+   explicitly and apply its `template-bundle/`—the standard core spine by
+   default, adding consequence-triggered modules as needed; incremental
+   adoption is migration, not a permanent mixed posture. Never resolve
+   `template-bundle/` relative to the installed skill. If no source checkout is
+   available, stop and ask the operator for its path instead of inventing the
+   docs tree.
+4. Consequence-triggered modules: install `product-guardrails`,
+   `contract-index`, `001-working-rules`, `specs/`, `specs/archive/README.md`,
+   batch-cards as warranted. Explain specs as provisional; archive when
+   canonical surfaces carry truth.
 5. Select templates from `assets/templates/` (Effigy native vs docs-authority
    vs compat), including root `PAPERCUTS.md` when missing. Seed it during
    adopt/upgrade — before release-candidate / exact-SHA prep, not during tag
@@ -74,8 +76,8 @@ Optional: `effigy check:posture-advisory` after structural edits.
 - `README.md`, `AGENTS.md`, `PAPERCUTS.md`, `effigy.toml`, `docs/README.md`,
   `docs/triage/README.md`,
   vision/roadmaps/logs front doors, `docs/policy/internal-writing-style.md`
-- Strict: guardrails, contract index, working rules, specs README + archive,
-  batch-card templates under active `gNN/`
+- Consequence-triggered modules: guardrails, contract index, working rules,
+  specs README + archive, batch-card templates under active `gNN/`
 
 ## Guardrails
 
@@ -83,7 +85,7 @@ Optional: `effigy check:posture-advisory` after structural edits.
 - No `--repo .` in docs examples for current-repo use.
 - No invented docs tree when template-bundle covers the need.
 - No routine bash/python when Effigy or TS covers the job.
-- Do not treat one strict lane as full-repo compliance without a migration plan.
+- Do not treat partial adoption as a permanent mixed posture; keep migration bounded.
 
 ## After normalize
 

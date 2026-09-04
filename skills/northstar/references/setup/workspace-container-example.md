@@ -26,7 +26,7 @@ workspace-root/
     ├── contracts/
     ├── roadmaps/
     ├── logs/
-    └── specs/             # only when stricter mode is warranted
+    └── specs/             # only when consequence-triggered modules are warranted
 ```
 
 Representative real repos from the Northstar proof runs:
@@ -47,11 +47,11 @@ The workspace root owns:
 
 The nested docs-authority repo owns:
 
-- the full baseline or stricter Northstar spine
+- the compact Northstar docs spine and consequence-triggered modules
 - `qa:docs`
 - `qa:northstar`
 - docs policy
-- migration or strict-lane planning state
+- migration or lifecycle planning state
 
 Shipping child repos own:
 
@@ -84,7 +84,7 @@ The workspace root should say plainly:
 
 The nested authority repo should say plainly:
 
-- whether it is baseline or stricter
+- authority mode and active lifecycle state
 - the active generation/milestone/spec lane
 - the current ready card or paused planning gate
 

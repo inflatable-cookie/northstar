@@ -26,7 +26,7 @@ future milestone, but it should keep the generation moving as a significant
 ## Seed files
 
 - `001-example-platform-reset.md`
-- `batch-cards/README.md` (strict posture)
+- `batch-cards/README.md` (when batch cards are used)
 
 ## Next task
 

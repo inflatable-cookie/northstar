@@ -4,19 +4,21 @@ Use this mode for an existing project when the operator wants to know whether
 its planning is coherent enough to continue, without starting implementation.
 The concise trigger is `northstar planning readiness review`.
 
-## Default posture
+## Mode boundary
 
 This is a read-only review unless the operator explicitly asks for planning
 repair. Do not edit production code, create a worker lane, mark a roadmap card
 ready, or compile new execution work during the review.
 
-Name the repository posture:
+Name the repository lifecycle state:
 
-- `baseline-routing`
-- `strict-ready`
-- `strict-paused`
+- `ready`
+- `paused`
 - `migration`
 - `drifted`
+
+Also name authority mode (root-owned or nested), active lane, whether a ready
+card exists, and whether an intent checkpoint blocks the next move.
 
 ## Review procedure
 
@@ -71,7 +73,7 @@ roadmap, readiness, validation, handoff, and operator gates still apply.
 
 Return a compact review containing:
 
-- posture;
+- lifecycle state;
 - planning verdict: `incomplete`, `drifted`, `materially ambiguous`, or
   `coherent`;
 - exact gaps and canonical files involved;

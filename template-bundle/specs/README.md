@@ -1,6 +1,6 @@
 # Specs
 
-**Type: OPTIONAL** (strict posture) -- Add this folder when using strict posture and provisional planning.
+**Type: OPTIONAL** -- Add this consequence-triggered folder when provisional planning is needed before promotion.
 
 Use this folder when a change needs provisional planning before it is settled
 into architecture and contracts.
@@ -49,8 +49,8 @@ When archive is warranted:
 - keep that archive lean and traceable rather than elaborate
 - do not treat archived specs as canonical execution authority
 
-For stricter repos, seed `docs/specs/archive/README.md` up front so preserved
-closed artifacts already have a defined home before the first cleanup batch.
+Seed `docs/specs/archive/README.md` up front so preserved closed artifacts
+already have a defined home before the first cleanup batch.
 
 Make spec hygiene explicit in normal project maintenance:
 
@@ -88,42 +88,24 @@ model, use `specs/` for master specs and `roadmaps/gNN/batch-cards/` for
 execution cards. A roadmap-only repo can still route live work well, but it
 should not pretend to carry the same explicit autonomy state.
 
-In a mature baseline repo, you may introduce this layer lane-first for the
-active work that needs it. Start with the current lane and bounded active
-batch-card chain instead of backfilling closed history.
+In a mature repository adopting the compact lifecycle, introduce this layer
+where the active work needs provisional shaping. Start with the current lane
+instead of backfilling closed history.
 
-If the project is moving toward full strict Northstar compliance, treat that
-lane-first seed as the first migration step rather than the final target.
-
-In that migration, the expected progression is:
-
-1. prove the stricter surface on one active lane
-2. expand it to become the default for new material lanes
-3. treat full strict compliance as the project-level operating state
-
-Do not leave mixed posture unexamined once the project has already decided the
-strict doctrine is the intended destination.
-
-For a mature repo migrating toward full strict compliance, use one active
-migration master spec to keep the rollout operational.
-
-That migration spec should record:
-
-- current posture
-- satisfied checkpoints
+Keep incremental adoption operational inside the normal planning spine:
+- satisfied compact lifecycle checkpoints
 - blocking gaps
-- whether mixed posture is still valid migration state or has become drift
+- whether migration state is still deliberate or has drifted
 - current tranche
 - next tranche
 - the evidence needed to close the current tranche
 
 Use the paired roadmap milestone to sequence the migration work and logs to
-prove each completed tranche. Do not invent a separate governance tracker for
-this.
+prove each completed tranche. Do not invent a separate governance tracker or
+permanent mixed posture for this.
 
 ## Templates
 
 - `archive/README.md`
 - `templates/master-spec-template.md`
 - `templates/batch-card-template.md`
-- `templates/strict-compliance-migration-template.md`

@@ -776,9 +776,22 @@ The orchestrator continues non-overlapping coordination, dispatch, revision rout
 merge, and closeout while workers run. A worker-finish notification starts
 review of that lane; it does not refill a global launch queue.
 
-Same-repository PRs merge one at a time. After each merge the orchestrator
-refreshes every remaining head against current `main` and re-reviews any head
-that changed or needed conflict resolution.
+Same-repository PRs merge one at a time. After each merge, post-merge local
+integration reconciliation is mandatory before card closeout, frontier
+recomputation, or another worker dispatch:
+- resolve and verify the provider's merged PR and resulting `origin/main`;
+- fetch the integration remote, fast-forward the project's local `main`
+  checkout to `origin/main`, and assert exact local and remote head equality;
+- base all downstream closeout, frontier recomputation, and worker dispatch
+  facts on that verified synchronized head;
+- fail closed on dirty checkout, wrong branch, divergence, fetch failure, or
+  head mismatch: stop immediately, preserve the local integration checkout
+  completely untouched, and return a context-complete reconciliation blocker to
+  Chatterbox; never reset, stash, rebase, discard changes, or dispatch from
+  stale local state.
+After successful reconciliation, the orchestrator refreshes every remaining head
+against current `main` and re-reviews any head that changed or needed conflict
+resolution.
 
 The following worker-start conditions apply only after a worker thread has been
 explicitly dispatched by the orchestrator with a handoff declaring

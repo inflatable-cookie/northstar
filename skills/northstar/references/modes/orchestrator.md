@@ -391,10 +391,11 @@ Chatterbox after operator confirmation.
    then this mode. In the target repo, read `AGENTS.md`, the promoted commit,
    the selected ready cards, the canonical dispatch manifest, and named refs.
    In the Northstar source repo also read `bundle-docs/protocol-kernel.md`.
-2. **Classify posture.** Name `baseline-routing`, `strict-ready`,
-   `strict-paused`, `migration`, or `drifted`, plus the authority mode, active
-   lane, and whether a ready card exists. If posture is `drifted` or required
-   coverage is missing, route planning repair to Chatterbox.
+2. **Classify lifecycle state.** Name `ready`, `paused`, `migration`, or
+   `drifted`, plus authority mode (root-owned or nested), active lane, whether
+   a ready card exists, and whether an intent checkpoint blocks the next move.
+   If lifecycle state is `drifted` or required coverage is missing, route
+   planning repair to Chatterbox.
 3. **Route material discovery.** Keep only operational clarifications in this
    thread. When the conversation carries material product meaning, route it to
    Chatterbox.
@@ -434,20 +435,33 @@ Chatterbox after operator confirmation.
    `send_agent_prompt` on that same reviewer after the worker yields the revised
    clean head. Replace it only on definitive unavailability, in the same worker
    workspace.
-9. **Merge, close out, and advance continuously.** Merge only after the
-   coordination gate holds: accepted exact-head review verdict on the provider,
-   passing checks, clean ancestry, mergeability, and no operator pause. When a
-   connector write is refused while the gate remains current, use an
-   authenticated repository-approved native write transport fallback and
-   re-verify provider state; never weaken the gate or solicit credentials.
-   Reconcile closeout surfaces on `main`. Make merge, post-merge reconciliation,
-   closeout, frontier recomputation, and next-ready dispatch one continuous
-   coordinator action chain: recompute the canonical frontier and continue
-   immediately with the next ready dispatch or mechanical transition in the
-   same turn without waiting for an operator `continue`. Yield only when
-   progress requires an active child, an external event, new authority, or an
-   empty runway. When the canonical runway is empty, send Chatterbox one
-   administrative notice with completed state, then yield.
+9. **Merge, reconcile integration checkout, close out, and advance continuously.**
+   Merge only after the coordination gate holds: accepted exact-head review
+   verdict on the provider, passing checks, clean ancestry, mergeability, and no
+   operator pause. When a connector write is refused while the gate remains
+   current, use an authenticated repository-approved native write transport
+   fallback and re-verify provider state; never weaken the gate or solicit
+   credentials.
+   Post-merge local integration reconciliation is mandatory before closeout,
+   frontier recomputation, or next-ready dispatch:
+   - verify the provider merge and resulting `origin/main`;
+   - fetch the integration remote, fast-forward the project's local `main`
+     checkout to `origin/main`, and assert exact local and remote head equality;
+   - base all downstream closeout, frontier recomputation, and worker dispatch
+     facts on that verified synchronized head;
+   - fail-closed invariant: if the local integration checkout is dirty, not on
+     `main`, divergent, fetch fails, or heads mismatch, stop immediately,
+     preserve the checkout completely untouched, and send Chatterbox a
+     context-complete reconciliation blocker; never reset, stash, rebase,
+     discard changes, or dispatch from stale local state.
+   After successful reconciliation, reconcile closeout surfaces on `main`. Make
+   merge, post-merge reconciliation, closeout, frontier recomputation, and
+   next-ready dispatch one continuous coordinator action chain: recompute the
+   canonical frontier and continue immediately with the next ready dispatch or
+   mechanical transition in the same turn without waiting for an operator `continue`.
+   Yield only when progress requires an active child, an external event, new
+   authority, or an empty runway. When the canonical runway is empty, send
+   Chatterbox one administrative notice with completed state, then yield.
 
 ## Worker file contract
 
@@ -687,7 +701,9 @@ creation and operator-relayed text.
 
 Stop and return to planning or the operator when:
 
-- the repo posture is drifted or a required surface is missing;
+- the repo lifecycle state is drifted or a required surface is missing;
+- post-merge local integration reconciliation encounters a dirty checkout, wrong
+  branch, divergence, fetch failure, or head mismatch;
 - architecture, contract, user intent, or ownership remains ambiguous;
 - the next card is not ready or the continuation envelope is exhausted;
 - the worker changes scope or contradicts the plan;

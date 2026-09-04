@@ -65,7 +65,7 @@ if fs::is_file(gen_index) {
 
         let batch_dir = path::join(gen_dir, "batch-cards");
         if fs::is_dir(batch_dir) && list_matching_files(batch_dir, numbered_pattern).len() == 0 {
-            warnings.push("docs/roadmaps/" + gen + "/batch-cards/ exists but has no NNN-<slug>.md cards (strict lanes normally keep ready cards here)");
+            warnings.push("docs/roadmaps/" + gen + "/batch-cards/ exists but has no NNN-<slug>.md cards (ready batch cards normally live here)");
         }
     }
 }
@@ -74,7 +74,7 @@ let specs_dir = path::join(target_root, "docs/specs");
 let numbered_specs = list_matching_files(specs_dir, numbered_pattern);
 let archive_readme = path::join(specs_dir, "archive/README.md");
 if numbered_specs.len() > 0 && !fs::is_file(archive_readme) {
-    warnings.push("docs/specs/ has numbered master specs but docs/specs/archive/README.md is missing (archive posture should be explicit for strict-style repos)");
+    warnings.push("docs/specs/ has numbered master specs but docs/specs/archive/README.md is missing (archive path should be explicit when specs exist)");
 }
 
 if warnings.len() == 0 {

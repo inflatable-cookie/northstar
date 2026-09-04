@@ -1,6 +1,6 @@
 # Contract Index
 
-**Type: REQUIRED** (strict posture) -- Maintain this index in all strict-posture repos. Optional in baseline.
+**Type: REQUIRED** -- Maintain this index to track all contracts governing the repository.
 
 Status: draft
 Owner: <owner>

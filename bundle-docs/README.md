@@ -48,7 +48,7 @@ Agents often add compatibility shims during refactors. Northstar’s stance is
   user-visible, or externally depended surfaces. Material breaks need explicit
   owner policy, not silent removal.
 
-Full doctrine: [`sections/07-delivery-framework-and-autonomy.md`](./sections/07-delivery-framework-and-autonomy.md) (heading *Refactoring posture by release maturity*). Stricter repos should also encode the same rules in `docs/contracts/001-working-rules.md` (start from [`../template-bundle/contracts/001-working-rules-template.md`](../template-bundle/contracts/001-working-rules-template.md)). This repo’s live contract: [`../docs/contracts/001-working-rules.md`](../docs/contracts/001-working-rules.md).
+Full doctrine: [`sections/07-delivery-framework-and-autonomy.md`](./sections/07-delivery-framework-and-autonomy.md) (heading *Refactoring posture by release maturity*). Projects should also encode the same rules in `docs/contracts/001-working-rules.md` (start from [`../template-bundle/contracts/001-working-rules-template.md`](../template-bundle/contracts/001-working-rules-template.md)). This repo’s live contract: [`../docs/contracts/001-working-rules.md`](../docs/contracts/001-working-rules.md).
 
 ## What Lives Here
 

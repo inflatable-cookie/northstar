@@ -75,7 +75,7 @@ canonical surface.
 
 Return:
 
-- selected scope and repository posture;
+- selected scope and repository lifecycle state;
 - evidence inspected;
 - current architecture verdict: `sound`, `strained`, `drifting`, or
   `insufficiently specified`;
