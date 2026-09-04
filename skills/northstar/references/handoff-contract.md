@@ -172,7 +172,8 @@ or copies multi-paragraph protocol text, treat that as a compression signal.
   signal, the next task, and unresolved risks. Worker handoffs also put the
   worker/PR flow here. Planning-delegate handoffs instead define the direct
   operator conversation, bounded research, triage/research-only diff, planning
-  PR, and orchestrator-owned review/merge/promotion flow. Orchestrator-
+  PR, and the independent-review, coordinator-gated merge, and operator-
+  confirmed promotion flow. Orchestrator-
   continuation handoffs tell the successor to re-enter normal orchestrator
   mode from the absolute path, and tell the source to yield the lane.
 

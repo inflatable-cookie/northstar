@@ -354,8 +354,13 @@ and posts the provider verdict; you then apply the normal coordination gate.
    Northstar source repo also read `bundle-docs/protocol-kernel.md`.
 2. **Classify posture.** Name `baseline-routing`, `strict-ready`,
    `strict-paused`, `migration`, or `drifted`, plus the authority mode, active
-   lane, and whether a ready card exists. Repair planning state before launching
-   a worker if posture is `drifted` or required coverage is missing.
+   lane, and whether a ready card exists. If posture is `drifted` or required
+   coverage is missing, route the material planning repair through a
+   chatterbox and the operator-confirmed promotion lane; this thread does not
+   repair semantic planning state itself. Only non-semantic administrative
+   corrections — renames, link fixes, stale status text — may be applied
+   directly. Do not launch a worker while drifted posture still governs its
+   lane.
 3. **Route material discovery.** Keep only operational clarifications that
    cannot change behavior, acceptance, public contract, or sequencing in this
    thread. When the conversation carries material product meaning — outcome,

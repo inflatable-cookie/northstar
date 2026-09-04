@@ -152,6 +152,30 @@ on this branch:
    reconciliation and canonical-home selection. The `planning-promotion`
    state description matches.
 
+### Round 3 (exact head `329eefa`)
+
+8. **Lane ownership wording reconciled (`integration-drift`):** inventory's
+   continuation row now transfers a coordination lane and its interface rows
+   define Orchestrator coordination (operator-confirmed intent precedes
+   promotion/ready cards) and delegate closeout via review child plus
+   operator-confirmed promotion; spec 026's continuation passes a
+   coordination lane; architecture's transfer sentence, planning-delegate
+   invariant, and merge-authority invariant route review through the
+   independent review child and promotion through the operator-confirmed
+   lane; the handoff contract's delegate lifecycle is the independent-
+   review, coordinator-gated merge, and operator-confirmed promotion flow.
+   Live sweep for equivalent wording is clean; historical evidence
+   untouched.
+9. **Drift repair routes through confirmation (`execution-miss`):** procedure
+   step 2 no longer orders the coordinator to repair planning state. Drifted
+   posture or missing coverage routes material planning repair through a
+   chatterbox and the operator-confirmed promotion lane; only non-semantic
+   administrative corrections (renames, link fixes, stale status text) are
+   direct; no worker launches while drift still governs its lane. This is
+   the exact-head evidence that the drift path cannot be read as restoring
+   coordinator self-planning: steps 2-5 together leave the coordinator no
+   direct semantic planning edits in any posture.
+
 ## Validation
 
 - `effigy check:model-routing` — PASS (ten milestone 047 oracle rows)

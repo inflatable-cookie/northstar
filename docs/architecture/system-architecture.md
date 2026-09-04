@@ -418,8 +418,8 @@ non-overlapping work, routes the planning PR to an independent review child,
 merges after the coordination gate, then separately promotes settled meaning
 through an operator-confirmed lane against current `main`.
 
-On explicit operator request, an orchestrator may transfer its current planning
-and review lane to one fresh orchestrator thread. The source closes the live
+On explicit operator request, an orchestrator may transfer its current
+coordination lane to one fresh orchestrator thread. The source closes the live
 state into a committed, pushed seven-section handoff, launches the successor as
 normal orchestrator mode, then stops mutating or dispatching that transferred
 lane. This is continuity, not parallel ownership: a genuinely concurrent
@@ -587,8 +587,9 @@ subagent, which gets no worktree or Git/provider authority.
   named triage/research packet. It separates confirmed decisions from advice and
   open questions, verifies any handoff-named sibling links in the worktree
   container, does not promote or implement, and finishes with a PR. The
-  orchestrator reserves the topic, reviews/merges the packet, then owns a
-  separate promotion batch against current `main`.
+  orchestrator reserves the topic, an independent review child reviews the
+  packet PR, the coordinator merges after the gate, and an operator-confirmed
+  promotion lane owns the separate promotion batch against current `main`.
 - A mechanical documentation projection subagent may edit only the named paths
   in the orchestrator's planning context from an exact settled brief. It is not
   worker mode, runs serially, stops on semantic ambiguity, and cannot choose
@@ -609,12 +610,14 @@ subagent, which gets no worktree or Git/provider authority.
   Every merge-blocking finding is posted on the provider review surface; chat
   summarizes that record and never becomes the only home of a required change.
 - Workers and planning delegates never merge. The orchestrator may merge their
-  PRs without a second operator prompt after it records an accepted review of
-  the exact current head, all required checks pass, the PR is mergeable into the
-  intended base, and no stricter repository rule or explicit operator pause
-  applies. A changed head requires another review; ambiguous merge state stops
-  before retry. A merged planning packet remains non-authoritative until the
-  orchestrator promotes it.
+  PRs without a second operator prompt after an independent review child
+  records an accepted verdict naming the exact current head — or the
+  orchestrator does so on an operator-requested direct review — all required
+  checks pass, the PR is mergeable into the intended base, and no stricter
+  repository rule or explicit operator pause applies. A changed head requires
+  another review; ambiguous merge state stops before retry. A merged planning
+  packet remains non-authoritative until it is promoted through an
+  operator-confirmed promotion lane.
 - Provider-native subagents, session messaging, and hosted agents are optional
   adapters, not Northstar protocol dependencies.
 - Project-root Paseo settings are optional project lifecycle configuration. They

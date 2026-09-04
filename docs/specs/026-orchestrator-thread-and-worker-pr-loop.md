@@ -59,7 +59,7 @@ becomes execution authority by merge alone.
 On a separate explicit request, the orchestrator may transfer its whole current
 lane to a fresh orchestrator thread. It first closes the repository state and
 writes one committed continuation handoff using the normal seven-section
-handoff shape. The successor owns the same planning/review lane; the source
+handoff shape. The successor owns the same coordination lane; the source
 stops mutating that lane after launch. This is neither worker mode nor a
 planning delegate, and it does not create an implementation worktree or PR.
 
