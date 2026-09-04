@@ -114,11 +114,12 @@ candidate before receipt selection.
 
 V1 content digests are required `sha256:<64 lowercase hex>` values. Manifest
 identity hashes the exact manifest bytes. Tree identity hashes the canonical
-sorted, length-framed regular-file stream defined by spec 034, including paths,
-the executable bit, and file bytes. Package paths must be portable and
-contained; case-fold collisions, symlinks, special files, and implicit empty
-directory dependencies are invalid. Every acquisition adapter must reconstruct
-the same identity before package code executes.
+sorted, length-framed regular-file stream defined by this contract and system
+architecture, including paths, the executable bit, and file bytes. Package
+paths must be portable and contained; case-fold collisions, symlinks, special
+files, and implicit empty directory dependencies are invalid. Every
+acquisition adapter must reconstruct the same identity before package code
+executes.
 
 Third-party packages require either an exact operator allowlist entry or
 interactive approval for one acquisition. The allowlist lives in machine or

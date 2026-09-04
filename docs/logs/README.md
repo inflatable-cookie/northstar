@@ -8,27 +8,14 @@ work.
 - Group logs by month directory: `YYYY-MM/`
 - Name each log: `DD-HHMMSS-<slug>.md`
 
-## Cadence rule
+## Cadence and evidence rule
 
-- Create logs per completed batch or meaningful update cycle.
-- Do not create a separate log for every tiny task.
-
-## Closeout rule
-
-Use logs as the third step in closeout:
-
-1. update the current batch card
-2. update the active roadmap milestone if its state changed
-3. write the batch log with evidence and validation actually run
-4. record whether the continuation envelope still holds or a stop signal exhausted it
-5. record the lane budget state and pause signal when the run paused cleanly
-6. create or update a handoff under `docs/handoffs/` only if another thread
-   needs to continue, and link it from the relevant log when useful
-7. refresh the roadmap front doors with one explicit next-task pointer
-
-## Still-governing context
-
-- `2026-04/09/09-111500-roll-to-g02-external-pilot.md`
+- Normal delivery evidence closes directly on its completed batch card
+  (outcome, validation, PR, commit, and material limits).
+- Dedicated logs are reserved for incidents, releases, material migrations,
+  cross-lane decisions, or evidence sets too large to keep the card legible.
+- Historical evidence is retained through generation roll-ups; routine logs
+  are pruned at generation closure.
 
 ## Recent active-lane evidence
 
@@ -36,106 +23,10 @@ Use logs as the third step in closeout:
 - `2026-09/04-184641-preserve-paseo-profile-permissions.md`
 - `2026-09/04-141135-route-pre-pr-decisions-through-chatterbox.md`
 - `2026-09/04-132051-wire-installed-language-package-route.md`
-- `2026-09/04-124909-tighten-chatterbox-triage-and-coordinator-routing.md`
 - `2026-09/04-122000-finish-continuous-coordinator-delivery.md`
-- `2026-09/04-115921-promote-continuous-coordinator-delivery.md`
-- `2026-09/04-113500-implement-chatterbox-led-planning.md`
-- `2026-09/04-105852-promote-chatterbox-led-planning.md`
-- `2026-09/04-093820-chatterbox-sibling-agent-tabs.md`
-- `2026-09/04-001602-economical-orchestrator-coordination.md`
-- `2026-09/03-183500-add-chatterbox-intake-channel.md`
-- `2026-09/03-181459-open-chatterbox-intake-channel.md`
-- `2026-09/03-154324-remove-embedded-language-quality-payloads.md`
-- `2026-09/03-142000-preserve-paseo-worker-parentage.md`
-- `2026-09/03-144604-open-embedded-language-payload-removal.md`
-- `2026-09/03-140006-plan-paseo-worker-parentage.md`
-- `2026-09/03-130752-review-generic-language-discovery.md`
-- `2026-09/03-123500-bind-generic-language-selection.md`
-- `2026-09/03-095021-refresh-embedded-removal-readiness.md`
-- `2026-09/03-092117-close-rust-package-canary.md`
-- `2026-09/03-090700-review-convergence-rust-package-canary.md`
-- `2026-09/03-083100-dispatch-convergence-rust-package-canary.md`
-- `2026-09/03-033950-pin-rust-package-candidate.md`
-- `2026-09/03-020500-refresh-rust-package-readiness-after-repin.md`
-- `2026-09/03-015500-repin-typescript-package-identity.md`
-- `2026-09/03-005031-refresh-rust-package-readiness.md`
-- `2026-09/02-223633-close-typescript-package-canary.md`
-- `2026-09/02-215000-repair-language-package-fallback-notice.md`
-- `2026-09/02-201200-pin-typescript-package-canary.md`
-- `2026-09/02-184102-refresh-typescript-package-canary-readiness.md`
-- `2026-09/02-021500-settle-language-package-host-and-self-check.md`
-- `2026-09/02-003949-refresh-language-package-lifecycle-readiness.md`
-- `2026-09/01-185002-freeze-language-package-machine-contracts.md`
-- `2026-09/01-163902-diversify-model-routing-across-runs.md`
-- `2026-09/01-160915-plan-diversified-model-routing.md`
-- `2026-09/01-155829-add-fresh-orchestrator-continuation.md`
-- `2026-09/01-150310-plan-fresh-orchestrator-continuation.md`
-- `2026-09/01-143313-reduce-prose-coupled-validation.md`
-- `2026-09/01-140857-close-live-dogfood-and-plan-reduction.md`
-- `2026-09/01-122831-remove-global-capacity-gating.md`
-- `2026-09/01-110709-prefer-economical-worker-routing.md`
-- `2026-09/01-101853-make-orchestrator-parallel-first.md`
-- `2026-09/01-080443-repair-partial-rust-evidence-collection.md`
-- `2026-08/31-171710-delegate-conversational-feature-planning.md`
-- `2026-08/31-164037-delegate-mechanical-orchestrator-documentation.md`
-- `2026-08/31-152748-centralize-paseo-worktree-runtime.md`
-- `2026-08/31-141748-make-paseo-dispatch-implicit-inside-paseo.md`
-- `2026-08/31-135131-add-paseo-project-lifecycle-helpers.md`
-- `2026-04/10/10-201500-apply-audit-and-rollout-guidance.md`
-- `2026-04/10/10-211500-reprove-audit-rollout-and-open-signal-migration-lane.md`
-- `2026-04/10/10-221500-compile-signal-migration-tranche-plan.md`
-- `2026-04/10/10-231500-apply-signal-migration-proof-findings.md`
-- `2026-04/09/09-220658-queue-consumer-follow-ups-and-open-underlay-recovery.md`
-- `2026-04/09/09-221359-apply-underlay-recovery-findings.md`
-- `2026-04/10/10-120500-open-underlay-consumer-cohort-and-install-underlay-reference-strict-pass.md`
-- `2026-04/10/10-132500-apply-remaining-underlay-consumer-strict-passes.md`
-- `2026-04/10/10-140500-formalize-nested-docs-authority-setup.md`
-- `2026-04/10/10-142500-add-workspace-container-adoption-specimen.md`
-- `2026-04/10/10-150500-formalize-repo-posture-classification.md`
-- `2026-05/19-164500-finish-protocol-kernel-batch-20-3.md`
-- `2026-05/19-172500-add-posture-advisory-effigy-checks.md`
-- `2026-05/20-144500-consolidate-northstar-skill-surface.md`
-- `2026-07/28-101319-repair-installed-skill-portability.md`
-- `2026-08/06-000000-add-papercuts-feedback-loop.md`
-- `2026-08/06-120000-harden-skill-distribution-and-consumer-proof.md`
-- `2026-08/16-000000-promote-orchestrator-thread-and-worker-pr-loop.md`
-- `2026-08/16-205523-readiness-frontier-checker-worker-pr-closeout.md`
-- `2026-08/16-211033-add-conversational-thread-style.md`
-- `2026-08/16-213328-batch-26-2-planning-checkpoint.md`
-- `2026-08/16-215610-pre-execution-discovery-routes-worker-pr-closeout.md`
-- `2026-08/16-220832-change-dogfood-sequence-poodle-first.md`
-- `2026-08/16-221512-batch-26-3-starter-surface-planning-checkpoint.md`
-- `2026-08/16-223757-add-agent-local-path-registry.md`
-- `2026-08/16-233931-optimize-agent-instruction-surface.md`
-- `2026-08/19-085645-add-triage-and-docs-cleanup.md`
-- `2026-08/25-164300-compile-rust-quality-roadmap.md`
-- `2026-08/25-172511-prove-rust-quality-production-boundary.md`
-- `2026-08/25-174148-promote-rust-quality-catalogue.md`
-- `2026-08/25-180448-add-rust-everyday-authoring.md`
-- `2026-08/25-183304-add-rust-explicit-audit.md`
-- `2026-08/25-184420-pause-rust-production-evidence-on-authority.md`
-- `2026-08/25-185548-correct-rust-foreign-error-authority.md`
-- `2026-08/26-083100-run-rust-quality-production-evidence.md`
-- `2026-08/26-111421-seed-typescript-quality-research.md`
-- `2026-08/26-153133-promote-typescript-audit-planning.md`
-- `2026-08/26-153445-prove-typescript-audit-production-boundary.md`
-- `2026-08/26-154530-promote-typescript-audit-catalogue.md`
-- `2026-08/26-160119-add-typescript-explicit-audit.md`
-- `2026-08/26-163706-halt-typescript-production-evidence.md`
-- `2026-08/26-165801-halt-typescript-production-evidence-o.md`
-- `2026-08/26-173000-halt-typescript-production-evidence-p.md`
-- `2026-08/26-173152-halt-typescript-production-evidence-q.md`
-- `2026-08/26-174510-halt-typescript-production-evidence-r.md`
-- `2026-08/26-181000-pass-typescript-production-evidence-s.md`
-- `2026-08/26-184827-promote-and-distribute-typescript-audit.md`
-- `2026-08/26-195923-promote-rust-audit-v2-research.md`
-- `2026-08/26-201146-compile-rust-audit-v2-tooling-roadmap.md`
-- `2026-08/26-204916-freeze-rust-v2-tool-boundary.md`
-- `2026-08/26-211937-replace-rust-v2-boundary-with-cargo.md`
-- `2026-08/26-220001-enforce-rust-v2-scope-ledger.md`
-- `2026-08/26-230000-add-rust-mechanical-evidence-adapters.md`
-- `2026-08/26-234500-qualify-rust-detector-candidates.md`
-- `2026-08/27-001136-run-rust-v2-production-evidence.md`
-- `2026-08/27-091043-promote-and-distribute-rust-v2.md`
-- `2026-08/27-160408-make-agent-instruction-reviews-intentful.md`
-- `2026-08/27-222245-post-direct-pr-review-findings.md`
+
+## Historical provenance
+
+Evidence from closed generations is curated in their generation roll-ups:
+- `g01`: `docs/roadmaps/archive/g01.md`
+- `g02`: `docs/roadmaps/archive/g02.md`

@@ -5,8 +5,8 @@ title: Operator blocked map
 destination: operator-blocked
 owner: repo-maintainers
 status: cleared
-master_spec: docs/specs/027-northstar-native-pre-execution-discovery.md
-roadmap: docs/roadmaps/g02/026-add-northstar-native-pre-execution-discovery.md
+master_spec: docs/specs/038-compact-default-lifecycle-and-generation-rollup.md
+roadmap: docs/roadmaps/g03/001-compact-default-lifecycle.md
 ---
 
 ## Destination

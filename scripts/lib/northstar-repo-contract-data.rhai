@@ -2,12 +2,7 @@ fn current_active_authority_files() {
     [
         "docs/vision/001-northstar-delivery-vision.md",
         "docs/contracts/004-language-quality-pack.md",
-        "docs/specs/026-orchestrator-thread-and-worker-pr-loop.md",
-        "docs/specs/027-northstar-native-pre-execution-discovery.md",
-        "docs/specs/029-northstar-long-horizon-planning.md",
-        "docs/specs/034-modular-language-quality-packages.md",
-        "docs/specs/035-chatterbox-intake-channel.md",
-        "docs/specs/037-chatterbox-led-planning-and-mechanical-coordination.md",
+        "docs/specs/038-compact-default-lifecycle-and-generation-rollup.md",
     ]
 }
 
@@ -25,7 +20,7 @@ fn required_files() {
         "docs/contracts/README.md",
         "docs/roadmaps/README.md",
         "docs/roadmaps/generation-index.md",
-        "docs/roadmaps/g02/README.md",
+        "docs/roadmaps/g03/README.md",
         "docs/logs/README.md",
         "docs/handoffs/README.md",
         "docs/triage/README.md",
@@ -37,7 +32,6 @@ fn required_files() {
         "docs/contracts/002-agent-local-paths.md",
         "docs/contracts/003-agent-instruction-surface.md",
         "docs/specs/README.md",
-        "docs/specs/030-conversational-triage-and-docs-cleanup.md",
         "docs/specs/archive/README.md",
         "bundle-docs/README.md",
         "bundle-docs/cheat-sheet.md",

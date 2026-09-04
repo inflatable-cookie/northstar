@@ -12,14 +12,12 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 | Replace permanent live-tree history with lifecycle-bound artifacts and lossless operational compaction. | active | spec 038, contract 001 | `g03.001` |
 | Make the compact lifecycle the only normal consumer posture. | ready behind foundation | spec 038 | `g03.001/132` |
 | Reduce repeated protocol enumerations and retire genuinely redundant modes without merging distinct behavior blindly. | planned | spec 038, later usage evidence | pending after `g03.001` |
-| Keep unresolved operator feedback visible without pinning old generations open. | watch | spec 037 | bounded watchlist below |
+| Keep unresolved operator feedback visible without pinning old generations open. | watch | spec 038, contract 001 | bounded watchlist below |
 
 ## Approved frontier
 
-- `g03.001/130` is ready and is the only initial implementation lane.
-- After card 130 merges, cards 131 and 132 are approved concurrent siblings.
-- No coordinator may dispatch 131 or 132 before card 130's merge and installed
-  planning base are verified.
+- Card 130 merged.
+- Cards `g03.001/131` and `g03.001/132` are the active concurrent frontier.
 
 ## Bounded watchlist
 
@@ -37,4 +35,4 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 
 ## Next task
 
-Dispatch card 130 from the planning commit that opened `g03`.
+Complete concurrent siblings `g03.001/131` and `g03.001/132`.

@@ -20,5 +20,6 @@ architecture, contracts, and executable roadmaps.
 - Historical and superseded procedure is not authority. Git retains full
   provenance.
 
-Card `g03.001/131` owns the classified removal of pre-`g03` specs using spec
-038's destination table.
+Pre-`g03` specs have been rolled up into architecture, contracts, bundle
+doctrine, and Git history per spec 038's destination table. Only active
+planning specs remain here.

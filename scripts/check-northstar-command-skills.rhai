@@ -372,7 +372,7 @@ require(review_child_section.contains("existing worker workspace") &&
     "review child missing worker workspace placement or serial lease");
 require(!fs::read_file(path::join(repo_root, "docs/architecture/system-architecture.md"))
         .contains("review child (dedicated PR-head workspace)") &&
-    !fs::read_file(path::join(repo_root, "docs/specs/036-economical-orchestrator-coordination.md"))
+    !fs::read_file(path::join(repo_root, "docs/contracts/001-working-rules.md"))
         .contains("creates a dedicated checkout/worktree workspace for the PR head"),
     "canonical docs retain superseded review-workspace creation instructions");
 
