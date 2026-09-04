@@ -1,6 +1,6 @@
 # 126 - Dogfood Economical Orchestrator Coordination
 
-Status: queued; bounded passive observation packet published
+Status: active; passive observation started after card 129 merge
 Owner: repo maintainers
 Created: 2026-09-04
 Updated: 2026-09-04
@@ -40,14 +40,14 @@ durable token accounting, or encoding local model prices and quotas.
       cancellation of both coordinator and promotion child;
 - [x] g02.053/card 128 implements the corrected role topology;
 - [x] observation packet and stop date are published;
-- [ ] g02.054/card 129 merged and installed parity verified.
+- [x] g02.054/card 129 merged through PR 35 and installed parity verified.
 
 ## Observation packet
 
 - **Cohort:** the first ten naturally occurring PR lanes coordinated under the
   installed post-card-129 protocol across the operator's Northstar-managed
   project work.
-- **Start:** card 129 merge plus verified installed-skill parity.
+- **Start:** 2026-09-04 after card 129 merge plus verified installed-skill parity.
 - **Stop:** the tenth accepted/closed PR lane, or 2026-09-18 at 17:00
   Europe/London, whichever comes first.
 - **Collection:** record only evidence already emitted by normal coordinator,
@@ -74,5 +74,6 @@ durable token accounting, or encoding local model prices and quotas.
 
 ## Next task
 
-Merge card 129 and verify installed parity, then begin passive collection. This
-card must not block or synthesize work in Northstar or any consumer project.
+Collect passive evidence from natural project lanes. Stop at the tenth natural
+lane or `2026-09-18 17:00 Europe/London`, whichever comes first. This card must
+not block or synthesize work in Northstar or any consumer project.

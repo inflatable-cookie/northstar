@@ -1,6 +1,6 @@
 # 129 - Finish Continuous Coordinator Delivery
 
-Status: complete in review
+Status: complete; merged through PR 35
 Owner: repo maintainers
 Created: 2026-09-04
 Updated: 2026-09-04
@@ -21,7 +21,7 @@ while canonical work is actionable.
 ## Approved dispatch manifest
 
 - **Lane:** `g02.054/129`
-- **State:** ready for direct implementation-worker dispatch
+- **State:** complete; merged through PR 35
 - **Promoted base:** the `main` commit containing the spec-037 continuity and
   cross-model corrections, roadmap 054, this card, and card 126's observation
   packet
@@ -104,6 +104,7 @@ Chatterbox.
 
 ## Next task
 
-Review and merge card 129 with an independent reviewer using a qualified
-distinct provider/model identity, refresh installed parity, and begin card
-126's passive observation cohort.
+Card 129 merged through PR 35 at `96a93957caea787926208cd15d70213796255650`
+after accepted exact-head review at `eaea45f1b3d8705988a1b7768e70b6c1a1e802ce`.
+Installed parity is verified. Card 126's passive observation cohort is active;
+its stop is the tenth natural lane or `2026-09-18 17:00 Europe/London`.

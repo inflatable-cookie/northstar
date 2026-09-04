@@ -1,6 +1,6 @@
 # 054 - Finish Continuous Coordinator Delivery
 
-Status: ready; card 129 is the sole implementation lane
+Status: complete; card 129 merged through PR 35
 Owner: repo maintainers
 Created: 2026-09-04
 Updated: 2026-09-04
@@ -38,9 +38,9 @@ first connector write refusal consumed an avoidable stop/fallback branch.
 
 ## Execution plan
 
-- [ ] **Card 129** updates reusable doctrine, modes, templates, checks, installed
+- [x] **Card 129** updates reusable doctrine, modes, templates, checks, installed
       parity, and closeout in one implementation lane.
-- [ ] **Card 126** then observes the next ten natural coordinated PR lanes or
+- [ ] **Card 126** observes the next ten natural coordinated PR lanes or
       stops at the published time boundary, whichever comes first.
 
 ## Review oracle
@@ -51,5 +51,7 @@ provider/model identity differs from its worker.
 
 ## Next task
 
-Dispatch card 129 directly. After accepted review and merge, begin card 126's
-passive cohort without blocking normal project work.
+Card 129 merged through PR 35 at `96a93957caea787926208cd15d70213796255650`
+after accepted exact-head review at `eaea45f1b3d8705988a1b7768e70b6c1a1e802ce`.
+Installed parity is verified. Card 126's passive cohort is now active and
+stops at the tenth natural lane or `2026-09-18 17:00 Europe/London`.

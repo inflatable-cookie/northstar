@@ -58,5 +58,6 @@ semantic role and merge boundaries remain exact-head review evidence.
 
 ## Next task
 
-Execute g02.054/card 129, then start card 126's published passive observation
-window. Observation must not block normal project delivery.
+Card 129 is merged through PR 35. Card 126's published passive observation is
+active through the tenth natural lane or `2026-09-18 17:00 Europe/London`.
+Observation must not block normal project delivery.

@@ -1,6 +1,6 @@
 # 037 - Chatterbox-Led Planning and Mechanical Coordination
 
-Status: active; card 128 complete, continuity correction card 129 ready
+Status: active; cards 128 and 129 complete, card 126 passive observation active
 Owner: repo maintainers
 Created: 2026-09-04
 Updated: 2026-09-04
@@ -277,7 +277,6 @@ Luna does not reconstruct their semantics.
 
 ## Next task
 
-Execute card 129. Update reusable doctrine, coordinator/reviewer modes, fixtures,
-and installed parity for continuous actionable progression, empty-runway-only
-Chatterbox notification, cross-model review, and bounded authenticated write
-fallback. Start card 126's passive observation cohort only after that merge.
+Card 129 merged through PR 35 and installed parity is verified. Continue card
+126's passive observation without synthetic work or delivery delay; stop at the
+tenth natural lane or `2026-09-18 17:00 Europe/London`.

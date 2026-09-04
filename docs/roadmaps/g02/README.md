@@ -15,7 +15,7 @@ single-pilot bucket.
 | Harden setup, nested-authority adoption, and posture classification so downstream repos can install the spine without hand adaptation. | active | `docs/specs/020-formalize-nested-docs-authority-setup.md`, `docs/specs/022-formalize-repo-posture-classification.md` | pending |
 | Keep execution autonomy bounded by ready cards, lane budgets, pause signals, and a file-based orchestrator/worker PR boundary instead of ad-hoc continuation prompts. | active | `docs/contracts/001-working-rules.md`, `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `bundle-docs/sections/07-delivery-framework-and-autonomy.md` | accept operator-provided live feedback |
 | Keep the orchestrator on the main runway by giving the operator independent chatterbox threads for side issues and ideas. | complete; cards 124 and 127 merged | `docs/specs/035-chatterbox-intake-channel.md`, `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `docs/specs/030-conversational-triage-and-docs-cleanup.md` | observe normal use |
-| Make Chatterbox the human planning authority while the coordinator mechanically dispatches approved frontiers and gates PRs. | active correction; card 129 ready | `docs/specs/037-chatterbox-led-planning-and-mechanical-coordination.md`, `docs/contracts/001-working-rules.md`, `docs/roadmaps/g02/054-finish-continuous-coordinator-delivery.md` | dispatch card 129, then passively observe card 126 |
+| Make Chatterbox the human planning authority while the coordinator mechanically dispatches approved frontiers and gates PRs. | complete; cards 128 and 129 merged | `docs/specs/037-chatterbox-led-planning-and-mechanical-coordination.md`, `docs/contracts/001-working-rules.md`, `docs/roadmaps/g02/054-finish-continuous-coordinator-delivery.md` | passively observe card 126 |
 | Keep always-loaded agent context useful, human, and bounded while preserving safety, authority, and project intent. | complete | `docs/contracts/003-agent-instruction-surface.md`, `docs/specs/028-agent-instruction-surface-optimization.md` | accept later operator feedback |
 | Consolidate bundle doctrine, templates, skills, and checks so the reusable system stays copy-ready. | active | `bundle-docs/protocol-kernel.md`, `template-bundle/README.md`, `skills/northstar/SKILL.md` | card 120 root reduction |
 | Add a genuinely long-horizon planning route without conflating it with readiness review. | active | `docs/specs/029-northstar-long-horizon-planning.md`, `skills/northstar/references/modes/atlas.md` | Non-Northstar scenario and operator confirmation |
@@ -128,15 +128,14 @@ rollover signal.
 - `053-chatterbox-led-planning-and-mechanical-coordination.md` (complete; card
   128 merged through PR 34 at `fd341aeb`; card 126 remains the next bounded
   observation lane)
-- `054-finish-continuous-coordinator-delivery.md` (ready; card 129 removes
-  operator-`continue` pauses between actionable steps, requires cross-model PR
-  review, and starts card 126's passive bounded observation after merge)
+- `054-finish-continuous-coordinator-delivery.md` (complete; card 129 merged
+  through PR 35 at `96a9395`; card 126's passive bounded observation is active)
 
 ## Next Task
 
-Dispatch g02.054/card 129. After merge and installed parity, card 126 begins its
-passive ten-lane-or-2026-09-18 observation without blocking other projects. The
-Sentrux triage note and any new-language cohort remain separate checkpoints.
+Card 126's passive ten-lane-or-2026-09-18 observation is active and must not
+block other projects. The Sentrux triage note and any new-language cohort remain
+separate checkpoints.
 
 `g02.048/117` merged through PR 22 at `75db6f5` after proving the generic
 lifecycle. Card 118's public repository merged package PR 1 as `09ef174`, and

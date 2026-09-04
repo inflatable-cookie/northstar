@@ -69,7 +69,7 @@
 - `scripts/check-northstar-command-skills.rhai`: added Card 129 structural
   assertions and 6 behavioral execution fixtures;
 - `docs/roadmaps/g02/batch-cards/129-finish-continuous-coordinator-delivery.md`:
-  marked complete in review with all acceptance items checked.
+  marked complete with all acceptance items checked.
 
 ## Validation & Verification
 
@@ -83,8 +83,14 @@
 - `effigy qa:docs`: passed;
 - `effigy qa`: passed (full validation board including outer board and consumer routes).
 
-## Next Move
+## Merge Closeout
 
-Review card 129 PR with a qualified distinct provider/model reviewer. Upon
-accepted review and merge, refresh installed parity and begin card 126's passive
-observation cohort.
+PR 35 merged to `main` as `96a93957caea787926208cd15d70213796255650` after the
+accepted independent exact-head verdict at
+`eaea45f1b3d8705988a1b7768e70b6c1a1e802ce`. The reviewer was
+`claude/claude-opus-5`, distinct from worker `cursor/gemini-3.8-flash`.
+Installed parity remains verified at 111 files. Card 126's passive observation
+is active and stops at the tenth natural lane or `2026-09-18 17:00 Europe/London`.
+
+The reviewer's fixture-quality and provider-neutrality advisories are
+non-blocking follow-up observations; they do not reopen card 129.

@@ -66,9 +66,10 @@ Northstar system:
   yields, and applies the merge gate. `g02.053/128` implemented the
   runtime/doctrine/template/check surfaces and merged through PR 34 at
   `fd341aeb`; installed parity is current. Live closeout then exposed repeated
-  operator-`continue` pauses. `g02.054/129` is ready to make actionable
-  progression continuous, enforce cross-model PR review, and begin card 126's
-  passive bounded observation without blocking other projects.
+operator-`continue` pauses. `g02.054/129` merged through PR 35 at `96a9395`,
+making actionable progression continuous and enforcing cross-model PR review.
+Card 126's passive bounded observation is active and does not block other
+projects.
 - `g02.041/109` repaired partial Rust evidence collection and merged; Signal
   owns the originating papercut closure
 - dependency-frontier design is Chatterbox planning. The canonical dispatch
