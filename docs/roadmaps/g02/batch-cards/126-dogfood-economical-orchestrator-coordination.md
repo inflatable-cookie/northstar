@@ -1,6 +1,6 @@
 # 126 - Dogfood Economical Orchestrator Coordination
 
-Status: blocked on g02.053/card 128 and corrected observation setup
+Status: ready for corrected observation setup
 Owner: repo maintainers
 Created: 2026-09-04
 Updated: 2026-09-04
@@ -38,7 +38,7 @@ durable token accounting, or encoding local model prices and quotas.
       dispatch, one fail-closed promotion child, a pending repeated loop,
       coordinator polling/waiting, an opaque blocker question, and operator
       cancellation of both coordinator and promotion child;
-- [ ] g02.053/card 128 implements the corrected role topology;
+- [x] g02.053/card 128 implements the corrected role topology;
 - [ ] observation packet and stop date are published.
 
 ## Acceptance criteria
@@ -50,5 +50,5 @@ durable token accounting, or encoding local model prices and quotas.
 
 ## Next task
 
-Blocked. Execute card 128, then publish the bounded observation packet and stop
-date before starting the corrected cohort.
+Publish the bounded observation packet and stop date before starting the
+corrected cohort.

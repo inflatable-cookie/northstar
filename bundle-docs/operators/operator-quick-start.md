@@ -54,7 +54,7 @@ to pick one mode:
   `northstar architecture refocus`
 - A request needs clearer shared wording without advancing the work -> reframe:
   `northstar reframe`
-- Independent intake chat, problem exploration, or side ideas -> chatterbox:
+- Planning, problem exploration, canonical promotion, or intake chat -> chatterbox:
   `northstar chatterbox` or `/northstar-chatterbox`
 - Sound planning; need milestones or batches -> planning: `compile-roadmaps`
 - Plan was right but changed -> recovery: `replan-after-change`
@@ -138,8 +138,9 @@ completion and resumes the same child for revisions. Without Paseo or when
 scoped tools are absent, you get every absolute handoff path for manual launch
 without pretended parentage.
 
-You do not have to ask for parallel workers. The orchestrator plans ready work
-as a dependency graph and launches every safe lane without a global thread budget.
+You do not have to ask for parallel workers. The coordinator consumes the
+canonical dispatch manifest and launches every approved ready-frontier lane
+without a global thread budget.
 A provider spend cap, quota, rate limit, or unavailable profile pauses
 or reroutes only that lane; unrelated ready work keeps launching. If the
 selected day-to-day route is unavailable, the orchestrator chooses another
@@ -165,20 +166,17 @@ and tests cannot bound. You can name a profile to
 override. If no adequate profile fits, the orchestrator reports that gap
 instead of silently spending the expensive one.
 
-You can also ask the orchestrator to spin off a planning conversation for one
-topic. It launches a frontier planning delegate in a separate worktree/thread;
-you talk with that delegate directly while the orchestrator continues unrelated
-work. The delegate opens a triage/research-only PR. An independent review child
-reviews it, the coordinator merges after the gate, and an operator-confirmed
-lane promotes the settled meaning into canonical planning.
+You can also spin off a lightweight planning delegate for one topic. It runs as
+a same-workspace conversation, captures unique triage notes, and reports them to
+Chatterbox for reconciliation and direct promotion.
 
-Worker PRs normally receive an independent review child: the orchestrator
-places it in a dedicated PR-head workspace, launches it as a child with finish
-notifications, and hands it the PR, canonical refs, and review oracle. The
-reviewer posts the verdict on the provider, naming the exact reviewed head.
-The coordinator does not duplicate the review; it verifies the verdict head,
-findings, checks, ancestry, mergeability, and pause state before merging. You
-can still ask the orchestrator thread to review a PR directly.
+Worker PRs normally receive an independent review child: the coordinator
+creates it in the existing worker workspace with finish notifications and a
+serial clean exact-head lease, and hands it the PR, canonical refs, and review
+oracle. The reviewer posts the verdict on the provider, naming the exact
+reviewed head. The coordinator does not duplicate the review; it verifies the
+verdict head, findings, checks, ancestry, mergeability, and pause state before
+merging. You can still ask the orchestrator thread to review a PR directly.
 
 You can also ask the current orchestrator to hand its live lane to a fresh
 orchestrator. It writes and pushes one ordinary seven-section handoff, then
@@ -190,23 +188,20 @@ Without Paseo you still get that absolute path and can launch the successor
 yourself. The old thread is not archived or deleted as part of the transfer.
 
 After a review requests changes, provider comments record the findings but do
-not wake a finished worker or planning delegate. A Paseo-backed orchestrator
-must prompt the same originating agent to read the comments, revise, validate,
-and push. It must not silently launch a replacement.
+not wake a finished worker. A Paseo-backed orchestrator must prompt the same
+originating agent to read the comments, revise, validate, and push. It must not
+silently launch a replacement.
 
-When an independent review child accepts the exact current worker or
-planning-delegate PR head and the coordinator's merge gate holds, the
-orchestrator may merge that lane without asking the
-operator again. A changed head,
-failed or pending check, stricter repository rule, explicit operator pause, or
-ambiguous merge state stops that path.
+When an independent review child accepts the exact current worker PR head and
+the coordinator's merge gate holds, the orchestrator may merge that lane
+without asking the operator again. A changed head, failed or pending check,
+stricter repository rule, explicit operator pause, or ambiguous merge state
+stops that path.
 
-The coordinator hands settled mechanical batches to a fast/low-cost subagent
-and reviews the full diff; planning, readiness, merge, and Git mutations stay
-with the coordinator. A decision-ready chatterbox packet can drive an
-operator-confirmed promotion batch: the projection applies only the named,
-confirmed changes, stops on semantic ambiguity, and an independent review
-child checks the promotion against the packet before the merge gate applies.
+Chatterbox directly promotes operator-confirmed canonical planning and sends
+the coordinator a provenance-labelled direction naming the promoted commit and
+approved ready frontier. The coordinator verifies factual preflight, dispatches
+workers, reports, and yields.
 
 - “Create a handoff for the next thread” -> `northstar` (handoff mode)
 

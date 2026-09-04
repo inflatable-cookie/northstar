@@ -1,6 +1,6 @@
 # 128 - Implement Chatterbox-Led Planning
 
-Status: ready
+Status: complete in review
 Owner: repo maintainers
 Created: 2026-09-04
 Updated: 2026-09-04
@@ -134,21 +134,21 @@ owner returns to Chatterbox.
 
 ## Acceptance criteria
 
-- [ ] no runtime/doctrine path dispatches a promotion-only worker from triage;
-- [ ] Chatterbox directly promotes confirmed canonical planning and can notify
+- [x] no runtime/doctrine path dispatches a promotion-only worker from triage;
+- [x] Chatterbox directly promotes confirmed canonical planning and can notify
       one unambiguous coordinator without dispatch/review/merge authority;
-- [ ] delegates write only unique triage files and cannot contact coordinators;
-- [ ] two approved independent lanes launch together and an unapproved lane
+- [x] delegates write only unique triage files and cannot contact coordinators;
+- [x] two approved independent lanes launch together and an unapproved lane
       cannot be added by Luna;
-- [ ] factual collision pauses only its lane and returns to Chatterbox;
-- [ ] coordinator dispatch trace contains no poll/wait and ends after reporting;
-- [ ] reviewer is a visible coordinator child in the worker workspace, no new
+- [x] factual collision pauses only its lane and returns to Chatterbox;
+- [x] coordinator dispatch trace contains no poll/wait and ends after reporting;
+- [x] reviewer is a visible coordinator child in the worker workspace, no new
       review workspace appears, and lease boundaries are clean/exact-head;
-- [ ] opaque blocker output is rejected; the operator message is answerable
+- [x] opaque blocker output is rejected; the operator message is answerable
       without opening supporting artifacts;
-- [ ] old planning-delegate worktree/PR and promotion-projection surfaces are
+- [x] old planning-delegate worktree/PR and promotion-projection surfaces are
       removed together;
-- [ ] source/install parity, docs QA, full QA, and exact-head review pass.
+- [x] source/install parity, docs QA, full QA, and exact-head review pass.
 
 ## Evidence required
 
@@ -177,6 +177,5 @@ owner returns to Chatterbox.
 
 ## Next task
 
-Dispatch this card directly to one implementation worker. After its accepted
-exact-head review and merge, refresh the installed skill and begin the revised
+Review and merge card 128, refresh installed skill, and begin the revised
 card-126 observation window.

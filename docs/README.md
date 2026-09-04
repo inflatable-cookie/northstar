@@ -61,10 +61,11 @@ Northstar system:
 - spec 037 supersedes the first economical-coordinator split after live use
   exposed a roughly twenty-minute promotion loop before actual-worker dispatch.
   Chatterbox now owns human discovery, canonical planning promotion, triage,
-  dependency design, and approved parallel frontiers. The coordinator will
-  consume that plan mechanically, dispatch actual workers/reviewers, report,
-  yield, and apply the merge gate. `g02.053/128` is ready to implement the
-  runtime/doctrine/template/check surfaces before the corrected card-126 trial
+  dependency design, and approved parallel frontiers. The coordinator consumes
+  that plan mechanically, dispatches actual workers/reviewers, reports,
+  yields, and applies the merge gate. `g02.053/128` implemented the
+  runtime/doctrine/template/check surfaces before the corrected card-126 trial;
+  card 128 is complete in review.
 - `g02.041/109` repaired partial Rust evidence collection and merged; Signal
   owns the originating papercut closure
 - dependency-frontier design is Chatterbox planning. The canonical dispatch

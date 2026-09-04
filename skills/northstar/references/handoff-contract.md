@@ -40,24 +40,6 @@ handoff. Normal-mode agents, planning/orchestrator threads, and agents that
 merely happen to be in a worktree must not perform the worker preflight or
 inspect worker-local path configuration.
 
-### Planning-delegate activation
-
-A planning-delegate handoff must declare all four frontmatter fields:
-
-```yaml
-handoff_mode: planning-delegate
-planning_mode: conversational-discovery
-dispatch_authority: orchestrator
-promotion_authority: orchestrator
-```
-
-This activates an operator-facing planning conversation in a separate
-branch/worktree. It does not activate implementation worker mode. The delegate
-may write only the named triage/research packet, may use bounded read-only
-research subagents, and finishes with a PR for independent review. Canonical
-promotion, readiness, implementation dispatch, and merge remain with the
-orchestrator; substantive review routes to an independent review child.
-
 ### Orchestrator-continuation activation
 
 A fresh-orchestrator continuation reuses the generic seven-section handoff.
@@ -128,10 +110,6 @@ or copies multi-paragraph protocol text, treat that as a compression signal.
   - the remaining continuation envelope, if another ready card is in-bounds;
   - lane budget or pause signal when the run did not simply continue;
   - the key files or artifacts involved, using absolute paths for local files;
-  - for a planning delegate, the named topic, triage/research packet paths,
-    allowed write paths, base/branch/worktree, concurrent non-overlapping work,
-    required sibling links or `none`, frontier capability profile, and
-    orchestrator promotion owner;
   - for a worker handoff dispatched beside other frontier lanes, the sibling
     lanes launched with it, the mutable and closeout surfaces this lane owns,
     and whether shared closeout is partitioned or reserved for a named
@@ -170,12 +148,9 @@ or copies multi-paragraph protocol text, treat that as a compression signal.
 - `Completion Protocol` points back to the repo's batch card, roadmap,
   currentness, and log surfaces. It names the continuation envelope or pause
   signal, the next task, and unresolved risks. Worker handoffs also put the
-  worker/PR flow here. Planning-delegate handoffs instead define the direct
-  operator conversation, bounded research, triage/research-only diff, planning
-  PR, and the independent-review, coordinator-gated merge, and operator-
-  confirmed promotion flow. Orchestrator-
-  continuation handoffs tell the successor to re-enter normal orchestrator
-  mode from the absolute path, and tell the source to yield the lane.
+  worker/PR flow and serial review lease here. Orchestrator-continuation handoffs
+  tell the successor to re-enter normal orchestrator mode from the absolute path,
+  and tell the source to yield the lane.
 
 ## Validity rules
 

@@ -124,11 +124,34 @@ One-page reference for terms used across Northstar docs.
 : A continuation brief created when one thread ends and another must continue.
 
 **Chatterbox**
-: A secondary Northstar communication mode for direct, human intake chat and
-  problem identification. Shares the orchestrator's checkout, writes only
-  unique timestamped triage files with exact-path git commit isolation, reports
-  notes to the operator without starting an orchestrator turn in v1, and cannot
-  implement, promote, review, merge, or dispatch.
+: The primary operator-facing planning authority. Owns discovery, research
+  direction, triage reconciliation, canonical planning promotion, lane graph
+  design, and the approved parallel frontier. Directly promotes confirmed
+  planning on the integration branch and sends provenance-labelled direction to
+  the coordinator.
+
+**Planning delegate**
+: An optional lightweight same-workspace conversation for exploring one issue
+  in parallel. Writes only unique timestamped triage files under exact-path Git
+  isolation and reports to Chatterbox; does not open planning PRs or contact the
+  coordinator.
+
+**Coordinator**
+: The mechanical delivery manager. Performs factual preflight, launches the
+  approved frontier from the canonical dispatch manifest, manages
+  worker/reviewer lifecycle, applies the merge gate, merges, and closes out.
+  Yields immediately after action.
+
+**Review child**
+: An independent exact-head reviewer running in the existing worker workspace
+  under a serial clean lease. Posts a durable provider verdict naming the exact
+  head.
+
+**Dispatch manifest**
+: The canonical specification in ready planning naming lane outcome, readiness,
+  prerequisites, mutable paths, reserved closeout surfaces, approved concurrent
+  siblings, serial edges, worker capability class, acceptance evidence, review
+  oracle, and stop conditions.
 
 ## Files and Naming
 

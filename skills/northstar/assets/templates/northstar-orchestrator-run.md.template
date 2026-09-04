@@ -189,22 +189,24 @@ report what changed, validation run, what remains, and any planning decision.
 
 ### Review and merge path
 
-The orchestrator will review the PR against the canonical refs, diff, and checks.
+The orchestrator launches an independent review child in this worker workspace
+under a serial clean exact-head lease to review the PR against the canonical
+refs, diff, review oracle, and checks.
 Current review state: `{{AWAITING_REVIEW_OR_OTHER_STATE}}`.
 
-The orchestrator records an evidence-backed verdict in the provider's review
-surface. When the orchestrator and worker share a GitHub identity, formal
-self-approval is unavailable, so the orchestrator posts the verdict as a PR
-comment; that comment is the canonical review record. If changes are requested,
-make only those changes on this branch, push again, and report back through the
-operator. Blocking findings use `execution-miss`, `oracle-gap`,
-`planning-change`, `validation-gap`, or `integration-drift`; a
-`planning-change` returns to planning before revision. Requested changes are:
-`{{REQUESTED_CHANGES_OR_NONE}}`. The PR should
-link the card, milestone, spec, changed surfaces, evidence, validation, and
-unresolved items. When the exact reviewed head is still current, required checks
-pass, the PR is mergeable into the intended base, and no stricter repository
-rule or explicit operator pause applies, the orchestrator merges without another
+The reviewer records an evidence-backed verdict in the provider's review
+surface naming the exact head SHA. When the reviewer and worker share a GitHub
+identity, formal self-approval is unavailable, so the reviewer posts the
+verdict as a PR comment; that comment is the canonical review record. If
+changes are requested, make only those changes on this branch, push again, and
+report back through the active control plane or operator. Blocking findings use
+`execution-miss`, `oracle-gap`, `planning-change`, `validation-gap`, or
+`integration-drift`; a `planning-change` returns to planning before revision.
+Requested changes are: `{{REQUESTED_CHANGES_OR_NONE}}`. The PR should link the
+card, milestone, spec, changed surfaces, evidence, validation, and unresolved
+items. When the exact reviewed head is still current, required checks pass, the
+PR is mergeable into the intended base, and no stricter repository rule or
+explicit operator pause applies, the orchestrator merges without another
 approval prompt.
 
 - **Closeout refs:** `{{CARD_LOG_ROADMAP_FRONT_DOORS}}`

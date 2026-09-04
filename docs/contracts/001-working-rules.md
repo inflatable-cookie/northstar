@@ -569,41 +569,26 @@ Risky surfaces still need an explicit review oracle and material independent
 review. A well-specified persistence or public-API change may use a small
 economical worker while the lane's independent review child keeps material
 review; a frontier review route is reserved for residual risk that settled
-planning, explicit oracles, and tests cannot bound. Unresolved designs return
-to planning. A refused route is removed only for that attempt; select another
-adequate route without treating the refusal as global capacity. If no adequate
-profile remains, preserve and pause only that lane.
+planning, explicit oracles, and tests cannot bound. Worker price is not the
+review-strength control. Unresolved designs return to planning. A refused
+route is removed only for that attempt; select another adequate route from the
+lane's diversified pool without treating the refusal as global capacity. If no
+adequate profile remains, preserve and pause only that lane.
 
-An operator may ask the orchestrator to spin off a frontier planning delegate
-for a named topic while the orchestrator continues unrelated work. The
-orchestrator publishes one handoff declaring `handoff_mode: planning-delegate`,
-`planning_mode: conversational-discovery`, `dispatch_authority: orchestrator`,
-and `promotion_authority: orchestrator`, then launches it in a separate
-worktree/branch using a current frontier conversational-planning profile. The
-delegate talks directly with the operator, captures confirmed decisions,
-recommendations, alternatives, evidence, and open questions in named
-`docs/triage/` and optional `docs/research/` paths, and opens a PR containing
-only that packet. Its handoff lists required sibling worktree links or `none`;
-launcher lifecycle creates them in the worktree container before setup and the
-delegate verifies them without overwriting conflicts.
+An operator may start a lightweight planning delegate for one issue in
+parallel. In Paseo it is a visible agent tab in the current project workspace,
+not a new worktree workspace. The delegate writes only unique timestamped
+`docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files using exact-path Git isolation.
+It talks directly with the operator, separates confirmed decisions,
+recommendations, evidence, and open questions; it does not edit canonical
+planning, open a planning PR, promote, decide readiness, or contact the
+coordinator. Bounded research subagents are read-only and return sourced
+findings to the delegate. When ready, the delegate sends Chatterbox the absolute
+note path and summary (or uses manual operator relay). Chatterbox reconciles
+the note against current authority and promotes, retains, splits, or removes it.
 
-The planning delegate may spawn bounded read-only research subagents that
-return sourced findings to it. Those subagents do not edit, create branches or
-PRs, contact the operator, or start nested orchestrator/implementation lanes.
-The delegate itself does not edit product or canonical planning surfaces,
-promote, decide readiness, or launch implementation. The orchestrator does not
-start work that depends on the topic while its planning PR is open.
-
-After an independent review child accepts the exact PR head and checks pass,
-the orchestrator merges the planning PR, reconciles it against current `main`,
-and separately promotes settled meaning through an operator-confirmed lane
-into architecture, contracts, specs, roadmaps, or cards. The promotion lane
-removes or splits resolved triage notes as the brief names. Merge of a
-planning packet is intake,
-not promotion or execution authority.
-
-An operator may instead ask the current orchestrator to transfer its whole live
-lane to a fresh orchestrator thread. The source writes the normal seven-section
+An operator may ask the current orchestrator to transfer its whole live lane to
+a fresh orchestrator thread. The source writes the normal seven-section
 handoff with `handoff_mode: orchestrator-continuation`,
 `orchestrator_mode: economical-coordination`, and
 `dispatch_authority: orchestrator`, reconciles and pushes the stopping state,
@@ -613,51 +598,71 @@ does not enter worker mode or run the worker worktree preflight.
 
 When Paseo supplies the transport, create a separate local workspace for the
 same project and checkout, select a current orchestrator-role profile, and pass
-the capitalized `Orchestrator` label through the supported agent-label field.
-Use only the absolute handoff path as the initial prompt. Preserve returned
-workspace and agent identities and do not retry ambiguously. If Paseo exposes a
-native sidebar pin/reorder surface, place the successor beside the source;
-otherwise report that pinning is manual. Never use browser, computer-use, or
-other UI automation to arrange the sidebar. Without Paseo, return the absolute
-handoff path for manual launch. Do not archive or delete the source workspace as
-part of the transfer.
+the capitalized `Orchestrator=true` label through the supported agent-label
+field. Use only the absolute handoff path as the initial prompt. Preserve
+returned workspace and agent identities and do not retry ambiguously. If Paseo
+exposes a native sidebar pin/reorder surface, place the successor beside the
+source; otherwise report that pinning is manual. Never use browser,
+computer-use, or other UI automation to arrange the sidebar. Without Paseo,
+return the absolute handoff path for manual launch. Do not archive or delete
+the source workspace as part of the transfer.
 
-The orchestrator may delegate a meaningful batch of mechanical documentation
-projection to a fast, low-cost subagent after it has settled every planning
-decision. A promotion batch may instead materialize an explicitly
-operator-confirmed decision-ready packet; it stops on semantic ambiguity, and
-an independent review child checks the promotion against the confirmed packet
-before the orchestrator applies the merge gate. The projection brief must name
-the authority owner, settled meaning, canonical refs, allowed paths, exact
-evidence and state transitions, forbidden judgments, validation, and stop
-conditions. The subagent may materialize or synchronize named roadmap, card,
-log, front-door, index, handoff, template, and evidence surfaces. It must not
+**Chatterbox** is the primary operator-facing planning authority. It owns
+discovery, research direction, triage reconciliation, canonical planning
+promotion, lane/dependency design, and the approved parallel frontier. After
+explicit operator confirmation, Chatterbox edits, validates, commits, and pushes
+the coherent canonical planning batch directly on the integration branch. It
+does not dispatch a promotion worker and does not implement product/runtime
+changes, accept reviews, or merge implementation PRs. Chatterboxes share the
+checkout and write only unique `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files,
+staged with `git add -- <exact-file>` and committed with
+`git commit -- <exact-file>`.
+
+Chatterbox may send the named coordinator one provenance-labelled background
+direction message: `operator-confirmed direction` (changes planning/priority/
+pause), `Chatterbox recommendation` (unconfirmed intake), or `administrative
+notice` (routing facts). Chatterbox inspects coordinator state once, sends
+once, reports delivery, and does not poll. Raw triage and external intake are
+never coordinator execution authority.
+
+The **coordinator** checks only current facts: promoted commit, prerequisite
+completion, path/workspace/branch collisions, transport/profile availability,
+repository gates, and operator pauses. It loads only the instructions, promoted
+commit, selected cards, manifest, and named refs needed for factual preflight
+(narrow fast path). It launches the complete approved ready frontier published
+in the dispatch manifest; it does not design lanes, dependency edges, or
+parallel groups. Coordinator turns are event-bounded: perform all immediately
+available coordination, report state and identities, then yield. Never poll,
+invoke a wait primitive, or hold a turn open. `notifyOnFinish: true` drives the
+next bounded turn.
+
+After meaning is fully settled, a fast/low-cost subagent may serially apply an
+exact brief to genuinely mechanical non-semantic edits in the planning
+checkout: materializing already-settled roadmap, card, log, front-door, index,
+handoff, template, parity, and evidence updates; synchronizing exact settled
+wording across named source/install surfaces; and running deterministic docs,
+link, parity, and diff checks. The brief must name the authority owner, settled
+meaning, canonical refs, allowed paths, exact evidence and state transitions,
+forbidden judgments, validation, and stop conditions. The subagent must not
 choose a canonical home, invent or reinterpret intent, add acceptance or stop
 rules, decide readiness/completion/next work, resolve contradictions, edit
 product code, commit, push, review, or merge.
 
-Documentation projection runs serially in the orchestrator's planning context;
-it is not worker mode and needs no worker handoff or worktree, and it is only
-for genuinely non-semantic edits because operator-confirmed promotion runs as
-the bounded branch/worktree/PR lane above. Capture existing
-dirty state and allowed paths before dispatch. The orchestrator reviews the full
-diff for semantic fidelity and owns commit/push. Keep tiny edits local when
-dispatch and review would cost more than the projection.
+Review children run in the existing worker workspace using the worker
+`workspaceId`, preserving parentage, visible tab placement, and
+`notifyOnFinish: true`. Do not create a review-only workspace. The worker and
+reviewer hold a serial clean exact-head lease: the worker is idle, `HEAD`
+equals the PR head SHA, and index/tracked worktree are clean before review. The
+reviewer inspects and runs checks without editing tracked files, committing,
+pushing, or changing branches. It posts a provider verdict naming the exact
+head.
 
-An operator may start a chatterbox thread directly with no handoff or worktree,
-or ask the orchestrator to spawn one for a feature idea, issue, or exploratory
-chat. In Paseo, the orchestrator spawns the chatterbox as a parent-attached
-child agent in its current workspace — a sibling agent tab, never a separate
-workspace — selects an adequate conversational profile under the
-diversified-routing rule, sets the capitalized `Chatterbox=true` label, and
-sets `notifyOnFinish: false`.
-Chatterboxes share the orchestrator's checkout and
-write only unique `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files, staged with
-`git add -- <exact-file>` and committed with `git commit -- <exact-file>`.
-Chatterbox v1 starts no automatic orchestrator turn; it reports the absolute
-note path and a one-line summary to the operator in chat. The orchestrator
-inspects `docs/triage/` at its next normal triage checkpoint and treats
-surfaced notes as non-assignments.
+The agent discovering an operator-owned blocker supplies a self-contained
+10-part capsule (headline, lane/PR/head state, observed vs intended behavior,
+why operator authority is required, impact, options, recommendation when
+supported, exact question, paused state/next action, supporting links). The
+coordinator verifies identities/state and relays the capsule. Missing or opaque
+capsules return to the discovering child.
 
 The repository is the durable communication boundary. A worker must be able to
 re-enter from its worker handoff, `AGENTS.md`, canonical refs, cards, commits,
@@ -842,8 +847,9 @@ current role profile, creates the lane's dedicated worktree workspace, creates
 the worker as a child agent from its own agent-scoped tool context with that
 returned workspace ID, leaves finish notifications enabled (`notifyOnFinish: true`),
 trusts finish notifications instead of polling, and sends bounded follow-ups to
-the same child agent without another permission prompt. Workspace placement
-does not detach parentage. A top-level/root-agent launch, schedule, generic
+the same child agent without another permission prompt. Review children are
+created in the existing worker workspace under a serial clean exact-head lease
+with finish notifications enabled. Workspace placement does not detach parentage. A top-level/root-agent launch, schedule, generic
 detached run, or CLI path without explicit parent attachment is rejected as
 non-equivalent. An operator-named profile overrides automatic profile
 selection. A repository `paseo.json` configures project lifecycle capability;

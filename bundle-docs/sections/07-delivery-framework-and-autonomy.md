@@ -722,43 +722,47 @@ explicit override even when rotation would choose differently.
 
 ## Economical orchestrator coordination
 
-Coordination is the orchestrator's default job. It maintains the dependency
-frontier and launches every safe ready lane, creates and resumes child workers
-and reviewers in separate workspaces, routes unresolved product meaning to an
-operator-facing chatterbox, promotes only operator-confirmed meaning through a
-bounded projection lane, routes substantive exact-head review to an
-independent review child, and verifies the merge gate. It does not repeat full
-planning or semantic review for a settled lane; it escalates when the packet,
+Coordination is the orchestrator's default job: mechanical delivery
+management. It maintains the approved ready frontier from the canonical
+dispatch manifest, launches every safe ready lane, creates and resumes child
+workers in dedicated worktree workspaces, creates review children in the
+existing worker workspace under a serial clean exact-head lease, verifies the
+coordination gate, merges, and closes out. It does not repeat full planning or
+semantic review for a settled lane; it escalates when a factual conflict,
 review, or repository state leaves a real judgment unresolved. Small
 operational clarifications that cannot change behavior, acceptance, public
 contract, or sequencing stay with the coordinator.
 
-Planning path: a chatterbox note is decision-ready when it separates
-operator-confirmed decisions, recommendations not yet accepted, evidence and
-alternatives, unresolved questions, and affected authority surfaces.
-Recommendations are not decisions. After the operator confirms the material
-meaning, the orchestrator compiles an exact promotion brief for a bounded
-planning-projection worker running as its own branch/worktree/PR lane. The
-worker edits canonical architecture, contracts, specs, roadmaps, and cards
-only as named; semantic ambiguity returns to the operator and the chatterbox.
-An independent review child reviews the promotion PR against the confirmed
-packet, and the coordinator then applies the normal exact-head merge gate.
+Planning path: Chatterbox is the primary planning authority and promotes
+confirmed canonical planning directly on the integration branch. The
+coordinator loads only the instructions, promoted commit, selected cards,
+dispatch manifest, and named refs needed for factual preflight (narrow fast
+path). It does not sweep unrelated planning, design dependency edges, compile a
+duplicate semantic handoff, or launch promotion-only workers.
 
-Review path: every worker PR gets an independent review child unless the
-operator explicitly asks the current thread for a direct review. In Paseo the
-orchestrator creates a dedicated workspace at the PR head, launches the
-reviewer as a parent-attached child with finish notifications enabled, selects
-an economical adequate review route under the diversified-routing rule, and
-hands over the PR, canonical refs, and review oracle — not the worker's
-transcript. Requested changes return to the same worker; the revised exact
-head returns to the same reviewer when available; a replacement reviewer
-starts a fresh complete review. Before merge the coordinator independently
-verifies only the coordination gate: the durable accepted verdict names the
-exact current head, every blocking finding is resolved or explicitly
-superseded on the provider, required checks pass, base ancestry and
-mergeability are current, and no stricter repository rule or operator pause
-applies. Ambiguous, contradictory, missing, or stale review evidence stops
-merge.
+Review path: every worker PR gets an independent review child in the existing
+worker workspace with finish notifications enabled (`notifyOnFinish: true`),
+selecting an economical adequate review route under the diversified-routing
+rule, and handing over the PR, canonical refs, and review oracle — not the
+worker's transcript. The worker and reviewer hold a serial clean exact-head
+lease: the worker is idle, workspace `HEAD` equals the PR head, and
+index/tracked worktree are clean before review. The reviewer may inspect and run
+checks but cannot edit tracked files, commit, push, or change branches. It
+posts a provider verdict naming the exact head. Requested changes return to the
+same worker; the revised exact head returns to the same reviewer when available;
+a replacement reviewer starts a fresh complete review. Before merge the
+coordinator independently verifies only the coordination gate: the durable
+accepted verdict names the exact current head, every blocking finding is
+resolved or explicitly superseded on the provider, required checks pass, base
+ancestry and mergeability are current, and no stricter repository rule or
+operator pause applies. Ambiguous, contradictory, missing, or stale review
+evidence stops merge.
+
+Coordinator turns are event-bounded: an operator message or child notification
+starts a turn. The coordinator performs every immediately available dispatch,
+revision, review, merge-gate, or closeout action, reports identities and state,
+then yields. It never polls, calls a wait primitive, holds a turn open for a
+child, or rescans unchanged state to appear busy.
 
 Model posture: the coordinator's normal route is an economical coordinator
 class — reliable tool use, concise state tracking, bounded verification.
@@ -771,42 +775,30 @@ whether the split holds; one anecdote never rewrites it.
 
 ## Conversational planning delegation
 
-An operator may ask the orchestrator to split off a frontier, high-reasoning
-planning thread for one named topic while the orchestrator continues unrelated
-lanes. This is a planning delegate, not an implementation worker. It receives a
-committed handoff, works in an isolated branch/worktree, talks directly with the
-operator, and records a reviewable planning packet in named `docs/triage/` and
-optional `docs/research/` paths. Its handoff lists required sibling links or
-`none`; launcher lifecycle creates them in the worktree container before setup,
-and the delegate stops on missing or conflicting paths.
+An operator may start a lightweight planning delegate for one issue in parallel
+while unrelated work continues. This is an optional same-workspace conversation,
+not an implementation worker and not a separate worktree workspace. In Paseo it
+is a visible agent tab in the current project workspace. It writes only unique
+timestamped `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files using exact-path Git
+isolation.
 
-The packet separates operator-confirmed decisions, delegate recommendations,
-alternatives, evidence, non-goals, and unresolved questions. The delegate may
-spawn bounded read-only research subagents that return sourced findings to it.
-They do not write to the repository, contact the operator, or create nested
-orchestrator/implementation lanes. The delegate does not edit product code or
-canonical planning, choose promotion destinations, decide readiness, or launch
-implementation.
+The delegate talks directly with the operator, separates evidence,
+alternatives, operator-confirmed statements, recommendations, constraints,
+non-goals, and unresolved questions. It may spawn bounded read-only research
+subagents that return sourced findings to it. They do not write to the
+repository, contact the operator, or create nested lanes. The delegate does not
+edit product code or canonical planning, open a planning PR, promote, decide
+readiness, or contact the coordinator.
 
-The orchestrator reserves the topic and continues only non-overlapping work.
-An independent review child reviews the planning PR against the original
-handoff, operator confirmations recorded in the packet, evidence, current
-canonical state, and exact head. If decision ownership is still unclear, the
-coordinator asks the operator rather than relying on private thread history.
-Requested changes return to the same delegate. After the accepted verdict
-names the current head and checks pass, the coordinator may merge without
-another operator prompt, then separately reconcile and promote settled meaning
-through an operator-confirmed lane against current `main`. The merged packet
-remains non-authoritative until promotion; resolved triage material is removed
-or split in that promotion batch.
+When ready, the delegate sends Chatterbox the absolute note path and summary;
+manual operator relay is the fallback. Chatterbox reconciles the note against
+current authority and promotes, retains, splits, or removes it.
 
 Select the delegate from the adequate frontier conversational-planning pool
 under the diversified-routing rule, rotating recent use like every other
 dispatch class. A locally preferred model is configuration, not
-Northstar doctrine.
-With a control plane, use one isolated branch-off workspace and the
-committed handoff as the only initial prompt. Without one, give the operator the
-absolute handoff path for a manually isolated thread.
+Northstar doctrine. Without a control plane, the operator conducts the
+conversation on the shared checkout.
 
 ## Fresh orchestrator continuation
 
@@ -833,78 +825,87 @@ other UI automation to arrange the sidebar. Without Paseo, return the absolute
 handoff path for manual launch. Do not archive or delete the source workspace as
 part of the transfer.
 
-## Mechanical documentation projection
+## Chatterbox planning and promotion
 
-Keep promotion authority, readiness judgment, review-oracle design, worker
-routing, the merge gate, and merge with the coordinator; route substantive
-review to independent review children. Once meaning is fully settled, an
-orchestrator may delegate genuinely non-semantic mechanical documentation
-edits to a fast, low-cost profile. Select by current role notes; do not make
-one provider model a Northstar dependency.
+Chatterbox is the primary human-facing planning authority. It owns discovery,
+research direction, triage reconciliation, canonical planning promotion, lane
+graph design, and the approved parallel frontier.
 
-The brief names the authority owner, settled decisions, canonical refs, allowed
-paths, exact evidence and state transitions, forbidden judgments, validation,
-and stop conditions. The projection subagent may materialize named roadmaps,
-cards, logs, front doors, indexes, handoffs, templates, parity updates, and
-deterministic evidence. It cannot choose canonical ownership, invent or
-reinterpret intent, add acceptance or stop policy, decide readiness/completion/
-next state, resolve contradictions, edit product code, commit, push, review, or
-merge.
-
-Run it serially in the planning context, without a worker handoff or worktree.
-This same-checkout helper carries no new product meaning. Capture dirty state
-and allowed paths before dispatch; the orchestrator reviews the complete diff
-before any Git/provider mutation, which it owns. Materializing an
-operator-confirmed decision-ready packet into canonical architecture,
-contracts, specs, roadmaps, and cards is different: that promotion runs as a
-bounded branch/worktree/PR lane with an independent review child and the
-coordination gate. Use the helper for roughly three or more related surfaces,
-or another batch large enough to repay dispatch and review overhead; keep tiny
-edits local.
-
-## Chatterbox intake channel
-
-An operator may run independent conversational intake threads — called
-**chatterboxes** — beside the main orchestrator to explore ideas, issues, and
-feature proposals without interrupting active dispatch, review, or execution.
-
-- **Start:** The operator starts a chatterbox directly with no handoff file or
-  worktree, or asks the orchestrator to spawn one.
-- **Paseo spawn:** In Paseo, the orchestrator spawns the chatterbox as a
-  parent-attached child agent in its current workspace — a sibling agent tab,
-  not a separate workspace (rejecting any new workspace, `branch-off`
-  isolation, or a different project path). It applies the capitalized
-  `Chatterbox=true` label, sets `notifyOnFinish: false`, and selects from the
-  adequate operator-facing conversational pool under the diversified-routing
-  rule. Several independent chatterboxes may coexist as sibling tabs there.
-- **Shared checkout and Git:** Chatterboxes share the orchestrator's checkout.
-  They write only unique `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files, check
+- **Direct promotion:** After explicit operator confirmation, Chatterbox
+  directly updates canonical planning on the integration branch (architecture,
+  contracts, specs, roadmaps, ready cards, dispatch manifest, indexes, triage
+  dispositions). It validates and reviews the complete semantic diff, commits,
+  pushes, then sends the coordinator a provenance-labelled direction naming the
+  promoted commit and approved ready frontier. It does not launch a promotion
+  worker or implement product/runtime changes.
+- **Direction channel:** Chatterbox may discover the named coordinator and send
+  it one background, provenance-labelled message:
+  - `operator-confirmed direction` changes planning, priority, pause, reroute,
+    or accepted escalation state;
+  - `Chatterbox recommendation` is unconfirmed intake and cannot change active
+    work;
+  - `administrative notice` carries a note, commit, supersession, or routing
+    fact.
+  The coordinator reconciles confirmed direction with current state without
+  asking the operator to repeat it. Chatterbox inspects coordinator state once
+  to avoid duplicate messages, sends once, reports delivery, and does not poll.
+  When no unambiguous coordinator or background messaging route exists,
+  Chatterbox gives the operator a complete manual-relay message and absolute
+  path.
+- **Shared checkout and Git:** Chatterboxes share the checkout. They write
+  only unique `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files, check
   `git diff --cached --name-only` to fail closed if pre-existing staged files
   exist, stage with `git add -- <exact-file>`, and commit with
   `git commit -- <exact-file>`. They never use `git add .`, edit `README.md` or
   code, create worktrees/branches/PRs, or modify non-triage files.
-- **Paseo notification boundary:** Paseo has no atomic notify-only or
-  send-if-idle API. `send_agent_prompt` starts an orchestrator turn, and checking
-  status before sending leaves a race in which the orchestrator can start work
-  between the two calls. Chatterbox v1 therefore does not call
-  `send_agent_prompt` or start an orchestrator turn; it reports the absolute note
-  path and summary to the operator in chat. A future atomic queue or conditional
-  send remains triage only.
-- **Orchestrator intake handling:** The orchestrator discovers and inspects
-  triage notes at its next normal triage checkpoint. If an intake prompt is ever
-  received, it treats it as non-assignment information: it records the path,
-  does not promote from the intake, does not change current work, and inspects
-  the note at its next triage checkpoint.
-- **Authority boundary:** A chatterbox is not a planning delegate, worker,
-  continuation, or `paseo-advisor`. It cannot implement, promote, review, merge,
-  dispatch, or reserve topics.
+- **Authority boundary:** Chatterbox does not implement product/runtime code,
+  supervise workers, review PRs, or merge.
+
+## Review children and serial workspace lease
+
+Review remains independent but uses the existing worker workspace. The
+coordinator creates a child reviewer with the worker `workspaceId`,
+preserving coordinator parentage, a visible agent tab, and
+`notifyOnFinish: true`. It does not create a review-only workspace or fall back
+to the coordinator checkout.
+
+The worker and reviewer hold a serial workspace lease:
+1. Before review, the worker is idle, workspace `HEAD` equals the PR head SHA,
+   and index and tracked worktree are clean.
+2. The reviewer may inspect files and run test/check commands but cannot edit
+   tracked files, commit, push, or change branches.
+3. The reviewer posts a provider verdict naming the exact head SHA and finishes.
+4. The coordinator verifies the same clean exact-head state before returning the
+   lease to the worker for revisions.
+Wrong head, dirty state, concurrent access, missing parentage/notification, or a
+need for branch mutation stops review.
+
+## Context-complete operator escalations
+
+The agent that discovers an operator-owned blocker supplies a self-contained
+capsule containing:
+
+1. plain-language headline;
+2. lane, PR, exact head, and lifecycle state;
+3. observed versus intended behavior;
+4. why operator authority is required;
+5. practical impact;
+6. concrete options and consequences;
+7. recommendation when evidence supports one;
+8. one exact question;
+9. paused state and next action;
+10. supporting links after the explanation.
+
+The coordinator verifies current identities/state and relays the capsule. An
+operator must be able to understand and answer without opening a blocker log,
+PR thread, or file. Missing or opaque capsules return to the discovering child;
+the coordinator does not reconstruct their semantics.
 
 ## Orchestrator merge authority
 
-An operator who starts a Northstar orchestrator-owned worker or planning-
-delegate lane pre-authorizes the orchestrator to merge that lane's PR after
-independent review. This is not auto-merge on PR creation. Merge is allowed only
-when:
+An operator who starts a Northstar orchestrator-owned worker lane pre-authorizes
+the orchestrator to merge that lane's PR after independent review. This is not
+auto-merge on PR creation. Merge is allowed only when:
 
 - the provider records an accepted review verdict for the exact current PR
   head; the verdict names that head and comes from an independent review child

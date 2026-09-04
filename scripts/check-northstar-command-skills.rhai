@@ -285,9 +285,68 @@ require(chatterbox_spawn.contains("parent-attached child agent") &&
     !chatterbox_spawn.contains("`local` workspace"),
     "chatterbox spawn must stay a sibling child in the coordinator workspace");
 
-// Research-subagent copy no longer says "or advisors"
-require(!orchestrator_text.contains("or advisors"), "orchestrator mode research-subagent copy still contains 'or advisors'");
-let delegate_template = fs::read_file(path::join(root, "assets/templates/northstar-discovery-delegate.md.template"));
-require(!delegate_template.contains("or advisors"), "discovery delegate template still contains 'or advisors'");
+// Card 128: obsolete templates are removed
+require(!fs::is_file(path::join(root, "assets/templates/northstar-discovery-delegate.md.template")),
+    "deleted discovery-delegate template still present");
+require(!fs::is_file(path::join(root, "assets/templates/northstar-documentation-projection.md.template")),
+    "deleted documentation-projection template still present");
+
+// Card 128: Spec 037 structural fixtures
+let chatterbox_mode_text = fs::read_file(path::join(root, "references/modes/chatterbox.md"));
+require(chatterbox_mode_text.contains("primary operator-facing planning authority") &&
+    chatterbox_mode_text.contains("reconciles delegate, external, or conversational triage notes") &&
+    chatterbox_mode_text.contains("directly updates canonical planning"),
+    "chatterbox mode missing primary planning and promotion authority");
+
+require(orchestrator_text.contains("mechanical delivery management") &&
+    orchestrator_text.contains("canonical dispatch manifest published by Chatterbox") &&
+    orchestrator_text.contains("narrow fast path"),
+    "orchestrator mode missing mechanical coordination role");
+
+let direction_section = h2_section(chatterbox_mode_text, "## Coordinator direction channel");
+require(direction_section.contains("operator-confirmed direction") &&
+    direction_section.contains("Chatterbox recommendation") &&
+    direction_section.contains("administrative notice"),
+    "chatterbox direction channel missing 3 provenance types");
+
+let orchestrator_posture = h2_section(orchestrator_text, "## Operating posture");
+require(orchestrator_posture.contains("complete approved ready frontier") &&
+    orchestrator_posture.contains("event-bounded turns") &&
+    orchestrator_posture.contains("never poll or call wait primitives"),
+    "orchestrator missing full-frontier launch or post-dispatch yield");
+
+let review_child_section = h2_section(orchestrator_text, "## Independent review children and serial workspace lease");
+require(review_child_section.contains("existing worker workspace") &&
+    review_child_section.contains("serial clean") &&
+    review_child_section.contains("Do not create a review-only workspace"),
+    "review child missing worker workspace placement or serial lease");
+
+let escalation_section = h2_section(orchestrator_text, "## Context-complete operator escalations");
+require(escalation_section.contains("10-part capsule") &&
+    escalation_section.contains("headline") &&
+    escalation_section.contains("observed versus intended behavior") &&
+    escalation_section.contains("why operator authority is required") &&
+    escalation_section.contains("one exact question"),
+    "escalation capsule definition incomplete");
+
+// Card 128: Spec 037 negative fixtures
+require(orchestrator_text.contains("Raw triage notes are never authority"),
+    "raw-triage dispatch forbidden check missing");
+require(orchestrator_text.contains("without designing lanes"),
+    "coordinator semantic lane design forbidden check missing");
+require(direction_section.contains("Inspect coordinator state once to avoid duplicate messages") &&
+    direction_section.contains("do not poll"),
+    "duplicate direction check missing");
+require(review_child_section.contains("verify the worker is idle") &&
+    review_child_section.contains("tracked worktree are clean") &&
+    review_child_section.contains("without editing tracked files"),
+    "concurrent workspace lease protection missing");
+let pr_review_text = fs::read_file(path::join(root, "references/modes/pr-review.md"));
+require(pr_review_text.contains("post the durable verdict on the provider naming the exact head SHA reviewed") &&
+    orchestrator_text.contains("durable accepted verdict names the exact current head"),
+    "exact head verification missing in pr-review or coordinator merge gate");
+require(escalation_section.contains("opaque or incomplete capsules") &&
+    escalation_section.contains("do not reconstruct"),
+    "opaque operator escalation rejection missing");
 
 log("Northstar command-skill surface: OK (" + commands.len() + " adapters, aggregate descriptions=" + aggregate_description_chars + " chars)");
