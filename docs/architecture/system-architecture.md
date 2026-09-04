@@ -727,6 +727,69 @@ subagent, which gets no worktree or Git/provider authority.
   authority or automatic work queue; every note needs a promote, merge, open,
   or remove disposition over time.
 
+## Planning Artifact Lifecycle and Compaction
+
+Northstar maintains a compact strict lifecycle: the live docs tree serves as
+active working memory, while Git and provider records retain historical
+artifacts. Completed transport and execution debris is removed or compacted so
+that agents and operators are never confused by superseded procedural instructions.
+
+### Artifact lifecycle classes and prune triggers
+
+Every planning artifact belongs to one lifecycle class with a default disposition:
+
+| Class | Examples | Live-tree rule | Disposition trigger |
+| --- | --- | --- | --- |
+| durable authority | vision, architecture, contracts | retain while authoritative | replace or delete with all callers when superseded |
+| active execution | active roadmap, ready/in-flight cards | retain only while actionable | fold outcome/evidence into closure, then generation roll-up |
+| transient transport | triage notes, worker handoffs, questionnaires | retain only while carrying unresolved or unconsumed meaning | delete after promotion, consumption, abandonment, or transfer |
+| exceptional evidence | releases, incidents, material migrations | retain when the evidence itself remains operationally useful | roll up only when its durable value is preserved |
+| derived currentness | indexes, status tables, navigation projections | generate, bound, or remove | rebuild from canonical current state |
+
+Prune triggers enforce that delivery evidence belongs directly on completed
+cards (outcome, validation, PR, commit, material limits). Separate logs are
+justified only for incidents, releases, material migrations, cross-lane decisions,
+or evidence too large for card legibility. Consumed worker handoffs are deleted
+after merge, abandonment, or transfer once durable outcomes are preserved in
+canonical docs or cards. Promoted specs are removed or reduced to non-procedural
+tombstones when a stable external reference requires one.
+
+### Generation closure and roll-up
+
+A roadmap generation represents a substantial sequencing era. It closes as a
+unit when its sequencing era ends. Passive observations and future feedback
+requests move to the next generation's bounded watchlist rather than holding
+the old generation open.
+
+Before compaction, the generation closure record must establish:
+1. no milestone or card remains executable in the old generation;
+2. durable decisions have canonical destinations;
+3. unresolved and deferred work has an active destination or explicit removal;
+4. current links and front doors no longer depend on files being removed;
+5. material delivery remains traceable to selected PRs, commits, releases, or
+   retained evidence;
+6. the preservation oracle passes.
+
+After the closure gate, the expanded `docs/roadmaps/gNN/` directory is replaced
+with one non-authoritative `docs/roadmaps/archive/gNN.md` roll-up. The roll-up
+contains generation intent, shipped capability outcomes, current authority
+destinations, material migrations/limits, rehomed commitments, selected
+evidence references, and the succeeding generation. It must never reproduce
+runnable steps, card instructions, or superseded protocol.
+
+### Preservation oracle
+
+Compaction lanes must satisfy this preservation oracle:
+
+| Invariant | Counterexample that fails review | Evidence |
+| --- | --- | --- |
+| Current authority is unchanged or deliberately promoted. | A deleted file held the only current rule. | Before/after authority map and link check. |
+| Every open commitment remains reachable. | Deferred work exists only in removed history. | Destination inventory. |
+| Material outcomes remain traceable. | A lasting migration has no PR, commit, release, or evidence reference. | Roll-up evidence table. |
+| Historical procedure cannot be mistaken for current authority. | An archive contains runnable steps or active status. | Archive-content review. |
+| Current work is legible without archive reads. | The next lane or dependency requires opening a roll-up. | Fresh-reader current-state check. |
+| Deletion is exact and reviewable. | A broad cleanup removes an unclassified file. | Frozen deletion manifest and diff review. |
+
 ## Performance and Reliability Constraints
 
 - Operator-facing docs should stay readable and direct.
@@ -750,8 +813,8 @@ checker must not invent that schema to preserve an old substring assertion.
 
 ## Interfaces With Roadmaps
 
-- `g01.001` uses this architecture to enact Northstar on Northstar and pilot
-  the delivery layer inside this repo.
+- The closed `g01` foundation is rolled up at `docs/roadmaps/archive/g01.md`,
+  establishing the Northstar-on-Northstar live delivery layer.
 - `docs/contracts/004-language-quality-pack.md` governs the first language
   quality pack. Completed roadmap `g02.030` records production-boundary proof,
   implementation, fresh evidence, and distribution.

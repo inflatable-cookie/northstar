@@ -16,7 +16,7 @@ Mode: sequential
 
 | Generation | State | Boundary | History disposition |
 | --- | --- | --- | --- |
-| `g01` | closed | Internal Northstar-on-Northstar foundation | card 130 roll-up pilot |
+| `g01` | closed | Internal Northstar-on-Northstar foundation | [archive/g01.md](archive/g01.md) roll-up |
 | `g02` | closed | External proof and execution hardening | card 131 roll-up |
 | `g03` | active | Compact default lifecycle and protocol reduction | expanded active generation |
 

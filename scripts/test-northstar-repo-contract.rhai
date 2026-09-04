@@ -92,6 +92,9 @@ fn new_machine_fixture(label, claude_contents, effigy_contents) {
     write_fixture_file(root,
         "scripts/lib/northstar-repo-contract-checker.rhai",
         fs::read_file(path::join(repo_root, "scripts/lib/northstar-repo-contract-checker.rhai")));
+    write_fixture_file(root,
+        "scripts/lib/northstar-lifecycle-checker.rhai",
+        fs::read_file(path::join(repo_root, "scripts/lib/northstar-lifecycle-checker.rhai")));
     write_fixture_file(root, "scripts/noop.rhai", "log(\"fixture no-op\");\n");
     write_fixture_file(root, "CLAUDE.md", claude_contents);
     write_fixture_file(root, "effigy.toml", effigy_contents);
@@ -321,4 +324,23 @@ expect_pass("source-preserving-partition", || run_check(source_preserving_partit
 
 prove_source_reduction();
 log("repo-contract fixture source-reduction: PASS");
-log("Northstar repo-contract fixture tests: OK (11 fixture cases; 6 expected failures, 5 benign passes, Effigy selector/outer-board proof, source reduction proof)");
+
+let lifecycle_fixture_root = path::join(repo_root, "scripts/fixtures/lifecycle");
+expect_failure(
+    "archive-executable",
+    || checker::check_lifecycle(path::join(lifecycle_fixture_root, "archive-executable")),
+    "archive roll-up g01.md must not contain runnable execution procedure",
+);
+expect_failure(
+    "archive-expanded-collision",
+    || checker::check_lifecycle(path::join(lifecycle_fixture_root, "archive-expanded-collision")),
+    "archived generation g01 must not remain expanded",
+);
+expect_failure(
+    "multiple-expanded",
+    || checker::check_lifecycle(path::join(lifecycle_fixture_root, "multiple-expanded")),
+    "more than one expanded sequential generation in roadmaps: g01",
+);
+expect_pass("lifecycle-valid", || checker::check_lifecycle(path::join(lifecycle_fixture_root, "valid")));
+
+log("Northstar repo-contract fixture tests: OK (15 fixture cases; 9 expected failures, 6 benign passes, Effigy selector/outer-board proof, source reduction proof)");
