@@ -245,22 +245,27 @@ packet. Its own branch diff contains only those named `docs/triage/` and optiona
 promotion destinations, decide readiness, or dispatch implementation.
 
 The orchestrator reserves the topic while the delegate runs. It may continue
-only work that neither depends on the topic nor mutates the packet paths. The
-planning PR is reviewed at its exact head for scope, evidence, conversational
-fidelity to the handoff and recorded operator confirmations, and clear
-separation between confirmed decisions, recommendations, and open questions. If
-decision ownership remains unclear, the orchestrator asks the operator rather
-than relying on private thread history. Requested changes return to the same
-delegate. Accepted review plus passing checks and mergeability permits
-orchestrator merge without another approval prompt unless a stricter rule or
-explicit pause applies.
+only work that neither depends on the topic nor mutates the packet paths. An
+independent review child reviews the planning PR at its exact head for scope,
+evidence, conversational fidelity to the handoff and recorded operator
+confirmations, and clear separation between confirmed decisions,
+recommendations, and open questions. If decision ownership remains unclear,
+the reviewer asks the operator rather than relying on private thread history.
+Requested changes return to the same delegate. An accepted verdict naming the
+exact current head plus passing checks and mergeability permits coordinator
+merge without another approval prompt unless a stricter rule or explicit
+pause applies.
 
-After merge, the orchestrator re-reads the packet against current `main`,
-resolves drift or contradictory operator decisions, selects canonical homes,
-promotes settled meaning, and removes or splits resolved triage material. Only
-that separate promotion batch may update architecture, contracts, specs,
-roadmaps, cards, or readiness. Mechanical documentation projection may apply an
-already-settled promotion map; it cannot choose the map.
+After merge, the packet is still not canonical authority. The operator
+confirms the material meaning — through the source chatterbox where one
+exists — and the coordinator compiles an exact promotion brief for the
+bounded promotion PR lane. That lane reconciles the packet against current
+`main` only as the confirmed brief names, and an independent review child
+checks the promotion PR against the confirmed packet before the coordinator
+applies the merge gate. Only that lane may update architecture, contracts,
+specs, roadmaps, cards, or readiness, and it removes or splits resolved
+triage material as the brief names. Mechanical documentation projection may
+apply an already-settled promotion map; it cannot choose the map.
 
 ## Fresh orchestrator continuation
 
@@ -272,7 +277,7 @@ The source orchestrator uses the normal handoff template and adds:
 
 ```yaml
 handoff_mode: orchestrator-continuation
-orchestrator_mode: planning-and-review
+orchestrator_mode: economical-coordination
 dispatch_authority: orchestrator
 ```
 
@@ -378,8 +383,8 @@ Use these states in the worker handoff or log when the run spans turns:
 - `planning-delegate-in-flight` — the operator and delegate are exploring one
   reserved topic in the isolated planning branch;
 - `planning-pr-awaiting-review` — the bounded triage/research packet is in a PR;
-- `planning-promotion` — the packet is merged and the orchestrator is
-  reconciling/promoting it against current `main`;
+- `planning-promotion` — the packet is merged and its settled meaning is
+  being promoted through the operator-confirmed lane against current `main`;
 - `ready-to-launch` — base and cards are ready; the worker-handoff path can be
   handed to a worker;
 - `worker-in-flight` — worker is executing the assigned runway;

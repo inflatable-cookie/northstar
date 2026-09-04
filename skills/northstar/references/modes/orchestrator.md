@@ -72,17 +72,17 @@ deeply. Use natural topic shifts and meaningful checkpoints rather than waiting
 for closeout. Keep the note raw enough to preserve the thought, but include
 enough context for a later agent to understand it.
 
-At each checkpoint, either bring the note into the active plan, leave it
-explicitly open, or identify its next canonical home. Before closeout, inspect
-every note touched by the run and promote, merge, or remove it as appropriate.
-When a note is promoted into a roadmap, remove the triage file in the same
-planning batch. If the note also contains unresolved material, preserve that
-material in a separate open note before removing the promoted source; do not
-leave promoted content in triage.
-Do not silently delete an uncertain note; ask the operator when its meaning,
-owner, destination, or removal is unclear. Triage notes are not authority for
-execution until their useful content is promoted into the normal planning
-surfaces.
+At each checkpoint, give the note an intake disposition only: keep it open
+with a next check, route it to the right thread, or flag it for the operator.
+The coordinator does not promote triage material into canonical surfaces and
+does not remove notes that carry unresolved meaning. Material promotion and
+removal happen only through the operator-confirmed promotion lane; only
+genuinely administrative cleanup that cannot change meaning — such as a
+duplicate or empty note — may be handled directly. At closeout, every note
+the run touched is left in an explicit open, routed, or flagged state, never
+silently dropped and never promoted by coordinator choice. Triage notes are
+not authority for execution until their useful content is promoted through
+that lane.
 
 ## Conversational planning delegates
 
@@ -252,7 +252,7 @@ must declare:
 
 ```yaml
 handoff_mode: orchestrator-continuation
-orchestrator_mode: planning-and-review
+orchestrator_mode: economical-coordination
 dispatch_authority: orchestrator
 ```
 
@@ -281,8 +281,9 @@ When Paseo tools are injected, the source:
 1. resolves its current project and repository checkout without guessing an
    ambiguous workspace;
 2. lists current profiles, builds the adequate orchestrator-role pool whose
-   notes cover orchestrator planning, operator conversation, dispatch, and
-   review, and applies the diversified-routing rule unless the operator
+   notes cover economical coordination — runway state tracking, dispatch,
+   revision routing, operator communication, and merge-gate verification —
+   and applies the diversified-routing rule unless the operator
    named a profile;
 3. creates a separate `local` workspace for that same project and checkout.
    Reject the transport plan if it uses `branch-off` worktree isolation or a

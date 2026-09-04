@@ -277,7 +277,7 @@ informal habits.
 - On operator request, the source orchestrator may transfer its whole live
   lane to a fresh orchestrator through the generic seven-section handoff with
   `handoff_mode: orchestrator-continuation`,
-  `orchestrator_mode: planning-and-review`, and
+  `orchestrator_mode: economical-coordination`, and
   `dispatch_authority: orchestrator`.
 - After that handoff is pushed and dispatched, the source yields planning,
   dispatch, review, and merge mutations for the transferred lane. The successor

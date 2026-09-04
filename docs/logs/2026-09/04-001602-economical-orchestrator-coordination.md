@@ -126,6 +126,32 @@ on this branch:
    ownership model. Historical logs, closed roadmap evidence, and research
    memos are untouched.
 
+### Round 2 (exact head `898d7f6`)
+
+5. **Continuation restores coordination, not the planner (`execution-miss`):**
+   the internal continuation marker is now
+   `orchestrator_mode: economical-coordination` with no compatibility alias,
+   across orchestrator mode, SKILL, router, handoff contract, working rules,
+   doctrine 07, the copy-ready template, and spec 026. The continuation
+   profile pool now selects for economical coordination — runway state
+   tracking, dispatch, revision routing, operator communication, and
+   merge-gate verification — instead of planning and review. The
+   `check:command-skills` machine contract that pins the settled router
+   marker was updated to the new value.
+6. **Coordinator triage handling is intake/routing only (`execution-miss`):**
+   triage checkpoints keep, route, or flag notes; material promotion and
+   removal happen only through the operator-confirmed promotion lane, with
+   genuinely administrative cleanup (duplicate or empty notes) handled
+   directly. Working-rules delegate closeout assigns triage removal to the
+   promotion lane as the brief names.
+7. **Delegate closeout uses review child plus confirmation (`integration-drift`):**
+   spec 026's planning-delegate closeout and the discovery-delegate template
+   now route the packet PR through an independent review child, gate the
+   merge on the verdict naming the exact head, and make post-merge promotion
+   an operator-confirmed bounded promotion PR lane instead of coordinator
+   reconciliation and canonical-home selection. The `planning-promotion`
+   state description matches.
+
 ## Validation
 
 - `effigy check:model-routing` — PASS (ten milestone 047 oracle rows)

@@ -295,7 +295,7 @@ This path applies **only** when a committed handoff declares all three fields:
 
 ```yaml
 handoff_mode: orchestrator-continuation
-orchestrator_mode: planning-and-review
+orchestrator_mode: economical-coordination
 dispatch_authority: orchestrator
 ```
 

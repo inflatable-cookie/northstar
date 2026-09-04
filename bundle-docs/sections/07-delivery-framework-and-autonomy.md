@@ -814,7 +814,7 @@ An operator may ask the current orchestrator to transfer its whole live lane to
 a fresh orchestrator thread. This is continuity, not parallel ownership. The
 source fills the generic seven-section handoff with
 `handoff_mode: orchestrator-continuation`,
-`orchestrator_mode: planning-and-review`, and
+`orchestrator_mode: economical-coordination`, and
 `dispatch_authority: orchestrator`, pushes that coherent stopping state, then
 stops planning, dispatch, review, and merge mutations for the transferred lane.
 The successor re-enters normal orchestrator mode from the absolute handoff

@@ -517,14 +517,15 @@ start work that depends on the topic while its planning PR is open.
 After an independent review child accepts the exact PR head and checks pass,
 the orchestrator merges the planning PR, reconciles it against current `main`,
 and separately promotes settled meaning through an operator-confirmed lane
-into architecture, contracts, specs, roadmaps, or cards. It removes or splits
-resolved triage notes during promotion. Merge of a planning packet is intake,
+into architecture, contracts, specs, roadmaps, or cards. The promotion lane
+removes or splits resolved triage notes as the brief names. Merge of a
+planning packet is intake,
 not promotion or execution authority.
 
 An operator may instead ask the current orchestrator to transfer its whole live
 lane to a fresh orchestrator thread. The source writes the normal seven-section
 handoff with `handoff_mode: orchestrator-continuation`,
-`orchestrator_mode: planning-and-review`, and
+`orchestrator_mode: economical-coordination`, and
 `dispatch_authority: orchestrator`, reconciles and pushes the stopping state,
 then stops planning, dispatch, review, and merge mutations for that lane. The
 successor re-enters normal orchestrator mode from the absolute handoff path; it

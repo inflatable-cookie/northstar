@@ -64,7 +64,7 @@ implement or promote.
 
 A fresh orchestrator continuation is distinct from both. Its handoff declares
 `handoff_mode: orchestrator-continuation`,
-`orchestrator_mode: planning-and-review`, and
+`orchestrator_mode: economical-coordination`, and
 `dispatch_authority: orchestrator`. The successor enters normal orchestrator
 mode from that absolute path and does not run worker or planning-delegate
 preflight. The source yields the transferred lane after pushed dispatch.
