@@ -50,7 +50,7 @@ a review-only workspace.
 - **Active spec lane:** operator-confirmed promotion of specs 035, 036, and 026
 - **Roadmap milestone:** current `g02` runway; update only the named front-door/index surfaces as settled by the packet
 - **Ready cards, in order:** none supplied; do not invent a card or readiness state
-- **Allowed runway:** the exact canonical destination map in the two packets, with packet 2 overriding packet 1
+- **Allowed runway:** the exact canonical destination map in the two packets, with packet 2 overriding packet 1, plus the four operator-confirmed mechanical callers listed below
 - **Remaining card budget:** one bounded promotion lane; stop when the named promotion is complete or a stop condition fires
 - **Dispatch topology:** one projection worker; an independent private review child will later lease this same worker workspace serially
 - **Parallel safety check:** one worker owns all named promotion surfaces; review is strictly serial after the worker releases the workspace
@@ -114,16 +114,23 @@ Update only these paths, using the required deltas in the source packet:
 - `docs/roadmaps/README.md`
 - `docs/roadmaps/generation-index.md`
 - `docs/roadmaps/g02/README.md`
+- `scripts/check-northstar-command-skills.rhai`
+- `skills/northstar/references/handoff-contract.md`
+- `template-bundle/contracts/002-agent-local-paths-template.md`
+- `docs/contracts/contract-index.md`
 
 The final four roadmap/front-door paths are the concrete projection of the
 packet's `docs/README.md and owned roadmap/front-door indexes` row. Do not
 create a new milestone, card, or other semantic authority destination: the
 packet does not name one. If faithful sequencing requires one, stop and return
-that question to the operator.
+that question to the operator. The operator has separately confirmed the four
+mechanical callers above after the worker found that template retirement would
+otherwise break required validation or leave live contract/index references.
 
 Use exact-token search to locate derived wording and validation surfaces, but
-do not add any path not listed above. If a checker or parity surface outside
-the list requires a semantic edit, stop and report the path for confirmation.
+do not add any path not listed above. If any checker, parity, contract, or
+index surface outside this expanded list requires an edit, stop and report the
+path for confirmation.
 
 ### Forbidden judgments
 
