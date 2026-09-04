@@ -870,11 +870,13 @@ feature proposals without interrupting active dispatch, review, or execution.
 
 - **Start:** The operator starts a chatterbox directly with no handoff file or
   worktree, or asks the orchestrator to spawn one.
-- **Paseo spawn:** In Paseo, the orchestrator creates a `local` workspace for the
-  same project and checkout (rejecting `branch-off` isolation or a different
-  project path), applies the capitalized `Chatterbox=true` label, sets
-  `notifyOnFinish: false`, and selects from the adequate operator-facing
-  conversational pool under the diversified-routing rule.
+- **Paseo spawn:** In Paseo, the orchestrator spawns the chatterbox as a
+  parent-attached child agent in its current workspace — a sibling agent tab,
+  not a separate workspace (rejecting any new workspace, `branch-off`
+  isolation, or a different project path). It applies the capitalized
+  `Chatterbox=true` label, sets `notifyOnFinish: false`, and selects from the
+  adequate operator-facing conversational pool under the diversified-routing
+  rule. Several independent chatterboxes may coexist as sibling tabs there.
 - **Shared checkout and Git:** Chatterboxes share the orchestrator's checkout.
   They write only unique `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files, check
   `git diff --cached --name-only` to fail closed if pre-existing staged files

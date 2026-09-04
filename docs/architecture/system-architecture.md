@@ -439,8 +439,9 @@ exploratory feature ideas, issues, or intake discussions. Chatterboxes share the
 orchestrator's checkout, create unique timestamped `docs/triage/` notes, and
 isolate commits to exact paths after verifying clean pre-stage index state.
 They do not create worktrees, branches, or PRs. In Paseo, the orchestrator
-spawns a chatterbox in a `local` workspace for the same project/checkout, with
-label `Chatterbox=true` and `notifyOnFinish: false`. Chatterbox v1 starts no
+spawns a chatterbox as a parent-attached child agent in its current workspace
+— a sibling agent tab, not a separate workspace — with label `Chatterbox=true`
+and `notifyOnFinish: false`. Chatterbox v1 starts no
 automatic orchestrator turn; it reports the absolute note path and summary in
 chat, and the orchestrator inspects `docs/triage/` at normal triage checkpoints.
 A note may be decision-ready when it separates operator-confirmed decisions,

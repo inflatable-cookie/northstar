@@ -89,3 +89,15 @@ separate-workspace instruction everywhere live.
 7. Commit, push, open a review-only PR against `main`, and report its URL and
    exact tested head. Do not merge.
 
+## Outcome Record
+
+- **Worker branch:** `worker/chatterbox-sibling-agent-tabs`; Paseo-managed
+  dedicated worktree based on pushed `main` at `862b1ab`.
+- **Roadmap milestone:** `docs/roadmaps/g02/052-chatterbox-sibling-agent-tabs.md`
+- **Ready card:** `docs/roadmaps/g02/batch-cards/127-chatterbox-sibling-agent-tabs.md`
+- **Closeout log:** `docs/logs/2026-09/04-093820-chatterbox-sibling-agent-tabs.md`
+- **Review state:** revision 1 implemented as one bounded batch; review-only,
+  this lane does not merge.
+- **Merge path:** orchestrator applies the accepted exact-head review and the
+  normal merge gate; installed-skill refresh follows merge.
+- **Card 126:** unchanged and still blocked.

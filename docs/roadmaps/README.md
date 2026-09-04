@@ -108,6 +108,10 @@ Roadmaps sequence contract-backed work for Northstar itself.
   chatterbox packets and semantic PR review in independent child reviewers;
   PR 32 merged as `61d4cc2`; card 126 awaits its observation packet and stop
   date.
+- `g02.052` has card 127 complete: Paseo chatterbox spawn is a parent-attached
+  sibling child agent in the coordinator's current workspace, not a separate
+  `local` workspace; label, notification, routing, manual fallback, and
+  exact-file Git isolation are unchanged. Its reviewable PR is open.
 
 The preceding `g02.024` milestone was compiled from the consumer papercuts
 evidence; that evidence remains the provenance for the current active lane.

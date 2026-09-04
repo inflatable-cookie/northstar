@@ -3,7 +3,7 @@
 Status: active
 Owner: repo maintainers
 Created: 2026-09-03
-Updated: 2026-09-03
+Updated: 2026-09-04
 Depends on: `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`,
 `docs/specs/030-conversational-triage-and-docs-cleanup.md`
 Governing architecture: `docs/architecture/system-architecture.md`
@@ -85,13 +85,16 @@ or plain language ("you're a chatterbox on X") is enough. No handoff file.
 The orchestrator may also spawn one on explicit request. No committed
 handoff. The initial prompt names chatterbox mode and the topic. In Paseo:
 
-- create a separate `local` workspace for the same project and checkout;
-- reject `branch-off` worktree isolation and a different project path;
+- create the chatterbox as a parent-attached child agent in the coordinator's
+  current workspace, so it appears as a sibling agent tab beside the
+  coordinator; do not create a new workspace;
+- reject any transport plan that creates a separate workspace, uses
+  `branch-off` worktree isolation, or attaches a different project path;
 - label `Chatterbox=true` (capitalized; reject omitted or lowercased);
 - set `notifyOnFinish` false so idle chatterbox turns do not spam the parent;
 - select from the adequate operator-facing conversational pool under the
   diversified-routing rule; an operator-named profile wins;
-- retain the returned identities; do not poll.
+- retain the returned agent identity; do not poll.
 
 Without Paseo, tell the operator to start a thread on the same checkout and
 invoke chatterbox mode. Manual start remains complete.
@@ -187,8 +190,9 @@ Northstar.
 ## Acceptance criteria
 
 - [ ] chatterbox is a distinct internal mode with a thin command adapter;
-- [ ] operator start needs no handoff; orchestrator spawn uses a local
-      workspace, `Chatterbox=true`, and `notifyOnFinish` false;
+- [ ] operator start needs no handoff; orchestrator spawn attaches the
+      chatterbox as a sibling child agent in the coordinator's current
+      workspace, with `Chatterbox=true` and `notifyOnFinish` false;
 - [ ] durable output is only unique `docs/triage/` files on the shared
       checkout, committed with exact-file add and exact-file commit;
 - [ ] chatterbox v1 does not call `send_agent_prompt` or start an orchestrator
@@ -207,7 +211,7 @@ Northstar.
 | Chatterbox is not another role. | Thread routes through orchestrator, worker, planning-delegate, handoff, or `paseo-advisor`. | Router/mode refuses and stays in chatterbox or asks the operator to start the right thread. | Router and adapter assertions. |
 | Capture cannot widen authority. | Chatterbox edits a spec, card, or product file, or opens a PR. | Stop before the write. | Mode/contract negative path. |
 | Shared checkout stays unique-file-only. | Chatterbox runs `git add .` or commits an unrelated dirty or already-staged file. | Stop; leave unrelated files staged or unstaged exactly as found. | Executable temporary-repository fixture. |
-| No worktree is required. | Spawn uses `branch-off` isolation. | Reject the transport plan. | Paseo spawn assertion. |
+| No new workspace is created. | Spawn creates a separate `local` workspace or `branch-off` isolation. | Reject the transport plan. | Paseo spawn assertion. |
 | Long-running chatterboxes do not spam. | Spawn enables `notifyOnFinish`. | Reject launch configuration. | Label/notification assertion. |
 | Capture does not interrupt live work. | Chatterbox calls `send_agent_prompt` or otherwise starts an orchestrator turn. | Skip automation; report the note path to the operator. | Mode review plus absence of a prompt path. |
 | Intake is not a new assignment. | Orchestrator starts promotion or dispatch merely because the note is surfaced. | Record the path only; continue current work. | Orchestrator intake review. |
