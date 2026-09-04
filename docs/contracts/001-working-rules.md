@@ -315,9 +315,9 @@ Work in this repo is not done unless:
 - Use a natural, human conversational tone in agent chat and normal thread
   replies. Keep recommendations and next steps, and make the exchange easy to
   respond to or redirect.
-- Orchestrator threads should be creative and exploratory: ask focused
-  questions, explore alternatives, explain trade-offs, and welcome tentative
-  ideas without weakening authority boundaries.
+- Orchestrator threads stay direct and human — explain state, trade-offs, and
+  next dispatches without protocol recitation — but material product
+  exploration is chatterbox work, not coordinator work.
 - Internal execution artifacts should remain compact and information-dense:
   - batch cards
   - roadmap milestones
@@ -402,36 +402,80 @@ Work in this repo is not done unless:
 For material work that benefits from a separate implementation context, use the
 following authority split:
 
-- the **orchestrator thread** owns question-led discovery, intent summary,
-  promoted architecture/contracts, roadmap readiness, worker launch preparation,
-  PR review, gated merge, and closeout;
+- the **orchestrator thread** owns economical coordination: dependency
+  frontier, dispatch, identity retention, state reconciliation, revision
+  routing, the merge gate, merge, and closeout. It must not assume product
+  meaning absent from operator-confirmed authority or a semantic verdict
+  absent from an independent review;
 - the **worker thread** owns implementation only inside its dedicated worktree
   and branch, including bounded diagnosis and implementation judgment inside
   the assigned ready cards, tests, commits, evidence, and PR creation;
 - a **planning delegate** owns one operator-facing discovery conversation and
   its bounded triage/research packet in an isolated branch; it does not promote
   canonical planning, decide readiness, or implement;
+- a **review child** owns independent exact-head semantic review of a worker
+  PR and posts the durable provider verdict naming the reviewed head; it does
+  not mutate the branch, implement, merge, or accept a later head;
 - a **chatterbox** owns one operator-facing intake conversation and problem
   identification, shares the orchestrator's checkout, writes only unique
   timestamped triage files, and reports them to the operator with no
-  orchestrator turn in v1; it does not implement, promote, review, merge,
-  dispatch, or reserve topics;
+  orchestrator turn in v1; a note may be decision-ready when it separates
+  operator-confirmed decisions, recommendations not yet accepted, evidence
+  and alternatives, unresolved questions, and affected authority surfaces;
+  the chatterbox does not implement, promote, review, merge, dispatch, or
+  reserve topics;
 - the **operator** answers unresolved questions, may override worker-profile
   selection, starts or relays manual runs, resolves material permission
   requests, and may pause or override the lane before merge.
 
 Starting an orchestrator-owned worker or planning-delegate lane pre-authorises
-the orchestrator to merge that lane's PR once it has reviewed the exact current
-head, recorded an accepted verdict on the provider, and confirmed every required
-check passes. A stricter repository rule or explicit operator pause still wins.
+the orchestrator to merge that lane's PR once an accepted review verdict for
+the exact current head is recorded on the provider by an independent review
+child — or by the orchestrator itself on an explicit operator-requested direct
+review — and every required check passes. A stricter repository rule or
+explicit operator pause still wins.
 
-Model routing is diversified and economical by default. Build the adequate
-profile pool from current adapter notes and explicit adapter cost metadata when
-available, prefer the cheapest adequate tier, then vary provider/model identity
-before reusing a recent route. Use adapter-visible recent-agent history when it
-exists; otherwise remember only routes launched in the current orchestrator
-run. Do not create a durable Northstar usage ledger or encode local profile,
-provider, model, price, balance, or allowance values.
+Worker PRs normally receive an independent review child. The orchestrator
+creates a dedicated workspace at the PR head and launches the reviewer as a
+parent-attached child with finish notifications enabled, selects an economical
+adequate review route under the diversified-routing rule, and gives the
+reviewer the PR, canonical refs, and review oracle — not the worker's private
+transcript. The reviewer works in direct PR-review mode and its posted verdict
+names the exact reviewed head. Requested changes return to the same worker;
+the revised exact head returns to the same reviewer when available, and a
+replacement reviewer starts a fresh complete review. The orchestrator does not
+duplicate the full diff review; before merge it independently verifies only
+the coordination gate: the durable accepted verdict names the exact current
+head, every blocking finding is resolved or explicitly superseded on the
+provider, required checks pass, the PR targets the intended base with
+acceptable current ancestry, the PR is mergeable, and no stricter repository
+rule or operator pause applies. Ambiguous, contradictory, missing, or stale
+review evidence stops merge. The operator may still explicitly ask the
+current orchestrator thread to perform a direct review.
+
+packet, the orchestrator compiles an exact promotion brief and dispatches a
+bounded planning-projection worker as its own branch/worktree/PR lane. The
+worker may edit canonical architecture, contracts, specs, roadmaps, and cards
+only as the brief names; semantic ambiguity returns to the operator and the
+chatterbox. An independent review child reviews the promotion PR against the
+confirmed packet, and the coordinator applies the normal exact-head merge
+gate. Readiness stays a canonical property of the
+promoted card. Small operational clarifications that cannot change behavior,
+acceptance, public contract, or sequencing may still be handled directly by
+the orchestrator.
+
+Model routing is diversified and economical by default, including the
+orchestrator's own route. Build the adequate profile pool from current adapter
+notes and explicit adapter cost metadata when available, prefer the cheapest
+adequate tier, then vary provider/model identity before reusing a recent
+route. Use adapter-visible recent-agent history when it exists; otherwise
+remember only routes launched in the current orchestrator run. Do not create a
+durable Northstar usage ledger or encode local profile, provider, model,
+price, balance, or allowance values. The orchestrator's normal profile is an
+economical coordinator capable of reliable tool use, concise state tracking,
+and bounded verification; higher reasoning effort is an escalation, not the
+default. Review children select from their own adequate pools under the same
+rule.
 
 Ordinary implementation, bounded audits, mechanical work, and most settled
 material lanes use that economical pool. A frontier implementation worker is a
@@ -441,9 +485,11 @@ the remaining reasoning. Priority, complexity, file count, duration, broad
 scope, or a risk-domain label is insufficient. Rotate eligible frontier and
 fresh-orchestrator profiles too; an operator-named profile still overrides.
 
-Risky surfaces still need an explicit review oracle and frontier review. A
-well-specified persistence or public-API change may use a small economical
-worker while the orchestrator keeps material review. Unresolved designs return
+Risky surfaces still need an explicit review oracle and material independent
+review. A well-specified persistence or public-API change may use a small
+economical worker while the lane's independent review child keeps material
+review; a frontier review route is reserved for residual risk that settled
+planning, explicit oracles, and tests cannot bound. Unresolved designs return
 to planning. A refused route is removed only for that attempt; select another
 adequate route without treating the refusal as global capacity. If no adequate
 profile remains, preserve and pause only that lane.
@@ -468,16 +514,18 @@ The delegate itself does not edit product or canonical planning surfaces,
 promote, decide readiness, or launch implementation. The orchestrator does not
 start work that depends on the topic while its planning PR is open.
 
-After exact-head review and checks, the orchestrator merges the planning PR,
-reconciles it against current `main`, and separately promotes settled meaning
-into architecture, contracts, specs, roadmaps, or cards. It removes or splits
-resolved triage notes during promotion. Merge of a planning packet is intake,
+After an independent review child accepts the exact PR head and checks pass,
+the orchestrator merges the planning PR, reconciles it against current `main`,
+and separately promotes settled meaning through an operator-confirmed lane
+into architecture, contracts, specs, roadmaps, or cards. The promotion lane
+removes or splits resolved triage notes as the brief names. Merge of a
+planning packet is intake,
 not promotion or execution authority.
 
 An operator may instead ask the current orchestrator to transfer its whole live
 lane to a fresh orchestrator thread. The source writes the normal seven-section
 handoff with `handoff_mode: orchestrator-continuation`,
-`orchestrator_mode: planning-and-review`, and
+`orchestrator_mode: economical-coordination`, and
 `dispatch_authority: orchestrator`, reconciles and pushes the stopping state,
 then stops planning, dispatch, review, and merge mutations for that lane. The
 successor re-enters normal orchestrator mode from the absolute handoff path; it
@@ -496,16 +544,22 @@ part of the transfer.
 
 The orchestrator may delegate a meaningful batch of mechanical documentation
 projection to a fast, low-cost subagent after it has settled every planning
-decision. The projection brief must name the authority owner, settled meaning,
-canonical refs, allowed paths, exact evidence and state transitions, forbidden
-judgments, validation, and stop conditions. The subagent may materialize or
-synchronize named roadmap, card, log, front-door, index, handoff, template, and
-evidence surfaces. It must not choose a canonical home, invent or reinterpret
-intent, add acceptance or stop rules, decide readiness/completion/next work,
-resolve contradictions, edit product code, commit, push, review, or merge.
+decision. A promotion batch may instead materialize an explicitly
+operator-confirmed decision-ready packet; it stops on semantic ambiguity, and
+an independent review child checks the promotion against the confirmed packet
+before the orchestrator applies the merge gate. The projection brief must name
+the authority owner, settled meaning, canonical refs, allowed paths, exact
+evidence and state transitions, forbidden judgments, validation, and stop
+conditions. The subagent may materialize or synchronize named roadmap, card,
+log, front-door, index, handoff, template, and evidence surfaces. It must not
+choose a canonical home, invent or reinterpret intent, add acceptance or stop
+rules, decide readiness/completion/next work, resolve contradictions, edit
+product code, commit, push, review, or merge.
 
 Documentation projection runs serially in the orchestrator's planning context;
-it is not worker mode and needs no worker handoff or worktree. Capture existing
+it is not worker mode and needs no worker handoff or worktree, and it is only
+for genuinely non-semantic edits because operator-confirmed promotion runs as
+the bounded branch/worktree/PR lane above. Capture existing
 dirty state and allowed paths before dispatch. The orchestrator reviews the full
 diff for semantic fidelity and owns commit/push. Keep tiny edits local when
 dispatch and review would cost more than the projection.
@@ -561,7 +615,7 @@ handoff per selected lane and gives the operator every absolute path at once.
 Northstar does not encode a fixed worker count, provider, or model, and does not
 ask the operator to guess one.
 
-The orchestrator continues non-overlapping planning, review, revision routing,
+The orchestrator continues non-overlapping coordination, dispatch, revision routing,
 merge, and closeout while workers run. A worker-finish notification starts
 review of that lane; it does not refill a global launch queue.
 
@@ -655,19 +709,23 @@ and closeout surfaces. A newly discovered product threshold, contract choice,
 or acceptance rule returns to planning.
 
 A worker completes the assigned runway with a pushed branch, evidence, and a
-reviewable PR. PR creation is not approval or merge. The orchestrator reviews the
-actual diff, changed files, commits, and checks against canonical refs. It records
-an evidence-backed verdict in the provider review surface; on same-identity
-GitHub runs, it posts that verdict as a PR comment because formal self-approval
-is unavailable. After an accepted verdict, the orchestrator may merge without a
-second operator prompt only when the reviewed head is still current, required
+reviewable PR. PR creation is not approval or merge. An independent review
+child reviews the actual diff, changed files, commits, and checks against
+canonical refs and records the evidence-backed verdict in the provider review
+surface; on same-identity GitHub runs, it posts that verdict as a PR comment
+because formal self-approval is unavailable. The operator may explicitly ask
+the orchestrator thread to review directly instead. After an accepted verdict,
+the orchestrator may merge without a second operator prompt only when the
+reviewed head is still current and the verdict names that exact head, required
 checks pass, the PR is mergeable into the intended base, and no repository rule
 or operator instruction requires a human merge. A changed head invalidates the
 verdict and requires another review. Merge failure or ambiguous provider state
 stops before retry. Requested changes return to the same worker branch when
-possible, followed by another review cycle. Provider review comments are durable
-evidence, not a worker wake-up mechanism: after posting a `changes requested`
-verdict, an orchestrator with an active control plane sends an explicit follow-up
+possible, and the revised exact head returns to the same reviewer when
+available, followed by another review cycle. Provider review comments are
+durable evidence, not a worker wake-up mechanism: after posting a `changes
+requested` verdict, an orchestrator with an active control plane sends an
+explicit follow-up
 to the originating agent. Paseo uses `send_agent_prompt` with the retained agent
 ID. The orchestrator resumes the same child agent; it does not silently replace
 an unavailable worker or create a detached replacement.

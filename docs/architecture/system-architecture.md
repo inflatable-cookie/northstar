@@ -373,11 +373,11 @@ non-mutating by default.
 For material work that benefits from a separate implementation context, the
 preferred split is:
 
-`operator ↔ orchestrator thread -> canonical plan/runway -> worker thread/worktree -> PR -> orchestrator review -> merge/closeout`
+`operator ↔ orchestrator thread -> canonical plan/runway -> worker thread/worktree -> PR -> independent review child -> coordinator gate -> merge/closeout`
 
 A parallel planning-only branch is:
 
-`operator ↔ planning delegate/worktree -> triage/research PR -> orchestrator review/merge -> orchestrator promotion`
+`operator ↔ planning delegate/worktree -> triage/research PR -> review child -> coordinator merge -> operator-confirmed promotion lane`
 
 An explicit fresh-orchestrator transfer uses:
 
@@ -391,23 +391,35 @@ A fresh direct-review thread uses the smaller path:
 
 `operator -> existing PR -> direct review thread -> provider review record`
 
-The orchestrator owns question-led discovery, promoted planning, ready-state,
-launch preparation, semantic review, PR review, and merge. After settling
-meaning, it may run one fast/low-cost documentation projection subagent serially
-in the planning context. That subagent applies an exact brief to named docs and
+The normal worker-PR review path routes through an independent child:
+
+`worker PR -> review child (dedicated PR-head workspace) -> provider verdict naming the head -> coordinator merge gate -> merge/closeout`
+
+The orchestrator owns economical coordination: operator-routed discovery, promoted
+planning bounded by operator-confirmed authority, ready-state, launch
+preparation, revision routing, the merge gate, and merge. Substantive
+exact-head semantic review belongs to independent review children. After
+settling meaning, the coordinator may run one fast/low-cost documentation
+projection subagent serially in the planning context for genuinely
+non-semantic edits. That subagent applies an exact brief to named docs and
 deterministic checks; it does not choose authority, invent planning, decide
-state, touch product code, or perform Git/provider mutations. The orchestrator
-reviews the resulting diff and retains semantic ownership.
+state, touch product code, or perform Git/provider mutations, and it stops on
+semantic ambiguity. The coordinator reviews the resulting helper diff and owns
+its Git mutations. A promotion batch driven by an operator-confirmed packet is
+different: it runs as a bounded branch/worktree/PR lane, where an independent
+review child checks the PR against the packet before the coordinator applies
+the merge gate.
 
 On explicit operator request, it may also launch one frontier planning delegate
 for a named topic. That delegate talks directly with the operator and owns only
 a bounded triage/research packet in an isolated branch. It may use read-only
 research subagents. The orchestrator reserves that topic, continues only
-non-overlapping work, reviews and merges the planning PR, then separately
-promotes its settled meaning against current `main`.
+non-overlapping work, routes the planning PR to an independent review child,
+merges after the coordination gate, then separately promotes settled meaning
+through an operator-confirmed lane against current `main`.
 
-On explicit operator request, an orchestrator may transfer its current planning
-and review lane to one fresh orchestrator thread. The source closes the live
+On explicit operator request, an orchestrator may transfer its current
+coordination lane to one fresh orchestrator thread. The source closes the live
 state into a committed, pushed seven-section handoff, launches the successor as
 normal orchestrator mode, then stops mutating or dispatching that transferred
 lane. This is continuity, not parallel ownership: a genuinely concurrent
@@ -431,6 +443,11 @@ spawns a chatterbox in a `local` workspace for the same project/checkout, with
 label `Chatterbox=true` and `notifyOnFinish: false`. Chatterbox v1 starts no
 automatic orchestrator turn; it reports the absolute note path and summary in
 chat, and the orchestrator inspects `docs/triage/` at normal triage checkpoints.
+A note may be decision-ready when it separates operator-confirmed decisions,
+recommendations not yet accepted, evidence and alternatives, unresolved
+questions, and affected authority surfaces; only operator confirmation through
+the orchestrator makes it promotable.
+
 Chatterboxes have no planning, readiness, implementation, review, merge, or
 dispatch authority.
 
@@ -442,6 +459,10 @@ provider/model identity before reusing a recent route. Adapter-visible recent
 agent history is evidence when available; otherwise the orchestrator remembers
 only the routes it launched in the current run. Northstar keeps no durable usage
 ledger and stores no provider or model names.
+
+The coordinator's own route is an economical coordinator class; higher
+reasoning effort is an escalation, not the default. Review children select
+from their own adequate pools under the same rule.
 
 Ordinary implementation, bounded audits, mechanical work, and most settled
 material lanes use that economical pool. A frontier worker is a rare residual
@@ -566,27 +587,37 @@ subagent, which gets no worktree or Git/provider authority.
   named triage/research packet. It separates confirmed decisions from advice and
   open questions, verifies any handoff-named sibling links in the worktree
   container, does not promote or implement, and finishes with a PR. The
-  orchestrator reserves the topic, reviews/merges the packet, then owns a
-  separate promotion batch against current `main`.
+  orchestrator reserves the topic, an independent review child reviews the
+  packet PR, the coordinator merges after the gate, and an operator-confirmed
+  promotion lane owns the separate promotion batch against current `main`.
 - A mechanical documentation projection subagent may edit only the named paths
   in the orchestrator's planning context from an exact settled brief. It is not
   worker mode, runs serially, stops on semantic ambiguity, and cannot choose
   authority, readiness, completion, or next work. The orchestrator captures
   dirty state first, reviews the full diff, and owns commit/push.
 - A worker's completion authority is a reviewable PR plus evidence, not a chat
-  claim. The orchestrator reviews the diff and checks against canonical refs and
-  records the verdict in the provider review surface; same-identity GitHub runs
-  use a PR comment because formal self-approval is unavailable.
+  claim. An independent review child reviews the diff and checks against
+  canonical refs and records the verdict in the provider review surface,
+  naming the exact reviewed head; same-identity GitHub runs use a PR comment
+  because formal self-approval is unavailable. The coordinator verifies the
+  verdict head, findings, checks, ancestry, mergeability, and pause state and
+  does not duplicate the full review; a replacement reviewer starts a fresh
+  complete review.
+- A decision-ready chatterbox packet separates operator-confirmed decisions
+  from recommendations; only operator-confirmed meaning enters a promotion
+  brief, and the bounded projection stops on semantic ambiguity.
 - A direct PR-review request authorizes review mutations on the named PR only.
   Every merge-blocking finding is posted on the provider review surface; chat
   summarizes that record and never becomes the only home of a required change.
 - Workers and planning delegates never merge. The orchestrator may merge their
-  PRs without a second operator prompt after it records an accepted review of
-  the exact current head, all required checks pass, the PR is mergeable into the
-  intended base, and no stricter repository rule or explicit operator pause
-  applies. A changed head requires another review; ambiguous merge state stops
-  before retry. A merged planning packet remains non-authoritative until the
-  orchestrator promotes it.
+  PRs without a second operator prompt after an independent review child
+  records an accepted verdict naming the exact current head — or the
+  orchestrator does so on an operator-requested direct review — all required
+  checks pass, the PR is mergeable into the intended base, and no stricter
+  repository rule or explicit operator pause applies. A changed head requires
+  another review; ambiguous merge state stops before retry. A merged planning
+  packet remains non-authoritative until it is promoted through an
+  operator-confirmed promotion lane.
 - Provider-native subagents, session messaging, and hosted agents are optional
   adapters, not Northstar protocol dependencies.
 - Project-root Paseo settings are optional project lifecycle configuration. They

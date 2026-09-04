@@ -61,8 +61,9 @@ implementation.
 - Do not edit product code, architecture, contracts, specs, roadmaps, cards,
   logs, or front doors. Do not decide canonical promotion, readiness,
   implementation scope, or the next execution lane.
-- Do not merge. The orchestrator reviews and merges the planning PR, then owns
-  promotion against the current canonical state.
+- Do not merge. An independent review child reviews the planning PR; the
+  orchestrator merges after the gate, then owns promotion against the current
+  canonical state.
 
 ## Important Context
 
@@ -130,7 +131,7 @@ private transcript.
 
 ### Review, merge, and promotion
 
-The orchestrator reviews the exact PR head for fidelity to this handoff and the
+An independent review child reviews the exact PR head for fidelity to this handoff and the
 operator confirmations recorded in the packet, evidence quality, scope, and a
 clean separation between confirmed decisions, recommendations, and open
 questions. If decision ownership is unclear, it asks the operator rather than
@@ -139,7 +140,10 @@ branch and report again. When the reviewed head remains current, required checks
 pass, the PR is mergeable, and no stricter rule or operator pause applies, the
 orchestrator may merge without another approval prompt.
 
-After merge, the orchestrator reconciles the packet with current `main`, chooses
-canonical destinations, promotes settled meaning, splits or removes resolved
-triage notes, validates the promoted planning, and only then decides readiness
-or launches implementation. Promotion is never implied by merging the packet.
+After merge, the packet is still non-authoritative. The operator confirms the
+material meaning — through the source chatterbox where one exists — and the
+coordinator compiles an exact promotion brief for the bounded promotion PR
+lane: a projection worker reconciles the packet with current `main` only as
+the brief names, an independent review child checks the promotion against the
+confirmed packet, and only the coordinator's gate merges it. Promotion is
+never implied by merging the packet.

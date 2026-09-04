@@ -54,6 +54,13 @@ The "enough" bar for a triage note:
 A triage note is an intake buffer, not a spec, card, contract, or execution
 request. It does not authorize work or reserve a topic.
 
+A note becomes **decision-ready** when it clearly separates operator-confirmed
+decisions, recommendations not yet accepted, evidence and alternatives,
+unresolved questions, and affected authority surfaces. Decision-ready is still
+non-authoritative: only the operator's explicit confirmation, routed through
+the orchestrator, promotes packet meaning. A chatterbox never promotes,
+dispatches projection, or reserves execution.
+
 ## Shared checkout and Git protocol
 
 Chatterboxes share the orchestrator's checkout. Because they only create unique

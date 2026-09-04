@@ -1,6 +1,6 @@
 # 125 - Implement Economical Orchestrator Coordination
 
-Status: ready
+Status: implemented; reviewable PR pending exact-head review
 Owner: repo maintainers
 Created: 2026-09-04
 Updated: 2026-09-04
@@ -48,16 +48,16 @@ weakening review/merge requirements.
 
 ## Acceptance criteria
 
-- [ ] all ten spec-036 oracle rows are covered without editorial prose checks;
-- [ ] orchestrator defaults to coordination and escalation, not duplicated work;
-- [ ] decision-ready chatterbox packets separate confirmed and tentative meaning;
-- [ ] projection stops on semantic ambiguity;
-- [ ] worker PRs normally receive an independent child review;
-- [ ] review revision reuses the same reviewer when available;
-- [ ] coordinator verifies the exact accepted SHA and full merge gate;
-- [ ] portable capability classes replace local model/profile names;
-- [ ] card 126 remains blocked and unexecuted;
-- [ ] source/install parity, docs QA, full QA, and `git diff --check` pass.
+- [x] all ten spec-036 oracle rows are covered without editorial prose checks;
+- [x] orchestrator defaults to coordination and escalation, not duplicated work;
+- [x] decision-ready chatterbox packets separate confirmed and tentative meaning;
+- [x] projection stops on semantic ambiguity;
+- [x] worker PRs normally receive an independent child review;
+- [x] review revision reuses the same reviewer when available;
+- [x] coordinator verifies the exact accepted SHA and full merge gate;
+- [x] portable capability classes replace local model/profile names;
+- [x] card 126 remains blocked and unexecuted;
+- [x] source/install parity, docs QA, full QA, and `git diff --check` pass.
 
 ## Evidence required
 
@@ -78,6 +78,6 @@ weakening review/merge requirements.
 
 ## Next task
 
-Run this card from its committed worker handoff. Stop for exact-head review; do
-not start card 126.
+Implemented on `worker/economical-orchestrator-coordination`. Stop for
+orchestrator exact-head review and merge; do not start card 126.
 

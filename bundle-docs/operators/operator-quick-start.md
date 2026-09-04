@@ -93,7 +93,7 @@ to pick one mode:
   `/northstar-typescript-audit worktree`
 - “Audit and fix this entire TypeScript/Svelte repository” ->
   `/northstar-typescript-audit repository`
-- **Create an orchestrator runway and worker PR loop** -> `northstar` (orchestrator mode)
+- **Coordinate a Northstar lane (runway, dispatch, gated merge)** -> `northstar` (orchestrator mode)
 
 Rust activation is agent-installed and repository-owned. The agent discovers
 Cargo and explicit toolchain paths, preserves existing instructions and
@@ -150,8 +150,8 @@ does not duplicate the agent. Without a control plane you simply get every
 absolute handoff path at once and launch as many as you want. You are never
 asked to guess a worker count. A lane that stays serial must come with a named
 reason — a dependency edge, a shared mutable or closeout surface, or unresolved
-authority. Same-repo PRs still merge one at a time, and the orchestrator
-re-reviews any remaining head that a merge changed.
+authority. Same-repo PRs still merge one at a time, and a changed or
+conflict-resolved remaining head goes back to review before it can merge.
 
 Ordinary workers draw from the cheapest adequate day-to-day pool, and the
 orchestrator varies provider/model identity between runs instead of reusing
@@ -159,15 +159,26 @@ one remembered route. Frontier workers are rare: the lane must be both
 exceptionally difficult after planning and highest-priority or materially
 consequential, and the handoff records both
 reasons. A risky but well-specified change can still use a capable non-frontier
-worker; the orchestrator keeps frontier review. You can name a profile to
+worker; its independent review child keeps material review. A frontier review
+route is reserved for residual risk that settled planning, explicit oracles,
+and tests cannot bound. You can name a profile to
 override. If no adequate profile fits, the orchestrator reports that gap
 instead of silently spending the expensive one.
 
 You can also ask the orchestrator to spin off a planning conversation for one
 topic. It launches a frontier planning delegate in a separate worktree/thread;
 you talk with that delegate directly while the orchestrator continues unrelated
-work. The delegate opens a triage/research-only PR. The orchestrator reviews and
-merges it, then separately promotes the settled meaning into canonical planning.
+work. The delegate opens a triage/research-only PR. An independent review child
+reviews it, the coordinator merges after the gate, and an operator-confirmed
+lane promotes the settled meaning into canonical planning.
+
+Worker PRs normally receive an independent review child: the orchestrator
+places it in a dedicated PR-head workspace, launches it as a child with finish
+notifications, and hands it the PR, canonical refs, and review oracle. The
+reviewer posts the verdict on the provider, naming the exact reviewed head.
+The coordinator does not duplicate the review; it verifies the verdict head,
+findings, checks, ancestry, mergeability, and pause state before merging. You
+can still ask the orchestrator thread to review a PR directly.
 
 You can also ask the current orchestrator to hand its live lane to a fresh
 orchestrator. It writes and pushes one ordinary seven-section handoff, then
@@ -183,17 +194,19 @@ not wake a finished worker or planning delegate. A Paseo-backed orchestrator
 must prompt the same originating agent to read the comments, revise, validate,
 and push. It must not silently launch a replacement.
 
-When the orchestrator accepts the exact current worker or planning-delegate PR
-head and required checks pass, it may merge that lane without asking the
+When an independent review child accepts the exact current worker or
+planning-delegate PR head and the coordinator's merge gate holds, the
+orchestrator may merge that lane without asking the
 operator again. A changed head,
 failed or pending check, stricter repository rule, explicit operator pause, or
 ambiguous merge state stops that path.
 
-The frontier orchestrator may hand a meaningful batch of settled documentation
-projection to a fast/low-cost subagent. The brief fixes meaning and allowed
-paths; the subagent performs the named roadmap/card/log/index/template churn and
-deterministic checks, then the orchestrator reviews the full diff. Planning,
-readiness, review, merge, and Git mutations stay with the orchestrator.
+The coordinator hands settled mechanical batches to a fast/low-cost subagent
+and reviews the full diff; planning, readiness, merge, and Git mutations stay
+with the coordinator. A decision-ready chatterbox packet can drive an
+operator-confirmed promotion batch: the projection applies only the named,
+confirmed changes, stops on semantic ambiguity, and an independent review
+child checks the promotion against the packet before the merge gate applies.
 
 - “Create a handoff for the next thread” -> `northstar` (handoff mode)
 

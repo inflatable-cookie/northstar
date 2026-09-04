@@ -1,6 +1,6 @@
 # 036 - Economical Orchestrator Coordination
 
-Status: planned
+Status: active; card 125 implemented, card 126 trial pending
 Owner: repo maintainers
 Created: 2026-09-04
 Updated: 2026-09-04

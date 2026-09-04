@@ -1,6 +1,6 @@
 # 051 - Economical Orchestrator Coordination
 
-Status: planned; card 125 ready
+Status: card 125 implemented; PR open; card 126 blocked
 Owner: repo maintainers
 Created: 2026-09-04
 Updated: 2026-09-04
@@ -36,7 +36,7 @@ semantic review to that one role.
 
 ## Execution plan
 
-- [ ] **Card 125** implements the authority split, adapters, doctrine, templates,
+- [x] **Card 125** implements the authority split, adapters, doctrine, templates,
       review-child path, and validation.
 - [ ] **Card 126** runs the separate ten-PR observation window after card 125 is
       merged and the installed skill is refreshed.
@@ -57,6 +57,6 @@ semantic role and merge boundaries remain exact-head review evidence.
 
 ## Next task
 
-Launch card 125 from its committed worker handoff. Card 126 stays blocked until
-card 125 merges and the installed skill is refreshed.
+Review and merge card 125's PR at its exact head, then refresh the installed
+skill. Card 126 stays blocked until both complete.
 

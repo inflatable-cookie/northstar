@@ -240,14 +240,18 @@ informal habits.
   Record both reasons in the handoff and rotate within the frontier pool too.
   Priority alone, complexity alone, file count, duration, or a risk-domain
   label is insufficient.
-- Risky surfaces still need an explicit review oracle and frontier review. A
-  material but settled change may use a capable non-frontier worker while the
-  orchestrator keeps material review; worker price is not the review-strength
-  control.
+- Risky surfaces still need an explicit review oracle and material independent
+  review. A material but settled change may use a capable non-frontier worker
+  while its independent review child keeps material review; worker price is
+  not the review-strength control.
 - Unresolved designs return to planning. A refused route is removed only for
   that attempt; choose another adequate route from the lane's pool. If no
   adequate route remains, report the gap; do not silently escalate. An
   operator-named profile remains an explicit override.
+- The orchestrator's normal route is an economical coordinator; higher
+  reasoning effort is an escalation. Review children select from their own
+  adequate review pools; a frontier review route is reserved for residual
+  risk that settled planning, explicit oracles, and tests cannot bound.
 
 ### Conversational planning delegation
 
@@ -262,16 +266,18 @@ informal habits.
   product code, or launch implementation.
 - Bounded research subagents are read-only and return sourced findings to the
   delegate. They do not write, contact the operator, or start nested lanes.
-- The delegate opens a PR. The orchestrator reviews and merges it, then
-  reconciles current `main` and separately promotes settled meaning. Packet
-  merge is not promotion or execution authority.
+- The delegate opens a PR. An independent review child reviews it against the
+  handoff and recorded operator confirmations; the coordinator merges after
+  the gate, then reconciles current `main` and separately promotes settled
+  meaning through an operator-confirmed lane. Packet merge is not promotion
+  or execution authority.
 
 ### Fresh orchestrator continuation
 
 - On operator request, the source orchestrator may transfer its whole live
   lane to a fresh orchestrator through the generic seven-section handoff with
   `handoff_mode: orchestrator-continuation`,
-  `orchestrator_mode: planning-and-review`, and
+  `orchestrator_mode: economical-coordination`, and
   `dispatch_authority: orchestrator`.
 - After that handoff is pushed and dispatched, the source yields planning,
   dispatch, review, and merge mutations for the transferred lane. The successor
@@ -289,17 +295,24 @@ informal habits.
 
 ### Mechanical documentation projection
 
-- Keep discovery, planning, promotion, acceptance, readiness, review, and merge
-  with the orchestrator.
-- After meaning is settled, a fast/low-cost subagent may serially apply an exact
-  brief to a worthwhile batch of named documentation surfaces and deterministic
-  checks.
+- Keep promotion authority, readiness judgment, the merge gate, and merge with
+  the orchestrator; route substantive review to independent review children.
+- Same-checkout helper: after meaning is fully settled, a fast/low-cost
+  subagent may serially apply an exact brief to genuinely non-semantic edits
+  in the planning checkout — already-settled updates, exact wording sync, and
+  deterministic checks. The orchestrator reviews the full diff before any Git
+  mutation and owns those mutations. This helper carries no new product
+  meaning.
 - The brief must bound authority, settled meaning, canonical refs, allowed
-  paths, evidence/state transitions, forbidden judgments, validation, and stop
-  conditions.
-- The subagent does not choose authority or state, edit product code, commit,
-  push, review, or merge. It stops on ambiguity. The orchestrator reviews the
-  full diff and owns Git/provider mutations.
+  paths, evidence/state transitions, forbidden judgments, validation, and
+  stop conditions. The subagent does not choose authority or state, edit
+  product code, commit, push, review, or merge, and stops on ambiguity.
+- Operator-confirmed promotion lane: materializing a decision-ready packet
+  into canonical architecture, contracts, specs, roadmaps, and cards runs as
+  a bounded branch/worktree/PR lane from an exact promotion brief. The
+  projection worker stops on semantic ambiguity; an independent review child
+  reviews the PR against the confirmed packet; the coordinator applies the
+  normal merge gate.
 
 ### Chatterbox intake channel
 
@@ -317,6 +330,11 @@ informal habits.
 - The orchestrator treats surfaced triage notes as non-assignment intake, does
   not promote or change work from the intake, and inspects the note at its next
   triage checkpoint.
+- A note may be marked decision-ready when it separates operator-confirmed
+  decisions, recommendations not yet accepted, evidence and alternatives,
+  unresolved questions, and affected authority surfaces; it stays
+  non-authoritative until the operator confirms the meaning through the
+  orchestrator.
 
 ### Issue-fix dispatch
 
@@ -334,11 +352,32 @@ informal habits.
   impossible. Do not present temporary instrumentation as completion of a fix
   lane.
 
+### Independent review children
+
+- Worker PRs normally receive an independent review child in direct PR-review
+  mode unless the operator explicitly asks the orchestrator thread to review
+  directly.
+- Create a dedicated workspace at the PR head and launch the reviewer as a
+  parent-attached child with finish notifications enabled; select an
+  economical adequate review route under the diversified-routing rule.
+- Give the reviewer the PR, canonical refs, and review oracle, not the
+  worker's private transcript. The posted verdict names the exact reviewed
+  head.
+- Requested changes return to the same worker; the revised head returns to
+  the same reviewer when available; a replacement reviewer starts a fresh
+  complete review.
+- The orchestrator does not duplicate the full diff review. Before merge it
+  verifies the coordination gate: the verdict names the exact current head,
+  blocking findings are resolved or superseded on the provider, required
+  checks pass, base ancestry and mergeability are current, and no stricter
+  rule or operator pause applies. Stale or ambiguous evidence stops merge.
+
 ### Orchestrator merge authority
 
 - Starting an orchestrator-owned worker or planning-delegate lane pre-authorizes
-  the orchestrator to merge that lane's PR after it independently accepts the
-  exact current head and all required checks pass.
+  the orchestrator to merge that lane's PR after an independent review child —
+  or an operator-requested direct review — accepts the exact current head; the
+  posted verdict must name that head, and all required checks pass.
 - Confirm the PR is mergeable into the intended base. A changed head requires
   another review; ambiguous merge state stops before retry.
 - A stricter repository rule or explicit operator pause still wins.

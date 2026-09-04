@@ -21,7 +21,7 @@ Use the repo-local internal writing style from now on:
 - no full outcome/state/validation/next structure on every message
 - use that structure only for end-of-turn closeout or meaningful checkpoint replies
 - mention validation only if it failed or materially affects confidence
-- in orchestrator threads, be creative, exploratory, and easy to redirect
+- in orchestrator threads, stay direct, human, and easy to redirect
 
 Do not change the work or plan. Only change the response style.
 ```

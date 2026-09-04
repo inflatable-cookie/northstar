@@ -3,10 +3,16 @@
 Status: active
 Owner: repo maintainers
 Created: 2026-08-16
-Updated: 2026-09-03
+Updated: 2026-09-04
 Related research: `bundle-docs/research/translation-memos/northstar-orchestrator-thread.md`
 Related specs: `docs/specs/035-chatterbox-intake-channel.md` (implemented —
 operator-facing intake threads beside the orchestrator)
+
+Spec 036 (`docs/specs/036-economical-orchestrator-coordination.md`) narrows the
+normal orchestrator job to economical coordination with independent review
+children; this spec remains the transport, handoff, and worker-PR-loop
+authority.
+
 Governing architecture: `docs/architecture/system-architecture.md`
 Governing contracts: `docs/contracts/001-working-rules.md`, `docs/contracts/002-agent-local-paths.md`
 
@@ -31,23 +37,29 @@ evidence boundaries explicit.
 ## Target operating model
 
 The operator starts or resumes one Northstar `orchestrator` mode in the planning
-checkout. The orchestrator owns discovery, planning, architecture/contracts,
-roadmap readiness, launch preparation, and PR review. It does not implement the
-feature in the planning checkout once the worker boundary is declared.
+checkout. The orchestrator owns economical coordination: the ready runway,
+launch preparation, revision routing, promotion of operator-confirmed meaning,
+and gated merge. Material discovery, canonical planning edits, and substantive
+PR review are not coordinator work: discovery routes to operator-facing
+chatterboxes, promotion runs through bounded operator-confirmed lanes, and
+review routes to independent review children (spec 036). The orchestrator does
+not implement the feature in the planning checkout once the worker boundary is
+declared.
 
 On explicit operator request, the orchestrator may split one named discovery
 topic into a frontier planning delegate while it continues unrelated work. The
 delegate receives a committed handoff, talks directly with the operator in its
 own thread, and writes only a bounded triage/research packet on an isolated
 branch. It may coordinate read-only research subagents, then opens a planning PR.
-The orchestrator reviews and merges that packet and separately promotes settled
-meaning against current `main`; the packet never becomes execution authority by
-merge alone.
+An independent review child reviews that packet PR, and the orchestrator merges
+it after the coordination gate, then separately promotes settled meaning
+through an operator-confirmed lane against current `main`; the packet never
+becomes execution authority by merge alone.
 
 On a separate explicit request, the orchestrator may transfer its whole current
 lane to a fresh orchestrator thread. It first closes the repository state and
 writes one committed continuation handoff using the normal seven-section
-handoff shape. The successor owns the same planning/review lane; the source
+handoff shape. The successor owns the same coordination lane; the source
 stops mutating that lane after launch. This is neither worker mode nor a
 planning delegate, and it does not create an implementation worktree or PR.
 
@@ -90,15 +102,17 @@ resume the same child for review revisions.
 
 Worker reports and the PR URL return through the active control plane when
 it supports direct parent/child messaging; otherwise the operator relays them.
-The orchestrator reviews the exact diff and checks against the canonical refs, then
-records one of these evidence-backed outcomes in the hosting provider's review
-surface: ready for merge, changes requested with line-specific or card-specific
-comments, or pause with a named planning gap. When the orchestrator and worker
-use the same GitHub identity, GitHub blocks formal self-approval; the
-orchestrator must post the verdict as a PR comment instead. A review comment is
-canonical review evidence in that case. An accepted orchestrator verdict plus
-passing required checks authorizes merge of that lane's current reviewed PR head
-without another operator prompt.
+An independent review child reviews the exact diff and checks against the
+canonical refs, then records one of these evidence-backed outcomes in the
+hosting provider's review surface: ready for merge, changes requested with
+line-specific or card-specific comments, or pause with a named planning gap.
+When the reviewer and worker share the same GitHub identity, GitHub blocks
+formal self-approval; the reviewer posts the verdict as a PR comment instead.
+A review comment is canonical review evidence in that case. An accepted
+review-child verdict naming the exact current head plus passing required
+checks authorizes coordinator merge of that lane's current reviewed PR head
+without another operator prompt. The operator may explicitly ask the current
+thread to perform a direct review instead.
 
 For a reported defect, the orchestrator dispatches the whole outcome rather
 than a diagnostic phase. The worker owns reproduction, causal investigation,
@@ -164,19 +178,23 @@ before chat summarizes the result.
 | Role | Owns | Must not assume |
 | --- | --- | --- |
 | Operator | answers unresolved questions, may override the selected worker profile, starts or relays manual runs, resolves material permission requests, and may pause or override a merge | that one thread can see another thread's private history |
-| Orchestrator | discovery, intent summary, promoted planning, ready runway, per-worker handoff, optional adapter dispatch, PR review verdict, gated merge, closeout | that a worker's narrative or control-plane state substitutes for repository/diff/check evidence |
+| Orchestrator | dependency frontier, intent routing to operator authority, ready runway, per-worker handoff, optional adapter dispatch, revision routing, gated merge, closeout | that a worker's narrative or control-plane state substitutes for repository/diff/check evidence, or that it may assume product meaning absent operator-confirmed authority or a semantic verdict absent an independent review |
 | Chatterbox | direct operator intake conversation, problem exploration, unique triage-file capture on shared checkout, and operator-visible note handoff | canonical planning, readiness, implementation, review, merge, worker dispatch, or a reserved topic |
 | Planning delegate | direct operator discovery for one named topic, bounded triage/research capture, read-only research coordination, commits, and planning PR | canonical promotion, readiness, implementation, merge, or authority outside its handoff |
 | Documentation projection subagent | mechanically materializes an exact orchestrator brief into named docs and deterministic validation | planning choices, semantic promotion, readiness/completion judgment, code edits, commit/push, review, or merge |
 | Worker | bounded diagnosis and implementation in its worktree, card execution, tests, commits, evidence, PR creation | new architecture, missing contracts, or scope expansion |
+| Review child | independent exact-head semantic review and durable provider verdict naming the reviewed head | branch mutation, implementation, merge, or acceptance of a later head |
 
 ## Documentation projection
 
-The orchestrator may use a fast, low-cost profile for a meaningful mechanical
-documentation batch after it has finished the relevant planning. This is a
-serial subagent operation in the planning context, not a worker lane. It does
-not use the worker handoff, create another worktree, or gain implementation
-authority.
+The orchestrator may use a fast, low-cost profile for genuinely non-semantic
+mechanical documentation batches — already-settled material with no new
+product meaning — after planning has settled. This is a serial subagent
+operation in the planning context, not a worker lane. It does not use the
+worker handoff, create another worktree, or gain implementation authority.
+Materializing operator-confirmed decision-ready packet meaning into canonical
+surfaces is different: that promotion runs as a bounded branch/worktree/PR
+lane with an independent review child and the coordination gate (spec 036).
 
 The orchestrator supplies an exact projection brief containing:
 
@@ -227,22 +245,27 @@ packet. Its own branch diff contains only those named `docs/triage/` and optiona
 promotion destinations, decide readiness, or dispatch implementation.
 
 The orchestrator reserves the topic while the delegate runs. It may continue
-only work that neither depends on the topic nor mutates the packet paths. The
-planning PR is reviewed at its exact head for scope, evidence, conversational
-fidelity to the handoff and recorded operator confirmations, and clear
-separation between confirmed decisions, recommendations, and open questions. If
-decision ownership remains unclear, the orchestrator asks the operator rather
-than relying on private thread history. Requested changes return to the same
-delegate. Accepted review plus passing checks and mergeability permits
-orchestrator merge without another approval prompt unless a stricter rule or
-explicit pause applies.
+only work that neither depends on the topic nor mutates the packet paths. An
+independent review child reviews the planning PR at its exact head for scope,
+evidence, conversational fidelity to the handoff and recorded operator
+confirmations, and clear separation between confirmed decisions,
+recommendations, and open questions. If decision ownership remains unclear,
+the reviewer asks the operator rather than relying on private thread history.
+Requested changes return to the same delegate. An accepted verdict naming the
+exact current head plus passing checks and mergeability permits coordinator
+merge without another approval prompt unless a stricter rule or explicit
+pause applies.
 
-After merge, the orchestrator re-reads the packet against current `main`,
-resolves drift or contradictory operator decisions, selects canonical homes,
-promotes settled meaning, and removes or splits resolved triage material. Only
-that separate promotion batch may update architecture, contracts, specs,
-roadmaps, cards, or readiness. Mechanical documentation projection may apply an
-already-settled promotion map; it cannot choose the map.
+After merge, the packet is still not canonical authority. The operator
+confirms the material meaning — through the source chatterbox where one
+exists — and the coordinator compiles an exact promotion brief for the
+bounded promotion PR lane. That lane reconciles the packet against current
+`main` only as the confirmed brief names, and an independent review child
+checks the promotion PR against the confirmed packet before the coordinator
+applies the merge gate. Only that lane may update architecture, contracts,
+specs, roadmaps, cards, or readiness, and it removes or splits resolved
+triage material as the brief names. Mechanical documentation projection may
+apply an already-settled promotion map; it cannot choose the map.
 
 ## Fresh orchestrator continuation
 
@@ -254,7 +277,7 @@ The source orchestrator uses the normal handoff template and adds:
 
 ```yaml
 handoff_mode: orchestrator-continuation
-orchestrator_mode: planning-and-review
+orchestrator_mode: economical-coordination
 dispatch_authority: orchestrator
 ```
 
@@ -360,8 +383,8 @@ Use these states in the worker handoff or log when the run spans turns:
 - `planning-delegate-in-flight` — the operator and delegate are exploring one
   reserved topic in the isolated planning branch;
 - `planning-pr-awaiting-review` — the bounded triage/research packet is in a PR;
-- `planning-promotion` — the packet is merged and the orchestrator is
-  reconciling/promoting it against current `main`;
+- `planning-promotion` — the packet is merged and its settled meaning is
+  being promoted through the operator-confirmed lane against current `main`;
 - `ready-to-launch` — base and cards are ready; the worker-handoff path can be
   handed to a worker;
 - `worker-in-flight` — worker is executing the assigned runway;

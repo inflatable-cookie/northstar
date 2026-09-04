@@ -54,9 +54,9 @@ promotion_authority: orchestrator
 This activates an operator-facing planning conversation in a separate
 branch/worktree. It does not activate implementation worker mode. The delegate
 may write only the named triage/research packet, may use bounded read-only
-research subagents, and finishes with a PR for orchestrator review. Canonical
-promotion, readiness, implementation dispatch, review, and merge remain with
-the orchestrator.
+research subagents, and finishes with a PR for independent review. Canonical
+promotion, readiness, implementation dispatch, and merge remain with the
+orchestrator; substantive review routes to an independent review child.
 
 ### Orchestrator-continuation activation
 
@@ -65,7 +65,7 @@ It must declare all three frontmatter fields:
 
 ```yaml
 handoff_mode: orchestrator-continuation
-orchestrator_mode: planning-and-review
+orchestrator_mode: economical-coordination
 dispatch_authority: orchestrator
 ```
 
@@ -172,7 +172,8 @@ or copies multi-paragraph protocol text, treat that as a compression signal.
   signal, the next task, and unresolved risks. Worker handoffs also put the
   worker/PR flow here. Planning-delegate handoffs instead define the direct
   operator conversation, bounded research, triage/research-only diff, planning
-  PR, and orchestrator-owned review/merge/promotion flow. Orchestrator-
+  PR, and the independent-review, coordinator-gated merge, and operator-
+  confirmed promotion flow. Orchestrator-
   continuation handoffs tell the successor to re-enter normal orchestrator
   mode from the absolute path, and tell the source to yield the lane.
 

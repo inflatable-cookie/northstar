@@ -113,8 +113,9 @@ generic-only (111-file payload) and both installed routes are proven; the PR
 awaits exact-head review and merge, and the installed-skill refresh follows
 merge as `aa9a005`; the installed skill was refreshed to the 111-file generic
 core. Spec 035 / `g02.050` / card 124 merged through PR 31 as `d1b162e`.
-Spec 036 / `g02.051` compiles the economical coordinator split; card 125 is
-ready and card 126 is blocked behind its merge and installed-skill refresh.
+Spec 036 / `g02.051` implemented the economical coordinator split through card
+125; its PR awaits exact-head review and card 126 is blocked behind that merge
+and the installed-skill refresh.
 
 `g02.030` is complete. Cards `g02.030/083-088` proved the Effigy-native
 boundary, promoted the shared production foundation, added both routed

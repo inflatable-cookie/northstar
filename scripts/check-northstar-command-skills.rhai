@@ -218,7 +218,7 @@ for line in str::split_lines(generic_template) {
 }
 
 require(continuation_router.contains("handoff_mode: orchestrator-continuation") &&
-    continuation_router.contains("orchestrator_mode: planning-and-review") &&
+    continuation_router.contains("orchestrator_mode: economical-coordination") &&
     continuation_router.contains("dispatch_authority: orchestrator"),
     "router continuation activation is missing the three settled fields");
 require(continuation_router.contains("does not run the worker startup") &&
