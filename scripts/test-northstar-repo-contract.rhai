@@ -20,7 +20,7 @@ fn fixture_required_files() {
 
 fn fixture_required_files_with_active_authority() {
     let files = fixture_required_files();
-    files.push("docs/specs/034-modular-language-quality-packages.md");
+    files.push("docs/specs/038-compact-default-lifecycle-and-generation-rollup.md");
     files
 }
 
@@ -69,7 +69,7 @@ fn new_authority_fixture(label, include_authority) {
     );
     if include_authority {
         write_fixture_file(root,
-            "docs/specs/034-modular-language-quality-packages.md",
+            "docs/specs/038-compact-default-lifecycle-and-generation-rollup.md",
             "# Active authority\n");
     }
     root
@@ -205,7 +205,7 @@ expect_failure(
     "missing required Northstar repo contract path",
 );
 
-let authority_path = "docs/specs/034-modular-language-quality-packages.md";
+let authority_path = "docs/specs/038-compact-default-lifecycle-and-generation-rollup.md";
 for authority in contract::current_active_authority_files() {
     require(contract::required_files().contains(authority),
         "current active authority is missing from the live required-path list: " + authority);
@@ -304,6 +304,12 @@ require(!contract::required_files().contains(historical_path),
 let closed_spec_path = "docs/specs/024-papercuts-feedback-loop.md";
 require(!contract::required_files().contains(closed_spec_path),
     "closed spec is still in the live required-path list");
+let closed_g02_front_door = "docs/roadmaps/g02/README.md";
+require(!contract::required_files().contains(closed_g02_front_door),
+    "closed g02 front door is still in the live required-path list");
+let closed_spec_034 = "docs/specs/034-modular-language-quality-packages.md";
+require(!contract::required_files().contains(closed_spec_034),
+    "closed spec 034 is still in the live required-path list");
 let historical_evidence = new_fixture(
     "historical-path",
     true,

@@ -1,6 +1,6 @@
 # 131 - Compact g02 and Currentness
 
-Status: ready to resume same worker after Chatterbox scope ruling
+Status: review
 Owner: repo maintainers
 Created: 2026-09-04
 Master roadmap: `g03.001`
@@ -16,8 +16,7 @@ only current `g03` authority and work.
 ## Approved dispatch manifest
 
 - **Lane:** `g03.001/131`
-- **State:** ready; resume the existing paused worker at its clean pre-mutation
-  head after the promoted scope ruling
+- **State:** ready for review; resumed after operator-confirmed Chatterbox scope ruling
 - **Prerequisites:** card 130 merged and lifecycle checks green
 - **Completion:** `g02` is rolled up, classified old artifacts are pruned, and
   every current front door is `g03`-only
@@ -75,21 +74,86 @@ the other's paths.
 
 ## Acceptance evidence and review oracle
 
-- [ ] every removed file is present in the frozen classified inventory;
-- [ ] the card-126 observation is reachable from the `g03` watchlist and does
+- [x] every removed file is present in the frozen classified inventory;
+- [x] the card-126 observation is reachable from the `g03` watchlist and does
       not keep `g02` executable;
-- [ ] no current or unresolved meaning exists only in removed files;
-- [ ] every removed pre-`g03` spec has the destination named by spec 038 and
+- [x] no current or unresolved meaning exists only in removed files;
+- [x] every removed pre-`g03` spec has the destination named by spec 038 and
       current-link/parity proof;
-- [ ] exact search proves no named checker or readiness fixture requires a
+- [x] exact search proves no named checker or readiness fixture requires a
       removed `g02` or pre-`g03` planning path;
-- [ ] `effigy check:repo-contract`, `effigy check:command-skills`,
+- [x] `effigy check:repo-contract`, `effigy check:command-skills`,
       `effigy check:model-routing`, and `effigy test:readiness-map` retain their
       positive and negative coverage against current or fixture-local authority;
-- [ ] material `g02` outcomes remain traceable through selected evidence;
-- [ ] a fresh reader answers authority/current/next without opening an archive;
-- [ ] `git diff --check`, `effigy qa:docs`, and `effigy qa` pass;
+- [x] material `g02` outcomes remain traceable through selected evidence;
+- [x] a fresh reader answers authority/current/next without opening an archive;
+- [x] `git diff --check`, `effigy qa:docs`, and `effigy qa` pass;
 - [ ] independent exact-head review applies the full preservation oracle.
+
+### Frozen classified deletion manifest (360 files)
+
+#### 1. Expanded `g02` roadmaps and batch cards (172 files)
+
+- `docs/roadmaps/g02/README.md` (front door, closure record)
+- `docs/roadmaps/g02/batch-cards/README.md`
+- 54 milestone files: `docs/roadmaps/g02/001-run-consumer-repo-pilot-and-consolidate.md` through `054-finish-continuous-coordinator-delivery.md`
+- 116 batch cards: `docs/roadmaps/g02/batch-cards/014-select-consumer-repo-pilot-target.md` through `129-finish-continuous-coordinator-delivery.md`
+- **Disposition:** Replaced by `docs/roadmaps/archive/g02.md` non-procedural roll-up. Lasting capabilities captured in roll-up; card 078 deferred; card 126 observation rehomed to `docs/roadmaps/g03/README.md` bounded watchlist.
+
+#### 2. Pre-`g03` promoted specs (37 files)
+
+| Group | Files | Historical role | Current canonical destination |
+| --- | --- | --- | --- |
+| 001–007 | `docs/specs/archive/001-northstar-delivery-layer.md` through `007-currentness-curation-and-evidence-window.md` (7 files) | Early delivery layer, runtime policy, closeout, pilot, guardrails, currentness | `docs/architecture/system-architecture.md`, `docs/contracts/001-working-rules.md`, bundle doctrine, Git history |
+| 008–025 | `docs/specs/008-spec-lifecycle-and-archive-mechanics.md` through `025-skill-distribution-and-consumer-papercut-proof.md` (18 files) | Spec lifecycle, continuation envelope, lane budget, consumer autonomy proofs, strict compliance, underlay recovery, nested authority, repo posture, protocol kernel, papercuts | `docs/architecture/system-architecture.md`, `docs/contracts/001-working-rules.md`, `bundle-docs/protocol-kernel.md`, `PAPERCUTS.md`, Git history |
+| 026, 035, 036 | `docs/specs/026-orchestrator-thread-and-worker-pr-loop.md`, `035-chatterbox-intake-channel.md`, `036-economical-orchestrator-coordination.md` (3 files) | Early orchestrator/worker, intake, economical coordination | Superseded by 037, `docs/contracts/001-working-rules.md`, and skills |
+| 027 | `docs/specs/027-northstar-native-pre-execution-discovery.md` (1 file) | Pre-execution discovery & readiness maps | `docs/contracts/001-working-rules.md`, `skills/northstar/references/modes/pre-execution-discovery.md`, `scripts/lib/northstar-readiness-map.rhai` |
+| 028 | `docs/specs/028-agent-instruction-surface-optimization.md` (1 file) | Agent instruction surface | `docs/contracts/003-agent-instruction-surface.md`, `skills/northstar/references/modes/agent-instruction-review.md` |
+| 029 | `docs/specs/029-northstar-long-horizon-planning.md` (1 file) | Long-horizon planning (Atlas) | `skills/northstar/references/modes/atlas.md`, `skills/northstar/commands/northstar-atlas/SKILL.md`; feedback on g03 watchlist |
+| 030 | `docs/specs/030-conversational-triage-and-docs-cleanup.md` (1 file) | Triage and docs cleanup | `docs/contracts/001-working-rules.md`, `skills/northstar/references/modes/cleanup-docs.md`; feedback on g03 watchlist |
+| 031–034 | `docs/specs/031-rust-quality-authoring-and-audit.md` through `034-modular-language-quality-packages.md` (4 files) | Rust and TypeScript quality packages, v2 tooling, modular packages | `docs/architecture/system-architecture.md`, `docs/contracts/004-language-quality-pack.md`, official registry, installed packages |
+| 037 | `docs/specs/037-chatterbox-led-planning-and-mechanical-coordination.md` (1 file) | Chatterbox planning, coordinator, review modes | `docs/contracts/001-working-rules.md`, `docs/architecture/system-architecture.md`, skills modes |
+
+#### 3. Consumed worker handoffs (35 files)
+
+All 35 completed handoffs from closed `g01`/`g02` work removed (`docs/handoffs/20260816-*` through `20260904-123000-*`). Active handoffs retained: `docs/handoffs/20260904-123500-compact-g02-and-currentness.md` (card 131) and `docs/handoffs/20260904-123501-make-compact-lifecycle-default.md` (card 132), plus `docs/handoffs/README.md`.
+
+#### 4. Routine closed batch logs (116 files)
+
+116 routine step/checkpoint/halt logs removed from closed `g01` and `g02` work across `docs/logs/2026-04/`, `2026-05/`, `2026-08/`, and `2026-09/`. 51 exceptional evidence logs documenting pilots, migrations, releases, canary results, and foundational capabilities are retained and cited in `docs/roadmaps/archive/g01.md`, `docs/roadmaps/archive/g02.md`, and `docs/logs/README.md`.
+
+### Six-row preservation oracle proof
+
+| Row | Invariant | Adversarial counterexample | Expected response | Proof |
+| --- | --- | --- | --- | --- |
+| 1 | Current authority is unchanged or deliberately promoted | A deleted file held the only current rule | Destination authority verified before deletion | All pre-g03 spec rules and g02 operational policies exist in `system-architecture.md`, `001-working-rules.md`, `003-agent-instruction-surface.md`, `004-language-quality-pack.md`, and skills modes; `effigy qa:docs` green |
+| 2 | Every open commitment remains reachable | Deferred work exists only in removed history | All commitments tracked to active destinations | Card 126 observation rehomed to `g03/README.md` bounded watchlist; card 078 deferred recorded in `archive/g02.md`; all other milestones/cards completed |
+| 3 | Material outcomes remain traceable | A lasting migration has no PR, commit, release, or evidence reference | Roll-up contains evidence and provenance references | `docs/roadmaps/archive/g02.md` cites all retained milestone evidence logs, pilot proofs, canary closures, and Git history |
+| 4 | Historical procedure cannot be mistaken for current authority | An archive contains runnable steps or active status | Roll-up contains only non-procedural outcomes | `archive/g02.md` has `Status: archived`, `Kind: roll-up`, no execution steps; `check_archive_non_authority` and `check_one_expanded_generation` pass |
+| 5 | Current work is legible without archive reads | The next lane or dependency requires opening a roll-up | Next active cards legible in `g03` without reading archive | Current runway in `docs/roadmaps/g03/README.md` and `docs/README.md` is self-contained |
+| 6 | Deletion is exact and reviewable | A broad cleanup removes an unclassified file | Exact frozen manifest matches deletion diff | `git status` diff confirms exactly the 360 classified files deleted |
+
+### Checker callers modernized
+
+- `scripts/lib/northstar-repo-contract-data.rhai`: `current_active_authority_files()` points to active spec 038; `required_files()` points to `docs/roadmaps/g03/README.md` instead of `g02/README.md`; removed closed spec 030.
+- `scripts/check-northstar-model-routing.rhai`: Re-anchored assertions from removed specs 026 and 037 to current contracts (`001-working-rules.md`), architecture, orchestrator mode, doctrine, and templates; all 12 oracle rows pass.
+- `scripts/check-northstar-command-skills.rhai`: Re-anchored superseded review-workspace creation assertion from removed spec 036 to `001-working-rules.md`; passes.
+- `scripts/test-northstar-repo-contract.rhai`: Authority fixture uses active spec 038; added negative assertions for `g02/README.md` and spec 034; all 15 fixture tests pass.
+- `scripts/fixtures/readiness-map/**`: Re-anchored fixture frontmatter from removed spec 027 and `g02` roadmap to active spec 038 and `g03/001-compact-default-lifecycle.md`; all 5 fixture tests pass with expected frontier and negative cases.
+
+### Validation
+
+- `effigy check:repo-contract` — PASS
+- `effigy check:repo-contract-wiring` — PASS
+- `effigy test:repo-contract` — PASS (15 fixture cases)
+- `effigy check:readiness-map` — PASS
+- `effigy test:readiness-map` — PASS (5 fixture cases)
+- `effigy check:command-skills` — PASS
+- `effigy check:model-routing` — PASS (12 routing oracle rows)
+- `effigy check:language-packages` — PASS
+- `effigy qa:docs` — PASS
+- `effigy qa` — PASS
+- `git diff --check` — clean (no whitespace or format errors)
 
 ## Stop conditions
 
@@ -99,3 +163,8 @@ the other's paths.
   historical dependency or weaken an intended negative case;
 - sibling path ownership collides;
 - validation changes the plan.
+
+## Next task
+
+Independent exact-head review in this worker workspace by a reviewer with a
+different provider/model identity, followed by coordinator merge gate.

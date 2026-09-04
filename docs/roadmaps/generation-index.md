@@ -9,15 +9,14 @@ Mode: sequential
 - `g03`
 - Runway: `g03/README.md`
 - Active milestone: `g03.001`
-- Approved frontier: card 130; cards 131 and 132 become concurrent-ready after
-  card 130 merges
+- Approved frontier: card 131 (compact g02 and currentness) and card 132 (make compact lifecycle default) executing concurrently after card 130 merge
 
 ## Generation log
 
 | Generation | State | Boundary | History disposition |
 | --- | --- | --- | --- |
 | `g01` | closed | Internal Northstar-on-Northstar foundation | [archive/g01.md](archive/g01.md) roll-up |
-| `g02` | closed | External proof and execution hardening | card 131 roll-up |
+| `g02` | closed | External proof and execution hardening | [archive/g02.md](archive/g02.md) roll-up |
 | `g03` | active | Compact default lifecycle and protocol reduction | expanded active generation |
 
 ## Rollover rule
@@ -30,4 +29,4 @@ preservation oracle in spec 038 passes.
 
 ## Next task
 
-Dispatch `g03.001/130` from the planning commit that opened `g03`.
+Complete concurrent siblings `g03.001/131` and `g03.001/132`.

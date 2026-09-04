@@ -16,10 +16,8 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 
 ## Approved frontier
 
-- `g03.001/130` is ready and is the only initial implementation lane.
-- After card 130 merges, cards 131 and 132 are approved concurrent siblings.
-- No coordinator may dispatch 131 or 132 before card 130's merge and installed
-  planning base are verified.
+- Card 130 merged.
+- Cards `g03.001/131` and `g03.001/132` are the active concurrent frontier.
 
 ## Bounded watchlist
 
@@ -37,4 +35,4 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 
 ## Next task
 
-Dispatch card 130 from the planning commit that opened `g03`.
+Complete concurrent siblings `g03.001/131` and `g03.001/132`.

@@ -29,7 +29,6 @@ fn forbid(row, surface, text, regex_pattern) {
     }
 }
 
-let spec = load("docs/specs/026-orchestrator-thread-and-worker-pr-loop.md");
 let contract = load("docs/contracts/001-working-rules.md");
 let architecture = load("docs/architecture/system-architecture.md");
 let mode = load("skills/northstar/references/modes/orchestrator.md");
@@ -39,12 +38,10 @@ let operators = load("bundle-docs/operators/operator-quick-start.md");
 let skill = load("skills/northstar/SKILL.md");
 let kernel = load("bundle-docs/protocol-kernel.md");
 let handoff = load("skills/northstar/references/handoff-contract.md");
-let spec_037 = load("docs/specs/037-chatterbox-led-planning-and-mechanical-coordination.md");
 let chatterbox_mode = load("skills/northstar/references/modes/chatterbox.md");
 let worker_template = load("skills/northstar/assets/templates/northstar-orchestrator-run.md.template");
 
 // Row 1 — adequacy precedes preference (adequate-pool assertion).
-require_row("adequacy precedes preference", "spec 026", spec, "adequate profile pool");
 require_row("adequacy precedes preference", "working rules", contract, "adequate profile pool");
 require_row("adequacy precedes preference", "architecture", architecture, "builds the adequate pool");
 require_row("adequacy precedes preference", "orchestrator mode", mode, "Adequacy comes before price or rotation");
@@ -52,7 +49,6 @@ require_row("adequacy precedes preference", "doctrine 07", doctrine, "Adequacy c
 require_row("adequacy precedes preference", "working-rules template", template, "Adequacy filters before price or rotation");
 
 // Row 2 — cheapest adequate tier wins (cost-tier assertion).
-require_row("cheap adequate routes are used", "spec 026", spec, "cheapest adequate tier");
 require_row("cheap adequate routes are used", "working rules", contract, "cheapest adequate tier");
 require_row("cheap adequate routes are used", "architecture", architecture, "cheapest adequate tier");
 require_row("cheap adequate routes are used", "orchestrator mode", mode, "cheapest adequate tier");
@@ -63,7 +59,6 @@ require_row("cheap adequate routes are used", "operator guidance", operators, "c
 
 // Row 3 — successful routes do not become permanent defaults (no-repeat
 // assertion).
-require_row("no permanent route defaults", "spec 026", spec, "vary provider/model identity");
 require_row("no permanent route defaults", "working rules", contract, "vary provider/model identity");
 require_row("no permanent route defaults", "architecture", architecture, "varies provider/model identity");
 require_row("no permanent route defaults", "orchestrator mode", mode, "vary provider/model identity");
@@ -74,17 +69,14 @@ require_row("no permanent route defaults", "operator guidance", operators, "vari
 
 // Row 4 — history is optional; current-run memory is enough
 // (history-fallback assertion).
-require_row("history is optional", "spec 026", spec, "recent-agent history");
 require_row("history is optional", "working rules", contract, "recent-agent history");
 require_row("history is optional", "architecture", architecture, "recent agent history");
 require_row("history is optional", "orchestrator mode", mode, "recent-agent history");
 require_row("history is optional", "doctrine 07", doctrine, "recent-agent history");
 require_row("history is optional", "working-rules template", template, "recent-agent history");
-require_row("history is optional", "spec 026", spec, "current orchestrator run");
 require_row("history is optional", "working rules", contract, "current orchestrator run");
 require_row("history is optional", "orchestrator mode", mode, "current orchestrator run");
 require_row("history is optional", "working-rules template", template, "current orchestrator run");
-require_row("history is optional", "spec 026", spec, "durable usage ledger");
 require_row("history is optional", "working rules", contract, "usage ledger");
 require_row("history is optional", "architecture", architecture, "durable usage ledger");
 require_row("history is optional", "orchestrator mode", mode, "durable usage ledger");
@@ -92,13 +84,11 @@ require_row("history is optional", "doctrine 07", doctrine, "durable usage ledge
 require_row("history is optional", "working-rules template", template, "durable usage ledger");
 
 // Row 5 — orchestrators rotate too (successor-routing assertion).
-require_row("orchestrators rotate too", "spec 026", spec, "adequate orchestrator-role pool");
 require_row("orchestrators rotate too", "architecture", architecture, "orchestrator-role pool");
 require_row("orchestrators rotate too", "orchestrator mode", mode, "adequate orchestrator-role pool");
 require_row("orchestrators rotate too", "doctrine 07", doctrine, "orchestrator-role pool");
 
 // Row 6 — review strength is not worker price (risk-separation assertion).
-require_row("review strength is not worker price", "spec 026", spec, "review-strength control");
 require_row("review strength is not worker price", "working rules", contract, "keeps material review");
 require_row("review strength is not worker price", "architecture", architecture, "material lanes use that economical pool");
 require_row("review strength is not worker price", "orchestrator mode", mode, "review-strength control");
@@ -106,7 +96,6 @@ require_row("review strength is not worker price", "doctrine 07", doctrine, "rev
 require_row("review strength is not worker price", "working-rules template", template, "review-strength control");
 
 // Row 7 — frontier cost is exceptional (residual-reasoning assertion).
-require_row("frontier cost is exceptional", "spec 026", spec, "remaining reasoning");
 require_row("frontier cost is exceptional", "working rules", contract, "remaining reasoning");
 require_row("frontier cost is exceptional", "architecture", architecture, "remaining reasoning");
 require_row("frontier cost is exceptional", "orchestrator mode", mode, "remaining reasoning");
@@ -114,7 +103,6 @@ require_row("frontier cost is exceptional", "doctrine 07", doctrine, "remaining 
 require_row("frontier cost is exceptional", "working-rules template", template, "remaining reasoning");
 
 // Row 8 — operator intent wins (override assertion).
-require_row("operator intent wins", "spec 026", spec, "operator-named profile");
 require_row("operator intent wins", "working rules", contract, "operator-named profile");
 require_row("operator intent wins", "architecture", architecture, "operator-selected profile still wins");
 require_row("operator intent wins", "orchestrator mode", mode, "operator-named");
@@ -135,7 +123,7 @@ require_row("route failure stays local", "operator guidance", operators, "lane's
 
 // Row 10 — implementation adequacy is role-first. Documentation volume does
 // not turn an implementation lane into an audit or documentation-grind job.
-require_row("implementation routing is role-first", "spec 037", spec_037, "profile qualifies only when its live description explicitly fits implementation or general day-to-day work");
+require_row("implementation routing is role-first", "working rules", contract, "profile qualifies only when its live notes explicitly fit implementation or general day-to-day work");
 require_row("implementation routing is role-first", "working rules", contract, "Audit, documentation-grind, review, planning, and coordinator profiles do not qualify");
 require_row("implementation routing is role-first", "orchestrator mode", mode, "excluded from implementation lanes even when the work is long");
 require_row("implementation routing is role-first", "doctrine 07", doctrine, "profiles do not qualify merely because an implementation lane is long");
@@ -145,7 +133,6 @@ require_row("implementation routing is role-first", "operator guidance", operato
 // Row 11 — pre-PR semantic blockers return to the human-facing planning
 // authority rather than making the mechanical coordinator interrogate the
 // operator or invent the decision.
-require_row("pre-PR decisions return to Chatterbox", "spec 037", spec_037, "pre-PR decision request");
 require_row("pre-PR decisions return to Chatterbox", "working rules", contract, "pre-PR decision request");
 require_row("pre-PR decisions return to Chatterbox", "orchestrator mode", mode, "Do not ask the operator the question in the coordinator thread");
 require_row("pre-PR decisions return to Chatterbox", "chatterbox mode", chatterbox_mode, "Chatterbox ruling");
@@ -161,7 +148,6 @@ require_row("pre-PR decisions return to Chatterbox", "skill outcome", skill, "pr
 // named row; the scans below reject local model names, prices, and the
 // concentration-era fallback wording anywhere in the routing payload.
 let scanned = [
-    #{ "name": "spec 026", "text": spec },
     #{ "name": "working rules", "text": contract },
     #{ "name": "architecture", "text": architecture },
     #{ "name": "orchestrator mode", "text": mode },

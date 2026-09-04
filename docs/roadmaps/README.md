@@ -7,10 +7,8 @@ generation remains expanded.
 
 - Active generation: [`g03`](./g03/README.md)
 - Active milestone: [`g03.001`](./g03/001-compact-default-lifecycle.md)
-- Ready card: [`g03.001/130`](./g03/batch-cards/130-establish-lifecycle-and-roll-up-g01.md)
-- Approved next frontier: cards 131 and 132 concurrently after card 130 merges
-- Closed generations: historical until cards 130 and 131 replace them with
-  compact roll-ups under `archive/`
+- Active frontier: [`g03.001/131`](./g03/batch-cards/131-compact-g02-and-currentness.md) and [`g03.001/132`](./g03/batch-cards/132-make-compact-lifecycle-default.md) executing concurrently (card 130 merged)
+- Closed generations: [`g01`](./archive/g01.md) and [`g02`](./archive/g02.md) roll-ups under `archive/`
 
 ## Rules
 
@@ -25,4 +23,4 @@ generation remains expanded.
 
 ## Next task
 
-Dispatch card 130. Do not dispatch historical `g01` or `g02` instructions.
+Complete concurrent siblings `g03.001/131` and `g03.001/132`. Do not dispatch historical `g01` or `g02` instructions.
