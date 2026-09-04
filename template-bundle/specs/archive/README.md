@@ -1,12 +1,12 @@
 # Specs Archive
 
-**Type: OPTIONAL** (strict posture) -- Create when you have archived specs to preserve.
+**Type: OPTIONAL** -- Create when you have archived specs to preserve.
 
 Use this folder for closed planning artifacts that should be preserved for
 traceability but no longer belong in the active `docs/specs/` surface.
 
-Stricter repos may seed this README from the start, before the first archived
-artifact exists, so the archive posture is explicit from the beginning.
+Seed this README when closed artifacts exist or up front so the archive path
+is explicit from the beginning.
 
 ## Rule
 

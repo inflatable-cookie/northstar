@@ -1,8 +1,8 @@
 # Template Selection
 
 Use the Northstar `template-bundle/` for the docs skeleton.
-Choose explicitly between the baseline docs spine and the stricter docs spine;
-do not leave the repo in a half-installed middle state.
+Adopt the compact docs spine from the bundle; do not leave the repo in a
+half-installed middle state.
 
 Use native Effigy templates by default. Reach for the compatibility template
 only when the installed binary really cannot support the docs or release
@@ -39,10 +39,10 @@ invariants, sharp edges, and completion lens; remove the comments. Do not ship
 the generic prompts as if they were project guidance, and do not erase an
 existing useful project voice when merging the Northstar boundaries.
 
-For stricter repos, also copy the bundle's working-rules and specs surfaces
-from a Northstar source checkout's `template-bundle/`. When only this installed
-skill is available, compile-roadmaps and batch-card authoring can use the
-shipped copy at
+When using consequence-triggered modules, also copy the bundle's
+working-rules and specs surfaces from a Northstar source checkout's
+`template-bundle/`. When only this installed skill is available,
+compile-roadmaps and batch-card authoring can use the shipped copy at
 `assets/templates/docs/specs/templates/batch-card-template.md` (consumer
 destination: `docs/specs/templates/batch-card-template.md`).
 

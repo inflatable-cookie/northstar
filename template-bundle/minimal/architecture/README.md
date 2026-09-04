@@ -7,9 +7,9 @@ Architecture docs define system shape, inventory, and boundaries.
 ## Contents
 
 - `system-architecture.md` -- system boundaries and major components
-- `system-inventory.md` -- what exists now (for stricter repos)
+- `system-inventory.md` -- what exists now
 - `repo-authority-map.md` -- which repo owns what (multi-repo only)
-- `product-guardrails.md` -- execution constraints (strict posture)
+- `product-guardrails.md` -- execution constraints and negative boundaries
 
 ## Rule
 

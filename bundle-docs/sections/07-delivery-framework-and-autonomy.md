@@ -34,28 +34,29 @@ It does not replace vision, specs, architecture, contracts, roadmaps,
 research, or logs. It tightens what must happen between roadmap intent and
 claimed completion.
 
-## Repo posture classification
+## Repo lifecycle state classification
 
 Northstar work gets easier when the repo's live state is named explicitly
 before setup, planning, recovery, or execution continues.
 
-Use this compact posture model:
+Northstar operates under one compact strict lifecycle. The former light,
+baseline, lane-first, mixed, and full-strict postures are retired as supported
+steady-state protocols. Classify current execution state using these operational
+states:
 
-- `baseline-routing`
-  healthy baseline spine, no stricter execution lane claimed
-- `strict-ready`
-  stricter spine, active spec lane, and one honest ready card or ready chain
-- `strict-paused`
-  stricter spine, active lane, but no honest ready card yet; planning or
-  intent must resolve first
+- `ready`
+  the active lane has honest, verified ready cards or an active milestone with
+  settled canonical authority
+- `paused`
+  active lane exists, but planning gaps, unresolved intent, or stop signals
+  pause execution
 - `migration`
-  repo is moving from baseline or lane-first posture toward fuller strict
-  compliance
+  mature repository is adopting the compact lifecycle in bounded tranches
 - `drifted`
   front doors, canonical refs, or live planning surfaces are no longer
   trustworthy enough to continue execution
 
-Whenever posture matters, also name:
+Whenever lifecycle state matters, also name:
 
 - authority mode: root-owned or nested docs-authority
 - current active lane
@@ -74,7 +75,7 @@ before roadmap execution relies on them.
 
 ## Canonical delivery artifacts
 
-Projects using the stricter mode should carry these artifacts:
+Projects using consequence-triggered modules carry these artifacts as needed:
 
 - `docs/architecture/product-guardrails.md`
 - `docs/specs/NNN-<slug>.md` for master specs
@@ -198,7 +199,7 @@ Northstar planning should not produce a one-card-at-a-time fake runway.
 
 Generation READMEs own the coarse `## Generation Runway`; roadmap milestones
 own lane shape; batch cards own step detail. A material roadmap should derive
-from the generation runway, then name several batches (and, in strict posture,
+from the generation runway, then name several batches (and, when batch cards are used,
 several batch cards) — not one agent turn. Checkbox task lists in roadmap
 execution plans make that lane runway scannable. Full granularity doctrine:
 [03-roadmaps.md](./03-roadmaps.md) (*Scope and granularity rule*).
@@ -490,93 +491,47 @@ not:
 If a lane still needs giant continuation prompts in ordinary use, the repo
 surfaces or local agent contract are under-specified and should be tightened.
 
-## Autonomy support levels
+## Compact lifecycle default
 
-Northstar supports more than one useful operating mode.
+Northstar operates under one normal operating posture: the compact strict
+lifecycle. The former light, baseline, lane-first, mixed, and full-strict
+postures are retired as supported steady-state protocols.
 
-- baseline roadmap mode
-  - a repo using the baseline spine can still support healthy active-lane
-    routing, clear milestone sequencing, and shorter bounded runs driven by
-    roadmap, contract, and log surfaces
-- lane-first stricter mode
-  - a mature baseline repo may add `docs/specs/` and batch cards for one active
-    lane when that lane needs explicit continuation-envelope, lane-budget, and
-    pause-signal state without forcing a repo-wide rewrite first
-- stricter delivery mode
-  - a repo that broadly wants the fuller paint-by-numbers execution layer
-    should adopt `docs/specs/` and batch cards as a standing surface
+A new consumer starts with the standard core spine:
+`vision/`, `architecture/`, `contracts/`, `roadmaps/`, `logs/`, `handoffs/`, and `triage/`.
+Starting small does not classify a project into a lighter protocol; the core
+spine is already the compact Northstar lifecycle.
 
-Lane-first stricter adoption is the migration entry point, not the long-term
-doctrinal destination. When a project is expected to live under the strict
-Northstar framework, the intended end state is full stricter compliance across
-the project rather than a permanent mixed posture.
+## Consequence-triggered modules
 
-Do not over-promise autonomy from a roadmap-only repo. The baseline spine can
-be valid and productive, but it is not the same thing as the stricter
-paint-by-numbers execution layer.
+Specs, detailed evidence, research, and additional authority files are
+consequence-triggered modules rather than a second posture:
 
-Do not install the stricter layer mechanically either. Use it when longer
-hands-off runs, tighter anti-drift guardrails, or more explicit execution state
-are actually needed. In a mature baseline repo, prefer lane-first adoption
-before a full repo-wide rewrite when the need is local to one active lane.
+- `specs/`: triggered when a material change needs provisional shaping before
+  its durable outcomes are promoted into architecture and contracts.
+- Batch cards: triggered for execution detail under an active roadmap milestone;
+  the milestone owns lane shape, batch cards own execution detail.
+- Separate logs: triggered only for an incident, release, migration,
+  cross-lane decision, or evidence set too large to keep the card legible.
+  Normal delivery evidence belongs on the completed card.
+- `research/`: triggered when comparative exploration or source-backed learning
+  is needed before architecture and contract commitments.
+- Additional authority files: triggered when multi-repo boundaries or distinct
+  authority seams genuinely require separate files (e.g., `repo-authority-map.md`).
 
-## Full strict compliance
+## Incremental adoption
 
-For projects that are meant to live under the strict Northstar framework, full
-strict compliance should mean all of the following are true:
+A mature repo may adopt the compact lifecycle in bounded tranches, but the
+destination remains the same single protocol.
 
-- the project carries the stricter docs spine as a normal working surface, not
-  only on one provisional lane
-- active material work is governed through specs and batch cards rather than
-  roadmap prose alone
-- architecture and contracts are current enough that roadmap execution is
-  compiled from canonical surfaces rather than inferred later
-- product guardrails, working rules, and closeout expectations are explicit and
-  used in normal execution
-- currentness surfaces, spec hygiene, and archive posture are maintained as
-  routine work rather than occasional cleanup
-
-Treat this as a project-level operating state, not just the presence of a few
-files.
-
-## Migration phases
-
-Mature projects moving to full strict compliance should usually pass through
-these phases:
-
-1. baseline posture
-   - the repo has the baseline spine and coherent active-lane routing
-2. lane-first stricter adoption
-   - one active lane uses specs and batch cards to prove the stricter surface
-     works in the real project
-3. expanding strict coverage
-   - the stricter spine becomes the default for new material lanes and the
-     standing project surfaces are upgraded accordingly
-4. full strict compliance
-   - mixed-mode operation is no longer the norm and active work runs under the
-     strict delivery layer by default
-
-Projects should not remain in phase 2 or 3 indefinitely without an explicit
-reason. Once the stricter surface is proven and the project is meant to live
-there, mixed posture should be treated as migration debt rather than a stable
-operating model.
-
-## Migration checkpoints
-
-Before a project claims full strict compliance, the minimum checkpoints should
-be true:
-
-- the stricter spine is present at project level, not only in a one-off lane
-- at least the active material lanes use specs and batch cards as the execution
-  unit
-- product guardrails, working rules, and contract indexing are explicit and
-  current
-- roadmap milestones point at canonical architecture/contracts and ready cards
-  rather than relying on prose-only next steps
-- logs and handoffs reflect the closeout sequence and execution state expected
-  by the strict doctrine
-- closed planning artifacts are archived or retired cleanly enough that
-  `docs/specs/` still reflects live planning
+- Keep migration inside the normal planning spine: one active migration spec
+  or roadmap records satisfied capabilities, blocking gaps, the current
+  tranche, the next tranche, and the evidence needed to advance.
+- Do not backfill closed history merely to imitate the current file shape.
+- Close ordinary migration work on its card. Retain a separate migration log
+  only when the evidence is materially useful after the generation rolls up.
+- Do not invent a detached governance tracker or a permanent mixed posture.
+  Mixed-mode operation is migration debt, not an alternative steady state.
 
 ## Autonomy rule
 
@@ -786,7 +741,20 @@ revision, review, merge-gate, or closeout action, reports identities and state,
 and continues across merge, closeout, and card boundaries while the canonical
 runway names another ready mechanical action. Merge, post-merge reconciliation,
 closeout, frontier recomputation, and next-ready dispatch form one continuous
-coordinator action chain. It yields only when progress requires an active child,
+coordinator action chain.
+
+Post-merge local integration reconciliation is mandatory before card closeout,
+frontier recomputation, or another worker dispatch:
+- resolve and verify the provider's merged PR and resulting `origin/main`;
+- fetch the integration remote, fast-forward the project's local `main` checkout
+  to `origin/main`, and verify the local and remote heads match;
+- base all later closeout and dispatch facts on that synchronized head;
+- if the local integration checkout is dirty, not on `main`, or cannot
+  fast-forward (divergent), fetch fails, or heads mismatch, preserve it
+  unchanged and send Chatterbox a context-complete reconciliation blocker. Never
+  reset, stash, rebase, discard, or dispatch from the stale local base.
+
+It yields only when progress requires an active child,
 an external event, new authority, or an empty runway. It never polls, calls a
 wait primitive, holds a turn open for a child, or repeatedly rescans unchanged
 state. Finish notifications start the next bounded turn. Waiting for active
@@ -1054,49 +1022,45 @@ When work deviates from the planned path:
    - a roadmap recompile
 4. resume only after the execution path is valid again
 
-## Strict-compliance audit and rollout
+## Incremental adoption audit and rollout
 
-For mature projects moving toward full strict compliance, Northstar should make
-the migration operational rather than rhetorical.
+For mature projects moving toward full compact lifecycle adoption, Northstar
+makes the migration operational rather than rhetorical.
 
-The audit surface should make these questions explicit:
+The audit surface makes these questions explicit:
 
-- what posture the project is currently in:
-  `baseline`, `lane-first stricter adoption`, `expanding strict coverage`, or
-  `full strict compliance`
-- which strict-compliance checkpoints are already satisfied
-- which gaps still block the next migration phase
-- whether mixed posture is still deliberate migration state or has drifted into
-  unowned inconsistency
+- which compact lifecycle checkpoints are already satisfied
+- which gaps still block full adoption
+- whether migration state is still deliberate or has drifted into unowned
+  inconsistency
 
-The rollout surface should make these questions explicit:
+The rollout surface makes these questions explicit:
 
 - what the current migration tranche is
 - what the next migration tranche is
 - what evidence proves the current tranche is complete
-- which project-level surfaces still need to change before full strict
-  compliance can be claimed
+- which project-level surfaces still need to change before compact lifecycle
+  adoption is complete
 
 Keep that migration state inside the normal planning spine:
 
-- use one active migration master spec to carry the audit posture, checkpoint
-  state, blocking gaps, and tranche plan
+- use one active migration master spec to carry the checkpoint state, blocking
+  gaps, and tranche plan
 - use one active roadmap milestone to sequence the migration work
 - use batch logs to prove completed tranches and rollout decisions
 
-Do not invent a separate governance board or detached tracker for this. Strict
-compliance migration should live in the same docs surfaces that already govern
-the repo.
+Do not invent a separate governance board or detached tracker for this.
+Migration lives in the same docs surfaces that already govern the repo.
 
-## Automation posture
+## Automation defaults
 
 The framework should work as much as possible without special phrasing from the
 operator.
 
-That means the installable skills should eventually behave like this:
+That means the installable skills behave like this:
 
 - `northstar-setup`
-  installs the guardrail pack by default for stricter projects
+  installs the standard compact lifecycle spine and guardrails by default
 - `northstar-plan`
   produces specs and batch cards when needed, then promotes settled outcomes
   into architecture/contracts before roadmap execution
@@ -1128,6 +1092,6 @@ by the repo's own planning surfaces.
 
 ## Next task
 
-Keep the strict-compliance audit and rollout surface compact: one active
+Keep the incremental adoption audit and rollout surface compact: one active
 migration spec, one active roadmap milestone, and batch logs that prove each
 completed tranche.

@@ -8,16 +8,16 @@
 - `roadmaps/README.md`
 - `logs/README.md`
 
-If the repo uses the stricter delivery layer, also start from:
+When consequence-triggered modules are needed, also consult:
 
 - `contracts/001-working-rules.md`
 - `specs/README.md`
 
 ## Working Rule
 
-The baseline docs spine is `vision/`, `architecture/`, `contracts/`,
+The compact docs spine is `vision/`, `architecture/`, `contracts/`,
 `roadmaps/`, and `logs/`.
-For stricter repos, add `contracts/001-working-rules.md` and `specs/` so
+When execution detail warrants it, add `contracts/001-working-rules.md` and `specs/` so
 execution grammar and batch-card planning are explicit.
 
 Start in `vision/` for long-horizon direction, `architecture/` and `contracts/`

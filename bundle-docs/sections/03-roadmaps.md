@@ -54,9 +54,9 @@ Start a new generation (`g02`) only when manually triggered.
 
 Generations are meant to be substantial sequencing eras, not tiny buckets of
 one or two milestone files. In a long-running repo, a healthy generation will
-often cover tens of roadmap files before rollover becomes useful. As a default
-posture, expect roughly 20 to 50 milestone files inside one generation before
-rollover is even worth considering. Treat that as a judgment guardrail, not an
+often cover tens of roadmap files before rollover becomes useful. By default,
+expect roughly 20 to 50 milestone files inside one generation before rollover is
+even worth considering. Treat that as a judgment guardrail, not an
 automatic file-count trigger.
 
 Typical manual triggers:
@@ -107,7 +107,7 @@ The generation runway sits above individual milestones and batch cards:
 - architecture and contracts define the allowed shape
 - the generation runway names the main goals still governing this generation
 - milestones turn those goals into executable slices
-- batch cards carry step detail in strict posture
+- batch cards carry step detail when batch cards are used
 - `Next Task` remains the live continuation pointer in roadmap front doors
 
 The runway is not a backlog, not a checkbox task list, and not a second current
@@ -169,15 +169,15 @@ agent chat.
   sequence** for a material slice of work.
 - `## Execution Plan` groups work into named batches (`### Batch n.m`). Each
   batch is a meaningful execution chunk, not a single agent turn.
-- In strict posture, most batches map to one or more **batch cards** under
-  `docs/roadmaps/gNN/batch-cards/`. The roadmap defines the sequence; batch
-  cards define the step-by-step instructions for the current batch.
+- When batch cards are used, most batches map to one or more **batch cards**
+  under `docs/roadmaps/gNN/batch-cards/`. The roadmap defines the sequence;
+  batch cards define the step-by-step instructions for the current batch.
 
 ### Batch cards own the steps
 
 - Do not put batch-card-level steps only in roadmap prose and then recreate the
   roadmap on the next thread.
-- Do not use a roadmap as a one-card scratchpad. If strict posture applies,
+- Do not use a roadmap as a one-card scratchpad. When batch cards are used,
   promote the immediate work into a batch card and keep the roadmap at milestone
   granularity.
 
@@ -188,9 +188,10 @@ For a non-trivial lane:
 - `## Execution Plan` should name **at least two or three batches** before
   execution starts, or name the immediate batch plus explicit runway notes that
   list the next few batches or milestone transitions.
-- In strict posture, a freshly compiled material milestone should normally
-  anticipate **several batch cards** across the visible runway (a useful default
-  is three or more), not a single card with implied follow-on work.
+- When batch cards are used, a freshly compiled material milestone should
+  normally anticipate **several batch cards** across the visible runway (a
+  useful default is three or more), not a single card with implied follow-on
+  work.
 - One batch in the execution plan may span multiple batch cards when the scope
   is still one meaningful chunk.
 
@@ -236,7 +237,7 @@ See also the runway rule in
 - `docs/roadmaps/README.md`
 - `docs/roadmaps/generation-index.md`
 - `docs/roadmaps/gNN/README.md` for each active generation
-- `docs/roadmaps/gNN/batch-cards/` when strict posture batch cards are in use
+- `docs/roadmaps/gNN/batch-cards/` when batch cards are in use
 - Refresh those surfaces whenever the active milestone or generation changes so
   operators do not have to reconstruct the live lane from stale front doors.
 

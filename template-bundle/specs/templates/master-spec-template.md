@@ -1,6 +1,6 @@
 # <NNN> - <Master Spec Title>
 
-**Type: TEMPLATE** -- Copy and fill in for provisional planning (strict posture).
+**Type: TEMPLATE** -- Copy and fill in for provisional planning before promotion.
 
 Status: draft
 Owner: <owner>

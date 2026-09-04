@@ -1,6 +1,6 @@
 # Batch Cards
 
-**Type: OPTIONAL** (strict posture) -- Create when using batch-card-driven execution.
+**Type: OPTIONAL** -- Create when using batch-card-driven execution.
 
 Use this folder for ready execution cards that sit under an active roadmap lane.
 

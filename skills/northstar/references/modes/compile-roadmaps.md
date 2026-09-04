@@ -13,12 +13,13 @@ one-card-at-a-time improvisation.
 
 1. Confirm the target work is fully represented in architecture, inventory, and
    contracts.
-2. Classify the active repo posture before compiling anything:
-   - `baseline-routing`
-   - `strict-ready`
-   - `strict-paused`
+2. Classify the active repo lifecycle state before compiling anything:
+   - `ready`
+   - `paused`
    - `migration`
    - `drifted`
+   Also identify authority mode (root-owned or nested), active lane, whether a
+   ready card exists, and whether an intent checkpoint blocks the next move.
 3. If there is a spec for this lane, confirm its durable outcomes have already
    been promoted into the canonical surfaces the roadmap will reference.
 4. If any required contract is missing, stop and surface a planning gap instead
@@ -29,7 +30,7 @@ one-card-at-a-time improvisation.
    long-horizon steering surface for a significant 20-to-50-roadmap generation,
    not a short queue that expires after a few roadmaps.
 6. Group work into meaningful **roadmap batches** (broad chunks), not
-   agent-turn steps. Batch cards carry step-by-step detail in strict posture.
+   agent-turn steps. Batch cards carry step-by-step detail when batch cards are used.
 7. For non-trivial lanes, name at least two or three batches in `## Execution
    Plan` and anticipate several batch cards across the visible runway before
    execution starts.
@@ -57,7 +58,7 @@ one-card-at-a-time improvisation.
      conditions are explicit
    - no unresolved planning gap still governs the work
    - any auto-continuation transition is already represented in file state
-12. If the posture is `strict-paused`, compile toward a paused planning gate or
+12. If the lifecycle state is `paused`, compile toward a paused planning gate or
    intent checkpoint instead of pretending the lane is ready for execution.
 13. Reference governing contract ids directly in each roadmap milestone.
 14. Keep planning gaps visible in the milestone until they are closed.
@@ -88,8 +89,7 @@ one-card-at-a-time improvisation.
 - Do not compile a roadmap whose execution plan is only one batch that mirrors
   a single batch card.
 - Do not create micro-batches; keep execution grouped into meaningful chunks.
-- Do not put batch-card-level steps only in roadmap prose when strict posture
-  applies.
+- Do not put batch-card-level steps only in roadmap prose when batch cards are in use.
 - Do not mark a batch `ready` just because it is next in sequence.
 - Do not leave execution with only one visible next card when the lane clearly
   needs a broader runway or an explicit planning checkpoint.

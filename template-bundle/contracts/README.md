@@ -13,7 +13,7 @@ Examples:
 Template:
 - `001-contract-template.md`
 - `contract-index.md`
-- `001-working-rules-template.md` for stricter repos
+- `001-working-rules-template.md` for explicit execution grammar
 - `002-agent-local-paths-template.md` for ignored local path settings and
   manual worktree placement
 - `003-agent-instruction-surface-template.md` for compact always-loaded agent
@@ -30,6 +30,5 @@ Roadmap work should not proceed until the required contract exists and is listed
 in the contract index.
 Contracts are the hard-definition surface for behavior, interfaces, policies,
 and other durable rules that should not live only in provisional specs.
-For stricter repos, start with `001-working-rules-template.md` so execution
-grammar, done-ness, and autonomy rules are explicit before longer hands-off
-delivery starts.
+Start with `001-working-rules-template.md` so execution grammar, done-ness, and
+autonomy rules are explicit before longer hands-off delivery starts.

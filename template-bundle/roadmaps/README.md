@@ -32,7 +32,7 @@ planning outcomes have been promoted out of specs.
 ## Layout
 
 - `g01/` first generation milestones
-- `g01/batch-cards/` execution cards for the active generation (strict posture)
+- `g01/batch-cards/` execution cards for the active generation (when batch-card detail is needed)
 - `generation-index.md` active generation and rollover history
 - `backlog/` deferred items with promotion criteria
 - `templates/roadmap-milestone-template.md` milestone starter contract
@@ -44,7 +44,7 @@ units inside them.
 
 - **Roadmap milestone** — problem, goals, acceptance, and the **batch
   sequence** for a material slice of work. Should span multiple batches and,
-  in strict posture, multiple batch cards — not one agent turn.
+  when batch cards are used, multiple batch cards — not one agent turn.
 - **Batch card** — bounded step-by-step instructions for the current batch.
   Create or update cards as execution proceeds; do not recreate the roadmap
   each turn.
@@ -64,7 +64,7 @@ a significant 20-to-50-roadmap generation moving for a long time.
 ### Minimum runway
 
 For non-trivial work, `## Execution Plan` should name at least two or three
-batches before execution starts. In strict posture, a freshly compiled
+batches before execution starts. When batch cards are used, a freshly compiled
 material milestone should normally anticipate several batch cards across the
 visible runway (three or more is a useful default), not one card plus implied
 follow-on work.
@@ -106,7 +106,7 @@ rule*).
 
 ## Batch cards
 
-In strict posture, batch cards live inside each generation:
+When batch-card execution detail is used, batch cards live inside each generation:
 
 - `docs/roadmaps/gNN/batch-cards/NNN-<slug>.md`
 - numbered per-generation so parallel generations never collide

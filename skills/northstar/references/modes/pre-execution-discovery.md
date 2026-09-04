@@ -5,10 +5,10 @@ rounds, project language, decision prototypes, questionnaires, or reframe before
 ordinary Northstar planning begins. It is a procedure inside the single public
 `northstar` skill, not a second installable skill or an execution permission.
 
-## Authority and posture
+## Authority and lifecycle state
 
-Name the repo posture (`baseline-routing`, `strict-ready`, `strict-paused`,
-`migration`, or `drifted`) and identify the destination before asking questions.
+Name the repo lifecycle state (`ready`, `paused`, `migration`, or `drifted`) and
+identify the destination before asking questions.
 The readiness map and its linked decision records remain the canonical planning
 surfaces:
 

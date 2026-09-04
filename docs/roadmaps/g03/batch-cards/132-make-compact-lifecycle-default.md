@@ -1,6 +1,6 @@
 # 132 - Make Compact Lifecycle the Default
 
-Status: blocked-ready; card 130 merge required
+Status: completed
 Owner: repo maintainers
 Created: 2026-09-04
 Master roadmap: `g03.001`
@@ -78,27 +78,27 @@ returns to Chatterbox.
 
 ## Acceptance evidence and review oracle
 
-- [ ] setup and routing expose one normal compact lifecycle;
-- [ ] repository-wide search finds no supported alternative steady-state
+- [x] setup and routing expose one normal compact lifecycle;
+- [x] repository-wide search finds no supported alternative steady-state
       posture; historical evidence may name old terms only where clearly
       non-authoritative;
-- [ ] a new consumer can start small without being classified into a lighter
+- [x] a new consumer can start small without being classified into a lighter
       protocol;
-- [ ] strict authority, ready-card, review, evidence, and stop protections are
+- [x] strict authority, ready-card, review, evidence, and stop protections are
       unchanged;
-- [ ] a merge fixture proves provider merge -> remote fetch -> local `main`
+- [x] a merge fixture proves provider merge -> remote fetch -> local `main`
       fast-forward -> exact local/remote-head verification occurs before
       closeout and next dispatch;
-- [ ] dirty, wrong-branch, divergent, fetch-failure, and head-mismatch fixtures
+- [x] dirty, wrong-branch, divergent, fetch-failure, and head-mismatch fixtures
       stop without mutation beyond the safe fetch and emit a context-complete
       Chatterbox blocker;
-- [ ] no successful-merge path can report closeout or create the next worker
+- [x] no successful-merge path can report closeout or create the next worker
       from a stale local integration head;
-- [ ] template file count and repeated required boilerplate decrease with an
+- [x] template file count and repeated required boilerplate decrease with an
       exact before/after inventory;
-- [ ] `git diff --check`, focused checks, `effigy qa:docs`, `effigy qa`, and
+- [x] `git diff --check`, focused checks, `effigy qa:docs`, `effigy qa`, and
       source/install parity pass;
-- [ ] independent exact-head review tests for lost functionality and hidden
+- [x] independent exact-head review tests for lost functionality and hidden
       compatibility aliases.
 
 ## Stop conditions
@@ -109,3 +109,25 @@ returns to Chatterbox.
   otherwise resolving concurrent local integration work;
 - sibling path ownership collides;
 - validation changes the plan.
+
+## Completion Notes
+
+- Shipped one compact strict lifecycle as the single reusable Northstar default.
+- Retired baseline, light, lane-first, mixed, and full-strict posture variants as supported steady-state protocols.
+- Established standard core spine + consequence-triggered modules (specs, batch cards, guardrails, research, additional authority files) doctrine.
+- Removed and tightened two-spine wording across owned skill, setup, bundle, and template surfaces (`SKILL.md`, `assets/templates/README.md`, `assets/templates/docs.README.md.template`, `references/setup/workspace-container-example.md`, `template-bundle/README.md`, `template-bundle/contracts/README.md`, `bundle-docs/sections/09-standard-docs-spine.md`, `bundle-docs/sections/06-planning-and-contract-gates.md`, `bundle-docs/sections/07-delivery-framework-and-autonomy.md`). Repository-wide search confirms no supported alternative steady-state postures remain.
+- Implemented mandatory post-merge local integration reconciliation in contract 001 and orchestrator mode with full behavioral coverage in `scripts/tests/post-merge-reconciliation/` (35 assertions across 8 scenarios: happy path, unverified provider merge, fetch failure, dirty checkout with 100% untouched working tree/index preservation, wrong branch, divergent unpushed commit preservation, head mismatch, and coordinator stale-head dispatch rejection).
+- Wired post-merge reconciliation behavioral test and posture label rejection into lifecycle checker (`scripts/lib/northstar-lifecycle-checker.rhai`).
+- Preserved all card-131-owned paths (`scripts/check-northstar-command-skills.rhai`, `scripts/test-northstar-repo-contract.rhai`, `scripts/lib/northstar-repo-contract-data.rhai`, `scripts/check-northstar-model-routing.rhai`, `scripts/fixtures/readiness-map/**`, `README.md`) untouched.
+- Synchronized installed Northstar skill (`~/.claude/skills/northstar`) to exact 100% parity (111 files).
+- Exact before/after template inventory:
+  - `template-bundle/specs/templates/strict-compliance-migration-template.md`: deleted (-63 lines, -8 sections).
+  - `template-bundle/specs/templates/batch-card-template.md`: 113 lines / 13 sections -> 68 lines / 10 sections (-45 lines, -3 sections; stripped redundant continuation/budget fields and 8-item closeout checklist; encoded prune triggers).
+  - `template-bundle/logs/templates/thread-handoff-template.md`: 71 lines / 8 non-standard sections -> 43 lines / 7 canonical sections (-28 lines, -1 section; aligned with canonical 7 sections, encoded prune triggers).
+  - Net template reduction: -136 lines, 1 obsolete template deleted, boilerplate stripped while preserving ready-state rubric, review oracle, evidence, and stop protections.
+- Validation:
+  - `effigy qa:docs`: PASS
+  - `effigy qa`: PASS
+  - `scripts/tests/post-merge-reconciliation/self-test.sh`: PASS (35/35 assertions)
+  - `effigy check:skill-install /Users/tom/.claude/skills/northstar`: PASS (111 files OK)
+  - `git diff --check`: PASS (clean)

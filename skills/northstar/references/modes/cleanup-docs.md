@@ -4,7 +4,7 @@ Use this mode to inspect a project's `docs/` tree for files and folders that do
 not fit the Northstar protocol and to rework clear drift into the right
 canonical home.
 
-## Operating posture
+## Operating principles
 
 Cleanup is an evidence-led docs maintenance pass, not a purge. An unfamiliar
 path is a finding to inspect, not proof that it should be deleted. Keep useful
@@ -13,17 +13,17 @@ Northstar does not prescribe its exact filename.
 
 ## Procedure
 
-1. Identify the docs authority, posture, active generation, and current task.
-   Read the repository front doors, applicable contracts, and the Northstar
-   standard-spine guidance before classifying paths.
+1. Identify the docs authority, lifecycle state, active generation, and current
+   task. Read the repository front doors, applicable contracts, and the
+   Northstar standard-spine guidance before classifying paths.
 2. Inventory `docs/` recursively. Include top-level folders, anchor files,
    nested files, deprecated patterns, empty directories, and every note under
    `docs/triage/` except its `README.md` anchor. Check filenames, links,
    references, and content rather than relying on names or age alone.
 3. Classify each candidate as canonical, supported add-on, legitimate
    project-specific surface, clear legacy/duplicate, stale or empty, or
-   ambiguous. Compare the path with the repo's posture; do not penalize a
-   justified strict or optional surface as drift.
+   ambiguous. Compare the path with the repo's lifecycle state; do not penalize
+   a justified consequence-triggered or optional surface as drift.
 4. For clear findings, choose the smallest clean repair: rehome content into
    the correct Northstar section, merge duplicate material, normalize naming or
    sections, update references, and remove the superseded source only after the

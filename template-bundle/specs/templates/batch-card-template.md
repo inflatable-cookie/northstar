@@ -1,30 +1,22 @@
 # <NNN> - <Batch Card Title>
 
-**Type: TEMPLATE** -- Copy and fill in for each execution batch (strict posture).
+**Type: TEMPLATE** -- Copy and fill in for each execution batch.
 
 Status: draft
 Owner: <owner>
-Updated: YYYY-MM-DD
-Master spec refs: <docs/specs/NNN-...>
-Governing refs: <architecture files>, <contract files>, <roadmap refs>
+Created: YYYY-MM-DD
+Master roadmap: <gNN.NNN>
+Governing refs: <architecture files>, <contract files>
 Auto-start next card: <yes/no/conditional>
 
-Writing style: internal, compressed, glue-light. Prefer dense operator-facing
-phrasing over polished prose.
-
-## Ready-State Checks
+## Ready-State Rubric
 
 - [ ] Objective is bounded enough to finish without fresh planning decisions.
 - [ ] Governing refs point at current canonical surfaces.
-- [ ] Scope boundaries and stop conditions are explicit.
-- [ ] Acceptance criteria, validation, and evidence requirements are explicit.
-- [ ] A review oracle is present when acceptance is high-risk, universal, exact,
-      or negative; otherwise the card says why it is not required.
-- [ ] No unresolved planning gap still governs this card.
-- [ ] No unresolved intent checkpoint still governs this card.
-- [ ] If auto-start is allowed, the continuation envelope is explicit and the
-      next card is already defined and ready or the condition is explicit and
-      already satisfiable.
+- [ ] Scope, acceptance criteria, validation, evidence, and stop conditions are explicit.
+- [ ] Review oracle is present when acceptance is high-risk, universal, exact, or negative; otherwise explicitly noted as not required.
+- [ ] Continuation envelope is explicit; next card is ready if auto-start is enabled.
+- [ ] No unresolved planning gaps or operator intent checkpoints.
 
 ## Objective
 
@@ -32,8 +24,8 @@ State the exact bounded outcome for this card.
 
 ## Lane Runway Context
 
-- Higher-level lane owner: <what this card is serving beyond itself>
-- Next likely cards or milestone transitions after this one: <refs or none>
+- Higher-level lane owner: <what this card serves beyond itself>
+- Next likely cards or milestone transitions: <refs or none>
 - Next planning checkpoint: <when strategy/intent must be reconsidered>
 
 ## Scope
@@ -52,9 +44,7 @@ State the exact bounded outcome for this card.
 
 ## Review Oracle
 
-Use this for concurrency, lifecycle, identity, persistence, security, public
-API, deployment, multi-version, or universal/exact/negative acceptance. For a
-mechanically direct card with no such claim, write `Not required` and why.
+Use for concurrency, lifecycle, identity, persistence, security, public API, deployment, multi-version, or universal/exact/negative acceptance. Otherwise write `Not required` and why.
 
 | Invariant | Adversarial counterexample | Expected failure or stop point | Required proof |
 | --- | --- | --- | --- |
@@ -62,51 +52,21 @@ mechanically direct card with no such claim, write `Not required` and why.
 
 ## Evidence Required
 
-- <command/check/log>
-
-## Continuation Envelope
-
-- Auto-start next card: <yes/no/conditional>
-- In-bounds next card: <card ref or none>
-- Remaining ready chain after this card: <0/1/2/...>
-- Transition proof required before auto-start: <validation/evidence/none>
-
-## Lane Budget
-
-- Current card ends budgeted run: <yes/no>
-- Further operator decision required after this card: <yes/no>
-- Pause signal if run stops here: <budget-exhausted/stop-signal-fired/lane-complete/handoff-required/none>
+- <command/check/log actually run>
 
 ## Stop Conditions
 
-- <stop condition>
-- Ask for operator intent if a real planning branch or milestone handoff choice
-  appears that is not already settled in the governing refs.
+- Stop on planning gaps, contract contradictions, or failed evidence gates.
+- Ask for operator intent if an unresolved planning branch or milestone choice appears.
 
-## Completion Notes
+## Completion Notes and Artifact Lifecycle
 
-Record what changes once this card is complete.
-
-## Closeout Sequence
-
-- [ ] Update this card's status and completion notes first.
-- [ ] Update the active roadmap milestone if progress, readiness, or the next
-      batch changed.
-- [ ] Update front-door currentness surfaces that name the active lane, ready
-      card, or recent evidence chain so they no longer point at stale state.
-- [ ] Write the batch log with evidence, validation actually run, and
-      unresolved blockers or limits.
-- [ ] Record whether the continuation envelope still holds or a stop signal
-      exhausted it.
-- [ ] Record the lane budget state and pause signal when the run is not simply
-      continuing in-bounds.
-- [ ] Create or update a handoff only if another thread truly needs to take
-      over.
-- [ ] Leave one explicit next task in the highest-authority active surface
-      that still governs the lane.
+- Outcome: <shipped outcome summary>
+- Validation: <checks run and result>
+- PR / Commit: <PR link, merge commit, or local commit>
+- Limits / Blockers: <residual limits or none>
+- Disposition trigger: active during execution; retains delivery evidence on completion; rolls up into `docs/roadmaps/archive/gNN.md` on generation rollover.
 
 ## Next Task
 
 State the next ready card or promotion step unlocked by this card.
-In a strict repo, this should be the default target of a later bare
-`continue` unless the lane is explicitly stopping for reassessment.

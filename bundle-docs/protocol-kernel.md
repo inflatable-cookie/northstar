@@ -19,15 +19,19 @@ promoted, merged, or removed.
 
 Full picture: [visual-map.md](./visual-map.md) and [glossary.md](./glossary.md).
 
-## Posture (pick deliberately)
+## Compact lifecycle (single default)
 
-| Posture | Spine | Typical use |
-| --- | --- | --- |
-| **Baseline** | `vision/`, `architecture/`, `contracts/`, `roadmaps/`, `logs/` | Single repo, clear scope, normal routing |
-| **Strict** | Baseline + `product-guardrails`, indexed contracts, `specs/`, `roadmaps/gNN/batch-cards/` | High-risk boundaries, longer hands-off runs |
+Northstar operates under one normal operating posture: the compact strict
+lifecycle. Former light, baseline, lane-first, mixed, and full-strict postures
+are retired as alternative steady-state protocols.
 
-Lane-first strict adoption is the normal migration path, not a permanent
-mixed-mode excuse. See [glossary.md](./glossary.md) (*Lane-first adoption*).
+The core standard spine is `vision/`, `architecture/`, `contracts/`,
+`roadmaps/`, `logs/`, `handoffs/`, and `triage/`. Provisional `specs/`,
+detailed evidence, research, and additional authority files are
+consequence-triggered modules rather than a second posture.
+
+Incremental adoption describes bounded migration into the compact lifecycle in
+explicit tranches; migration state is not a permanent mixed posture.
 
 ## Canonical homes (single owners for enumerations)
 
@@ -35,7 +39,7 @@ Do **not** maintain parallel copies of the same bullet lists across skills,
 templates, and doctrine unless a surface is intentionally binding (repo
 contracts).
 
-| Topic | Doctrine (authoritative full detail) | Binding in a strict repo |
+| Topic | Doctrine (authoritative full detail) | Binding in a Northstar repo |
 | --- | --- | --- |
 | Planning completeness and execution authority | [sections/06-planning-and-contract-gates.md](./sections/06-planning-and-contract-gates.md) | Same expectations; repo records gaps in its own planning files |
 | Batch cards, ready-state, closeout shape, autonomy levels, master specs | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Batch card rule**, **Ready-state rubric**, **Operator-facing summary rule**, **Autonomy support levels** | `docs/contracts/001-working-rules.md` (from [`template-bundle/contracts/001-working-rules-template.md`](../template-bundle/contracts/001-working-rules-template.md)); keep compact, point here for full enumerations |
@@ -49,6 +53,7 @@ contracts).
 | Chatterbox planning and promotion | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Chatterbox planning and promotion** | `docs/contracts/001-working-rules.md` plus the installed chatterbox mode |
 | Handoff content and compression | [`skills/northstar/references/handoff-contract.md`](../skills/northstar/references/handoff-contract.md) | `docs/handoffs/`; handoff points to cards and contracts instead of copying them |
 | Direct PR review and provider record | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Direct PR review boundary** | `docs/contracts/001-working-rules.md` plus the installed Northstar PR-review mode |
+| Planning artifact lifecycle, prune triggers, generation roll-up, post-merge reconciliation | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) | `docs/contracts/001-working-rules.md` |
 | Spec lifecycle and archive | [sections/08-specs-and-promotion.md](./sections/08-specs-and-promotion.md) + [template-bundle/specs/README.md](../template-bundle/specs/README.md) | `docs/specs/` + `docs/specs/archive/` in the installed repo |
 | Automation defaults | [sections/10-automation-runtime-policy.md](./sections/10-automation-runtime-policy.md) | `AGENTS.md` / Effigy config in each repo |
 | Agent execution feedback | [papercuts.md](./papercuts.md) | root `PAPERCUTS.md` + agent contract |

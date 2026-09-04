@@ -37,7 +37,7 @@ readiness.
 ## Fix Rules
 
 - Expand thin roadmaps into multi-batch milestones; move step detail into batch
-  cards where strict posture applies
+  cards where batch cards are used
 - Merge per-thread roadmap scratchpads into the active milestone; retire
   duplicate milestone files
 - Convert execution-plan prose bullets to checkbox tasks where progress should

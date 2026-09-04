@@ -66,7 +66,7 @@ Add optional folders only when your project needs them:
 - `schemas/` -- data models or API schemas
 - `templates/` -- reusable doc templates
 - `diagrams/` -- architecture diagrams
-- `specs/` -- provisional planning before promotion (strict posture)
+- `specs/` -- provisional planning before promotion into architecture/contracts
 
 ## Full Template Bundle
 

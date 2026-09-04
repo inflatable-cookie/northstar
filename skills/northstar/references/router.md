@@ -226,13 +226,13 @@ destination, ownership, meaning, or deletion consequence is uncertain. Include
 
 → [`modes/cleanup-docs.md`](./modes/cleanup-docs.md)
 
-## 11. Normalize docs posture
+## 11. Normalize docs lifecycle
 
 Use when the job is **repo shape and spine health** (initial or ongoing):
 
 - set up / bootstrap / migrate / normalize under Northstar
 - fix or refresh docs front doors, generation index, Effigy wiring
-- lane-first strict adoption, install working-rules / specs / archive surfaces
+- compact lifecycle adoption, install working-rules / specs / archive surfaces
 - keep the docs tree aligned with doctrine over time
 
 → [`modes/normalize-docs.md`](./modes/normalize-docs.md)
@@ -371,10 +371,12 @@ existing path; never delete, replace, or overwrite. If a listed source is
 missing, stop and report; do not skip a catalog member. Then continue with the
 normal mode-specific checks.
 
-## Posture label (all modes except handoff)
+## Lifecycle state label (all modes except handoff)
 
-Name repo posture early: `baseline-routing`, `strict-ready`, `strict-paused`,
-`migration`, or `drifted`.
+Name repo lifecycle state early: `ready`, `paused`, `migration`, or `drifted`.
+Whenever lifecycle state matters, also name authority mode (root-owned or
+nested), active lane, whether a ready card exists, and whether an intent
+checkpoint blocks the next move.
 
 ## Shared reads
 

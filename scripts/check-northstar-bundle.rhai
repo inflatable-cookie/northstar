@@ -93,7 +93,7 @@ require_heading(repo_root, "bundle-docs/sweeps/README.md", "Agent Execution Cont
 require_heading(repo_root, "bundle-docs/sweeps/README.md", "Sweep Order");
 require_heading(repo_root, "bundle-docs/sweeps/README.md", "Required Agent Output");
 require_heading(repo_root, "template-bundle/README.md", "Core structure");
-require_heading(repo_root, "template-bundle/README.md", "Standard docs spines");
+require_heading(repo_root, "template-bundle/README.md", "Standard docs spine");
 require_heading(repo_root, "template-bundle/README.md", "Optional add-on folders");
 require_heading(repo_root, "template-bundle/README.md", "Folder policy");
 require_heading(repo_root, "template-bundle/README.md", "Operating posture");

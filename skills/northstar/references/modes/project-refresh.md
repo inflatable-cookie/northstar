@@ -20,15 +20,15 @@ copying their procedures.
 ## Refresh loop
 
 1. **Identify the target.** Confirm the repository root, repository identity,
-   local `AGENTS.md`/`CLAUDE.md`, Northstar posture, docs authority, active
-   generation, and current task. Do not infer a consumer target from the
+   local `AGENTS.md`/`CLAUDE.md`, Northstar lifecycle state, docs authority,
+   active generation, and current task. Do not infer a consumer target from the
    Northstar source checkout when an explicit target is available.
 2. **Check the instruction surface.** Review root and relevant nested
    `AGENTS.md` files, the Claude bridge, command ordering, stop rules, and
    canonical pointers. Route instruction-surface findings through the AGENTS
    review mode. Normal-mode guidance must not contain worker-only startup rules.
 3. **Check the docs spine.** Verify the front doors, architecture, inventory,
-   repo authority, contract index, specs/archive posture, roadmaps, logs,
+   repo authority, contract index, specs/archive lifecycle, roadmaps, logs,
    handoffs, triage, policy, Effigy wiring, and any required local-path
    contracts. Use normalize-docs only for structural or spine repair.
 4. **Manage triage.** Read every Markdown note under `docs/triage/` except its
@@ -85,7 +85,7 @@ Report one state for each facet:
 - `missing` — required coverage or authority is absent;
 - `ambiguous` — an operator-owned decision or boundary is unresolved;
 - `blocked` — repair cannot proceed without another route, access, or decision;
-- `not-applicable` — the project posture does not require that surface.
+- `not-applicable` — the project lifecycle does not require that surface.
 
 The refresh report includes a separate `triage` facet. A green docs-spine check
 does not make open triage notes disappear: every note still needs an explicit
@@ -114,7 +114,7 @@ not claim planning is complete merely because files exist.
 
 Return a compact refresh report containing:
 
-- target and posture;
+- target and lifecycle state;
 - one state per facet;
 - files/checks actually inspected;
 - triage notes inspected and their dispositions;

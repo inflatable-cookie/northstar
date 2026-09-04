@@ -221,7 +221,7 @@ approval prompt. When an otherwise-valid merge gate holds and a
 connector/provider write is refused, the orchestrator may use an
 already-authenticated, repository-approved native write transport and re-verify
 provider state; it never weakens the gate, solicits credentials, or improvises
-an undeclared transport. Merge, closeout, frontier recomputation, and
+an undeclared transport. Merge, post-merge reconciliation, closeout, frontier recomputation, and
 next-ready dispatch advance in one continuous coordinator action chain without
 an operator `continue`.
 

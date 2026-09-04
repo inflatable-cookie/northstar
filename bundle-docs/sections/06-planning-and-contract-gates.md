@@ -7,8 +7,8 @@ Updated: 2026-03-24
 
 Northstar already provides a strong documentation spine, but complex delivery
 programs fail when agents can infer missing boundaries and start building
-against imagined system behavior. This section defines the stricter operating
-mode: planning coverage must be explicit, governing rules must exist before
+against imagined system behavior. This section defines the planning gates of the
+compact lifecycle: planning coverage must be explicit, governing rules must exist before
 execution, and planning gaps are a stop condition rather than a prompt for
 improvisation.
 

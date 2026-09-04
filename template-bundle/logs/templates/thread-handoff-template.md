@@ -1,66 +1,42 @@
 # Handoff: <Topic>
 
-**Type: TEMPLATE** -- New handoffs should be written by the installed Northstar
-handoff mode under `docs/handoffs/` with a filename like
-`YYYYMMDD-HHMMSS-<slug>.md`. This older bundle template is retained as a
-reference for the same core content.
+**Type: TEMPLATE** -- New handoffs are written under `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md`.
 
 Status: active
 Created: YYYY-MM-DD
 Roadmap: <gNN.NNN or none>
+Governing refs: <card or contract refs>
 
-## Objective
+## 1. What This Thread Was Doing
 
-State the one-sentence outcome the next thread should deliver.
+State the bounded task this thread was executing.
 
-## Scope
+## 2. Why It Matters
 
-- <task 1>
-- <task 2>
-- Do not <explicit out-of-scope boundary>
+Explain the goal served and the impact of the work.
 
-## Inputs
+## 3. Current State
 
-- <absolute path 1>
-- <absolute path 2>
+- Progress: <what was completed>
+- Working tree: <clean / dirty / branch name>
+- Validation: <checks run and result>
 
-## Constraints
+## 4. Boundaries
 
-- Follow the repo instructions in `AGENTS.md`.
-- Keep edits aligned with the active Northstar planning surfaces.
-- Do not widen scope beyond the listed tasks.
+- In scope: <task list>
+- Out of scope: <explicit non-goals>
 
-## Deliverables
+## 5. Important Context
 
-- <absolute output path 1>
-- <absolute output path 2>
+- Non-obvious decisions, risks, or key paths.
+- Link canonical cards and contracts rather than duplicating steps or doctrine.
 
-## Acceptance Criteria
+## 6. Suggested Next Move
 
-- <testable criterion 1>
-- <testable criterion 2>
+One concrete next action for the incoming thread.
 
-## Notes
+## 7. Completion Protocol and Artifact Lifecycle
 
-- Current context: <active vision/roadmap/log linkage>
-- Remaining continuation envelope: <in-bounds next card or explicit stop signal>
-- Lane budget / pause signal: <budget state or explicit pause signal>
-- Decisions: <non-obvious reasoning or user preferences>
-- Watch-outs: <known risks or ambiguities>
-- Next move: <one concrete thing to try or execute next>
-
-## Completion Protocol
-
-Use this section only when a fresh-thread boundary is genuinely required. If
-the same thread can continue after compaction, prefer normal closeout and do
-not create a handoff.
-
-1. Confirm the current batch card already reflects the stopping point.
-2. Confirm the roadmap and log surfaces already reflect the outcome.
-3. Confirm whether any continuation envelope remains in-bounds or whether a
-   stop signal exhausted it.
-4. Confirm the lane budget or explicit pause signal for this stopping point.
-5. Confirm that another thread truly needs to take over and that low context or
-   compaction alone is not the reason this handoff exists.
-6. Record unresolved blockers or risks explicitly.
-7. Leave one clear next task for the following thread.
+- Worker handoffs: confirm worktree, branch, PR contract, and clean head before reporting.
+- Orchestrator handoffs: reconcile stopping state, push branch, and pass absolute path.
+- Disposition trigger: transient transport; delete after promotion, merge, consumption, abandonment, or ownership transfer. Do not retain as routine history.

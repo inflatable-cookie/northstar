@@ -23,14 +23,14 @@ contracts/
 
     ↑ promotion happens here ↑
 
-specs/          (strict posture only)
+specs/          (consequence-triggered provisional planning)
   └─ provisional planning, then promoted out
 
 roadmaps/
   ├─ g01/       generation of milestones
-  │   └─ batch-cards/  execution cards (strict posture)
+  │   └─ batch-cards/  execution cards (when batch-card detail is needed)
   ├─ g02/
-  │   └─ batch-cards/  execution cards (strict posture)
+  │   └─ batch-cards/  execution cards (when batch-card detail is needed)
   ├─ backlog/   deferred work
   └─ generation-index.md
 
@@ -63,23 +63,21 @@ logs (evidence)
 Unresolved conversation threads → triage (capture) → canonical docs or removal
 ```
 
-## Decision: Baseline or Strict?
+## Operating Model: Compact Lifecycle
 
 ```
-Starting a new project?
+Northstar Project
   │
-  ├─ Simple? One repo? Low coordination risk?
-  │     └─ Baseline posture
-  │        (vision, architecture, contracts, roadmaps, logs)
+  ├─ Standard Core Spine
+  │     └─ vision, architecture, contracts, roadmaps, logs, handoffs, triage
   │
-  └─ Complex? Multiple repos? High-risk boundaries?
-  │     └─ Strict posture
-  │        (baseline + product-guardrails, contract-index,
-  │         working-rules, specs, lane budgets, stop/pause signals)
+  ├─ Consequence-Triggered Modules
+  │     ├─ specs (provisional planning before promotion)
+  │     ├─ product-guardrails & repo-authority-map (execution bounds & multi-repo)
+  │     └─ research (comparative/source-backed learning)
   │
-  └─ Already using baseline and need tighter guardrails?
-        └─ Lane-first adoption
-           (adopt strict for one active lane, expand gradually)
+  └─ Incremental Adoption
+        └─ Bounded migration into the compact lifecycle in explicit tranches
 ```
 
 ## Workflow: Healthy Active Repo
@@ -99,7 +97,7 @@ Starting a new project?
 ```
 1. Run sweep pack (8 sweeps)
 2. Invoke the `northstar` skill; open [`skills/northstar/references/router.md`](../skills/northstar/references/router.md) and pick one mode.
-3. Repair/complete planning or normalize docs posture as needed.
+3. Repair/complete planning or normalize docs lifecycle as needed.
 4. Compile roadmap.
 5. Execute batch → log → handoff (handoff mode only when explicitly requested).
 ```
