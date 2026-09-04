@@ -1,6 +1,6 @@
 # 128 - Implement Chatterbox-Led Planning
 
-Status: complete in review
+Status: complete; merged through PR 34
 Owner: repo maintainers
 Created: 2026-09-04
 Updated: 2026-09-04
@@ -177,5 +177,7 @@ owner returns to Chatterbox.
 
 ## Next task
 
-Review and merge card 128, refresh installed skill, and begin the revised
-card-126 observation window.
+Card 128 merged through PR 34 at `fd341aebd9c59bf1110f87deb4bce46cc3249d66`
+after accepted exact-head review at `201c499b9134b764eabd7953101af93d3891ae32`.
+The installed skill refresh and 111-file parity proof are complete. Publish
+card 126's bounded observation packet and stop date.

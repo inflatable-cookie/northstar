@@ -65,7 +65,8 @@ Northstar system:
   that plan mechanically, dispatches actual workers/reviewers, reports,
   yields, and applies the merge gate. `g02.053/128` implemented the
   runtime/doctrine/template/check surfaces before the corrected card-126 trial;
-  card 128 is complete in review.
+  card 128 merged through PR 34 at `fd341aeb`; the installed skill is refreshed
+  with verified 111-file parity.
 - `g02.041/109` repaired partial Rust evidence collection and merged; Signal
   owns the originating papercut closure
 - dependency-frontier design is Chatterbox planning. The canonical dispatch

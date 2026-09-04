@@ -58,3 +58,12 @@
 - `effigy check:skill-install skills/northstar`: passed (111 files, 100% parity)
 - `effigy qa:docs`: passed
 - `effigy qa`: passed
+
+## Merge Closeout
+
+PR 34 merged to `main` as `fd341aebd9c59bf1110f87deb4bce46cc3249d66` after
+accepted exact-head review at
+`201c499b9134b764eabd7953101af93d3891ae32`.
+The installed skill remains at verified 111-file parity. Card 126 is the
+single next bounded observation lane; its packet and stop date must be
+published before the cohort starts.

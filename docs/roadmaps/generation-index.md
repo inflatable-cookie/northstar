@@ -118,8 +118,10 @@ payload. Live use then exposed a roughly twenty-minute recursive promotion path,
 coordinator polling, opaque escalation, and no actual-worker dispatch before
 operator cancellation. Spec 037 / `g02.053` supersedes that topology:
 Chatterbox owns canonical promotion and approved-frontier design; the
-coordinator dispatches actual workers mechanically. Card 128 is ready, and card
-126 waits for its merge before observing the corrected model. The
+coordinator dispatches actual workers mechanically. Card 128 merged through PR
+34 at `fd341aeb` after accepted exact-head review at `201c499b`; the installed
+skill is current and card 126 is next for bounded observation of the corrected
+model. The
 `g02.052` sibling-tab correction (card 127) merged through PR 33 as `7d3bfd1`;
 the installed skill is current.
 

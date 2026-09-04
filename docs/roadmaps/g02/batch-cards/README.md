@@ -76,7 +76,8 @@ merged as `69e4d5d`, card 119 merged as `256d0f7`, and card 122 merged as
 `ddaae0d`.
 Paseo worker-parentage correction `g02.049/123` merged as `7ebaa9c`; modular
 language-package extraction closed through card 120 and PR 30 at `aa9a005`.
-Chatterbox-led planning `g02.053/128` implements the spec-037 role topology:
+Chatterbox-led planning `g02.053/128` implemented the spec-037 role topology
+and merged through PR 34 at `fd341aeb`:
 Chatterbox promotes canonical planning directly, triage-only delegates feed
 Chatterbox, and the coordinator dispatches workers mechanically and yields. Card
-128 is complete in review; card 126 will execute under the corrected topology.
+128 is complete; card 126 will execute under the corrected topology.
