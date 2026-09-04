@@ -32,6 +32,7 @@ Use logs as the third step in closeout:
 
 ## Recent active-lane evidence
 
+- `2026-09/04-122000-finish-continuous-coordinator-delivery.md`
 - `2026-09/04-115921-promote-continuous-coordinator-delivery.md`
 - `2026-09/04-113500-implement-chatterbox-led-planning.md`
 - `2026-09/04-105852-promote-chatterbox-led-planning.md`

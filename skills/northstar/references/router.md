@@ -175,13 +175,15 @@ verdict naming the exact reviewed head.
 
 Use when the user wants Northstar to coordinate a lane: consume the canonical
 dispatch manifest, verify factual prerequisites, launch the approved frontier,
-place review children in worker workspaces with serial clean exact-head leases,
-and own the merge gate; or continue from a committed `orchestrator-continuation`
-handoff. Canonical planning and promotion belong to Chatterbox. This is an
-internal mode of the single public authority; the operator relays messages
-between threads when no control-plane tools are available. When Paseo injects
-its orchestration tools, the mode uses them for routine dispatch without a
-separate permission prompt.
+place cross-model review children (distinct underlying provider/model identity)
+in worker workspaces with serial clean exact-head leases, advance continuously
+across merge, closeout, and next-ready dispatch without an operator `continue`,
+notify Chatterbox only when the runway is empty, and own the merge gate; or
+continue from a committed `orchestrator-continuation` handoff. Canonical
+planning and promotion belong to Chatterbox. This is an internal mode of the
+single public authority; the operator relays messages between threads when no
+control-plane tools are available. When Paseo injects its orchestration tools,
+the mode uses them for routine dispatch without a separate permission prompt.
 
 → [`modes/orchestrator.md`](./modes/orchestrator.md)
 

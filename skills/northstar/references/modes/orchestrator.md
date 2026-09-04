@@ -21,11 +21,20 @@ Your default job is mechanical coordination:
   edges, or inventing concurrency;
 - create child workers in dedicated worktrees;
 - create review children in the existing worker workspace under a serial clean
-  exact-head lease;
-- verify the coordination gate, merge, and close out;
+  exact-head lease, requiring an underlying provider/model identity distinct
+  from the authoring worker;
+- verify the coordination gate, merge, reconcile closeout, recompute the
+  frontier, and continue through ready mechanical actions as one continuous
+  action chain;
 - operate in event-bounded turns: perform every immediately available action,
-  report identities and state, then yield; never poll or call wait primitives
-  (`notifyOnFinish: true` drives the next turn).
+  continue across merge, closeout, and card boundaries without asking for an
+  operator `continue` while canonical work is actionable, report identities and
+  state, and yield only when progress awaits a child, external event, new
+  authority, or an empty runway;
+- keep `notifyOnFinish: true` and never poll or call wait primitives; waiting
+  for active children does not notify Chatterbox;
+- send Chatterbox exactly one administrative notice with completed state when
+  the canonical runway is empty, then yield.
 
 **Paseo dispatch is implicit inside Paseo.** When the current orchestrator
 thread exposes Paseo's profile, workspace, agent, and follow-up tools, that
@@ -133,6 +142,11 @@ direction message:
 Reconcile confirmed direction against current execution state without asking
 the operator to repeat it.
 
+When the canonical runway is empty—no ready lane, active child, or
+already-published downstream lane—the coordinator sends Chatterbox one
+administrative notice with completed state and then yields. Waiting for active
+children does not notify Chatterbox.
+
 ## Independent review children and serial workspace lease
 
 Every worker PR gets an independent review child unless the operator
@@ -145,16 +159,25 @@ Review children run in the existing worker workspace under a serial clean
 exact-head lease using the worker `workspaceId`, with parentage preserved and
 `notifyOnFinish: true`. Do not create a review-only workspace.
 
+The review child must use a different underlying provider/model identity from
+the authoring worker. A renamed profile, different reasoning level, or fresh
+thread using the same provider/model does not qualify. Carry the worker's
+provider/model identity into review dispatch; reject the same provider/model
+even behind another profile, reasoning level, or thread. Record both identities
+in the review handoff. If no qualified distinct reviewer exists, fail closed
+with a context-complete escalation.
+
 In Paseo, launch the reviewer like this:
 - verify the worker is idle, workspace `HEAD` equals the PR head SHA, and index
   and tracked worktree are clean;
 - create the reviewer child through your agent-scoped creation call using the
   worker `workspaceId` so it remains your child and appears as a visible tab in
   that workspace; leave finish notifications enabled (`notifyOnFinish: true`);
-- select an economical adequate review route under the diversified-routing
-  rule; escalate to a frontier route only when the diff retains residual risk
-  that settled planning, the review oracle, tests, and an economical independent
-  review cannot bound;
+- select an economical adequate review route whose underlying provider/model
+  identity differs from the worker under the diversified-routing rule; escalate
+  to a frontier route only when the diff retains residual risk that settled
+  planning, the review oracle, tests, and an economical independent review
+  cannot bound;
 - give the reviewer the PR URL, canonical refs, and review oracle — not the
   worker's private transcript;
 - the reviewer inspects and runs checks without editing tracked files,
@@ -172,8 +195,8 @@ verdict gate is identical in both routes.
 
 The reviewer works in Direct PR Review mode and its posted verdict names the
 exact head it reviewed. Changes requested return to the same implementation
-worker. The revised exact head returns to the same reviewer when available; a
-replacement reviewer starts a fresh complete review and never inherits an
+worker. Preserve the same distinct reviewer for revision rounds when available;
+a replacement reviewer starts a fresh complete review and never inherits an
 unseen verdict.
 
 Before merge you must independently verify only the coordination gate:
@@ -185,6 +208,12 @@ Before merge you must independently verify only the coordination gate:
 - no stricter repository rule or operator pause applies.
 
 Ambiguous, contradictory, missing, or stale review evidence stops the merge.
+
+A provider or connector write refusal does not invalidate an otherwise-current
+coordination gate. When the repository already exposes an authenticated,
+approved native write transport, the coordinator may retry the same bounded
+mutation through it, then re-verify provider state. Never weaken the gate,
+solicit credentials, or improvise an undeclared transport.
 
 ## Context-complete operator escalations
 
@@ -331,16 +360,29 @@ Chatterbox after operator confirmation.
      `baseBranch: origin/main`, and the intended branch;
    - call `create_agent` with that workspace ID, `notifyOnFinish: true`, and the
      prompt `Read and follow <absolute-handoff-path>.`;
-   - retain identities, report to the operator, and **yield**. Do not poll or
-     call wait primitives.
+   - retain identities, report to the operator, and **yield**. Do not poll,
+     call wait primitives, or send Chatterbox notifications for child waits.
 8. **Handle child notifications and revision routing.** A finish notification
    starts review for that lane. Verify the worker is idle and index/tracked
    worktree are clean, then launch the review child in that worker workspace
-   under a serial clean exact-head lease.
-9. **Merge and close out.** Merge only after the coordination gate holds:
-   accepted exact-head review verdict on the provider, passing checks, clean
-   ancestry, mergeability, and no operator pause. Reconcile closeout surfaces
-   and yield.
+   under a serial clean exact-head lease. Select a qualified reviewer whose
+   underlying provider/model identity differs from the worker; profile renames
+   and effort changes do not qualify. Use the same distinct reviewer for
+   revision rounds when available.
+9. **Merge, close out, and advance continuously.** Merge only after the
+   coordination gate holds: accepted exact-head review verdict on the provider,
+   passing checks, clean ancestry, mergeability, and no operator pause. When a
+   connector write is refused while the gate remains current, use an
+   authenticated repository-approved native write transport fallback and
+   re-verify provider state; never weaken the gate or solicit credentials.
+   Reconcile closeout surfaces on `main`. Make merge, post-merge reconciliation,
+   closeout, frontier recomputation, and next-ready dispatch one continuous
+   coordinator action chain: recompute the canonical frontier and continue
+   immediately with the next ready dispatch or mechanical transition in the
+   same turn without waiting for an operator `continue`. Yield only when
+   progress requires an active child, an external event, new authority, or an
+   empty runway. When the canonical runway is empty, send Chatterbox one
+   administrative notice with completed state, then yield.
 
 ## Worker file contract
 
@@ -594,6 +636,11 @@ Stop and return to planning or the operator when:
 - review evidence is stale, ambiguous, contradictory, or missing;
 - a review child cannot launch in the existing worker workspace under a serial
   clean exact-head lease;
+- no qualified reviewer whose underlying provider/model identity differs from
+  the authoring worker is available, or review-model identity cannot be observed
+  reliably;
+- a write transport fallback would bypass an unverified gate, weaken
+  requirements, or require new credentials;
 - a manual worktree is needed but the local path contract has not been satisfied;
 - control-plane launch state is ambiguous enough that retrying could create a
   duplicate workspace, worker, or successor orchestrator;

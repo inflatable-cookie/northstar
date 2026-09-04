@@ -322,9 +322,18 @@ informal habits.
 - It launches the complete approved ready frontier published in the dispatch
   manifest; it does not design lanes, dependency edges, or parallel groups.
 - Coordinator turns are event-bounded: perform all immediately available
-  coordination, report state and identities, then yield. Never poll, invoke a
-  wait primitive, or hold a turn open. `notifyOnFinish: true` drives the next
-  bounded turn.
+  coordination, report state and identities, and continue across merge,
+  closeout, and card boundaries while the canonical runway names another ready
+  mechanical action. Yield only for a child or external result, new authority,
+  or an empty runway. Never poll, invoke a wait primitive, hold a turn open, or
+  repeatedly rescan unchanged state. `notifyOnFinish: true` drives the next
+  bounded turn. Waiting for a child does not notify Chatterbox; an empty runway
+  sends Chatterbox one administrative notice with completed state. Do not
+  require an operator `continue` between actionable steps.
+- A refused connector or provider write may use an already-authenticated,
+  repository-approved native write transport when the verified gate remains
+  current. Re-verify provider state afterward. Do not solicit credentials,
+  weaken the gate, or improvise an undeclared transport.
 
 ### Issue-fix dispatch
 
@@ -355,9 +364,14 @@ informal habits.
   after review.
 - The reviewer inspects and runs checks but cannot edit tracked files, commit,
   push, or change branches. It posts a provider verdict naming the exact head.
+- The review child must use a different underlying provider/model identity from
+  the authoring worker. Profile renames, effort changes, and fresh threads do
+  not establish independence. Record both identities in the review handoff; if
+  no qualified distinct reviewer exists, fail closed and escalate
+  context-completely.
 - Requested changes return to the same worker; the revised head returns to the
-  same reviewer when available; a replacement reviewer starts a fresh complete
-  review.
+  same distinct reviewer when available; a replacement reviewer starts a fresh
+  complete review.
 - The orchestrator does not duplicate the full diff review. Before merge it
   verifies the coordination gate: the verdict names the exact current head,
   blocking findings are resolved or superseded on the provider, required
@@ -382,6 +396,12 @@ informal habits.
   verdict must name that head, and all required checks pass.
 - Confirm the PR is mergeable into the intended base. A changed head requires
   another review; ambiguous merge state stops before retry.
+- When a connector write is refused while the gate remains current, the
+  coordinator may use an already-authenticated, repository-approved native
+  write transport and re-verify provider state; it never weakens the gate or
+  solicits credentials.
+- Merge, post-merge reconciliation, closeout, frontier recomputation, and
+  next-ready dispatch form one continuous coordinator action chain.
 - A stricter repository rule or explicit operator pause still wins.
 - Workers, planning delegates, and standalone direct-review threads never merge.
 

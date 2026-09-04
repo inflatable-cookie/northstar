@@ -110,8 +110,13 @@ preflight. The source yields the transferred lane after pushed dispatch.
   preserved across dedicated worktree workspace placement (scoped
   cross-workspace child creation, finish notifications enabled, no detached
   root launches, same-agent revision resume), independent review children in the
-  existing worker workspace with serial clean exact-head lease and coordination
-  gate verification, event-bounded turns with post-dispatch yield,
+  existing worker workspace with serial clean exact-head lease and distinct
+  underlying provider/model identity, continuous coordinator action chain
+  across merge, post-merge reconciliation, closeout, frontier recomputation,
+  and next-ready dispatch without operator `continue`, prompt yield on children
+  with `notifyOnFinish: true` and no child-wait Chatterbox noise, exactly one
+  administrative notice to Chatterbox on an empty runway, bounded authenticated
+  native write fallback on connector refusal after an unchanged merge gate,
   self-contained operator escalation relay, optional fresh-orchestrator
   continuation through a pushed seven-section handoff and a separate local
   workspace with `Orchestrator=true`, one pushed worker handoff under

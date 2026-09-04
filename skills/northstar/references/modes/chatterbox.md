@@ -117,6 +117,12 @@ Protocol:
 Chatterbox does not use this channel to dispatch, cancel, resume, review, or
 merge children itself.
 
+The coordinator sends Chatterbox one administrative notice with completed state
+only when the canonical runway is empty (no ready lane, active child, or
+already-published downstream lane), and then yields. Waiting for active children
+does not notify Chatterbox. Genuine blockers route to their named escalation
+owner; an empty runway caused by missing planning returns to Chatterbox.
+
 ## Shared checkout and Git protocol
 
 Chatterboxes share the working checkout.
