@@ -6,9 +6,9 @@ generation remains expanded.
 ## Current state
 
 - Active generation: [`g03`](./g03/README.md)
-- Last completed milestone: [`g03.001`](./g03/001-compact-default-lifecycle.md)
-- Active milestone: [g03.002](g03/002-complete-consumer-compaction.md)
-- Approved frontier: card 133
+- Last completed milestone: `g03.002` consumer compaction
+- Active milestone: none
+- Approved frontier: none
 - Closed generations: [`g01`](./archive/g01.md) and [`g02`](./archive/g02.md) roll-ups under `archive/`
 
 ## Rules
@@ -24,4 +24,5 @@ generation remains expanded.
 
 ## Next task
 
-Execute card 133 under g03.002; no concurrent siblings or automatic next lane.
+No approved next task. Chatterbox owns the next promotion; the bounded
+watchlist is not execution authority.

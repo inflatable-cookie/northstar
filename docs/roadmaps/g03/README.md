@@ -10,14 +10,14 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 | Goal | State | Governing refs | Next milestone |
 | --- | --- | --- | --- |
 | Replace permanent live-tree history with lifecycle-bound artifacts and lossless operational compaction. | complete through `g03.001` | contract 001 | observe normal use |
-| Complete consumer compaction through maintenance routes. | ready; reusable workflow gap confirmed | contract 001 | `g03.002` |
+| Complete consumer compaction through maintenance routes. | complete through card 133 | contract 001 | no approved next lane |
 | Reduce repeated protocol enumerations and retire genuinely redundant modes without merging distinct behavior blindly. | planned | contract 001, later usage evidence | pending after `g03.001` |
 | Keep unresolved operator feedback visible without pinning old generations open. | watch | contract 001 | bounded watchlist below |
 
 ## Approved frontier
 
-Card [133](batch-cards/133-complete-consumer-compaction.md), `g03.002`.
-One lane; no concurrent siblings.
+No approved frontier. Cards 130–133 are complete; the bounded watchlist is
+non-executable until Chatterbox promotes new work.
 
 ## Bounded watchlist
 
@@ -34,9 +34,8 @@ One lane; no concurrent siblings.
 ## Milestones
 
 - `001-compact-default-lifecycle.md` — complete
-- `002-complete-consumer-compaction.md` — ready
+- `002-complete-consumer-compaction.md` — complete
 
 ## Next task
 
-Execute card 133. After closeout, return to the operator with the consumer
-fixture outcome; no further simplification lane is authorized.
+No next execution task is approved. Chatterbox owns the next promotion.

@@ -1,6 +1,6 @@
 # 133 - Complete Consumer Compaction
 
-Status: ready
+Status: complete
 Owner: repo maintainers
 Created: 2026-09-05
 Master roadmap: g03.002
@@ -82,9 +82,9 @@ Do not substitute manual expected-output construction for missing replay access.
 
 ## Implementation evidence
 
-Status remains ready for coordinator closeout. Worker delivery is the shared
-procedure, disposable fixture, recorded installed-skill replays, and
-independent before/after assertions.
+Status is complete. Worker delivery is the shared procedure, disposable
+fixture, recorded installed-skill replays, and independent before/after
+assertions. PR #41 merged after exact-head review.
 
 Installed-skill route: `$HOME/.agents/skills/northstar` via
 `references/lifecycle-maintenance.md`. Provider `codex/gpt-5.6-luna`,
@@ -104,5 +104,14 @@ Validation on this checkout: `git diff --check`, `effigy check:consumer-compacti
 `effigy check:skill-install $HOME/.agents/skills/northstar` (112 files) all pass.
 
 Limits: live consumers were not migrated. Repeat input is the recorded happy
-after-tree, not a second live consumer. Coordinator owns merge, installed
-parity on the integration checkout, and reserved front-door closeout.
+after-tree, not a second live consumer.
+
+## Closeout
+
+- PR: [#41](https://github.com/inflatable-cookie/northstar/pull/41)
+- Reviewed exact head: `3fcb7e009adc89943c6e695d317092700c7fecee`
+- Merge commit: `ec84170dd8e28d2ced8880f04e3b2832c3fb70fb`
+- Independent review: [canonical verdict](https://github.com/inflatable-cookie/northstar/pull/41#issuecomment-5552845973)
+- Main is synchronized with `origin/main` at the merge commit.
+- No live consumer writes, reserved front-door edits, workflow changes, or
+  release mutations were included in the implementation PR.

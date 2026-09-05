@@ -8,8 +8,8 @@ Mode: sequential
 
 - `g03`
 - Runway: `g03/README.md`
-- Active milestone: `g03.002` — consumer compaction
-- Approved frontier: card 133
+- Last completed milestone: `g03.002` — consumer compaction
+- Approved frontier: none
 
 ## Generation log
 
@@ -29,4 +29,4 @@ preservation oracle in contract 001 passes.
 
 ## Next task
 
-Execute card 133 under g03.002.
+No approved next task. Chatterbox owns the next promotion.

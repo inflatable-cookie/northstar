@@ -6,5 +6,4 @@ evidence until generation roll-up removes it from the live tree.
 
 ## Current frontier
 
-[133](133-complete-consumer-compaction.md) is ready under g03.002.
-Cards 130–132 remain completed history.
+No approved frontier. Cards 130–133 remain completed history under g03.
