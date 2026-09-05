@@ -6,6 +6,5 @@ evidence until generation roll-up removes it from the live tree.
 
 ## Current frontier
 
-Only card 132's final lifecycle retirement correction is ready. Cards 130 and
-131 are complete; earlier card-132 implementation and README correction are
-merged. The milestone remains open for retirement proof and reconciliation.
+None. Cards 130–132 are complete and `g03.001` is closed. New execution needs a
+fresh operator-confirmed Chatterbox plan.

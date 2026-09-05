@@ -174,8 +174,8 @@ Reconciled remaining live citations to deleted pre-`g03` specs across live autho
 
 ## Next task
 
-Independent exact-head review in this worker workspace by a reviewer with a
-different provider/model identity, followed by coordinator merge gate.
+Complete. Reconciled delivery below is final; this card has no dispatch
+authority.
 
 ## Reconciled delivery
 

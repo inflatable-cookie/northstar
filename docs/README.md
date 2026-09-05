@@ -15,8 +15,8 @@ that Northstar provides to consumer projects.
 ## Current work
 
 - Active generation: [`roadmaps/g03/README.md`](./roadmaps/g03/README.md)
-- Active milestone: [`roadmaps/g03/001-compact-default-lifecycle.md`](./roadmaps/g03/001-compact-default-lifecycle.md)
-- Active frontier: [`card 132 final lifecycle retirement correction`](./roadmaps/g03/batch-cards/132-make-compact-lifecycle-default.md); initial sibling implementations are merged, milestone reconciliation remains open
+- Last completed milestone: [`g03.001 compact default lifecycle`](./roadmaps/g03/001-compact-default-lifecycle.md)
+- Approved frontier: none; the next `g03` tranche needs Chatterbox/operator planning
 - Intake: [`triage/README.md`](./triage/README.md)
 - Execution friction: [`../PAPERCUTS.md`](../PAPERCUTS.md)
 

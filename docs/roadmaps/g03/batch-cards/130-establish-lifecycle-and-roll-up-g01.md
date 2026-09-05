@@ -16,7 +16,7 @@ roll-up.
 ## Approved dispatch manifest
 
 - **Lane:** `g03.001/130`
-- **State:** ready
+- **State:** complete; no dispatch authority
 - **Prerequisites:** planning commit opening `g03` is on `main`; no active work
   or unresolved commitment remains in `g01`
 - **Completion:** lifecycle authority and structural proof are merged; `g01`
@@ -64,7 +64,7 @@ changed `g01` link valid; card 131 owns their compaction.
 - [x] the roll-up contains outcomes and provenance, not runnable old steps;
 - [x] current links and deterministic structural checks pass;
 - [x] `git diff --check`, `effigy qa:docs`, and `effigy qa` pass;
-- [ ] independent review falsifies each preservation-oracle row against the
+- [x] independent review falsifies each preservation-oracle row against the
       exact PR head.
 
 ### Frozen g01 deletion manifest (18 files)
@@ -121,5 +121,7 @@ changed `g01` link valid; card 131 owns their compaction.
 
 ## Next task
 
-Independent exact-head review in this worker workspace by a reviewer with a
-different provider/model identity, followed by coordinator merge gate.
+Complete. PR 36 accepted exact head
+`8956c5c1e71e9475fdd90fbfc03fd60ecfdc17ed` and merged as
+`e8637b3d74db63c5d805f6726d4e59dd37a49da9`. Cards 131 and 132 then launched as
+the approved concurrent frontier.

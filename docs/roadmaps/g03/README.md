@@ -9,16 +9,15 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 
 | Goal | State | Governing refs | Next milestone |
 | --- | --- | --- | --- |
-| Replace permanent live-tree history with lifecycle-bound artifacts and lossless operational compaction. | active | contract 001 | `g03.001` |
-| Make the compact lifecycle the only normal consumer posture. | final retirement correction ready | contract 001 | `g03.001/132` |
+| Replace permanent live-tree history with lifecycle-bound artifacts and lossless operational compaction. | complete through `g03.001` | contract 001 | observe normal use |
+| Make the compact lifecycle the only normal consumer posture. | complete through card 132 and PR 40 | contract 001 | observe normal use |
 | Reduce repeated protocol enumerations and retire genuinely redundant modes without merging distinct behavior blindly. | planned | contract 001, later usage evidence | pending after `g03.001` |
 | Keep unresolved operator feedback visible without pinning old generations open. | watch | contract 001 | bounded watchlist below |
 
 ## Approved frontier
 
-- Cards 130 and 131 merged; card 132's initial implementation also merged.
-- Only card `g03.001/132`'s bounded final lifecycle retirement correction is ready.
-- Chatterbox owns milestone reconciliation after that correction.
+None. `g03.001` is complete. Chatterbox and the operator must select and promote
+the next tranche before the coordinator dispatches more work.
 
 ## Bounded watchlist
 
@@ -34,8 +33,9 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 
 ## Milestones
 
-- `001-compact-default-lifecycle.md` — active
+- `001-compact-default-lifecycle.md` — complete
 
 ## Next task
 
-Complete card `g03.001/132`'s final lifecycle retirement correction, then reconcile `g03.001`.
+Discuss the next `g03` simplification tranche with the operator. Do not turn a
+watchlist item into execution work without fresh planning and confirmation.

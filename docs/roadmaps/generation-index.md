@@ -8,8 +8,8 @@ Mode: sequential
 
 - `g03`
 - Runway: `g03/README.md`
-- Active milestone: `g03.001`
-- Approved frontier: card 132 final lifecycle retirement correction; initial sibling implementations are merged
+- Active milestone: none; `g03.001` is complete
+- Approved frontier: none; next tranche requires Chatterbox/operator planning
 
 ## Generation log
 
@@ -29,4 +29,5 @@ preservation oracle in contract 001 passes.
 
 ## Next task
 
-Complete card `g03.001/132`'s final lifecycle retirement correction, then reconcile `g03.001`.
+Select the next `g03` simplification tranche with the operator. The current
+runway contains no dispatchable card.

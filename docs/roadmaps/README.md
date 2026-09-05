@@ -6,8 +6,8 @@ generation remains expanded.
 ## Current state
 
 - Active generation: [`g03`](./g03/README.md)
-- Active milestone: [`g03.001`](./g03/001-compact-default-lifecycle.md)
-- Active frontier: [`g03.001/132 final lifecycle retirement correction`](./g03/batch-cards/132-make-compact-lifecycle-default.md); initial sibling implementations are merged
+- Last completed milestone: [`g03.001`](./g03/001-compact-default-lifecycle.md)
+- Approved frontier: none
 - Closed generations: [`g01`](./archive/g01.md) and [`g02`](./archive/g02.md) roll-ups under `archive/`
 
 ## Rules
@@ -23,4 +23,6 @@ generation remains expanded.
 
 ## Next task
 
-Complete card `g03.001/132`'s final lifecycle retirement correction, then reconcile `g03.001`. Do not dispatch historical `g01` or `g02` instructions.
+Chatterbox and the operator should select the next `g03` simplification tranche.
+Do not dispatch historical `g01` or `g02` instructions or invent work from the
+bounded watchlist.

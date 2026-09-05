@@ -1,6 +1,6 @@
 # 132 - Make Compact Lifecycle the Default
 
-Status: review; final lifecycle retirement correction implemented and ready for review
+Status: complete
 Owner: repo maintainers
 Created: 2026-09-04
 Master roadmap: `g03.001`
@@ -16,7 +16,7 @@ steady-state protocols.
 ## Approved dispatch manifest
 
 - **Lane:** `g03.001/132`
-- **State:** ready for the final lifecycle retirement correction below
+- **State:** complete; no dispatch authority
 - **Prerequisites:** card 130 merged and lifecycle checks green
 - **Completion:** reusable doctrine, templates, skills, setup, and checks expose
   one compact lifecycle with incremental adoption described only as migration;
@@ -275,3 +275,16 @@ correction merges, return to Chatterbox for full `g03.001` reconciliation.
   - `effigy test:readiness-map`: PASS (5 fixture cases)
   - `effigy qa:docs`: PASS
   - `effigy qa`: PASS
+
+### Final accepted delivery
+
+- PR 40 accepted exact head
+  `2d3c1a7577f07cf28010cd6c8ef90f5d09e091a8` after independent review by a
+  different provider/model and merged as
+  `e9874ef2c41380460f5595ca82792c7a59c7c980`.
+- Local `main` was fetched, fast-forwarded, left clean, and verified equal to
+  `origin/main` before milestone reconciliation.
+- `git diff --check`, repo-contract and readiness tests, `effigy qa:docs`,
+  `effigy qa`, and mergeability passed on the accepted delivery chain.
+- The readiness-map fixture-local authority limitation is non-blocking and has
+  moved to triage. It does not reopen this completed card.

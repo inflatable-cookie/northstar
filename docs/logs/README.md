@@ -33,7 +33,7 @@ Evidence from closed generations is curated in their generation roll-ups:
 
 ## Current delivery evidence
 
-`g03.001` records ordinary delivery on cards 130–132. Their PR and merge records
-cover lifecycle foundation, generation compaction, reusable defaults, and the
-README follow-up. Final lifecycle retirement and milestone reconciliation remain
-open on card 132; no separate routine log is required.
+`g03.001` is complete. Cards 130–132 retain its compact PR, merge, validation,
+and limitation evidence for lifecycle foundation, generation compaction,
+reusable defaults, README correction, and final spec retirement. No separate
+routine log is required.
