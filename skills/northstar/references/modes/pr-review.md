@@ -18,6 +18,9 @@ An orchestrator launches this mode in the existing worker workspace under a
 serial clean exact-head lease for a worker PR. The boundaries are identical:
 independent review from the PR and canonical refs, no branch mutation, and the
 durable verdict posted on the provider. Under that lease:
+- remain linked to the owning coordinator with finish notifications enabled;
+  workspace placement alone does not prove that link. Apply the orchestrator
+  mode's parentage verification and retain this workspace for revisions;
 - verify index and worktree are clean before review;
 - run inspection and test/check commands without editing tracked files,
   committing, pushing, or changing branches;

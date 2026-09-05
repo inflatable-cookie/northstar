@@ -19,7 +19,9 @@ Your default job is mechanical coordination:
 - consume the canonical dispatch manifest published by Chatterbox and launch
   the complete approved ready frontier without designing lanes, dependency
   edges, or inventing concurrency;
-- create child workers in dedicated worktrees;
+- create workers as children of this coordinator through its own agent-scoped
+  tool surface, placed in dedicated worktrees; verify linkage before reporting
+  dispatch success;
 - create review children in the existing worker workspace under a serial clean
   exact-head lease, requiring an underlying provider/model identity distinct
   from the authoring worker;
@@ -31,7 +33,9 @@ Your default job is mechanical coordination:
   operator `continue` while canonical work is actionable, report identities and
   state, and yield only when progress awaits a child, external event, new
   authority, or an empty runway;
-- keep `notifyOnFinish: true` and never poll or call wait primitives; waiting
+- keep `notifyOnFinish: true` on worker/reviewer creation and follow-ups only;
+  use `background: true, notifyOnFinish: false` for messages to Chatterbox.
+  Keep turns event-bounded: never poll or call wait primitives; waiting
   for active children does not notify Chatterbox;
 - when a worker stops before PR on an operator decision, send its complete
   capsule to Chatterbox as a pre-PR decision request and yield;
@@ -182,6 +186,17 @@ already-published downstream lane—the coordinator sends Chatterbox one
 administrative notice with completed state and then yields. Waiting for active
 children does not notify Chatterbox; a pre-PR decision request is the explicit
 blocked-child exception, not a waiting notice.
+
+### Notification routing
+
+Apply section 07's **Notification direction and interruption budget**. Worker
+and reviewer callbacks wake this coordinator. Messages between Chatterbox and
+coordinator use `background: true, notifyOnFinish: false` in both directions;
+only explicit decision/blocker or runway-empty messages should wake Chatterbox.
+Do not send it dispatch receipts, progress, review-start, intermediate merge,
+waiting, or acknowledgement messages. Keep routine state in this thread.
+Deduplicate unchanged blockers and runway-empty notices; never label a child
+wait as an empty runway. These rules preserve necessary escalations.
 
 ## Independent review children and serial workspace lease
 
@@ -422,11 +437,22 @@ Chatterbox after operator confirmation.
    - materialize the complete selected profile into `create_agent`, including
      its operator-configured full-accept `modeId`; call it with that workspace
      ID, `notifyOnFinish: true`, and the prompt
-     `Read and follow <absolute-handoff-path>.`;
-   - retain identities, report to the operator, and **yield**. Do not poll,
+     `Read and follow <absolute-handoff-path>.`. The call must run through this
+     coordinator's own agent-scoped tool surface; a top-level launch with the
+     correct workspace is not equivalent;
+   - verify and record coordinator ID, child ID, workspace ID, and the scoped
+     creation evidence. Check returned parent identity when exposed. A name,
+     label, workspace, or reporting instruction is not a parent link. If the
+     attachment is absent or cannot be established, preserve returned IDs and
+     stop that launch; do not guess API fields or create a duplicate;
+   - retain identities, report routine state only in this coordinator thread,
+     and **yield**. Do not poll,
      call wait primitives, or send Chatterbox notifications for child waits.
 8. **Handle child notifications and revision routing.** A finish notification
-   starts review for that lane. Verify the worker is idle and index/tracked
+   starts review for that lane. Use explicit `background: true,
+   notifyOnFinish: true` for worker/reviewer follow-ups. A completed turn is not
+   permission to detach or archive the child or remove its review workspace.
+   Verify the worker is idle and index/tracked
    worktree are clean, then launch the review child with the worker's exact
    retained `workspaceId` under a serial clean exact-head lease. Never create a
    review workspace. Select a qualified reviewer whose underlying

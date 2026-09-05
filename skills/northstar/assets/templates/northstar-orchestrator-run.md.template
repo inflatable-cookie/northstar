@@ -50,6 +50,11 @@ Here is the state the worker is inheriting:
 - **Ready cards, in order:** `{{CARD_REFS}}`
 - **Allowed runway:** `{{ASSIGNED_RUNWAY}}`
 - **Remaining card budget:** `{{CARD_COUNT_OR_TIME_BOUND}}`
+- **Coordinator agent ID:** `{{COORDINATOR_AGENT_ID_OR_MANUAL_RELAY}}`
+- **Delivery route:** coordinator-attached child with `notifyOnFinish: true`;
+  the coordinator records scoped creation and returned child/workspace identity.
+  Use manual operator relay only when automatic transport is unavailable and
+  the handoff explicitly declares it. A workspace or thread name is not linkage.
 - **Dispatch topology:** `{{FRONTIER_LANES_LAUNCHED_WITH_THIS_ONE}}`
 - **Parallel safety check:** `{{NO_SHARED_MUTABLE_SCOPE_OR_OTHER_REASON_SERIAL}}`
 - **Surfaces this lane owns:** `{{MUTABLE_AND_CLOSEOUT_SURFACES_OWNED}}`
@@ -104,7 +109,9 @@ Please keep this run inside the named runway:
 - **Decisions and preferences:** {{NON_OBVIOUS_DECISIONS_OR_USER_PREFERENCES}}
 - **Open tensions:** {{KNOWN_RISKS_AMBIGUITIES_OR_JUDGMENT_CALLS}}
 - **Report after:** `{{MEANINGFUL_CHUNK_DEFINITION}}`
-- **Report to:** the operator, who will relay progress to the orchestrator
+- **Report to:** the owning coordinator through the linked child result. Do
+  not require operator relay or message Chatterbox during automatic dispatch;
+  manual relay applies only to the explicitly declared fallback.
 
 ## Suggested Next Move
 
@@ -190,7 +197,7 @@ report what changed, validation run, what remains, and any planning decision.
    self-referential hash for the commit that contains this file.
 6. In the PR body, link the spec, milestone, cards, changed surfaces, evidence,
    validation, and unresolved items.
-7. Report the PR URL and the evidence to the operator. Do not merge.
+7. Return the PR URL and evidence to the owning coordinator. Do not merge.
 
 ### Review and merge path
 

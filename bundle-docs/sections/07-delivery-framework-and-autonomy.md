@@ -604,6 +604,22 @@ structural and enabled; reject launch configuration before creation if
 notifications are disabled. Review follow-ups resume the same child agent
 identity rather than creating a detached replacement.
 
+Before calling a dispatch successful, record the coordinator agent ID, child
+agent ID, worker workspace ID, and evidence that the creation call ran in the
+coordinator's agent-scoped context with `notifyOnFinish: true`. Verify returned
+parent identity when the adapter exposes it; it must be the coordinator. A
+workspace ID, thread title, label, or prompt saying "report to the coordinator"
+does not establish parentage. Never invent a parent parameter the tool does not
+support. If attachment cannot be established from the scoped tool contract or
+returned metadata, preserve the returned identities and stop that launch; do not
+claim automatic delivery or create another child blindly. The operator must
+not become the routine message relay for a supposedly automatic lane.
+
+Use explicit `background: true, notifyOnFinish: true` on coordinator follow-ups
+to workers and reviewers. A visible tab in another workspace is still a linked
+child; never detach, archive, or close it merely because one turn finished.
+Keep its workspace available through review and revision until delivery closes.
+
 Paseo profiles are complete launch bundles, not model aliases. For every
 Northstar-created child thread, materialize the selected profile's
 provider/model identity plus `modeId`, `thinkingOptionId`, and `featureValues`
@@ -830,6 +846,35 @@ failure: report that placement is manual. Never use browser, computer-use, or
 other UI automation to arrange the sidebar. Without Paseo, return the absolute
 handoff path for manual launch. Do not archive or delete the source workspace as
 part of the transfer.
+
+### Notification direction and interruption budget
+
+Notification settings belong to a directed relationship, not to all background
+calls. Keep completion callbacks on for delivery children and off for the
+planning/coordination conversation:
+
+| Call | Explicit settings | Result |
+| --- | --- | --- |
+| Coordinator creates a worker or reviewer | `notifyOnFinish: true`, coordinator-scoped creation | Child completion, error, or permission wakes the coordinator. |
+| Coordinator resumes a worker or reviewer | `background: true, notifyOnFinish: true` | The same coordinator receives the next result. |
+| Chatterbox sends coordinator direction | `background: true, notifyOnFinish: false` | Routine coordinator turn completion does not wake Chatterbox. |
+| Coordinator explicitly notifies Chatterbox | `background: true, notifyOnFinish: false` | The requested message arrives without subscribing to Chatterbox's turn completion. |
+
+The last two rows use explicit messages for the response path. Disabling their
+callbacks must never disable worker/reviewer callbacks or prevent escalation.
+
+Wake Chatterbox only for a complete decision/blocker capsule that requires its
+planning authority, or one completed-state notice when the approved runway is
+empty. Deduplicate the same blocker until its material facts change; after a
+runway-empty notice, do not resend until new approved work has run. A direct
+operator request for status may be answered in the coordinator thread.
+
+Do not forward dispatch receipts, "worker running", routine progress, review
+started, intermediate merge, waiting, or acknowledgement messages to Chatterbox.
+Keep them in the coordinator's own thread and delivery evidence. A child wait
+is not an empty runway. On receiving direction, act; do not send an extra
+"received" or "dispatched" message. Necessary semantic and integration blockers
+remain reportable even while a sibling runs; silence is not permission to stall.
 
 ## Chatterbox planning and promotion
 

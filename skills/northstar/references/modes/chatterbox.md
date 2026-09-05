@@ -144,7 +144,10 @@ provenance-labelled message:
 
 Protocol:
 1. Inspect coordinator state once to avoid duplicate messages.
-2. Send once using available background messaging.
+2. Send once using `background: true, notifyOnFinish: false`. This direction
+   message uses an explicit response path: the coordinator sends a decision/
+   blocker capsule or one runway-empty notice when warranted. Do not subscribe
+   Chatterbox to every coordinator turn's completion.
 3. Report delivery to the operator in chat and do not poll.
 4. When no unambiguous coordinator or background route exists, give the
    operator a complete manual-relay message with the absolute handoff/commit
@@ -160,6 +163,13 @@ does not notify Chatterbox. A complete pre-PR decision request is the explicit
 blocked-child exception: resolve it here and return direction to the
 coordinator. Other blockers route to their named escalation owner; an empty
 runway caused by missing planning returns to Chatterbox.
+
+Routine dispatch, progress, review-start, intermediate merge, waiting, and
+acknowledgement messages belong in the coordinator thread. Do not request them
+as automatic callbacks or reply to an unsolicited progress callback with another
+coordinator prompt. Apply section 07's **Notification direction and interruption
+budget**; unchanged blockers and runway-empty notices are deduplicated. These
+settings do not disable the coordinator's worker/reviewer callbacks.
 
 ## Shared checkout and Git protocol
 

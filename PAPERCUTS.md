@@ -5,6 +5,13 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 
 ## Open
 
+- **2026-09-05 — command-skill check depends on sentence casing:** changing
+  `never poll or call wait primitives` to sentence-initial `Never` failed the
+  orchestration surface check despite identical behavior. Restored the expected
+  phrase for this batch. Replace prose-sensitive assertions with stable routing
+  evidence when that checker is next owned; affected surface is
+  `scripts/check-northstar-command-skills.rhai:330`.
+
 - **2026-09-04 — language-package consumer oracle copied generated trees
   (resolved):** the disposable Jetstream fixture excluded `target`,
   `node_modules`, and `.effigy` but still copied 39 GB of `artifacts/` plus the

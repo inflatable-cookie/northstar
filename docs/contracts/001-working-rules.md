@@ -454,6 +454,24 @@ This contract and system architecture govern the current planning and delivery t
   routing facts. Chatterbox resolves identity once, sends once, reports
   delivery, and does not poll. It never uses this channel to dispatch, cancel,
   resume, review, or merge children itself.
+- Worker and reviewer threads must be children of the coordinator that owns
+  their delivery, created through its own agent-scoped tool surface. Record
+  coordinator ID, child ID, workspace ID, and scoped creation evidence; verify
+  returned parent identity when exposed. Workspace placement, naming, labels,
+  and prompt text do not prove attachment. An unestablished link stops dispatch
+  without guessing unsupported API fields or duplicating a returned child.
+- Worker/reviewer creation uses explicit `notifyOnFinish: true`; their
+  coordinator follow-ups use `background: true, notifyOnFinish: true`. Preserve
+  linked children and their workspaces through review/revision; a finished turn
+  is not delivery closeout or permission to detach/archive them.
+- Chatterbox/coordinator messages in both directions use `background: true,
+  notifyOnFinish: false`. Explicit messages carry required responses; automatic
+  coordinator-turn callbacks must not interrupt Chatterbox. Only complete
+  decision/blocker capsules requiring Chatterbox authority and one completed
+  runway-empty notice belong there. Deduplicate unchanged blockers and repeated
+  empty-runway notices. Dispatch receipts, progress, review starts, intermediate
+  merges, waits, and acknowledgements stay in the coordinator thread. Necessary
+  escalation remains enabled; child waits are not empty runway.
 - Coordinator turns are event-bounded. After an operator event or child
   notification, perform all immediately available coordination and continue
   across merge, closeout, and card boundaries while the canonical runway names
