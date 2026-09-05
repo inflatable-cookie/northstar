@@ -37,3 +37,8 @@ Evidence from closed generations is curated in their generation roll-ups:
 and limitation evidence for lifecycle foundation, generation compaction,
 reusable defaults, README correction, and final spec retirement. No separate
 routine log is required.
+
+## Cross-project planning evidence
+
+- [Shared knowledge retrieval pilot](2026-09/05-093742-shared-knowledge-retrieval-pilot.md):
+  frozen cases and measurements transferred to Effigy g09.005/g09.006.

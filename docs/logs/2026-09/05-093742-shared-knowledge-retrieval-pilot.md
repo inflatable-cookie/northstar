@@ -1,7 +1,7 @@
 # Shared knowledge retrieval pilot
 
-Status: open; pilot evidence complete, next implementation ownership undecided
-Owner: Chatterbox and operator
+Status: completed pilot; implementation planning transferred to Effigy
+Owner: Northstar Chatterbox (pilot evidence)
 Created: 2026-09-05
 
 ## Confirmed direction
@@ -126,30 +126,30 @@ source digests are at `/tmp/northstar-knowledge-pilot-20260905-093742/`; they ar
 disposable diagnostics. The commands, outcomes, source paths, and Git identities
 in this note are the durable evidence needed to reproduce the pilot.
 
-## Recommendation and unresolved boundary
+## Canonical disposition
 
-Prefer an explicit portfolio source directory and a bounded query route over a
-new central knowledge database. The directory should name repository identity,
-allowed documentation/skill roots, canonical front doors, and the local query
-route. Return source excerpts with repository/path/span, commit or dirty-content
-identity, and declared authority/currentness. Preserve missing/unknown state and
-report a partially unavailable repository rather than blocking all results.
-Keep query routing independent of runtime agent notification/coordination.
+The operator approved Effigy ownership. Effigy promoted the planning at
+`29375e153e049d3badc5249a6a1296261f95648e`:
 
-First implementation candidate: make existing repository-local docs retrieval
-usable within an agent-sized latency budget, then test a thin cross-repository
-caller using the frozen cases. That likely belongs to Effigy because its
-contract already owns extraction, freshness, and ranking. Northstar should own
-authority/lifecycle guidance and any explicitly adopted profile, not another
-retrieval engine. This ownership is a recommendation, not a ready dispatch.
-A bounded exact-text fallback may be useful, but it must identify itself as
-unranked/unknown-authority evidence, not silently impersonate semantic results.
+- `docs/roadmaps/g09/005-docs-context-latency-and-freshness.md`, spec 120,
+  card 1113: queued serially after release-gate card 1112. The owning spec
+  freezes measurement budgets and the repair boundary.
+- `docs/roadmaps/g09/006-cross-repository-source-routing.md`: conditional
+  routing plan; no ready card. API, access, output and partial-failure
+  semantics still require planning after latency evidence.
 
-Before implementation, settle with the operator whether to promote this work
-into Effigy or another existing portfolio tool. Then freeze the caller's API,
-latency/output budget, partial-failure behavior, per-repository access scope,
-and source-identity requirements. Compare against ordinary source search with
-the same task questions; success requires usable sources faster, preserved
-current/historical distinction, and correct abstention on the negative controls.
-No MCP server or embeddings are justified by the current evidence. No agent
-may autonomously promote shared memory into another project's authority.
+These paths are relative to the Effigy repository. They own execution scope
+and current state; this log preserves the frozen pilot cases and measurements.
+Northstar retains documentation authority and lifecycle doctrine. No competing
+knowledge store or Northstar implementation lane was created.
+
+Effigy's subsequent reproduction records a 10.7-second query on a current
+index and an immediate 5000 ms timeout. Its milestone records contention and
+requires controlled remeasurement before repair. Those observations extend the
+pilot; they do not establish speedup, recall, or a clean performance baseline.
+
+The original triage note was fully consumed and removed. Its original bytes
+remain available at Northstar commit `4ce522b`; this log is the retained pilot
+evidence for Effigy's dependent replay. Further sequencing belongs to Effigy's
+coordinator. Northstar needs no further relay unless a decision changes its
+ownership boundary.
