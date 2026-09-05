@@ -80,6 +80,8 @@ At minimum, audit these checkpoints:
   execution depends on settled outcomes
 - closeout, currentness, and spec hygiene are normal maintenance rather than
   rescue cleanup
+- already-closed sequential generations are rolled up, not left expanded until
+  the next rollover
 
 ## Rollout Tracking Pattern
 

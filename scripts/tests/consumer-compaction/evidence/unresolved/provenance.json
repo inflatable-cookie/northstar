@@ -1,0 +1,17 @@
+{
+  "activity_note": "Loaded installed skill router, project-refresh, and lifecycle-maintenance.md. Stopped g01 on UNIQUE-ORPHAN-RULE ownership conflict. Compacted safely closed g02 only. Codex session 01a0721e-99ea-7122-9f1d-9b6d53dc30b6.",
+  "agent_id": "b3ac3ec8-d1a8-4df7-a8a3-c72c5dd94989",
+  "authorization": "repair-authorized",
+  "before_fixture": "unresolved-before",
+  "captured_at": "2026-09-05T15:16:30Z",
+  "finished_at": "2026-09-05T15:14:48Z",
+  "prompt_sha256": "sha256:e4939f0fc5701eaba162ede60355fa5f1cce4beebe7567e54f9ce3c6d5e385cf",
+  "provider": "codex/gpt-5.6-luna",
+  "route": "installed-northstar-project-refresh",
+  "scenario": "unresolved",
+  "skill_path": "/Users/tom/.agents/skills/northstar",
+  "skill_procedure_relative": "references/lifecycle-maintenance.md",
+  "skill_procedure_sha256": "sha256:067585725935b8757dc11efb810d801bf42351f16edc52adb0dec389ecb61508",
+  "started_at": "2026-09-05T15:10:03Z",
+  "workspace_id": "wks_3bb0620a49197eee"
+}

@@ -11,7 +11,8 @@ Thin explicit entrypoint for the canonical docs-cleanup route.
 2. Select **Docs cleanup** and load
    `references/modes/cleanup-docs.md`.
 3. Follow that mode's inventory, classification, bounded-repair, and triage
-   disposition procedure.
+   disposition procedure. Report proposed closed-generation compaction; remain
+   read-only until repair is already allowed.
 4. Treat the text after `/northstar-cleanup` as the docs tree or cleanup
    question to inspect.
 

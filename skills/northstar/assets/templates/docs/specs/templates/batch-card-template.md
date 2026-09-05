@@ -65,7 +65,7 @@ Use for concurrency, lifecycle, identity, persistence, security, public API, dep
 - Validation: <checks run and result>
 - PR / Commit: <PR link, merge commit, or local commit>
 - Limits / Blockers: <residual limits or none>
-- Disposition trigger: active during execution; retains delivery evidence on completion; rolls up into `docs/roadmaps/archive/gNN.md` on generation rollover.
+- Disposition trigger: active during execution; retains delivery evidence on completion; rolls up into `docs/roadmaps/archive/gNN.md` on generation rollover or during maintenance of an already-closed generation.
 
 ## Next Task
 

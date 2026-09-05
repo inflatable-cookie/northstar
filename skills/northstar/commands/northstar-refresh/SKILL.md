@@ -11,6 +11,8 @@ Thin explicit entrypoint for the canonical project-refresh route.
 2. Select **Project refresh** and load
    `references/modes/project-refresh.md`.
 3. Follow that mode's facet audit, bounded repair, and one-next-route procedure.
+   Closed-generation compaction is part of that mode's bounded repair; do not
+   ask for a second confirmation.
 4. Treat the text after `/northstar-refresh` as the existing project or refresh
    scope.
 

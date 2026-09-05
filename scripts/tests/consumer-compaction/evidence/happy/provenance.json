@@ -1,0 +1,17 @@
+{
+  "activity_note": "Loaded installed skill SKILL.md, router, project-refresh, and lifecycle-maintenance.md. Compacted g01 and g02, preserved g03, promoted UNIQUE-RULE-WIDGET-PREFIX, rehomed DEFERRED-COMMITMENT-WIDGET-AUDIT. Codex session 01a0721e-8041-7783-8f95-f2a5be31e5f3.",
+  "agent_id": "70fbe934-62fa-431f-a183-1db9ecb5c0af",
+  "authorization": "repair-authorized",
+  "before_fixture": "happy-before",
+  "captured_at": "2026-09-05T15:16:29Z",
+  "finished_at": "2026-09-05T15:15:04Z",
+  "prompt_sha256": "sha256:ee9259a6adc60217a55075da6f399bbe961658361b1cb9cff293733d6d003452",
+  "provider": "codex/gpt-5.6-luna",
+  "route": "installed-northstar-project-refresh",
+  "scenario": "happy",
+  "skill_path": "/Users/tom/.agents/skills/northstar",
+  "skill_procedure_relative": "references/lifecycle-maintenance.md",
+  "skill_procedure_sha256": "sha256:067585725935b8757dc11efb810d801bf42351f16edc52adb0dec389ecb61508",
+  "started_at": "2026-09-05T15:09:56Z",
+  "workspace_id": "wks_ee903b3e1f0fcc17"
+}

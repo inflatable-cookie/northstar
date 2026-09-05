@@ -1,0 +1,17 @@
+{
+  "activity_note": "Loaded installed skill router, project-refresh, and lifecycle-maintenance.md. Stopped on g01 active/closed conflict. No file mutations. Codex session 01a0721e-9c98-7bf1-a4ed-7ad367b4dc5d.",
+  "agent_id": "2767c19d-82ae-494a-b358-24f432ce46c3",
+  "authorization": "repair-authorized",
+  "before_fixture": "active-conflict-before",
+  "captured_at": "2026-09-05T15:11:42Z",
+  "finished_at": "2026-09-05T15:11:22Z",
+  "prompt_sha256": "sha256:8f8fb4e17048a9a71fb59935ead15e7a2b014ae9494c33f889219dacce653042",
+  "provider": "codex/gpt-5.6-luna",
+  "route": "installed-northstar-project-refresh",
+  "scenario": "active-conflict",
+  "skill_path": "/Users/tom/.agents/skills/northstar",
+  "skill_procedure_relative": "references/lifecycle-maintenance.md",
+  "skill_procedure_sha256": "sha256:067585725935b8757dc11efb810d801bf42351f16edc52adb0dec389ecb61508",
+  "started_at": "2026-09-05T15:10:03Z",
+  "workspace_id": "wks_319d15e5985bd9b8"
+}

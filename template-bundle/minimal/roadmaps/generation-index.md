@@ -30,3 +30,5 @@ generation, not a short sequence of four or five roadmaps.
 ## Next Task
 
 Record rollover decisions here when a generation closes.
+Refresh, normalize, and authorized cleanup also compact already-closed
+generations that are still expanded; a new rollover is not required.

@@ -59,21 +59,34 @@ copying their procedures.
 7. **Check currentness and closeout.** Reconcile roadmap/current-task pointers,
    completed or stale cards, latest logs, handoffs, papercuts, and unresolved
    decisions. Do not treat a stale pointer or an old handoff as current authority.
-8. **Check validation and distribution.** Run only the repository's cheap
+   Inventory already-closed sequential generations. A completed milestone does
+   not close a generation, and a fresh rollover is not required to compact one
+   that is already safely closed.
+8. **Compact closed generations.** Follow
+   [`../lifecycle-maintenance.md`](../lifecycle-maintenance.md). When
+   documentation repair is authorized, apply that procedure without a second
+   blanket confirmation. When repair is not authorized, report the proposed
+   compaction only. Leave unresolved generations intact. Do not report
+   lifecycle state `current` while a classified closed generation remains
+   expanded unless an explicit unresolved blocker or bounded migration
+   disposition remains.
+9. **Check validation and distribution.** Run only the repository's cheap
    orientation and relevant deterministic checks during the review. Run full QA
    when changes are made or the repository contract requires it. For the
    Northstar source repo, verify installed-skill parity; for a consumer repo,
    verify the target-local checks without pretending it is the Northstar source.
-9. **Repair or route.** Apply only bounded, evidence-backed documentation,
-   planning, or instruction-surface repairs that are clearly in scope. Route
-   material ambiguity, missing contracts, research gaps, architecture drift, or
+10. **Repair or route.** Apply only bounded, evidence-backed documentation,
+   planning, or instruction-surface repairs that are clearly in scope. Closed-
+   generation compaction is one of those repairs when step 8 authorizes it.
+   Route material ambiguity, missing contracts, research gaps, architecture drift, or
    execution work to exactly one existing mode. Route non-protocol `/docs`
    findings to `cleanup-docs` when the cleanup inventory is the main blocker.
    Never use refresh to smuggle in production-code changes or roadmap execution.
-10. **Stop at authority boundaries.** Ask the operator when ownership, intent,
+11. **Stop at authority boundaries.** Ask the operator when ownership, intent,
    architecture, promotion, generation rollover, or a material breaking choice
-   remains unresolved. A refresh may identify the decision; it may not decide it
-   silently.
+   remains unresolved. Compacting an already-classified closed generation is
+   maintenance, not a rollover decision. A refresh may identify a new-generation
+   decision; it may not decide it silently.
 
 ## Facet result states
 

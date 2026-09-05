@@ -12,6 +12,7 @@ hygiene when front doors, generation index, or consequence-triggered surfaces dr
 - [`../setup/workspace-container-example.md`](../setup/workspace-container-example.md)
 - [`../setup/paseo-project.md`](../setup/paseo-project.md)
 - [`../setup/monkey-example.md`](../setup/monkey-example.md)
+- [`../lifecycle-maintenance.md`](../lifecycle-maintenance.md)
 - Templates: [`../../assets/templates/`](../../assets/templates/)
 - Northstar source checkout, when available: `bundle-docs/protocol-kernel.md`
   and `template-bundle/`
@@ -66,8 +67,13 @@ Optional: `effigy check:posture-advisory` after structural edits.
    only by exception. When wiring `effigy.toml`, keep `tasks.health` cheap
    (seconds-scale). Never alias `health` to `qa` — doctor runs health during
    orientation; full validation is `effigy qa`.
-7. Validate: `effigy qa`, `effigy qa:docs`, project-specific checks.
-8. Keep the live `Next Task` pointer in the roadmap front doors. Other front
+7. Compact already-closed sequential generations with
+   [`../lifecycle-maintenance.md`](../lifecycle-maintenance.md). Normalization
+   includes this spine repair; do not wait for another rollover. Leave
+   unresolved generations intact and name the blocker. Opening a new generation
+   still follows the rollover gates in compile-roadmaps.
+8. Validate: `effigy qa`, `effigy qa:docs`, project-specific checks.
+9. Keep the live `Next Task` pointer in the roadmap front doors. Other front
    doors may summarize state or dependencies, but should not each own the
    active thread pointer.
 

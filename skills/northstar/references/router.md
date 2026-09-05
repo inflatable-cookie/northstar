@@ -217,7 +217,8 @@ homes rather than blindly purged:
 
 - `northstar cleanup`;
 - `northstar docs cleanup`;
-- inspect, classify, normalize, or prune an existing `/docs` tree.
+- inspect, classify, normalize, or prune an existing `/docs` tree, including
+  already-closed expanded generations.
 
 This is a docs-only maintenance route. Inspect unfamiliar paths and their
 references before proposing a move or removal. Ask the operator whenever the
@@ -233,7 +234,8 @@ Use when the job is **repo shape and spine health** (initial or ongoing):
 - set up / bootstrap / migrate / normalize under Northstar
 - fix or refresh docs front doors, generation index, Effigy wiring
 - compact lifecycle adoption, install working-rules / specs / archive surfaces
-- keep the docs tree aligned with doctrine over time
+- keep the docs tree aligned with doctrine over time, including compaction of
+  already-closed generations without waiting for another rollover
 
 → [`modes/normalize-docs.md`](./modes/normalize-docs.md)
 

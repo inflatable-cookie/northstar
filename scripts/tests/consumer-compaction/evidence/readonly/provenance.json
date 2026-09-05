@@ -1,0 +1,17 @@
+{
+  "activity_note": "Loaded installed skill router, cleanup-docs, and lifecycle-maintenance.md. Proposed compaction of g01 and g02. Mutated no files. Codex session 01a0721e-8be4-7a33-be95-719360f77942.",
+  "agent_id": "0ea21e44-e63a-4927-93f6-2a8698d693d9",
+  "authorization": "read-only",
+  "before_fixture": "happy-before",
+  "captured_at": "2026-09-05T15:13:10Z",
+  "finished_at": "2026-09-05T15:12:38Z",
+  "prompt_sha256": "sha256:5eaa54516149136bb725a79fa5d802080755d7e9b60dd2520256ecffa0f4f000",
+  "provider": "codex/gpt-5.6-luna",
+  "route": "installed-northstar-docs-cleanup",
+  "scenario": "readonly",
+  "skill_path": "/Users/tom/.agents/skills/northstar",
+  "skill_procedure_relative": "references/lifecycle-maintenance.md",
+  "skill_procedure_sha256": "sha256:067585725935b8757dc11efb810d801bf42351f16edc52adb0dec389ecb61508",
+  "started_at": "2026-09-05T15:09:59Z",
+  "workspace_id": "wks_0e98e08557d834de"
+}
