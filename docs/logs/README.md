@@ -17,7 +17,7 @@ work.
 - Historical evidence is retained through generation roll-ups; routine logs
   are pruned at generation closure.
 
-## Recent active-lane evidence
+## Governing evidence from the preceding generation
 
 - `2026-09/04-191812-pin-reviews-to-worker-workspaces.md`
 - `2026-09/04-184641-preserve-paseo-profile-permissions.md`
@@ -30,3 +30,10 @@ work.
 Evidence from closed generations is curated in their generation roll-ups:
 - `g01`: `docs/roadmaps/archive/g01.md`
 - `g02`: `docs/roadmaps/archive/g02.md`
+
+## Current delivery evidence
+
+`g03.001` records ordinary delivery on cards 130–132. Their PR and merge records
+cover lifecycle foundation, generation compaction, reusable defaults, and the
+README follow-up. Final lifecycle retirement and milestone reconciliation remain
+open on card 132; no separate routine log is required.

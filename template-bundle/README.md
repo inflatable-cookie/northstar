@@ -193,8 +193,6 @@ They also include a second specimen showing when refocus should force a clean
 should point at rather than duplicating inline. Use it for lightweight
 allowlists and internal writing-style guidance.
 
-## Operating posture
-
 ## Quick reference
 
 - [Visual map](../bundle-docs/visual-map.md) -- one-page overview

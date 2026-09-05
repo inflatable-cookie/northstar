@@ -375,10 +375,9 @@ Work in this repo is not done unless:
 - When a thread has a ready runway of cards, the default behavior is to
   continue through them without pausing for operator acknowledgment at every
   boundary.
-- Baseline roadmap-only repos can still support healthy routing and shorter
-  bounded runs, but the fuller continuation-envelope, lane-budget, and
-  pause-signal model should be treated as a stricter `specs/` plus batch-card
-  capability.
+- Bounded work uses the same compact lifecycle. Add a material spec when the
+  decision warrants one; ready cards, explicit continuation limits, and stop
+  protections govern autonomous execution without a second posture.
 - Auto-continuation is allowed only when:
   - the next card is already defined and marked ready
   - the cards belong to the same active roadmap/spec lane
@@ -406,7 +405,7 @@ Work in this repo is not done unless:
 
 ### Chatterbox-led planning and mechanical coordination
 
-Spec 037 governs the current planning and delivery topology.
+This contract and system architecture govern the current planning and delivery topology.
 
 - **Chatterbox** is the primary operator-facing planning authority. It owns
   discovery, research direction, triage reconciliation, canonical planning
@@ -1135,7 +1134,8 @@ Execution must stop when:
 - Semantic contradiction, misleading currentness, and historical-authority
   judgment remain review responsibilities until a real structured contract
   exists.
-- `docs/specs/038-compact-default-lifecycle-and-generation-rollup.md` exists and matches these rules.
+- System architecture and the lifecycle rules in this contract agree; checks
+  must not require a promoted spec to remain in the live tree.
 - at least one live batch card exists and is tied to an active roadmap
   milestone
 - `effigy qa`

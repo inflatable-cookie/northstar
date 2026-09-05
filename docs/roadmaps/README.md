@@ -7,7 +7,7 @@ generation remains expanded.
 
 - Active generation: [`g03`](./g03/README.md)
 - Active milestone: [`g03.001`](./g03/001-compact-default-lifecycle.md)
-- Active frontier: [`g03.001/132 root-README correction`](./g03/batch-cards/132-make-compact-lifecycle-default.md); initial sibling implementations are merged
+- Active frontier: [`g03.001/132 final lifecycle retirement correction`](./g03/batch-cards/132-make-compact-lifecycle-default.md); initial sibling implementations are merged
 - Closed generations: [`g01`](./archive/g01.md) and [`g02`](./archive/g02.md) roll-ups under `archive/`
 
 ## Rules
@@ -23,4 +23,4 @@ generation remains expanded.
 
 ## Next task
 
-Complete card `g03.001/132`'s root-README correction, then reconcile `g03.001`. Do not dispatch historical `g01` or `g02` instructions.
+Complete card `g03.001/132`'s final lifecycle retirement correction, then reconcile `g03.001`. Do not dispatch historical `g01` or `g02` instructions.

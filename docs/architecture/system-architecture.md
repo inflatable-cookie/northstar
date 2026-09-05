@@ -376,7 +376,7 @@ non-mutating by default.
 
 ## Chatterbox-led planning topology
 
-Spec 037 separates human planning from mechanical coordination:
+The current topology separates human planning from mechanical coordination:
 
 `operator <-> Chatterbox -> canonical plan + approved frontier -> coordinator -> worker workspaces -> reviewer tabs in worker workspaces -> coordinator gate/merge`
 
@@ -435,8 +435,8 @@ conversation, then the coordinator resumes the same worker.
 
 ## Superseded thread topology
 
-The remainder of this section records the specs 026/035/036 rollout. Spec 037
-and the topology above override its planning-delegate, Chatterbox, promotion,
+The remainder of this section records the historical specs 026/035/036 rollout.
+The current topology above and contract 001 override its planning-delegate, Chatterbox, promotion,
 frontier-ownership, coordinator-turn, reviewer-workspace, and escalation edges.
 
 For material work that benefits from a separate implementation context, the

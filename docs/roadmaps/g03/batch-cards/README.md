@@ -6,5 +6,6 @@ evidence until generation roll-up removes it from the live tree.
 
 ## Current frontier
 
-- Card 130 is ready.
-- Cards 131 and 132 become concurrent-ready only after card 130 merges.
+Only card 132's final lifecycle retirement correction is ready. Cards 130 and
+131 are complete; earlier card-132 implementation and README correction are
+merged. The milestone remains open for retirement proof and reconciliation.

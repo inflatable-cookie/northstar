@@ -11,13 +11,12 @@ that Northstar provides to consumer projects.
 - Delivery contract: [`contracts/001-working-rules.md`](./contracts/001-working-rules.md)
 - Agent surfaces: [`contracts/003-agent-instruction-surface.md`](./contracts/003-agent-instruction-surface.md)
 - Language packages: [`contracts/004-language-quality-pack.md`](./contracts/004-language-quality-pack.md)
-- Active lifecycle spec: [`specs/038-compact-default-lifecycle-and-generation-rollup.md`](./specs/038-compact-default-lifecycle-and-generation-rollup.md)
 
 ## Current work
 
 - Active generation: [`roadmaps/g03/README.md`](./roadmaps/g03/README.md)
 - Active milestone: [`roadmaps/g03/001-compact-default-lifecycle.md`](./roadmaps/g03/001-compact-default-lifecycle.md)
-- Active frontier: [`card 132 root-README correction`](./roadmaps/g03/batch-cards/132-make-compact-lifecycle-default.md); initial sibling implementations are merged, milestone reconciliation remains open
+- Active frontier: [`card 132 final lifecycle retirement correction`](./roadmaps/g03/batch-cards/132-make-compact-lifecycle-default.md); initial sibling implementations are merged, milestone reconciliation remains open
 - Intake: [`triage/README.md`](./triage/README.md)
 - Execution friction: [`../PAPERCUTS.md`](../PAPERCUTS.md)
 

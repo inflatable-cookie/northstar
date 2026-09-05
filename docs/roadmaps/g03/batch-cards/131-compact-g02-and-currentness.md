@@ -1,6 +1,6 @@
 # 131 - Compact g02 and Currentness
 
-Status: review
+Status: complete
 Owner: repo maintainers
 Created: 2026-09-04
 Master roadmap: `g03.001`
@@ -16,7 +16,7 @@ only current `g03` authority and work.
 ## Approved dispatch manifest
 
 - **Lane:** `g03.001/131`
-- **State:** ready for review; resumed after operator-confirmed Chatterbox scope ruling
+- **State:** complete; no dispatch authority
 - **Prerequisites:** card 130 merged and lifecycle checks green
 - **Completion:** `g02` is rolled up, classified old artifacts are pruned, and
   every current front door is `g03`-only
@@ -88,9 +88,9 @@ the other's paths.
 - [x] material `g02` outcomes remain traceable through selected evidence;
 - [x] a fresh reader answers authority/current/next without opening an archive;
 - [x] `git diff --check`, `effigy qa:docs`, and `effigy qa` pass;
-- [ ] independent exact-head review applies the full preservation oracle.
+- [x] independent exact-head review applies the full preservation oracle.
 
-### Frozen classified deletion manifest (360 files)
+### Frozen classified deletion manifest (359 files)
 
 #### 1. Expanded `g02` roadmaps and batch cards (172 files)
 
@@ -114,9 +114,9 @@ the other's paths.
 | 031–034 | `docs/specs/031-rust-quality-authoring-and-audit.md` through `034-modular-language-quality-packages.md` (4 files) | Rust and TypeScript quality packages, v2 tooling, modular packages | `docs/architecture/system-architecture.md`, `docs/contracts/004-language-quality-pack.md`, official registry, installed packages |
 | 037 | `docs/specs/037-chatterbox-led-planning-and-mechanical-coordination.md` (1 file) | Chatterbox planning, coordinator, review modes | `docs/contracts/001-working-rules.md`, `docs/architecture/system-architecture.md`, skills modes |
 
-#### 3. Consumed worker handoffs (35 files)
+#### 3. Consumed worker handoffs (34 files)
 
-All 35 completed handoffs from closed `g01`/`g02` work removed (`docs/handoffs/20260816-*` through `20260904-123000-*`). Active handoffs retained: `docs/handoffs/20260904-123500-compact-g02-and-currentness.md` (card 131) and `docs/handoffs/20260904-123501-make-compact-lifecycle-default.md` (card 132), plus `docs/handoffs/README.md`.
+All 34 completed handoffs from closed `g01`/`g02` work removed (`docs/handoffs/20260816-*` through `20260904-123000-*`). At the implementation head, active handoffs retained: `docs/handoffs/20260904-123500-compact-g02-and-currentness.md` (card 131) and `docs/handoffs/20260904-123501-make-compact-lifecycle-default.md` (card 132), plus `docs/handoffs/README.md`.
 
 #### 4. Routine closed batch logs (116 files)
 
@@ -176,3 +176,12 @@ Reconciled remaining live citations to deleted pre-`g03` specs across live autho
 
 Independent exact-head review in this worker workspace by a reviewer with a
 different provider/model identity, followed by coordinator merge gate.
+
+## Reconciled delivery
+
+PR #37 accepted head `597b89d654ea5d83a42c5a9951a3f7218ffa1752` merged as
+`4b2e3dd5339d44a5410dea33fb9e528a8046a0ce`. The initial inventory's 360/35
+count was inaccurate: the reviewed diff contained 359 deletions, including 34
+consumed handoffs. Original card-131 transport is now consumed and pruned.
+Remaining spec-038 checker retirement belongs to card 132's final correction;
+this completed card grants no new execution authority.

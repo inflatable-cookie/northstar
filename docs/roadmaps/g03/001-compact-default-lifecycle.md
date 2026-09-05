@@ -4,7 +4,8 @@ Status: active
 Owner: repo maintainers
 Created: 2026-09-04
 Depends on: closed `g02` sequencing era
-Master spec: `docs/specs/038-compact-default-lifecycle-and-generation-rollup.md`
+Governing authority: `docs/contracts/001-working-rules.md`, system architecture
+Planning provenance: spec 038 (retirement pending final correction)
 Vision tags: `clarity`, `autonomy`, `maintenance`, `traceability`
 
 ## Outcome
@@ -21,9 +22,10 @@ meaning, or material provenance.
    - 131 compacts Northstar's closed `g02` and currentness surfaces;
    - 132 makes the compact lifecycle the reusable default and retires posture
      variants.
-3. Both siblings merged. Card 132 has a ready, bounded root-README correction
-   because its repository-wide posture requirement remains unsatisfied.
-4. Chatterbox reconciles the complete milestone after that correction merges.
+3. Both siblings and the README follow-up merged. Card 132's final correction
+   removes the remaining spec-038 checker/fixture coupling and retires that
+   promoted spec with preservation proof.
+4. Chatterbox closes the milestone after that correction merges.
 
 ## Non-goals
 

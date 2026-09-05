@@ -1,10 +1,10 @@
 # 132 - Make Compact Lifecycle the Default
 
-Status: review; README follow-up implemented and ready for re-review
+Status: ready; final lifecycle retirement correction
 Owner: repo maintainers
 Created: 2026-09-04
 Master roadmap: `g03.001`
-Governing refs: spec 038, contract 001
+Governing refs: contract 001 and system architecture; spec 038 is planning provenance
 Auto-start next card: no
 
 ## Objective
@@ -16,7 +16,7 @@ steady-state protocols.
 ## Approved dispatch manifest
 
 - **Lane:** `g03.001/132`
-- **State:** ready for review; bounded post-merge README correction implemented
+- **State:** ready for the final lifecycle retirement correction below
 - **Prerequisites:** card 130 merged and lifecycle checks green
 - **Completion:** reusable doctrine, templates, skills, setup, and checks expose
   one compact lifecycle with incremental adoption described only as migration;
@@ -50,6 +50,60 @@ front doors. It also exclusively owns these deletion-coupled callers:
 `scripts/fixtures/readiness-map/**`. Card 132 must not edit them. Neither sibling
 may edit the other's paths. Any other direct caller outside these surfaces
 returns to Chatterbox.
+
+## Final lifecycle retirement correction
+
+Chatterbox reconciliation, 2026-09-05: PR #39 accepted head
+`8a7eff1958e9c3381e719b680561655ef5d65b29` merged as
+`b0d87d92daf8996ca8e3daac35c28bd7084af59f`. Root README correction is complete.
+Local main was fetched and fast-forwarded to that merge before reconciliation.
+The earlier dispatch sections below are delivery history, not remaining work.
+
+Spec 038's lifecycle requires its retirement after durable promotion. The
+repo-contract data and readiness fixtures still require it, so milestone
+closeout remains blocked by implementation, not by a new intent decision.
+Architecture's lifecycle section and contract 001 own its lasting rules.
+
+This final scope supersedes every earlier mutable-path list on this card:
+
+- `scripts/lib/northstar-repo-contract-data.rhai`;
+- `scripts/test-northstar-repo-contract.rhai`;
+- `scripts/fixtures/readiness-map/**`, only to replace live spec-038 coupling
+  with fixture-local material planning while preserving existing cases;
+- `docs/specs/038-compact-default-lifecycle-and-generation-rollup.md`, remove
+  after the preservation proof below;
+- `docs/specs/README.md`, report no active spec after retirement;
+- this card's compact final evidence.
+
+The two checker paths and readiness fixtures transfer narrowly from completed
+card 131. No other original card-131 scope transfers. Chatterbox reserves all
+other currentness, contract, architecture, and milestone reconciliation files.
+There are no concurrent siblings. Prerequisites are PRs #37–39 merged and this
+planning correction promoted. Existing worker/reviewer classes and stop gates
+apply. Reuse the card-132 worker if available; definitive unavailability permits
+one replacement worker/workspace and a cross-model reviewer in that workspace.
+The coordinator owns dispatch transport, exact-head review, merge, and local
+main synchronization. No workflow consolidation or new generation is authorized.
+
+Required proof:
+
+1. Map spec 038's lasting decisions to system architecture and contract 001;
+   preserve its unresolved commitments in the `g03` watchlist and delivery
+   evidence on cards. Stop for any unique current meaning without a destination.
+2. Replace active-authority data's hardcoded spec with durable authority.
+   Keep missing-authority and invalid-authority negative cases meaningful.
+   Readiness fixtures must use fixture-local specs, not another disposable live
+   planning file; preserve valid, missing-reference, cycle, orphan, and
+   operator-blocked behavior.
+3. Remove spec 038 and retarget the specs front door in the same correction.
+   Historical card evidence may retain its name as provenance; no active caller
+   may require the deleted file or silently substitute missing authority.
+4. Run `git diff --check`, `effigy test:repo-contract`,
+   `effigy test:readiness-map`, `effigy qa:docs`, and `effigy qa` on the resulting
+   spec-free tree. Independent review must apply all six preservation rows from
+   contract 001 and verify the negative cases retain their intended failures.
+5. Record the accepted head, PR, merge, validation, and limits here. Return to
+   Chatterbox after synchronized merge for final milestone/currentness closeout.
 
 ## Post-merge README correction
 
