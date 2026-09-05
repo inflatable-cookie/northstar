@@ -1,6 +1,6 @@
 # 132 - Make Compact Lifecycle the Default
 
-Status: ready; final lifecycle retirement correction
+Status: review; final lifecycle retirement correction implemented and ready for review
 Owner: repo maintainers
 Created: 2026-09-04
 Master roadmap: `g03.001`
@@ -248,5 +248,30 @@ correction merges, return to Chatterbox for full `g03.001` reconciliation.
 - Replacement worker: implementation worker operating from clean synchronized main at `e3732c2e3837f54ac9f91051a17b9c07017f673f`.
 - Follow-up validation:
   - `git diff --check`: PASS
+  - `effigy qa:docs`: PASS
+  - `effigy qa`: PASS
+
+### Final lifecycle retirement correction
+
+- Mapped spec 038's lasting decisions to canonical authority:
+  - Compact strict lifecycle default, consequence-triggered modules, and bounded migration -> `docs/architecture/system-architecture.md:732-736`, `docs/contracts/001-working-rules.md:964-970`, root `README.md`, bundle doctrine.
+  - Planning artifact lifecycle classes, prune triggers, and delivery evidence rules -> `docs/contracts/001-working-rules.md:989-1011`, `docs/architecture/system-architecture.md:737-750`.
+  - Generation closure, roll-up rules, and six-row preservation oracle -> `docs/contracts/001-working-rules.md:1012-1055`.
+  - Currentness budget and structural checks -> `docs/contracts/001-working-rules.md:1056-1070`, `scripts/lib/northstar-lifecycle-checker.rhai`.
+  - Deferred protocol/mode consolidation and unconsumed feedback -> preserved in `docs/roadmaps/g03/README.md` runway and bounded watchlist; no unique current meaning lost.
+- Retired and deleted `docs/specs/038-compact-default-lifecycle-and-generation-rollup.md`.
+- Retargeted specs front door (`docs/specs/README.md`) to report no active planning specs.
+- Replaced active-authority hardcoded spec in `scripts/lib/northstar-repo-contract-data.rhai` (`current_active_authority_files()`) with durable authority (`docs/vision/001-northstar-delivery-vision.md` and `docs/contracts/004-language-quality-pack.md`).
+- Updated `scripts/test-northstar-repo-contract.rhai`:
+  - Re-anchored authority fixture and missing-authority negative test to durable authority (`docs/contracts/004-language-quality-pack.md`).
+  - Added negative assertions proving retired spec 038 is neither in `required_files()` nor `current_active_authority_files()`.
+  - All 15 fixture cases retain intended behavior (9 expected failures, 6 benign passes).
+- Re-anchored readiness fixtures in `scripts/fixtures/readiness-map/**` from retired spec 038 to durable authority `docs/contracts/001-working-rules.md`, preserving all 5 fixture behaviors (`valid` frontier, `missing-reference` non-canonical roadmap/missing decision, `cycle` loop detection, `orphan` unindexed decision, `operator-blocked` unresolved operator decision).
+- Noted outside-scope finding for Chatterbox: `scripts/lib/northstar-readiness-map.rhai:190` `canonical_prefix` restricts `master_spec` to `docs/` surfaces, preventing readiness fixtures outside `docs/` from resolving fixture-relative specs without triggering `noncanonical_reference_error`.
+- Preserved PRs #37–39 and prior merge history.
+- Correction validation:
+  - `git diff --check`: PASS
+  - `effigy test:repo-contract`: PASS (15 fixture cases; 9 expected failures, 6 benign passes)
+  - `effigy test:readiness-map`: PASS (5 fixture cases)
   - `effigy qa:docs`: PASS
   - `effigy qa`: PASS

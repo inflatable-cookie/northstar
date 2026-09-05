@@ -5,8 +5,9 @@ architecture, contracts, and executable roadmaps.
 
 ## Active planning
 
-- [`038-compact-default-lifecycle-and-generation-rollup.md`](./038-compact-default-lifecycle-and-generation-rollup.md)
-  governs `g03.001`.
+No active planning specs. Lasting lifecycle rules and planning doctrine live in
+`docs/architecture/system-architecture.md` and
+`docs/contracts/001-working-rules.md`.
 
 ## Lifecycle
 
@@ -20,6 +21,6 @@ architecture, contracts, and executable roadmaps.
 - Historical and superseded procedure is not authority. Git retains full
   provenance.
 
-Pre-`g03` specs have been rolled up into architecture, contracts, bundle
-doctrine, and Git history per spec 038's destination table. Only active
-planning specs remain here.
+Pre-`g03` specs and spec 038 have been promoted into architecture, contracts,
+bundle doctrine, and Git history. Only active planning specs belong here when
+active work requires one.

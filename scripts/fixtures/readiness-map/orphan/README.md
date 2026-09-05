@@ -5,7 +5,7 @@ title: Orphan map
 destination: orphan
 owner: repo-maintainers
 status: active
-master_spec: docs/specs/038-compact-default-lifecycle-and-generation-rollup.md
+master_spec: docs/contracts/001-working-rules.md
 roadmap: docs/roadmaps/g03/001-compact-default-lifecycle.md
 ---
 
