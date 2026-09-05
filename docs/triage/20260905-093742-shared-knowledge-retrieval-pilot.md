@@ -153,4 +153,3 @@ the same task questions; success requires usable sources faster, preserved
 current/historical distinction, and correct abstention on the negative controls.
 No MCP server or embeddings are justified by the current evidence. No agent
 may autonomously promote shared memory into another project's authority.
-
