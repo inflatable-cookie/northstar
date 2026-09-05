@@ -135,6 +135,12 @@ The live `## Next Task` pointer belongs in the roadmap front doors:
 `docs/roadmaps/gNN/README.md`. Other spine surfaces should summarize state or
 dependencies without becoming the live thread pointer.
 
+Refresh, normalization, and authorized docs cleanup compact already-closed
+expanded generations into `docs/roadmaps/archive/gNN.md` without opening a new
+generation. Leave unresolved generations expanded and name the blocker. Do not
+report the spine current while classified closed generations remain expanded
+unless that blocker or a bounded migration disposition is explicit.
+
 ## Template Impact
 
 The template bundle makes the compact lifecycle copy-ready:

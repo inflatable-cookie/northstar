@@ -54,6 +54,13 @@ Before opening the next generation in sequential mode:
 If that cleanup has not happened, stay in the current generation and finish the
 closeout there first.
 
+### Closed generations still expanded
+
+If this index already marks a generation closed but `gNN/` is still expanded,
+that is maintenance drift, not a reason to open `gNN+1`. Refresh,
+normalization, and authorized docs cleanup replace each safely closed
+generation with `archive/gNN.md` using the same preservation rules as rollover.
+
 ### Parallel mode
 
 Switch to `parallel` mode only when:

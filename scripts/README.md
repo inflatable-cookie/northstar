@@ -159,6 +159,21 @@ operator-blocked cases without network, database, provider, or external tracker
 access. A repository with no live readiness maps passes with deterministic
 zero-map output.
 
+## Consumer compaction replay (`check:consumer-compaction`)
+
+Inspect recorded installed-skill compaction replays. The task does not re-run
+the agent. It asserts preservation, link, and stop properties on the actual
+before/after trees plus retained provenance.
+
+```bash
+effigy check:consumer-compaction
+```
+
+Recorded scenarios live under `scripts/tests/consumer-compaction/evidence/`.
+Input fixtures live under `scripts/fixtures/consumer-compaction/`. A missing
+replay or a handcrafted after-tree that does not match retained provenance
+fails. Included in `effigy validate` / `effigy qa`.
+
 ## Language package machine contracts (`check:language-packages`)
 
 Validate the generic machine contracts and review-oracle invariants for

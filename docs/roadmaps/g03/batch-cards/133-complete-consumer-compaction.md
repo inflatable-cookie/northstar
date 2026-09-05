@@ -79,3 +79,30 @@ Stop for an authority conflict the preservation oracle cannot settle, a required
 consumer mutation outside disposable fixtures, unavailable installed-route replay
 capability, path ownership collision, or validation failure that changes the plan.
 Do not substitute manual expected-output construction for missing replay access.
+
+## Implementation evidence
+
+Status remains ready for coordinator closeout. Worker delivery is the shared
+procedure, disposable fixture, recorded installed-skill replays, and
+independent before/after assertions.
+
+Installed-skill route: `$HOME/.agents/skills/northstar` via
+`references/lifecycle-maintenance.md`. Provider `codex/gpt-5.6-luna`,
+`full-access`, `xhigh`. Replay artifacts:
+`scripts/tests/consumer-compaction/evidence/`.
+
+| Scenario | Agent | Result |
+| --- | --- | --- |
+| Happy authorized refresh | `70fbe934-62fa-431f-a183-1db9ecb5c0af` | Removed expanded `g01`/`g02`; wrote `archive/g01.md` and `archive/g02.md`; preserved `g03` and `ACTIVE-GEN-ONLY-TOKEN`; promoted `UNIQUE-RULE-WIDGET-PREFIX`; rehomed `DEFERRED-COMMITMENT-WIDGET-AUDIT`; retained PR 101/`c0ffee101` and PR 202/`c0ffee202`; rewrote stale `g01/`/`g02/` front-door links |
+| Read-only cleanup | `0ea21e44-e63a-4927-93f6-2a8698d693d9` | Proposal only; byte-identical tree |
+| Unresolved ownership | `b3ac3ec8-d1a8-4df7-a8a3-c72c5dd94989` | `g01` and `UNIQUE-ORPHAN-RULE` left on the source card; no `archive/g01.md`; `g02` compacted as safely closed |
+| Active/closed conflict | `2767c19d-82ae-494a-b358-24f432ce46c3` | Stopped; no mutations; `CONFLICT-ACTIVE-CLOSED` retained |
+| Repeat refresh | `3b9de735-b7c0-40d2-9f43-5a700eb524e1` | No docs content churn; no re-expansion |
+
+Validation on this checkout: `git diff --check`, `effigy check:consumer-compaction`
+(123/0), `effigy qa:docs`, `effigy qa`, and
+`effigy check:skill-install $HOME/.agents/skills/northstar` (112 files) all pass.
+
+Limits: live consumers were not migrated. Repeat input is the recorded happy
+after-tree, not a second live consumer. Coordinator owns merge, installed
+parity on the integration checkout, and reserved front-door closeout.

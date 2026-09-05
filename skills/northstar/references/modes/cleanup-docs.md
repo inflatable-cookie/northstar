@@ -17,18 +17,24 @@ Northstar does not prescribe its exact filename.
    task. Read the repository front doors, applicable contracts, and the
    Northstar standard-spine guidance before classifying paths.
 2. Inventory `docs/` recursively. Include top-level folders, anchor files,
-   nested files, deprecated patterns, empty directories, and every note under
+   nested files, deprecated patterns, empty directories, every expanded
+   `docs/roadmaps/gNN/` generation, and every note under
    `docs/triage/` except its `README.md` anchor. Check filenames, links,
    references, and content rather than relying on names or age alone.
 3. Classify each candidate as canonical, supported add-on, legitimate
    project-specific surface, clear legacy/duplicate, stale or empty, or
-   ambiguous. Compare the path with the repo's lifecycle state; do not penalize
+   ambiguous. Classify each expanded generation as active, safely closed, or
+   unresolved using [`../lifecycle-maintenance.md`](../lifecycle-maintenance.md).
+   Compare the path with the repo's lifecycle state; do not penalize
    a justified consequence-triggered or optional surface as drift.
 4. For clear findings, choose the smallest clean repair: rehome content into
    the correct Northstar section, merge duplicate material, normalize naming or
    sections, update references, and remove the superseded source only after the
    destination and reference rewrite are complete. Preserve meaningful history
    in the appropriate log or archive rather than leaving a shim behind.
+   Closed-generation compaction uses the same shared procedure. Apply it only
+   when bounded docs repair is authorized; otherwise report the proposal and
+   do not mutate files.
 5. Give every triage note a disposition. Promote or rework useful notes, merge
    duplicates, and remove notes that are implemented, superseded, or no longer
    useful. Keep unresolved notes only while they are genuinely open, with a
@@ -52,7 +58,8 @@ read-only and report repairs as proposals.
 ## Boundaries
 
 Cleanup is read-only unless the operator explicitly authorizes bounded docs
-repair. Never delete an unclassified file or folder, never use age alone as a
-deletion rule, and never create a compatibility shim in a deprecated path. Ask
-the operator whenever the evidence does not establish a safe canonical home or
-removal decision.
+repair. After that authorization, closed-generation compaction does not need a
+second blanket confirmation. Never delete an unclassified file or folder, never
+use age alone as a deletion rule, and never create a compatibility shim in a
+deprecated path. Ask the operator whenever the evidence does not establish a
+safe canonical home or removal decision.

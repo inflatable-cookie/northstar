@@ -1,0 +1,21 @@
+{
+  "files": {
+    "AGENTS.md": "sha256:d5eb854a5fe3dd30a35c73fbf4a0d228dd7bc033e68c4a6670eeeed2f9d8d21c",
+    "PAPERCUTS.md": "sha256:577379495dd582feb2e1dde925ab53dc2d4d3e8d63336c1ff417c2e372e14c6e",
+    "README.md": "sha256:e17f31fad589c4f21914f032f76dbf63882b9237e077776ad9215a621573ba02",
+    "docs/README.md": "sha256:93e498f5acd3bf730b8f50b27c238c69589181ac049dab7aafba4be81c2aa564",
+    "docs/architecture/system-architecture.md": "sha256:0edac9dcf5f57bdb791783591c3ddc081d00ed3fc022558a1e95a76148310281",
+    "docs/contracts/001-working-rules.md": "sha256:25250c858c71e6ee9ccc828979b1a5894ecf0b2fc9fd038d514ab21e3de55e40",
+    "docs/logs/README.md": "sha256:67bc7e9b687aba5b29c9975522a86d11fca56d3ba4c9aa17ce753362238e190a",
+    "docs/roadmaps/README.md": "sha256:ce72e372c7aa220cd703a350b7f4a707dbcd90309f8fb476997b3a52e26899c2",
+    "docs/roadmaps/g01/001-establish-widget-ids.md": "sha256:e158d9e4c7e53506f7e32a49f5b753f5354acc9df269a261173586bc8f293947",
+    "docs/roadmaps/g01/README.md": "sha256:f9d8bcb2c77e78c77dd3479b2335ece73ad321136f1a280ef8909629d4f60339",
+    "docs/roadmaps/g01/batch-cards/001-ship-widget-ids.md": "sha256:d0f04fa87ed899c2029bfa739988ea0390ee0d2a8d28db6653e6489af73e947d",
+    "docs/roadmaps/g02/001-catalog-importer.md": "sha256:c16f69ded066d7fdb7ecc5239f66f8b989f2e717ed361a897e270a24cca77727",
+    "docs/roadmaps/g02/README.md": "sha256:25b8910f5b74f8cd9dea0ae87517fc2d97639c22197457c8152c325f40a07e1c",
+    "docs/roadmaps/g02/batch-cards/010-import-catalog.md": "sha256:30417e5d9f3ccee310c04856b93905981eebac3b40178d01c44d8281d78f03d0",
+    "docs/roadmaps/g03/001-active-lane.md": "sha256:bc980a9e62eadbb77bfdbb15f78228855c2059900f8a1afb87c36f2aa6f79913",
+    "docs/roadmaps/g03/README.md": "sha256:4cfe4a640445dae150350dd615de2a4bb5ff6c3b6dfada60abc311823c10860b",
+    "docs/roadmaps/generation-index.md": "sha256:2d9a1ba0510ddc53671fa55ed1e95dc32b49ec136a83dd103425b2cfb4c16389"
+  }
+}

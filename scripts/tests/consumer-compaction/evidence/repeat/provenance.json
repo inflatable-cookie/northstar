@@ -1,0 +1,17 @@
+{
+  "activity_note": "Loaded installed skill router, project-refresh, and lifecycle-maintenance.md. Already-compacted consumer; no docs files changed. Codex session 01a07224-ad11-7123-b6a3-b7c5cd3fc3e1.",
+  "agent_id": "3b9de735-b7c0-40d2-9f43-5a700eb524e1",
+  "authorization": "repair-authorized",
+  "before_fixture": "after",
+  "captured_at": "2026-09-05T15:18:19Z",
+  "finished_at": "2026-09-05T15:17:53Z",
+  "prompt_sha256": "sha256:7899c85e31435d72892b95ef7598d18d3010342fea397c2ed5a917def465579f",
+  "provider": "codex/gpt-5.6-luna",
+  "route": "installed-northstar-project-refresh",
+  "scenario": "repeat",
+  "skill_path": "/Users/tom/.agents/skills/northstar",
+  "skill_procedure_relative": "references/lifecycle-maintenance.md",
+  "skill_procedure_sha256": "sha256:067585725935b8757dc11efb810d801bf42351f16edc52adb0dec389ecb61508",
+  "started_at": "2026-09-05T15:16:40Z",
+  "workspace_id": "wks_c0efd164a56714ab"
+}

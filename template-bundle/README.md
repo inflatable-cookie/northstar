@@ -216,3 +216,5 @@ Northstar defaults to lean, strict execution:
   consequence-triggered modules added when needed
 - incremental adoption moves mature projects into the compact lifecycle in
   bounded tranches without creating a permanent mixed posture
+- already-closed generations compact through refresh, normalize, and authorized
+  cleanup; a new rollover is not a prerequisite

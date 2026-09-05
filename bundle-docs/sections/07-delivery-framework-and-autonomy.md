@@ -533,6 +533,12 @@ destination remains the same single protocol.
 - Do not invent a detached governance tracker or a permanent mixed posture.
   Mixed-mode operation is migration debt, not an alternative steady state.
 
+Maintenance routes compact already-closed sequential generations into
+`docs/roadmaps/archive/gNN.md` without waiting for another rollover. The
+installed shared procedure is
+`skills/northstar/references/lifecycle-maintenance.md`. Roadmap doctrine for
+the closeout shape lives in [03-roadmaps.md](./03-roadmaps.md).
+
 ## Autonomy rule
 
 Autonomy should be pre-authorized through artifacts, not recreated by operator

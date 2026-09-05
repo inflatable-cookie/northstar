@@ -95,7 +95,8 @@ routine tool prompts; it does not expand the child's Northstar authority.
   project's planning is incomplete, drifted, materially ambiguous, or coherent,
   with one routed next step.
 - **Project refresh:** all-facets Northstar audit with bounded documentation
-  repair and one routed next step; no worker/worktree startup.
+  repair, including compaction of already-closed generations when repair is
+  authorized, and one routed next step; no worker/worktree startup.
 - **Architecture refocus:** bounded, evidence-led architecture improvement
   candidates with explicit promotion routes; no production-code edits.
 - **Consumer evidence:** live consumer dogfooding is operator-owned outside
@@ -111,9 +112,12 @@ routine tool prompts; it does not expand the child's Northstar authority.
   project-language, prototype, and questionnaire routes; no execution authority.
 - **PR review:** independent review of an existing PR with the verdict and every
   required change posted on the provider review surface before chat summary.
+- **Docs cleanup:** inventory and classify docs drift, including expanded
+  closed generations; mutate only when bounded repair is authorized.
 - **Research:** promoted decisions in architecture/contracts, not stranded memos.
 - **Recovery:** trustworthy planning surfaces and canonical refs restored.
-- **Normalize:** compact lifecycle spine installed/maintained; Effigy-first QA.
+- **Normalize:** compact lifecycle spine installed/maintained; already-closed
+  generations compacted without waiting for another rollover; Effigy-first QA.
 - **Orchestrator:** mechanical delivery management as the default job —
   parallel-first dispatch of the whole approved ready frontier without a global
   thread budget, lane-local provider/profile routing, diversified economical

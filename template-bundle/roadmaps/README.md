@@ -28,12 +28,16 @@ planning outcomes have been promoted out of specs.
   stale specs from `docs/specs/` before opening the next generation. Batch cards
   stay with their generation under `docs/roadmaps/gNN/batch-cards/` and do not
   need separate archiving.
+- Refresh, normalization, and authorized docs cleanup compact already-closed
+  generations the same way, without opening a new generation. Leave unresolved
+  generations expanded and name the blocker.
 
 ## Layout
 
 - `g01/` first generation milestones
 - `g01/batch-cards/` execution cards for the active generation (when batch-card detail is needed)
 - `generation-index.md` active generation and rollover history
+- `archive/` closed-generation roll-ups (`gNN.md`) after a generation is safely closed
 - `backlog/` deferred items with promotion criteria
 - `templates/roadmap-milestone-template.md` milestone starter contract
 

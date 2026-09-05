@@ -1,0 +1,19 @@
+{
+  "files": {
+    "AGENTS.md": "sha256:081f75c0af7d6abadf60fe4b47816f476179aa1df947da19408cb82928e074ca",
+    "PAPERCUTS.md": "sha256:577379495dd582feb2e1dde925ab53dc2d4d3e8d63336c1ff417c2e372e14c6e",
+    "README.md": "sha256:e17f31fad589c4f21914f032f76dbf63882b9237e077776ad9215a621573ba02",
+    "docs/README.md": "sha256:ebe4d3a9b999ee8046305e6399a544b18129da29297280a78bccbf44644489ca",
+    "docs/architecture/system-architecture.md": "sha256:5b8663d70d53a848e10c33c42e31c877a5dfe3856cbfe9467f439c63d67f1669",
+    "docs/contracts/001-working-rules.md": "sha256:8e5e5ca5d1b28afdd99525695e285887d3b20c2fd259945cedd10dd847fc670b",
+    "docs/logs/README.md": "sha256:6241e3634f81be2d38d4344d74326e5ef2cf7d1b7c06d1a4d11ad9c5fc41d8a2",
+    "docs/roadmaps/README.md": "sha256:e49be0e78811b2e652a75e24c17cdc80e2712ab2541aa4fe9e85aed6a0287e28",
+    "docs/roadmaps/archive/g02.md": "sha256:1a2e66933e412ef104e1270bd9cf5be6e7bec214b342a5ee7e97f68ddd921042",
+    "docs/roadmaps/g01/001-establish-widget-ids.md": "sha256:140e270ac007b0e6ced33f4b11dc633d0eef10de4cafc6083ccf3c412c25155c",
+    "docs/roadmaps/g01/README.md": "sha256:f9d8bcb2c77e78c77dd3479b2335ece73ad321136f1a280ef8909629d4f60339",
+    "docs/roadmaps/g01/batch-cards/001-ship-widget-ids.md": "sha256:d0f04fa87ed899c2029bfa739988ea0390ee0d2a8d28db6653e6489af73e947d",
+    "docs/roadmaps/g03/001-active-lane.md": "sha256:bc980a9e62eadbb77bfdbb15f78228855c2059900f8a1afb87c36f2aa6f79913",
+    "docs/roadmaps/g03/README.md": "sha256:5f5485ba9c735a1d0e8e45267969008763f54e4214d5eecab911c236e42a3f32",
+    "docs/roadmaps/generation-index.md": "sha256:9ade6c9034803eda7180a7b7debc441c459d42c19a85a10e6a836ee50b9f22e9"
+  }
+}

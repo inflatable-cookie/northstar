@@ -129,6 +129,12 @@ fn required_files() {
         "scripts/lib/northstar-repo-contract-checker.rhai",
         "scripts/lib/northstar-readiness-map.rhai",
         "scripts/lib/northstar-lifecycle-checker.rhai",
+        "skills/northstar/references/lifecycle-maintenance.md",
+        "scripts/tests/consumer-compaction/self-test.sh",
+        "scripts/tests/consumer-compaction/validate_consumer_compaction.py",
+        "scripts/tests/consumer-compaction/capture_replay.py",
+        "template-bundle/roadmaps/archive/README.md",
+        "template-bundle/roadmaps/archive/rollup-template.md",
     ];
     for file in current_active_authority_files() {
         files.push(file);
@@ -145,7 +151,7 @@ fn stable_machine_contracts() {
         ["effigy.toml", "\"check:repo-contract\" = [{ rhai = \"scripts/check-northstar-repo-contract.rhai\" }]", "repo-contract task declaration"],
         ["effigy.toml", "\"test:repo-contract\" = [{ rhai = \"scripts/test-northstar-repo-contract.rhai\" }]", "repo-contract fixture task declaration"],
         ["effigy.toml", "\"qa:docs\" = [{ task = \"check:repo-contract-wiring\" }, { task = \"check:repo-contract\" }, { task = \"test:repo-contract\" }, { task = \"check:readiness-map\" }, { task = \"test:readiness-map\" }, { task = \"check:command-skills\" }, { task = \"check:model-routing\" }, { task = \"check:language-packages\" }]", "docs QA repo-contract wiring"],
-        ["effigy.toml", "validate = [{ task = \"check:repo-contract-wiring\" }, { task = \"check:bundle\" }, { task = \"check:language-packages\" }, { task = \"check:language-package-routes\" }, { task = \"test:paseo-worktree\" }]", "outer validation board retains repo-contract wiring"],
+        ["effigy.toml", "validate = [{ task = \"check:repo-contract-wiring\" }, { task = \"check:bundle\" }, { task = \"check:language-packages\" }, { task = \"check:language-package-routes\" }, { task = \"test:paseo-worktree\" }, { task = \"check:consumer-compaction\" }]", "outer validation board retains repo-contract wiring"],
         ["effigy.toml", "qa = [{ task = \"validate\" }, { task = \"qa:docs\" }]", "full QA includes docs QA"],
         ["effigy.toml", "\"paseo:worktree\" = [{ rhai = \"skills/northstar/scripts/paseo-worktree.rhai\" }]", "root Paseo task declaration"],
         ["effigy.toml", "\"language:route\" = \"bun run skills/northstar/scripts/language-package-lifecycle.ts route {args}\"", "root language-package route declaration"],

@@ -245,9 +245,9 @@ machine_effigy += "[catalog]\nalias = \"northstar\"\n\n[tasks]\n";
 machine_effigy += "\"check:repo-contract-wiring\" = [{ rhai = \"scripts/check-northstar-repo-contract-wiring.rhai\" }]\n";
 machine_effigy += "\"check:repo-contract\" = [{ rhai = \"scripts/check-northstar-repo-contract.rhai\" }]\n";
 machine_effigy += "\"test:repo-contract\" = [{ rhai = \"scripts/test-northstar-repo-contract.rhai\" }]\n";
-machine_effigy += "\"check:readiness-map\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"test:readiness-map\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:command-skills\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:model-routing\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:language-packages\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:bundle\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:language-package-routes\" = \"scripts/noop.sh\"\n\"test:paseo-worktree\" = [{ rhai = \"scripts/noop.rhai\" }]\n";
+machine_effigy += "\"check:readiness-map\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"test:readiness-map\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:command-skills\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:model-routing\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:language-packages\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:bundle\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:language-package-routes\" = \"scripts/noop.sh\"\n\"test:paseo-worktree\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:consumer-compaction\" = \"scripts/noop.sh\"\n";
 machine_effigy += "\"qa:docs\" = " + full_qa_docs + "\n";
-machine_effigy += "validate = [{ task = \"check:repo-contract-wiring\" }, { task = \"check:bundle\" }, { task = \"check:language-packages\" }, { task = \"check:language-package-routes\" }, { task = \"test:paseo-worktree\" }]\n";
+machine_effigy += "validate = [{ task = \"check:repo-contract-wiring\" }, { task = \"check:bundle\" }, { task = \"check:language-packages\" }, { task = \"check:language-package-routes\" }, { task = \"test:paseo-worktree\" }, { task = \"check:consumer-compaction\" }]\n";
 machine_effigy += "qa = [{ task = \"validate\" }, { task = \"qa:docs\" }]\n";
 let missing_claude_bridge = new_machine_fixture(
     "missing-claude-bridge",
@@ -352,6 +352,11 @@ expect_failure(
     || checker::check_lifecycle(path::join(lifecycle_fixture_root, "multiple-expanded")),
     "more than one expanded sequential generation in roadmaps: g01",
 );
+expect_failure(
+    "stale-archive-link",
+    || checker::check_lifecycle(path::join(lifecycle_fixture_root, "stale-archive-link")),
+    "active front door README.md points at archived generation g01",
+);
 expect_pass("lifecycle-valid", || checker::check_lifecycle(path::join(lifecycle_fixture_root, "valid")));
 
-log("Northstar repo-contract fixture tests: OK (15 fixture cases; 9 expected failures, 6 benign passes, Effigy selector/outer-board proof, source reduction proof)");
+log("Northstar repo-contract fixture tests: OK (16 fixture cases; 10 expected failures, 6 benign passes, Effigy selector/outer-board proof, source reduction proof)");

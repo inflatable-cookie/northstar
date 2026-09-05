@@ -500,6 +500,11 @@ Every planning artifact belongs to one lifecycle class with a default dispositio
   durable outcomes are promoted into architecture/contracts.
 - Rollover replaces each closed generation with one non-authoritative
   `docs/roadmaps/archive/gNN.md` roll-up and purges closed/stale specs.
+- Refresh, normalization, and authorized docs cleanup inspect already-closed
+  expanded generations and apply the same preservation-led roll-up. A fresh
+  rollover is not required. Leave unresolved generations intact. Read-only
+  cleanup reports the proposal only; authorized repair does not need a second
+  confirmation for this compaction.
 - Allow parallel mode when genuinely independent work streams need separate
   generations without blocking each other; front doors must name all active
   generations and milestones.

@@ -68,7 +68,10 @@ one-card-at-a-time improvisation.
    cleanly rather than escaping local cleanup.
 16. Before recommending rollover, confirm all current-generation milestones can
    be marked closed, superseded, or rehomed and that stale specs or batch cards
-   from that generation can be archived or removed from `docs/specs/`.
+   from that generation can be archived or removed from `docs/specs/`. Perform
+   that closeout with [`../lifecycle-maintenance.md`](../lifecycle-maintenance.md).
+   The same procedure also compacts already-closed generations during
+   maintenance without opening a new generation.
 17. Treat any remaining spec for the lane as context only; do not let it outrank
    the promoted canonical surfaces.
 
@@ -101,3 +104,5 @@ one-card-at-a-time improvisation.
   generation.
 - Do not open a new generation while the current one still has live milestones
   or stale specs that should have been cleaned up first.
+- Do not leave already-closed generations expanded until the next rollover;
+  maintenance routes compact them through the shared lifecycle procedure.

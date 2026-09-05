@@ -222,9 +222,56 @@ fn test_posture_label_rejection(repo_root) {
     }
 }
 
+fn check_front_door_archive_links(repo_root) {
+    let roadmaps_dir = path::join(repo_root, "docs/roadmaps");
+    let archive_dir = path::join(roadmaps_dir, "archive");
+    if !fs::is_dir(archive_dir) {
+        return;
+    }
+
+    let archived_gens = [];
+    for entry in fs::list(archive_dir) {
+        if fs::is_file(entry) && str::ends_with(entry, ".md") {
+            let file_name = path::file_name(entry);
+            if regex::is_match("^g[0-9]+[.]md$", file_name) {
+                archived_gens.push(str::replace(file_name, ".md", ""));
+            }
+        }
+    }
+    if archived_gens.len() == 0 {
+        return;
+    }
+
+    let files_to_check = [];
+    let candidates = [
+        path::join(repo_root, "docs/README.md"),
+        path::join(roadmaps_dir, "README.md"),
+        path::join(roadmaps_dir, "generation-index.md"),
+        path::join(repo_root, "docs/logs/README.md"),
+        path::join(repo_root, "docs/contracts/contract-index.md"),
+    ];
+    for candidate in candidates {
+        if fs::is_file(candidate) {
+            files_to_check.push(candidate);
+        }
+    }
+
+    for file_path in files_to_check {
+        let text = fs::read_file(file_path);
+        let file_name = path::file_name(file_path);
+        for gen in archived_gens {
+            let needle = gen + "/";
+            if text.contains(needle) {
+                throw("active front door " + file_name + " points at archived generation " + gen);
+            }
+        }
+    }
+}
+
 fn check_lifecycle(repo_root) {
     check_archive_non_authority(repo_root);
     check_one_expanded_generation(repo_root);
+    check_front_door_archive_links(repo_root);
     check_retired_posture_labels(repo_root);
     test_posture_label_rejection(repo_root);
     check_post_merge_reconciliation(repo_root);

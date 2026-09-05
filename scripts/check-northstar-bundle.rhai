@@ -68,6 +68,8 @@ let required_files = [
     "template-bundle/research/value-tracks/README.md",
     "template-bundle/roadmaps/README.md",
     "template-bundle/roadmaps/generation-index.md",
+    "template-bundle/roadmaps/archive/README.md",
+    "template-bundle/roadmaps/archive/rollup-template.md",
     "template-bundle/specs/README.md",
     "template-bundle/specs/batch-cards/README.md",
     "template-bundle/vision/README.md",

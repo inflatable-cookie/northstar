@@ -58,6 +58,7 @@ contracts).
 | Automation defaults | [sections/10-automation-runtime-policy.md](./sections/10-automation-runtime-policy.md) | `AGENTS.md` / Effigy config in each repo |
 | Agent execution feedback | [papercuts.md](./papercuts.md) | root `PAPERCUTS.md` + agent contract |
 | Conversational capture and pruning | [sections/09-standard-docs-spine.md](./sections/09-standard-docs-spine.md) | `docs/triage/README.md` + refresh/cleanup modes |
+| Closed-generation compaction during maintenance | [sections/03-roadmaps.md](./sections/03-roadmaps.md) — see **Closed-generation compaction without another rollover** | Installed [`skills/northstar/references/lifecycle-maintenance.md`](../skills/northstar/references/lifecycle-maintenance.md) used by refresh, normalize, authorized cleanup, and rollover closeout |
 
 **Northstar maintainers:** the live repo may tighten wording in
 `docs/contracts/001-working-rules.md`, but expanded checklists should stay in

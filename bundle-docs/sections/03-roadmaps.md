@@ -90,6 +90,25 @@ lane state there first.
 
 Record rollover reason in `docs/roadmaps/generation-index.md`.
 
+## Closed-generation compaction without another rollover
+
+Refresh, normalization, and authorized docs cleanup must inspect already-closed
+sequential generations. They do not wait for a new rollover to replace a
+safely closed expanded generation with `docs/roadmaps/archive/gNN.md`.
+
+Inventory each expanded `gNN/` tree and classify it as active, safely closed,
+or unresolved from content and references. A completed milestone does not close
+a generation. Apply the preservation oracle before deletion: promote unique
+authority, rehome open commitments, retain selected evidence, rewrite current
+links, then remove only the classified sources. Leave ambiguous generations
+intact. Explicit parallel active generations require inspection; do not close
+them by counting folders.
+
+Installed maintenance follows
+[`skills/northstar/references/lifecycle-maintenance.md`](../../skills/northstar/references/lifecycle-maintenance.md).
+Authorized repair includes this compaction; it does not require a second
+blanket confirmation. Read-only cleanup reports the proposal only.
+
 ## Generation runway rule
 
 Each active generation's `docs/roadmaps/gNN/README.md` should carry a
