@@ -2,7 +2,6 @@ fn current_active_authority_files() {
     [
         "docs/vision/001-northstar-delivery-vision.md",
         "docs/contracts/004-language-quality-pack.md",
-        "docs/specs/038-compact-default-lifecycle-and-generation-rollup.md",
     ]
 }
 

@@ -5,7 +5,7 @@ title: Missing reference map
 destination: missing-reference
 owner: repo-maintainers
 status: active
-master_spec: docs/specs/038-compact-default-lifecycle-and-generation-rollup.md
+master_spec: docs/contracts/001-working-rules.md
 roadmap: scripts/README.md
 ---
 
