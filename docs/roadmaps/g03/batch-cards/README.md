@@ -6,5 +6,5 @@ evidence until generation roll-up removes it from the live tree.
 
 ## Current frontier
 
-None. Cards 130–132 are complete and `g03.001` is closed. New execution needs a
-fresh operator-confirmed Chatterbox plan.
+[133](133-complete-consumer-compaction.md) is ready under g03.002.
+Cards 130–132 remain completed history.

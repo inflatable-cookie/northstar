@@ -16,7 +16,8 @@ that Northstar provides to consumer projects.
 
 - Active generation: [`roadmaps/g03/README.md`](./roadmaps/g03/README.md)
 - Last completed milestone: [`g03.001 compact default lifecycle`](./roadmaps/g03/001-compact-default-lifecycle.md)
-- Approved frontier: none; the next `g03` tranche needs Chatterbox/operator planning
+- Active milestone: [g03.002 consumer compaction](roadmaps/g03/002-complete-consumer-compaction.md)
+- Approved frontier: card 133
 - Intake: [`triage/README.md`](./triage/README.md)
 - Execution friction: [`../PAPERCUTS.md`](../PAPERCUTS.md)
 

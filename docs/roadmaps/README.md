@@ -7,7 +7,8 @@ generation remains expanded.
 
 - Active generation: [`g03`](./g03/README.md)
 - Last completed milestone: [`g03.001`](./g03/001-compact-default-lifecycle.md)
-- Approved frontier: none
+- Active milestone: [g03.002](g03/002-complete-consumer-compaction.md)
+- Approved frontier: card 133
 - Closed generations: [`g01`](./archive/g01.md) and [`g02`](./archive/g02.md) roll-ups under `archive/`
 
 ## Rules
@@ -23,6 +24,4 @@ generation remains expanded.
 
 ## Next task
 
-Chatterbox and the operator should select the next `g03` simplification tranche.
-Do not dispatch historical `g01` or `g02` instructions or invent work from the
-bounded watchlist.
+Execute card 133 under g03.002; no concurrent siblings or automatic next lane.

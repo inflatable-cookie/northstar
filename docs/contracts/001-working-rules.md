@@ -1059,6 +1059,26 @@ disposition:
 - If those closeout conditions are not satisfied, repair the current generation
   instead of opening a new one.
 
+### Consumer compaction maintenance
+
+Refresh, normalization, and authorized docs cleanup must inspect already-closed
+sequential generations, not wait for another rollover. Inventory each expanded
+generation and classify it as active, safely closed, or unresolved from content
+and references. A completed milestone alone does not close a generation.
+
+Apply the preservation oracle before replacing a safely closed generation with
+its roll-up: promote unique authority, rehome open commitments, retain selected
+material evidence, rewrite current references, then remove the exact classified
+sources. Never copy historical execution procedure into the roll-up. Leave
+ambiguous generations intact and name the blocking decision. Explicit parallel
+active generations require inspection; do not close them by counting folders.
+
+An authorized refresh includes these bounded documentation repairs. Read-only
+reviews report proposed compaction. Neither may report lifecycle state current
+while closed generations remain expanded without an explicit unresolved
+preservation blocker or bounded migration disposition. A fresh rollover is not
+a prerequisite for repairing historical drift.
+
 ### Currentness budget and structural rules
 
 - Default-read surfaces describe current authority, the active runway, the

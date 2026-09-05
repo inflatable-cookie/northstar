@@ -8,8 +8,8 @@ Mode: sequential
 
 - `g03`
 - Runway: `g03/README.md`
-- Active milestone: none; `g03.001` is complete
-- Approved frontier: none; next tranche requires Chatterbox/operator planning
+- Active milestone: `g03.002` — consumer compaction
+- Approved frontier: card 133
 
 ## Generation log
 
@@ -29,5 +29,4 @@ preservation oracle in contract 001 passes.
 
 ## Next task
 
-Select the next `g03` simplification tranche with the operator. The current
-runway contains no dispatchable card.
+Execute card 133 under g03.002.
