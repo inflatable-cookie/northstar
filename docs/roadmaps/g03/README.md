@@ -7,7 +7,7 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 
 ## Generation Runway
 
-| Goal | State | Governing refs | Next milestone |
+| Goal | State | Governing refs | Next task |
 | --- | --- | --- | --- |
 | Replace permanent live-tree history with lifecycle-bound artifacts and lossless operational compaction. | complete through `g03.001` | contract 001 | observe normal use |
 | Complete consumer compaction through maintenance routes. | complete as `g03.002`; card 133 evidence pending flattening | contract 001 | no further compaction lane |

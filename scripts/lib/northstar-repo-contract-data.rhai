@@ -83,7 +83,6 @@ fn required_files() {
         "template-bundle/contracts/001-working-rules-template.md",
         "template-bundle/contracts/002-agent-local-paths-template.md",
         "template-bundle/contracts/003-agent-instruction-surface-template.md",
-        "template-bundle/roadmaps/g01/batch-cards/README.md",
         "paseo.json",
         "skills/northstar/SKILL.md",
         "skills/northstar/agents/openai.yaml",
@@ -123,8 +122,8 @@ fn required_files() {
         "skills/northstar/assets/templates/effigy.native.toml.template",
         "skills/northstar/assets/templates/northstar-handoff.md.template",
         "skills/northstar/assets/templates/northstar-orchestrator-run.md.template",
-        "skills/northstar/assets/templates/docs/specs/templates/batch-card-template.md",
-        "template-bundle/specs/templates/batch-card-template.md",
+        "skills/northstar/assets/templates/docs/roadmaps/templates/task-template.md",
+        "template-bundle/roadmaps/templates/task-template.md",
         "scripts/lib/northstar-repo-contract-data.rhai",
         "scripts/lib/northstar-repo-contract-checker.rhai",
         "scripts/lib/northstar-readiness-map.rhai",
@@ -168,9 +167,9 @@ fn stable_machine_contracts() {
 fn identical_file_pairs() {
     [
         [
-            "template-bundle/specs/templates/batch-card-template.md",
-            "skills/northstar/assets/templates/docs/specs/templates/batch-card-template.md",
-            "skill-shipped batch-card template must match template-bundle canonical copy",
+            "template-bundle/roadmaps/templates/task-template.md",
+            "skills/northstar/assets/templates/docs/roadmaps/templates/task-template.md",
+            "skill-shipped task template must match template-bundle canonical copy",
         ],
     ]
 }

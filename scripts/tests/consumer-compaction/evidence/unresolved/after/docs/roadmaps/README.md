@@ -3,8 +3,8 @@
 ## Current state
 
 - Active generation: [`g03`](g03/README.md)
-- Closed history: [`g02` roll-up](archive/g02.md)
-- `g01` remains expanded with an unresolved lifecycle blocker.
+- Closed generation `g02` is curated in [`archive/g02.md`](archive/g02.md).
+- Generation `g01` remains expanded: its ownership decision is unresolved.
 
 ## Next task
 

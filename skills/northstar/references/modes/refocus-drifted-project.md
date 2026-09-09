@@ -13,7 +13,7 @@ active roadmap queue.
 1. Audit the live planning and execution surfaces before editing.
 2. Classify the starting lifecycle state first and explain why it is no longer
    trustworthy enough to leave as-is.
-3. Identify drift explicitly: stale milestones, stale specs, missing contracts,
+3. Identify drift explicitly: stale tasks, stale specs, missing contracts,
    repo authority ambiguity, research that never promoted, and logs that hide
    planning failures.
 4. Rebuild or repair `system-architecture.md`, `system-inventory.md`,
@@ -28,7 +28,7 @@ active roadmap queue.
    execution.
 9. Recompile the active roadmap or open a new generation when the old sequence
    is no longer trustworthy.
-10. Leave a clear next task pointing to the first newly valid batch or remaining
+10. Leave a clear next task pointing to the first newly valid task or remaining
    planning blocker.
 
 ## Guardrails

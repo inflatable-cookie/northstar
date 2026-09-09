@@ -13,7 +13,7 @@ It records the realized structure that roadmap batches must implement against.
 Define system layers, authority boundaries, full system coverage, and the
 realized structure that has been promoted out of specs and research.
 Use research translation memos as inputs when external comparisons materially shaped the boundary.
-Keep milestone task sequencing out of architecture docs.
+Keep task sequencing out of architecture docs.
 
 ## Template layout
 
@@ -65,7 +65,7 @@ Keep milestone task sequencing out of architecture docs.
 - Must define authority across repos in `repo-authority-map.md` when more than
   one repo or deployable owner exists.
 - Must link to research translation memos when a boundary depends on comparative findings.
-- Must expose clear handoff points for roadmap milestones.
+- Must expose clear handoff points for roadmap tasks.
 - Architecture and contract artifacts should not carry the live `## Next Task`
   pointer. Keep that in the roadmap front doors.
 

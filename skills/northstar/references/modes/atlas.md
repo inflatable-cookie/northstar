@@ -13,14 +13,14 @@ request to shape the long-term direction and meaningful planning horizons.
 
 Atlas is appropriate when the work:
 
-- spans multiple meaningful milestones, batches, or planning horizons;
+- spans multiple meaningful tasks or planning horizons;
 - has strategic choices whose consequences outlast the next implementation lane;
 - crosses domains, packages, repositories, products, or ownership boundaries;
 - needs a durable runway rather than a single next card;
 - requires explicit non-goals, sequencing, dependencies, or rollover conditions.
 
 Do not use Atlas for a small change, a single seam, a currentness audit, or a
-coherent plan that only needs milestones. Route those requests to the normal
+coherent plan that only needs tasks. Route those requests to the normal
 planning, architecture-refocus, readiness-review, or roadmap-compilation mode.
 
 ## Authority and principles
@@ -33,7 +33,7 @@ does not silently decide strategic direction or authorize execution.
 - Architecture owns system shape, boundaries, and invariants.
 - Contracts own durable authority and behavioural rules.
 - Specs own provisional realization strategy until promotion.
-- Roadmaps own time-ordered milestones and generation runways.
+- Roadmaps own time-ordered tasks and generation runways.
 - The operator owns strategic commitments, trade-offs, accepted uncertainty, and
   any decision that changes product or project direction.
 
@@ -55,7 +55,7 @@ inventing a parallel one:
 - `docs/contracts/` and the governing contract index;
 - active specs and research promotion records;
 - `docs/roadmaps/gNN/README.md`, `docs/roadmaps/generation-index.md`, active
-  milestones, and runway state;
+  tasks, and runway state;
 - recent logs, handoffs, papercuts, and current operator evidence;
 - deterministic planning checks available in the target repository.
 
@@ -142,12 +142,12 @@ Once that gate is passed, a later Atlas result may contain:
 - **Strategic options:** alternatives, trade-offs, non-goals, and irreversible
   choices, without an unrequested default recommendation;
 - **Open operator decisions:** only questions the operator must own;
-- **Runway:** the next meaningful milestone transitions, not a task queue;
+- **Runway:** the next meaningful task transitions, not a task queue;
 - **Promotion map:** vision, architecture, contract, spec, research, or roadmap
   destinations;
 - **Recommended next route:** one bounded route, with execution status.
 
-If the existing strategy is already coherent and only milestones are missing,
+If the existing strategy is already coherent and only tasks are missing,
 recommend roadmap compilation. If the direction is unclear or the operator does
 not yet know the aim, guide first-principles discovery or route away from Atlas;
 do not compensate with an agent-authored strategy. If canonical state is stale,
@@ -164,7 +164,7 @@ map. Keep the changes bounded and provider-neutral:
 - accepted system shape and invariants → `docs/architecture/`;
 - durable authority or behaviour → `docs/contracts/`;
 - unresolved or provisional realization strategy → `docs/specs/`;
-- time-ordered horizons and milestone sequencing → `docs/roadmaps/`;
+- time-ordered horizons and task sequencing → `docs/roadmaps/`;
 - evidence and decisions → `docs/logs/` or the linked canonical record.
 
 Do not create an Atlas-specific shadow database, strategy tracker, glossary,

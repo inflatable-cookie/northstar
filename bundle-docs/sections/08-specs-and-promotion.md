@@ -21,7 +21,7 @@ must be promoted into canonical surfaces.
 This section governs:
 
 - master specs
-- batch cards
+- tasks
 - promotion from specs into architecture and contracts
 - the boundary between provisional planning and canonical execution authority
 
@@ -43,7 +43,7 @@ Specs are for:
 
 - working through a non-trivial change before it is settled
 - defining realization phases for a large goal
-- breaking a complex plan into batch cards
+- breaking a complex plan into tasks
 - exposing open questions, stop conditions, and validation needs before the
   change hardens
 
@@ -87,7 +87,7 @@ Before execution starts on a material change:
   architecture
 - durable behavioral or policy rules discovered in specs must be promoted into
   contracts
-- roadmap milestones must reference the canonical architecture/contracts
+- roadmap tasks must reference the canonical architecture/contracts
   surfaces, not rely only on the spec
 
 Specs may still be referenced as planning history, but they should not remain
@@ -110,14 +110,14 @@ Apply this rule:
   an occasional cleanup drive
 - before roadmap generation rollover, purge stale generation-specific specs from
   the active specs tree so the next generation does not open on inherited
-  planning debris. Batch cards live under `docs/roadmaps/gNN/batch-cards/` and
+  planning debris. Tasks live at `docs/roadmaps/gNN/NNN-<slug>.md` and
   stay with their generation.
 
 ## Spec lifecycle rule
 
 Treat specs as having explicit lifecycle states:
 
-- `active`: still governs an active lane or an imminent continuation batch
+- `active`: still governs an active lane or an imminent continuation task
 - `retired-in-place`: closed and still worth keeping briefly in the active tree
   while nearby work or traceability still benefits from it
 - `archived`: no longer governs live work and moved out of the active specs
@@ -145,7 +145,7 @@ lane.
 
 Use a master spec when a goal:
 
-- spans more than one meaningful batch
+- spans more than one meaningful task
 - changes user-facing behavior significantly
 - introduces a non-trivial rollout or migration path
 - has enough uncertainty that the team needs to reason through the path before
@@ -162,9 +162,10 @@ The master spec should define:
 - promotion targets
 - stop conditions
 
-## Batch card rule
+## Task rule
 
-Batch cards define a bounded execution card.
+Tasks define a bounded executable unit at `docs/roadmaps/gNN/NNN-<slug>.md`
+(`gNN.NNN`).
 
 They should contain:
 
@@ -176,13 +177,12 @@ They should contain:
 - validation commands
 - evidence required
 - stop conditions
-- whether the next card may auto-start
+- whether the next task may auto-start
 
-Batch cards live under `docs/roadmaps/gNN/batch-cards/`, not in `docs/specs/`.
-They are numbered per-generation so parallel generations never collide.
+Tasks are numbered per-generation so parallel generations never collide.
 They stay with their generation and do not need separate archiving on rollover.
 
-Batch cards can guide execution tightly, but they should still inherit their
+Tasks can guide execution tightly, but they should still inherit their
 durable truths from architecture/contracts once those truths have been
 promoted.
 

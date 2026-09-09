@@ -27,10 +27,10 @@ Vision refs: docs/vision/001-northstar-delivery-vision.md
 - Vision in `docs/vision/` sets the destination for Northstar's next evolution.
 - Architecture plus a compact working-rules contract define the rules the repo
   should follow while changing itself.
-- Specs and batch cards in `docs/specs/` define the detailed path for material
-  changes.
+- Specs in `docs/specs/` shape the provisional path for material
+  changes before promotion.
 - Roadmaps in `docs/roadmaps/` sequence approved work.
-- Logs in `docs/logs/` provide batch-level evidence.
+- Logs in `docs/logs/` provide task-level evidence.
 - Temporary observations and unresolved conversational threads land in
   `docs/triage/` before they are promoted into canonical planning surfaces or
   removed during refresh/cleanup.
@@ -521,7 +521,7 @@ the orchestrator makes it promotable.
 Chatterboxes have no planning, readiness, implementation, review, merge, or
 dispatch authority.
 
-Each worker owns only the assigned ready cards in its dedicated worktree and
+Each worker owns only the assigned ready tasks in its dedicated worktree and
 branch. Model routing treats current profiles as a portfolio. For each run the
 orchestrator builds the adequate pool from current role notes and any explicit
 adapter cost metadata, prefers the cheapest adequate tier, then varies
@@ -622,7 +622,7 @@ subagent, which gets no worktree or Git/provider authority.
 - `template-bundle/` remains generic and copy-ready; repo-specific planning
   lives in `docs/`, not in the bundle.
 - `docs/` is the authority for Northstar's own development process.
-- Material delivery work should flow through contracts, master specs, batch
+- Material delivery work should flow through contracts, master specs, task
   cards, roadmaps, and logs rather than jumping straight from idea to edits.
 - The public skill surface should remain small and deliberately routed.
 - Everyday authoring and explicit audit-and-repair must not drift into separate
@@ -762,7 +762,7 @@ requests move to the next generation's bounded watchlist rather than holding
 the old generation open.
 
 Before compaction, the generation closure record must establish:
-1. no milestone or card remains executable in the old generation;
+1. no task remains executable in the old generation;
 2. durable decisions have canonical destinations;
 3. unresolved and deferred work has an active destination or explicit removal;
 4. current links and front doors no longer depend on files being removed;
@@ -795,7 +795,7 @@ Compaction lanes must satisfy this preservation oracle:
 - Operator-facing docs should stay readable and direct.
 - The repo should default to manual, concrete evidence before adding more
   automation.
-- Validation should stay cheap enough that batch-level checks remain normal.
+- Validation should stay cheap enough that task-level checks remain normal.
 - Autonomy should increase only when the repo's planning artifacts make it safe.
 
 ### Validation boundary
@@ -822,4 +822,4 @@ checker must not invent that schema to preserve an old substring assertion.
   structural negative proof.
 - Spec 034 records the promoted package design. Roadmap `g02.048` sequences the
   fixture protocol, TypeScript, Rust, and embedded-payload removal; only its
-  current ready card authorizes implementation.
+  current ready task authorizes implementation.

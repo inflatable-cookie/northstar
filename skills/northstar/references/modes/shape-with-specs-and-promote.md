@@ -12,7 +12,7 @@ into architecture and contracts before roadmap execution relies on them.
 
 1. Create or update a master spec when the goal spans multiple meaningful
    batches or still has open design questions.
-2. Break the immediate path into batch cards when execution needs a tightly
+2. Break the immediate path into tasks when execution needs a tightly
    bounded, paint-by-numbers flow.
 3. Use the spec to expose open questions, stop conditions, validation needs,
    and promotion targets.
@@ -21,7 +21,7 @@ into architecture and contracts before roadmap execution relies on them.
    accepted.
 6. Once promotion is complete, decide whether the spec should stay as active
    planning history or be archived/removed because it no longer adds value.
-7. Compile or update roadmap milestones only after the canonical surfaces are
+7. Compile or update roadmap tasks only after the canonical surfaces are
    ready enough to govern execution.
 
 ## Guardrails

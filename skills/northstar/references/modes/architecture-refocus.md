@@ -25,7 +25,7 @@ Inspect only the evidence relevant to the selected scope:
 1. current `AGENTS.md` and local contracts;
 2. `docs/architecture/system-architecture.md`, system inventory, and repo
    authority map where present;
-3. governing contracts, active spec, roadmap milestone, and ready cards;
+3. governing contracts, active spec, roadmap task, and ready tasks;
 4. relevant source modules, public interfaces, dependency edges, tests, and
    validation surfaces;
 5. recent logs, changes, and the owning repository's `PAPERCUTS.md`;
@@ -65,7 +65,7 @@ authority. Promote a selected candidate through the normal route:
 - provisional structural change -> spec;
 - durable structure -> architecture;
 - durable boundary or policy -> contract;
-- executable approved work -> roadmap and ready card.
+- executable approved work -> roadmap and ready task.
 
 Do not edit production code in this mode. If the operator selects a candidate,
 return to the appropriate planning mode and record the decision once in the

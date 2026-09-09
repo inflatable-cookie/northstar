@@ -17,14 +17,14 @@ Leave the planning surfaces coherent again before execution resumes.
 3. Update the affected contract first, or record a contract delta in the log
    flow when the change is still under review.
 4. Propagate the change into architecture, system inventory, repo authority
-   mapping, and active specs/batch cards where relevant.
+   mapping, and active specs/tasks where relevant.
 5. Update the active roadmap/spec lane so its governing refs point to the
    current canonical surfaces.
-6. Mark affected roadmap milestones blocked or stale until they are recompiled.
+6. Mark affected roadmap tasks blocked or stale until they are recompiled.
 7. Roll over to a new roadmap generation when the sequencing baseline changed
    materially rather than patching the old generation indefinitely.
 8. Leave a clear next task that points to the next planning artifact or the
-   first newly valid execution batch.
+   first newly valid execution task.
 
 ## Guardrails
 

@@ -81,7 +81,7 @@ routine tool prompts; it does not expand the child's Northstar authority.
 ## Outcomes by mode
 
 - **Planning:** coherent architecture/contracts/roadmaps; no invented system
-  behavior; ready cards only when rubric satisfied.
+  behavior; ready tasks only when rubric satisfied.
 - **Language quality workflow:** selected generically from explicit intent or
   an exact registered activation marker. Run the installed skill's
   `northstar/language:route` task; it resolves or securely acquires the pinned

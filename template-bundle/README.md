@@ -96,8 +96,7 @@ than choosing a separate posture:
   AGENTS instruction surface
 - `specs/` -- when provisional design shaping is needed before promoting durable
   outcomes into architecture/contracts
-- `roadmaps/gNN/batch-cards/` -- for step-by-step execution detail under active
-  roadmap milestones
+- `roadmaps/gNN/NNN-<slug>.md` -- executable tasks (`gNN.NNN`) carrying their own steps, acceptance, and closeout
 - `research/` -- when comparative or source-backed exploration is needed before
   commitments
 
@@ -129,8 +128,8 @@ surface.
 Use:
 
 - one active migration master spec
-- one active roadmap milestone
-- normal batch logs for completed migration tranches
+- one active roadmap task
+- normal task logs for completed migration tranches
 
 That migration spec should record:
 
@@ -141,7 +140,7 @@ That migration spec should record:
 - next tranche
 - the evidence needed to close the current tranche
 
-Use the roadmap milestone to sequence the actual migration work and the logs to
+Use the roadmap task to sequence the actual migration work and the logs to
 prove each closed tranche. Do not invent a permanent mixed posture.
 
 ## Optional add-on folders
@@ -185,7 +184,7 @@ The architecture and contracts sections include planning specimens to
 show how system inventory, repo authority, and contract readiness should work in
 practice.
 The roadmap and logs sections include a worked replan sequence showing how a
-planning gap becomes a contract delta and then a recompiled milestone.
+planning gap becomes a contract delta and then a recompiled task.
 They also include a second specimen showing when refocus should force a clean
 `g02` rollover rather than preserve a misleading `g01`.
 
@@ -202,7 +201,7 @@ allowlists and internal writing-style guidance.
 ## Operating posture
 
 Northstar defaults to lean, strict execution:
-- batch-based logging, not per-task logging
+- task evidence on the completed task, not per-step logging
 - problem-led research, not collection-building for its own sake
 - manual-first evidence, automation only when recurring pain justifies it
 - prefer `effigy` first, then `TypeScript`+`bun` for repo-owned automation;

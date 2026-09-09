@@ -1,82 +1,55 @@
 # 002 - Example Analytics Export Refocus
 
-**Type: EXAMPLE** -- Illustrates a blocked milestone and planning gap. Remove from your project after reading.
+**Type: EXAMPLE** -- Illustrates a blocked task and planning gap. Remove from your project after reading.
 
 Status: blocked
 Owner: Core Team
 Created: YYYY-MM-DD
+Governing refs: `003-analytics-export-contract.md`
 Depends on: g01.001
-Vision tags: `ALIGN`, `RELIABILITY`, `OPS`
-Contract refs: `003-analytics-export-contract.md`
-Planning state: blocked on planning
 
-## Problem
+## Outcome
 
-The product needs downstream analytics export, but execution drifted ahead of
-planning and the seam now crosses an unresolved repo boundary.
+The product gets a contract-backed downstream analytics export slice, but execution drifted ahead of planning and the seam now crosses an unresolved repo boundary. No export implementation runs while ownership is unresolved.
 
-## Goals
+## Decisions
 
-- [ ] Confirm the authoritative owner of the analytics export seam.
-- [ ] Convert the seam into an explicit contract before implementation starts.
-- [ ] Recompile this milestone once the seam is contract-backed.
+None yet; seam ownership is the open planning gap.
 
-## Non-Goals
+## Dispatch manifest
 
-- [ ] No export implementation work while seam ownership is unresolved.
-- [ ] No worker or API-side guesswork about the downstream sink contract.
+- **State:** blocked on planning; resumes when the seam contract exists
+- **Completion:** repo ownership explicit, seam covered by an active contract, and this task either recompiled as `ready` or explicitly deferred
+- **Owned mutable paths:** `docs/roadmaps/g01/002-<slug>.md`
+- **Reserved closeout surfaces:** none
+- **Worker:** none until unblocked
+- **Excluded:** export implementation work while seam ownership is unresolved; worker or API-side guesswork about the downstream sink contract
+- **Escalation:** repo maintainers for the ownership decision
 
-## Contract Coverage
+## Work
 
-- [ ] This milestone remains blocked until `003-analytics-export-contract.md`
-      exists.
-- [ ] The source and consumer repos must be listed in
-      `repo-authority-map.md`.
-- [ ] Any research-driven export decisions must be promoted before the milestone
-      becomes ready.
+1. Audit current export assumptions in architecture, contracts, and roadmap files.
+2. Resolve whether `analytics-export` is first-party, vendor-owned, or out of scope.
+3. Create the seam contract or defer the export work from active scope.
+4. Recompile this task with the new contract refs, then execute the first implementation step only after status becomes `ready`.
 
-## Execution Plan
+## Acceptance and review oracle
 
-### Batch 2.1 - Planning repair and seam ownership
+| Invariant | Adversarial counterexample | Required proof |
+| --- | --- | --- |
+| Repo ownership for analytics export is explicit | Roadmap prose hides a missing cross-repo contract | `repo-authority-map.md` entry |
+| The seam is covered by an active contract | Implementation starts on prose promises | `003-analytics-export-contract.md` exists |
+| This task is either recompiled as `ready` or explicitly deferred | A half-alive blocked task lingers | Status field says `ready` or `deferred` |
 
-- [ ] Audit current export assumptions in architecture, contracts, and roadmap
-      files.
-- [ ] Resolve whether `analytics-export` is first-party, vendor-owned, or out
-      of scope.
-- [ ] Create the seam contract or defer the export work from active scope.
+## Stop conditions
 
-### Batch 2.2 - Recompile and execute the first contract-valid export slice
+- Remains stopped: `analytics-export` ownership unresolved; `003-analytics-export-contract.md` missing.
 
-- [ ] Recompile this milestone with the new contract refs and evidence
-      requirements.
-- [ ] Execute the first implementation batch only after planning state becomes
-      `ready`.
+## Evidence
 
-## Acceptance Criteria
+Log the planning-gap discovery for `g01.002`; on unblock, log the seam-contract creation and the recompile from blocked to ready or deferred.
 
-- [ ] Repo ownership for analytics export is explicit.
-- [ ] The seam is covered by an active contract.
-- [ ] This milestone is either recompiled as `ready` or explicitly deferred.
-
-## Risks and Mitigations
-
-- Risk: roadmap prose hides a missing cross-repo contract.
-- Mitigation: keep milestone blocked until authority and contract coverage are
-  explicit.
-
-## Planning Gaps
-
-- `analytics-export` ownership unresolved
-- `003-analytics-export-contract.md` missing
-
-## Evidence Requirements
-
-- [ ] log showing the planning gap discovery for `g01.002`
-- [ ] contract-delta log showing the seam contract was created or approved
-- [ ] roadmap recompile log showing the milestone was updated from blocked to
-      ready or deferred
-
-## Next Task
+## Next task
 
 Close the analytics seam planning gap and either create
 `003-analytics-export-contract.md` or remove export work from the active queue.

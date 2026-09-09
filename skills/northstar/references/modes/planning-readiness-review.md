@@ -34,7 +34,7 @@ card exists, and whether an intent checkpoint blocks the next move.
      surfaces are involved;
    - `docs/contracts/contract-index.md` and the contracts governing the active
      roadmap;
-   - active specs, milestones, batch cards, and recent logs;
+   - active specs, tasks, and recent logs;
    - research promotion records and destination-local readiness maps when they
      exist.
 4. Compare the active roadmap against those surfaces. Report exact gaps with
@@ -62,9 +62,9 @@ The planning is up to scratch only when:
 - active seams have governing contract references;
 - research-backed decisions are promoted into architecture or contracts;
 - missing planning is visible as a blocker rather than hidden in roadmap prose;
-- the next batch has bounded scope, acceptance, validation, evidence, and stop
+- the next task has bounded scope, acceptance, validation, evidence, and stop
   conditions;
-- no unresolved decision still governs the scope of the proposed next batch.
+- no unresolved decision still governs the scope of the proposed next task.
 
 A clear review does not authorize execution by itself. Normal spec, promotion,
 roadmap, readiness, validation, handoff, and operator gates still apply.

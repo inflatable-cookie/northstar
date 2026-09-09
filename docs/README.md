@@ -30,7 +30,7 @@ that Northstar provides to consumer projects.
 - `roadmaps/` owns sequencing, dependencies, and ready execution.
 - `triage/` holds unresolved mutable intake only.
 - `logs/` retains exceptional evidence; normal delivery evidence closes on its
-  card until generation roll-up.
+  task until generation roll-up.
 - `handoffs/` is transient transport and is pruned after consumption.
 
 Closed generations and superseded procedure are not current authority. Start

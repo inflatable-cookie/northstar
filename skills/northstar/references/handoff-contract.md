@@ -105,9 +105,9 @@ or copies multi-paragraph protocol text, treat that as a compression signal.
 - `Current State` captures:
   - what is true now;
   - what is finished versus still open;
-  - the active spec lane and current batch card when present;
+  - the active spec lane and current task when present;
   - the canonical promoted refs the next thread should trust;
-  - the remaining continuation envelope, if another ready card is in-bounds;
+  - the remaining continuation envelope, if another ready task is in-bounds;
   - lane budget or pause signal when the run did not simply continue;
   - the key files or artifacts involved, using absolute paths for local files;
   - for a worker handoff dispatched beside other frontier lanes, the sibling
@@ -145,7 +145,7 @@ or copies multi-paragraph protocol text, treat that as a compression signal.
   preferences, repo constraints from `AGENTS.md`, and open tensions.
 - `Suggested Next Move` tells the next thread how to begin without pretending
   that unresolved choices are settled.
-- `Completion Protocol` points back to the repo's batch card, roadmap,
+- `Completion Protocol` points back to the repo's task,
   currentness, and log surfaces. It names the continuation envelope or pause
   signal, the next task, and unresolved risks. Worker handoffs also put the
   worker/PR flow and serial review lease here. Orchestrator-continuation handoffs
@@ -198,7 +198,7 @@ alone is not a handoff.
 A Northstar handoff should preserve:
 
 - vision context: what long-horizon outcome the work serves;
-- roadmap context: which milestone or batch the work belongs to;
+- roadmap context: which task the work belongs to;
 - spec context: which provisional planning lane is still active, if any;
 - canonical context: which promoted architecture/contracts govern execution;
 - log context: what evidence or decision chain the next thread should continue;

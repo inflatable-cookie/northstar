@@ -11,3 +11,4 @@ Execute from ready cards. Do not invent system behavior.
 Canonical destination for widget identifier rules.
 
 UNIQUE-RULE-WIDGET-PREFIX: Widget identifiers must use the prefix WIDGET-.
+(Promoted from closed `g01` during authorized maintenance compaction.)

@@ -90,7 +90,7 @@ The worker extension keeps the same friendly core sections, then adds inside
 `## Completion Protocol`:
 
 - how to confirm the worktree and branch;
-- the ready cards and allowed runway;
+- the ready tasks and allowed runway;
 - how and when to report progress through the operator;
 - when to stop and ask for planning help;
 - final validation and PR creation requirements;
@@ -103,7 +103,7 @@ a robot reading a shell script. The hard boundaries still need to be explicit.
 
 - create a handoff only for compaction, low context, or a bare `continue`;
 - write the handoff only in chat or only under `docs/logs/`;
-- substitute a handoff for a batch log, roadmap update, or honest closeout;
+- substitute a handoff for a task log, roadmap update, or honest closeout;
 - use stale front doors as authority without calling out the drift;
 - use relative paths for local files inside the handoff;
 - invent decisions that the current thread did not settle;

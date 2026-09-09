@@ -22,8 +22,8 @@ Record explicit Northstar deviations to avoid accidental drift.
 - Vision as long-horizon constraints and directional blueprint.
 - Architecture as system shape + invariants.
 - Research as an optional synthesis layer for comparative/source-backed learning before architecture or roadmap commitments.
-- Roadmaps as milestone files with executable task lists and acceptance criteria.
-- Logs as dated evidence artifacts tied to roadmap batches.
+- Roadmaps as task files with ordered steps and acceptance criteria.
+- Logs as dated evidence artifacts tied to roadmap tasks.
 - Triage as a lightweight, timestamped capture buffer whose contents are
   promoted, merged, or removed during refresh and cleanup.
 

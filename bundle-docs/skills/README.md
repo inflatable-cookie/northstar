@@ -117,7 +117,7 @@ compatibility aliases.
 | `normalize-docs.md` | Bootstrap, migrate, or ongoing docs-spine hygiene |
 | `plan-from-scratch.md` | Planning coverage still missing |
 | `shape-with-specs-and-promote.md` | Provisional spec lane before promotion |
-| `compile-roadmaps.md` | Canonical surfaces exist; compile milestones/cards |
+| `compile-roadmaps.md` | Canonical surfaces exist; compile tasks |
 | `research.md` | Evidence → architecture/contracts |
 | `replan-after-change.md` | Valid plan, changed boundary |
 | `refocus-drifted-project.md` | Broad drift or untrustworthy state |

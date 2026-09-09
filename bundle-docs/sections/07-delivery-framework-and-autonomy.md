@@ -27,7 +27,7 @@ This section governs:
 - definition of done
 - execution autonomy policy
 - master specs
-- batch cards
+- tasks
 - deviation and stop rules
 
 It does not replace vision, specs, architecture, contracts, roadmaps,
@@ -45,7 +45,7 @@ steady-state protocols. Classify current execution state using these operational
 states:
 
 - `ready`
-  the active lane has honest, verified ready cards or an active milestone with
+  the active lane has honest, verified ready tasks with
   settled canonical authority
 - `paused`
   active lane exists, but planning gaps, unresolved intent, or stop signals
@@ -60,14 +60,14 @@ Whenever lifecycle state matters, also name:
 
 - authority mode: root-owned or nested docs-authority
 - current active lane
-- whether a ready card exists
+- whether a ready task exists
 - whether an intent checkpoint still blocks the next move
 
 ## Delivery chain
 
 For material work, the expected chain is:
 
-`vision -> research/specs -> architecture + contracts -> roadmap milestone -> execution -> evidence -> closeout`
+`vision -> research/specs -> architecture + contracts -> roadmap task -> execution -> evidence -> closeout`
 
 Specs are the planning layer here, not the final authority. Once a change is
 accepted, its durable outcomes should be promoted into architecture/contracts
@@ -79,7 +79,7 @@ Projects using consequence-triggered modules carry these artifacts as needed:
 
 - `docs/architecture/product-guardrails.md`
 - `docs/specs/NNN-<slug>.md` for master specs
-- `docs/roadmaps/gNN/batch-cards/NNN-<slug>.md` for execution cards
+- `docs/roadmaps/gNN/NNN-<slug>.md` for execution tasks (`gNN.NNN`)
 - `docs/contracts/NNN-<slug>.md` only when a separate contract surface is worth
   the extra split
 
@@ -87,11 +87,11 @@ Use them as follows:
 
 - `product-guardrails.md`
   locks simplicity, UX direction, anti-fake-work rules, and constraints that
-  should apply across multiple milestones
+  should apply across multiple tasks
 - master specs
   define the provisional realization plan for a goal or epic before its durable
   outcomes are promoted
-- batch cards
+- tasks
   define the exact execution unit an agent may work through without making fresh
   planning decisions
 - separate contracts
@@ -170,8 +170,8 @@ Work should not be marked done unless:
 - the intended behavior exists for real, not as a mockup or placeholder
 - dependent files and references are updated coherently
 - required validation was actually run
-- the relevant roadmap/spec/card state was updated
-- a batch log or equivalent evidence exists
+- the relevant roadmap/spec/task state was updated
+- a task log or equivalent evidence exists
 - the next task is clear
 
 ## Continue semantics
@@ -183,42 +183,42 @@ The intended default is:
 
 - the operator says `continue`
 - the thread resolves that through the previous closeout's `Next Task`
-- that `Next Task` normally points at the current ready batch card
-- the ready batch card defines the bounded work, stop conditions, validation,
+- that `Next Task` normally points at the current ready task
+- the ready task defines the bounded work, stop conditions, validation,
   and closeout requirements
 
 That means a bare `continue` is valid only when the file state already makes
 the next move explicit.
 
-If the previous `Next Task` does not point at a real ready card or explicit
+If the previous `Next Task` does not point at a real ready task or explicit
 stop/reassessment step, the lane is not continuation-ready.
 
 ## Runway rule
 
-Northstar planning should not produce a one-card-at-a-time fake runway.
+Northstar planning should not produce a one-task-at-a-time fake runway.
 
-Generation READMEs own the coarse `## Generation Runway`; roadmap milestones
-own lane shape; batch cards own step detail. A material roadmap should derive
-from the generation runway, then name several batches (and, when batch cards are used,
-several batch cards) — not one agent turn. Checkbox task lists in roadmap
-execution plans make that lane runway scannable. Full granularity doctrine:
+Generation READMEs own the coarse `## Generation Runway`; each task owns its
+objective, steps, acceptance, and closeout. A material lane should derive
+from the generation runway, then name several dependency-linked tasks —
+not one agent turn. Checkbox task lists in task plans make that lane runway
+scannable. Full granularity doctrine:
 [03-roadmaps.md](./03-roadmaps.md) (*Scope and granularity rule*).
 
 When a material lane needs planning, the output should usually include:
 
 - the generation runway goal the lane is trying to realize
-- the current ready card or paused gate
-- the next few meaningful batches or milestone transitions beyond that card
+- the current ready task or paused gate
+- the next few meaningful tasks beyond that task
 - the next planning checkpoint where strategy or intent may need to be
   reconsidered
 
 The point is not to pretend the whole program is fully known. The point is to
-avoid a loop where the thread executes one card, then makes up the next card,
+avoid a loop where the thread executes one task, then makes up the next task,
 then repeats that cycle indefinitely under stricter-looking paperwork.
 
 Good planning leaves both a generation runway and a bounded execution runway.
 Both may still contain uncertainty, but they should make the program shape and
-lane shape visible beyond the immediate card.
+lane shape visible beyond the immediate task.
 
 ## Intent checkpoint rule
 
@@ -234,8 +234,8 @@ the existing authority surfaces, the thread should:
 
 Use this intent checkpoint especially when:
 
-- more than one reasonable next lane or batch exists
-- a milestone may close, continue, or hand off
+- more than one reasonable next lane or task exists
+- a task may close, continue, or hand off
 - the choice depends on product tradeoffs or prioritization rather than missing
   file updates
 
@@ -246,16 +246,16 @@ Do not hide this ambiguity behind overconfident planning churn.
 Closeout should be an ordered sequence, not a loose reminder to "update the
 docs."
 
-For a meaningful completed batch or stopping point, the minimum closeout order
+For a meaningful completed task or stopping point, the minimum closeout order
 is:
 
-1. update the current batch card so its status and completion notes reflect the
+1. update the current task so its status and completion notes reflect the
    truth
-2. update the active roadmap milestone if the batch changed milestone progress,
-   readiness, or the next batch
+2. update the generation runway if the task changed lane progress,
+   readiness, or the next task
 3. refresh any front-door or currentness surfaces that still name the active
-   lane, current ready card, or recent evidence chain
-4. write the batch log with the evidence, validation actually run, and any
+   lane, current ready task, or recent evidence chain
+4. write the task log with the evidence, validation actually run, and any
    unresolved blockers or limits
 5. update or create a handoff only when another thread really needs to take
    over
@@ -280,7 +280,7 @@ that summary rather than replace it.
 
 Bad pattern:
 
-- lead with card ids, file churn, and long validation lists
+- lead with task ids, file churn, and long validation lists
 - make the operator infer the actual outcome from the paperwork
 
 Better pattern:
@@ -305,8 +305,8 @@ is chatterbox work, not coordinator work.
 
 Use compressed, high-density writing for internal execution artifacts:
 
-- batch cards
-- roadmap milestones
+- tasks
+- generation runways
 - logs
 - internal contracts and working rules
 
@@ -350,11 +350,12 @@ The master spec should define:
 Before execution of material implementation work, the spec should no longer be
 the only place that durable structure or behavior is defined.
 
-## Batch card rule
+## Task rule
 
-Batch cards are the paint-by-numbers execution unit.
+Tasks are the paint-by-numbers execution unit. Each task lives at
+`docs/roadmaps/gNN/NNN-<slug>.md` and is referenced as `gNN.NNN`.
 
-Every ready batch card should define:
+Every ready task should define:
 
 - exact objective
 - governing spec, roadmap, and other authority refs
@@ -364,26 +365,26 @@ Every ready batch card should define:
 - validation commands
 - evidence required for closure
 - stop conditions
-- whether the next card should auto-start (default: yes if ready)
+- whether the next task should auto-start (default: yes if ready)
 
-For an issue-fix card whose root cause is not yet known, those steps define the
-bounded problem-solving loop, not a guessed patch. The card is ready when it
+For an issue-fix task whose root cause is not yet known, those steps define the
+bounded problem-solving loop, not a guessed patch. The task is ready when it
 states the observed failure, expected behavior, reproduction or acceptance
 evidence, scope boundaries, validation, and stop conditions. It does not need to
 preselect the root cause or exact files to edit. Inside that envelope, the worker
 may reproduce, instrument, diagnose, choose the smallest complete contract-valid repair,
 remove temporary diagnostics, and validate the result.
 
-Batch cards sit inside a larger lane runway.
+Tasks sit inside a larger generation runway.
 They should not be treated as the only visible planning horizon when a lane is
-large enough to justify a master spec and roadmap milestone.
+large enough to justify a master spec and several dependency-linked tasks.
 
-If a batch card still requires material product or system decisions, it is not
+If a task still requires material product or system decisions, it is not
 ready.
 
 ## Review oracle rule
 
-A ready card needs a review oracle when acceptance depends on a high-risk seam
+A ready task needs a review oracle when acceptance depends on a high-risk seam
 or a universal, exact, or negative claim. Typical triggers are concurrency,
 lifecycle, identity, persistence, security, public APIs, deployment,
 multi-version behavior, or words such as `all`, `every`, `never`, `exact`,
@@ -396,16 +397,16 @@ Keep the oracle compact. For each exposed invariant, name:
 | `<claim>` | `<smallest case that would falsify it>` | `<where rejection or containment occurs>` | `<test, check, or evidence>` |
 
 The oracle operationalizes acceptance; it does not preselect the implementation.
-A card is not ready when the reviewer would have to invent a material acceptance
+A task is not ready when the reviewer would have to invent a material acceptance
 condition during review.
 
 ## Ready-state rubric
 
 Treat `ready` as a real execution state, not a hopeful label.
 
-A single batch card is ready only when all of the following are true:
+A single task is ready only when all of the following are true:
 
-- the card status is explicitly `ready`
+- the task status is explicitly `ready`
 - the objective is bounded enough to finish without fresh design or planning
   decisions
 - the governing refs point at current canonical surfaces rather than only
@@ -413,19 +414,19 @@ A single batch card is ready only when all of the following are true:
 - scope boundaries and stop conditions are explicit
 - acceptance criteria, validation, and evidence requirements are explicit
 - a review oracle is present when high-risk or universal acceptance needs one
-- no unresolved planning gap still governs the card's scope
-- no unresolved intent checkpoint still governs the card's scope
-- the next task points either to the next ready card or to the correct stop or
+- no unresolved planning gap still governs the task's scope
+- no unresolved intent checkpoint still governs the task's scope
+- the next task points either to the next ready task or to the correct stop or
   promotion step
 - the previous closeout leaves a `Next Task` that makes a bare `continue`
   unambiguous
 
 A short autonomous chain is ready only when:
 
-- each card in the chain is individually ready
-- the cards all belong to the same active roadmap/spec lane
-- the card order is explicit
-- each handoff between cards is already represented in file state rather than
+- each task in the chain is individually ready
+- the tasks all belong to the same active roadmap/spec lane
+- the task order is explicit
+- each handoff between tasks is already represented in file state rather than
   depending on fresh judgment
 - auto-start is allowed on each transition that should continue without
   operator intervention
@@ -436,9 +437,9 @@ If any of these checks fail, the work is not ready for hands-off execution.
 ## Worker pre-PR adversarial pass
 
 After normal validation and before opening or updating a PR, the worker rereads
-the diff against the card and tries to falsify it. Enumerate universal, exact,
+the diff against the task and tries to falsify it. Enumerate universal, exact,
 and negative claims; map each review-oracle row to proof; exercise the named
-counterexamples; and reconcile card, roadmap, log, handoff, and front-door state.
+counterexamples; and reconcile task, log, handoff, and front-door state.
 If this exposes a new product threshold, contract choice, or acceptance rule,
 stop and return it to planning instead of choosing it in implementation.
 
@@ -448,13 +449,13 @@ Classify each merge-blocking finding so revision evidence distinguishes worker
 execution from planning quality:
 
 - `execution-miss`: the worker missed explicit authority or acceptance;
-- `oracle-gap`: the card did not operationalize a foreseeable counterexample;
+- `oracle-gap`: the task did not operationalize a foreseeable counterexample;
 - `planning-change`: review introduced or changed product or contract intent;
 - `validation-gap`: required proof was absent or falsely green;
 - `integration-drift`: surrounding callers, generated state, or closeout surfaces
   no longer agreed.
 
-A `planning-change` returns to the planning/card boundary before worker revision.
+A `planning-change` returns to the planning/task boundary before worker revision.
 Track codes per finding or review cycle; do not infer handoff quality from raw
 cycle count alone.
 
@@ -474,7 +475,7 @@ present temporary instrumentation or a root-cause report as completion of a fix
 lane.
 
 The worker owns bounded causal and implementation judgment inside a ready fix
-card. It should continue from diagnosis into the smallest complete contract-valid repair
+task. It should continue from diagnosis into the smallest complete contract-valid repair
 without asking the operator to approve ordinary code-level choices. It stops
 when the diagnosis reveals a material scope expansion, contract change,
 unresolved product choice, missing authority/access, or validation result that
@@ -486,7 +487,7 @@ In a strict lane, the normal operator shortcut should be:
 
 not:
 
-- a long recap prompt that restates the card, closeout protocol, and boundaries
+- a long recap prompt that restates the task, closeout protocol, and boundaries
 
 If a lane still needs giant continuation prompts in ordinary use, the repo
 surfaces or local agent contract are under-specified and should be tightened.
@@ -509,11 +510,11 @@ consequence-triggered modules rather than a second posture:
 
 - `specs/`: triggered when a material change needs provisional shaping before
   its durable outcomes are promoted into architecture and contracts.
-- Batch cards: triggered for execution detail under an active roadmap milestone;
-  the milestone owns lane shape, batch cards own execution detail.
+- Tasks: each `gNN.NNN` file carries its own objective, steps, acceptance, and
+  closeout; the generation README owns the durable runway and approved frontier.
 - Separate logs: triggered only for an incident, release, migration,
-  cross-lane decision, or evidence set too large to keep the card legible.
-  Normal delivery evidence belongs on the completed card.
+  cross-lane decision, or evidence set too large to keep the task legible.
+  Normal delivery evidence belongs on the completed task.
 - `research/`: triggered when comparative exploration or source-backed learning
   is needed before architecture and contract commitments.
 - Additional authority files: triggered when multi-repo boundaries or distinct
@@ -528,7 +529,7 @@ destination remains the same single protocol.
   or roadmap records satisfied capabilities, blocking gaps, the current
   tranche, the next tranche, and the evidence needed to advance.
 - Do not backfill closed history merely to imitate the current file shape.
-- Close ordinary migration work on its card. Retain a separate migration log
+- Close ordinary migration work on its task. Retain a separate migration log
   only when the evidence is materially useful after the generation rolls up.
 - Do not invent a detached governance tracker or a permanent mixed posture.
   Mixed-mode operation is migration debt, not an alternative steady state.
@@ -544,30 +545,30 @@ the closeout shape lives in [03-roadmaps.md](./03-roadmaps.md).
 Autonomy should be pre-authorized through artifacts, not recreated by operator
 intervention.
 
-When a thread has a ready runway of multiple cards, the default behavior is to
+When a thread has a ready runway of multiple tasks, the default behavior is to
 continue through them without pausing for operator acknowledgment at every
 boundary.
 
-An agent must continue across consecutive ready batch cards when all of the
+An agent must continue across consecutive ready tasks when all of the
 following are true:
 
-- the cards belong to the same active spec/roadmap lane
+- the tasks belong to the same active spec/roadmap lane
 - the governing architecture/contracts exist
-- the prior card's evidence gate passed
+- the prior task's evidence gate passed
 - the execution policy for the project allows auto-continuation
 - no stop condition has been triggered
 
 The agent should only pause and wait for operator input when:
 
-- the next card is not yet ready
+- the next task is not yet ready
 - a stop condition is triggered
 - the runway ends and planning is needed to generate the next batch
 - an intent checkpoint requires operator direction
 
-Operators should not need to keep sending "continue" when the next ready card
+Operators should not need to keep sending "continue" when the next ready task
 is already defined and permitted.
 They also should not have to re-invent the lane shape after every completed
-card because planning failed to leave a longer-horizon runway.
+task because planning failed to leave a longer-horizon runway.
 
 ## Parallel lane scheduling
 
@@ -582,7 +583,7 @@ A lane belongs on the frontier only when it has:
 - no shared mutable files or overlapping write scope;
 - no ordering, data, or generated-artifact dependency;
 - no overlapping authority decision or unresolved intent;
-- its own ready cards, acceptance, validation, evidence, and stop conditions;
+- its own ready tasks, acceptance, validation, evidence, and stop conditions;
 - its own worktree, branch, and committed handoff.
 
 Same-repository lanes must additionally partition their mutable and
@@ -595,7 +596,7 @@ not serialized around one blocked edge. A provider, model, or profile quota,
 spend, rate, or availability failure is lane-local routing state,
 not a reason to serialize the rest of the frontier. Parallelism is never a
 reason to invent
-a speculative card, or to split one coherent issue-fix lane into diagnosis and
+a speculative task, or to split one coherent issue-fix lane into diagnosis and
 repair workers.
 
 Paseo workspace isolation and agent parentage are separate axes. The
@@ -727,7 +728,7 @@ contract, or sequencing stay with the coordinator.
 
 Planning path: Chatterbox is the primary planning authority and promotes
 confirmed canonical planning directly on the integration branch. The
-coordinator loads only the instructions, promoted commit, selected cards,
+coordinator loads only the instructions, promoted commit, selected tasks,
 dispatch manifest, and named refs needed for factual preflight (narrow fast
 path). It does not sweep unrelated planning, design dependency edges, compile a
 duplicate semantic handoff, or launch promotion-only workers.
@@ -760,12 +761,12 @@ contradictory, missing, or stale review evidence stops merge.
 Coordinator turns are event-bounded: an operator message or child notification
 starts a turn. The coordinator performs every immediately available dispatch,
 revision, review, merge-gate, or closeout action, reports identities and state,
-and continues across merge, closeout, and card boundaries while the canonical
+and continues across merge, closeout, and task boundaries while the canonical
 runway names another ready mechanical action. Merge, post-merge reconciliation,
 closeout, frontier recomputation, and next-ready dispatch form one continuous
 coordinator action chain.
 
-Post-merge local integration reconciliation is mandatory before card closeout,
+Post-merge local integration reconciliation is mandatory before task closeout,
 frontier recomputation, or another worker dispatch:
 - resolve and verify the provider's merged PR and resulting `origin/main`;
 - fetch the integration remote, fast-forward the project's local `main` checkout
@@ -890,7 +891,7 @@ graph design, and the approved parallel frontier.
 
 - **Direct promotion:** After explicit operator confirmation, Chatterbox
   directly updates canonical planning on the integration branch (architecture,
-  contracts, specs, roadmaps, ready cards, dispatch manifest, indexes, triage
+  contracts, specs, roadmaps, ready tasks, dispatch manifest, indexes, triage
   dispositions). It validates and reviews the complete semantic diff, commits,
   pushes, then sends the coordinator a provenance-labelled direction naming the
   promoted commit and approved ready frontier. It does not launch a promotion
@@ -1064,10 +1065,10 @@ Execution must stop and return to planning or operator review when:
 
 When work deviates from the planned path:
 
-1. stop execution on the affected card
-2. record the deviation in the active card/spec/log flow
+1. stop execution on the affected task
+2. record the deviation in the active task/spec/log flow
 3. decide whether the issue is:
-   - a card rewrite
+   - a task rewrite
    - a spec rewrite
    - a contract change
    - a roadmap recompile
@@ -1097,8 +1098,8 @@ Keep that migration state inside the normal planning spine:
 
 - use one active migration master spec to carry the checkpoint state, blocking
   gaps, and tranche plan
-- use one active roadmap milestone to sequence the migration work
-- use batch logs to prove completed tranches and rollout decisions
+- use one active roadmap task to sequence the migration work
+- use task logs to prove completed tranches and rollout decisions
 
 Do not invent a separate governance board or detached tracker for this.
 Migration lives in the same docs surfaces that already govern the repo.
@@ -1113,14 +1114,14 @@ That means the installable skills behave like this:
 - `northstar-setup`
   installs the standard compact lifecycle spine and guardrails by default
 - `northstar-plan`
-  produces specs and batch cards when needed, then promotes settled outcomes
+  produces specs and tasks when needed, then promotes settled outcomes
   into architecture/contracts before roadmap execution
 - `northstar-recover`
   repairs specs, architecture, contracts, and roadmaps when execution drifts
 - `northstar-research`
   promotes findings into specs, architecture, and contracts
 - `northstar-handoff`
-  carries forward the active spec, canonical refs, current card, and remaining
+  carries forward the active spec, canonical refs, current task, and remaining
   autonomy envelope
 
 The aim is fewer special instructions in conversation and more behavior driven
@@ -1132,17 +1133,17 @@ by the repo's own planning surfaces.
 - Specs define provisional realization strategy for material goals.
 - Architecture defines realized system shape and invariants.
 - Contracts define enforced boundaries and execution rules.
-- Batch cards define the exact execution unit.
-- Roadmaps sequence the cards into milestone lanes.
+- Tasks define the exact execution unit.
+- Roadmaps sequence the tasks into generation lanes.
 - Logs prove what was completed and why.
 
 ## Quick reference
 
-- [Glossary: Batch card, continuation envelope, stop/pause signals](../glossary.md#agent-and-thread-concepts)
+- [Glossary: Task, continuation envelope, stop/pause signals](../glossary.md#agent-and-thread-concepts)
 - [Glossary: Lane budget](../glossary.md#agent-and-thread-concepts)
 
 ## Next task
 
 Keep the incremental adoption audit and rollout surface compact: one active
-migration spec, one active roadmap milestone, and batch logs that prove each
+migration spec, one active roadmap task, and task logs that prove each
 completed tranche.

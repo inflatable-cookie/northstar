@@ -1,17 +1,17 @@
 {
-  "activity_note": "Loaded installed skill SKILL.md, router, project-refresh, and lifecycle-maintenance.md. Compacted g01 and g02, preserved g03, promoted UNIQUE-RULE-WIDGET-PREFIX, rehomed DEFERRED-COMMITMENT-WIDGET-AUDIT. Codex session 01a0721e-8041-7783-8f95-f2a5be31e5f3.",
-  "agent_id": "70fbe934-62fa-431f-a183-1db9ecb5c0af",
+  "activity_note": "g03.003 worker replay under the flattened procedure: loaded installed SKILL.md, router, project-refresh, lifecycle-maintenance.md. Compacted g01+g02, preserved g03, promoted UNIQUE-RULE-WIDGET-PREFIX, rehomed DEFERRED-COMMITMENT-WIDGET-AUDIT, retained PR101/c0ffee101 and PR202/c0ffee202, rewrote stale front-door links, updated index dispositions.",
+  "agent_id": "f9fd5df4-d796-4325-9aa1-88fdfd568982",
   "authorization": "repair-authorized",
   "before_fixture": "happy-before",
-  "captured_at": "2026-09-05T15:16:29Z",
-  "finished_at": "2026-09-05T15:15:04Z",
-  "prompt_sha256": "sha256:ee9259a6adc60217a55075da6f399bbe961658361b1cb9cff293733d6d003452",
-  "provider": "codex/gpt-5.6-luna",
+  "captured_at": "2026-09-09T10:53:17Z",
+  "finished_at": "2026-09-09T11:45:00Z",
+  "prompt_sha256": "sha256:e886c37bf74460b60027f3a6385a4840a914bedb7666784d97bd23be042c78be",
+  "provider": "meta/muse-spark-1.3-contributor",
   "route": "installed-northstar-project-refresh",
   "scenario": "happy",
   "skill_path": "/Users/tom/.agents/skills/northstar",
   "skill_procedure_relative": "references/lifecycle-maintenance.md",
-  "skill_procedure_sha256": "sha256:067585725935b8757dc11efb810d801bf42351f16edc52adb0dec389ecb61508",
-  "started_at": "2026-09-05T15:09:56Z",
-  "workspace_id": "wks_ee903b3e1f0fcc17"
+  "skill_procedure_sha256": "sha256:7d8c992fc7a05b47e2306f3b584ecc0eb45280abfa78146aab6a4ed89f90181b",
+  "started_at": "2026-09-09T11:30:00Z",
+  "workspace_id": ""
 }

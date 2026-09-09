@@ -8,11 +8,10 @@ One-page reference for naming, formats, and conventions.
 |------|---------|---------|
 | Vision | `NNN-<slug>.md` | `001-product-vision.md` |
 | Contracts | `NNN-<slug>.md` | `001-api-contract.md` |
-| Roadmap | `NNN-<slug>.md` | `001-auth-migration.md` |
+| Roadmap task | `NNN-<slug>.md` | `001-auth-migration.md` |
 | Logs | `DD-HHMMSS-<slug>.md` | `15-143000-auth-batch-1.md` |
 | Architecture | `<slug>.md` | `system-architecture.md` |
 | Specs | `NNN-<slug>.md` | `012-rate-limiting.md` |
-| Batch cards | `NNN-<slug>.md` | `034-apply-contract.md` |
 | Triage notes | `YYYYMMDD-HHMMSS-<slug>.md` | `20260819-084500-capture-open-question.md` |
 
 ## Reference Keys
@@ -20,7 +19,7 @@ One-page reference for naming, formats, and conventions.
 | Key | Format | Example |
 |-----|--------|---------|
 | Generation | `gNN` | `g01`, `g02` |
-| Milestone | `gNN.NNN` | `g01.003` |
+| Task | `gNN.NNN` | `g01.003` |
 | Log month | `YYYY-MM` | `2026-04` |
 | Log timestamp | `DD-HHMMSS` | `15-143000` |
 
@@ -33,9 +32,9 @@ docs/
 ├── contracts/
 ├── roadmaps/
 │   ├── g01/
-│   │   └── batch-cards/  (execution detail)
+│   │   └── NNN-<slug>.md  (executable tasks)
 │   ├── g02/
-│   │   └── batch-cards/  (execution detail)
+│   │   └── NNN-<slug>.md  (executable tasks)
 │   ├── backlog/
 │   └── generation-index.md
 ├── logs/
@@ -60,11 +59,11 @@ docs/
 
 ## Core Rules
 
-1. Create `vision/001` before first roadmap milestone
+1. Create `vision/001` before first roadmap task
 2. Define architecture before contracts
 3. Create contracts before roadmaps
-4. Log per batch, not per task
-5. Roadmaps span multiple batches/cards; batch cards own step detail
+4. Record evidence on the completed task
+5. Generation READMEs own the runway; tasks own steps, acceptance, closeout
 6. Stop on planning gaps -- do not infer missing behavior
 7. One active generation in sequential mode; parallel mode allows multiple
 8. Backlog lives only at `roadmaps/backlog/`

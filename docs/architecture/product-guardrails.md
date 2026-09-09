@@ -27,14 +27,14 @@ Vision refs: docs/vision/001-northstar-delivery-vision.md
 
 ## Delivery Expectations
 
-- Material work should use a master spec and batch cards.
+- Material work should use a master spec and tasks.
 - Completion should be evidenced in logs, not only described in chat.
-- Roadmap milestones should sequence real execution work, not just summarize
+- Roadmap tasks should sequence real execution work, not just summarize
   intent.
 
 ## Autonomy Expectations
 
-- Agents should continue across ready batch cards without needing repeated
+- Agents should continue across ready tasks without needing repeated
   operator prompts when the execution policy allows it.
 - Agents should stop immediately on planning gaps, contract ambiguity, failed
   validation, or unresolved design uncertainty.

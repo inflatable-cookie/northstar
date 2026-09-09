@@ -24,9 +24,9 @@ Here is the short version of where things stand:
 - **Done:** {{WHAT_IS_ALREADY_TRUE_NOW}}
 - **Still open:** {{WHAT_THE_NEXT_THREAD_NEEDS_TO_CONTINUE}}
 - **Active spec lane:** {{ACTIVE_SPEC_LANE_OR_NONE}}
-- **Current batch card:** {{CURRENT_BATCH_CARD_OR_NONE}}
+- **Current task:** {{CURRENT_TASK_OR_NONE}} (`gNN.NNN` path; the handoff transports it and never replaces it)
 - **Canonical refs:** {{CANONICAL_PROMOTED_REFS}}
-- **Remaining continuation envelope:** {{IN_BOUNDS_NEXT_CARD_OR_STOP_SIGNAL}}
+- **Remaining continuation envelope:** {{IN_BOUNDS_NEXT_TASK_OR_STOP_SIGNAL}}
 - **Lane budget / pause signal:** {{LANE_BUDGET_OR_PAUSE_SIGNAL}}
 - **Key files:**
   - {{ABSOLUTE_PATH_ONE}}
@@ -61,9 +61,9 @@ question back rather than quietly choosing for the user.
 This handoff exists because another thread genuinely needs to take over. Before
 you finish, please:
 
-1. Confirm the current batch card already reflects the stopping point.
-2. Confirm the roadmap and log surfaces already reflect what actually happened.
-3. Say whether another in-bounds card remains or the continuation envelope is
+1. Confirm the current task already reflects the stopping point.
+2. Confirm the generation runway and log surfaces already reflect what actually happened.
+3. Say whether another in-bounds task remains or the continuation envelope is
    exhausted;
 4. Record the lane budget or pause signal for this stopping point;
 5. Call out unresolved risks or blockers plainly;

@@ -1,17 +1,17 @@
 {
-  "activity_note": "Loaded installed skill router, project-refresh, and lifecycle-maintenance.md. Stopped g01 on UNIQUE-ORPHAN-RULE ownership conflict. Compacted safely closed g02 only. Codex session 01a0721e-99ea-7122-9f1d-9b6d53dc30b6.",
-  "agent_id": "b3ac3ec8-d1a8-4df7-a8a3-c72c5dd94989",
+  "activity_note": "g03.003 worker replay: g01 left expanded with UNIQUE-ORPHAN-RULE on its source card (ownership contested, precise unresolved disposition); g02 compacted as safely closed with commitment rehomed and roll-up written.",
+  "agent_id": "f9fd5df4-d796-4325-9aa1-88fdfd568982",
   "authorization": "repair-authorized",
   "before_fixture": "unresolved-before",
-  "captured_at": "2026-09-05T15:16:30Z",
-  "finished_at": "2026-09-05T15:14:48Z",
-  "prompt_sha256": "sha256:e4939f0fc5701eaba162ede60355fa5f1cce4beebe7567e54f9ce3c6d5e385cf",
-  "provider": "codex/gpt-5.6-luna",
+  "captured_at": "2026-09-09T10:53:55Z",
+  "finished_at": "2026-09-09T12:05:00Z",
+  "prompt_sha256": "sha256:1304b5080bc7d1a0650b5e7bd904587ca885f3fb7013fde9feafce9617225f05",
+  "provider": "meta/muse-spark-1.3-contributor",
   "route": "installed-northstar-project-refresh",
   "scenario": "unresolved",
   "skill_path": "/Users/tom/.agents/skills/northstar",
   "skill_procedure_relative": "references/lifecycle-maintenance.md",
-  "skill_procedure_sha256": "sha256:067585725935b8757dc11efb810d801bf42351f16edc52adb0dec389ecb61508",
-  "started_at": "2026-09-05T15:10:03Z",
-  "workspace_id": "wks_3bb0620a49197eee"
+  "skill_procedure_sha256": "sha256:7d8c992fc7a05b47e2306f3b584ecc0eb45280abfa78146aab6a4ed89f90181b",
+  "started_at": "2026-09-09T11:52:00Z",
+  "workspace_id": ""
 }

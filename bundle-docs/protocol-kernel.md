@@ -42,8 +42,8 @@ contracts).
 | Topic | Doctrine (authoritative full detail) | Binding in a Northstar repo |
 | --- | --- | --- |
 | Planning completeness and execution authority | [sections/06-planning-and-contract-gates.md](./sections/06-planning-and-contract-gates.md) | Same expectations; repo records gaps in its own planning files |
-| Batch cards, ready-state, closeout shape, autonomy levels, master specs | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Batch card rule**, **Ready-state rubric**, **Operator-facing summary rule**, **Autonomy support levels** | `docs/contracts/001-working-rules.md` (from [`template-bundle/contracts/001-working-rules-template.md`](../template-bundle/contracts/001-working-rules-template.md)); keep compact, point here for full enumerations |
-| Review oracles, worker adversarial pass, review finding codes | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Review oracle rule**, **Worker pre-PR adversarial pass**, **Review finding classification** | Ready card + compact repo working-rules binding |
+| Tasks, ready-state, closeout shape, autonomy levels, master specs | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Task rule**, **Ready-state rubric**, **Operator-facing summary rule**, **Autonomy support levels** | `docs/contracts/001-working-rules.md` (from [`template-bundle/contracts/001-working-rules-template.md`](../template-bundle/contracts/001-working-rules-template.md)); keep compact, point here for full enumerations |
+| Review oracles, worker adversarial pass, review finding codes | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Review oracle rule**, **Worker pre-PR adversarial pass**, **Review finding classification** | Ready task + compact repo working-rules binding |
 | Parallel lane scheduling and lane-local provider routing | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Parallel lane scheduling** | `docs/contracts/001-working-rules.md` plus one worker handoff per dispatched lane |
 | Economical worker routing (diversified adequate pools, cheapest tier, recent-use rotation) | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Economical worker routing** | `docs/contracts/001-working-rules.md` plus frontier-worker justification on the worker handoff |
 | Economical orchestrator coordination (mechanical coordination, dispatch manifest, review child in worker workspace, coordination gate) | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Economical orchestrator coordination** | `docs/contracts/001-working-rules.md` plus the installed orchestrator and PR-review modes |
@@ -51,7 +51,7 @@ contracts).
 | Conversational planning delegation | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Conversational planning delegation** | `docs/contracts/001-working-rules.md` plus the installed chatterbox mode |
 | Fresh orchestrator continuation | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Fresh orchestrator continuation** | `docs/contracts/001-working-rules.md` plus the generic seven-section handoff with `orchestrator-continuation` activation |
 | Chatterbox planning and promotion | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Chatterbox planning and promotion** | `docs/contracts/001-working-rules.md` plus the installed chatterbox mode |
-| Handoff content and compression | [`skills/northstar/references/handoff-contract.md`](../skills/northstar/references/handoff-contract.md) | `docs/handoffs/`; handoff points to cards and contracts instead of copying them |
+| Handoff content and compression | [`skills/northstar/references/handoff-contract.md`](../skills/northstar/references/handoff-contract.md) | `docs/handoffs/`; handoff points to tasks and contracts instead of copying them |
 | Direct PR review and provider record | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Direct PR review boundary** | `docs/contracts/001-working-rules.md` plus the installed Northstar PR-review mode |
 | Planning artifact lifecycle, prune triggers, generation roll-up, post-merge reconciliation | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) | `docs/contracts/001-working-rules.md` |
 | Spec lifecycle and archive | [sections/08-specs-and-promotion.md](./sections/08-specs-and-promotion.md) + [template-bundle/specs/README.md](../template-bundle/specs/README.md) | `docs/specs/` + `docs/specs/archive/` in the installed repo |
@@ -71,7 +71,7 @@ contracts).
   [skills/README.md](./skills/README.md) — always run
   [`references/router.md`](../../skills/northstar/references/router.md) first.
 
-Skills should **name modes and file paths**, not restate full batch-card field
+Skills should **name modes and file paths**, not restate full task field
 lists. When an agent needs doctrine depth, prefer this kernel → linked section
 → glossary, in that order.
 

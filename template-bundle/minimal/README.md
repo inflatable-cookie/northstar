@@ -43,7 +43,7 @@ docs/
 3. Create `docs/vision/001-<your-project>-vision.md` before anything else.
 4. Add `docs/architecture/system-architecture.md` before creating roadmaps.
 5. Create the first roadmap milestone only after contracts exist.
-6. Add logs per completed batch.
+6. Record evidence on each completed task.
 7. Create a handoff only when another thread genuinely needs to take over.
 8. Capture unresolved observations in `docs/triage/YYYYMMDD-HHMMSS-<slug>.md`;
    refresh or cleanup should promote, merge, or remove each note over time.

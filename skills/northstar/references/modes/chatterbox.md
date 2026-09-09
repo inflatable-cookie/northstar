@@ -20,7 +20,7 @@ A chatterbox:
 - spawns bounded read-only research subagents when external evidence is needed;
 - reconciles delegate, external, or conversational triage notes;
 - after explicit operator confirmation, directly updates canonical planning on
-  the integration branch (architecture, contracts, specs, roadmaps, ready cards,
+  the integration branch (architecture, contracts, specs, roadmaps, ready tasks,
   dispatch manifest, indexes, and triage dispositions);
 - validates and reviews the complete semantic planning diff, commits, and pushes
   to `main`;
@@ -88,7 +88,7 @@ After explicit operator confirmation, Chatterbox directly promotes settled
 planning on the integration branch without a promotion worker:
 
 1. Update canonical planning files: architecture, contracts, specs, roadmaps,
-   ready cards, indexes, and triage dispositions.
+   ready tasks, indexes, and triage dispositions.
 2. Publish the canonical dispatch manifest for every ready lane:
    - card/outcome and readiness state;
    - prerequisites and completion conditions;

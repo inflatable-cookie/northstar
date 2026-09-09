@@ -13,7 +13,8 @@ Created: 2026-06-01
 ## Bounded watchlist
 
 - DEFERRED-COMMITMENT-WIDGET-AUDIT: Schedule the widget-audit after the catalog
-  importer ships. Keep this obligation open until it is scheduled.
+  importer ships. (Rehomed from closed `g02` during authorized maintenance
+  compaction.)
 
 ## Next task
 

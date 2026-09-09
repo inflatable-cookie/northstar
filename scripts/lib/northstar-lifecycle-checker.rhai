@@ -151,14 +151,6 @@ fn check_retired_posture_labels(repo_root) {
                         files_to_check.push(entry);
                     }
                 }
-                let batch_cards_dir = path::join(active_gen_dir, "batch-cards");
-                if fs::is_dir(batch_cards_dir) {
-                    for entry in fs::list(batch_cards_dir) {
-                        if fs::is_file(entry) && str::ends_with(entry, ".md") {
-                            files_to_check.push(entry);
-                        }
-                    }
-                }
             }
         }
     }
@@ -268,10 +260,174 @@ fn check_front_door_archive_links(repo_root) {
     }
 }
 
+fn list_expanded_generations(repo_root) {
+    let gens = [];
+    let roadmaps_dir = path::join(repo_root, "docs/roadmaps");
+    if !fs::is_dir(roadmaps_dir) {
+        return gens;
+    }
+    for entry in fs::list(roadmaps_dir) {
+        if fs::is_dir(entry) && regex::is_match("^g[0-9]+$", path::file_name(entry)) {
+            gens.push(entry);
+        }
+    }
+    gens
+}
+
+fn check_no_nested_cards(repo_root) {
+    for gen_dir in list_expanded_generations(repo_root) {
+        let nested = path::join(gen_dir, "batch-cards");
+        if fs::is_dir(nested) {
+            throw("nested executable cards remain under docs/roadmaps/" + path::file_name(gen_dir) + "/batch-cards; flattened tasks live directly in the generation directory");
+        }
+    }
+}
+
+fn first_heading_id(text) {
+    for line in str::split_lines(text) {
+        if str::starts_with(line, "#") {
+            let rest = line;
+            while regex::is_match("g[0-9]+[.][0-9]+", rest) {
+                let id = regex::replace("^(?:.*?)((?:g[0-9]+[.][0-9]+))(?:.*)$", rest, "$1");
+                return id;
+            }
+            return "";
+        }
+    }
+    ""
+}
+
+fn check_task_ids(repo_root) {
+    let claimed_ids = [];
+    let claimed_files = [];
+    for gen_dir in list_expanded_generations(repo_root) {
+        let gen = path::file_name(gen_dir);
+        for entry in fs::list(gen_dir) {
+            if !fs::is_file(entry) || !str::ends_with(entry, ".md") {
+                continue;
+            }
+            let name = path::file_name(entry);
+            if !regex::is_match("^[0-9]+-.+[.]md$", name) {
+                continue;
+            }
+            let nnn = regex::replace("-.*$", name, "");
+            let own_id = gen + "." + nnn;
+            let heading_id = first_heading_id(fs::read_file(entry));
+            if heading_id != "" && heading_id != own_id {
+                throw("task file " + name + " heading claims " + heading_id + " but lives at " + own_id);
+            }
+            let dup_file = "";
+            let i = 0;
+            while i < claimed_ids.len() {
+                if claimed_ids[i] == own_id {
+                    dup_file = claimed_files[i];
+                }
+                i += 1;
+            }
+            if dup_file != "" {
+                throw("duplicate task ID " + own_id + " claimed by " + name + " and " + dup_file);
+            }
+            claimed_ids.push(own_id);
+            claimed_files.push(name);
+        }
+    }
+}
+
+fn frontier_ids_in(text) {
+    let ids = [];
+    for line in str::split_lines(text) {
+        if !regex::is_match("(?i)(?:frontier|approved)", line) {
+            continue;
+        }
+        let rest = line;
+        while regex::is_match("g[0-9]+[.][0-9]+", rest) {
+            let id = regex::replace("^(?:.*?)((?:g[0-9]+[.][0-9]+))(?:.*)$", rest, "$1");
+            if !ids.contains(id) {
+                ids.push(id);
+            }
+            rest = regex::replace("^(?:.*?)g[0-9]+[.][0-9]+(.*)$", rest, "$1");
+        }
+    }
+    ids
+}
+
+fn check_frontier(repo_root) {
+    let roadmaps_dir = path::join(repo_root, "docs/roadmaps");
+    let candidates = [
+        path::join(roadmaps_dir, "README.md"),
+        path::join(roadmaps_dir, "generation-index.md"),
+    ];
+    let index_text = "";
+    let gen_index_file = path::join(roadmaps_dir, "generation-index.md");
+    if fs::is_file(gen_index_file) {
+        index_text = fs::read_file(gen_index_file);
+        let active_gen = parse_active_generation(index_text);
+        if active_gen != "" {
+            candidates.push(path::join(path::join(roadmaps_dir, active_gen), "README.md"));
+        }
+    }
+    let declared = [];
+    for candidate in candidates {
+        if !fs::is_file(candidate) {
+            continue;
+        }
+        let ids = frontier_ids_in(fs::read_file(candidate));
+        if ids.len() == 0 {
+            continue;
+        }
+        let ids_text = "";
+        for id in ids {
+            if ids_text != "" {
+                ids_text += ",";
+            }
+            ids_text += id;
+        }
+        for known in declared {
+            let same = known["ids"].len() == ids.len();
+            if same {
+                for id in ids {
+                    if !known["ids"].contains(id) {
+                        same = false;
+                    }
+                }
+            }
+            if !same {
+                throw("front doors name different approved tasks: " + known["file"] + " declares " + known["text"] + " but " + path::file_name(candidate) + " declares " + ids_text);
+            }
+        }
+        declared.push(#{ ids: ids, file: path::file_name(candidate), text: ids_text });
+    }
+    if declared.len() == 0 {
+        return;
+    }
+    let frontier = declared[0]["ids"];
+    let frontier_text = declared[0]["text"];
+    for gen_dir in list_expanded_generations(repo_root) {
+        let gen = path::file_name(gen_dir);
+        for entry in fs::list(gen_dir) {
+            if !fs::is_file(entry) || !str::ends_with(entry, ".md") {
+                continue;
+            }
+            let name = path::file_name(entry);
+            if !regex::is_match("^[0-9]+-.+[.]md$", name) {
+                continue;
+            }
+            let nnn = regex::replace("-.*$", name, "");
+            let own_id = gen + "." + nnn;
+            if regex::is_match("(?m)^Status:\\s*ready", fs::read_file(entry)) && !frontier.contains(own_id) {
+                throw("ready task " + own_id + " is outside the approved frontier " + frontier_text);
+            }
+        }
+    }
+}
+
 fn check_lifecycle(repo_root) {
     check_archive_non_authority(repo_root);
     check_one_expanded_generation(repo_root);
     check_front_door_archive_links(repo_root);
+    check_no_nested_cards(repo_root);
+    check_task_ids(repo_root);
+    check_frontier(repo_root);
     check_retired_posture_labels(repo_root);
     test_posture_label_rejection(repo_root);
     check_post_merge_reconciliation(repo_root);

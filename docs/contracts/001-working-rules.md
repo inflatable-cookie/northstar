@@ -44,29 +44,29 @@ roll-ups and prose evidence may retain their original terms where clearly
 non-authoritative.
 
 - Material work should follow this chain:
-  `vision -> research/specs -> architecture + contracts -> roadmap milestone -> execution -> evidence -> closeout`.
+  `vision -> research/specs -> architecture + contracts -> roadmap task -> execution -> evidence -> closeout`.
 - Use a separate contract only when a stable seam, authority boundary, or
   reusable rule surface genuinely needs one.
-- Use a master spec when a goal spans multiple meaningful batches, changes
+- Use a master spec when a goal spans multiple meaningful tasks, changes
   user-facing behavior, or introduces non-trivial operational policy.
-- A ready batch card must define scope, exact steps, governing refs, acceptance
+- A ready task must define scope, exact steps, governing refs, acceptance
   criteria, validation, evidence requirements, stop conditions, and whether
   auto-continuation is allowed.
 - Each active generation README should carry a `## Generation Runway`: a short,
   coarse list of generation goals, states, governing refs, and likely next
-  milestones. Use it to choose the next milestone when a lane closes instead of
+  tasks. Use it to choose the next task when a lane closes instead of
   inventing a new direction from recent context. It does not need to pre-plan
-  every milestone, but it should be written to keep a significant generation
+  every task, but it should be written to keep a significant generation
   moving across many roadmap files.
-- When planning is required for a material lane, do not stop at one next card.
+- When planning is required for a material lane, do not stop at one next task.
   Compile a bounded execution runway that names the generation-runway goal it
-  advances, the next few meaningful batches or milestones, and the next
+  advances, the next few meaningful tasks, and the next
   planning checkpoint.
-- Roadmap milestones are turnkey lane definitions: name a multi-batch execution
-  plan with checkbox tasks, not one agent turn. Batch cards carry step detail.
-  See `bundle-docs/sections/03-roadmaps.md` (*Scope and granularity rule*).
+- Roadmap tasks are turnkey lane definitions: name a reviewable execution
+  plan with checkbox tasks, not one agent turn. See
+  `bundle-docs/sections/03-roadmaps.md` (*Scope and granularity rule*).
 - In a strict lane, a bare `continue` should resolve through the previous
-  closeout's `Next Task`, which should normally point at the current ready card
+  closeout's `Next Task`, which should normally point at the current ready task
   or an explicit stop/reassessment step.
 - When planning is needed and the next direction is still materially
   ambiguous, stop and ask for operator intent instead of inventing the next
@@ -77,7 +77,7 @@ non-authoritative.
 - Keep `docs/specs/` tidy over time: retain active or still-useful planning
   history, but archive or remove stale specs once promoted canonical surfaces
   already carry the truth and the lane is no longer active.
-- Treat specs and batch-card lanes as having explicit lifecycle states:
+- Treat specs and task lanes as having explicit lifecycle states:
   `active`, `retired-in-place`, and `archived`.
 - Use `retired-in-place` only as a short-lived holding state when a recently
   closed planning artifact still needs to remain near active work for
@@ -172,12 +172,12 @@ non-authoritative.
 
 ### Ready-state rubric
 
-- Full doctrine enumerations for batch-card fields and card-level readiness live
+- Full doctrine enumerations for task fields and task-level readiness live
   in [`bundle-docs/sections/07-delivery-framework-and-autonomy.md`](../../bundle-docs/sections/07-delivery-framework-and-autonomy.md)
-  under **Batch card rule** and **Ready-state rubric**. This subsection stays the
+  under **Task rule** and **Ready-state rubric**. This subsection stays the
   compact binding surface for the northstar repo.
 - Treat `ready` as a constrained execution state, not a placeholder label.
-- A card is ready only when:
+- A task is ready only when:
   - its objective is bounded enough to complete without fresh planning
     decisions
   - its governing refs point at current canonical surfaces
@@ -186,20 +186,20 @@ non-authoritative.
   - high-risk, universal, exact, or negative acceptance includes a compact
     review oracle: invariant, adversarial counterexample, expected failure or
     stop point, and required proof
-  - no unresolved planning gap still governs the card's scope
-  - no unresolved intent checkpoint still governs the card's scope
+  - no unresolved planning gap still governs the task's scope
+  - no unresolved intent checkpoint still governs the task's scope
 - A short auto-continuation chain is ready only when:
-  - each card in the chain is individually ready
-  - the cards belong to the same active roadmap/spec lane
+  - each task in the chain is individually ready
+  - the tasks belong to the same active roadmap/spec lane
   - the order is explicit and the next transition is already represented in
     file state
   - the chain stays inside the project's autonomy envelope
 - A lane is planning-coherent only when:
   - the current roadmap/spec surfaces name the higher-level owner of the lane
-  - the next likely batches or milestone handoff are visible beyond the
-    immediate ready card
+  - the next likely tasks or task handoff are visible beyond the
+    immediate ready task
   - the next planning checkpoint is explicit rather than deferred until the
-    current card finishes
+    current task finishes
 
 ### Readiness-map and decision-record contract
 
@@ -269,18 +269,18 @@ planning instruments, not execution permissions:
 All four routes are provider-neutral, plan-only, non-mutating by default, and
 must leave a traceable path back to the readiness map and its canonical decision
 records. A route may update planning evidence, but it cannot mark a map cleared,
-make a card ready, or bypass normal spec, promotion, roadmap, or operator gates.
+make a task ready, or bypass normal spec, promotion, roadmap, or operator gates.
 
 ### Continuation envelope
 
 - Treat auto-continuation as a bounded envelope, not an open-ended permission.
 - A continuation envelope must make explicit:
-  - which next card may auto-start
-  - how many already-defined ready cards remain in-bounds
+  - which next task may auto-start
+  - how many already-defined ready tasks remain in-bounds
   - what proof must pass before each transition stays valid
 - The continuation envelope may stay active only while:
-  - the completed card's evidence gate passed
-  - the next card is already defined and still marked ready
+  - the completed task's evidence gate passed
+  - the next task is already defined and still marked ready
   - the governing refs still match the live lane
   - no stop signal has been triggered
 - If any part of that envelope is no longer explicit in file state, treat
@@ -289,9 +289,9 @@ make a card ready, or bypass normal spec, promotion, roadmap, or operator gates.
 ### Lane budget and pause signals
 
 - Treat lane budget as the lane-level answer to whether a run should keep
-  spending autonomy budget even when another card is technically in-bounds.
+  spending autonomy budget even when another task is technically in-bounds.
 - A lane-level budget should make explicit:
-  - whether the current card is the end of the budgeted run
+  - whether the current task is the end of the budgeted run
   - whether another operator decision is required before more autonomy is spent
   - which compact pause signal explains a clean stop
 - Low context or normal thread compaction is not a pause signal. Treat it as a
@@ -313,7 +313,7 @@ Work in this repo is not done unless:
   placeholder, mockup, or token partial implementation
 - dependent references and planning surfaces are updated coherently
 - required validation commands were actually run
-- the relevant spec, batch card, roadmap milestone, and log state reflects the
+- the relevant spec, task, and log state reflects the
   current truth
 - unresolved blockers or limits are named explicitly instead of hidden inside a
   completion claim
@@ -331,10 +331,10 @@ Work in this repo is not done unless:
   - what the current lane state is now
   - what happens next
 - Compress validation and protocol bookkeeping into short secondary detail.
-- Mention roadmap/card/log ids only when they clarify the current state, not as
+- Mention roadmap/task/log ids only when they clarify the current state, not as
   the main story.
 - Do not make the operator reconstruct the actual outcome from a list of file
-  updates, card numbers, or validation commands.
+  updates, task numbers, or validation commands.
 - A good default closeout shape is:
   - outcome in plain language
   - current lane state
@@ -352,8 +352,8 @@ Work in this repo is not done unless:
   next dispatches without protocol recitation — but material product
   exploration is chatterbox work, not coordinator work.
 - Internal execution artifacts should remain compact and information-dense:
-  - batch cards
-  - roadmap milestones
+  - tasks
+  - generation runways
   - logs
   - working rules and similar internal contracts
 - Public-facing or explanatory surfaces should keep normal prose:
@@ -371,25 +371,14 @@ Work in this repo is not done unless:
 ### Closeout pattern
 
 - Closeout is an ordered sequence, not a generic reminder to update docs.
-- For a meaningful completed batch or stopping point:
-  - update the current batch card status and completion notes first
-  - update the active roadmap milestone if progress, readiness, or the next
-    batch changed
+- For a meaningful completed task or stopping point:
+  - update the current task status and completion notes first
+  - update the active generation runway if progress, readiness, or the next
+    task changed
   - refresh any front-door or currentness surfaces that still name the active
-    lane, current ready card, or recent evidence chain
-  - write the batch log with evidence, validation actually run, and unresolved
+    lane, current ready task, or recent evidence chain
+  - write the task log with evidence, validation actually run, and unresolved
     blockers or limits
-  - record whether the continuation envelope still holds or whether a stop
-    signal exhausted it
-  - record the lane budget state and the pause signal when the run is not
-    simply continuing in-bounds
-  - update or create a handoff only when another thread truly needs to take
-    over or the user explicitly asks for one
-  - leave one explicit next-task pointer in the roadmap front doors:
-    `docs/roadmaps/README.md`, `docs/roadmaps/generation-index.md`, and the
-    active `docs/roadmaps/gNN/README.md`
-- If the next work is not ready, say so explicitly in closeout rather than
-  implying continuation.
 - Do not declare the lane complete or create a handoff merely because context
   is low or the runtime may compact the thread. If the same thread can keep
   going after compaction, normal closeout plus `Next Task` is the correct path.
@@ -398,32 +387,32 @@ Work in this repo is not done unless:
 
 ### Execution autonomy
 
-- When a thread has a ready runway of cards, the default behavior is to
+- When a thread has a ready runway of tasks, the default behavior is to
   continue through them without pausing for operator acknowledgment at every
   boundary.
 - Bounded work uses the same compact lifecycle. Add a material spec when the
-  decision warrants one; ready cards, explicit continuation limits, and stop
+  decision warrants one; ready tasks, explicit continuation limits, and stop
   protections govern autonomous execution without a second posture.
 - Auto-continuation is allowed only when:
-  - the next card is already defined and marked ready
-  - the cards belong to the same active roadmap/spec lane
+  - the next task is already defined and marked ready
+  - the tasks belong to the same active roadmap/spec lane
   - the governing refs still match the work
-  - the prior card's evidence gate passed
+  - the prior task's evidence gate passed
   - the remaining continuation envelope is explicit in file state
   - no stop condition below has been triggered
 - In a strict lane, a later bare `continue` should normally be enough because
-  the prior closeout already named the next task and the current ready card.
-- That should not collapse the lane into one-card improvisation. Planning work
+  the prior closeout already named the next task and the current ready task.
+- That should not collapse the lane into one-task improvisation. Planning work
   should leave enough runway that execution can see the broader lane shape and
   the next planning checkpoint without reopening strategy from scratch after
-  every card.
+  every task.
 - If a thread still needs a giant continuation prompt in ordinary use, treat
   that as a repo-surface or local-agent-contract failure worth tightening.
 - Context compaction is compatible with that model. It should not be treated as
   a handoff-required boundary when the same thread can continue from the prior
   `Next Task`.
 - Default upper bound for one uninterrupted run:
-  - up to 3 consecutive ready batch cards
+  - up to 3 consecutive ready tasks
   - or roughly 90 minutes of focused work
   - whichever limit is hit first
 - When that upper bound is reached cleanly, use `budget-exhausted` instead of
@@ -500,7 +489,7 @@ This contract and system architecture govern the current planning and delivery t
   escalation remains enabled; child waits are not empty runway.
 - Coordinator turns are event-bounded. After an operator event or child
   notification, perform all immediately available coordination and continue
-  across merge, closeout, and card boundaries while the canonical runway names
+  across merge, closeout, and task boundaries while the canonical runway names
   another ready mechanical action. Yield only for a child/external result, new
   authority, or an empty runway. Never poll, invoke a wait primitive, hold the
   turn open for a child, or repeatedly rescan unchanged state. Finish
@@ -582,7 +571,7 @@ following authority split:
   absent from an independent review;
 - the **worker thread** owns implementation only inside its dedicated worktree
   and branch, including bounded diagnosis and implementation judgment inside
-  the assigned ready cards, tests, commits, evidence, and PR creation;
+  the assigned ready tasks, tests, commits, evidence, and PR creation;
 - a **planning delegate** owns one operator-facing discovery conversation and
   its bounded triage/research packet in an isolated branch; it does not promote
   canonical planning, decide readiness, or implement;
@@ -632,12 +621,12 @@ current orchestrator thread to perform a direct review.
 
 packet, the orchestrator compiles an exact promotion brief and dispatches a
 bounded planning-projection worker as its own branch/worktree/PR lane. The
-worker may edit canonical architecture, contracts, specs, roadmaps, and cards
+worker may edit canonical architecture, contracts, specs, roadmaps, and tasks
 only as the brief names; semantic ambiguity returns to the operator and the
 chatterbox. An independent review child reviews the promotion PR against the
 confirmed packet, and the coordinator applies the normal exact-head merge
 gate. Readiness stays a canonical property of the
-promoted card. Small operational clarifications that cannot change behavior,
+promoted task. Small operational clarifications that cannot change behavior,
 acceptance, public contract, or sequencing may still be handled directly by
 the orchestrator.
 
@@ -735,7 +724,7 @@ coordinator execution authority.
 The **coordinator** checks only current facts: promoted commit, prerequisite
 completion, path/workspace/branch collisions, transport/profile availability,
 repository gates, and operator pauses. It loads only the instructions, promoted
-commit, selected cards, manifest, and named refs needed for factual preflight
+commit, selected tasks, manifest, and named refs needed for factual preflight
 (narrow fast path), not open triage. It never reconciles triage or chooses a
 planning branch from it. It launches the complete approved ready frontier published
 in the dispatch manifest; it does not design lanes, dependency edges, or
@@ -746,7 +735,7 @@ next bounded turn.
 
 After meaning is fully settled, a fast/low-cost subagent may serially apply an
 exact brief to genuinely mechanical non-semantic edits in the planning
-checkout: materializing already-settled roadmap, card, log, front-door, index,
+checkout: materializing already-settled roadmap, task, log, front-door, index,
 handoff, template, parity, and evidence updates; synchronizing exact settled
 wording across named source/install surfaces; and running deterministic docs,
 link, parity, and diff checks. The brief must name the authority owner, settled
@@ -777,8 +766,7 @@ to Chatterbox, which rules from cited existing authority or converses with the
 operator before returning direction; other capsules follow their named
 escalation path. Missing or opaque capsules return to the discovering child.
 
-The repository is the durable communication boundary. A worker must be able to
-re-enter from its worker handoff, `AGENTS.md`, canonical refs, cards, commits,
+re-enter from its worker handoff, `AGENTS.md`, canonical refs, tasks, commits,
 tests, and PR metadata; private conversation history is not required authority.
 
 Parallel dispatch is the default schedule, not an operator-requested option.
@@ -790,7 +778,7 @@ before creating a new thread.
 
 A lane belongs on that frontier only when it has no shared mutable scope,
 no ordering/data/generated-artifact dependency, and no overlapping authority
-decision, and when it has its own ready cards, validation, evidence, stop
+decision, and when it has its own ready tasks, validation, evidence, stop
 conditions, worktree, branch, and handoff. Same-repository lanes must also
 partition their mutable and closeout/front-door surfaces or reserve one named
 orchestrator integration step; two workers never own the same front door.
@@ -800,7 +788,7 @@ dependency, shared surface, or unresolved authority. Unrelated ready work is
 not serialized around one blocked edge. A provider, model, or profile quota,
 spend, rate, or availability failure is not a control-plane capacity signal and
 must not serialize unrelated ready work. Parallelism is never a reason to invent
-a speculative card or to split one coherent issue-fix lane.
+a speculative task or to split one coherent issue-fix lane.
 
 A control-plane workspace or agent creation failure belongs to that lane.
 Preserve every returned workspace or agent identity so an ambiguous attempt is not duplicated,
@@ -820,7 +808,7 @@ merge, and closeout while workers run. A worker-finish notification starts
 review of that lane; it does not refill a global launch queue.
 
 Same-repository PRs merge one at a time. After each merge, post-merge local
-integration reconciliation is mandatory before card closeout, frontier
+integration reconciliation is mandatory before task closeout, frontier
 recomputation, or another worker dispatch:
 - resolve and verify the provider's merged PR and resulting `origin/main`;
 - fetch the integration remote, fast-forward the project's local `main`
@@ -888,13 +876,13 @@ Before a worker starts:
 
 During execution:
 
-- every assigned card is already ready, ordered, and inside the continuation
+- every assigned task is already ready, ordered, and inside the continuation
   envelope;
 - issue-fix dispatches are outcome-scoped: when the operator asks to fix a
   reported defect, the same worker lane owns reproduction, diagnosis, the
   smallest complete contract-valid repair, removal of temporary diagnostics, validation,
   evidence, and PR creation;
-- a fix card may be ready without a known root cause or preselected edit when it
+- a fix task may be ready without a known root cause or preselected edit when it
   defines the observed failure, expected behavior, reproduction or acceptance
   evidence, scope boundaries, validation, and stop conditions;
 - the orchestrator must not split diagnosis into a separate completed lane or
@@ -904,19 +892,19 @@ During execution:
   makes implementation impossible inside the current envelope;
 - the worker handoff names scope, acceptance, validation, evidence, stop conditions,
   report cadence, and PR base/head expectations;
-- the handoff is a dispatch overlay: it points to canonical cards and contracts
+- the handoff is a dispatch overlay: it points to canonical tasks and contracts
   instead of copying their steps, acceptance prose, or general doctrine;
 - the worker reports after meaningful chunks with changed surfaces, validation,
-  remaining cards, blockers, and new risks; an active adapter may return the
+  remaining tasks, blockers, and new risks; an active adapter may return the
   report directly, otherwise the operator relays it;
 - the worker stops on a planning gap, contract contradiction, unresolved product
   choice, scope expansion, missing authority/access, or validation failure that
   changes the plan;
-- the worker may continue through in-bounds ready cards without a new operator
-  prompt, but may not invent the next card or architecture.
+- the worker may continue through in-bounds ready tasks without a new operator
+  prompt, but may not invent the next task or architecture.
 
 Before opening or updating a PR, the worker performs an adversarial pass over
-the diff: enumerate universal, exact, and negative claims, try the card's named
+the diff: enumerate universal, exact, and negative claims, try the task's named
 counterexamples, map every review-oracle row to proof, and reconcile execution
 and closeout surfaces. A newly discovered product threshold, contract choice,
 or acceptance rule returns to planning.
@@ -1015,19 +1003,19 @@ parentage exists.
 - Each active generation's `docs/roadmaps/gNN/README.md` owns its
   `## Generation Runway`.
 - Keep the generation runway coarse and stable. Write it for a long-lived
-  generation, not the next four or five roadmaps. Update it when
-  generation-level intent changes, a milestone materially advances or closes a
+  generation, not the next four or five tasks. Update it when
+  generation-level intent changes, a task materially advances or closes a
   goal, or rollover is being considered.
 - Do not use the generation runway as a backlog, checkbox task list, or
   per-turn currentness surface.
-- In long-running repos, expect one generation to hold many milestones before a
+- In long-running repos, expect one generation to hold many tasks before a
   new generation is useful.
-- Treat roughly 20 to 50 milestones as the normal scale of a healthy
+- Treat roughly 20 to 50 tasks as the normal scale of a healthy
   generation before rollover is even worth discussing.
 - Roll to a new generation only when the sequencing baseline itself needs a
   reset, not merely because one lane or batch closed quickly.
-- Finishing a batch, suite, or lane of roadmaps does **not** close the
-  generation. After one batch closes, compile or continue the next batch inside
+- Finishing a task, suite, or lane of roadmaps does **not** close the
+  generation. After one task closes, compile or continue the next task inside
   the same generation.
 
 ### Planning artifact lifecycle classes and prune triggers
@@ -1038,17 +1026,16 @@ disposition:
 | Class | Examples | Live-tree rule | Disposition trigger |
 | --- | --- | --- | --- |
 | durable authority | vision, architecture, contracts | retain while authoritative | replace or delete with all callers when superseded |
-| active execution | active roadmap, ready/in-flight cards | retain only while actionable | fold outcome/evidence into closure, then generation roll-up |
-| transient transport | triage notes, worker handoffs, questionnaires | retain only while carrying unresolved or unconsumed meaning | delete after promotion, consumption, abandonment, or transfer |
+| active execution | active task, ready/in-flight task | retain only while actionable | fold outcome/evidence into closure, then generation roll-up |
 | exceptional evidence | releases, incidents, material migrations | retain when the evidence itself remains operationally useful | roll up only when its durable value is preserved |
 | derived currentness | indexes, status tables, navigation projections | generate, bound, or remove | rebuild from canonical current state |
 
-- Normal delivery evidence belongs on the completed card: outcome, validation,
+- Normal delivery evidence belongs on the completed task: outcome, validation,
   PR, commit, and material limits.
 - A separate log is justified only for an incident, release, migration,
-  cross-lane decision, or evidence set too large to keep the card legible.
+  cross-lane decision, or evidence set too large to keep the task legible.
 - Consumed worker handoffs are deleted after merge, abandonment, or ownership
-  transfer once any durable outcome has moved to the card or canonical docs.
+  transfer once any durable outcome has moved to the task or canonical docs.
 - Promoted specs are removed or reduced to a non-procedural tombstone only when
   a stable external reference requires it. Superseded executable-looking prose
   must not remain in the default read path.
@@ -1056,13 +1043,13 @@ disposition:
 ### Generation closure and roll-up
 
 - Treat rollover as full generation closeout. A closure record may disposition
-  old milestones and cards individually or in explicit groups; it becomes the
+  old tasks individually or in explicit groups; it becomes the
   authority over stale status text inside the closed generation.
 - Move passive observations, future feedback requests, and other unresolved
   commitments to the new generation's bounded watchlist or another current
   destination. They do not keep an old sequencing era open.
 - Before compaction, the generation closure record must establish:
-  1. no milestone or card remains executable in the old generation;
+  1. no task remains executable in the old generation;
   2. durable decisions have canonical destinations;
   3. unresolved and deferred work has an active destination or explicit removal;
   4. current links and front doors no longer depend on files being removed;
@@ -1080,7 +1067,7 @@ disposition:
   - deferred/unresolved items and their new destinations;
   - selected PR, commit, release, and validation references;
   - the succeeding generation.
-- It must not reproduce old steps, card instructions, detailed status
+- It must not reproduce old steps, task instructions, detailed status
   narration, or superseded protocol. Git remains the full-fidelity archive.
 - If those closeout conditions are not satisfied, repair the current generation
   instead of opening a new one.
@@ -1090,7 +1077,7 @@ disposition:
 Refresh, normalization, and authorized docs cleanup must inspect already-closed
 sequential generations, not wait for another rollover. Inventory each expanded
 generation and classify it as active, safely closed, or unresolved from content
-and references. A completed milestone alone does not close a generation.
+and references. A completed task alone does not close a generation.
 
 Apply the preservation oracle before replacing a safely closed generation with
 its roll-up: promote unique authority, rehome open commitments, retain selected
@@ -1138,7 +1125,7 @@ Each compaction lane must satisfy this preservation oracle:
   roadmap records satisfied capabilities, blocking gaps, the current tranche,
   the next tranche, and the evidence needed to advance.
 - Do not backfill closed history merely to imitate the current file shape.
-- Close ordinary migration work on its card. Retain a separate migration log
+- Close ordinary migration work on its task. Retain a separate migration log
   only when the evidence is materially useful after the generation rolls up.
 - Do not invent a detached governance tracker or a permanent mixed posture.
 
@@ -1151,7 +1138,7 @@ Each compaction lane must satisfy this preservation oracle:
   - `docs/roadmaps/gNN/README.md` for the active generation
   - `docs/contracts/contract-index.md`
   - `docs/logs/README.md`
-- Refresh those surfaces whenever the active milestone, generation, or recent
+- Refresh those surfaces whenever the active task, generation, or recent
   evidence chain changes materially.
 - When currentness drift repeats enough to become predictable, add lightweight
   deterministic checks instead of relying only on manual cleanup.
@@ -1160,7 +1147,7 @@ Each compaction lane must satisfy this preservation oracle:
   execution decisions for the current lane.
 - `docs/roadmaps/README.md`, `docs/roadmaps/generation-index.md`, and the
   active `docs/roadmaps/gNN/README.md` should each point to one active
-  milestone, not a list of competing "current" lanes.
+  task, not a list of competing "current" lanes.
 - The active `docs/roadmaps/gNN/README.md` owns the full generation runway.
   Other front doors may point to it, but should not duplicate the runway table.
 - Keep the live next-task pointer only in those roadmap front doors. Other
@@ -1184,7 +1171,7 @@ Execution must stop when:
 - validation fails in a way that changes the plan
 - required access, dependency, or authority is missing
 - the work no longer matches the current master spec or roadmap intent
-- the current batch card is exhausted and the next one is not already ready
+- the current task is exhausted and the next one is not already ready
 - the remaining continuation envelope is missing, contradicted, or no longer
   justified in file state
 
@@ -1200,8 +1187,7 @@ Execution must stop when:
   exists.
 - System architecture and the lifecycle rules in this contract agree; checks
   must not require a promoted spec to remain in the live tree.
-- at least one live batch card exists and is tied to an active roadmap
-  milestone
+- at least one live task exists and is tied to the active generation
 - `effigy qa`
 - `effigy qa:docs`
 

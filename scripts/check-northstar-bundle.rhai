@@ -71,7 +71,7 @@ let required_files = [
     "template-bundle/roadmaps/archive/README.md",
     "template-bundle/roadmaps/archive/rollup-template.md",
     "template-bundle/specs/README.md",
-    "template-bundle/specs/batch-cards/README.md",
+    "template-bundle/roadmaps/templates/task-template.md",
     "template-bundle/vision/README.md",
     "template-bundle/vision/001-project-vision-blueprint-template.md",
     "template-bundle/minimal/triage/README.md",

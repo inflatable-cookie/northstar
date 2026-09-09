@@ -43,7 +43,7 @@ blocker. Do not label lifecycle state `current` while a classified closed
 generation remains expanded unless that unresolved blocker or a bounded
 migration disposition is explicit.
 
-A completed milestone alone does not close a generation.
+A completed task alone does not close a generation.
 
 ## Procedure
 
@@ -55,7 +55,7 @@ any deletion.
 Walk `docs/` recursively. For each expanded `docs/roadmaps/gNN/` directory,
 collect:
 
-- generation README, milestones, batch cards, and nested files;
+- generation README, task files, and nested files (including any legacy `batch-cards/` directory, which compacts with its generation);
 - inbound Markdown links from current front doors and other live docs;
 - unique durable rules (statements that do not already exist on a current
   canonical contract, architecture, or vision surface);
@@ -81,7 +81,7 @@ From content and references, not from folder count:
 - **active** — the sequential current generation, or an explicit parallel
   active generation named as active by front doors;
 - **safely closed** — generation-index or equivalent closure record says
-  closed, no milestone or card remains executable, and no unresolved
+  closed, no task remains executable, and no unresolved
   preservation blocker remains after promotion/rehoming in the later steps;
 - **unresolved** — conflicting active/closed state, missing ownership, unique
   authority or open commitment without a destination, or explicit parallel
@@ -134,8 +134,8 @@ Must not contain:
 
 - `Status: active`, `Status: ready`, or `Status: in-flight`;
 - `## Steps`, `## Execution Plan`, or `## Acceptance Criteria`;
-- `Auto-start next card: yes`;
-- copied old steps, card instructions, or detailed status narration.
+- `Auto-start next task: yes`;
+- copied old steps, task instructions, or detailed status narration.
 
 ### 6. Rewrite current links
 

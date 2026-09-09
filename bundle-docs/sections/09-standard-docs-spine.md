@@ -39,8 +39,8 @@ rather than creating a separate posture:
   for formal contract coverage and execution grammar
 - `docs/specs/README.md` and `docs/specs/templates/` -- when provisional shaping
   is needed before promoting durable outcomes into architecture/contracts
-- `docs/roadmaps/gNN/batch-cards/` -- for step-by-step execution detail under
-  active roadmap milestones
+- `docs/roadmaps/gNN/NNN-<slug>.md` -- executable tasks (`gNN.NNN`) carrying
+  their own steps, acceptance, and closeout under the generation runway
 - `docs/research/` -- when comparative or source-backed exploration is needed
   before architecture or roadmap commitments
 
@@ -56,7 +56,7 @@ protocol; it is already the compact Northstar lifecycle.
 - `specs/` are provisional planning surfaces used only while shaping material
   changes before promotion.
 - `roadmaps/` sequence approved work from the canonical surfaces.
-- `logs/` capture batch-level evidence and decisions.
+- `logs/` capture task-level evidence and decisions.
 - `handoffs/` hold friendly, timestamped notes for genuine thread takeovers.
 - `triage/` holds temporary conversational observations, ideas, plans, and
   questions. It is a mutable capture buffer, not an execution authority. Update
@@ -87,8 +87,8 @@ In that shape:
 
 - Do not install `specs/` mechanically on repos that do not need provisional
   planning; add them when material changes require shaping before promotion.
-- Do not describe a repo without batch cards as carrying full
-  continuation-envelope automation; batch cards carry step detail when explicit
+- Do not describe a repo without tasks as carrying full
+  continuation-envelope automation; tasks carry step detail when explicit
   autonomy state is needed.
 - Do not leave `specs/` present without making the promotion rule clear.
 - Do not let setup invent a bespoke docs structure when the standard spine is
@@ -116,8 +116,8 @@ inside the standard spine rather than in a separate control surface.
 
 Use:
 
-- one active migration spec or roadmap milestone
-- normal batch logs for completed migration tranches
+- one active migration spec or roadmap task
+- normal task logs for completed migration tranches
 
 The migration planning artifact should record:
 
@@ -128,7 +128,7 @@ The migration planning artifact should record:
 - next tranche
 - tranche-close evidence
 
-The roadmap milestone should then sequence the actual migration batches.
+The roadmap task should then sequence the actual migration work.
 
 The live `## Next Task` pointer belongs in the roadmap front doors:
 `docs/roadmaps/README.md`, `docs/roadmaps/generation-index.md`, and the active

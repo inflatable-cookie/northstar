@@ -124,7 +124,7 @@ than inventing a destination.
 If the request is an explicit orchestrator, worker, worktree, or PR loop, choose
 **Orchestrator** mode instead. If the request is only to test existing planning
 coherence, choose **Planning readiness review**. If coherent canonical surfaces
-only need milestones, choose roadmap compilation.
+only need tasks, choose roadmap compilation.
 
 → [`modes/atlas.md`](./modes/atlas.md)
 
@@ -264,8 +264,8 @@ If planning coverage is **still missing**, use plan-from-scratch instead.
 Use when the job is **planning or sequencing** and recovery is not the main
 problem:
 
-- plan from scratch, contracts, specs, promotion, compile roadmaps/milestones
-- next milestone, next batch, readiness, continuation envelope
+- plan from scratch, contracts, specs, promotion, compile roadmap tasks
+- next task, readiness, continuation envelope
 - tighten guardrails so execution cannot outrun contracts
 
 Choose one:
@@ -274,7 +274,7 @@ Choose one:
 | --- | --- |
 | Missing architecture/inventory/contracts | [`plan-from-scratch.md`](./modes/plan-from-scratch.md) |
 | Change still in provisional specs | [`shape-with-specs-and-promote.md`](./modes/shape-with-specs-and-promote.md) |
-| Canonical surfaces exist; need milestones/cards | [`compile-roadmaps.md`](./modes/compile-roadmaps.md) |
+| Canonical surfaces exist; need tasks | [`compile-roadmaps.md`](./modes/compile-roadmaps.md) |
 
 ## 15. Chatterbox planning and intake
 
@@ -377,7 +377,7 @@ normal mode-specific checks.
 
 Name repo lifecycle state early: `ready`, `paused`, `migration`, or `drifted`.
 Whenever lifecycle state matters, also name authority mode (root-owned or
-nested), active lane, whether a ready card exists, and whether an intent
+nested), active lane, whether a ready task exists, and whether an intent
 checkpoint blocks the next move.
 
 ## Shared reads

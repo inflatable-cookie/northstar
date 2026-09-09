@@ -5,12 +5,12 @@ Updated: 2026-06-05
 
 ## Why this section matters now
 
-Roadmaps convert strategy into executable short-term milestone blocks.
+Roadmaps convert strategy into executable short-term task blocks.
 Generation segmentation keeps long-running programs manageable.
 
 ## Scope
 
-Define milestone files, batch-oriented execution lists, acceptance criteria, and
+Define task files, dependency-linked sequencing, acceptance criteria, and
 sequencing rules.
 Roadmaps must derive from vision, architecture, and contracts, plus research
 translation memos when comparative work materially shaped the bet, unless a
@@ -53,9 +53,9 @@ Rationale:
 Start a new generation (`g02`) only when manually triggered.
 
 Generations are meant to be substantial sequencing eras, not tiny buckets of
-one or two milestone files. In a long-running repo, a healthy generation will
+one or two task files. In a long-running repo, a healthy generation will
 often cover tens of roadmap files before rollover becomes useful. By default,
-expect roughly 20 to 50 milestone files inside one generation before rollover is
+expect roughly 20 to 50 task files inside one generation before rollover is
 even worth considering. Treat that as a judgment guardrail, not an
 automatic file-count trigger.
 
@@ -67,23 +67,21 @@ Typical manual triggers:
 - the existing generation would become misleading if new work kept landing
   under its old sequencing assumptions
 
-Do not roll a generation just because one milestone closed quickly or because a
-single external proof lane completed. Finishing a batch, suite, or lane of
-roadmaps does **not** mark the generation as complete. After closing one batch,
-compile or continue the next batch inside the same generation. The generation
+Do not roll a generation just because one task closed quickly or because a
+single external proof lane completed. Finishing a task, suite, or lane of
+roadmaps does **not** mark the generation as complete. After closing one task,
+compile or continue the next task inside the same generation. The generation
 stays open until the rollover conditions above are met.
 
 Generation rollover is a closeout event, not a convenience move. Before opening
 `gNN+1` in sequential mode, all of the following must be true:
 
-- every milestone in `gNN/` is explicitly closed, superseded, or moved to
+- every task in `gNN/` is explicitly closed, superseded, or moved to
   backlog so no roadmap file in the old generation still presents as active
 - the roadmap front doors and generation README agree that `gNN` is fully
   closed and ready for rollover
 - `docs/specs/` has been purged of stale specs from the closing generation so
-  the active specs tree no longer carries obsolete planning debris. Batch cards
-  stay with their generation under `docs/roadmaps/gNN/batch-cards/` and do not
-  need separate archiving.
+  the active specs tree no longer carries obsolete planning debris.
 
 If those conditions are not met, stay in the current generation and repair the
 lane state there first.
@@ -97,7 +95,7 @@ sequential generations. They do not wait for a new rollover to replace a
 safely closed expanded generation with `docs/roadmaps/archive/gNN.md`.
 
 Inventory each expanded `gNN/` tree and classify it as active, safely closed,
-or unresolved from content and references. A completed milestone does not close
+or unresolved from content and references. A completed task does not close
 a generation. Apply the preservation oracle before deletion: promote unique
 authority, rehome open commitments, retain selected evidence, rewrite current
 links, then remove only the classified sources. Leave ambiguous generations
@@ -114,31 +112,31 @@ blanket confirmation. Read-only cleanup reports the proposal only.
 Each active generation's `docs/roadmaps/gNN/README.md` should carry a
 `## Generation Runway`: a short, coarse goal list for the generation.
 
-Use it to steer the next milestone when a lane closes. Write it with the
+Use it to steer the next task when a lane closes. Write it with the
 express intent of keeping a significant generation moving for a long time. It
-does not need to plan all 20 to 50 likely milestones in one pass, but it should
+does not need to plan all 20 to 50 likely tasks in one pass, but it should
 make the next several durable goal areas visible so agents do not treat four or
-five completed roadmaps as a rollover signal.
+five completed tasks as a rollover signal.
 
-The generation runway sits above individual milestones and batch cards:
+The generation runway sits above individual tasks:
 
 - vision explains why the generation matters
 - architecture and contracts define the allowed shape
 - the generation runway names the main goals still governing this generation
-- milestones turn those goals into executable slices
-- batch cards carry step detail when batch cards are used
+- tasks turn those goals into executable slices with their own steps,
+  acceptance, and closeout
 - `Next Task` remains the live continuation pointer in roadmap front doors
 
 The runway is not a backlog, not a checkbox task list, and not a second current
-queue. Keep it stable between real strategy, milestone, or rollover changes.
+queue. Keep it stable between real strategy, task, or rollover changes.
 If an agent is rewriting the runway every turn, it is using the surface wrong.
-If an agent wants to roll the generation after only a handful of milestones,
-the runway should bias toward compiling the next milestone inside the current
+If an agent wants to roll the generation after only a handful of tasks,
+the runway should bias toward compiling the next task inside the current
 generation unless a real sequencing reset is already documented.
 
 Recommended shape:
 
-| Goal | State | Governing refs | Next milestone |
+| Goal | State | Governing refs | Next task |
 | --- | --- | --- | --- |
 | Establish the first contract-backed execution lane. | active | `<contract refs>` | `g01.001` |
 
@@ -156,94 +154,67 @@ active generations without blocking each other. In parallel mode:
 - each generation's `gNN/README.md` remains the authoritative front door for
   that thread
 - front doors must accurately name all active generations and their active
-  milestones
+  tasks
 
 Use parallel mode only when the work streams are truly independent. Do not use
 it to bypass closeout discipline for related work that should share a queue.
 
-## Content contract (per roadmap file)
+## Content contract (per task file)
 
-1. `Status`, `Owner`, `Created`, `Depends on`, `Vision tags`, `Contract refs`,
-   `Planning state`
-2. `## Problem`
-3. `## Goals`
-4. `## Non-Goals`
-5. `## Contract Coverage`
-6. `## Execution Plan` (batch-based executable task lists with checkboxes)
-7. `## Acceptance Criteria`
-8. `## Risks and Mitigations`
-9. `## Planning Gaps`
-10. `## Evidence Requirements`
-11. `## Next Task`
+1. `Status`, `Owner`, `Created`, `Depends on`, `Governing refs`,
+   `Dispatch manifest`
+2. `## Outcome`
+3. `## Decisions` (when the task settles provisional design)
+4. `## Work` (ordered steps with checkboxes)
+5. `## Acceptance and review oracle`
+6. `## Stop conditions`
+7. `## Evidence` (on completion: PR, head, merge, validation, limits)
+8. `## Next task`
 
 ## Scope and granularity rule
 
-Roadmaps are **turnkey milestone definitions**, not thread-scoped planning
-notes. A roadmap should survive closeout and handoff without the originating
+Tasks are **turnkey execution definitions**, not thread-scoped planning
+notes. A task should survive closeout and handoff without the originating
 agent chat.
 
-### Roadmap owns the lane shape
+### Task owns the work
 
-- A roadmap milestone names the problem, goals, acceptance, and **batch
-  sequence** for a material slice of work.
-- `## Execution Plan` groups work into named batches (`### Batch n.m`). Each
-  batch is a meaningful execution chunk, not a single agent turn.
-- When batch cards are used, most batches map to one or more **batch cards**
-  under `docs/roadmaps/gNN/batch-cards/`. The roadmap defines the sequence;
-  batch cards define the step-by-step instructions for the current batch.
-
-### Batch cards own the steps
-
-- Do not put batch-card-level steps only in roadmap prose and then recreate the
-  roadmap on the next thread.
-- Do not use a roadmap as a one-card scratchpad. When batch cards are used,
-  promote the immediate work into a batch card and keep the roadmap at milestone
-  granularity.
-
-### Minimum runway inside a milestone
-
-For a non-trivial lane:
-
-- `## Execution Plan` should name **at least two or three batches** before
-  execution starts, or name the immediate batch plus explicit runway notes that
-  list the next few batches or milestone transitions.
-- When batch cards are used, a freshly compiled material milestone should
-  normally anticipate **several batch cards** across the visible runway (a
-  useful default is three or more), not a single card with implied follow-on
-  work.
-- One batch in the execution plan may span multiple batch cards when the scope
-  is still one meaningful chunk.
+- A task names the outcome, governing refs, ordered work steps, acceptance
+  oracle, and stop conditions for one reviewable slice of work.
+- `## Work` groups work into ordered steps. Each step is concrete enough to
+  tick off during closeout, but the task stays one coherent outcome — not
+  one agent turn and not a vague multi-month bucket.
+- Size a task by coherent ownership and a reviewable outcome. Model a
+  long-running outcome as a dependency-linked sequence of meaningful tasks
+  in one generation, with the generation runway showing the dependency order
+  and the next planning checkpoint.
 
 ### Checkbox format
 
-Write `## Execution Plan`, `## Goals`, and `## Acceptance Criteria` as
-actionable checkbox lines (`- [ ]` / `- [x]`). That keeps milestone progress
-scannable at a glance. Batch-level tasks inside `## Execution Plan` should be
-concrete enough to tick off during closeout.
+Write `## Work` and acceptance rows as actionable checkbox lines
+(`- [ ]` / `- [x]`). That keeps task progress scannable at a glance.
 
 ### Anti-patterns
 
-- Creating a new roadmap file each agent turn instead of updating the active
-  milestone and batch cards.
-- A roadmap whose entire execution plan is one batch that duplicates a single
-  batch card.
-- Micro-batches sized to a single trivial task.
+- Creating a new task file each agent turn instead of updating the active task.
+- A task whose entire work section is one vague bucket with no ordered steps.
+- Micro-tasks sized to a single trivial edit.
 - Prose-only bullet lists where checkbox progress would be clearer.
 
 See also the runway rule in
 [07-delivery-framework-and-autonomy.md](./07-delivery-framework-and-autonomy.md).
 
-## Batch rule
+## Task rule
 
-- Plan and execute in meaningful batches (not micro-tasks).
-- Logs must be created per completed batch/update cycle, not per individual task.
-- If a batch uncovers a missing contract or unplanned repo behavior, stop and
+- Plan and execute in meaningful tasks (not micro-tasks).
+- Evidence must be recorded on the completed task, not per individual step.
+- If a task uncovers a missing contract or unplanned repo behavior, stop and
   close the planning gap before continuing execution.
-- Do not run roadmap execution directly from a raw spec once the spec's durable
+- Do not run task execution directly from a raw spec once the spec's durable
   outcomes should have been promoted into architecture/contracts.
-- For a material lane, do not leave the roadmap at one immediate card plus
-  guesswork. Show the higher-level owner, the next few meaningful batches or
-  milestone transitions, and the next planning checkpoint.
+- For a material lane, do not leave the generation at one immediate task plus
+  guesswork. Show the runway goal, the next few meaningful tasks or
+  transitions, and the next planning checkpoint.
 
 ## Currentness rule
 
@@ -256,8 +227,7 @@ See also the runway rule in
 - `docs/roadmaps/README.md`
 - `docs/roadmaps/generation-index.md`
 - `docs/roadmaps/gNN/README.md` for each active generation
-- `docs/roadmaps/gNN/batch-cards/` when batch cards are in use
-- Refresh those surfaces whenever the active milestone or generation changes so
+- Refresh those surfaces whenever the active task or generation changes so
   operators do not have to reconstruct the live lane from stale front doors.
 
 ## Currentness curation rule
@@ -265,12 +235,12 @@ See also the runway rule in
 - In sequential mode, `docs/roadmaps/README.md`,
   `docs/roadmaps/generation-index.md`, and the active
   `docs/roadmaps/gNN/README.md` should each name one active generation and one
-  active milestone, not a cluster of competing "current" lanes.
+  active task, not a cluster of competing "current" lanes.
 - Keep the live `## Next Task` pointer only in those roadmap front doors.
   Non-roadmap docs may describe active state, but should not each own the
   current thread pointer.
 - In parallel mode, front doors must name all active generations and their
-  active milestones. Each generation's `gNN/README.md` remains the
+  active tasks. Each generation's `gNN/README.md` remains the
   authoritative front door for that thread.
 - `docs/README.md` may surface one active spec alongside the active roadmap,
   but only when that spec still materially governs the next planning or
@@ -283,21 +253,21 @@ See also the runway rule in
 Default posture is manual-first evidence, not checker-script proliferation.
 
 Only add a new script/checker when all are true:
-- the same check has repeated in at least 3 batches, or across at least 2 projects
+- the same check has repeated in at least 3 tasks, or across at least 2 projects
 - pass/fail is deterministic and not primarily judgement-based
 - an owner and expected run cadence are explicitly assigned
 - a removal/sunset trigger is recorded
 
-If these conditions are not met, keep validation in batch logs as human-run checks.
+If these conditions are not met, keep validation in task logs as human-run checks.
 
 ## Quick reference
 
-- [Glossary: Generation, milestone, lane](../glossary.md#execution-and-workflow)
+- [Glossary: Generation, task, lane](../glossary.md#execution-and-workflow)
 - [Glossary: Currentness, backlog](../glossary.md#execution-and-workflow)
 - [Cheat sheet: Reference keys](../cheat-sheet.md#reference-keys)
 
 ## Next task
 
 Keep roadmap doctrine, templates, and currentness surfaces aligned around the
-active lane so rollover and milestone changes do not leave stale front doors
+active lane so rollover and task changes do not leave stale front doors
 behind.

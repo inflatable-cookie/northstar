@@ -13,8 +13,8 @@ fn fixture_required_files() {
         "docs/README.md",
         "skills/northstar/SKILL.md",
         "skills/northstar/references/mode.md",
-        "template-bundle/specs/templates/batch-card-template.md",
-        "skills/northstar/assets/templates/docs/specs/templates/batch-card-template.md",
+        "template-bundle/roadmaps/templates/task-template.md",
+        "skills/northstar/assets/templates/docs/roadmaps/templates/task-template.md",
     ]
 }
 
@@ -27,8 +27,8 @@ fn fixture_required_files_with_active_authority() {
 fn fixture_file_pairs() {
     [
         [
-            "template-bundle/specs/templates/batch-card-template.md",
-            "skills/northstar/assets/templates/docs/specs/templates/batch-card-template.md",
+            "template-bundle/roadmaps/templates/task-template.md",
+            "skills/northstar/assets/templates/docs/roadmaps/templates/task-template.md",
             "fixture template parity",
         ],
     ]
@@ -42,9 +42,8 @@ fn new_fixture(label, include_docs_front_door, skill_target, mirror_contents, do
     let root = fs::make_temp_dir("northstar-repo-contract-" + label);
     fs::create_dir(path::join(root, "docs"));
     fs::create_dir(path::join(root, "docs/specs"));
-    fs::create_dir(path::join(root, "skills/northstar/references"));
-    fs::create_dir(path::join(root, "skills/northstar/assets/templates/docs/specs/templates"));
-    fs::create_dir(path::join(root, "template-bundle/specs/templates"));
+    fs::create_dir(path::join(root, "skills/northstar/assets/templates/docs/roadmaps/templates"));
+    fs::create_dir(path::join(root, "template-bundle/roadmaps/templates"));
 
     write_fixture_file(root, "README.md", "# Fixture\n");
     if include_docs_front_door {
@@ -52,9 +51,9 @@ fn new_fixture(label, include_docs_front_door, skill_target, mirror_contents, do
     }
     write_fixture_file(root, "skills/northstar/SKILL.md", "[mode](" + skill_target + ")\n");
     write_fixture_file(root, "skills/northstar/references/mode.md", "# Mode\n");
-    write_fixture_file(root, "template-bundle/specs/templates/batch-card-template.md", "canonical\n");
+    write_fixture_file(root, "template-bundle/roadmaps/templates/task-template.md", "canonical\n");
     write_fixture_file(root,
-        "skills/northstar/assets/templates/docs/specs/templates/batch-card-template.md",
+        "skills/northstar/assets/templates/docs/roadmaps/templates/task-template.md",
         mirror_contents);
     root
 }
@@ -298,9 +297,12 @@ let papercut_closeout = new_fixture(
 );
 expect_pass("papercut-closeout", || run_check(papercut_closeout));
 
-let historical_path = "docs/roadmaps/g02/batch-cards/082-reprove-triage-and-docs-cleanup-surface.md";
-require(!contract::required_files().contains(historical_path),
-    "historical card is still in the live required-path list");
+let removed_card_template = "template-bundle/specs/templates/batch-card-template.md";
+require(!contract::required_files().contains(removed_card_template),
+    "removed card template is still in the live required-path list");
+let removed_starter_cards = "template-bundle/roadmaps/g01/batch-cards/README.md";
+require(!contract::required_files().contains(removed_starter_cards),
+    "removed starter batch-cards scaffold is still in the live required-path list");
 let closed_spec_path = "docs/specs/024-papercuts-feedback-loop.md";
 require(!contract::required_files().contains(closed_spec_path),
     "closed spec is still in the live required-path list");
@@ -358,5 +360,25 @@ expect_failure(
     "active front door README.md points at archived generation g01",
 );
 expect_pass("lifecycle-valid", || checker::check_lifecycle(path::join(lifecycle_fixture_root, "valid")));
+expect_failure(
+    "nested-cards",
+    || checker::check_lifecycle(path::join(lifecycle_fixture_root, "nested-cards")),
+    "nested executable cards remain under docs/roadmaps/g02/batch-cards",
+);
+expect_failure(
+    "duplicate-task-id",
+    || checker::check_lifecycle(path::join(lifecycle_fixture_root, "duplicate-task-id")),
+    "duplicate task ID g02.001",
+);
+expect_failure(
+    "ready-outside-frontier",
+    || checker::check_lifecycle(path::join(lifecycle_fixture_root, "ready-outside-frontier")),
+    "ready task g02.001 is outside the approved frontier g02.002",
+);
+expect_failure(
+    "frontier-mismatch",
+    || checker::check_lifecycle(path::join(lifecycle_fixture_root, "frontier-mismatch")),
+    "front doors name different approved tasks",
+);
 
-log("Northstar repo-contract fixture tests: OK (16 fixture cases; 10 expected failures, 6 benign passes, Effigy selector/outer-board proof, source reduction proof)");
+log("Northstar repo-contract fixture tests: OK (20 fixture cases; 14 expected failures, 6 benign passes, Effigy selector/outer-board proof, source reduction proof)");

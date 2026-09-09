@@ -16,7 +16,7 @@ after a sweep-led repair pass.
 4. Apply fixes in meaningful batches rather than one tiny patch at a time.
 5. Check whether the active spec lane and canonical promoted refs still agree.
 6. Re-run the relevant sweep checks and close the findings explicitly.
-7. Add one batch log under `docs/logs/YYYY-MM/` summarizing what changed and
+7. Add one task log under `docs/logs/YYYY-MM/` summarizing what changed and
    what remains unresolved.
 
 ## Guardrails
