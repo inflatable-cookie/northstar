@@ -13,7 +13,7 @@ They guide architecture and roadmap decisions without becoming delivery plans.
 
 ## Writing rule
 
-- Create `001` before creating the first roadmap milestone.
+- Create `001` before creating the first roadmap task.
 - Keep roadmap task sequencing out of vision docs.
 
 ## Governance artifacts (lean and periodic)

@@ -81,7 +81,7 @@ docs/
 
 ## Protocol kernel
 
-Authoritative **enumerations** (batch-card fields, ready-state checks, closeout
+Authoritative **enumerations** (task fields, ready-state checks, closeout
 shape) live in [`sections/07-delivery-framework-and-autonomy.md`](./sections/07-delivery-framework-and-autonomy.md). One-page map of surfaces:
 [`protocol-kernel.md`](./protocol-kernel.md).
 
