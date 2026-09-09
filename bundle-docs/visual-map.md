@@ -4,7 +4,7 @@ Text-based overview of how Northstar pieces fit together.
 
 ## Protocol kernel
 
-Normative **detail** for batch cards, ready-state, closeout, and autonomy lives
+Normative **detail** for tasks, ready-state, closeout, and autonomy lives
 in [`sections/07-delivery-framework-and-autonomy.md`](./sections/07-delivery-framework-and-autonomy.md).
 Before agents or tools re-embed those lists, read the one-page map:
 [`protocol-kernel.md`](./protocol-kernel.md).
@@ -27,15 +27,13 @@ specs/          (consequence-triggered provisional planning)
   └─ provisional planning, then promoted out
 
 roadmaps/
-  ├─ g01/       generation of milestones
-  │   └─ batch-cards/  execution cards (when batch-card detail is needed)
+  ├─ g01/       generation of tasks (`NNN-<slug>.md`, referenced `gNN.NNN`)
   ├─ g02/
-  │   └─ batch-cards/  execution cards (when batch-card detail is needed)
   ├─ backlog/   deferred work
   └─ generation-index.md
 
 logs/
-  └─ YYYY-MM/   dated evidence per batch
+  └─ YYYY-MM/   dated evidence per task
 
 handoffs/
   └─ YYYYMMDD-HHMMSS-<slug>.md   friendly fresh-thread notes
@@ -85,11 +83,11 @@ Northstar Project
 ```
 1. Open docs/README.md
 2. Check generation-index.md for active generation
-3. Open active milestone in gNN/
+3. Open active task in gNN/
 4. Read latest log in logs/YYYY-MM/
-5. Execute next batch
+5. Execute next task
 6. Append any solvable execution friction to root PAPERCUTS.md
-7. Closeout: update card → milestone → front doors → log
+7. Closeout: update task → front doors → log
 ```
 
 ## Workflow: Drifted or New Repo
@@ -98,8 +96,8 @@ Northstar Project
 1. Run sweep pack (8 sweeps)
 2. Invoke the `northstar` skill; open [`skills/northstar/references/router.md`](../skills/northstar/references/router.md) and pick one mode.
 3. Repair/complete planning or normalize docs lifecycle as needed.
-4. Compile roadmap.
-5. Execute batch → log → handoff (handoff mode only when explicitly requested).
+4. Compile task.
+5. Execute task → log → handoff (handoff mode only when explicitly requested).
 ```
 
 ## Skill Surface

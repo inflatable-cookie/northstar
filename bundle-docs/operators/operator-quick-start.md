@@ -17,11 +17,11 @@ If the repo already has live docs and an active roadmap lane:
 
 1. open the repo docs front door
 2. open the generation index
-3. open the active milestone
+3. open the active task
 4. open the latest relevant log
-5. use the governing contracts only when the milestone or log points at them
+5. use the governing contracts only when the task or log points at them
 
-This is the shortest normal path to a valid next batch.
+This is the shortest normal path to a valid next task.
 
 ### Unclear, Missing, Or Drifted
 
@@ -56,7 +56,7 @@ to pick one mode:
   `northstar reframe`
 - Planning, problem exploration, canonical promotion, or intake chat -> chatterbox:
   `northstar chatterbox` or `/northstar-chatterbox`
-- Sound planning; need milestones or batches -> planning: `compile-roadmaps`
+- Sound planning; need tasks -> planning: `compile-roadmaps`
 - Plan was right but changed -> recovery: `replan-after-change`
 - Drifted or messy state -> recovery: `refocus-drifted-project` or `sweep-audit-repair`
 - Research -> contracts/architecture -> `research`
@@ -249,11 +249,11 @@ Start here instead of wading through all docs:
 
 Healthy active repo:
 
-`repo docs -> generation index -> active milestone -> latest log -> next batch`
+`repo docs -> generation index -> active task -> latest log -> next task`
 
 Drifted or unclear repo:
 
-`sweep -> choose entry point -> repair/complete planning -> compile roadmap -> execute batch -> log -> handoff`
+`sweep -> choose entry point -> repair/complete planning -> compile task -> execute task -> log -> handoff`
 
 ## Maintenance-Only Support
 
@@ -264,4 +264,4 @@ These are for maintaining Northstar itself, not for normal repo operation:
 ## Next task
 
 Validate whether the new visual map and glossary actually reduce the time from
-"open repo" to "start next batch" for active operators.
+"open repo" to "start next task" for active operators.

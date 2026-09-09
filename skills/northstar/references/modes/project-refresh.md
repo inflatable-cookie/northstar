@@ -53,13 +53,13 @@ copying their procedures.
    refactor or pretending the architecture is repaired.
 6. **Check planning completeness.** Run the planning-readiness review over the
    active spec, readiness maps, decision records, contracts, research promotion,
-   roadmap milestones, batch cards, and recent logs. Confirm that the next
-   executable batch has current refs, bounded scope, acceptance, validation,
+   roadmap tasks and recent logs. Confirm that the next
+   executable task has current refs, bounded scope, acceptance, validation,
    evidence, and stop conditions.
 7. **Check currentness and closeout.** Reconcile roadmap/current-task pointers,
    completed or stale cards, latest logs, handoffs, papercuts, and unresolved
    decisions. Do not treat a stale pointer or an old handoff as current authority.
-   Inventory already-closed sequential generations. A completed milestone does
+   Inventory already-closed sequential generations. A completed task does
    not close a generation, and a fresh rollover is not required to compact one
    that is already safely closed.
 8. **Compact closed generations.** Follow
@@ -136,6 +136,6 @@ Return a compact refresh report containing:
 - exactly one recommended next route;
 - whether execution is currently safe to continue.
 
-If all facets are current and the next batch is genuinely ready, say so and point
+If all facets are current and the next task is genuinely ready, say so and point
 to the canonical card. If the project is healthy but no execution lane is ready,
 say that explicitly rather than inventing work.

@@ -60,12 +60,12 @@ if fs::is_file(gen_index) {
         } else if !fs::is_file(gen_readme) {
             warnings.push("generation " + gen + " exists but docs/roadmaps/" + gen + "/README.md is missing (operators use it as a front door)");
         } else if list_matching_files(gen_dir, numbered_pattern).len() == 0 {
-            warnings.push("docs/roadmaps/" + gen + "/ has no NNN-<slug>.md milestone files while generation-index still names it active");
+            warnings.push("docs/roadmaps/" + gen + "/ has no NNN-<slug>.md task files while generation-index still names it active");
         }
 
         let batch_dir = path::join(gen_dir, "batch-cards");
-        if fs::is_dir(batch_dir) && list_matching_files(batch_dir, numbered_pattern).len() == 0 {
-            warnings.push("docs/roadmaps/" + gen + "/batch-cards/ exists but has no NNN-<slug>.md cards (ready batch cards normally live here)");
+        if fs::is_dir(batch_dir) {
+            warnings.push("docs/roadmaps/" + gen + "/batch-cards/ still exists; flattened tasks live directly in the generation directory");
         }
     }
 }

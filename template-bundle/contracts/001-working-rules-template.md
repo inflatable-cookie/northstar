@@ -19,7 +19,7 @@ informal habits.
 ### Delivery grammar
 
 - Material work should follow this chain:
-  `vision -> research/specs -> architecture + contracts -> roadmap milestone -> execution -> evidence -> closeout`.
+  `vision -> research/specs -> architecture + contracts -> roadmap task -> execution -> evidence -> closeout`.
 - Use separate contracts for stable seams, important boundaries, or durable
   rules that need their own authority surface.
 - Use specs only while shaping material changes; promote durable outcomes into
@@ -27,11 +27,11 @@ informal habits.
 - Once those outcomes are promoted, treat specs as provisional planning history
   rather than canonical authority; keep, archive, or remove them based on
   whether they still help the active lane.
-- A ready batch card should define scope, steps, governing refs, acceptance
+- A ready task should define scope, steps, governing refs, acceptance
   criteria, evidence requirements, stop conditions, and whether
   auto-continuation is allowed. Full field enumeration lives in the Northstar
   bundle at `bundle-docs/sections/07-delivery-framework-and-autonomy.md`
-  (heading *Batch card rule*); keep this contract aligned with that section when
+  (heading *Task rule*); keep this contract aligned with that section when
   you customize wording.
 - When acceptance crosses concurrency, lifecycle, identity, persistence,
   security, public API, deployment, multi-version, or universal/exact/negative
@@ -40,7 +40,7 @@ informal habits.
 - Before PR creation or revision, the worker tries to falsify the diff against
   that oracle and returns newly discovered product or contract choices to
   planning.
-- Worker handoffs are dispatch overlays. Point to canonical cards and contracts;
+- Worker handoffs are dispatch overlays. Point to canonical tasks and contracts;
   do not copy their steps, acceptance prose, or general doctrine.
 - Classify blocking review findings as `execution-miss`, `oracle-gap`,
   `planning-change`, `validation-gap`, or `integration-drift`. Repair planning
@@ -48,15 +48,14 @@ informal habits.
   count alone does not diagnose handoff quality.
 - Each active generation README should carry a `## Generation Runway`: a short,
   coarse list of generation goals, states, governing refs, and likely next
-  milestones. Use it to choose the next milestone when a lane closes instead of
+  tasks. Use it to choose the next task when a lane closes instead of
   inventing a new direction from recent context. It does not need to pre-plan
-  every milestone, but it should be written to keep a significant generation
+  every task, but it should be written to keep a significant generation
   moving across many roadmap files.
-- Roadmap milestones are turnkey lane definitions: name a multi-batch execution
-  plan (checkbox tasks), not one agent turn. Batch cards carry step detail.
+- Roadmap tasks are turnkey definitions: name a reviewable execution plan (checkbox tasks), not one agent turn.
   See `bundle-docs/sections/03-roadmaps.md` (*Scope and granularity rule*).
 - A bare `continue` should resolve through the previous closeout's `Next Task`,
-  which should normally point at the current ready card or an explicit
+  which should normally point at the current ready task or an explicit
   stop/reassessment step.
 
 ### Papercuts feedback loop
@@ -111,9 +110,9 @@ informal habits.
 - When planning is needed and the next direction is not clearly determined by
   the current authority surfaces, stop and ask the operator for intent instead
   of inventing the next lane or batch.
-- Treat competing plausible directions, milestone handoff choices, and still-open
+- Treat competing plausible directions, task handoff choices, and still-open
   product tradeoffs as intent checkpoints rather than routine planning work.
-- Do not mark a card `ready` while an unresolved intent checkpoint still
+- Do not mark a task `ready` while an unresolved intent checkpoint still
   governs its scope.
 
 ### Execution guardrail pack
@@ -152,7 +151,7 @@ informal habits.
   token implementation.
 - Update dependent refs, roadmap state, and logs so they match reality.
 - Update any front-door or currentness surfaces that still name the active
-  lane, current ready card, or recent evidence chain so they do not keep
+  lane, current ready task, or recent evidence chain so they do not keep
   advertising stale authority after closeout.
 - Run the required validation commands and record them in a log.
 - Name unresolved blockers or limits explicitly instead of hiding them inside a
@@ -168,13 +167,13 @@ informal habits.
   changed, what state the lane is now in, and what happens next.
 - Mention validation only if it failed or materially affects confidence.
 - Keep protocol bookkeeping concise and secondary.
-- Do not make the operator reconstruct the real outcome from card ids, file
+- Do not make the operator reconstruct the real outcome from task ids, file
   updates, or long command lists.
 
 ### Selective compression
 
 - Use compressed, information-dense writing for internal execution surfaces:
-  agent chat, batch cards, roadmap milestones, logs, and internal contracts.
+  agent chat, tasks, generation runways, logs, and internal contracts.
 - Remove filler, repetition, and ceremonial transitions.
 - Prefer short bullets, fragments, and dense phrasing when clarity survives.
 - Do not force this style onto public-facing or teaching docs that need normal
@@ -182,12 +181,12 @@ informal habits.
 
 ### Execution autonomy
 
-- Agents may continue across consecutive ready batch cards without waiting for
+- Agents may continue across consecutive ready tasks without waiting for
   a manual prompt.
-- Auto-continuation is allowed only when the cards stay inside the same active
-  lane, the governing refs still match, and the prior card's evidence gate
+- Auto-continuation is allowed only when the tasks stay inside the same active
+  lane, the governing refs still match, and the prior task's evidence gate
   passed.
-- Set a local upper bound for uninterrupted runs, such as a card limit or time
+- Set a local upper bound for uninterrupted runs, such as a task limit or time
   limit, so autonomy remains bounded.
 
 ### Parallel lane scheduling
@@ -199,14 +198,14 @@ informal habits.
   creating a new thread.
 - A lane joins the frontier only with no shared mutable scope, no
   ordering/data/generated-artifact dependency, no overlapping authority
-  decision, and its own ready cards, validation, evidence, stop conditions,
+  decision, and its own ready tasks, validation, evidence, stop conditions,
   worktree, branch, and handoff.
 - Same-repository lanes must partition mutable and closeout/front-door surfaces
   or reserve one named orchestrator integration step. Two workers never own the
   same front door.
 - A serial decision must name the dependency, shared surface, or unresolved
   authority. Do not serialize unrelated ready work around one blocked edge,
-  invent a speculative card, or split one coherent issue-fix lane.
+  invent a speculative task, or split one coherent issue-fix lane.
 - Provider, model, or profile quota, spend, rate, or availability failure is
   not a control-plane capacity signal. Preserve returned workspace and agent
   identities so an ambiguous attempt is not duplicated, then continue unrelated
@@ -332,14 +331,14 @@ informal habits.
 - The **coordinator** checks only current facts: promoted commit, prerequisite
   completion, path/workspace/branch collisions, transport/profile availability,
   repository gates, and operator pauses.
-- It loads only the instructions, promoted commit, selected cards, manifest,
+- It loads only the instructions, promoted commit, selected tasks, manifest,
   and named refs needed for factual preflight (narrow fast path), not open
   triage. It never reconciles triage or chooses a planning branch from it.
 - It launches the complete approved ready frontier published in the dispatch
   manifest; it does not design lanes, dependency edges, or parallel groups.
 - Coordinator turns are event-bounded: perform all immediately available
   coordination, report state and identities, and continue across merge,
-  closeout, and card boundaries while the canonical runway names another ready
+  closeout, and task boundaries while the canonical runway names another ready
   mechanical action. Yield only for a child or external result, new authority,
   or an empty runway. Never poll, invoke a wait primitive, hold a turn open, or
   repeatedly rescan unchanged state. `notifyOnFinish: true` drives the next
@@ -358,7 +357,7 @@ informal habits.
 - Dispatch a reported defect as one outcome-scoped lane covering reproduction,
   diagnosis, the smallest complete contract-valid repair, cleanup of temporary
   diagnostics, validation, evidence, and a reviewable PR.
-- A fix card may be ready without a known root cause or exact edit when the
+- A fix task may be ready without a known root cause or exact edit when the
   observed failure, expected behavior, reproduction or acceptance evidence,
   boundaries, validation, and stop conditions are clear.
 - Let the worker make ordinary causal and code-level choices inside that
@@ -430,7 +429,7 @@ informal habits.
   solicits credentials.
 - Merge, post-merge reconciliation, closeout, frontier recomputation, and
   next-ready dispatch form one continuous coordinator action chain.
-- Post-merge local integration reconciliation is mandatory before card closeout,
+- Post-merge local integration reconciliation is mandatory before task closeout,
   frontier recomputation, or another worker dispatch:
   - resolve and verify the provider's merged PR and resulting `origin/main`;
   - fetch the integration remote, fast-forward the project's local `main` checkout
@@ -474,10 +473,10 @@ informal habits.
   retains current authority, actionable work, unresolved meaning, and material
   evidence only.
 - Treat roadmap generations as substantial sequencing eras (roughly 20 to 50
-  milestones), not one-or-two-file buckets.
+  tasks), not one-or-two-file buckets.
 - Each active generation's `docs/roadmaps/gNN/README.md` owns its stable
   `## Generation Runway`.
-- Finishing a batch, suite, or lane of roadmaps does not close the generation;
+- Finishing a task, suite, or lane of roadmaps does not close the generation;
   stay inside the active generation until the sequencing baseline needs a reset.
 
 Every planning artifact belongs to one lifecycle class with a default disposition:
@@ -485,12 +484,12 @@ Every planning artifact belongs to one lifecycle class with a default dispositio
 | Class | Examples | Live-tree rule | Disposition trigger |
 | --- | --- | --- | --- |
 | durable authority | vision, architecture, contracts | retain while authoritative | replace or delete with all callers when superseded |
-| active execution | active roadmap, ready/in-flight cards | retain only while actionable | fold outcome/evidence into closure, then generation roll-up |
+| active execution | active task, ready/in-flight task | retain only while actionable | fold outcome/evidence into closure, then generation roll-up |
 | transient transport | triage notes, worker handoffs, questionnaires | retain only while carrying unresolved or unconsumed meaning | delete after promotion, consumption, abandonment, or transfer |
 | exceptional evidence | releases, incidents, material migrations | retain when operationally useful | roll up only when durable value is preserved |
 | derived currentness | indexes, status tables, projections | generate, bound, or remove | rebuild from canonical current state |
 
-- Normal delivery evidence belongs on the completed card: outcome, validation,
+- Normal delivery evidence belongs on the completed task: outcome, validation,
   PR, commit, and material limits.
 - Separate logs are justified only for incidents, releases, migrations,
   cross-lane decisions, or oversized evidence sets.
@@ -507,7 +506,7 @@ Every planning artifact belongs to one lifecycle class with a default dispositio
   confirmation for this compaction.
 - Allow parallel mode when genuinely independent work streams need separate
   generations without blocking each other; front doors must name all active
-  generations and milestones.
+  generations and tasks.
 
 ### Stop conditions
 
@@ -516,7 +515,7 @@ Every planning artifact belongs to one lifecycle class with a default dispositio
   multiple plausible planning directions
 - stop when user-facing ambiguity exceeds the project guardrails
 - stop when validation fails in a way that changes the plan
-- stop when the current card is complete and the next one is not already ready
+- stop when the current task is complete and the next one is not already ready
 
 ### Currentness surfaces
 
@@ -528,15 +527,15 @@ Every planning artifact belongs to one lifecycle class with a default dispositio
   - `docs/roadmaps/gNN/README.md` for the active generation
   - `docs/specs/README.md` when specs are part of the lane
   - `docs/logs/README.md`
-- When a card closes, those surfaces must either:
-  - point at the next ready card or active milestone state
+- When a task closes, those surfaces must either:
+  - point at the next ready task or active task state
   - or explicitly say the lane is awaiting reassessment
 - Keep the live next-task pointer only in the roadmap front doors. Other docs
   surfaces may summarize state or dependencies, but should not own the active
   thread pointer.
 - The active `docs/roadmaps/gNN/README.md` owns the full generation runway.
   Other front doors may point to it, but should not duplicate the runway table.
-- Do not leave a completed card named as the current ready card after closeout.
+- Do not leave a completed task named as the current ready task after closeout.
 
 ## Validation
 

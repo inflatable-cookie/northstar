@@ -10,7 +10,7 @@ operator explicitly asks for one. A long thread, low context, or ordinary
 compaction is not enough if the same thread can continue from the live `Next Task`.
 
 Before writing a handoff, complete the honest closeout that belongs in the
-planning spine: update the current card, roadmap/currentness surfaces, and log
+planning spine: update the current task, roadmap/currentness surfaces, and log
 when the work reached a meaningful stopping point.
 
 ## Naming
@@ -32,7 +32,7 @@ exists, add `-2`, `-3`, and so on after the slug.
 
 ## What belongs here
 
-Handoffs are coordination notes, not batch evidence. Each file uses the
+Handoffs are coordination notes, not task evidence. Each file uses the
 Northstar handoff contract's seven core sections:
 
 1. What This Thread Was Doing
@@ -57,11 +57,11 @@ handoff uses the same seven sections with
 `dispatch_authority: orchestrator`; the successor enters normal orchestrator
 mode and does not run worker preflight.
 
-Keep the handoff as a dispatch overlay. Link canonical cards, contracts, and
+Keep the handoff as a dispatch overlay. Link the canonical task, contracts, and
 review oracles; do not copy their full steps, acceptance prose, validation, or
 general doctrine. Repeat only dispatch state, worker boundaries, local runtime
 facts, the PR contract, and non-obvious tensions. If the handoff rivals its
-owning card or repeats multi-paragraph protocol text, compress it.
+owning task or repeats multi-paragraph protocol text, compress it.
 
 ## Relationship to logs
 

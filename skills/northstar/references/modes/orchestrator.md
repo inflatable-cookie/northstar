@@ -404,11 +404,11 @@ Chatterbox after operator confirmation.
 
 1. **Load authority (narrow fast path).** Read `references/router.md` first,
    then this mode. In the target repo, read `AGENTS.md`, the promoted commit,
-   the selected ready cards, the canonical dispatch manifest, and named refs.
+   the selected ready tasks, the canonical dispatch manifest, and named refs.
    In the Northstar source repo also read `bundle-docs/protocol-kernel.md`.
 2. **Classify lifecycle state.** Name `ready`, `paused`, `migration`, or
    `drifted`, plus authority mode (root-owned or nested), active lane, whether
-   a ready card exists, and whether an intent checkpoint blocks the next move.
+   a ready task exists, and whether an intent checkpoint blocks the next move.
    If lifecycle state is `drifted` or required coverage is missing, route
    planning repair to Chatterbox.
 3. **Route material discovery.** Keep only operational clarifications in this
@@ -544,7 +544,7 @@ The file must say, in substance:
   the list is `none`, skip this step;
 - continue from the tracked handoff; all canonical refs and instructions needed
   for the run are named inside it;
-- execute only the ordered ready cards;
+- execute only the ordered ready tasks;
 - when sibling frontier lanes are running, write only inside the surfaces this
   lane owns, leave partitioned or integration-reserved closeout surfaces to
   their named owner, and stop and report any shared mutable scope or hidden
@@ -588,7 +588,7 @@ A lane joins the frontier only when all of these hold:
 - no shared mutable files or overlapping write scope;
 - no ordering, data, or generated-artifact dependency;
 - no overlapping authority decision or unresolved intent;
-- its own ready cards, acceptance, validation, evidence, and stop conditions;
+- its own ready tasks, acceptance, validation, evidence, and stop conditions;
 - its own worktree, branch, and committed handoff.
 
 Same-repository lanes must additionally partition their mutable and

@@ -37,7 +37,7 @@ skills.
 | chatterbox thread | primary human-facing discovery, planning, triage reconciliation, canonical promotion, and approved-frontier design | operator + chatterbox | operator-confirmed canonical planning on `main` plus provenance-labelled coordinator direction | `skills/northstar/references/modes/chatterbox.md`, `docs/contracts/001-working-rules.md`, direct promotion validation |
 | direct PR review thread | provider-facing review surface | reviewer + operator | named existing PR | `skills/northstar/references/modes/pr-review.md`, applicable repo authority, provider review record |
 | review child | independent exact-head PR review | coordinator-owned reviewer tab in the existing worker workspace under a serial lease | durable provider verdict naming the exact reviewed head | `skills/northstar/references/modes/pr-review.md`, parentage + finish notification, clean exact-head lease, coordination gate |
-| `worker thread/worktree` | bounded implementation surface | worker agent | assigned ready cards and branch | one committed handoff per worker lane under `docs/handoffs/`, explicit worker-mode metadata, economical day-to-day default, frontier worker only when both escalation axes hold, lane-local provider/profile routing, batch cards, tests, commits, startup worktree-safety preflight |
+| `worker thread/worktree` | bounded implementation surface | worker agent | assigned ready tasks and branch | one committed handoff per worker lane under `docs/handoffs/`, explicit worker-mode metadata, economical day-to-day default, frontier worker only when both escalation axes hold, lane-local provider/profile routing, tasks, tests, commits, startup worktree-safety preflight |
 | PR review boundary | delivery and merge-control surface | independent review child; coordinator merge gate, with operator pause/override | worker branch against prepared base | PR metadata, exact reviewed head, checks, provider review record (formal review or comment), coordinator verdict-head/checks/ancestry/mergeability/pause verification, closeout log |
 
 ## Interfaces and Dependencies
@@ -46,7 +46,7 @@ skills.
 | --- | --- | --- | --- | --- |
 | Doctrine promotion | `bundle-docs/` | `template-bundle/`, `skills/` | `001-working-rules` | Doctrine should not outrun reusable implementation for long |
 | Live repo planning | `docs/vision/`, `docs/architecture/`, `docs/contracts/` | repo changes | `001-working-rules` | Internal repo development now follows Northstar in a compact contract mode |
-| Spec-to-roadmap execution | `docs/specs/` | `docs/roadmaps/`, `docs/logs/` | `001-working-rules` | Batch cards are the detailed execution unit |
+| Spec-to-roadmap execution | `docs/specs/` | `docs/roadmaps/`, `docs/logs/` | `001-working-rules` | Tasks are the detailed execution unit |
 | Validation loop | roadmap/log state | `effigy qa`, `effigy qa:docs` | `001-working-rules` | Validation evidence is required for closure |
 | Papercut feedback | agent execution | maintenance triage and normal planning surfaces | `bundle-docs/papercuts.md`, `001-working-rules` | Notes are captured at encounter time and promoted only after triage |
 | Orchestrator coordination | Chatterbox-promoted commit + approved frontier | actual-worker dispatch, pre-PR decision requests to Chatterbox, review routing, merge gate, merge, closeout, and immediate next-ready progression | `001-working-rules`, `skills/northstar/references/modes/orchestrator.md` | Coordinator continues across actionable boundaries without operator `continue`; yields for results/authority/empty runway; ordinary child waiting is silent, while empty runway and pre-PR semantic blockers notify Chatterbox |
@@ -58,11 +58,11 @@ skills.
 | Independent review children | worker PR + retained worker `workspaceId` + retained reviewer `agentId` + clean exact-head lease + review oracle + author provider/model identity | provider verdict naming the exact reviewed head + coordinator merge gate | `001-working-rules`, `skills/northstar/references/modes/pr-review.md` | First review creates no workspace and verifies returned placement; revised heads resume the same reviewer; replacement requires definitive unavailability and stays in the worker workspace; reviewer model differs from worker; stale or ambiguous evidence stops merge |
 | Conversational triage | operator conversation + agent observations | canonical docs or explicit removal | `001-working-rules`, `docs/triage/README.md` | Capture before deep dives; never execute directly from a note |
 | Docs cleanup | `/docs` inventory and classification | reworked canonical docs or operator question | `001-working-rules`, `skills/northstar/references/modes/cleanup-docs.md` | Inspect content and references before any move or removal |
-| Worker execution | explicit worker-mode handoff + startup worktree-safety preflight + ready cards | worker branch/worktree and evidence | `001-working-rules`, `002-agent-local-paths`, active batch cards | Economical day-to-day default; frontier worker only when both escalation axes hold and both reasons are in the handoff. Only an orchestrator-dispatched worker uses the harness worktree or the operator-selected `AGENTS_WORKTREE_CONTAINER_DIR` when its starting context is unsuitable |
+| Worker execution | explicit worker-mode handoff + startup worktree-safety preflight + ready tasks | worker branch/worktree and evidence | `001-working-rules`, `002-agent-local-paths`, active tasks | Economical day-to-day default; frontier worker only when both escalation axes hold and both reasons are in the handoff. Only an orchestrator-dispatched worker uses the harness worktree or the operator-selected `AGENTS_WORKTREE_CONTAINER_DIR` when its starting context is unsuitable |
 | Paseo project lifecycle | committed `paseo.json` + primary-checkout Effigy link ledger | prepared sibling links, real repository setup, replayed worktree-local links | optional Paseo setup adapter | Setup is prepare -> project setup -> link; teardown unlinks worktree state and retains potentially shared sibling symlinks |
 | PR review and merge | worker branch/PR | independent review-child verdict + coordinator gate (verdict head, findings, checks, ancestry, mergeability, pause) + merge | `001-working-rules`, active cards | Review uses exact-head diff/check evidence and a provider record naming the head; same-identity GitHub runs use PR comments; changed heads require re-review; no second operator prompt unless local policy or an explicit pause requires it |
 | Direct PR review | operator request + existing PR | provider review record + chat summary | `001-working-rules`, applicable PR refs | Every blocking finding is posted on the PR; same-identity fallback uses one `Changes required` comment; no branch mutation or merge authority |
-| Rust everyday language quality | scoped instructions + Rust catalogue + consumer profile | current changed tranche and closeout evidence | `004-language-quality-pack` | Compact Rust projection re-enters at task start and batch exit; TypeScript everyday remains unavailable |
+| Rust everyday language quality | scoped instructions + Rust catalogue + consumer profile | current changed tranche and closeout evidence | `004-language-quality-pack` | Compact Rust projection re-enters at task start and task exit; TypeScript everyday remains unavailable |
 | Explicit language audit and repair | explicit operator request + resolved worktree or repository scope | findings, bounded repairs, deviations, and validation evidence | `004-language-quality-pack` | Rust and TypeScript use package-specific catalogues, strict profiles, finding-first records, and dirty-state preservation |
 
 ## Validation Surfaces
@@ -89,7 +89,7 @@ skills.
 
 - `template-bundle/` does not yet expose every delivery-layer artifact as
   canonical copy-ready surfaces.
-- `skills/` do not yet consistently emit master specs, batch cards, and
+- `skills/` do not yet consistently emit master specs, tasks, and
   autonomy envelopes by default.
 - The live repo pilot has not yet proven a longer autonomous multi-card run.
 - The first per-worker handoff/PR loop is proven, including same-identity GitHub

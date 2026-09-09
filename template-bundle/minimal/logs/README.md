@@ -11,5 +11,5 @@ Logs capture dated evidence and assessments.
 
 ## Rule
 
-- Create logs per completed batch or update cycle.
+- Create logs per completed task or update cycle.
 - Do not create a separate log for every task.

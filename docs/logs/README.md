@@ -10,10 +10,10 @@ work.
 
 ## Cadence and evidence rule
 
-- Normal delivery evidence closes directly on its completed batch card
+- Normal delivery evidence closes directly on its completed task
   (outcome, validation, PR, commit, and material limits).
 - Dedicated logs are reserved for incidents, releases, material migrations,
-  cross-lane decisions, or evidence sets too large to keep the card legible.
+  cross-lane decisions, or evidence sets too large to keep the task legible.
 - Historical evidence is retained through generation roll-ups; routine logs
   are pruned at generation closure.
 
@@ -33,9 +33,9 @@ Evidence from closed generations is curated in their generation roll-ups:
 
 ## Current delivery evidence
 
-`g03.001` is complete. Cards 130–132 retain its compact PR, merge, validation,
+`g03.001` is complete. Task `001-compact-default-lifecycle.md` retains its compact PR, merge, validation,
 and limitation evidence for lifecycle foundation, generation compaction,
-reusable defaults, README correction, and final spec retirement. No separate
+reusable defaults, README correction, and final spec retirement (absorbed from cards 130–132 by `g03.003`). No separate
 routine log is required.
 
 ## Cross-project planning evidence

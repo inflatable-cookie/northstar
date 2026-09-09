@@ -12,10 +12,9 @@ Created: 2026-06-01
 
 ## Bounded watchlist
 
-- `DEFERRED-COMMITMENT-WIDGET-AUDIT`: Schedule the widget-audit after the
-  catalog importer ships. Owner: catalog maintainers. Next check: during the
-  active catalog lane. This obligation remains open; it was rehomed from
-  `g02.001` before that generation was compacted.
+- DEFERRED-COMMITMENT-WIDGET-AUDIT: Schedule the widget-audit after the catalog
+  importer ships. (Rehomed from closed `g02` during authorized maintenance
+  compaction.)
 
 ## Next task
 

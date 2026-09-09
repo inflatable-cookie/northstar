@@ -16,8 +16,8 @@ Every Northstar repository starts with the core spine:
 - `vision/` defines purpose, scope, and non-goals
 - `architecture/` defines realized system structure and boundaries
 - `contracts/` locks enforceable behavioral rules and interfaces
-- `roadmaps/` sequences work into milestone lanes and batches
-- `logs/` records dated batch-level outcomes and evidence
+- `roadmaps/` sequences work into dependency-linked tasks
+- `logs/` records dated task-level outcomes and evidence
 - `handoffs/` enables friendly fresh-thread transitions
 - `triage/` captures conversational observations before promotion
 - `policy/` holds lightweight repo rules and internal writing style
@@ -37,8 +37,7 @@ than selecting a separate posture:
   review oracles, stop conditions, and coordinator mechanics are enforced
 - `docs/specs/` and `docs/specs/archive/` -- when provisional design shaping is
   needed before promoting durable outcomes into architecture/contracts
-- `docs/roadmaps/gNN/batch-cards/` -- when step-by-step execution detail is
-  needed under an active roadmap milestone
+- `docs/roadmaps/gNN/NNN-<slug>.md` -- executable tasks (`gNN.NNN`) carrying their own steps, acceptance, and closeout
 - `docs/research/` -- when comparative or source-backed exploration is needed
   before architecture or contract commitments
 - Additional authority files (e.g. `repo-authority-map.md`) -- when multi-repo
@@ -53,7 +52,7 @@ the destination remains the same single protocol.
   spec or roadmap records satisfied capabilities, blocking gaps, the current
   tranche, the next tranche, and the evidence needed to advance.
 - Do not backfill closed history merely to imitate the file shape.
-- Close ordinary migration work on its card.
+- Close ordinary migration work on its task.
 - Do not invent a detached governance tracker or a permanent mixed posture.
   Mixed-mode operation is migration debt, not an alternative steady state.
 
@@ -74,7 +73,7 @@ At minimum, audit these checkpoints:
 - standard docs spine is installed and current
 - product guardrails, contract indexing, and working rules are explicit where
   applicable
-- active material lanes use specs and batch cards where fuller execution detail
+- active material lanes use specs and tasks where fuller execution detail
   is needed
 - promotion into architecture and contracts is explicit before roadmap
   execution depends on settled outcomes
@@ -90,8 +89,8 @@ Track migration inside the repo's normal planning spine.
 Use:
 
 - one active migration master spec
-- one active roadmap milestone
-- normal batch logs for completed tranches
+- one active roadmap task
+- normal task logs for completed tranches
 
 That migration spec should name:
 
@@ -115,5 +114,5 @@ in the same docs surfaces that already govern the repo.
   bounded.
 - Do not treat nested docs-authority repos like bespoke migrations when they
   already cleanly own the planning contract.
-- Normal delivery evidence belongs on the completed card; separate logs are
+- Normal delivery evidence belongs on the completed task; separate logs are
   reserved for exceptional evidence (releases, incidents, migrations).

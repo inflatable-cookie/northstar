@@ -1,17 +1,17 @@
 {
-  "activity_note": "Loaded installed skill router, project-refresh, and lifecycle-maintenance.md. Already-compacted consumer; no docs files changed. Codex session 01a07224-ad11-7123-b6a3-b7c5cd3fc3e1.",
-  "agent_id": "3b9de735-b7c0-40d2-9f43-5a700eb524e1",
+  "activity_note": "g03.003 worker replay: repeat refresh on the already-compacted tree produced no docs churn and no re-expansion.",
+  "agent_id": "f9fd5df4-d796-4325-9aa1-88fdfd568982",
   "authorization": "repair-authorized",
-  "before_fixture": "after",
-  "captured_at": "2026-09-05T15:18:19Z",
-  "finished_at": "2026-09-05T15:17:53Z",
-  "prompt_sha256": "sha256:7899c85e31435d72892b95ef7598d18d3010342fea397c2ed5a917def465579f",
-  "provider": "codex/gpt-5.6-luna",
+  "before_fixture": "happy-after-tree",
+  "captured_at": "2026-09-09T10:54:20Z",
+  "finished_at": "2026-09-09T12:14:00Z",
+  "prompt_sha256": "sha256:66f5cd3209a7d2945f5ced8687f651c6b03cf2afbc5bc73c941b62ee262db04f",
+  "provider": "meta/muse-spark-1.3-contributor",
   "route": "installed-northstar-project-refresh",
   "scenario": "repeat",
   "skill_path": "/Users/tom/.agents/skills/northstar",
   "skill_procedure_relative": "references/lifecycle-maintenance.md",
-  "skill_procedure_sha256": "sha256:067585725935b8757dc11efb810d801bf42351f16edc52adb0dec389ecb61508",
-  "started_at": "2026-09-05T15:16:40Z",
-  "workspace_id": "wks_c0efd164a56714ab"
+  "skill_procedure_sha256": "sha256:7d8c992fc7a05b47e2306f3b584ecc0eb45280abfa78146aab6a4ed89f90181b",
+  "started_at": "2026-09-09T12:11:00Z",
+  "workspace_id": ""
 }

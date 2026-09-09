@@ -85,8 +85,8 @@ The workspace root should say plainly:
 The nested authority repo should say plainly:
 
 - authority mode and active lifecycle state
-- the active generation/milestone/spec lane
-- the current ready card or paused planning gate
+- the active generation/task/spec lane
+- the current ready task or paused planning gate
 
 ## Anti-Patterns
 

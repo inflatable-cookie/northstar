@@ -44,12 +44,11 @@ generation. Do not treat the end of a planned sequence as a generation closeout
 event.
 
 Before opening the next generation in sequential mode:
-- close, supersede, or rehome every milestone in the current generation.
+- close, supersede, or rehome every task in the current generation.
 - refresh the roadmap front doors so the old generation is visibly closed.
 - purge stale specs from `docs/specs/` so the active specs tree no longer
-  carries debris from the closing generation. Batch cards stay with their
-  generation under `docs/roadmaps/gNN/batch-cards/` and do not need separate
-  archiving.
+  carries debris from the closing generation. Tasks stay with their
+  generation and do not need separate archiving.
 
 If that cleanup has not happened, stay in the current generation and finish the
 closeout there first.

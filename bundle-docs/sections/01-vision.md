@@ -11,7 +11,7 @@ It sets long-term direction and constraints so architecture and roadmap work sta
 ## Scope
 
 Define long-horizon intent and directional constraints.
-Do not include milestone task lists or delivery sequencing detail.
+Do not include task lists or delivery sequencing detail.
 
 ## Template layout
 
@@ -52,7 +52,7 @@ Do not include milestone task lists or delivery sequencing detail.
 ## Dependencies
 
 - Architecture and roadmaps derive from accepted vision constraints.
-- `001` must exist before first roadmap milestone is created.
+- `001` must exist before the first roadmap task is created.
 
 ## Quick reference
 

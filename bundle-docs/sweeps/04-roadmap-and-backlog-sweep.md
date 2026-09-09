@@ -14,32 +14,30 @@ readiness.
 - In parallel mode, each active generation operates as its own queue.
 - Deferred work belongs only in `docs/roadmaps/backlog/`.
 - Backlog items require promotion criteria.
-- Active roadmap milestones should reference governing contracts directly.
-- Roadmap batches must stop on planning gaps rather than imply missing repo or
+- Active roadmap tasks should reference governing contracts directly.
+- Roadmap tasks must stop on planning gaps rather than imply missing repo or
   interface behavior.
 
 ## Drift Patterns
 
-- Roadmaps sized to one agent turn or one batch card instead of a multi-batch
-  milestone runway
-- New roadmap files created per thread instead of updating the active milestone
-  and batch cards
-- `## Execution Plan` with only one micro-batch or prose bullets instead of
+- Roadmaps sized to one agent turn or one vague bucket instead of a
+  dependency-linked task runway
+- New roadmap files created per thread instead of updating the active task
+- `## Work` with only one vague step or prose bullets instead of
   checkbox task lists
 - Multiple competing active queues within one generation
 - Backlog items in random folders
 - Missing generation rollover rationale
 - Global phase-number assumptions that bypass `gNN.NNN`
-- Milestones marked ready even though contract refs or planning state are missing
+- Tasks marked ready even though contract refs or planning state are missing
 - Roadmap text that assumes behavior from unplanned repos or undeclared seams
 - Parallel mode enabled without clear lane separation between generations
 
 ## Fix Rules
 
-- Expand thin roadmaps into multi-batch milestones; move step detail into batch
-  cards where batch cards are used
-- Merge per-thread roadmap scratchpads into the active milestone; retire
-  duplicate milestone files
+- Expand thin roadmaps into dependency-linked tasks with ordered steps
+- Merge per-thread roadmap scratchpads into the active task; retire
+  duplicate task files
 - Convert execution-plan prose bullets to checkbox tasks where progress should
   be scannable
 - Consolidate competing queues within a generation and mark stale branches as
@@ -50,7 +48,7 @@ readiness.
 - Add or update generation index entries for rollover reasons.
 - Normalize all roadmap references to `gNN.NNN`.
 - Backfill contract refs and planning state where execution readiness exists.
-- If the needed contract or authority map does not exist, mark the milestone
+- If the needed contract or authority map does not exist, mark the task
   blocked and repair planning instead of guessing.
 
 ## Fast Checks

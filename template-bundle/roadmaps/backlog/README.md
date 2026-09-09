@@ -7,7 +7,7 @@ Use this folder for deferred items that are not in the active queue.
 ## Promotion rules
 
 Promote a backlog item when at least one applies:
-- it is now required by an active milestone
+- it is now required by an active task
 - repeated requests justify priority change
 - dependency timing now makes it tractable
 

@@ -46,10 +46,10 @@ Here is the state the worker is inheriting:
   Format each as link name, absolute primary-checkout source, and path beside
   this worktree. Write `none` when there are no sibling dependencies.
 - **Active spec lane:** `{{SPEC_REF}}`
-- **Roadmap milestone:** `{{ROADMAP_REF}}`
-- **Ready cards, in order:** `{{CARD_REFS}}`
+- **Roadmap task:** `{{TASK_REF}}` (`gNN.NNN` path; this handoff transports it and never replaces it)
+- **Ready tasks, in order:** `{{TASK_REFS}}`
 - **Allowed runway:** `{{ASSIGNED_RUNWAY}}`
-- **Remaining card budget:** `{{CARD_COUNT_OR_TIME_BOUND}}`
+- **Remaining task budget:** `{{TASK_COUNT_OR_TIME_BOUND}}`
 - **Coordinator agent ID:** `{{COORDINATOR_AGENT_ID_OR_MANUAL_RELAY}}`
 - **Delivery route:** coordinator-attached child with `notifyOnFinish: true`;
   the coordinator records scoped creation and returned child/workspace identity.
@@ -63,7 +63,7 @@ Here is the state the worker is inheriting:
   refreshes this head against current `main` and re-reviews it if a sibling lane
   merges first
 - **Canonical refs:** {{ARCHITECTURE_REFS}}; {{CONTRACT_REFS}}
-- **Review oracle:** `{{CARD_REVIEW_ORACLE_REFS_OR_NONE}}`
+- **Review oracle:** `{{TASK_REVIEW_ORACLE_REFS_OR_NONE}}`
 - **Model capability profile:** `{{WORKER_PROFILE}}`
 - **Worker provider/model identity:** `{{WORKER_PROVIDER_MODEL}}`
 - **Frontier-worker justification:** `{{BOTH_AXES_OR_NONE}}`
@@ -105,7 +105,7 @@ Please keep this run inside the named runway:
 ## Important Context
 
 - **Planning lineage:** {{ACTIVE_VISION_ROADMAP_LOG_CONTEXT}}
-- **Why these cards are ready:** {{WHY_THE_RUNWAY_IS_READY}}
+- **Why these tasks are ready:** {{WHY_THE_RUNWAY_IS_READY}}
 - **Decisions and preferences:** {{NON_OBVIOUS_DECISIONS_OR_USER_PREFERENCES}}
 - **Open tensions:** {{KNOWN_RISKS_AMBIGUITIES_OR_JUDGMENT_CALLS}}
 - **Report after:** `{{MEANINGFUL_CHUNK_DEFINITION}}`
@@ -116,7 +116,7 @@ Please keep this run inside the named runway:
 ## Suggested Next Move
 
 Run the `Completion Protocol` preflight before broad reads. Then read
-`AGENTS.md`, the active milestone, assigned cards, and canonical refs from the
+`AGENTS.md`, the assigned task, and canonical refs from the
 selected worker worktree. Start the first coherent chunk. At a natural pause,
 report what changed, validation run, what remains, and any planning decision.
 
@@ -155,20 +155,20 @@ report what changed, validation run, what remains, and any planning decision.
    is absent; reuse only a symlink resolving to that source. Stop on a missing
    source, mismatch, directory, or file. Never delete, replace, overwrite, or
    skip a listed catalog member. Skip only when the list is `none`.
-6. Read the active milestone, assigned cards, `AGENTS.md`, and canonical refs.
+6. Read the assigned task, `AGENTS.md`, and canonical refs.
 7. Run the repo's cheap orientation checks and record what you actually ran.
 
 ### While you work
 
-- Execute the ready cards in order and keep commits aligned with meaningful
+- Execute the ready tasks in order and keep commits aligned with meaningful
   chunks, not arbitrary model turns.
-- For an issue-fix card, use bounded causal and code-level judgment to reproduce
+- For an issue-fix task, use bounded causal and code-level judgment to reproduce
   and diagnose the failure, then continue into the smallest in-scope repair.
   Remove temporary instrumentation before review unless the governing refs
   explicitly require it as durable observability. Diagnosis alone does not
   complete a fix lane.
 - After each meaningful chunk, report through the active control plane or the
-  operator with changed files, validation actually run, remaining cards, new
+  operator with changed files, validation actually run, remaining tasks, new
   risks, and blockers.
 - Stop and say so if a contract is missing, intent is ambiguous, scope expands,
   authority/access is missing, or validation changes the plan.
@@ -181,12 +181,12 @@ report what changed, validation run, what remains, and any planning decision.
 ### When the assigned runway is complete
 
 1. Run the required final validation: `{{CHECKS}}`.
-2. Try to falsify the diff against the card. Enumerate universal, exact, and
+2. Try to falsify the diff against the task. Enumerate universal, exact, and
    negative claims; exercise every review-oracle counterexample; map each row to
-   proof; and reconcile card, roadmap, log, handoff, and front-door state. Stop
+   proof; and reconcile task, log, handoff, and front-door state. Stop
    and return any new product threshold, contract choice, or acceptance rule to
    planning.
-3. Update the card/log evidence required by the runway, including the actual
+3. Update the task/log evidence required by the runway, including the actual
    worktree and branch if the temporary fallback was used.
 4. Push the selected worker branch (the fallback branch if one was created).
    If a sibling lane merged first, rebase or merge current `main` into this
@@ -195,7 +195,7 @@ report what changed, validation run, what remains, and any planning decision.
 5. Open a reviewable PR against the current pushed `main` tip. The handoff's
    `{{BASE_REF}}` is the planning base before the handoff commit, not a
    self-referential hash for the commit that contains this file.
-6. In the PR body, link the spec, milestone, cards, changed surfaces, evidence,
+6. In the PR body, link the spec, task, changed surfaces, evidence,
    validation, and unresolved items.
 7. Return the PR URL and evidence to the owning coordinator. Do not merge.
 
@@ -220,7 +220,7 @@ report back through the active control plane or operator. Blocking findings use
 `execution-miss`, `oracle-gap`, `planning-change`, `validation-gap`, or
 `integration-drift`; a `planning-change` returns to planning before revision.
 Requested changes are: `{{REQUESTED_CHANGES_OR_NONE}}`. The PR should link the
-card, milestone, spec, changed surfaces, evidence, validation, and unresolved
+task, spec, changed surfaces, evidence, validation, and unresolved
 items. When the exact reviewed head is still current, required checks pass, the
 PR is mergeable into the intended base, and no stricter repository rule or
 explicit operator pause applies, the orchestrator merges without another
@@ -236,6 +236,6 @@ an operator `continue`.
 
 ### Handoff closeout
 
-Before calling the runway complete, leave the card, roadmap, log, and next-task
+Before calling the runway complete, leave the task, log, and next-task
 state honest. If the work is blocked, record the blocker and stop rather than
 making the handoff look more complete than it is.

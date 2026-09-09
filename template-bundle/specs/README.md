@@ -27,7 +27,7 @@ Specs are usually provisional, but not necessarily deleted the moment a roadmap
 exists.
 
 - keep a spec while the lane is still active, the planning history is still
-  useful, or later batches still rely on its shaped context
+  useful, or later tasks still rely on its shaped context
 - archive or remove a spec when the lane is closed and the spec no longer adds
   value beyond the promoted architecture and contract surfaces
 - do not leave specs around as shadow authority once the canonical surfaces are
@@ -35,7 +35,7 @@ exists.
 
 Use an explicit lifecycle:
 
-- `active` when the spec still governs live planning or an imminent batch
+- `active` when the spec still governs live planning or an imminent task
 - `retired-in-place` when the lane is closed but the artifact still deserves a
   short-lived place in the active tree for traceability
 - `archived` when the artifact no longer governs live work and should move out
@@ -50,7 +50,7 @@ When archive is warranted:
 - do not treat archived specs as canonical execution authority
 
 Seed `docs/specs/archive/README.md` up front so preserved closed artifacts
-already have a defined home before the first cleanup batch.
+already have a defined home before the first cleanup task.
 
 Make spec hygiene explicit in normal project maintenance:
 
@@ -76,16 +76,16 @@ Treat planning as a real runway:
 
 - do not leave a material lane with only one immediate card and no visible
   higher-level owner beyond it
-- make the next few meaningful batches or milestone transitions visible
+- make the next few meaningful tasks or transitions visible
 - leave an explicit planning checkpoint so the lane does not fall back into
-  one-card-at-a-time improvisation after each closeout
-- compile roadmaps as turnkey multi-batch milestones with checkbox execution
-  plans; put step detail in batch cards, not per-thread roadmap scratchpads
+  one-task-at-a-time improvisation after each closeout
+- compile roadmaps as turnkey tasks with checkbox execution
+  plans and ordered steps, not per-thread roadmap scratchpads
   (`bundle-docs/sections/03-roadmaps.md`, *Scope and granularity rule*)
 
 If a repo wants the full continuation-envelope, lane-budget, and pause-signal
-model, use `specs/` for master specs and `roadmaps/gNN/batch-cards/` for
-execution cards. A roadmap-only repo can still route live work well, but it
+model, use `specs/` for master specs and `roadmaps/gNN/NNN-<slug>.md` for
+execution tasks. A roadmap-only repo can still route live work well, but it
 should not pretend to carry the same explicit autonomy state.
 
 In a mature repository adopting the compact lifecycle, introduce this layer
@@ -100,7 +100,7 @@ Keep incremental adoption operational inside the normal planning spine:
 - next tranche
 - the evidence needed to close the current tranche
 
-Use the paired roadmap milestone to sequence the migration work and logs to
+Use the paired roadmap task to sequence the migration work and logs to
 prove each completed tranche. Do not invent a separate governance tracker or
 permanent mixed posture for this.
 
@@ -108,4 +108,3 @@ permanent mixed posture for this.
 
 - `archive/README.md`
 - `templates/master-spec-template.md`
-- `templates/batch-card-template.md`

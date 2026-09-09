@@ -7,9 +7,9 @@
 
 ## Current work
 
-Continue [`g03.001 active catalog lane`](roadmaps/g03/001-active-lane.md).
+Current work lives in [`g03`](roadmaps/g03/README.md). Closed `g01`/`g02`
+history is curated in `roadmaps/archive/g01.md` and `roadmaps/archive/g02.md`.
 
 ## Closed history
 
-Closed generations are compacted into the [`g01` roll-up](roadmaps/archive/g01.md)
-and [`g02` roll-up](roadmaps/archive/g02.md).
+`g01` and `g02` are closed sequential generations but remain expanded on disk.

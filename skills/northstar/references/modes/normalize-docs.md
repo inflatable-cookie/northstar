@@ -34,7 +34,7 @@ Optional: `effigy check:posture-advisory` after structural edits.
 ## Workflow
 
 1. Classify repo lifecycle state: `ready`, `paused`, `migration`, or `drifted`;
-   record blocking gaps in an active spec/milestone when migrating.
+   record blocking gaps in an active spec/task when migrating.
 2. Choose adoption mode (single repo, workspace container + docs authority, or
    compatibility only when the installed Effigy binary lacks needed surfaces).
 3. For bootstrap or template-copy work, locate a Northstar source checkout
@@ -46,7 +46,7 @@ Optional: `effigy check:posture-advisory` after structural edits.
    docs tree.
 4. Consequence-triggered modules: install `product-guardrails`,
    `contract-index`, `001-working-rules`, `specs/`, `specs/archive/README.md`,
-   batch-cards as warranted. Explain specs as provisional; archive when
+   tasks as warranted. Explain specs as provisional; archive when
    canonical surfaces carry truth.
 5. Select templates from `assets/templates/` (Effigy native vs docs-authority
    vs compat), including root `PAPERCUTS.md` when missing. Seed it during
@@ -83,7 +83,7 @@ Optional: `effigy check:posture-advisory` after structural edits.
   `docs/triage/README.md`,
   vision/roadmaps/logs front doors, `docs/policy/internal-writing-style.md`
 - Consequence-triggered modules: guardrails, contract index, working rules,
-  specs README + archive, batch-card templates under active `gNN/`
+  specs README + archive, task template under active `gNN/`
 
 ## Guardrails
 
@@ -95,6 +95,6 @@ Optional: `effigy check:posture-advisory` after structural edits.
 
 ## After normalize
 
-If the next job is planning or milestones, switch via
+If the next job is planning or tasks, switch via
 [`../router.md`](../router.md) to a planning or recovery mode—not a separate
 skill.

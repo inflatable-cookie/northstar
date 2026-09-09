@@ -34,7 +34,7 @@ Use these artifacts before execution starts:
 - one or more `docs/contracts/NNN-<slug>.md` files only for stable
   execution-relevant boundaries that need to stand apart from architecture/specs
 - current research translation memos when a bet depends on external evidence
-- roadmap milestones whose work is fully backed by the above surfaces
+- roadmap tasks whose work is fully backed by the above surfaces
 
 ## Planning coverage rule
 
@@ -60,7 +60,7 @@ Roadmap work may start only when all of the following are true:
 - ownership is clear in `repo-authority-map.md` when multiple authorities exist
 - the governing rule exists in architecture, specs, or `docs/contracts/`
 - when separate contracts are used, they are indexed in `contract-index.md`
-- the roadmap milestone references the governing artifact directly
+- the roadmap task references the governing artifact directly
 - required research translation memos are linked when the bet is evidence-driven
 
 If these conditions are not met, the valid action is to add or repair planning
@@ -73,18 +73,18 @@ artifacts, not to start implementation.
 Use it when:
 
 - a required repo or service is missing from the planning surfaces
-- a roadmap milestone depends on behavior that no contract defines
+- a roadmap task depends on behavior that no contract defines
 - ownership is unclear across repos or teams
 - research-backed decisions have not been promoted into architecture/contracts
 - validation requirements are unknown or contradictory
 
 When a planning gap appears:
 
-1. stop execution on the affected batch
+1. stop execution on the affected task
 2. log the missing surface in the relevant planning artifact or a roadmap/log
    note
 3. create or update the needed architecture, spec, contract, or research artifact
-4. regenerate affected roadmap batches only after the planning gap is closed
+4. regenerate affected roadmap tasks only after the planning gap is closed
 
 ## Multi-repo rule
 
@@ -97,7 +97,7 @@ states:
 - which governing artifacts govern each seam
 - which repo is authoritative when state or behavior conflicts
 
-Agents must not fabricate missing repo behavior to keep a batch moving.
+Agents must not fabricate missing repo behavior to keep a task moving.
 
 ## Replanning and change protocol
 

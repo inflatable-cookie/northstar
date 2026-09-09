@@ -12,7 +12,7 @@ No active planning specs. Lasting lifecycle rules and planning doctrine live in
 ## Lifecycle
 
 - Use a spec only when a goal needs material discovery or crosses several
-  execution batches.
+  execution tasks.
 - Promote lasting system shape to architecture and lasting behavior to
   contracts before implementation depends on it.
 - Remove a fully promoted spec after current links and unique meaning have been

@@ -137,7 +137,7 @@ Baseline docs spine:
 - `vision` defines long-horizon outcome and strategic constraints
 - `architecture` defines realized structure and guardrails once planning settles
 - `contracts` define durable behavioral rules and important boundaries
-- `roadmaps` define milestone queue and execution batches
+- `roadmaps` define the task queue and generation runway
 - `logs` record meaningful evidence and decisions
 - `triage` holds temporary timestamped capture notes; it is not execution
   authority and must be promoted, merged, or removed over time
@@ -150,7 +150,7 @@ For consequence-triggered modules, adopt as needed:
 - `contracts/001-working-rules.md`
 - `contracts/contract-index.md`
 - `specs` as a provisional planning surface
-- `roadmaps/gNN/batch-cards/` for execution cards when batch-card detail is needed
+- `roadmaps/gNN/NNN-<slug>.md` for executable tasks (`gNN.NNN`)
 
 In that mode, specs should be treated as a stepping stone to
 architecture/contracts rather than a second permanent authority.

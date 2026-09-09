@@ -28,7 +28,7 @@ Northstar planning source of truth:
 - template-bundle/architecture/repo-authority-map.md
 - template-bundle/contracts/contract-index.md
 - template-bundle/contracts/001-contract-template.md
-- template-bundle/roadmaps/templates/roadmap-milestone-template.md
+- template-bundle/roadmaps/templates/task-template.md
 
 Execution requirements:
 1. Audit the current planning state first and list exact gaps with file paths.

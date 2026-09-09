@@ -23,9 +23,9 @@ without blocking each other. Each generation operates as its own queue.
 ## Runway Rule
 
 Each active generation's `gNN/README.md` owns its `## Generation Runway`.
-Use it to choose the next milestone when a lane closes. Do not rewrite it as a
-per-turn task list. It should be written for a significant 20-to-50-roadmap
-generation, not a short sequence of four or five roadmaps.
+Use it to choose the next task when a lane closes. Do not rewrite it as a
+per-turn task list. It should be written for a significant 20-to-50-task
+generation, not a short sequence of four or five tasks.
 
 ## Next Task
 

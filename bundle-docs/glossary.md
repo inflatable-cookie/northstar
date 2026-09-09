@@ -17,18 +17,17 @@ One-page reference for terms used across Northstar docs.
 : Provisional planning surfaces. Temporary documents that shape a change before its durable outcomes are promoted into architecture or contracts.
 
 **Roadmaps**
-: Turnkey milestone plans derived from vision, architecture, and contracts.
-  Name the batch sequence for a material slice of work — typically several
-  batches and, when batch cards are used, several batch cards — not one agent turn.
-  Use checkbox task lists in `## Execution Plan`, `## Goals`, and `## Acceptance
-  Criteria`. Compiled after specs are promoted.
+:: Turnkey task plans derived from vision, architecture, and contracts.
+  The generation README owns the runway; each `gNN.NNN` task owns its
+  objective, steps, acceptance, and closeout. Model long work as
+  dependency-linked tasks, not one agent turn.
 
 **Logs**
-: Dated evidence and decision records. Written per completed batch, not per task.
+:: Dated evidence and decision records. Written per completed task, not per step.
 
 **Handoffs**
-: Friendly, timestamped notes that let another thread or person take over. They
-  live in `docs/handoffs/` and do not replace batch logs.
+:: Friendly, timestamped notes that let another thread or person take over. They
+  live in `docs/handoffs/` and do not replace task evidence.
 
 **Triage notes**
 : Lightweight, timestamped Markdown capture notes for observations, ideas,
@@ -49,19 +48,15 @@ One-page reference for terms used across Northstar docs.
 
 ## Execution and Workflow
 
-**Batch**
-: A meaningful chunk of work executed together. The unit of logging and closeout.
-
-**Batch card**
-: A short spec-like document that defines one batch's step-by-step scope,
-  evidence, and done criteria. Sits under a roadmap milestone; the roadmap
-  owns lane shape, batch cards own execution detail.
+**Task**
+:: The sole executable planning unit. Lives at `docs/roadmaps/gNN/NNN-<slug>.md`
+  and is referenced as `gNN.NNN`. Owns its objective, sequence, dependencies,
+  boundaries, dispatch manifest, acceptance oracle, evidence, and closeout.
+  A queue task transports one Northstar task; an Effigy task is a command
+  selector. Neither is planning authority.
 
 **Generation**
-: A numbered era of roadmap milestones (`g01`, `g02`, `g03`). Holds 20-40 milestones before rollover is warranted. In parallel mode, multiple generations may be active simultaneously as independent queues.
-
-**Milestone**
-: One roadmap file inside a generation, named `NNN-<slug>.md`. Referenced as `gNN.NNN`.
+:: A numbered era of roadmap tasks (`g01`, `g02`, `g03`). Holds 20-40 tasks before rollover is warranted. In parallel mode, multiple generations may be active simultaneously as independent queues.
 
 **Lane**
 : An active line of work within a roadmap. One active queue per generation plus a backlog.
@@ -172,7 +167,7 @@ One-page reference for terms used across Northstar docs.
 | Architecture | System shape | `docs/architecture/` |
 | Contracts | Behavior rules | `docs/contracts/` |
 | Specs | Provisional plans | `docs/specs/` |
-| Roadmaps | Executable milestones | `docs/roadmaps/gNN/` |
+| Roadmaps | Executable tasks | `docs/roadmaps/gNN/` |
 | Logs | Evidence | `docs/logs/YYYY-MM/` |
 | Handoffs | Coordination | `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md` |
 | Triage notes | Temporary capture | `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` |

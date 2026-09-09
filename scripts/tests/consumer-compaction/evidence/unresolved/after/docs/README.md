@@ -7,11 +7,10 @@
 
 ## Current work
 
-Continue the active catalog lane:
-[`g03.001 active catalog lane`](roadmaps/g03/001-active-lane.md).
+Stale pointer still names the first generation as current:
+[`g01.001 establish widget ids`](roadmaps/g01/001-establish-widget-ids.md).
 
 ## Closed history
 
-- `g02` is preserved in the [`g02` roll-up](roadmaps/archive/g02.md).
-- `g01` is closed but remains expanded while its contested
-  `UNIQUE-ORPHAN-RULE` has no authorized canonical destination.
+`g02` is closed and curated in `roadmaps/archive/g02.md`. `g01` remains expanded
+while its rule ownership is unresolved.

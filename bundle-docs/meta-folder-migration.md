@@ -37,7 +37,7 @@ Deprecate as default folders:
 Map common `meta` content into Northstar-aligned locations:
 
 - workflow guides -> `logs/` (dated updates) or `roadmaps/` (execution rules)
-- guardrails/checklists -> `roadmaps/` milestone acceptance/evidence sections
+- guardrails/checklists -> `roadmaps/` task acceptance/evidence sections
 - glossary/terminology -> `architecture/` or optional `specs/` where term ownership is explicit
 - architecture inbox/backlog notes -> `roadmaps/backlog/`
 - one-off audits -> dated `logs/YYYY-MM/`

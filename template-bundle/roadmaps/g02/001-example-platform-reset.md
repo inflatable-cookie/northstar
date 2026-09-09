@@ -5,73 +5,55 @@
 Status: ready
 Owner: Core Team
 Created: YYYY-MM-DD
+Governing refs: `004-platform-topology-contract.md`, `005-runtime-boundary-contract.md`
 Depends on: none
-Vision tags: `ALIGN`, `RELIABILITY`, `OPS`
-Contract refs: `004-platform-topology-contract.md`, `005-runtime-boundary-contract.md`
-Planning state: ready
 
-## Problem
+## Outcome
 
 The original `g01` roadmap assumed a stable three-repo topology, but refocus
 work revealed a broader platform split and ownership change that invalidated
-multiple queued milestones. The old generation is no longer a trustworthy
-execution baseline.
+multiple queued tasks. Replace stale `g01` assumptions with a new
+contract-backed platform sequence and re-establish one trustworthy active
+queue under `g02`.
 
-## Goals
+## Decisions
 
-- [ ] Replace stale `g01` assumptions with a new contract-backed platform
-      sequence.
-- [ ] Re-establish one trustworthy active queue under `g02`.
-- [ ] Resume execution only from work that reflects the new repo topology.
+Rollover to `g02` rather than in-generation repair: the old generation is no
+longer a trustworthy execution baseline.
 
-## Non-Goals
+## Dispatch manifest
 
-- [ ] No further execution from superseded `g01` milestones.
-- [ ] No compatibility storytelling that preserves the old sequencing baseline.
+- **State:** ready; single task, no siblings
+- **Completion:** `generation-index.md` records why `g02` replaced `g01`; active work no longer depends on stale topology assumptions
+- **Owned mutable paths:** `docs/roadmaps/g02/001-<slug>.md`, `docs/logs/YYYY-MM/`
+- **Reserved closeout surfaces:** none
+- **Worker:** day-to-day implementation pool
+- **Excluded:** further execution from superseded `g01` tasks; compatibility storytelling that preserves the old sequencing baseline
+- **Escalation:** repo maintainers for scope or contract questions
 
-## Contract Coverage
+## Work
 
-- [ ] `004-platform-topology-contract.md` defines the new authority split across
-      platform repos.
-- [ ] `005-runtime-boundary-contract.md` defines the runtime seam that changed
-      sequencing across the program.
-- [ ] Superseded `g01` milestones remain visible for traceability but are not
-      part of the active queue.
+1. Mark stale `g01` tasks superseded and update references to the new generation.
+2. Confirm `g02` contract refs match architecture, inventory, and authority surfaces.
+3. Execute the first platform-reset step against the new topology.
 
-## Execution Plan
+## Acceptance and review oracle
 
-### Batch 1.1 - Reset active queue and first valid platform slice
+| Invariant | Adversarial counterexample | Required proof |
+| --- | --- | --- |
+| `generation-index.md` clearly records why `g02` replaced `g01` | Teams keep reading `g01` as active because the rollover was only implied | Rollover decision log |
+| Active roadmap work no longer depends on stale topology assumptions | A `g02` step imports the old repo split | Contract-delta log for the new topology contracts |
+| The first `g02` step is directly backed by current contracts | Execution starts on prose promises | Task closure log for the first `g02` execution slice |
 
-- [ ] Mark stale `g01` milestones superseded and update references to the new
-      generation.
-- [ ] Confirm `g02` contract refs match architecture, inventory, and authority
-      surfaces.
-- [ ] Execute the first platform-reset batch against the new topology.
+## Stop conditions
 
-## Acceptance Criteria
+- Stop when a planning gap, contract contradiction, or failed evidence gate changes the plan.
 
-- [ ] `generation-index.md` clearly records why `g02` replaced `g01`.
-- [ ] Active roadmap work no longer depends on stale topology assumptions.
-- [ ] The first `g02` batch is directly backed by current contracts.
+## Evidence
 
-## Risks and Mitigations
+None yet; record rollover decision, contract delta, and closure logs on completion.
 
-- Risk: teams continue reading `g01` as active because the rollover was only
-  implied.
-- Mitigation: mark stale milestones superseded, log the rollover clearly, and
-  treat `g02` as the only active queue.
+## Next task
 
-## Planning Gaps
-
-- `none`
-
-## Evidence Requirements
-
-- [ ] rollover decision log explaining why in-generation repair was rejected
-- [ ] contract-delta log showing the new topology contracts
-- [ ] batch closure log for the first `g02` execution slice
-
-## Next Task
-
-Execute Batch 1.1 and publish the first `g02` closure log after stale `g01`
+Execute the work steps above and publish the first `g02` closure log after stale `g01`
 items are explicitly superseded.

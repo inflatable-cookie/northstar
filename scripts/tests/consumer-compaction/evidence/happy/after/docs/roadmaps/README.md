@@ -3,7 +3,8 @@
 ## Current state
 
 - Active generation: [`g03`](g03/README.md)
-- Closed history: [`g01` roll-up](archive/g01.md) and [`g02` roll-up](archive/g02.md)
+- Closed generations `g01` and `g02` are curated in [`archive/g01.md`](archive/g01.md)
+  and [`archive/g02.md`](archive/g02.md).
 
 ## Next task
 

@@ -327,8 +327,8 @@ effigy --repo /path/to/installed/northstar northstar/check:agent-instructions /p
 ## Posture advisory (`check:posture-advisory`)
 
 Non-blocking checks for common **declared vs actual** drift in Northstar-shaped
-`docs/` trees (active generation paths, specs archive surface, empty batch-card
-folders). Always exits `0`; warnings print as `[northstar:advisory] …`.
+`docs/` trees (active generation paths, specs archive surface, leftover
+`batch-cards/` folders). Always exits `0`; warnings print as `[northstar:advisory] …`.
 
 ```bash
 effigy check:posture-advisory

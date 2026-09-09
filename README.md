@@ -96,13 +96,13 @@ than choosing an alternative posture:
   for formal contract indexing, ready-state checks, and execution grammar
 - `specs/` -- when provisional design shaping is needed before promoting
   durable outcomes into architecture or contracts
-- `roadmaps/gNN/batch-cards/` -- for step-by-step execution detail under active
-  roadmap milestones
+- `roadmaps/gNN/NNN-<slug>.md` -- executable tasks (`gNN.NNN`) carrying
+  their own steps, acceptance, and closeout under the generation runway
 - `research/` -- when comparative or source-backed exploration is needed before
   commitments
 
 **Bounded migration**: mature projects adopt the compact lifecycle in explicit
-tranches using one active migration spec and roadmap milestone. Migration state
+tranches using one active migration spec and roadmap task. Migration state
 is bounded work, not a permanent mixed posture.
 
 ### Setup steps
@@ -114,8 +114,8 @@ is bounded work, not a permanent mixed posture.
    clean-tree release-candidate prep (do not add `PAPERCUTS.md` during tag
    closeout after CI is already green on a pinned SHA).
 3. Start with vision first, then architecture. Add `research/` when external comparison or source-backed exploration is needed before committing new bets.
-4. Create roadmap milestones under `docs/roadmaps/gNN/` using `NNN-<slug>.md`.
-5. Log each completed batch in `docs/logs/YYYY-MM/` using `DD-HHMMSS-<slug>.md`.
+4. Create roadmap tasks under `docs/roadmaps/gNN/` using `NNN-<slug>.md`.
+5. Record evidence on each completed task in `docs/logs/YYYY-MM/` using `DD-HHMMSS-<slug>.md`.
 6. Create a handoff under `docs/handoffs/` only when another thread genuinely
    needs to take over.
 7. Capture unresolved observations in `docs/triage/YYYYMMDD-HHMMSS-<slug>.md`

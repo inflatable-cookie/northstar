@@ -42,15 +42,15 @@ existing useful project voice when merging the Northstar boundaries.
 When using consequence-triggered modules, also copy the bundle's
 working-rules and specs surfaces from a Northstar source checkout's
 `template-bundle/`. When only this installed skill is available,
-compile-roadmaps and batch-card authoring can use the shipped copy at
-`assets/templates/docs/specs/templates/batch-card-template.md` (consumer
-destination: `docs/specs/templates/batch-card-template.md`).
+compile-roadmaps and task authoring can use the shipped copy at
+`assets/templates/docs/roadmaps/templates/task-template.md` (consumer
+destination: `docs/roadmaps/templates/task-template.md`).
 
 - `docs/contracts/001-working-rules.md`
 - `docs/specs/README.md`
 - `docs/specs/templates/master-spec-template.md`
-- `docs/specs/templates/batch-card-template.md`
-- `docs/roadmaps/g01/batch-cards/README.md`
+- `docs/roadmaps/templates/task-template.md`
+- `docs/roadmaps/g01/README.md`
 - `docs/policy/internal-writing-style.md`
 
 Template rule:
@@ -79,7 +79,7 @@ Native template note:
   `[docs_policy.indexes.vision]` block plus a task-composed `qa:northstar`
   bundle with root/front-door/docs-spine drift checks
 - active generation READMEs carry the `## Generation Runway`; use that coarse
-  goal list to steer new milestones after lanes close
+  goal list to steer new tasks after lanes close
 - the roadmap front doors keep the live `## Next Task` pointer; non-roadmap
   front doors should summarize state or dependencies without becoming the live
   thread pointer
