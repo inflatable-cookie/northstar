@@ -1,6 +1,6 @@
 # g03.002 Complete Consumer Compaction
 
-Status: ready
+Status: complete
 Owner: repo maintainers
 Created: 2026-09-05
 Governing refs: contract 001, Consumer compaction maintenance and preservation oracle
@@ -15,21 +15,21 @@ and the starter mentions roll-up only at rollover. Installed refresh/normalize
 match source. This corrects the incomplete reusable outcome of g03.001; it does
 not rewrite its delivery history.
 
-## Execution plan
+## Completed work
 
-- [ ] [133](batch-cards/133-complete-consumer-compaction.md): deliver one shared
+- [x] [Card 133 evidence](batch-cards/133-complete-consumer-compaction.md): deliver one shared
   preservation-led procedure, route it through maintenance and rollover,
   align reusable doctrine/templates, and prove a consumer fixture end to end.
-- [ ] Close the lane with exact-head review, installed parity, and compact
+- [x] Close the lane with exact-head review, installed parity, and compact
   outcome/evidence on card 133.
 
 ## Boundary and checkpoint
 
 One lane, no concurrent siblings. No live consumer migration is authorized.
-After delivery, operator-provided consumer feedback determines whether another
-correction is needed. Mode consolidation and unrelated simplification remain
-planned, not implicitly executable. Card 133 owns the dispatch manifest.
+Soundcheck consumer compaction passed after delivery. Mode consolidation and
+unrelated simplification remain planned, not implicitly executable. Card 133
+retains the dispatch and delivery evidence until `g03.003` absorbs it here.
 
 ## Next task
 
-Execute card 133 from synchronized main.
+Execute `g03.003`; it will absorb card 133's evidence into this task.

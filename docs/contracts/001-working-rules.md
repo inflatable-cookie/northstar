@@ -17,6 +17,32 @@ single-repo planning lane like this one.
 
 ### Delivery grammar
 
+#### Approved flattened execution-task model
+
+Effective with `g03.003`, a **Northstar task** is the sole executable planning
+unit. It lives at `docs/roadmaps/gNN/NNN-<slug>.md` and is referenced as
+`gNN.NNN`. The generation README owns the durable runway and approved frontier;
+each task owns its objective, sequence, dependencies, boundaries, dispatch
+manifest, acceptance oracle, evidence, and closeout. Do not create a milestone
+wrapper or nested `batch-cards/` file for the same work.
+
+A long-running outcome is a dependency-linked sequence of meaningful tasks in
+one generation. A spec remains optional provisional authority when several
+tasks share unresolved design. Task size is set by coherent ownership and a
+reviewable outcome, not by one agent turn.
+
+Paseo may call its queued execution record a task, but that record transports
+one committed Northstar task; it is not planning authority. Effigy task
+selectors remain repository commands and are also distinct. The committed
+`gNN.NNN` file owns intent and acceptance in both cases.
+
+`g03.003` is the direct pre-1.0 migration. Existing roadmap-milestone and batch-
+card wording in this contract, reusable doctrine, skills, templates, checks,
+and current generation files is migration input, not a second supported model.
+The task must update callers and remove `batch-cards/` together. Historical
+roll-ups and prose evidence may retain their original terms where clearly
+non-authoritative.
+
 - Material work should follow this chain:
   `vision -> research/specs -> architecture + contracts -> roadmap milestone -> execution -> evidence -> closeout`.
 - Use a separate contract only when a stable seam, authority boundary, or

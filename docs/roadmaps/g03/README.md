@@ -10,14 +10,15 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 | Goal | State | Governing refs | Next milestone |
 | --- | --- | --- | --- |
 | Replace permanent live-tree history with lifecycle-bound artifacts and lossless operational compaction. | complete through `g03.001` | contract 001 | observe normal use |
-| Complete consumer compaction through maintenance routes. | complete through card 133 | contract 001 | no approved next lane |
+| Complete consumer compaction through maintenance routes. | complete as `g03.002`; card 133 evidence pending flattening | contract 001 | no further compaction lane |
+| Flatten milestone/card execution into one generation task unit. | ready as `g03.003` | contract 001 | execute `g03.003` |
 | Reduce repeated protocol enumerations and retire genuinely redundant modes without merging distinct behavior blindly. | planned | contract 001, later usage evidence | pending after `g03.001` |
 | Keep unresolved operator feedback visible without pinning old generations open. | watch | contract 001 | bounded watchlist below |
 
 ## Approved frontier
 
-No approved frontier. Cards 130–133 are complete; the bounded watchlist is
-non-executable until Chatterbox promotes new work.
+Task [`g03.003`](003-flatten-execution-tasks.md) is ready. It is the only
+approved task; no concurrent siblings or automatic successor are authorized.
 
 ## Bounded watchlist
 
@@ -31,11 +32,12 @@ non-executable until Chatterbox promotes new work.
 - Atlas, triage/cleanup, and language-package feedback remain operator-provided
   evidence only. They are not ready Northstar execution lanes.
 
-## Milestones
+## Tasks
 
 - `001-compact-default-lifecycle.md` — complete
 - `002-complete-consumer-compaction.md` — complete
+- `003-flatten-execution-tasks.md` — ready
 
 ## Next task
 
-No next execution task is approved. Chatterbox owns the next promotion.
+Execute `g03.003`. Return to Chatterbox after closeout; no next task is approved.
