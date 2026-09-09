@@ -1,17 +1,17 @@
 {
-  "activity_note": "g03.003 worker replay: read-only cleanup inventoried and classified g01/g02 as compactable-if-authorized, proposed only, mutated nothing; tree byte-identical.",
-  "agent_id": "f9fd5df4-d796-4325-9aa1-88fdfd568982",
+  "activity_note": "Chatterbox semantic replay: read-only mode still proposes compaction without mutation; triage ownership does not change the no-write result.",
+  "agent_id": "5f6fe9a9-e588-4bbc-89d7-dbbe02ba4fa0",
   "authorization": "read-only",
   "before_fixture": "happy-before",
-  "captured_at": "2026-09-09T10:53:29Z",
-  "finished_at": "2026-09-09T11:50:00Z",
-  "prompt_sha256": "sha256:1e5618e8821e8408acdcbc598c7af1619f3a57b30676faa496411cd4d3a3b6ec",
-  "provider": "meta/muse-spark-1.3-contributor",
+  "captured_at": "2026-09-09T13:53:49Z",
+  "finished_at": "2026-09-09T13:39:00Z",
+  "prompt_sha256": "sha256:04b4110147cca673a76391f3b029f24cea361ef358500fb38b1a7294e453dc95",
+  "provider": "openai/gpt-6",
   "route": "installed-northstar-docs-cleanup",
   "scenario": "readonly",
   "skill_path": "/Users/tom/.agents/skills/northstar",
   "skill_procedure_relative": "references/lifecycle-maintenance.md",
-  "skill_procedure_sha256": "sha256:7d8c992fc7a05b47e2306f3b584ecc0eb45280abfa78146aab6a4ed89f90181b",
-  "started_at": "2026-09-09T11:46:00Z",
-  "workspace_id": ""
+  "skill_procedure_sha256": "sha256:06cf010e83d0d08deb444fddd709f1a8073c7e8ec0d5e32a7b47721029b11734",
+  "started_at": "2026-09-09T13:38:00Z",
+  "workspace_id": "wks_a3e5efb3a55b2682"
 }

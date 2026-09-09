@@ -10,7 +10,6 @@ Ensure required Northstar docs structure exists and deprecated top-level pattern
 - `docs/architecture/`
 - `docs/contracts/`
 - `docs/roadmaps/`
-- `docs/roadmaps/backlog/`
 - `docs/logs/`
 - `docs/logs/templates/`
 - `docs/triage/`
@@ -52,17 +51,18 @@ delivery:
 
 - Missing core folders or anchor files
 - Strict-planning repos missing system inventory, contract index, or repo authority map
-- Backlog outside `docs/roadmaps/backlog/`
+- A retained `docs/roadmaps/backlog/` or root `backlog/` competing with triage
 - Optional add-on folders auto-seeded with no project-specific need
 - Untracked or malformed `docs/triage/` notes and non-Markdown entries
-- Canonical docs stored in deprecated areas (`docs/meta/`, root `backlog/`, root `decisions/`)
+- Canonical docs stored in deprecated areas (`docs/meta/`, any `backlog/`, root `decisions/`)
 
 ## Fix Rules
 
 - Create missing required folders/files.
 - Create missing planning gate files when the project claims strict planning or
   multi-repo execution readiness.
-- Move backlog content into `docs/roadmaps/backlog/`.
+- Move unresolved or deferred backlog content into `docs/triage/`; promote
+  approved execution into a roadmap task.
 - Do not create optional add-on folders unless project scope requires them.
 - Remove empty/unused optional add-on folders created by default scaffolding.
 - If `docs/research/` is a real project section, keep it and normalize it to the Northstar research layout.

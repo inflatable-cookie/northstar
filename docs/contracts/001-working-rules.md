@@ -99,7 +99,7 @@ non-authoritative.
 - Each entry captures friction, impact, a plausible smallest fix, and the
   affected tool, document, script, or workflow.
 - Papercuts do not pause work, authorize unplanned fixes, or replace the normal
-  backlog, roadmap, spec, architecture, or contract surfaces. Triage them in
+  triage, roadmap, spec, architecture, or contract surfaces. Review them in
   normal maintenance and promote repeated or material items as appropriate.
 - Do not record ordinary one-off failures, external blockers, sensitive data, or
   duplicate open entries. Full detail lives in `bundle-docs/papercuts.md`.
@@ -1006,7 +1006,7 @@ parentage exists.
   generation, not the next four or five tasks. Update it when
   generation-level intent changes, a task materially advances or closes a
   goal, or rollover is being considered.
-- Do not use the generation runway as a backlog, checkbox task list, or
+- Do not use the generation runway as a catch-all, checkbox task list, or
   per-turn currentness surface.
 - In long-running repos, expect one generation to hold many tasks before a
   new generation is useful.

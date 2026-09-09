@@ -11,7 +11,7 @@ Jetstream and Loophole both showed that durable research docs become much more u
 ## Scope
 
 Define where to keep specimen studies, cross-cutting syntheses, source hierarchies, and project-facing translation memos.
-Do not turn research docs directly into roadmap backlogs, architecture, or
+Do not turn research docs directly into roadmap tasks, architecture, or
 contracts before the promotion rule is satisfied.
 
 ## Template layout

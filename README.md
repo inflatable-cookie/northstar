@@ -152,7 +152,7 @@ is bounded work, not a permanent mixed posture.
 - Handoff file format: `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md`
 - Triage folder format: `docs/triage/`
 - Triage file format: `docs/triage/YYYYMMDD-HHMMSS-<slug>.md`
-- Backlog lives only at `docs/roadmaps/backlog/`
+- Unresolved and deferred candidates live in `docs/triage/` until promotion
 - Decision records live in logs by default, not a separate `decisions/` root
 - Research promotes through `specimen-dossiers` -> `value-tracks` -> `translation-memos` before architecture or roadmap commitments
 - Execution must stop when a required repo, interface, or contract surface is unplanned; record a planning gap instead of inferring missing behavior
@@ -188,7 +188,7 @@ Northstar is intentionally lean:
 - keep research problem-led and source-backed; do not freeze raw findings directly into architecture or roadmaps
 - keep planning strict where execution risk is real: no inferred cross-repo behavior, no silent contract gaps, no roadmap work that outruns architecture or contracts
 - prefer manual evidence before adding checker scripts
-- keep one active roadmap queue and move deferred work into backlog
+- keep one active roadmap queue and move unresolved or deferred candidates into triage
 - treat `meta/` as deprecated and extract useful content into canonical docs
 - enforce clean migrations: move, update refs, remove legacy artifacts in one batch
 - keep installable skills portable as one folder; push doctrine back into

@@ -12,7 +12,7 @@ Northstar sweep source of truth:
 - bundle-docs/sweeps/01-structure-sweep.md
 - bundle-docs/sweeps/02-naming-and-keys-sweep.md
 - bundle-docs/sweeps/03-format-and-sections-sweep.md
-- bundle-docs/sweeps/04-roadmap-and-backlog-sweep.md
+- bundle-docs/sweeps/04-roadmap-and-triage-sweep.md
 - bundle-docs/sweeps/05-logs-and-traceability-sweep.md
 - bundle-docs/sweeps/06-deprecation-and-clean-migration-sweep.md
 - bundle-docs/sweeps/07-research-sweep.md

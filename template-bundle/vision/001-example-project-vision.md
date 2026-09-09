@@ -28,4 +28,4 @@ Deliver a reliable, fast-moving product platform where roadmap execution stays a
 
 - Roadmap tasks map directly to vision constraints.
 - Task logs show concrete movement and clear next actions.
-- Deferred work moves into backlog rather than bloating active queues.
+- Unresolved or deferred candidates move into triage rather than bloating active queues.

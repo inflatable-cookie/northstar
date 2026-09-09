@@ -48,9 +48,9 @@ Use the starter shape in `PAPERCUTS.md`:
 
 Papercuts are observations, not automatic roadmap commitments. During normal
 maintenance or planning, group duplicates, close entries fixed by other work,
-and promote material or repeated items into the appropriate backlog, roadmap,
-spec, architecture, contract, or automation change. Keep the queue small enough
-to review.
+and promote material or repeated items into triage, a roadmap, spec,
+architecture, contract, or automation change as appropriate. Keep the queue
+small enough to review.
 
 Known adoption footgun: `tasks.health = [{ task = "qa" }]` makes every
 `effigy doctor` run the full board. Prefer a cheap health baseline; keep full

@@ -35,7 +35,6 @@ planning outcomes have been promoted out of specs.
 - `g01/` first generation tasks
 - `generation-index.md` active generation and rollover history
 - `archive/` closed-generation roll-ups (`gNN.md`) after a generation is safely closed
-- `backlog/` deferred items with promotion criteria
 - `templates/task-template.md` task starter contract
 
 ## Generation runway and tasks
@@ -85,7 +84,8 @@ rule*).
 
 ## Lean governance rule
 
-- Keep one active queue per generation and use backlog for deferred scope.
+- Keep one active queue per generation. Capture unresolved or deferred
+  candidates in `docs/triage/` until promotion.
 - In sequential mode, maintain exactly one active generation.
 - In parallel mode, each active generation is its own queue; keep each queue's
   front doors accurate for that thread.

@@ -4,6 +4,10 @@
 observations, ideas, plans, and questions that are not yet settled into the
 Northstar planning spine.
 
+Triage also holds unresolved or deferred candidates until they are promoted.
+There is no separate roadmap backlog: roadmaps contain approved executable
+tasks, while triage remains non-authoritative.
+
 ## Naming
 
 Use the same local-creation timestamp as handoffs:

@@ -8,7 +8,7 @@ Enforce clean migration policy: deprecate legacy folders without shim clutter an
 
 - `docs/meta/` as active per-project process source
 - Root `decisions/` as canonical decision location
-- Root `backlog/` outside `docs/roadmaps/backlog/`
+- Any `backlog/` folder; triage supersedes it
 - Compatibility shim docs kept in deprecated folders
 
 ## Rules
@@ -37,6 +37,7 @@ Enforce clean migration policy: deprecate legacy folders without shim clutter an
 ```bash
 find docs -maxdepth 3 -type d | sort
 rg -n "meta/|decisions/|backlog/|moved to|deprecated" docs
+find docs -type d -name backlog -print
 ```
 
 ## Completion Criteria

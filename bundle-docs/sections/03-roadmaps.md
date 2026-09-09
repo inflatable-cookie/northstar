@@ -32,13 +32,12 @@ Rationale:
 - `docs/roadmaps/g01/001-<slug>.md`
 - `docs/roadmaps/g01/00n-<slug>.md`
 - `docs/roadmaps/generation-index.md`
-- `docs/roadmaps/backlog/README.md`
-- `docs/roadmaps/backlog/backlog-item-template.md`
+- `docs/triage/README.md`
 - `docs/logs/templates/roadmap-currentness-triage-template.md` (optional)
 
 ## Default vs optional
 
-- `roadmaps/` and `roadmaps/backlog/` are default core sections.
+- `roadmaps/` and `triage/` are default core sections.
 - `docs/roadmaps/templates/` is core for roadmap authoring.
 - Top-level `docs/templates/` remains optional and should not be seeded by default.
 
@@ -76,8 +75,9 @@ stays open until the rollover conditions above are met.
 Generation rollover is a closeout event, not a convenience move. Before opening
 `gNN+1` in sequential mode, all of the following must be true:
 
-- every task in `gNN/` is explicitly closed, superseded, or moved to
-  backlog so no roadmap file in the old generation still presents as active
+- every task in `gNN/` is explicitly closed, superseded, or has its unresolved
+  meaning moved to triage or another active task so no roadmap file in the old
+  generation still presents as active
 - the roadmap front doors and generation README agree that `gNN` is fully
   closed and ready for rollover
 - `docs/specs/` has been purged of stale specs from the closing generation so
@@ -127,7 +127,7 @@ The generation runway sits above individual tasks:
   acceptance, and closeout
 - `Next Task` remains the live continuation pointer in roadmap front doors
 
-The runway is not a backlog, not a checkbox task list, and not a second current
+The runway is not a catch-all, checkbox task list, or second current
 queue. Keep it stable between real strategy, task, or rollover changes.
 If an agent is rewriting the runway every turn, it is using the surface wrong.
 If an agent wants to roll the generation after only a handful of tasks,
@@ -221,8 +221,8 @@ See also the runway rule in
 - Keep one clearly identified active queue per generation.
 - In sequential mode, maintain exactly one active generation.
 - In parallel mode, each active generation is its own queue.
-- Move deferred items into backlog with promotion criteria.
-- Use lightweight currentness triage logs only when queue clarity degrades.
+- Capture unresolved or deferred candidates in triage with promotion criteria.
+- Use lightweight currentness logs only when queue clarity degrades.
 - Keep the roadmap currentness surfaces aligned to the active lane:
 - `docs/roadmaps/README.md`
 - `docs/roadmaps/generation-index.md`
@@ -263,7 +263,7 @@ If these conditions are not met, keep validation in task logs as human-run check
 ## Quick reference
 
 - [Glossary: Generation, task, lane](../glossary.md#execution-and-workflow)
-- [Glossary: Currentness, backlog](../glossary.md#execution-and-workflow)
+- [Glossary: Currentness, triage notes](../glossary.md#execution-and-workflow)
 - [Cheat sheet: Reference keys](../cheat-sheet.md#reference-keys)
 
 ## Next task

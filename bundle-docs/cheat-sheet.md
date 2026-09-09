@@ -35,7 +35,6 @@ docs/
 │   │   └── NNN-<slug>.md  (executable tasks)
 │   ├── g02/
 │   │   └── NNN-<slug>.md  (executable tasks)
-│   ├── backlog/
 │   └── generation-index.md
 ├── logs/
 │   └── YYYY-MM/
@@ -66,7 +65,7 @@ docs/
 5. Generation READMEs own the runway; tasks own steps, acceptance, closeout
 6. Stop on planning gaps -- do not infer missing behavior
 7. One active generation in sequential mode; parallel mode allows multiple
-8. Backlog lives only at `roadmaps/backlog/`
+8. Unresolved or deferred candidates live in triage until promotion
 9. Clean migrations only: move, update refs, remove legacy in one batch
 10. Triage notes are temporary: promote, merge, or remove them during refresh or cleanup
 

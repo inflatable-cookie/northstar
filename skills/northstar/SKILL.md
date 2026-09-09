@@ -191,7 +191,7 @@ mechanical coordinator does not scan or reconcile triage.
   fix is already in scope.
 - Do not log ordinary one-off failures, external blockers, sensitive data, or
   duplicate open entries. Papercuts are observations for later triage, not an
-  automatic backlog or roadmap commitment.
+  automatic triage note or roadmap commitment.
 
 The starter file is available at `assets/templates/PAPERCUTS.md`. Seed it on
 adopt/upgrade before exact-SHA / clean-tree release prep; do not add it during

@@ -29,7 +29,6 @@ specs/          (consequence-triggered provisional planning)
 roadmaps/
   ├─ g01/       generation of tasks (`NNN-<slug>.md`, referenced `gNN.NNN`)
   ├─ g02/
-  ├─ backlog/   deferred work
   └─ generation-index.md
 
 logs/
@@ -39,7 +38,7 @@ handoffs/
   └─ YYYYMMDD-HHMMSS-<slug>.md   friendly fresh-thread notes
 
 triage/
-  └─ YYYYMMDD-HHMMSS-<slug>.md   temporary conversational capture notes
+  └─ YYYYMMDD-HHMMSS-<slug>.md   unresolved or deferred candidates awaiting promotion
 
 PAPERCUTS.md
   └─ agent-observed friction, triaged later into the docs spine

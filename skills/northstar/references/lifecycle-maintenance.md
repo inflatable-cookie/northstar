@@ -110,7 +110,7 @@ For each safely closed generation:
 1. Copy unique durable rules onto their current canonical destination. Do not
    leave the only statement of a live rule inside a file you will delete.
 2. Move open and deferred commitments onto the active generation's bounded
-   watchlist, backlog, or another current destination. Record an explicit
+   watchlist, triage, or another current destination. Record an explicit
    removal only when the commitment is deliberately dropped.
 3. Keep selected PR, commit, release, and validation references for the
    roll-up. Git remains the full-fidelity archive.

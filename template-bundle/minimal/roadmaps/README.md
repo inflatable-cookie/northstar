@@ -14,7 +14,7 @@ Roadmaps are executable task plans derived from vision, architecture, and contra
 
 - `g01/` first generation tasks
 - `generation-index.md` active generation and rollover history
-- `backlog/` deferred items (create when needed)
+- `docs/triage/` holds unresolved or deferred candidates until promotion
 
 ## Rule
 

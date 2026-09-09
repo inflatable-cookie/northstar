@@ -31,7 +31,7 @@ Use [Fresh Agent Sweep Prompt](./fresh-agent-sweep-prompt.md) to start a new age
 1. [01 Structure Sweep](./01-structure-sweep.md)
 2. [02 Naming and Keys Sweep](./02-naming-and-keys-sweep.md)
 3. [03 Format and Sections Sweep](./03-format-and-sections-sweep.md)
-4. [04 Roadmap and Backlog Sweep](./04-roadmap-and-backlog-sweep.md)
+4. [04 Roadmap and Triage Sweep](./04-roadmap-and-triage-sweep.md)
 5. [05 Logs and Traceability Sweep](./05-logs-and-traceability-sweep.md)
 6. [06 Deprecation and Clean Migration Sweep](./06-deprecation-and-clean-migration-sweep.md)
 7. [07 Research Sweep](./07-research-sweep.md)

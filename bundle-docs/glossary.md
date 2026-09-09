@@ -59,10 +59,8 @@ One-page reference for terms used across Northstar docs.
 :: A numbered era of roadmap tasks (`g01`, `g02`, `g03`). Holds 20-40 tasks before rollover is warranted. In parallel mode, multiple generations may be active simultaneously as independent queues.
 
 **Lane**
-: An active line of work within a roadmap. One active queue per generation plus a backlog.
-
-**Backlog**
-: Deferred work. Lives only at `docs/roadmaps/backlog/`.
+: An active line of work within a roadmap. Each active generation owns one
+  approved queue.
 
 ## Planning and Control
 
@@ -171,7 +169,6 @@ One-page reference for terms used across Northstar docs.
 | Logs | Evidence | `docs/logs/YYYY-MM/` |
 | Handoffs | Coordination | `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md` |
 | Triage notes | Temporary capture | `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` |
-| Backlog | Deferred work | `docs/roadmaps/backlog/` |
 | Policy | Repo-local rules | `docs/policy/` |
 
 ## Where to Start

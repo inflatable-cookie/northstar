@@ -58,11 +58,11 @@ protocol; it is already the compact Northstar lifecycle.
 - `roadmaps/` sequence approved work from the canonical surfaces.
 - `logs/` capture task-level evidence and decisions.
 - `handoffs/` hold friendly, timestamped notes for genuine thread takeovers.
-- `triage/` holds temporary conversational observations, ideas, plans, and
-  questions. It is a mutable capture buffer, not an execution authority. Update
-  the same note when an issue changes. Full promotion deletes the note; partial
-  promotion leaves only unresolved meaning. Git history and logs retain the
-  history.
+- `triage/` holds temporary conversational observations, ideas, plans,
+  questions, and deferred candidates. It supersedes a separate roadmap backlog
+  and remains a mutable capture buffer, not execution authority. Update the same
+  note when an issue changes. Full promotion deletes the note; partial promotion
+  leaves only unresolved meaning. Git history and logs retain the history.
 
 ## Nested Docs-Authority Repos
 

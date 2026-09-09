@@ -3,6 +3,10 @@
 **Type: REQUIRED** -- A temporary capture buffer for useful observations,
 ideas, plans, and questions that are not yet settled into the Northstar docs.
 
+Triage also holds unresolved or deferred candidates until promotion. There is
+no separate roadmap backlog: roadmaps contain approved executable tasks, while
+triage remains non-authoritative.
+
 Name notes with the same timestamped format as handoffs:
 
 ```text

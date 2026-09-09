@@ -160,7 +160,7 @@ Section-local template folders such as `docs/roadmaps/templates/`, `docs/logs/te
 
 ## Folder policy
 
-- Keep `roadmaps/backlog/` as the only backlog pattern.
+- Keep unresolved or deferred candidates in `triage/` until promotion.
 - Prefer decision logs over a separate `decisions/` folder.
 - Treat `architecture/system-inventory.md`, `architecture/repo-authority-map.md`
   (when multi-repo), and `contracts/contract-index.md` as planning gate
@@ -206,7 +206,7 @@ Northstar defaults to lean, strict execution:
 - manual-first evidence, automation only when recurring pain justifies it
 - prefer `effigy` first, then `TypeScript`+`bun` for repo-owned automation;
   treat Bash/Python as exceptions rather than a mixed default
-- clear active queue + backlog separation to prevent roadmap sprawl
+- clear separation between approved roadmap tasks and unresolved triage notes
 - specs are provisional; architecture and contracts are the canonical execution
   surfaces once a design is accepted
 - strict planning gates: stop on planning gaps instead of making up missing

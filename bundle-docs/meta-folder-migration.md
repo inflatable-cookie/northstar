@@ -39,7 +39,7 @@ Map common `meta` content into Northstar-aligned locations:
 - workflow guides -> `logs/` (dated updates) or `roadmaps/` (execution rules)
 - guardrails/checklists -> `roadmaps/` task acceptance/evidence sections
 - glossary/terminology -> `architecture/` or optional `specs/` where term ownership is explicit
-- architecture inbox/backlog notes -> `roadmaps/backlog/`
+- architecture inbox and deferred notes -> `triage/`
 - one-off audits -> dated `logs/YYYY-MM/`
 - long-lived contracts/policies -> `contracts/` or optional `schemas/`
 - comparative studies, source maps, and competitive teardowns -> `research/`
