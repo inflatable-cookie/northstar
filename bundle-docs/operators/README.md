@@ -8,6 +8,8 @@ The normal day-to-day surfaces are:
 
 - `strict-planning-starter-prompt.md` for reusable planning thread openers
 - `project-refocus-starter-prompt.md` for reusable recovery thread openers
+- `flattened-task-switchover-prompt.md` for the one-time milestone/card to task
+  migration
 - `live-project-refocus-specimen.md` for a worked recovery example
 
 Maintenance-only pilot and pruning docs now live under

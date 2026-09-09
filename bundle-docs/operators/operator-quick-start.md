@@ -231,6 +231,8 @@ If humans are going to reuse the same opener across multiple threads, use:
 
 - [strict-planning-starter-prompt.md](./strict-planning-starter-prompt.md)
 - [project-refocus-starter-prompt.md](./project-refocus-starter-prompt.md)
+- [flattened-task-switchover-prompt.md](./flattened-task-switchover-prompt.md)
+  for the one-time migration from milestones and batch cards to tasks
 
 ## If You Need An Example
 
