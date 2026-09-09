@@ -31,7 +31,7 @@ For a real external pilot, prefer a repo that:
 - is complex enough that routing and closeout decisions are non-trivial
 - is stable enough that the pilot will expose Northstar friction rather than
   repo chaos
-- has a real current task the operator can route toward a valid next batch
+- has a real current task the operator can route toward a valid next task
 
 ## Drill Steps
 
@@ -45,7 +45,7 @@ Task:
 
 - decide what you would do first if an operator said:
   “Refocus this drifting project under Northstar and get me back to a valid next
-  batch.”
+  task.”
 
 Expected result:
 
@@ -92,7 +92,7 @@ Use:
 
 Task:
 
-- answer whether “lay out the next few roadmaps” should compile milestones now
+- answer whether “lay out the next few roadmaps” should compile tasks now
   or first repair planning
 
 Expected result:
@@ -111,7 +111,7 @@ Task:
 
 Expected result:
 
-- handoff happens only after there is one bounded next batch with clear
+- handoff happens only after there is one bounded next task with clear
   contract refs and evidence requirements
 
 ## What To Record
@@ -119,13 +119,13 @@ Expected result:
 After the drill, note:
 
 - which page you actually started from
-- the order of pages opened before reaching the first valid next batch
+- the order of pages opened before reaching the first valid next task
 - which extra pages you needed before you could act confidently
 - which pages felt duplicative
 - where routing was still ambiguous
 - whether the quick start was enough on its own
 - whether any false start or wrong entry point had to be corrected
-- how long it took to reach a valid next batch rather than just a first guess
+- how long it took to reach a valid next task rather than just a first guess
 
 Use:
 

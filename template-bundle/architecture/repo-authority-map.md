@@ -29,7 +29,7 @@ them.
 - When sources disagree, <repo/system> is authoritative for <surface>.
 - If a seam lacks a contract, execution stops until the contract exists.
 - If ownership changes, update this file, the contract index, and affected
-  roadmap milestones before further execution.
+  roadmap tasks before further execution.
 
 ## Planning Gaps
 

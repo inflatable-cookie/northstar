@@ -25,23 +25,23 @@ instead of explicitly contracted.
 - Retry eligibility is decided by the retry class emitted by `product-api`;
   workers may delay or schedule retries but may not widen eligibility rules.
 - Breaking schema changes require a contract update and coordinated roadmap
-  batch, not silent rollout.
+  task, not silent rollout.
 
 ## Validation
 
 - contract test covering dispatch payload schema generation
 - worker integration test covering rejection of malformed payloads
-- roadmap batch log confirming the shared schema version used in both repos
+- roadmap task closeout confirming the shared schema version used in both repos
 
 ## Migration Notes
 
 Move any ad hoc worker-side payload defaults into the shared schema and remove
-repo-local repair logic in the same batch.
+repo-local repair logic in the same task.
 
 ## Roadmap Impact
 
 Affected roadmap keys:
-- `g01.001` foundation planning and first dispatch-safe batch
+- `g01.001` foundation planning and first dispatch-safe task
 - `g01.002` async execution improvements after the seam is stable
 
 ## Planning Notes

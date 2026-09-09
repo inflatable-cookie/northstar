@@ -15,9 +15,9 @@ that Northstar provides to consumer projects.
 ## Current work
 
 - Active generation: [`roadmaps/g03/README.md`](./roadmaps/g03/README.md)
-- Last completed task: `g03.002` consumer compaction
-- Active task: [`g03.003 flatten execution tasks`](./roadmaps/g03/003-flatten-execution-tasks.md)
-- Approved frontier: `g03.003` only
+- Last completed task: `g03.003` flatten execution tasks
+- Active task: none; `g03.003` is complete
+- Approved frontier: none; return to Chatterbox for planning
 - Intake: [`triage/README.md`](./triage/README.md)
 - Execution friction: [`../PAPERCUTS.md`](../PAPERCUTS.md)
 

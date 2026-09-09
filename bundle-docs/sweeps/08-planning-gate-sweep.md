@@ -20,7 +20,7 @@ cannot plausibly fill missing system behavior with assumptions.
   authoritative deployable surface is involved
 - `docs/contracts/contract-index.md` maps required boundaries to contracts or
   explicit pending items
-- active roadmap milestones reference the contracts they depend on
+- active roadmap tasks reference the contracts they depend on
 - research-driven bets promote into architecture/contracts before roadmap
   execution
 
@@ -29,7 +29,7 @@ cannot plausibly fill missing system behavior with assumptions.
 - active roadmap work exists for repos or seams not listed in system inventory
 - multi-repo work has no repo authority map
 - contract index omits boundaries the roadmap clearly depends on
-- milestones look executable but still rely on implied behavior
+- tasks look executable but still rely on implied behavior
 - planning gaps exist but are buried in prose instead of surfaced as blockers
 - research recommendations were promoted straight into roadmap work with no
   contract layer
@@ -37,7 +37,7 @@ cannot plausibly fill missing system behavior with assumptions.
 ## Fix Rules
 
 - Add or update the missing planning artifacts before allowing roadmap execution.
-- Convert implied boundaries into explicit contracts or mark the milestone
+- Convert implied boundaries into explicit contracts or mark the task
   blocked.
 - Add missing planning gaps to the relevant planning surface instead of hiding
   them in a roadmap risk list.

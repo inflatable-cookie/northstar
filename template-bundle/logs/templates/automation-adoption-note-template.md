@@ -9,7 +9,7 @@ Owner: <owner>
 
 ## Problem Repetition Evidence
 
-- <where this repeated across batches/projects>
+- <where this repeated across tasks/projects>
 
 ## Why Automation Is Justified
 
@@ -18,7 +18,7 @@ Owner: <owner>
 
 ## Runtime Plan
 
-- Expected run cadence: <pre-merge / batch-close / weekly>
+- Expected run cadence: <pre-merge / task-close / weekly>
 - Execution location: <local / CI>
 
 ## Sunset Trigger

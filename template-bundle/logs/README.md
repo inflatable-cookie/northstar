@@ -11,28 +11,29 @@ Logs capture dated evidence and assessments.
 
 ## Cadence rule
 
-- Create logs per completed batch or update cycle.
-- Do not create a separate log for every task.
+- Create logs only for exceptional evidence or a material update cycle.
+- Record normal delivery evidence on the completed roadmap task.
 
 ## Closeout rule
 
-Use logs as the third step in closeout, not the first:
+Use logs only after the task and currentness surfaces are settled:
 
-1. update the current batch card
-2. update the active roadmap milestone if its state changed
-3. update currentness surfaces that still name the active lane, ready card, or
+1. update the current roadmap task
+2. update the generation runway if its state changed
+3. update currentness surfaces that still name the active lane, ready task, or
    recent evidence chain
-4. write the batch log with evidence and validation actually run
-5. record whether the continuation envelope still holds or a stop signal
+4. record evidence and validation actually run on the task
+5. write a log only when material evidence needs a durable separate record
+6. record whether the continuation envelope still holds or a stop signal
    exhausted it
-6. record the lane budget state and pause signal when the run paused cleanly
+7. record the lane budget state and pause signal when the run paused cleanly
 7. create or update a handoff under `docs/handoffs/` only if another thread
    genuinely needs to continue
 8. refresh the roadmap front doors with one explicit next-task pointer
 
 ## Continuation note
 
-- When a batch ends inside a ready chain, say whether another in-bounds card
+- When a task ends inside a ready chain, say whether another in-bounds task
   remains.
 - When continuation stops, name the stop signal instead of implying that the
   next thread should simply keep going.
@@ -70,17 +71,17 @@ Use that pattern for the end-of-turn closeout message, not every short reply.
 
 - Do not maintain a separate `decisions/` folder by default.
 - Capture major decisions as dedicated decision logs in this folder.
-- For legacy migrations, rewrite references and remove old `decisions/` files in the same batch (no compatibility shim files).
+- For legacy migrations, rewrite references and remove old `decisions/` files in the same task (no compatibility shim files).
 
 ## Seed file
 
-- `YYYY-MM/01-090000-example-roadmap-g01-001-batch-1.1-contract-delta.md`
+- `YYYY-MM/01-090000-example-roadmap-g01-001-task-closeout.md`
 - `YYYY-MM/02-100000-example-planning-gap-g01-002-analytics-export.md`
 - `YYYY-MM/03-110000-example-contract-delta-g01-002-analytics-export.md`
 - `YYYY-MM/04-120000-example-roadmap-recompile-g01-002.md`
 - `YYYY-MM/05-130000-example-rollover-decision-g02.md`
 - `YYYY-MM/06-140000-example-contract-delta-g02-platform-reset.md`
-- `YYYY-MM/07-150000-example-first-batch-g02-001.md`
+- `YYYY-MM/07-150000-example-first-task-g02-001.md`
 
 ## Handoff convention
 
@@ -107,5 +108,5 @@ for human-friendly re-entry.
   active lane plus any still-governing rollover or decision log needed to
   explain the current state
 - use `templates/roadmap-currentness-triage-template.md` only when currentness
-  cleanup is itself the batch, or when multiple stale front-door/evidence
+  cleanup is itself the task, or when multiple stale front-door/evidence
   surfaces need a short explicit cleanup pass beyond ordinary closeout

@@ -13,19 +13,19 @@ Deliver a reliable, fast-moving product platform where roadmap execution stays a
 ## Strategic Constraints
 
 - Keep architecture boundaries explicit and documented.
-- Prefer incremental delivery in batch-sized milestones.
-- Require evidence-backed closure for milestone batches.
+- Prefer incremental delivery through meaningful tasks.
+- Require evidence-backed task closure.
 - Keep governance lightweight and focused on outcomes.
 
 ## Target Envelopes
 
-- Delivery cadence: complete at least one meaningful roadmap batch each cycle.
-- Reliability posture: no unresolved critical regressions at batch closure.
+- Delivery cadence: complete at least one meaningful roadmap task each cycle.
+- Reliability posture: no unresolved critical regressions at task closure.
 - Documentation quality: roadmap/log references stay traceable (`gNN.NNN`).
 - Governance overhead: logging and checks stay proportional to delivery value.
 
 ## Alignment Signals
 
-- Roadmap milestones map directly to vision constraints.
-- Batch logs show concrete movement and clear next actions.
+- Roadmap tasks map directly to vision constraints.
+- Task logs show concrete movement and clear next actions.
 - Deferred work moves into backlog rather than bloating active queues.

@@ -4,7 +4,7 @@ Use this prompt when a fresh agent needs to plan a product or multi-repo program
 in Northstar before any execution begins.
 
 Use this prompt only when planning is still missing or incomplete.
-If planning is already sound and you want the next milestones, use the roadmap
+If planning is already sound and you want the next tasks, use the roadmap
 compiler path instead.
 If the existing project state is stale or contradictory, use the refocus path
 instead.
@@ -32,7 +32,7 @@ Northstar planning source of truth:
 
 Execution requirements:
 1. Audit the current planning state first and list exact gaps with file paths.
-   If planning already looks coherent enough to compile milestones immediately,
+   If planning already looks coherent enough to compile tasks immediately,
    stop and route to the roadmap-compiler flow instead of redoing planning work.
 2. Enumerate every known execution-relevant surface: repos, services, packages,
    interfaces, operators, external dependencies, and validation surfaces.
@@ -44,9 +44,9 @@ Execution requirements:
    gap and mark roadmap work blocked.
 6. Promote research-backed decisions into architecture and contracts before
    allowing roadmap execution.
-7. Only after the planning gates are satisfied, compile roadmap milestones from
+7. Only after the planning gates are satisfied, compile roadmap tasks from
    the approved contracts.
-8. Work in meaningful batches, not tiny edits, and leave one explicit next task.
+8. Work in meaningful units, not tiny edits, and leave one explicit next task.
 
 Output requirements:
 - files changed

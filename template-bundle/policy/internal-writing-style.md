@@ -42,8 +42,7 @@ reply, not for every message:
 ## Apply to
 
 - chat replies about internal work, with conversational tone as the default
-- batch cards
-- roadmap milestones
+- roadmap tasks
 - logs
 - handoffs
 - internal contracts and working rules

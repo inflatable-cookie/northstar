@@ -1,11 +1,11 @@
-# Roadmap <gNN.NNN> Batch <N> Contract Delta
+# Roadmap <gNN.NNN> Contract Delta
 
-**Type: TEMPLATE** -- Copy and fill in when a batch changes contracts.
+**Type: TEMPLATE** -- Copy and fill in when a task changes contracts.
 
 Status: draft
 Created: YYYY-MM-DD
 Roadmap: gNN.NNN
-Batch: <n.m> - <batch title>
+Task: <gNN.NNN> - <task title>
 Cycle scope: <what this update cycle covered>
 
 ## Summary
@@ -40,4 +40,4 @@ Cycle scope: <what this update cycle covered>
 
 ## Next Task
 
-State the next roadmap batch or remediation task unlocked by this log.
+State the next roadmap task or remediation step unlocked by this log.

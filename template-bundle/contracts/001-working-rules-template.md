@@ -109,7 +109,7 @@ informal habits.
 
 - When planning is needed and the next direction is not clearly determined by
   the current authority surfaces, stop and ask the operator for intent instead
-  of inventing the next lane or batch.
+  of inventing the next lane or task.
 - Treat competing plausible directions, task handoff choices, and still-open
   product tradeoffs as intent checkpoints rather than routine planning work.
 - Do not mark a task `ready` while an unresolved intent checkpoint still
@@ -121,11 +121,11 @@ informal habits.
   scaffolding
 - prefer simplicity over decorative or architectural complexity that the
   governing refs do not require
-- prefer end-to-end follow-through over convenient partial closure when a batch
+- prefer end-to-end follow-through over convenient partial closure when a task
   promised a working path
 - prefer explicit incompleteness over implied completion when a path is still
   scaffolded or unproven
-- treat disconnected gesture work as incomplete unless the batch was explicitly
+- treat disconnected gesture work as incomplete unless the task was explicitly
   scoped as bounded substrate-only work
 
 ### Refactoring and release maturity
@@ -133,7 +133,7 @@ informal habits.
 - **Before v1.0:** do not add compatibility aliases, shims, re-export layers,
   deprecated stubs, or silent fallbacks to keep obsolete paths working. Prefer
   direct migrations: update call sites and remove superseded surfaces in the
-  same batch unless the operator directs a different shape.
+  same task unless the operator directs a different shape.
 - **Breaking changes:** when a refactor would break callers, contracts, or
   documented behavior, stop and raise it with the operator with a short impact
   summary and options. Do not unilaterally add a compatibility layer to avoid
@@ -142,7 +142,7 @@ informal habits.
   functionality for stable, user-visible, or externally depended behavior.
   Deprecation windows, adapters, or other compatibility work may be required;
   still coordinate material breaks with the operator, but do not treat "delete
-  the old path in one batch" as the automatic default when it would abandon
+  the old path directly" as the automatic default when it would abandon
   supported behavior without an explicit decision.
 
 ### Definition of done
@@ -308,7 +308,7 @@ informal habits.
   discovery, research direction, triage reconciliation, canonical planning
   promotion, lane/dependency design, and the approved parallel frontier.
 - After explicit operator confirmation, Chatterbox edits, validates, commits,
-  and pushes the coherent canonical planning batch directly on the integration
+  and pushes the coherent canonical planning update directly on the integration
   branch. It does not dispatch a promotion worker and does not implement
   product/runtime changes, accept reviews, or merge implementation PRs.
 - Chatterboxes share the checkout. They create unique

@@ -189,7 +189,7 @@ task source separate from the consumer target.
 
 The overlap closes only after exact parity, independent install and self-check,
 installed routing, rollback, offline fallback, current consumer activation,
-and one real consumer workflow pass. The following migration milestone removes
+and one real consumer workflow pass. The following migration task removes
 the embedded payload and fallback together. An unsafe fallback defect pauses
 the cutover rather than creating indefinite dual maintenance. TypeScript
 extraction proves the protocol before Rust copies it; no new language begins
@@ -438,7 +438,7 @@ risk-boundary coverage.
 ## Everyday authoring
 
 Everyday authoring uses a compact path-scoped projection. It re-enters at task
-start and again at coherent batch closeout. Detailed rule references load only
+start and again at coherent task closeout. Detailed rule references load only
 for applicable domains.
 
 The closeout check covers the changed tranche and its direct correctness

@@ -1,6 +1,6 @@
 # Roadmap Currentness Log
 
-**Type: TEMPLATE** -- Optional. Copy and fill in when currentness cleanup is the batch.
+**Type: TEMPLATE** -- Optional. Copy and fill in when currentness cleanup is the task.
 
 Status: draft
 Created: YYYY-MM-DD

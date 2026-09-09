@@ -5,7 +5,7 @@ but execution has drifted and the system needs to be reorganized around strict
 planning, contracts, and clear ownership.
 
 Use this prompt when you do not trust the current planning or roadmap state.
-If the plan is still coherent and you only need the next milestones, use the
+If the plan is still coherent and you only need the next tasks, use the
 roadmap compiler path instead.
 If the plan is coherent but changed in a bounded way, use the replan path
 instead.
@@ -33,11 +33,11 @@ Execution requirements:
    contracts, research, roadmaps, logs, and active repo boundaries.
    If the roadmap and planning surfaces are already coherent, stop and route to
    roadmap compilation instead of running a refocus pass.
-2. Identify drift explicitly: stale milestones, missing contracts, unclear repo
+2. Identify drift explicitly: stale tasks, missing contracts, unclear repo
    ownership, untracked research-driven bets, and fake or inferred behavior.
 3. Rebuild planning coverage using `system-architecture.md`,
    `system-inventory.md`, `repo-authority-map.md`, and `contract-index.md`.
-4. Mark stale roadmap milestones blocked or superseded rather than patching over
+4. Mark stale roadmap tasks blocked or superseded rather than patching over
    them silently.
 5. Convert real missing boundaries into contracts or explicit planning gaps.
 6. If the sequencing baseline is no longer trustworthy, roll over to a new
@@ -50,7 +50,7 @@ Output requirements:
 - files changed
 - drift or planning gaps found
 - planning surfaces repaired
-- milestones blocked, superseded, or recompiled
+- tasks blocked, superseded, or recompiled
 - validation checks run
 - next task
 ```

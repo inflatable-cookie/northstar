@@ -1,16 +1,16 @@
-# Roadmap g02.001 Batch 1.1 Closure
+# Roadmap g02.001 Task Closure
 
-**Type: EXAMPLE** -- Illustrates a post-rollover batch closure. Remove from your project after reading.
+**Type: EXAMPLE** -- Illustrates a post-rollover task closure. Remove from your project after reading.
 
 Status: draft
 Created: YYYY-MM-DD
 Roadmap: g02.001
-Batch: 1.1 - Reset active queue and first valid platform slice
-Cycle scope: executed the first post-rollover batch from the new contract-backed generation
+Task: g02.001 - Reset active queue and first valid platform slice
+Cycle scope: executed the first post-rollover task from the new contract-backed generation
 
 ## Summary
 
-- Executed the first `g02` batch after the rollover and topology contract
+- Executed the first `g02` task after the rollover and topology contract
   updates.
 - Removed stale active references to superseded `g01` work.
 - Re-established one trustworthy active queue for continuing delivery.
@@ -28,7 +28,7 @@ Cycle scope: executed the first post-rollover batch from the new contract-backed
 1. Manual checks:
 - Verified `g02` is the only active generation referenced by current execution
   surfaces.
-- Verified the executed batch matched the new topology and runtime-boundary
+- Verified the executed task matched the new topology and runtime-boundary
   contracts.
 
 2. Commands executed:
@@ -52,5 +52,5 @@ Cycle scope: executed the first post-rollover batch from the new contract-backed
 
 ## Next Task
 
-Compile the next `g02` milestone from the refocused contract set and continue
+Compile the next `g02` task from the refocused contract set and continue
 execution from the new queue only.

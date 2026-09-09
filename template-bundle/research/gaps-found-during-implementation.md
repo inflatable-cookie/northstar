@@ -35,7 +35,7 @@ Use this format:
 
 ### Priority
 - [ ] blocks current work
-- [ ] should fill before next milestone
+- [ ] should fill before next task
 - [ ] can defer
 ```
 

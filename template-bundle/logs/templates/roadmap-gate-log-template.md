@@ -5,7 +5,7 @@
 Status: draft
 Created: YYYY-MM-DD
 Roadmap: gNN.NNN
-Batch window: <covered batches>
+Task window: <covered tasks>
 
 ## Roadmap Gate Summary
 

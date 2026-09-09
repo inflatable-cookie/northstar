@@ -5,12 +5,12 @@
 Status: draft
 Created: YYYY-MM-DD
 Roadmap: g01.002
-Batch: 2.1 - Planning repair and seam ownership
+Task: g01.002 - Planning repair and seam ownership
 Cycle scope: audited export work and stopped execution when the seam lacked an owner and contract
 
 ## Summary
 
-- Audited the blocked analytics export milestone.
+- Audited the blocked analytics export task.
 - Confirmed roadmap scope depended on an unresolved cross-repo seam.
 - Stopped execution and recorded the missing planning surfaces as blockers.
 
@@ -25,7 +25,7 @@ Cycle scope: audited export work and stopped execution when the seam lacked an o
 ## Validation Performed
 
 1. Manual checks:
-- Verified the roadmap milestone referenced a missing contract.
+- Verified the roadmap task referenced a missing contract.
 - Verified repo ownership for the export sink was not explicit.
 
 2. Commands executed:

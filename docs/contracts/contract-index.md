@@ -2,12 +2,12 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-09-05
+Updated: 2026-09-09
 
 ## Coverage Rules
 
 - Every separate contract used by this repo should be listed here.
-- Roadmap milestones should reference their governing artifacts directly.
+- Roadmap tasks should reference their governing artifacts directly.
 - If a boundary genuinely needs its own contract and none exists yet, mark the
   roadmap blocked and close the gap before execution continues.
 
@@ -22,9 +22,8 @@ Updated: 2026-09-05
 
 ## Current readiness
 
-Contract coverage supports `g03.001`'s remaining lifecycle retirement correction
-on card 132. The milestone stays open until promoted-spec callers and fixtures
-stop depending on spec 038 and its retirement passes preservation review.
+Contract coverage supports completed tasks `g03.001` through `g03.003`. No
+active task or approved frontier remains after the flattened-task migration.
 Closed `g01` and `g02` work has no execution authority here; selected evidence
 and deferred dispositions live in their roll-ups. The active generation's
 watchlist retains unresolved operator feedback.

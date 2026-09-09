@@ -6,7 +6,7 @@ Updated: 2026-03-05
 ## Why this section matters now
 
 Architecture translates vision into a durable system shape and invariants.
-It records the realized structure that roadmap batches must implement against.
+It records the realized structure that roadmap tasks must implement against.
 
 ## Scope
 

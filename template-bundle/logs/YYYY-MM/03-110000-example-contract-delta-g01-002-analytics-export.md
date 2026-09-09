@@ -1,11 +1,11 @@
-# Roadmap g01.002 Batch 2.1 Contract Delta
+# Roadmap g01.002 Contract Delta
 
 **Type: EXAMPLE** -- Illustrates a contract delta log. Remove from your project after reading.
 
 Status: draft
 Created: YYYY-MM-DD
 Roadmap: g01.002
-Batch: 2.1 - Planning repair and seam ownership
+Task: g01.002 - Planning repair and seam ownership
 Cycle scope: converted the blocked analytics export seam into an explicit contract
 
 ## Summary
@@ -13,7 +13,7 @@ Cycle scope: converted the blocked analytics export seam into an explicit contra
 - Resolved the authoritative owner of the analytics export seam.
 - Drafted the missing seam contract and updated planning artifacts to point to
   it.
-- Left execution blocked until the roadmap milestone was recompiled against the
+- Left execution blocked until the roadmap task was recompiled against the
   new contract.
 
 ## Changes
@@ -52,5 +52,5 @@ Cycle scope: converted the blocked analytics export seam into an explicit contra
 
 ## Next Task
 
-Recompile `g01.002` so its planning state, batch list, and evidence
+Recompile `g01.002` so its status, work list, and evidence
 requirements match the new analytics export contract.

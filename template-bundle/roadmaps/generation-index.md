@@ -28,18 +28,18 @@ Create a new generation when:
   roadmap scale warrants a new boundary.
 
 Generations are expected to be long-lived. Do not open `g02` just because one
-or two milestones landed; prefer rollover only when the sequencing baseline
+or two tasks landed; prefer rollover only when the sequencing baseline
 itself needs a reset.
 
-As a healthy default, expect roughly 20 to 50 milestones in one generation
+As a healthy default, expect roughly 20 to 50 tasks in one generation
 before rollover is even worth considering. Treat that as a judgment guardrail,
 not an automatic counter.
 
-### Batch completion does not close the generation
+### Task completion does not close the generation
 
-Finishing a batch, suite, or lane of roadmaps does **not** mark the generation
+Finishing a task, suite, or lane of roadmaps does **not** mark the generation
 as complete. The generation remains open until the rollover conditions above are
-met. After closing one batch, compile or continue the next batch inside the same
+met. After closing one task, compile or continue the next task inside the same
 generation. Do not treat the end of a planned sequence as a generation closeout
 event.
 
@@ -65,20 +65,20 @@ generation with `archive/gNN.md` using the same preservation rules as rollover.
 Switch to `parallel` mode only when:
 - genuinely independent work streams need separate generations without blocking
   each other
-- each stream has distinct contracts, milestones, and lane context
+- each stream has distinct contracts, tasks, and lane context
 - front doors can accurately track all active generations without collision
 
 In parallel mode, each active generation operates as its own queue. Opening a
 new generation does not require closing prior generations. Each generation's
-`gNN/README.md` and milestone files remain the authoritative front door for
+`gNN/README.md` and task files remain the authoritative front door for
 that thread.
 
 ## Runway rule
 
 Each active generation's `gNN/README.md` owns its `## Generation Runway`: a
-short, coarse goal list for the generation. Use it to choose the next milestone
+short, coarse goal list for the generation. Use it to choose the next task
 when a lane closes instead of inventing a new direction from recent context.
-Keep the runway stable between real strategy, milestone, or rollover changes.
+Keep the runway stable between real strategy, task, or rollover changes.
 It should be written for a significant generation, not a four-or-five-roadmap
 sequence.
 

@@ -24,7 +24,7 @@ Vision refs: <docs/vision/001-...>
 ## Anti-Fake-Work Rules
 
 - do not call mockups, placeholders, fake adapters, or token substrate work
-  "done" when the batch was supposed to land working behavior
+  "done" when the task was supposed to land working behavior
 - do not leave disconnected gesture work behind and imply the real path now
   exists
 - if a seam is still scaffolded or unproven, name it explicitly as incomplete

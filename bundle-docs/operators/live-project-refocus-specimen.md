@@ -20,14 +20,14 @@ A product team has three active repos:
 - `product-worker`
 
 The active roadmap generation is `g01`.
-`g01.001` shipped a foundation batch successfully.
+`g01.001` shipped a foundation task successfully.
 `g01.002` started describing analytics export work, but the downstream sink repo
 was never contracted and ownership is unclear.
 Agents started sketching likely export behavior in roadmap prose and partial
 implementation notes.
 
 The refocus goal is to stop that drift, repair the planning surfaces, and hand
-execution back only when a valid roadmap batch exists again.
+execution back only when a valid roadmap task exists again.
 
 ## Step 1: Audit Before Editing
 
@@ -38,7 +38,7 @@ Read these surfaces first:
 - `docs/architecture/repo-authority-map.md`
 - `docs/contracts/contract-index.md`
 - active contracts in `docs/contracts/`
-- active roadmap milestones in `docs/roadmaps/g01/`
+- active roadmap tasks in `docs/roadmaps/g01/`
 - latest relevant logs in `docs/logs/YYYY-MM/`
 - `docs/research/translation-memos/` when the seam is research-driven
 
@@ -51,13 +51,13 @@ Expected findings in this specimen:
 
 ## Step 2: Freeze Invalid Execution
 
-Do not keep the milestone half-alive while “figuring it out.”
+Do not keep the task half-alive while “figuring it out.”
 
 Valid actions:
 
-- mark the affected milestone `blocked`
+- mark the affected task `blocked`
 - add `Planning Gaps` entries for the missing seam and authority owner
-- stop implementation batches that depend on the missing contract
+- stop implementation tasks that depend on the missing contract
 
 In the template-bundle specimen, this state is represented by:
 
@@ -105,14 +105,14 @@ Make the choice explicitly.
 
 Recompile inside the current generation when all are true:
 
-- the affected work is localized to one or a few milestones
+- the affected work is localized to one or a few tasks
 - the generation’s overall sequencing logic still holds
 - contract repairs do not invalidate the rest of the active queue
 
 Open `g02` when any are true:
 
 - the contract shift changes the sequencing baseline across the program
-- multiple milestones in `g01` now depend on the repaired boundary
+- multiple tasks in `g01` now depend on the repaired boundary
 - ownership or repo topology changed broadly enough that the old queue is
   misleading
 - maintainers can no longer tell which `g01` items are still valid without a
@@ -128,8 +128,8 @@ Once planning is coherent again:
 - update contract refs
 - change planning state from `blocked` to `ready` only if the contract chain is
   complete
-- replace planning-repair-only tasks with the first contract-valid execution
-  batch
+- replace planning-repair-only steps with the first contract-valid execution
+  work
 - update evidence requirements so the next execution log validates the new seam
 
 In the specimen chain:
@@ -142,18 +142,18 @@ Only hand execution back once there is a trustworthy starting point.
 
 The handoff target should be:
 
-- one roadmap milestone with `Planning state: ready`
+- one roadmap task with `Status: ready`
 - direct `Contract refs`
 - explicit acceptance criteria and evidence requirements
-- no unresolved planning gaps that still govern the next batch
+- no unresolved planning gaps that still govern the next task
 
-At that point, execution can continue from the first newly valid batch.
+At that point, execution can continue from the first newly valid task.
 If the project uses a continuation artifact, create it after the recompile, not
 before.
 
 ## Failure Modes To Reject
 
-- keeping a stale milestone “mostly active” while the contract is still missing
+- keeping a stale task “mostly active” while the contract is still missing
 - moving implementation ahead and promising to backfill the contract later
 - hiding a planning gap inside `Risks and Mitigations`
 - treating cross-repo ownership as “obvious” without writing it down
@@ -167,7 +167,7 @@ before.
 3. Freeze invalid roadmap work.
 4. Repair planning surfaces and contracts.
 5. Decide recompile versus rollover explicitly.
-6. Hand execution back from the first contract-valid batch.
+6. Hand execution back from the first contract-valid task.
 
 ## Next task
 
@@ -176,7 +176,7 @@ For the harder rollover case, use these companion artifacts:
 - [001-example-platform-reset.md](~/Dev/projects/northstar/template-bundle/roadmaps/g02/001-example-platform-reset.md)
 - [05-130000-example-rollover-decision-g02.md](~/Dev/projects/northstar/template-bundle/logs/YYYY-MM/05-130000-example-rollover-decision-g02.md)
 - [06-140000-example-contract-delta-g02-platform-reset.md](~/Dev/projects/northstar/template-bundle/logs/YYYY-MM/06-140000-example-contract-delta-g02-platform-reset.md)
-- [07-150000-example-first-batch-g02-001.md](~/Dev/projects/northstar/template-bundle/logs/YYYY-MM/07-150000-example-first-batch-g02-001.md)
+- [07-150000-example-first-task-g02-001.md](~/Dev/projects/northstar/template-bundle/logs/YYYY-MM/07-150000-example-first-task-g02-001.md)
 
 Next task: add a compact operator checklist that compares the strict-planning,
 refocus, roadmap-compiler, and replan skills so teams know which entry point to

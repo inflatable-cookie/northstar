@@ -25,7 +25,7 @@ future task, but it should keep the generation moving as a significant
 
 ## Seed files
 
-- `001-example-foundation-batch.md`
+- `001-example-foundation-task.md`
 - `002-example-analytics-export.md`
 - `templates/task-template.md`
 

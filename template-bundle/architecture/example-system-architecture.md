@@ -26,17 +26,17 @@ Vision refs: docs/vision/001-example-project-vision.md
 
 - Domain rules are enforced server-side, not only in UI layers.
 - Roadmap changes must reference affected architecture boundaries.
-- Logs must reflect real validation activity from completed batches.
+- Logs must reflect real validation activity from completed tasks.
 
 ## Performance and Reliability Constraints
 
-- API and workflow latency targets should be explicit per milestone.
+- API and workflow latency targets should be explicit per task.
 - Critical failure paths require clear rollback or containment behavior.
-- Batch closures must identify residual risk and ownership.
+- Task closures must identify residual risk and ownership.
 
 ## Interfaces With Roadmaps
 
 - `g01.001` establishes strict planning coverage and the first contract-backed
-  execution batch.
+  execution task.
 - `g01.002` remains blocked until the unresolved analytics seam is either
   contracted or removed from scope.

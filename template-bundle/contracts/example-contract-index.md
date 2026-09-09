@@ -11,7 +11,7 @@ Updated: YYYY-MM-DD
 - Every active roadmap dependency should appear here as an active contract or a
   visible pending item.
 - Multi-repo seams stay blocked until the source and consumer repos are explicit.
-- Roadmap milestones should reference contract ids directly rather than naming
+- Roadmap tasks should reference contract ids directly rather than naming
   vague “integration work.”
 
 ## Contract Register

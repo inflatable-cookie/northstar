@@ -25,4 +25,4 @@ Document key constraints and budgets.
 
 ## Interfaces With Roadmaps
 
-List the roadmap milestones/batches this architecture currently unlocks or constrains.
+List the roadmap tasks this architecture currently unlocks or constrains.

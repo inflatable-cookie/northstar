@@ -1,11 +1,11 @@
-# Roadmap g02.001 Batch 1.1 Contract Delta
+# Roadmap g02.001 Contract Delta
 
 **Type: EXAMPLE** -- Illustrates a post-rollover contract delta. Remove from your project after reading.
 
 Status: draft
 Created: YYYY-MM-DD
 Roadmap: g02.001
-Batch: 1.1 - Reset active queue and first valid platform slice
+Task: g02.001 - Reset active queue and first valid platform slice
 Cycle scope: created the new topology and runtime-boundary contracts for the post-rollover queue
 
 ## Summary
@@ -46,9 +46,9 @@ Cycle scope: created the new topology and runtime-boundary contracts for the pos
 ## Risks
 
 - The new generation will drift immediately if stale `g01` references are not
-  cleaned up in the same batch.
+  cleaned up in the same task.
 
 ## Next Task
 
 Finalize `g02.001`, supersede stale `g01` references, and execute the first
-contract-valid platform-reset batch.
+contract-valid platform-reset task.

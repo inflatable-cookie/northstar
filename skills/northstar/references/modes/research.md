@@ -29,5 +29,5 @@ roadmap work absorbs decisions implicitly.
 
 ## Guardrails
 
-- Do not promote raw research straight into roadmap batches.
+- Do not promote raw research straight into roadmap tasks.
 - Do not skip contracts when research implies a concrete boundary.

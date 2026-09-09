@@ -27,7 +27,7 @@ Document compatibility implications and required migrations.
 
 ## Roadmap Impact
 
-List affected roadmap keys (`gNN.NNN`) and batch implications.
+List affected roadmap tasks (`gNN.NNN`) and sequencing implications.
 
 ## Planning Notes
 

@@ -42,7 +42,7 @@ meaning, or material provenance.
 - no deletion before a frozen inventory and preservation proof;
 - no retention of old procedural prose merely to preserve history;
 - no second compact/full protocol;
-- no consolidation of distinct Northstar modes in this milestone.
+- no consolidation of distinct Northstar modes in this task.
 
 ## Completion
 - [x] lifecycle foundation tasks merged after independent exact-head review

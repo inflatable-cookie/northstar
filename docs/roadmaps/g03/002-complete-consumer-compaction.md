@@ -68,4 +68,5 @@ unrelated simplification remain planned, not implicitly executable.
 
 ## Next task
 
-Execute `g03.003`; it has absorbed this task's delivery evidence above.
+`g03.003` absorbed this task's delivery evidence and is complete. Return to the
+active generation runway for the current frontier.

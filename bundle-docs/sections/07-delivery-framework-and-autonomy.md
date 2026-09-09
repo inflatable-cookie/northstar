@@ -6,7 +6,7 @@ Updated: 2026-09-01
 ## Why this section matters now
 
 Northstar's planning spine is useful, but complex projects still drift when
-agents can treat roadmap milestones as loose suggestions rather than tightly
+agents can treat roadmap tasks as loose suggestions rather than tightly
 defined delivery paths. The recurring failure mode is not only bad planning. It
 is weak execution grammar: mockups pass as completion, UI complexity grows
 without product need, partial work is treated as done, and operators have to
@@ -120,20 +120,20 @@ For autonomy-sensitive projects, the guardrail pack should make five things
 explicit:
 
 - real over representational
-  - do not stop at mockups, placeholders, or token scaffolding if the batch was
+  - do not stop at mockups, placeholders, or token scaffolding if the task was
     supposed to land working behavior
 - simplicity over flourish
   - do not add UI or interaction complexity unless the product need is explicit
     in the governing refs
 - integration over isolated gesture work
   - partial seams, fake adapters, and disconnected surfaces do not count as
-    completion for an end-to-end batch
+    completion for an end-to-end task
 - follow-through over convenient stopping points
-  - when a batch promises a realized user or operator path, carry the work to
+  - when a task promises a realized user or operator path, carry the work to
     the contract-valid end state or mark it incomplete
 - explicit incompleteness over implied closure
   - if the remaining path is still scaffolded, mocked, or unproven, record that
-    limit instead of claiming the milestone is effectively done
+    limit instead of claiming the task is effectively done
 
 ## Papercut feedback loop
 
@@ -153,7 +153,7 @@ refactors. That is usually wrong noise **before v1.0**, and often mandatory care
 **once a product or library has shipped v1.0-level stability expectations**.
 
 - **Pre-1.0:** forbid opportunistic compatibility layers. Prefer clean migration:
-  update references, rename in place, delete superseded paths in the same batch.
+  update references, rename in place, and delete superseded paths in the same task.
   If a change is breaking or needs a phased rollout, **stop and ask the
   operator** for a decision instead of inventing a shim.
 - **v1.0 and later:** default to preserving expected behavior for stable,
@@ -228,7 +228,7 @@ still materially ambiguous.
 When planning is needed and the next direction is not clearly determined by
 the existing authority surfaces, the thread should:
 
-- stop before inventing the next lane or batch
+- stop before inventing the next lane or task
 - name the main plausible directions briefly
 - ask the operator for intent or priority
 
@@ -331,7 +331,7 @@ human conversation.
 
 Use a master spec when a goal:
 
-- spans more than one meaningful batch
+- spans more than one meaningful task
 - changes user-facing behavior
 - introduces new contracts or operational policy
 - requires non-trivial rollout, migration, or validation planning
@@ -562,7 +562,7 @@ The agent should only pause and wait for operator input when:
 
 - the next task is not yet ready
 - a stop condition is triggered
-- the runway ends and planning is needed to generate the next batch
+- the runway ends and planning is needed to generate the next task
 - an intent checkpoint requires operator direction
 
 Operators should not need to keep sending "continue" when the next ready task
@@ -1053,7 +1053,7 @@ chat-only review as complete.
 Execution must stop and return to planning or operator review when:
 
 - a required contract is missing or contradictory
-- a batch reveals a planning gap
+- a task reveals a planning gap
 - operator intent or prioritization is still unresolved across multiple
   plausible planning directions
 - user-facing design ambiguity exceeds the product guardrails

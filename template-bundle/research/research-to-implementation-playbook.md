@@ -39,14 +39,14 @@ Use `templates/implementation-decision-record-template.md` when the decision sho
 - Reference the research artifact in code comments when the implementation encodes a research-driven behavior.
 - If research is missing, capture the gap in `gaps-found-during-implementation.md`.
 - If the implementation reveals a conflict with the research, document the deviation and rationale instead of silently drifting.
-- If the implementation reveals a missing contract, stop the batch and close the
+- If the implementation reveals a missing contract, stop the task and close the
   planning gap before continuing.
 
 ### Phase 4: Validation
 
 - Derive tests from the behaviors the research claims matter.
 - Validate prototype-gated recommendations before treating them as settled.
-- Record what was checked in the roadmap batch log.
+- Record what was checked in the roadmap task or its closeout log.
 
 ### Phase 5: Review
 

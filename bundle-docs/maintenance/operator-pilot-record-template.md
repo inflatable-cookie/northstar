@@ -17,7 +17,7 @@ This is maintenance evidence for Northstar itself, not a normal operator page.
 ## Time To First Decision
 
 - Minutes to choose first action:
-- Minutes to valid next batch:
+- Minutes to valid next task:
 - First page opened:
 - Additional pages opened before acting:
 - Pages opened in order:
@@ -57,7 +57,7 @@ This is maintenance evidence for Northstar itself, not a normal operator page.
 ## Outcome
 
 - Was the correct entry point chosen:
-- Did the operator reach a valid next batch:
+- Did the operator reach a valid next task:
 - Did any doc encourage the wrong action:
 - Which docs or prompts were decisive vs incidental:
 

@@ -11,8 +11,8 @@ Month segmentation keeps historical logging navigable at scale.
 ## Scope
 
 Define log naming, placement, cadence, and minimum sections.
-Logs must trace directly back to roadmap keys and batches.
-When a batch produces or promotes research, cite the relevant research artifacts in evidence.
+Logs must trace directly back to roadmap task keys.
+When a task produces or promotes research, cite the relevant research artifacts in evidence.
 
 ## Template layout
 
@@ -33,16 +33,17 @@ When a batch produces or promotes research, cite the relevant research artifacts
 
 - Directory pattern: `docs/logs/YYYY-MM/`
 - File pattern: `DD-HHMMSS-<log-slug>.md`
-- Example: `docs/logs/2026-03/05-160623-roadmap-g01-001-batch-1.2-contract-delta.md`
+- Example: `docs/logs/2026-03/05-160623-roadmap-g01-001-contract-delta.md`
 
 ## Cadence rule
 
-- Create logs per update cycle / completed batch.
-- Do not create a new log for every individual task.
+- Create logs for exceptional evidence or a material update cycle.
+- Normal delivery evidence closes on the completed task; do not duplicate it
+  in a routine log.
 
 ## Lean evidence rule
 
-- Logs should capture what was actually run in the batch.
+- Logs should capture what was actually run in the task or update cycle.
 - Prefer a short list of manual checks plus commands executed.
 - Do not add a checker script unless roadmap lean-governance criteria are met.
 
@@ -50,7 +51,7 @@ When a batch produces or promotes research, cite the relevant research artifacts
 
 - Use decision logs for major decisions.
 - Do not maintain a dedicated `decisions/` folder by default.
-- During migration from legacy `decisions/`, move files to `logs/`, rewrite references, and delete legacy files in the same batch (no shim docs).
+- During migration from legacy `decisions/`, move files to `logs/`, rewrite references, and delete legacy files in the same task (no shim docs).
 
 ## Consolidation rule
 
@@ -65,15 +66,15 @@ evidence.
 - `docs/logs/README.md` should reflect the current evidence chain rather than a
   stale subset of old logs
 - when the active lane changes materially, refresh the log README so operators
-  can find the recent batch trail quickly
+  can find the recent evidence trail quickly
 - keep a bounded evidence window in `docs/logs/README.md`, usually the most
   recent 5 active-lane logs plus any still-governing rollover or decision log
   needed to explain the current state
 - do not mirror the whole month or whole generation in `docs/logs/README.md`
   once that list stops helping an operator reach the live lane quickly
 - use the optional currentness-triage template only when currentness cleanup is
-  itself the batch, or when multiple stale front-door/evidence surfaces need a
-  short explicit cleanup record beyond normal batch closeout
+  itself the task, or when multiple stale front-door/evidence surfaces need a
+  short explicit cleanup record beyond normal task closeout
 
 ## Content contract (per log)
 
@@ -86,7 +87,7 @@ evidence.
 
 ## Traceability rule
 
-Each log must include roadmap references in `gNN.NNN` format and can include research artifact links when those artifacts materially changed in the batch.
+Each log must include roadmap references in `gNN.NNN` format and can include research artifact links when those artifacts materially changed in the task.
 
 Logs should describe evidence and remaining risks, but should not own the live
 `## Next Task` pointer. Keep that pointer in the roadmap front doors.
