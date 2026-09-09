@@ -6,9 +6,9 @@ generation remains expanded.
 ## Current state
 
 - Active generation: [`g03`](./g03/README.md)
-- Last completed task: `g03.002` consumer compaction
-- Active task: [`g03.003`](./g03/003-flatten-execution-tasks.md)
-- Approved frontier: `g03.003` only
+- Last completed task: `g03.003` flatten execution tasks
+- Active task: none; `g03.003` is complete
+- Approved frontier: none; return to Chatterbox for planning
 - Closed generations: [`g01`](./archive/g01.md) and [`g02`](./archive/g02.md) roll-ups under `archive/`
 
 ## Rules
@@ -23,4 +23,5 @@ generation remains expanded.
 
 ## Next task
 
-Execute `g03.003`. The bounded watchlist is not execution authority.
+Return to Chatterbox for the next planning checkpoint. The bounded watchlist
+is not execution authority.

@@ -38,6 +38,11 @@ and limitation evidence for lifecycle foundation, generation compaction,
 reusable defaults, README correction, and final spec retirement (absorbed from cards 130–132 by `g03.003`). No separate
 routine log is required.
 
+`g03.003` is complete. Task `003-flatten-execution-tasks.md` retains the
+flattening outcome, PR #42, accepted review, merge commit, validation, and
+deferred limits. The material-migration closeout record is
+[`2026-09/09-122615-flatten-execution-tasks.md`](2026-09/09-122615-flatten-execution-tasks.md).
+
 ## Cross-project planning evidence
 
 - [Shared knowledge retrieval pilot](2026-09/05-093742-shared-knowledge-retrieval-pilot.md):

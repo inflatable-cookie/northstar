@@ -1,15 +1,15 @@
 # Roadmap Generation Index
 
 Status: active
-Updated: 2026-09-05
+Updated: 2026-09-09
 Mode: sequential
 
 ## Active generation
 
 - `g03`
 - Runway: `g03/README.md`
-- Last completed task: `g03.002` — consumer compaction
-- Approved frontier: `g03.003` — flatten execution tasks
+- Last completed task: `g03.003` — flatten execution tasks
+- Approved frontier: none; return to Chatterbox for planning
 
 ## Generation log
 
@@ -29,4 +29,5 @@ preservation oracle in contract 001 passes.
 
 ## Next task
 
-Execute `g03.003`; no automatic successor is approved.
+Return to Chatterbox for the next planning checkpoint; no automatic successor
+is approved.

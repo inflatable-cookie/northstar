@@ -1,6 +1,6 @@
 # g03.003 Flatten Execution Tasks
 
-Status: ready
+Status: complete
 Owner: repo maintainers
 Created: 2026-09-09
 Governing refs: contract 001, system architecture
@@ -91,6 +91,24 @@ transport cannot resolve a flattened task without a queue-plugin change, or if
 validation reveals a material lifecycle regression. Bring the exact impact and
 options to Chatterbox; do not add a shim.
 
+## Closeout
+
+- The milestone-plus-batch-card hierarchy was replaced with one executable
+  `gNN.NNN` task level across Northstar doctrine, skills, starter templates,
+  checkers, fixtures, current planning, and queue-facing handoff wording.
+- PR [#42](https://github.com/inflatable-cookie/northstar/pull/42) was accepted
+  at exact head `184937dbb24e3c7eadbd3daa74cc56ff3ba90496` by the independent
+  review in [comment 5600997364](https://github.com/inflatable-cookie/northstar/pull/42#issuecomment-5600997364)
+  and merged as `92f3720576f8bd28b767768011aff8f6507b760a`.
+- The final review recorded `effigy qa` (123 checks, 0 failures),
+  `effigy qa:docs`, `git diff --check`, and installed-skill parity (112 files)
+  passing on the accepted head. The integration `main` checkout was clean and
+  synchronized with `origin/main` at the merge commit before this closeout.
+- Non-blocking prose-level milestone vocabulary in illustrative or secondary
+  surfaces remains deferred to a later doctrine sweep. Live consumer
+  migrations remain outside this lane; the related triage note is a lead, not
+  execution authority. No acceptance failure remains.
+
 ## Next task
 
-Execute `g03.003`. On closeout, return to Chatterbox; no successor is approved.
+Return to Chatterbox for the next planning checkpoint; no successor is approved.

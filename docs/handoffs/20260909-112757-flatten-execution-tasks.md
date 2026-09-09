@@ -4,7 +4,7 @@ title: "Flatten Northstar execution tasks"
 handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
-status: ready-to-launch
+status: complete
 base_required: pushed-main
 queue_dispatch: northstar-queue
 queue_approval: "Operator proposed the flattening and confirmed the resulting design with 'Spot on' on 2026-09-09."
@@ -32,7 +32,11 @@ task contract.
 - Canonical task: [`g03.003`](../roadmaps/g03/003-flatten-execution-tasks.md).
 - Governing contract: [`001`](../contracts/001-working-rules.md), approved
   flattened execution-task model.
-- Planning is ready on pushed `main`; `g03.002` is complete.
+- The worker/PR loop is complete. PR #42 was accepted at exact head
+  `184937dbb24e3c7eadbd3daa74cc56ff3ba90496` and merged as
+  `92f3720576f8bd28b767768011aff8f6507b760a`.
+- `g03.002` and `g03.003` are complete; the integration `main` checkout is
+  synchronized and no execution successor is approved.
 - This is the only approved lane. No concurrent sibling or continuation task.
 - Worker profile: automatic adequate implementation pool, general capability;
   frontier-worker justification: none.
@@ -57,21 +61,15 @@ with another permanent layer.
 
 ## Suggested Next Move
 
-Start from synchronized `main`, read task `g03.003` and its governing contract,
-then inventory every active caller of roadmap milestones, batch cards, and
-`batch-cards/`. Freeze the deletion/evidence map before editing. Implement the
-coherent migration and validate the resulting single-level consumer shape.
+No further worker action is needed. Return to Chatterbox for the next planning
+checkpoint; no successor is approved.
 
 ## Completion Protocol
 
-Follow task `g03.003` for scope, acceptance, validation, stop conditions, and
-closeout. Work in the launcher-provided non-main worktree after the worker
-startup preflight. Open one PR, leave the workspace and branch clean, and
-report the PR plus exact head to queue orchestration. An independent reviewer
-must accept that exact head before merge. Queue orchestration owns review,
-merge, synchronized-main reconciliation, task/front-door closeout, handoff
-disposition, and final status. Pause on a task stop condition and return the
-complete blocker through the queue; do not ask the operator from the worker.
+Task `g03.003` completed through PR #42, independent exact-head review,
+merge-sync, and synchronized-main closeout. The task and roadmap surfaces now
+retain the canonical outcome and evidence. No continuation envelope remains;
+queue orchestration owns the final task disposition.
 
 There is no continuation envelope after `g03.003`. The next task is an explicit
 Chatterbox planning checkpoint.
