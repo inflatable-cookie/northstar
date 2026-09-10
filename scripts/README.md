@@ -124,6 +124,13 @@ restore generic prose assertions. Run `effigy check:repo-contract-wiring` or
 exercise isolated structural failures, execution-contract failures, and benign
 changes.
 
+`check:native-starter` renders both native Effigy starter templates into
+isolated repositories. It runs the Praxis-shaped `effigy test --plan`,
+`effigy doctor`, and `effigy qa` sequence for the native repo starter, then
+doctor and QA for the thin docs-authority starter, which intentionally owns no
+product test suite. This catches command-grammar drift in nested task strings
+that static template checks cannot execute.
+
 ## Explicit command surface (`check:command-skills`)
 
 Run `effigy check:command-skills` directly or through `effigy qa:docs`.

@@ -108,14 +108,14 @@ supports consumer-side `docs_policy`, the starter repo contract should include:
   - `exclude = ["history/**"]`
 That config should pair with repo-owned tasks composed from native validators:
 
-- `effigy docs check-paths README.md AGENTS.md docs/README.md docs/vision/README.md docs/roadmaps/README.md docs/logs/README.md`
- - `effigy docs check-paths docs/policy/internal-writing-style.md`
-- `effigy docs check-contains AGENTS.md --require "effigy tasks" --require "effigy test --plan"`
-- `effigy docs check-contains README.md --require "docs/README.md"`
-- `effigy docs check-contains docs/README.md --require "vision/README.md" --require "roadmaps/README.md" --require "logs/README.md"`
-- `effigy docs check-index --policy-index vision`
-- `effigy docs check-headings docs/vision/README.md --require-heading "## Current Vision"`
-- `effigy docs check-forbidden ... --forbid '--repo .'`
+- `effigy docs check paths README.md AGENTS.md docs/README.md docs/vision/README.md docs/roadmaps/README.md docs/logs/README.md`
+- `effigy docs check paths docs/policy/internal-writing-style.md`
+- `effigy docs check contains AGENTS.md --require "effigy tasks" --require "effigy test --plan"`
+- `effigy docs check contains README.md --require "docs/README.md"`
+- `effigy docs check contains docs/README.md --require "vision/README.md" --require "roadmaps/README.md" --require "logs/README.md"`
+- `effigy docs check index --policy-index vision`
+- `effigy docs check headings docs/vision/README.md --require-heading "## Current Vision"`
+- `effigy docs check forbidden ... --forbid '--repo .'`
 
 For a thin workspace root that delegates into a nested docs-authority repo, the
 same contract still applies. The root should only keep the orchestration tasks
