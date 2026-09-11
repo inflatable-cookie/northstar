@@ -5,9 +5,9 @@ architecture, contracts, and executable roadmaps.
 
 ## Active planning
 
-No active planning specs. Lasting lifecycle rules and planning doctrine live in
-`docs/architecture/system-architecture.md` and
-`docs/contracts/001-working-rules.md`.
+- [`039-ui-design-planning-and-delivery.md`](./039-ui-design-planning-and-delivery.md)
+  freezes the UI brief, prototype gate, provider-neutral skill, delivery
+  evidence, and exact-head rendered review for ready task `g03.004`.
 
 ## Lifecycle
 

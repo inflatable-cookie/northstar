@@ -1,8 +1,9 @@
 # Translation Memo: UI Design Planning And Delivery
 
-Status: research complete; awaiting promotion decision
+Status: promoted to spec 039 and task `g03.004`
 Owner: repo maintainers
 Last Updated: 2026-09-11
+Related spec: `docs/specs/039-ui-design-planning-and-delivery.md`
 Promotion targets: Chatterbox mode, worker handoff contract, UI skill, review mode
 
 ## Problem
@@ -215,11 +216,9 @@ or treat a deterministic detector as design approval.
 - Small UI fixes remain quick.
 - Rework caused by vague intent and missing states falls across dogfood runs.
 
-## Decisions needed before promotion
+## Promotion decision
 
-1. Keep the skill provider-neutral, with Impeccable optional, or make an
-   external design system a dependency.
-2. Require an approved brief plus a concept or prototype checkpoint for
-   substantial UI work, or require the brief alone.
-3. Keep the full brief in the canonical task or spec with a self-contained
-   handoff copy, or make the handoff the sole authority.
+The operator selected the provider-neutral skill, an approved brief plus a
+concept or prototype checkpoint for substantial work, and canonical task or
+spec ownership with a self-contained handoff copy. Spec 039 freezes those
+choices; `g03.004` is the bounded implementation lane.

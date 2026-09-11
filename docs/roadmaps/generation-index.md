@@ -1,7 +1,7 @@
 # Roadmap Generation Index
 
 Status: active
-Updated: 2026-09-09
+Updated: 2026-09-11
 Mode: sequential
 
 ## Active generation
@@ -9,7 +9,7 @@ Mode: sequential
 - `g03`
 - Runway: `g03/README.md`
 - Last completed task: `g03.003` — flatten execution tasks
-- Approved frontier: none; return to Chatterbox for planning
+- Approved frontier: `g03.004` — UI design planning and delivery
 
 ## Generation log
 
@@ -29,5 +29,4 @@ preservation oracle in contract 001 passes.
 
 ## Next task
 
-Return to Chatterbox for the next planning checkpoint; no automatic successor
-is approved.
+Execute `g03.004`; no automatic successor is approved.
