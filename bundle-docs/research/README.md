@@ -6,13 +6,14 @@ source-backed coding-quality workflows.
 
 ## Scope
 
-This research initiative covers five feature areas:
+This research initiative covers six feature areas:
 
 1. **Reusable Release Management** - Systems for automating version bumps, releases, and publication
 2. **Changelog Handler System** - Tools for updating, formatting, and maintaining changelogs
 3. **Documentation Coverage Checks** - Validating completeness and consistency of documentation
 4. **Standardised README Generation** - Template-driven README creation and maintenance
 5. **Language-Specific Coding Quality** - Shared standards for everyday authoring and explicit audit-and-repair
+6. **UI Design Planning And Delivery** - User-workflow briefs, concept checkpoints, implementation guidance, and rendered review
 
 ## Release and changelog refined direction
 

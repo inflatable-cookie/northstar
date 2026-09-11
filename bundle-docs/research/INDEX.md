@@ -59,6 +59,7 @@
 - `translation-memos/matt-pocock-skills-audit-to-northstar.md` - External skill-design translation
 - `translation-memos/rust-quality-skills-and-audit.md` - Two-track Rust coding-quality model
 - `translation-memos/typescript-quality-and-svelte-overlay.md` - TypeScript quality with Svelte overlays
+- `translation-memos/ui-design-planning-and-delivery.md` - UI briefing, prototyping, delivery, and review
 
 ### Meta
 - `README.md` - Research overview and scope
@@ -130,9 +131,9 @@ Primary test data:
 | Source hubs | 5 |
 | Specimen dossiers | 5 |
 | Value tracks | 2 |
-| Translation memos | 10 |
+| Translation memos | 11 |
 | Meta | 4 |
-| **Total** | **30** |
+| **Total** | **31** |
 
 ---
 

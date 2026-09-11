@@ -53,6 +53,7 @@ Project-facing recommendations:
 - [Matt Pocock Skills Audit To Northstar](translation-memos/matt-pocock-skills-audit-to-northstar.md) - Translation of external skill-design evidence into Northstar constraints
 - [Rust Quality Authoring And Audit](translation-memos/rust-quality-skills-and-audit.md) - Source-backed two-track Rust quality model
 - [TypeScript Quality And Svelte Overlay](translation-memos/typescript-quality-and-svelte-overlay.md) - Source-backed TypeScript pack with conditional Svelte and SvelteKit rules
+- [UI Design Planning And Delivery](translation-memos/ui-design-planning-and-delivery.md) - UI brief, prototype checkpoint, worker skill, and rendered review
 
 ### Specifications
 Technical specifications for tools and formats:
