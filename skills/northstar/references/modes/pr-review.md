@@ -34,6 +34,28 @@ or idle remains resumable. Replacement requires definitive unavailability,
 still uses the worker workspace, starts a complete fresh review, and never
 inherits an unseen verdict.
 
+## UI-marked PRs
+
+When the PR implements a UI-classified lane, load the nested
+[`northstar-ui` skill](../../ui/SKILL.md) Review route
+([`../ui/review.md`](../ui/review.md)) in addition to this mode, and review the
+running exact head:
+
+- run the product at the PR head and exercise the expected workflow, required
+  states, viewports, keyboard and input paths, and the scenario oracle's negative
+  or recovery case;
+- read the approved brief from the canonical task or spec and from the handoff's
+  `UI Design Brief`; treat it as acceptance authority;
+- publish UI findings beside code findings, and treat material workflow,
+  hierarchy, state, accessibility, responsive, or presentation misses as
+  blocking even when the diff is correct;
+- reject a verdict built only on tests, a static screenshot, or a style
+  detector; those may support but never replace rendered inspection.
+
+If the required interface cannot actually be run, stop and report the missing
+capability rather than approving from the diff. The consumer repository owns
+design authority; do not ask the PR to adopt a different visual language.
+
 ## Procedure
 
 1. Resolve the named PR and target repository. Read the applicable `AGENTS.md`

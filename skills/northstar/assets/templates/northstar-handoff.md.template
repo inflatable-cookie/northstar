@@ -48,6 +48,22 @@ Please keep the next pass within these boundaries:
 - **Decisions and preferences:** {{NON_OBVIOUS_DECISIONS_OR_USER_PREFERENCES}}
 - **Open tensions:** {{KNOWN_RISKS_AMBIGUITIES_OR_JUDGMENT_CALLS}}
 
+### UI Design Brief
+
+Write `Not applicable` when the lane is not UI work. Otherwise this is the
+self-contained execution copy of the brief owned by {{UI_BRIEF_CANONICAL_OWNER}}
+under `{{UI_CLASSIFICATION}}`. Do not change the seven top-level sections, and
+do not invent a missing brief here; stop and return the lane to planning when a
+material experience decision is still open. Field detail lives in
+`references/ui/brief-contract.md`.
+
+- **Classification / current and target workflow:** {{UI_WORKFLOW_SUMMARY}}
+- **Presentation direction and design authority:** {{UI_PRESENTATION_DIRECTION}}
+- **States, content ranges, and input envelope:** {{UI_STATES_AND_ENVELOPE}}
+- **Selected concept or prototype identity:** {{UI_CONCEPT_EVIDENCE_OR_NONE}}
+- **Scenario oracle:** {{UI_SCENARIO_ORACLE}}
+- **Open decisions and stop conditions:** {{UI_OPEN_DECISIONS_AND_STOPS}}
+
 ## Suggested Next Move
 
 Start here: {{FIRST_STEP_FOR_THE_NEXT_THREAD}}

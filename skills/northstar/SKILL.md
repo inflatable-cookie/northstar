@@ -28,6 +28,7 @@ router's generic language section into the installed-package route at
 | Agent instruction review | User asks for a `northstar AGENTS file review`, or to review/optimize `AGENTS.md`/`CLAUDE.md` |
 | Pre-execution discovery | Readiness mapping, intent rounds, project language, decision prototypes, questionnaires, or reframe |
 | PR review | User asks a thread to review an existing PR |
+| UI design delivery | A UI-classified implementation or review lane has an approved brief; run the `northstar-ui` skill's Build or Review route |
 | Orchestrator | User wants a Northstar lane coordinated — manifest-defined frontier dispatch, review-child lease in worker workspace, and gated merge — or a committed orchestrator-continuation handoff; canonical planning and promotion belong to chatterbox |
 | Docs cleanup | User wants `/docs` files and folders inspected and reworked to fit Northstar |
 | Chatterbox | User wants primary planning authority, problem exploration, canonical promotion, triage reconciliation, or coordinator direction; or uses `northstar chatterbox` / `/northstar-chatterbox` |
@@ -112,6 +113,13 @@ routine tool prompts; it does not expand the child's Northstar authority.
   project-language, prototype, and questionnaire routes; no execution authority.
 - **PR review:** independent review of an existing PR with the verdict and every
   required change posted on the provider review surface before chat summary.
+  For a UI-classified PR, load the `northstar-ui` Review route and run the exact
+  head; material workflow, hierarchy, state, accessibility, responsive, or
+  presentation failures block even when tests pass.
+- **UI design delivery:** a UI-classified implementation lane runs the
+  `northstar-ui` Build route against its approved brief and attaches exact-head
+  rendered evidence; a UI review runs the Review route. Northstar owns the
+  protocol, not a house aesthetic or a renderer.
 - **Docs cleanup:** inventory and classify docs drift, including expanded
   closed generations; mutate only when bounded repair is authorized.
 - **Research:** promoted decisions in architecture/contracts, not stranded memos.
@@ -218,9 +226,14 @@ Northstar source repo, expanded doctrine lives at
 - Handoff directory: `docs/handoffs/`
 - Triage directory: `docs/triage/`
 - Handoff contract: [`references/handoff-contract.md`](./references/handoff-contract.md)
+- UI skill: [`ui/SKILL.md`](./ui/SKILL.md) (Build and Review routes under
+  `references/ui/`)
 
 ## Do not
 
+- Impose a house aesthetic or override consumer design authority through the
+  `northstar-ui` skill; it executes an approved brief and reviews the running
+  result.
 - Skip the router.
 - Use handoff mode for compaction-only or ordinary `continue`.
 - Start roadmap execution to discover missing contracts.

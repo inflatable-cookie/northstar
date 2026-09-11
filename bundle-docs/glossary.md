@@ -76,6 +76,24 @@ One-page reference for terms used across Northstar docs.
 **Currentness curation**
 : The periodic or closeout-driven task of aligning front doors to active state.
 
+**UI classification**
+: The depth of UI planning a lane needs, chosen by decision risk and user
+  impact: refinement, workflow change, or substantial redesign. File count is
+  not a proxy.
+
+**UI design brief**
+: The durable record of a UI lane's problem, current and target workflows,
+  presentation direction, states, viewports, constraints, concept evidence,
+  scenario oracle, and stop conditions. Owned by the canonical task or spec and
+  transported to the worker as a self-contained `UI Design Brief` subsection
+  under `Important Context`.
+
+**Design delegate**
+: A planning-only conversational helper for a substantial UI lane. Gathers
+  requirements, inspects the running surface, maps workflows, and produces
+  materially different concepts. It cannot implement production code or grant
+  readiness; the operator selects the direction.
+
 ## Research and Promotion
 
 **Research**

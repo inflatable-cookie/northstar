@@ -176,7 +176,34 @@ exact-head lease and posts a provider verdict naming the exact reviewed head.
 
 → [`modes/pr-review.md`](./modes/pr-review.md)
 
-## 8. Orchestrator thread
+## 8. UI design delivery (approved brief)
+
+Use when a UI-classified lane needs implementation or review and an approved UI
+design brief already exists in its canonical task or spec:
+
+- a worker lane whose handoff carries a `UI Design Brief` subsection;
+- a reviewer asked to judge the running experience of a UI PR;
+- a request to build or review a refinement, workflow change, or substantial
+  redesign that planning has settled.
+
+Open the nested [`northstar-ui` skill](../ui/SKILL.md) and load exactly one
+route: [`references/ui/build.md`](./ui/build.md) for implementation, or
+[`references/ui/review.md`](./ui/review.md) for independent review. Both use the
+brief contract in [`references/ui/brief-contract.md`](./ui/brief-contract.md) and
+the compact guidance in [`references/ui/design-guidance.md`](./ui/design-guidance.md).
+
+This route executes and reviews an approved design; it is not a planning route.
+If a material experience decision is still open, or a substantial redesign has
+no operator-selected concept evidence, stop and return the lane to planning
+(chatterbox or pre-execution discovery). Product truth, components, tokens, and
+visual language stay with the consumer repository; tests, screenshots, and style
+detectors never grant design approval.
+
+**Precedence:** an explicit orchestrator or worker dispatch keeps its route and
+loads this skill inside the worker; a bare review request for a UI PR uses this
+route alongside direct PR review.
+
+## 9. Orchestrator thread
 
 Use when the user wants Northstar to coordinate a lane: consume the canonical
 dispatch manifest, verify factual prerequisites, launch the approved frontier,
@@ -194,7 +221,7 @@ the mode uses them for routine dispatch without a separate permission prompt.
 
 → [`modes/orchestrator.md`](./modes/orchestrator.md)
 
-## 9. Agent instruction review
+## 10. Agent instruction review
 
 Use when the user explicitly asks for an always-loaded instruction-surface
 review, especially:
@@ -209,7 +236,7 @@ Northstar's own files when the target is a consumer repository.
 
 → [`modes/agent-instruction-review.md`](./modes/agent-instruction-review.md)
 
-## 10. Docs cleanup
+## 11. Docs cleanup
 
 Use when the operator wants an active inventory of files or folders under
 `/docs` that do not fit Northstar, with clear drift reworked into canonical
@@ -227,7 +254,7 @@ destination, ownership, meaning, or deletion consequence is uncertain. Include
 
 → [`modes/cleanup-docs.md`](./modes/cleanup-docs.md)
 
-## 11. Normalize docs lifecycle
+## 12. Normalize docs lifecycle
 
 Use when the job is **repo shape and spine health** (initial or ongoing):
 
@@ -239,14 +266,14 @@ Use when the job is **repo shape and spine health** (initial or ongoing):
 
 → [`modes/normalize-docs.md`](./modes/normalize-docs.md)
 
-## 12. Research
+## 13. Research
 
 Use when **external evidence** must become architecture or contracts before
 roadmap work bets on it.
 
 → [`modes/research.md`](./modes/research.md)
 
-## 13. Recovery
+## 14. Recovery
 
 Use when planning **was valid but state is now untrustworthy**:
 
@@ -259,7 +286,7 @@ If planning coverage is **still missing**, use plan-from-scratch instead.
 → `replan-after-change.md`, `refocus-drifted-project.md`, or
 `sweep-audit-repair.md`
 
-## 14. Planning (default for implicit work)
+## 15. Planning (default for implicit work)
 
 Use when the job is **planning or sequencing** and recovery is not the main
 problem:
@@ -276,7 +303,7 @@ Choose one:
 | Change still in provisional specs | [`shape-with-specs-and-promote.md`](./modes/shape-with-specs-and-promote.md) |
 | Canonical surfaces exist; need tasks | [`compile-roadmaps.md`](./modes/compile-roadmaps.md) |
 
-## 15. Chatterbox planning and intake
+## 16. Chatterbox planning and intake
 
 Use when the operator wants to explore problems, plan, reconcile triage notes,
 promote canonical planning directly after confirmation, or send direction to

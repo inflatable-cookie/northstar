@@ -115,6 +115,38 @@ informal habits.
 - Do not mark a task `ready` while an unresolved intent checkpoint still
   governs its scope.
 
+### UI design planning and delivery
+
+- Classify UI work by decision risk and user impact, not file count:
+  **refinement** preserves an established workflow and pattern,
+  **workflow change** alters actions, navigation, forms, states, or information
+  hierarchy, and **substantial redesign** creates or materially replaces a user
+  experience.
+- A refinement uses a compact UI design brief; a workflow change uses the full
+  brief; a substantial redesign uses the full brief plus an operator-approved
+  concept, comp, or interactive prototype checkpoint. The canonical task or
+  spec owns the brief, and the worker handoff carries a self-contained
+  `UI Design Brief` subsection under its `Important Context` without changing
+  the seven top-level handoff sections.
+- Before a UI task is ready, planning inspects the running current surface when
+  it exists, maps the current and target workflows, identifies the governing
+  design authority, and settles material design decisions. A planning-only
+  design delegate may propose concepts but cannot implement production code or
+  grant readiness; the operator selects the direction.
+- The worker implements the complete approved workflow through the
+  `northstar-ui` skill, exercises its scenario oracle in the running product,
+  captures named rendered states, performs one bounded critique-and-repair
+  pass, and attaches exact-head rendered evidence to the PR.
+- The independent reviewer runs the exact PR head and treats material workflow,
+  hierarchy, state, accessibility, responsive, or presentation failures as
+  blocking. Tests, screenshots, and style detectors are supporting evidence,
+  never design approval.
+- The consumer repository owns product truth, components, tokens, platform
+  conventions, and visual language. Do not let the protocol create a competing
+  design authority, require a Northstar renderer, or make an external design
+  tool mandatory. Full detail lives in the Northstar bundle at
+  `bundle-docs/sections/11-ui-design-delivery.md` when that source is available.
+
 ### Execution guardrail pack
 
 - prefer real integrated behavior over mockups, placeholders, or token

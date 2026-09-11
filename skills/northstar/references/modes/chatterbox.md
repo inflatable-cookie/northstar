@@ -82,6 +82,49 @@ Triage is mutable live intake, not an append-only history. Its directory should
 contain unresolved current meaning only. Git history and delivery logs preserve
 provenance after correction or promotion.
 
+## UI design planning
+
+UI lanes need their experience settled before a worker is dispatched. When a
+lane is UI-classified:
+
+1. Inspect the repository's current design authority and run the current UI when
+   it exists. Do not infer the experience from code alone.
+2. Walk and capture the real current workflow: entry, actions, responses,
+   decisions, friction, recovery, and completion.
+3. Classify the lane by decision risk and user impact, not file count:
+   **refinement**, **workflow change**, or **substantial redesign**. Plan at the
+   highest class the lane contains.
+4. Describe the ideal target workflow before choosing implementation structure.
+5. Ask only questions that change the workflow, hierarchy, or presentation.
+6. Write the brief into the canonical task or governing spec. A refinement uses
+   the compact form; a workflow change or substantial redesign uses the full
+   brief and its scenario oracle.
+7. For a substantial redesign, use the lightest artifact that resolves the risk
+   (annotated screenshots, flow or wireframe, high-fidelity comps, or a
+   disposable interactive prototype), record it at a stable project path with
+   recorded identity, and obtain operator selection before readiness.
+8. Promote only the selected direction; rejected variants stay
+   non-authoritative.
+9. Compile the self-contained execution copy into the worker handoff under
+   `## Important Context` as `### UI Design Brief`, bound back to the canonical
+   owner. Do not change the seven top-level handoff sections.
+
+Do not mark a UI task `ready` while the worker would still need to invent a
+material experience decision. Do not create a competing product or design
+authority, make a design tool mandatory, or turn qualitative review into a
+score.
+
+### Planning-only design delegate
+
+A substantial UI lane may use a planning-only design delegate. It interviews
+and inspects, maps flows, and produces two or three materially different
+structures. It cannot implement production code, grant readiness, or pick the
+direction; the operator selects. Record its output at a stable project path and
+promote only the operator-selected direction. Field detail lives in
+[`../ui/brief-contract.md`](../ui/brief-contract.md). When the Northstar source
+checkout is available, full doctrine is at
+`bundle-docs/sections/11-ui-design-delivery.md`.
+
 ## Canonical planning and promotion
 
 After explicit operator confirmation, Chatterbox directly promotes settled

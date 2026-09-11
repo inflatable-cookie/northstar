@@ -69,6 +69,29 @@ headings for its own docs policy. Those trailing sections:
 The generic Northstar handoff template does not add consumer-specific headings by
 default.
 
+### UI Design Brief transport
+
+When the lane is UI-classified as a refinement, workflow change, or substantial
+redesign, the handoff carries a self-contained execution copy inside
+`## Important Context` under `### UI Design Brief`. Keep it after the other
+`Important Context` bullets and before `## Suggested Next Move`.
+
+- Bind the copy to its canonical owner with an explicit task or spec reference.
+- Carry the compact form for a refinement: affected user, current and target
+  behavior, governing pattern, state or viewport impact, scenario oracle, and
+  stop conditions.
+- Carry the full brief for a workflow change or substantial redesign, including
+  the scenario oracle and, for a substantial redesign, the operator-selected
+  concept or prototype identity.
+- Do not invent a missing brief in the handoff. If a material experience
+  decision is still open, stop and return the lane to planning instead.
+- Do not change, reorder, or rename the seven top-level sections. The brief is a
+  subsection of `Important Context`.
+
+The field enumeration lives in
+[`ui/brief-contract.md`](./ui/brief-contract.md) for the `northstar-ui` skill
+and in the canonical task or spec. Do not restate it here.
+
 ## Human writing rules
 
 A good handoff should feel like a thoughtful teammate catching someone up:

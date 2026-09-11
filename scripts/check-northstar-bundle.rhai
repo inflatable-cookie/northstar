@@ -35,6 +35,7 @@ let required_files = [
     "bundle-docs/sections/05-research.md",
     "bundle-docs/sections/09-standard-docs-spine.md",
     "bundle-docs/sections/10-automation-runtime-policy.md",
+    "bundle-docs/sections/11-ui-design-delivery.md",
     "bundle-docs/sweeps/README.md",
     "bundle-docs/sweeps/fresh-agent-sweep-prompt.md",
     "bundle-docs/sweeps/07-research-sweep.md",
@@ -90,6 +91,9 @@ require_heading(repo_root, "README.md", "Read Next");
 require_heading(repo_root, "README.md", "Operating Posture");
 
 require_heading(repo_root, "bundle-docs/README.md", "Governance posture");
+require_heading(repo_root, "bundle-docs/sections/11-ui-design-delivery.md", "UI classification");
+require_heading(repo_root, "bundle-docs/sections/11-ui-design-delivery.md", "UI design brief contract");
+require_heading(repo_root, "bundle-docs/sections/11-ui-design-delivery.md", "Independent review");
 require_heading(repo_root, "bundle-docs/sweeps/README.md", "Use Case");
 require_heading(repo_root, "bundle-docs/sweeps/README.md", "Agent Execution Contract");
 require_heading(repo_root, "bundle-docs/sweeps/README.md", "Sweep Order");

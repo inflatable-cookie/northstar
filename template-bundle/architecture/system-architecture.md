@@ -15,6 +15,13 @@ Describe core layers and responsibilities.
 
 Describe how data moves and where authoritative decisions are made.
 
+For a project that ships a user interface, the consumer repository owns design
+authority: product truth, components, tokens, platform conventions, and visual
+language. Planning owns UI classification, the design brief, readiness, and the
+rendered-evidence and review protocol described in `docs/contracts/001`. Do not
+let tooling create a competing design authority or treat a deterministic check
+as design approval.
+
 ## Invariants
 
 List non-negotiable rules implementation must preserve.
