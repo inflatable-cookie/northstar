@@ -21,6 +21,7 @@ State the exact bounded outcome for this task.
 - [ ] Review oracle below is present when acceptance is high-risk, universal, exact, or negative; otherwise explicitly noted as not required.
 - [ ] Continuation envelope is explicit; the next task is ready if auto-start is enabled.
 - [ ] UI classification is recorded; a workflow change or substantial redesign has a settled UI design brief, and a substantial redesign names the operator-selected concept evidence.
+- [ ] No unresolved planning gaps or operator intent checkpoints.
 
 ## Decisions
 

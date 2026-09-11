@@ -136,6 +136,9 @@ let mirror_task_template = "skills/northstar/assets/templates/docs/roadmaps/temp
 let task_template = read(canonical_task_template);
 require_contains(task_template, "UI classification:", "task template");
 require_contains(task_template, "## UI Design Brief", "task template");
+require_contains(task_template,
+    "No unresolved planning gaps or operator intent checkpoints.",
+    "task template readiness invariant");
 require(fs::sha256(path::join(repo_root, canonical_task_template)) ==
     fs::sha256(path::join(repo_root, mirror_task_template)),
     "task template mirror drifted");
