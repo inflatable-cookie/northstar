@@ -1,6 +1,6 @@
 # g03.004 UI Design Planning And Delivery
 
-Status: ready
+Status: complete
 Owner: repo maintainers
 Created: 2026-09-11
 Governing refs: spec 039, contract 001, system architecture
@@ -93,7 +93,28 @@ if the fixture design would claim visual-quality proof it cannot supply.
 
 ## Closeout
 
-Pending.
+- UI design decisions now precede dispatch: spec 039's classification, brief,
+  prototype gate, planning-only design delegate, handoff transport, and
+  exact-head rendered review are promoted into reusable doctrine
+  (`bundle-docs/sections/11-ui-design-delivery.md`), system architecture,
+  contract 001, copy-ready templates, the provider-neutral `northstar-ui`
+  skill with build and review routes, and structural fixtures.
+- PR [#43](https://github.com/inflatable-cookie/northstar/pull/43) was accepted
+  at exact head `571b0cde6e477736482dba18aea2095c8e7f7c1b` by the independent
+  review in [comment 5636020236](https://github.com/inflatable-cookie/northstar/pull/43#issuecomment-5636020236)
+  and merged as `d4245b18031f1589208a6babe2f49c2a62c4a18c`.
+- The final review recorded `effigy qa` passing (exit 0),
+  `effigy check:ui-protocol` OK, `effigy test:ui-protocol` with all 9 fixtures
+  passing, and `git diff --check` clean on the accepted head. The round-1
+  finding (restored readiness-rubric invariant in both task-template mirrors,
+  hardened by a structural assertion) was resolved and re-validated. The
+  integration `main` checkout was clean and synchronized with `origin/main`
+  at the merge commit before this closeout, and `effigy qa:docs` passes there.
+- Non-blocking notes carried forward: the handoff-template brief-ownership
+  phrasing reads oddly once filled, and the skills-README payload count is
+  declared non-contractual and fragile. Deterministic fixtures remain a
+  structural floor only; live consumer evidence awaits the first natural
+  operator-supplied lanes. No acceptance failure remains.
 
 ## Next task
 

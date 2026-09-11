@@ -6,9 +6,9 @@ generation remains expanded.
 ## Current state
 
 - Active generation: [`g03`](./g03/README.md)
-- Last completed task: `g03.003` flatten execution tasks
-- Active task: [`g03.004`](./g03/004-ui-design-planning-and-delivery.md) UI design planning and delivery
-- Approved frontier: `g03.004` only; no automatic successor
+- Last completed task: `g03.004` UI design planning and delivery
+- Active task: none; last completed `g03.004`
+- Approved frontier: none; return to Chatterbox for the next planning checkpoint
 - Closed generations: [`g01`](./archive/g01.md) and [`g02`](./archive/g02.md) roll-ups under `archive/`
 
 ## Rules
@@ -23,5 +23,5 @@ generation remains expanded.
 
 ## Next task
 
-Execute `g03.004`. Return to Chatterbox after closeout. The bounded watchlist is
+Return to Chatterbox for the next planning checkpoint. The bounded watchlist is
 not execution authority.

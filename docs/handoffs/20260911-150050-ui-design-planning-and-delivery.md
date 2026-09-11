@@ -4,7 +4,7 @@ title: "Implement UI design planning and delivery"
 handoff_mode: worker-pr-loop
 worker_mode: implementation
 dispatch_authority: orchestrator
-status: ready-to-launch
+status: complete
 base_required: pushed-main
 queue_dispatch: northstar-queue
 queue_approval: "Operator approved the three recommended policy choices, clarified the companion-tool posture, and said 'Let's dispatch' on 2026-09-11."
@@ -32,7 +32,9 @@ intent from a code diff.
 
 - **Done:** research is promoted; spec 039 freezes the brief, prototype gate,
   provider-neutral skill, companion-capability posture, and rendered review.
-- **Still open:** implement and distribute the complete protocol in `g03.004`.
+- **Implemented and merged:** the complete protocol in `g03.004`. PR #43 was
+  accepted at exact head `571b0cde6e477736482dba18aea2095c8e7f7c1b` and merged
+  as `d4245b18031f1589208a6babe2f49c2a62c4a18c`.
 - **Active spec lane:** [`039`](../specs/039-ui-design-planning-and-delivery.md).
 - **Current task:** [`g03.004`](../roadmaps/g03/004-ui-design-planning-and-delivery.md).
 - **Canonical refs:** contract 001, system architecture, spec 039, and the
@@ -81,29 +83,18 @@ canonical refs.
 
 ## Suggested Next Move
 
-Start by reading spec 039, `g03.004`, contract 001, the relevant Chatterbox,
-pre-execution, handoff, worker, and PR-review modes, and the source/install
-parity checks. Build a caller and authority inventory before editing so the new
-skill and brief do not create a second planning spine.
+No further worker action is needed. Return to Chatterbox for the next planning
+checkpoint; no successor is approved.
 
 ## Completion Protocol
 
-Implement the complete task in a dedicated worktree and branch. Work in
-coherent batches, run the focused fixtures and required Effigy checks, commit
-and push, then open a PR that links `g03.004`, spec 039, the exact implementation
-head, and validation evidence. Do not edit the reserved closeout surfaces after
-the PR unless the coordinator returns the workspace for an accepted revision.
+Task `g03.004` completed through PR #43, independent exact-head review,
+merge-sync, and synchronized-main closeout. The task and roadmap surfaces now
+retain the canonical outcome and evidence. No continuation envelope remains;
+queue orchestration owns the final task disposition.
 
-The coordinator will launch an independent reviewer in this same worker
-workspace under a serial clean exact-head lease. The reviewer must inspect the
-task oracle, test the exact PR head without modifying it, and post a durable
-verdict naming that SHA. Address requested changes in this same worker and PR.
-After acceptance, the coordinator owns merge, synchronized-main verification,
-handoff consumption, spec/task/front-door closeout, and the empty-runway notice.
-
-There is no continuation envelope after `g03.004`. Stop and return a precise
-blocker if any task stop condition occurs; do not add a compatibility layer or
-weaken the operator prototype gate.
+There is no continuation envelope after `g03.004`. The next task is an explicit
+Chatterbox planning checkpoint.
 
 Disposition trigger: delete this transient handoff after merge, abandonment, or
 ownership transfer once its unique meaning is promoted or consumed.

@@ -8,8 +8,8 @@ Mode: sequential
 
 - `g03`
 - Runway: `g03/README.md`
-- Last completed task: `g03.003` — flatten execution tasks
-- Approved frontier: `g03.004` — UI design planning and delivery
+- Last completed task: `g03.004` — UI design planning and delivery
+- Approved frontier: none; return to Chatterbox for the next planning checkpoint
 
 ## Generation log
 
@@ -29,4 +29,4 @@ preservation oracle in contract 001 passes.
 
 ## Next task
 
-Execute `g03.004`; no automatic successor is approved.
+Return to Chatterbox for the next planning checkpoint; no automatic successor is approved.
