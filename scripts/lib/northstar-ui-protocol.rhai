@@ -1,5 +1,5 @@
 // Pure protocol logic and fixtures for Northstar UI design planning and
-// delivery (spec 039 / g03.004). No filesystem or provider access.
+// delivery (g03.004). No filesystem or provider access.
 
 fn required_sections() {
     [

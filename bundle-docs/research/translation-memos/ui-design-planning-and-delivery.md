@@ -3,7 +3,7 @@
 Status: promoted to spec 039 and task `g03.004`
 Owner: repo maintainers
 Last Updated: 2026-09-11
-Related spec: `docs/specs/039-ui-design-planning-and-delivery.md`
+Historical spec: 039, promoted and removed; Git retains its source
 Promotion targets: Chatterbox mode, worker handoff contract, UI skill, review mode
 
 ## Problem

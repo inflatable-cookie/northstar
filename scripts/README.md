@@ -316,7 +316,8 @@ effigy check:language-package-routes
 
 ## UI design protocol (`check:ui-protocol`, `test:ui-protocol`)
 
-Validate the UI design planning and delivery protocol from spec 039. The
+Validate the UI design planning and delivery protocol from durable section 11
+and completed task `g03.004`. The
 structural check asserts the `northstar-ui` skill and its build/review routes,
 the brief contract, the handoff `UI Design Brief` placement under
 `Important Context`, the doctrine section, the working-rules bindings, the task

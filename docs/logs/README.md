@@ -44,7 +44,7 @@ deferred limits. The material-migration closeout record is
 [`2026-09/09-122615-flatten-execution-tasks.md`](2026-09/09-122615-flatten-execution-tasks.md).
 
 `g03.004` is complete. Task `004-ui-design-planning-and-delivery.md` retains its compact PR, merge, validation,
-and limitation evidence for the UI design planning and delivery protocol (spec 039 promotion, provider-neutral skill,
+and limitation evidence for the UI design planning and delivery protocol (`g03.004` promotion, provider-neutral skill,
 handoff transport, fixtures, exact-head rendered review). No separate
 routine log is required.
 

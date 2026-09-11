@@ -168,4 +168,4 @@ require_contains(router, "ui/SKILL.md", "router");
 let architecture = read("docs/architecture/system-architecture.md");
 require_contains(architecture, "## UI design planning and delivery", "system architecture");
 
-log("Northstar UI design planning and delivery surface: OK (spec 039 / g03.004)");
+log("Northstar UI design planning and delivery surface: OK (g03.004)");

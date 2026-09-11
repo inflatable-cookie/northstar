@@ -3,7 +3,7 @@
 Status: complete
 Owner: repo maintainers
 Created: 2026-09-11
-Governing refs: spec 039, contract 001, system architecture
+Governing refs: section 11, contract 001, system architecture; promoted from spec 039
 Depends on: `g03.003` complete
 
 ## Outcome
@@ -115,6 +115,10 @@ if the fixture design would claim visual-quality proof it cannot supply.
   declared non-contractual and fragile. Deterministic fixtures remain a
   structural floor only; live consumer evidence awaits the first natural
   operator-supplied lanes. No acceptance failure remains.
+- Final Chatterbox reconciliation refreshed the stale `docs/README.md` pointers,
+  removed fully promoted spec 039, and consumed this lane's transient handoff.
+  Durable authority remains in section 11, contract 001, architecture, and the
+  installed skill; Git and this closeout retain provenance.
 
 ## Next task
 

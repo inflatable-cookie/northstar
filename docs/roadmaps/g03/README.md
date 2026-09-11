@@ -12,7 +12,7 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 | Replace permanent live-tree history with lifecycle-bound artifacts and lossless operational compaction. | complete through `g03.001` | contract 001 | observe normal use |
 | Complete consumer compaction through maintenance routes. | complete as `g03.002`; delivery evidence absorbed | contract 001 | no further compaction lane |
 | Flatten milestone/card execution into one generation task unit. | complete as `g03.003` | contract 001 | return to Chatterbox planning checkpoint |
-| Move material UI design decisions before dispatch and require rendered exact-head delivery review. | complete as `g03.004` | spec 039, contract 001 | observe first natural consumer lanes |
+| Move material UI design decisions before dispatch and require rendered exact-head delivery review. | complete as `g03.004` | section 11, contract 001 | observe first natural consumer lanes |
 | Reduce repeated protocol enumerations and retire genuinely redundant modes without merging distinct behavior blindly. | planned | contract 001, later usage evidence | pending after `g03.001` |
 | Keep unresolved operator feedback visible without pinning old generations open. | watch | contract 001 | bounded watchlist below |
 
