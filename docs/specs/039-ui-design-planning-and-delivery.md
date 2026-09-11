@@ -56,6 +56,13 @@ expected user workflow.
 11. Effigy may discover and run consumer-declared preview, journey,
     accessibility, and visual-regression selectors. Northstar does not require a
     universal renderer or treat a detector as design approval.
+12. Projects doing meaningful UI work should provide an Impeccable-like
+    execution capability: run and inspect the real interface, capture required
+    states and viewports, exercise interaction and accessibility paths, and
+    retain rendered evidence. Northstar should discover existing capability and
+    recommend a missing companion for substantial work. Impeccable is one
+    supported option, not a dependency. Readiness blocks only when the required
+    design or rendered validation cannot actually be performed.
 
 ## UI design brief contract
 
@@ -136,4 +143,3 @@ Stop for Chatterbox if implementation would create a competing product/design
 authority, change the seven-section handoff shape, make an external design tool
 mandatory, require Northstar to own a renderer, or reduce rendered review to a
 deterministic approval score.
-

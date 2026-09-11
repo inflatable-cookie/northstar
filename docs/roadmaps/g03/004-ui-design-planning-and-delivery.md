@@ -30,8 +30,8 @@ inspect the running exact PR head.
   `docs/roadmaps/README.md`, `docs/roadmaps/generation-index.md`,
   `docs/README.md`, `docs/specs/README.md`, spec 039, and any justified compact
   evidence record.
-- **Worker:** automatic adequate implementation pool. UI-specific skill guidance
-  is mandatory; reviewer must use an independent provider/model identity.
+- **Worker:** automatic adequate implementation pool. Spec 039 governs this
+  skill-building lane; reviewer must use an independent provider/model identity.
 - **Excluded:** consumer-product UI changes, a Northstar-owned renderer,
   mandatory external design tooling, aesthetic scoring, `.github/workflows/`,
   releases, new generation, history rewrites, and unrelated protocol cleanup.
@@ -57,6 +57,9 @@ inspect the running exact PR head.
    accessibility, responsiveness, states, realistic content, motion, bounded
    render-and-repair, and common model-generated UI failures without imposing a
    house aesthetic.
+   Detect whether the consumer already has an adequate run-inspect-capture
+   feedback loop. For substantial UI work, recommend a compatible companion
+   when it does not; name Impeccable as one option without requiring it.
 5. Route UI-marked implementation and review through the skill. Require the
    worker to exercise the scenario oracle and attach exact-head rendered
    evidence. Require the independent reviewer to run the exact head and treat
@@ -97,4 +100,3 @@ Pending.
 After merge, return to Chatterbox. Record the first natural refinement and
 substantial consumer UI lanes as operator-supplied evidence before tightening
 the protocol further; do not dispatch consumer dogfood automatically.
-

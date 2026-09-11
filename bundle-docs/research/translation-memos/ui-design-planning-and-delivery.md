@@ -161,8 +161,11 @@ should exercise the expected workflow, states, viewports, and input paths, then
 publish UI findings beside code findings. Passing tests, a static screenshot,
 or a generic style detector cannot prove the experience is good.
 
-Impeccable may remain an optional external tool. Northstar should not depend on
-its command vocabulary, hooks, detector, or parallel `PRODUCT.md` and
+Projects doing meaningful UI work should have an Impeccable-like capability to
+run, inspect, capture, and iterate on the real interface. Northstar should
+discover that capability and recommend a compatible companion when substantial
+work lacks it. Impeccable is a strong supported option, but Northstar should not
+depend on its command vocabulary, hooks, detector, or parallel `PRODUCT.md` and
 `DESIGN.md` authority surfaces.
 
 ## Delivery and review evidence
