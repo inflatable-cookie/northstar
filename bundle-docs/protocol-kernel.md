@@ -1,7 +1,7 @@
 # Northstar Protocol Kernel
 
 Status: active  
-Updated: 2026-09-01
+Updated: 2026-09-11
 
 One-page map of **what counts as the protocol**, **where normative detail
 lives**, and **how surfaces should relate**. Use this before pasting long
@@ -52,6 +52,7 @@ contracts).
 | Fresh orchestrator continuation | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Fresh orchestrator continuation** | `docs/contracts/001-working-rules.md` plus the generic seven-section handoff with `orchestrator-continuation` activation |
 | Chatterbox planning and promotion | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Chatterbox planning and promotion** | `docs/contracts/001-working-rules.md` plus the installed chatterbox mode |
 | Handoff content and compression | [`skills/northstar/references/handoff-contract.md`](../skills/northstar/references/handoff-contract.md) | `docs/handoffs/`; handoff points to tasks and contracts instead of copying them |
+| UI design classification, brief, prototype gate, handoff transport, rendered evidence, and exact-head review | [sections/11-ui-design-delivery.md](./sections/11-ui-design-delivery.md) — see **UI classification**, **UI design brief contract**, **Concept checkpoint and design delegate**, **Independent review** | `docs/contracts/001-working-rules.md` plus the installed `northstar-ui` skill and the handoff contract's `UI Design Brief` subsection |
 | Direct PR review and provider record | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) — see **Direct PR review boundary** | `docs/contracts/001-working-rules.md` plus the installed Northstar PR-review mode |
 | Planning artifact lifecycle, prune triggers, generation roll-up, post-merge reconciliation | [sections/07-delivery-framework-and-autonomy.md](./sections/07-delivery-framework-and-autonomy.md) | `docs/contracts/001-working-rules.md` |
 | Spec lifecycle and archive | [sections/08-specs-and-promotion.md](./sections/08-specs-and-promotion.md) + [template-bundle/specs/README.md](../template-bundle/specs/README.md) | `docs/specs/` + `docs/specs/archive/` in the installed repo |

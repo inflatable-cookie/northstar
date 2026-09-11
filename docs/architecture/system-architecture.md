@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-09-02
+Updated: 2026-09-11
 Vision refs: docs/vision/001-northstar-delivery-vision.md
 
 ## Top-Level Stack
@@ -432,6 +432,40 @@ escalation capsule produced by the discovering child, not as an unexplained log
 reference. Before PR, that capsule goes from coordinator to Chatterbox:
 Chatterbox rules from cited existing planning authority or holds the operator
 conversation, then the coordinator resumes the same worker.
+
+## UI design planning and delivery
+
+Northstar owns the UI protocol; the consumer repository owns product truth,
+components, tokens, platform conventions, and visual language. The protocol
+decides what must be settled before a UI task is ready and how the running
+result is reviewed. It does not decide the aesthetic.
+
+| Surface | Role |
+| --- | --- |
+| `bundle-docs/sections/11-ui-design-delivery.md` | durable doctrine: classification, brief, prototype gate, evidence, review posture |
+| `skills/northstar/ui/SKILL.md` | provider-neutral `northstar-ui` skill with Build and Review routes |
+| `skills/northstar/references/ui/brief-contract.md` | agent-facing brief fields, depth, and readiness rules |
+| `skills/northstar/references/ui/design-guidance.md` | compact execution guidance and common model-generated UI failures |
+| `skills/northstar/references/handoff-contract.md` | `UI Design Brief` transport inside `Important Context` |
+| `docs/contracts/001-working-rules.md` | binding rule for this repo |
+
+UI work is classified by decision risk and user impact: refinement, workflow
+change, or substantial redesign. A refinement uses a compact brief; a workflow
+change uses the full brief; a substantial redesign also needs an
+operator-selected concept, comp, or prototype before readiness. The canonical
+task or spec owns the full brief, and the worker handoff carries a
+self-contained copy so the worker cannot reconstruct the experience from
+planning history.
+
+The `northstar-ui` skill is a nested skill inside the single distributable
+`northstar` package, not a second front door or planning authority. Chatterbox
+and pre-execution discovery settle the workflow and direction; the worker builds
+the complete approved workflow and attaches exact-head rendered evidence; the
+independent reviewer runs the exact head and treats material workflow,
+hierarchy, state, accessibility, responsive, or presentation failures as
+blocking. Effigy may run consumer-declared preview, journey, accessibility, and
+visual-regression selectors. Northstar owns no renderer and treats no detector
+or score as design approval.
 
 ## Superseded thread topology
 

@@ -314,6 +314,25 @@ half a minute (cargo builds inside the Rust package prover).
 effigy check:language-package-routes
 ```
 
+## UI design protocol (`check:ui-protocol`, `test:ui-protocol`)
+
+Validate the UI design planning and delivery protocol from spec 039. The
+structural check asserts the `northstar-ui` skill and its build/review routes,
+the brief contract, the handoff `UI Design Brief` placement under
+`Important Context`, the doctrine section, the working-rules bindings, the task
+template classification field, and the chatterbox, discovery, and PR-review
+routing. The fixture test exercises refinement, workflow change, substantial
+redesign, prototype selection, handoff placement, rendered-evidence sufficiency,
+and material UI review blocking as pure protocol logic.
+
+```bash
+effigy check:ui-protocol
+effigy test:ui-protocol
+```
+
+Both run through `effigy qa:docs`. The fixtures prove protocol wiring, not
+aesthetic quality; keep qualitative judgment with people and agents.
+
 ## Agent-instruction audit (`check:agent-instructions`)
 
 The read-only agent-instruction checker measures root or supplied `AGENTS.md`

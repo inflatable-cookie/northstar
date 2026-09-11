@@ -91,6 +91,10 @@ The worker extension keeps the same friendly core sections, then adds inside
 
 - how to confirm the worktree and branch;
 - the ready tasks and allowed runway;
+- for a UI-classified lane, a self-contained `UI Design Brief` subsection under
+  `Important Context`, bound to the canonical task or spec, with the full brief
+  (or compact refinement form) and the scenario oracle; stop and return to
+  planning rather than inventing a missing brief;
 - how and when to report progress through the operator;
 - when to stop and ask for planning help;
 - final validation and PR creation requirements;

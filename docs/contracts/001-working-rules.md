@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-09-01
+Updated: 2026-09-11
 Depends on: docs/architecture/system-architecture.md
 Authority owners: repo maintainers
 Affects: bundle-docs, template-bundle, skills, docs, scripts
@@ -200,6 +200,50 @@ non-authoritative.
     immediate ready task
   - the next planning checkpoint is explicit rather than deferred until the
     current task finishes
+
+### UI design planning and delivery
+
+- Full doctrine lives in
+  [`bundle-docs/sections/11-ui-design-delivery.md`](../../bundle-docs/sections/11-ui-design-delivery.md).
+  This subsection is the compact binding surface for the northstar repo.
+- Classify UI work by decision risk and user impact, not file count:
+  - **refinement** preserves an established workflow and pattern;
+  - **workflow change** alters actions, navigation, forms, states, or
+    information hierarchy;
+  - **substantial redesign** creates or materially replaces a user experience.
+- A refinement uses a compact UI design brief. A workflow change uses the full
+  brief. A substantial redesign uses the full brief plus an
+  operator-approved concept, comp, or interactive prototype checkpoint.
+- The canonical task or governing spec owns the full brief. Before a UI task is
+  ready, Chatterbox or the planning route inspects the running current surface,
+  maps the current and target workflows, identifies design authority, and
+  settles material design decisions. The worker handoff carries a
+  self-contained execution copy under `## Important Context` as
+  `### UI Design Brief`; the seven top-level handoff sections do not change.
+- A planning-only design delegate may inspect, map, and propose materially
+  different concepts. It cannot implement production code or grant readiness;
+  the operator selects the direction. Artifacts the worker or reviewer needs
+  live at a stable project path with recorded identity, and rejected variants
+  are non-authoritative.
+- A UI worker implements the complete approved workflow through the
+  `northstar-ui` skill's Build route, exercises the scenario oracle in the
+  running product, captures named rendered states, performs one bounded
+  critique-and-repair pass, and attaches exact-head rendered evidence to the
+  PR. Passing tests or a static screenshot do not prove the experience.
+- An independent reviewer loads the Review route and exercises the running
+  exact PR head. Material workflow, hierarchy, state, accessibility,
+  responsive, or presentation failures block acceptance even when the diff is
+  technically correct.
+- The consumer repository owns product truth, components, tokens, platform
+  conventions, and visual language. Northstar owns planning, brief, handoff,
+  skill, readiness, scenario, evidence, and review protocol only. Effigy may
+  run consumer-declared preview, journey, accessibility, and visual-regression
+  selectors; Northstar owns no renderer and treats no detector as design
+  approval.
+- Stop for planning when implementation would create a competing design
+  authority, change the seven-section handoff shape, make an external design
+  tool mandatory, require a Northstar renderer, or reduce rendered review to an
+  approval score.
 
 ### Readiness-map and decision-record contract
 

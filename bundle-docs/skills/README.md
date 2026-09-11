@@ -15,6 +15,7 @@ before loading a mode.
 | Source | Role |
 | --- | --- |
 | `skills/northstar/` | One package containing the front door and generic mode routing |
+| `skills/northstar/ui/SKILL.md` | Nested provider-neutral `northstar-ui` skill with Build and Review routes; installed with the same package, not a second front door |
 
 The package exposes thin explicit command adapters under `commands/`:
 
@@ -32,6 +33,13 @@ Language quality workflows are not commands in this package. Explicit
 audit-and-repair and everyday authoring route through installed language
 packages via the generic installed-package route in
 `skills/northstar/references/packages/installed-package-route.md`.
+
+The `northstar-ui` skill is a role skill, not a routing command. It executes an
+approved UI design brief (Build) or judges the running exact PR head (Review).
+Planning routes (`chatterbox`, `pre-execution discovery`) settle the workflow,
+classification, and concept checkpoint; direct PR review loads the UI Review
+route for UI-marked PRs. Product truth, components, tokens, and visual language
+stay with the consumer repository.
 
 ## Distribution and update
 
@@ -67,7 +75,7 @@ direct `rsync -a --delete` from `skills/northstar/` is reserved for local
 development before the change is published. Restart agent sessions after an
 update.
 
-The current source package contains 111 distributable files. Installed copies
+The current source package contains 117 distributable files. Installed copies
 remain separate parity targets and may lag until an explicit update. This
 count is evidence for the current payload, not a stable public contract.
 
@@ -147,7 +155,9 @@ Templates live under `skills/northstar/assets/templates/`.
 
 ## Structural rules
 
-- Keep the public skill count at **one**.
+- Keep the public front door at **one**. Nested role skills (`ui/`) and thin
+  command adapters under `commands/` ship inside the same package and do not
+  create a second planning or routing authority.
 - Put procedures in `references/modes/` and load **one** mode per invocation.
 - Keep every local Markdown link inside `skills/northstar/`; the installed
   skill is a one-folder artifact.

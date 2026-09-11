@@ -238,14 +238,14 @@ let parity_drift = new_fixture(
 );
 expect_failure("parity-drift", || run_check(parity_drift), "fixture template parity");
 
-let full_qa_docs = "[{ task = \"check:repo-contract-wiring\" }, { task = \"check:repo-contract\" }, { task = \"test:repo-contract\" }, { task = \"check:native-starter\" }, { task = \"check:readiness-map\" }, { task = \"test:readiness-map\" }, { task = \"check:command-skills\" }, { task = \"check:model-routing\" }, { task = \"check:language-packages\" }]";
+let full_qa_docs = "[{ task = \"check:repo-contract-wiring\" }, { task = \"check:repo-contract\" }, { task = \"test:repo-contract\" }, { task = \"check:native-starter\" }, { task = \"check:readiness-map\" }, { task = \"test:readiness-map\" }, { task = \"check:command-skills\" }, { task = \"check:model-routing\" }, { task = \"check:ui-protocol\" }, { task = \"test:ui-protocol\" }, { task = \"check:language-packages\" }]";
 let machine_effigy = "[manifest]\nminimum_effigy_version = \"0.8.4\"\n\n";
 machine_effigy += "[catalog]\nalias = \"northstar\"\n\n[tasks]\n";
 machine_effigy += "\"check:repo-contract-wiring\" = [{ rhai = \"scripts/check-northstar-repo-contract-wiring.rhai\" }]\n";
 machine_effigy += "\"check:repo-contract\" = [{ rhai = \"scripts/check-northstar-repo-contract.rhai\" }]\n";
 machine_effigy += "\"test:repo-contract\" = [{ rhai = \"scripts/test-northstar-repo-contract.rhai\" }]\n";
 machine_effigy += "\"check:native-starter\" = \"scripts/noop.sh\"\n";
-machine_effigy += "\"check:readiness-map\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"test:readiness-map\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:command-skills\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:model-routing\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:language-packages\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:bundle\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:language-package-routes\" = \"scripts/noop.sh\"\n\"test:paseo-worktree\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:consumer-compaction\" = \"scripts/noop.sh\"\n";
+machine_effigy += "\"check:readiness-map\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"test:readiness-map\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:command-skills\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:model-routing\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:ui-protocol\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"test:ui-protocol\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:language-packages\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:bundle\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:language-package-routes\" = \"scripts/noop.sh\"\n\"test:paseo-worktree\" = [{ rhai = \"scripts/noop.rhai\" }]\n\"check:consumer-compaction\" = \"scripts/noop.sh\"\n";
 machine_effigy += "\"qa:docs\" = " + full_qa_docs + "\n";
 machine_effigy += "validate = [{ task = \"check:repo-contract-wiring\" }, { task = \"check:bundle\" }, { task = \"check:language-packages\" }, { task = \"check:language-package-routes\" }, { task = \"test:paseo-worktree\" }, { task = \"check:consumer-compaction\" }]\n";
 machine_effigy += "qa = [{ task = \"validate\" }, { task = \"qa:docs\" }]\n";

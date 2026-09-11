@@ -113,6 +113,34 @@ Please keep this run inside the named runway:
   not require operator relay or message Chatterbox during automatic dispatch;
   manual relay applies only to the explicitly declared fallback.
 
+### UI Design Brief
+
+Write `Not applicable` for a non-UI lane. For a UI-classified lane, this is the
+self-contained execution copy of the approved brief owned by
+`{{TASK_REF}}` / `{{SPEC_REF}}`; the worker must not reconstruct the experience
+from planning history or the diff. Do not change the seven top-level sections.
+
+- **Canonical owner:** `{{UI_BRIEF_CANONICAL_OWNER}}`
+- **Classification:** `{{REFINEMENT_OR_WORKFLOW_CHANGE_OR_SUBSTANTIAL_REDESIGN}}`
+- **Affected user and situation:** `{{UI_USER_AND_GOAL}}`
+- **Current workflow:** `{{UI_CURRENT_WORKFLOW}}`
+- **Target workflow:** `{{UI_TARGET_WORKFLOW}}`
+- **Presentation direction and governing design authority:**
+  `{{UI_PRESENTATION_AND_DESIGN_AUTHORITY}}`
+- **Required states and content ranges:** `{{UI_STATES_AND_CONTENT_RANGES}}`
+- **Viewport, input, motion, and assistive-technology envelope:**
+  `{{UI_DEVICE_AND_INPUT_ENVELOPE}}`
+- **Reuse and constraints:** `{{UI_CONSTRAINTS_AND_PRESERVED_SURFACES}}`
+- **Selected concept or prototype identity:** `{{UI_CONCEPT_EVIDENCE_OR_NONE}}`
+  Required and operator-selected for a substantial redesign.
+- **Scenario oracle:** `{{UI_SCENARIO_ORACLE}}`
+- **Open decisions and stop conditions:** `{{UI_OPEN_DECISIONS_AND_STOPS}}`
+
+The compact form (affected user, current and target behavior, governing
+pattern, state or viewport impact, scenario oracle, stop conditions) is enough
+for a refinement. Use the full form for a workflow change or substantial
+redesign. Field detail lives in `references/ui/brief-contract.md`.
+
 ## Suggested Next Move
 
 Run the `Completion Protocol` preflight before broad reads. Then read
@@ -170,6 +198,11 @@ report what changed, validation run, what remains, and any planning decision.
 - After each meaningful chunk, report through the active control plane or the
   operator with changed files, validation actually run, remaining tasks, new
   risks, and blockers.
+- For a UI-classified lane, load the `northstar-ui` skill's Build route
+  (`references/ui/build.md`). Implement the approved workflow using consumer
+  design authority, exercise the scenario oracle in the running product, capture
+  named rendered states, and perform one bounded critique-and-repair pass before
+  final validation. Do not redesign the workflow or invent missing states.
 - Stop and say so if a contract is missing, intent is ambiguous, scope expands,
   authority/access is missing, or validation changes the plan.
 - If that stop happens before PR and needs an operator-facing semantic

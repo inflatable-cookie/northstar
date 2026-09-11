@@ -1,7 +1,7 @@
 # Section Index
 
 Status: active
-Updated: 2026-03-07
+Updated: 2026-09-11
 
 ## Purpose
 
@@ -19,6 +19,7 @@ Track template sections and their definition state.
 - [08-specs-and-promotion.md](./08-specs-and-promotion.md) - active
 - [09-standard-docs-spine.md](./09-standard-docs-spine.md) - active
 - [10-automation-runtime-policy.md](./10-automation-runtime-policy.md) - active
+- [11-ui-design-delivery.md](./11-ui-design-delivery.md) - active
 
 ## Quick reference
 

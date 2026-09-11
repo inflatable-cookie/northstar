@@ -137,6 +137,39 @@ recommendation, prototype verdict, research result, or previous conversation
 summary must not be substituted for the operator's response. Keep the record
 unresolved until explicit operator evidence supports a normal resolution.
 
+## UI design route
+
+Use this route when the discovery question concerns a user interface. It is a
+planning route, not an execution route.
+
+1. Inspect the repository's current design authority and run the current UI when
+   it exists. Record what the running surface actually does before proposing
+   anything.
+2. Walk and capture the current workflow: entry, actions, responses, decisions,
+   friction, dead ends, recovery, and completion.
+3. Classify the question by decision risk and user impact: **refinement**,
+   **workflow change**, or **substantial redesign**. File count is not a proxy.
+4. Resolve repository-answerable facts first, then ask only questions that
+   change the workflow, hierarchy, or presentation. Record them in the canonical
+   decision record linked from the readiness map.
+5. Describe the ideal target workflow before implementation structure.
+6. For a substantial redesign, produce the lightest concept artifact that
+   resolves the risk and record its identity at a stable project path. The
+   operator selects the direction; a planning-only design delegate may propose
+   materially different structures but cannot implement production code or grant
+   readiness.
+7. Stop before dispatch while a material experience decision remains open, and
+   keep a substantial redesign un-ready until operator-selected concept evidence
+   is recorded.
+
+UI design planning is not a second authority. The canonical task or spec owns
+the brief; the worker handoff carries the self-contained copy under
+`Important Context` as `UI Design Brief`. Field detail lives in
+[`../ui/brief-contract.md`](../ui/brief-contract.md). Consumer product truth,
+components, tokens, platform conventions, and visual language stay with the
+consumer repository; Northstar owns the protocol, and no detector or score
+grants design approval.
+
 ## Route outputs and boundaries
 
 The default route is read-only. When the operator asks to record progress, update
