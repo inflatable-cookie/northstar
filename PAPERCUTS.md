@@ -5,6 +5,16 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 
 ## Open
 
+- **2026-09-11 — adding one `qa:docs` task edits three mirrored lists:** wiring
+  `check:ui-protocol` / `test:ui-protocol` into docs QA required the same exact
+  task-list string in `effigy.toml`, the `stable_machine_contracts` entry in
+  `scripts/lib/northstar-repo-contract-data.rhai`, and `full_qa_docs` in
+  `scripts/test-northstar-repo-contract.rhai`; impact is easily-forgotten drift
+  between the declared board and its fixture; plausible fix is to derive the
+  fixture string from the data module instead of duplicating it; affected
+  surfaces are `effigy.toml`, the repo-contract data module, and the
+  repo-contract fixture test.
+
 - **2026-09-05 — command-skill check depends on sentence casing:** changing
   `never poll or call wait primitives` to sentence-initial `Never` failed the
   orchestration surface check despite identical behavior. Restored the expected
