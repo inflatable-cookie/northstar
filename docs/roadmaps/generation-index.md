@@ -8,8 +8,11 @@ Mode: sequential
 
 - `g03`
 - Runway: `g03/README.md`
-- Last completed task: `g03.006` — portable lifecycle adoption (cutover published as `d244d83`)
-- Approved frontier: `g03.007` only — finish hook-owned closeout
+- Current task, ready frontier, and delivery state are projected in the
+  generated lifecycle blocks under `docs/README.md`, `docs/roadmaps/README.md`,
+  and `g03/README.md`; this index stays strategic.
+- Next sequencing decision after the open lane closes: return to Chatterbox;
+  no automatic successor.
 
 ## Generation log
 
@@ -27,7 +30,12 @@ and removing its execution authority. Keep only the active sequential
 generation expanded; compact closed generations under `archive/` after the
 preservation oracle in contract 001 passes.
 
+In a lifecycle-adopted repository, rollover also changes the declared
+projection targets explicitly: the outgoing generation README leaves
+`.northstar/lifecycle/v1/projection-targets.json` and the incoming one joins
+it in the same rollover change.
+
 ## Next task
 
-[`g03.007`](./g03/007-finish-hook-owned-closeout.md) is the sole approved
-frontier. No automatic successor is approved.
+The open lane runs until the closeout hook publishes its terminal record;
+after that, return to Chatterbox. No automatic successor is approved.

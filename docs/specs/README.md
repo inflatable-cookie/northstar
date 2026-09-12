@@ -5,10 +5,12 @@ architecture, contracts, and executable roadmaps.
 
 ## Active planning
 
-- [`040-portable-task-lifecycle.md`](./040-portable-task-lifecycle.md) — active;
-  provider-neutral lifecycle core, standalone adapter, deterministic Markdown,
-  and document-agnostic Queue hook boundary. Core task `g03.005` is complete;
-  adoption task `g03.006` is the ready frontier after Queue contract v1 landed.
+None. The portable task lifecycle spec (040) is implementation-complete; its
+lasting clauses live in `docs/architecture/system-architecture.md`,
+`docs/contracts/001-working-rules.md`,
+[`skills/northstar/references/lifecycle/README.md`](../../skills/northstar/references/lifecycle/README.md),
+and `bundle-docs/sections/12-portable-task-lifecycle.md`. Northstar keeps no
+active spec open while the current frontier executes.
 
 Lasting UI-design delivery rules live in
 `docs/architecture/system-architecture.md`, `docs/contracts/001-working-rules.md`,
@@ -26,6 +28,6 @@ and `bundle-docs/sections/11-ui-design-delivery.md`.
 - Historical and superseded procedure is not authority. Git retains full
   provenance.
 
-Pre-`g03` specs and specs 038–039 have been promoted into architecture,
-contracts, bundle doctrine, and Git history. Only active planning specs belong
-here when active work requires one.
+Pre-`g03` specs, specs 038–039, and spec 040 have been promoted into
+architecture, contracts, bundle doctrine, skill references, and Git history.
+Only active planning specs belong here when active work requires one.

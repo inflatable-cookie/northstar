@@ -15,11 +15,12 @@ that Northstar provides to consumer projects.
 ## Current work
 
 - Active generation: [`roadmaps/g03/README.md`](./roadmaps/g03/README.md)
-- Last completed task: [`g03.006` portable lifecycle adoption](./roadmaps/g03/006-adopt-portable-lifecycle.md),
-  including the published live shadow cutover
-- Active task: [`g03.007` finish hook-owned closeout](./roadmaps/g03/007-finish-hook-owned-closeout.md)
-- Approved frontier: `g03.007` only
-- Active spec: [`040-portable-task-lifecycle.md`](./specs/040-portable-task-lifecycle.md)
+- Current task, ready frontier, and delivery state: projected in the generated
+  lifecycle block below and in the roadmaps front doors. The closeout hook
+  refreshes them; prose here stays semantic and is not hand-updated at
+  closeout.
+- Dispatch authorization for the open lane: that task's committed handoff and
+  its dispatch manifest.
 - Intake: [`triage/README.md`](./triage/README.md)
 - Execution friction: [`../PAPERCUTS.md`](../PAPERCUTS.md)
 
@@ -33,7 +34,9 @@ that Northstar provides to consumer projects.
 - `triage/` holds unresolved mutable intake only.
 - `logs/` retains exceptional evidence; normal delivery evidence closes on its
   task until generation roll-up.
-- `handoffs/` is transient transport and is pruned after consumption.
+- `handoffs/` is transient transport. The required closeout hook removes the
+  consumed handoff when it publishes the terminal record; Git retains the
+  blob.
 
 Closed generations and superseded procedure are not current authority. Start
 from this page and the active `g03` runway; archives are provenance only.

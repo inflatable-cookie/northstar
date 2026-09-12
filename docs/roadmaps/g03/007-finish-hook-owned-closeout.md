@@ -1,9 +1,8 @@
 # g03.007 Finish Hook-Owned Closeout
 
-Status: ready
 Owner: repo maintainers
 Created: 2026-09-12
-Governing refs: spec 040, system architecture, contract 001
+Governing refs: system architecture, contract 001, bundle section 12
 Depends on: `g03.006` complete; Queue g01.010 merged and plugin reloaded
 UI classification: none
 

@@ -5,10 +5,11 @@ generation remains expanded.
 
 ## Current state
 
-- Last completed task: `g03.006` portable lifecycle adoption
-- Active task: `g03.007` finish hook-owned closeout
-- Approved frontier: `g03.007` only
+- Active generation: [`g03`](./g03/README.md)
 - Closed generations: [`g01`](./archive/g01.md) and [`g02`](./archive/g02.md) roll-ups under `archive/`
+- Current task, ready frontier, and delivery state are projected in the
+  generated lifecycle block below. The closeout hook refreshes it; the prose
+  here is semantic and is not hand-updated at closeout.
 
 ## Rules
 
@@ -22,9 +23,10 @@ generation remains expanded.
 
 ## Next task
 
-[`g03.007`](./g03/007-finish-hook-owned-closeout.md) removes the remaining
-manual closeout duplicates and must prove the hook-only route live. The bounded
-watchlist is not execution authority.
+The open lane runs until the closeout hook publishes its terminal record into
+the generated block below; no successor is automatic. After a lane closes,
+return to Chatterbox for direction. The bounded watchlist is not execution
+authority.
 <!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v1 digest=sha256:b61aa082aa7612cc3d8848350f8e5de1ab59472b2c4f7b4c6cba74ae9d93228a -->
 | Task | Status | Stage | Revision | Record digest |
 | --- | --- | --- | --- | --- |

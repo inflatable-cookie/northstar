@@ -121,10 +121,23 @@ non-authoritative.
   know Northstar task IDs, paths, lifecycle commands, or Markdown structure.
   The Northstar starter hook performs that translation. Required hook intent is
   persisted before execution and uncertain writes are reconciled before retry.
+- Repository checkpoints are required for promotion to `ready`, durable block,
+  cancellation, or supersession, accepted terminal closeout, and generation
+  closure. Transient active stages may stay in runtime state. The last
+  repository checkpoint is conservative: it may lag activity but never claims
+  review, merge, or completion without durable proof.
+- Where a required integration-write `task.closeout` hook is declared, it owns
+  mechanical closeout: one integration commit publishes the terminal record,
+  regenerates every declared projection target, and removes the exact consumed
+  instruction handoff by pinned path and blob identity. Changed, missing, or
+  ambiguous handoffs fail closed; there is no second mechanical closeout
+  route.
 
-Spec 040 owns the exact schema, reducer, standalone write protocol,
-deterministic projection grammar, generic hook boundary, proof matrix, and
-staged adoption.
+The installed lifecycle reference
+(`skills/northstar/references/lifecycle/README.md`), bundle section 12, and
+the lifecycle self-tests own the exact schema, reducer, standalone write
+protocol, deterministic projection grammar, generic hook boundary, and proof
+matrix.
 
 ### Papercuts feedback loop
 
