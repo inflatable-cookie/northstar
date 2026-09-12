@@ -18,6 +18,8 @@ setup = ["health"]
 "check:language-packages" = [{ rhai = "skills/northstar/scripts/check-language-packages.rhai" }]
 "check:language-package-routes" = "scripts/tests/language-package-routes/self-test.sh"
 "language:route" = "bun run skills/northstar/scripts/language-package-lifecycle.ts route {args}"
+"lifecycle:run" = "bun run skills/northstar/scripts/lifecycle-core.ts {args}"
+"check:lifecycle-core" = "scripts/tests/lifecycle-core/self-test.sh"
 "check:chatterbox-git" = "scripts/tests/chatterbox-git-isolation/self-test.sh"
 "paseo:worktree" = [{ rhai = "skills/northstar/scripts/paseo-worktree.rhai" }]
 "test:paseo-worktree" = [{ task = "paseo:worktree self-test" }]
@@ -31,5 +33,5 @@ setup = ["health"]
 "check:consumer-compaction" = "scripts/tests/consumer-compaction/self-test.sh"
 "qa:docs" = [{ task = "check:repo-contract-wiring" }, { task = "check:repo-contract" }, { task = "test:repo-contract" }, { task = "check:native-starter" }, { task = "check:readiness-map" }, { task = "test:readiness-map" }, { task = "check:command-skills" }, { task = "check:model-routing" }, { task = "check:ui-protocol" }, { task = "test:ui-protocol" }, { task = "check:language-packages" }]
 health = [{ task = "check:bundle" }]
-validate = [{ task = "check:repo-contract-wiring" }, { task = "check:bundle" }, { task = "check:language-packages" }, { task = "check:language-package-routes" }, { task = "test:paseo-worktree" }, { task = "check:consumer-compaction" }]
+validate = [{ task = "check:repo-contract-wiring" }, { task = "check:bundle" }, { task = "check:language-packages" }, { task = "check:language-package-routes" }, { task = "check:lifecycle-core" }, { task = "test:paseo-worktree" }, { task = "check:consumer-compaction" }]
 qa = [{ task = "validate" }, { task = "qa:docs" }]
