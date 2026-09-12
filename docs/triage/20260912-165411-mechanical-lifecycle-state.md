@@ -64,70 +64,80 @@ current task and generation view. This preserves provenance and makes retry
 idempotency explicit, but increases file count and requires fork/conflict
 validation plus generation compaction.
 
-### SQLite or external queue state
+### Queue-backed live state
 
-SQLite gives local transactions but is poor Git material and does not merge.
-The queue database handles live concurrency well but cannot be Northstar's only
-portable authority. Either may be a cache or orchestration projection, not the
-repository contract.
+Northstar Queue already implements most of the required live lifecycle engine:
+versioned tasks, dependencies, role runs, coordinator generations, callbacks,
+idempotent receipts, exact-head review, merge reconciliation, retries,
+supersession, and closeout. Its SQLite store gives the transactional behavior
+that a Git-backed script would otherwise have to rebuild badly.
+
+Queue state cannot be Northstar's only authority. It belongs to one Paseo
+installation, contains operational detail that should not be copied into Git,
+and is unavailable to manual or alternative orchestrators. Treat Queue as the
+first live adapter to a provider-neutral Northstar lifecycle contract.
 
 ## Tentative recommendation
 
-Use immutable per-task transition fragments with a deterministic derived index.
-Treat the repository as an event log at the mechanical boundary:
+Use two tiers rather than a second lifecycle engine:
+
+1. Queue, or another orchestrator, owns live transactional execution.
+2. Northstar owns a portable lifecycle interchange contract, terminal receipts,
+   validation, and deterministic repository projections.
+
+Bind every Queue task to a canonical Northstar task ID and path. Do not infer
+`gNN.NNN` from the handoff name, branch, workspace, or prompt. At
+authority-changing points, the adapter passes a versioned payload to the
+Northstar lifecycle command. The happy-path closeout payload records accepted
+implementation and review heads, merge and synchronized-main identities,
+validation, handoff disposition, and final task state.
+
+Store one compact receipt per task rather than copying Queue's complete event
+stream into Git:
 
 ```text
 .northstar/lifecycle/v1/
-  tasks/g03.004/
-    01-ready-<id>.json
-    02-dispatched-<id>.json
-    03-implementation-<id>.json
-    04-review-<id>.json
-    05-merged-<id>.json
-    06-closed-<id>.json
-  generations/g03.json
+  tasks/g03.004.json
+  generations/g03.json       # optional derived projection
 ```
 
-Names above are illustrative. Use a monotonic transition sequence plus a UUID
-or content digest; timestamps alone do not establish order.
+The task receipt should carry:
 
-Each fragment should carry:
-
-- schema version, task and generation ID, transition type, event ID;
-- prior state and expected prior event/digest;
-- actor role and source (`manual`, Queue, provider, CI);
+- schema version, canonical task ID and path;
+- receipt version, state, actor, and source (`manual`, Queue, provider, CI);
 - planning authority commit;
-- task-specific identities required by the transition;
+- implementation, review, merge, and synchronized-main identities;
 - idempotency key and creation time;
-- evidence links or digests;
-- explicit reason for blocking or non-happy-path disposition.
+- validation evidence and handoff disposition;
+- durable limitation, block, cancellation, or supersession when applicable.
 
-The reducer rejects missing predecessors, duplicate idempotency keys with
-different content, illegal transitions, forks from one prior event, review/head
-mismatch, merge without accepted exact-head review, and closeout without merge
-and validation evidence.
+Queue keeps high-volume operational events in its live store. Git keeps the
+portable facts needed to understand and verify the result after Queue is gone.
+Optional transition receipts may preserve durable nonterminal dispositions or
+support manual operation, but they are not the default write shape.
+
+The Northstar command rejects stale receipt versions, duplicate idempotency
+keys with different content, illegal transitions, review/head mismatch, merge
+without accepted exact-head review, and closeout without merge and validation
+evidence. A manual adapter must emit the same payload as Queue.
 
 ## Concurrency and merge shape
 
 - Workers do not edit global front doors or lifecycle state in their PRs.
-- Each task has one active ownership lease. Different tasks may progress in
-  parallel; the same task may not have competing writers.
-- Lifecycle commands use an expected prior digest. A local lock plus atomic
-  write protects one checkout; the digest and repository validator protect
-  against cross-checkout forks.
-- Unique fragments avoid content conflicts across tasks. If two writers fork
-  one task, both files can merge physically but validation fails semantically
-  until one receives an explicit disposition.
+- Queue's task version, coordinator generation, callback receipts, and role-run
+  ownership protect live execution. Northstar should reuse those guarantees,
+  not reproduce them in Rhai.
+- Different tasks write different receipt paths. A receipt update uses an
+  expected prior version or digest; same-task stale writes fail.
 - Code PRs can merge without waiting for prose closeout. The integrator records
   merged facts on synchronized `main`, either after each merge or as one batch
   for several already-merged lanes.
-- A global currentness index is generated from fragments. Workers never edit it.
+- A global currentness index is generated from task receipts. Workers never edit it.
   Prefer computing it on demand; if a human-readable projection is committed,
   one integration writer regenerates it after merges and it remains derived,
   never canonical.
-- Closing a generation reduces its validated fragments into one compact summary
-  with source digests, then removes the expanded event set under the existing
-  preservation oracle.
+- Closing a generation reduces its validated receipts into one compact summary
+  with source digests under the existing preservation oracle.
 
 Git provider merges are still serialized at the commit boundary. This design
 removes artificial lane serialization caused by shared documentation paths; it
@@ -135,19 +145,14 @@ does not pretend simultaneous mutations of `main` exist.
 
 ## Lifecycle command surface
 
-An installed Northstar task, invoked through Effigy, should expose bounded
-operations such as:
+An installed Northstar task, invoked through Effigy, should expose a small
+adapter and projection surface such as:
 
 ```text
 northstar/lifecycle status
 northstar/lifecycle verify
-northstar/lifecycle ready
-northstar/lifecycle dispatch
-northstar/lifecycle implementation
-northstar/lifecycle review
-northstar/lifecycle merged
-northstar/lifecycle block|resume|supersede|cancel
-northstar/lifecycle close
+northstar/lifecycle apply-receipt <payload>
+northstar/lifecycle close <payload>
 northstar/lifecycle frontier
 northstar/lifecycle compact-generation
 northstar/lifecycle render
@@ -157,11 +162,11 @@ Exact command grammar is not settled. Repository wiring may provide a short
 `effigy northstar:lifecycle ...` selector; the installed-skill fallback can use
 Effigy's existing `--repo` route.
 
-Rhai is suitable for task wiring, validation, and simple projections. Atomic
-writes, locking, canonical JSON, idempotency, and Git/provider identity may
-justify a small portable implementation behind the Effigy task. Do not choose
-the language before a spike proves the required filesystem and concurrency
-behavior.
+Queue should call this surface after merge and synchronized-main verification.
+Manual workflows call it with the same schema. Rhai is suitable for task wiring,
+validation, and simple projections; a small portable implementation may still
+be justified for canonical JSON and atomic receipt writes. It must not become a
+parallel scheduler, callback store, or orchestration state machine.
 
 ## Use cases to prove
 
@@ -203,23 +208,26 @@ operator preference.
 
 1. Inventory every current lifecycle write and classify it as semantic,
    mechanical, derived, or exceptional evidence.
-2. Freeze the state machine, schemas, actor trust, and conflict rules.
-3. Build a read-only reducer over fixtures and compare its output with current
-   Northstar closeouts.
-4. Spike atomic fragment creation and cross-worktree fork detection in Rhai and
-   one small alternative implementation.
-5. Shadow one natural task: keep current Markdown authority while generating
-   structured events and comparing the derived result.
-6. Run the two-concurrent-PR oracle.
-7. Only after parity, switch lifecycle status authority and remove manual
+2. Map Queue's task, event, review, merge, and closeout fields onto the smallest
+   provider-neutral receipt schema.
+3. Freeze the receipt schema, actor trust, idempotency, and conflict rules.
+4. Build a read-only validator/projector over fixtures and compare its output
+   with current Northstar closeouts.
+5. Add a Queue reference adapter and a manual adapter that produce identical
+   receipts.
+6. Shadow one natural task: keep current Markdown authority while generating a
+   terminal receipt and comparing the derived result.
+7. Run the two-concurrent-PR oracle.
+8. Only after parity, switch lifecycle status authority and remove manual
    projections together.
-8. Prove generation roll-up before making the mechanism a reusable default.
+9. Prove generation roll-up before making the mechanism a reusable default.
 
 ## Open decisions
 
 - Whether browse-only GitHub status justifies committed generated projections.
-- Whether transition fragments are canonical evidence or a rebuildable record
-  derived from Git/provider/Queue facts.
+- Whether the Queue adapter invokes the Northstar command directly on
+  synchronized `main` or hands an authenticated receipt to an integration run.
+- Which nonterminal dispositions merit portable receipts before final closeout.
 - Which actors may assert review, merge, cancellation, and operator decisions.
 - Whether the first version supports both sequential and parallel generations.
 - How much provider evidence is copied versus linked and hash-bound.
