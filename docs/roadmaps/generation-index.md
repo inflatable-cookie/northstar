@@ -9,7 +9,8 @@ Mode: sequential
 - `g03`
 - Runway: `g03/README.md`
 - Last completed task: `g03.005` — portable lifecycle core
-- Approved frontier: none; return to Chatterbox for planning
+- Planned task: `g03.006` — portable lifecycle adoption, blocked on Queue hooks
+- Approved frontier: none; Queue planning owns the prerequisite
 
 ## Generation log
 
@@ -29,5 +30,5 @@ preservation oracle in contract 001 passes.
 
 ## Next task
 
-Return to Chatterbox to compile standalone adoption and relay the frozen
-generic hook boundary to Queue planning; no automatic successor is approved.
+Relay the frozen generic hook boundary to Queue planning. Do not approve or
+dispatch `g03.006` until the Queue prerequisite is proven.

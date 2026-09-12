@@ -14,16 +14,16 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 | Flatten milestone/card execution into one generation task unit. | complete as `g03.003` | contract 001 | return to Chatterbox planning checkpoint |
 | Move material UI design decisions before dispatch and require rendered exact-head delivery review. | complete as `g03.004` | section 11, contract 001 | observe first natural consumer lanes |
 | Replace agent-written mechanical lifecycle bookkeeping with a portable core and deterministic projections. | complete as `g03.005` | spec 040, system architecture, contract 001 | return to Chatterbox for standalone adoption and Queue planning |
-| Integrate rich runtimes without making Northstar or Queue depend on each other's internal structure. | planned after core freeze | spec 040; Queue-owned generic hook contract | Queue hook lane, then Northstar adapter proof |
+| Integrate rich runtimes without making Northstar or Queue depend on each other's internal structure. | planned as `g03.006`; blocked on Queue | spec 040; Queue-owned generic hook contract | Queue hook lane, then Northstar adoption/cutover |
 | Reduce repeated protocol enumerations and retire genuinely redundant modes without merging distinct behavior blindly. | planned | contract 001, later usage evidence | pending after `g03.001` |
 | Keep unresolved operator feedback visible without pinning old generations open. | watch | contract 001 | bounded watchlist below |
 
 ## Approved frontier
 
-`g03.005` is complete. No task is approved; no concurrent sibling or automatic
-successor is authorized. Queue repository work remains separately owned and is
-not part of this frontier. Return to Chatterbox to compile standalone adoption
-and relay the frozen generic hook boundary to Queue planning.
+`g03.005` is complete. `g03.006` is planned but not ready: Queue must first ship
+the repository-declared generic hook contract. No Northstar task is approved;
+no concurrent sibling or automatic successor is authorized. Queue repository
+work remains separately owned and is not part of this frontier.
 
 ## Bounded watchlist
 
@@ -44,9 +44,10 @@ and relay the frozen generic hook boundary to Queue planning.
 - `003-flatten-execution-tasks.md` — complete
 - `004-ui-design-planning-and-delivery.md` — complete
 - `005-portable-lifecycle-core.md` — complete
+- `006-adopt-portable-lifecycle.md` — planned; blocked on Queue generic hooks
 
 ## Next task
 
-Return to Chatterbox after `g03.005` closeout to compile standalone adoption
-and relay the frozen generic hook boundary to Queue planning. Do not dispatch
-either automatically.
+Relay the frozen generic hook boundary to Queue planning. Revisit `g03.006`
+readiness only after the Queue contract is merged, installed, and available for
+an exact integration proof.

@@ -7,7 +7,8 @@ architecture, contracts, and executable roadmaps.
 
 - [`040-portable-task-lifecycle.md`](./040-portable-task-lifecycle.md) — active;
   provider-neutral lifecycle core, standalone adapter, deterministic Markdown,
-  and document-agnostic Queue hook boundary. First execution task: `g03.005`.
+  and document-agnostic Queue hook boundary. Core task `g03.005` is complete;
+  adoption task `g03.006` waits on the Queue-owned generic hook prerequisite.
 
 Lasting UI-design delivery rules live in
 `docs/architecture/system-architecture.md`, `docs/contracts/001-working-rules.md`,

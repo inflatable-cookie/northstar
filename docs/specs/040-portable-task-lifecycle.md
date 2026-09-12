@@ -4,7 +4,7 @@ Status: active
 Owner: repo maintainers
 Created: 2026-09-12
 Governing refs: system architecture, contract 001
-Execution: `g03.005` first; later standalone adoption and Queue integration
+Execution: `g03.005` complete; Queue generic hooks next; `g03.006` adoption after
 
 ## Problem
 
@@ -226,15 +226,17 @@ claims review, merge, or completion without durable proof.
 1. `g03.005` freezes schemas and implements the core, standalone adapter,
    deterministic renderer, and adversarial fixtures without migrating live
    Northstar status authority.
-2. A later Northstar task adopts the records and generated blocks in templates,
-   doctrine, skills, and this repository, then removes manual mechanical
-   closeout instructions after shadow parity.
-3. The Queue repository separately freezes and implements its generic control
+2. The Queue repository separately freezes and implements its generic control
    manifest, event/result schemas, instruction artifact, transactional hook
    outbox, and integration writer.
-4. A final Northstar integration task ships `.paseo/queue.json`, maps Queue
-   events to Northstar transitions, proves standalone/Queue receipt equivalence,
-   and retires the Queue-specific closeout agent after parity.
+3. `g03.006` ships the Northstar hook adapter and starter manifest, adopts
+   records and generated blocks in templates, doctrine, skills, and this
+   repository, and proves the standalone path before enabling Queue writes.
+4. The same task then maps Queue events to Northstar transitions, proves
+   standalone/Queue receipt equivalence, and retires agent-written mechanical
+   closeout only after one live shadow closeout passes. It may split the live
+   cutover into a successor task if the shadow evidence cannot exist before its
+   own merge; do not weaken the oracle to preserve a one-task shape.
 5. Generation compaction adopts receipt roll-up only after current-generation
    closeout and preservation behavior has passed in both modes.
 

@@ -16,8 +16,8 @@ that Northstar provides to consumer projects.
 
 - Active generation: [`roadmaps/g03/README.md`](./roadmaps/g03/README.md)
 - Last completed task: `g03.005` portable lifecycle core
-- Active task: none; `g03.005` is complete
-- Approved frontier: none; return to Chatterbox for planning
+- Active task: none; `g03.006` is planned and blocked on Queue generic hooks
+- Approved frontier: none; Queue planning owns the prerequisite
 - Active spec: [`040-portable-task-lifecycle.md`](./specs/040-portable-task-lifecycle.md)
 - Intake: [`triage/README.md`](./triage/README.md)
 - Execution friction: [`../PAPERCUTS.md`](../PAPERCUTS.md)
