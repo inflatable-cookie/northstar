@@ -9,8 +9,8 @@ Mode: sequential
 - `g03`
 - Runway: `g03/README.md`
 - Last completed task: `g03.005` — portable lifecycle core
-- Planned task: `g03.006` — portable lifecycle adoption, blocked on Queue hooks
-- Approved frontier: none; Queue planning owns the prerequisite
+- Active task: `g03.006` — portable lifecycle adoption
+- Approved frontier: `g03.006`; explicit execution authorization required
 
 ## Generation log
 
@@ -30,5 +30,4 @@ preservation oracle in contract 001 passes.
 
 ## Next task
 
-Relay the frozen generic hook boundary to Queue planning. Do not approve or
-dispatch `g03.006` until the Queue prerequisite is proven.
+Dispatch `g03.006` after explicit execution authorization.

@@ -7,8 +7,8 @@ generation remains expanded.
 
 - Active generation: [`g03`](./g03/README.md)
 - Last completed task: `g03.005` portable lifecycle core
-- Active task: none; `g03.006` is planned and blocked on Queue generic hooks
-- Approved frontier: none; Queue planning owns the prerequisite
+- Active task: [`g03.006`](./g03/006-adopt-portable-lifecycle.md) portable lifecycle adoption
+- Approved frontier: `g03.006`; explicit execution authorization required
 - Closed generations: [`g01`](./archive/g01.md) and [`g02`](./archive/g02.md) roll-ups under `archive/`
 
 ## Rules
@@ -23,6 +23,5 @@ generation remains expanded.
 
 ## Next task
 
-Relay the frozen generic hook boundary to Queue planning. Revisit `g03.006`
-only after the Queue prerequisite lands. The bounded watchlist is not execution
-authority.
+Dispatch `g03.006` after explicit execution authorization. The bounded
+watchlist is not execution authority.

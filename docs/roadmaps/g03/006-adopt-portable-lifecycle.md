@@ -1,10 +1,10 @@
 # g03.006 Adopt Portable Lifecycle
 
-Status: planned
+Status: ready
 Owner: repo maintainers
 Created: 2026-09-12
 Governing refs: spec 040, system architecture, contract 001
-Depends on: `g03.005` complete; Queue generic hook contract merged and installed
+Depends on: `g03.005` complete; Queue PR #8 merged as `7da4eeb` and installed
 UI classification: none
 
 ## Outcome
@@ -19,9 +19,9 @@ passes.
 ## Ready-State Rubric
 
 - [x] The provider-neutral core and standalone oracle are complete in `g03.005`.
-- [ ] Queue's generic control manifest, event/result contracts, transactional
+- [x] Queue's generic control manifest, event/result contracts, transactional
       hook intent, and integration writer are merged and installed.
-- [ ] The exact Queue contract version and supported event set are recorded in
+- [x] The exact Queue contract version and supported event set are recorded in
       this task before dispatch.
 - [x] Scope, authority, portability, and terminal-equivalence boundaries are
       fixed by spec 040.
@@ -48,13 +48,32 @@ passes.
   adapter and equivalence proof complete and promote one small cutover task.
   Do not fake same-task evidence or keep two permanent routes.
 
+## Queue prerequisite
+
+- Queue task `g01.007` / `3ca4a65b-dfde-4d2d-85c1-df4ccb68ea4a` shipped in
+  PR #8. Accepted implementation head: `0f9b1bb34eb441dbecac8f741e60a66562c69d07`;
+  merge: `7da4eeba73c4f1ce7d8c7967acd6e11fbf83c7f6`.
+- Frozen schemas: `paseo.queue.control.v1`, `paseo.queue.event.v1`, and
+  `paseo.queue.hook-result.v1`.
+- Supported events: `task.pre_dispatch`, `task.blocked`, `task.cancelled`, and
+  `task.closeout`. Pre-dispatch is read-only; the other events may use
+  read-only or integration-write mode.
+- Queue main was clean and synchronized at
+  `2c528543b00147556acd4a5ed74b3784d0fee056` during readiness review. Paseo's
+  plugin log records a successful directory-plugin reload after that commit.
+- The contract keeps manifest absence compatible, treats instructions as
+  opaque committed artifacts, executes fixed argv without a shell, records
+  durable hook intent, and makes Queue own validated integration publication
+  and uncertain-effect reconciliation.
+
 ## UI Design Brief
 
 Not applicable.
 
 ## Dispatch manifest
 
-- **State:** planned and blocked on the Queue-owned generic-hook prerequisite.
+- **State:** ready after this planning commit is pushed; one lane, no concurrent
+  sibling and no automatic successor.
 - **Completion:** the Northstar hook adapter, starter manifest, projection
   targets, installed-consumer proof, repository adoption boundary, standalone
   shadow proof, Queue equivalence proof, and live cutover satisfy the oracle;
@@ -142,8 +161,10 @@ closeout routes.
 
 ## Evidence
 
-Pending the Queue prerequisite and a future ready-state promotion.
+Queue prerequisite evidence is recorded above. Delivery evidence is pending.
 
 ## Next task
 
-Remain planned until Queue's generic hook contract is merged and installed.
+Dispatch this task only after explicit execution authorization. If its live
+shadow cannot prove same-task cutover after merge, return to Chatterbox for one
+bounded cutover task.

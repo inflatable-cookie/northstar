@@ -4,7 +4,7 @@ Status: active
 Owner: repo maintainers
 Created: 2026-09-12
 Governing refs: system architecture, contract 001
-Execution: `g03.005` complete; Queue generic hooks next; `g03.006` adoption after
+Execution: `g03.005` and Queue contract v1 complete; `g03.006` ready
 
 ## Problem
 
