@@ -74,16 +74,31 @@ that a Git-backed script would otherwise have to rebuild badly.
 
 Queue state cannot be Northstar's only authority. It belongs to one Paseo
 installation, contains operational detail that should not be copied into Git,
-and is unavailable to manual or alternative orchestrators. Treat Queue as the
-first live adapter to a provider-neutral Northstar lifecycle contract.
+and is unavailable to manual or alternative orchestrators. Queue must remain an
+optional adapter to a provider-neutral Northstar lifecycle core.
 
 ## Tentative recommendation
 
-Use two tiers rather than a second lifecycle engine:
+Use three layers rather than a second lifecycle engine:
 
-1. Queue, or another orchestrator, owns live transactional execution.
-2. Northstar owns a portable lifecycle interchange contract, terminal receipts,
-   validation, and deterministic repository projections.
+1. Northstar owns the state machine, schemas, transition validation, portable
+   task receipts, and deterministic repository projections.
+2. A bundled standalone adapter applies those transitions directly to
+   per-task repository state with atomic writes and compare-and-swap checks.
+3. Queue optionally owns richer live transactional execution and maps its
+   database records onto the same Northstar transitions and receipts.
+
+Northstar must be complete without Queue. A repository with Effigy and the
+installed Northstar skill can create, inspect, advance, close, and compact task
+state. The standalone path may be less convenient and offer fewer centralized
+operations, but it must preserve the same lifecycle invariants and final
+evidence.
+
+Queue must not define a second set of lifecycle semantics. It may add leases,
+callbacks, retries, provider routing, role runs, notifications, recovery, and
+queryable history. At durable boundaries it submits the same transition
+envelope the standalone adapter uses and records the accepted receipt version
+and digest. Queue-specific IDs remain additive metadata.
 
 Bind every Queue task to a canonical Northstar task ID and path. Do not infer
 `gNN.NNN` from the handoff name, branch, workspace, or prompt. At
@@ -162,11 +177,12 @@ Exact command grammar is not settled. Repository wiring may provide a short
 `effigy northstar:lifecycle ...` selector; the installed-skill fallback can use
 Effigy's existing `--repo` route.
 
-Queue should call this surface after merge and synchronized-main verification.
-Manual workflows call it with the same schema. Rhai is suitable for task wiring,
-validation, and simple projections; a small portable implementation may still
-be justified for canonical JSON and atomic receipt writes. It must not become a
-parallel scheduler, callback store, or orchestration state machine.
+The standalone adapter calls this surface directly. Queue calls the same surface
+at durable state boundaries and after merge and synchronized-main verification.
+Rhai is suitable for task wiring, validation, and simple projections; a small
+portable implementation may still be justified for canonical JSON and atomic
+receipt writes. The bundled implementation must own the lifecycle semantics but
+must not grow into a parallel scheduler, callback store, or provider runtime.
 
 ## Use cases to prove
 
@@ -213,8 +229,8 @@ operator preference.
 3. Freeze the receipt schema, actor trust, idempotency, and conflict rules.
 4. Build a read-only validator/projector over fixtures and compare its output
    with current Northstar closeouts.
-5. Add a Queue reference adapter and a manual adapter that produce identical
-   receipts.
+5. Build the bundled standalone adapter, then add a Queue reference adapter that
+   produces identical receipts from equivalent facts.
 6. Shadow one natural task: keep current Markdown authority while generating a
    terminal receipt and comparing the derived result.
 7. Run the two-concurrent-PR oracle.
@@ -227,6 +243,8 @@ operator preference.
 - Whether browse-only GitHub status justifies committed generated projections.
 - Whether the Queue adapter invokes the Northstar command directly on
   synchronized `main` or hands an authenticated receipt to an integration run.
+- Which durable transitions the standalone adapter commits before terminal
+  closeout, and how it behaves when no integration writer is available.
 - Which nonterminal dispositions merit portable receipts before final closeout.
 - Which actors may assert review, merge, cancellation, and operator decisions.
 - Whether the first version supports both sequential and parallel generations.
