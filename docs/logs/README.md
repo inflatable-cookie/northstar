@@ -52,6 +52,11 @@ routine log is required.
 portable core outcome, PR #44, accepted exact-head review, merge commit,
 validation, and deferred limits. No separate routine log is required.
 
+`g03.006` is complete. Task `006-adopt-portable-lifecycle.md` retains the
+hook-adapter outcome, PR #45, accepted exact-head review, merge commit,
+validation, and the deferred live shadow cutover. No separate routine log
+is required.
+
 ## Cross-project planning evidence
 
 - [Shared knowledge retrieval pilot](2026-09/05-093742-shared-knowledge-retrieval-pilot.md):

@@ -14,14 +14,15 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 | Flatten milestone/card execution into one generation task unit. | complete as `g03.003` | contract 001 | return to Chatterbox planning checkpoint |
 | Move material UI design decisions before dispatch and require rendered exact-head delivery review. | complete as `g03.004` | section 11, contract 001 | observe first natural consumer lanes |
 | Replace agent-written mechanical lifecycle bookkeeping with a portable core and deterministic projections. | complete as `g03.005` | spec 040, system architecture, contract 001 | continue with `g03.006` adoption |
-| Integrate rich runtimes without making Northstar or Queue depend on each other's internal structure. | ready as `g03.006`; Queue prerequisite complete | spec 040; Queue contract v1 | Northstar adoption/cutover |
+| Integrate rich runtimes without making Northstar or Queue depend on each other's internal structure. | complete as `g03.006` (adapter/equivalence merged; live shadow cutover deferred) | spec 040; Queue contract v1 | one bounded Chatterbox cutover task |
 | Reduce repeated protocol enumerations and retire genuinely redundant modes without merging distinct behavior blindly. | planned | contract 001, later usage evidence | pending after `g03.001` |
 | Keep unresolved operator feedback visible without pinning old generations open. | watch | contract 001 | bounded watchlist below |
 
 ## Approved frontier
 
-`g03.006` is the sole approved task. Queue's generic hook prerequisite is merged
-and installed. No concurrent sibling or automatic successor is authorized.
+`g03.006` is complete. No task is approved; no concurrent sibling or automatic
+successor is authorized. Queue repository work remains separately owned and is
+not part of this frontier. Return to Chatterbox for one bounded cutover task.
 
 ## Bounded watchlist
 
@@ -42,8 +43,11 @@ and installed. No concurrent sibling or automatic successor is authorized.
 - `003-flatten-execution-tasks.md` — complete
 - `004-ui-design-planning-and-delivery.md` — complete
 - `005-portable-lifecycle-core.md` — complete
-- `006-adopt-portable-lifecycle.md` — ready
+- `006-adopt-portable-lifecycle.md` — complete
 
 ## Next task
 
-Dispatch `g03.006` after explicit execution authorization.
+Return to Chatterbox after `g03.006` closeout for one bounded cutover task:
+install the merged skill, reach a clean synchronized integration checkout,
+run the shadow closeout, and verify the published portable digest with
+no-diff replay. Do not dispatch it automatically.

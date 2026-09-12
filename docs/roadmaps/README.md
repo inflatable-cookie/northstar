@@ -5,10 +5,9 @@ generation remains expanded.
 
 ## Current state
 
-- Active generation: [`g03`](./g03/README.md)
-- Last completed task: `g03.005` portable lifecycle core
-- Active task: [`g03.006`](./g03/006-adopt-portable-lifecycle.md) portable lifecycle adoption
-- Approved frontier: `g03.006`; explicit execution authorization required
+- Last completed task: `g03.006` portable lifecycle adoption
+- Active task: none; `g03.006` is complete
+- Approved frontier: none; return to Chatterbox for one bounded cutover task
 - Closed generations: [`g01`](./archive/g01.md) and [`g02`](./archive/g02.md) roll-ups under `archive/`
 
 ## Rules
@@ -23,5 +22,5 @@ generation remains expanded.
 
 ## Next task
 
-Dispatch `g03.006` after explicit execution authorization. The bounded
+Return to Chatterbox for one bounded `g03.006` cutover task. The bounded
 watchlist is not execution authority.

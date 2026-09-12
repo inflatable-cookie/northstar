@@ -1,6 +1,6 @@
 # g03.006 Adopt Portable Lifecycle
 
-Status: ready
+Status: complete
 Owner: repo maintainers
 Created: 2026-09-12
 Governing refs: spec 040, system architecture, contract 001
@@ -161,10 +161,43 @@ closeout routes.
 
 ## Evidence
 
-Queue prerequisite evidence is recorded above. Delivery evidence is pending.
+Queue prerequisite evidence is recorded above. The delivery evidence is
+recorded in the Closeout below. The live shadow cutover is deferred to the
+bounded successor named there.
+
+## Closeout
+
+- The Queue hook adapter, starter manifest, multi-target projections, and
+  terminal-equivalence proof are shipped: explicit-path containment repair,
+  validated multi-target writes, ancestry-based completion semantics,
+  a 58-check core oracle, and standalone/hook terminal records sharing the
+  same `portable_digest` in both task orders.
+- PR [#45](https://github.com/inflatable-cookie/northstar/pull/45) was
+  accepted at exact head
+  `60d302d0f8f67f7c1b413c7fa6fdc04f66158aaa` by the independent review in
+  [comment 5648708967](https://github.com/inflatable-cookie/northstar/pull/45#issuecomment-5648708967)
+  and merged as `64f953e58547f7d9a8236a1cfe588ea5099fc66b`.
+- The accepted review ran the focused lifecycle/adoption/equivalence
+  fixtures at the exact head (core oracle 58 checks, installed-consumer and
+  standalone paths, Queue frozen-contract cross-checks, launcher isolation,
+  terminal equivalence), plus `effigy qa:docs`, `effigy qa`,
+  `effigy check:posture-advisory` (0 warnings), and `git diff --check`.
+  Evidence levels are preserved: provider facts stay `adapter_attested`,
+  Git facts `locally_verified`. This closeout repeats none of that
+  validation; it records the merged outcome.
+- The live shadow cutover is unproven: no `tasks/g03.006.json` record is
+  published and the manual mechanical route stays authoritative. The review
+  holds two integration prerequisites for the shadow, both outside this
+  diff: Queue's clean-base gate fails on ignored artifacts present in a
+  normal checkout (`.effigy/`, `.DS_Store`, thousands of entries), which
+  holds required integration-write hooks by design; and the installed skill
+  does not yet contain the hook adapter the launcher resolves. The review's
+  remaining notes are non-blocking starter guidance, semantic labelling,
+  policy scope, and a documented containment edge.
 
 ## Next task
 
-Dispatch this task only after explicit execution authorization. If its live
-shadow cannot prove same-task cutover after merge, return to Chatterbox for one
-bounded cutover task.
+Return to Chatterbox for one bounded cutover task: install the merged skill,
+reach a clean synchronized integration checkout, run the shadow closeout,
+and verify the published portable digest with no-diff replay. No automatic
+successor is authorized.
