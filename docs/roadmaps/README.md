@@ -22,8 +22,8 @@ generation remains expanded.
 
 ## Next task
 
-Return to Chatterbox for one bounded `g03.006` cutover task. The bounded
-watchlist is not execution authority.
+`g03.006` cutover is published as `d244d83`. Return to Chatterbox for next
+planning direction. The bounded watchlist is not execution authority.
 <!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v1 digest=sha256:b61aa082aa7612cc3d8848350f8e5de1ab59472b2c4f7b4c6cba74ae9d93228a -->
 | Task | Status | Stage | Revision | Record digest |
 | --- | --- | --- | --- | --- |

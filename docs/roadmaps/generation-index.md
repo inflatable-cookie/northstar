@@ -8,8 +8,8 @@ Mode: sequential
 
 - `g03`
 - Runway: `g03/README.md`
-- Last completed task: `g03.006` — portable lifecycle adoption
-- Approved frontier: none; return to Chatterbox for one bounded cutover task
+- Last completed task: `g03.006` — portable lifecycle adoption (cutover published as `d244d83`)
+- Approved frontier: none; return to Chatterbox for next planning direction
 
 ## Generation log
 
@@ -29,5 +29,5 @@ preservation oracle in contract 001 passes.
 
 ## Next task
 
-Return to Chatterbox for one bounded `g03.006` cutover task; no automatic
-successor is approved.
+`g03.006` cutover is published as `d244d83`. Return to Chatterbox for next
+planning direction; no automatic successor is approved.

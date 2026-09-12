@@ -54,8 +54,8 @@ validation, and deferred limits. No separate routine log is required.
 
 `g03.006` is complete. Task `006-adopt-portable-lifecycle.md` retains the
 hook-adapter outcome, PR #45, accepted exact-head review, merge commit,
-validation, and the deferred live shadow cutover. No separate routine log
-is required.
+validation, and the published live shadow cutover: terminal record and
+projections committed as `d244d83`. No separate routine log is required.
 
 ## Cross-project planning evidence
 

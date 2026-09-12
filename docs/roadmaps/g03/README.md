@@ -14,15 +14,16 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 | Flatten milestone/card execution into one generation task unit. | complete as `g03.003` | contract 001 | return to Chatterbox planning checkpoint |
 | Move material UI design decisions before dispatch and require rendered exact-head delivery review. | complete as `g03.004` | section 11, contract 001 | observe first natural consumer lanes |
 | Replace agent-written mechanical lifecycle bookkeeping with a portable core and deterministic projections. | complete as `g03.005` | spec 040, system architecture, contract 001 | continue with `g03.006` adoption |
-| Integrate rich runtimes without making Northstar or Queue depend on each other's internal structure. | complete as `g03.006` (adapter/equivalence merged; live shadow cutover deferred) | spec 040; Queue contract v1 | one bounded Chatterbox cutover task |
+| Integrate rich runtimes without making Northstar or Queue depend on each other's internal structure. | complete as `g03.006`; terminal record and projections published as `d244d83` | spec 040; Queue contract v1 | Chatterbox next planning direction |
 | Reduce repeated protocol enumerations and retire genuinely redundant modes without merging distinct behavior blindly. | planned | contract 001, later usage evidence | pending after `g03.001` |
 | Keep unresolved operator feedback visible without pinning old generations open. | watch | contract 001 | bounded watchlist below |
 
 ## Approved frontier
 
-`g03.006` is complete. No task is approved; no concurrent sibling or automatic
-successor is authorized. Queue repository work remains separately owned and is
-not part of this frontier. Return to Chatterbox for one bounded cutover task.
+`g03.006` is complete, including the published live shadow cutover. No task
+is approved; no concurrent sibling or automatic successor is authorized.
+Queue repository work remains separately owned and is not part of this
+frontier. Return to Chatterbox for next planning direction.
 
 ## Bounded watchlist
 
@@ -47,7 +48,5 @@ not part of this frontier. Return to Chatterbox for one bounded cutover task.
 
 ## Next task
 
-Return to Chatterbox after `g03.006` closeout for one bounded cutover task:
-install the merged skill, reach a clean synchronized integration checkout,
-run the shadow closeout, and verify the published portable digest with
-no-diff replay. Do not dispatch it automatically.
+`g03.006` cutover is published as `d244d83`. Return to Chatterbox for next
+planning direction. Do not dispatch automatically.

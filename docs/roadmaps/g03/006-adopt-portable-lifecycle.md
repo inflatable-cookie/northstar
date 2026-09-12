@@ -162,8 +162,8 @@ closeout routes.
 ## Evidence
 
 Queue prerequisite evidence is recorded above. The delivery evidence is
-recorded in the Closeout below. The live shadow cutover is deferred to the
-bounded successor named there.
+recorded in the Closeout below, including the published live shadow
+cutover.
 
 ## Closeout
 
@@ -185,19 +185,22 @@ bounded successor named there.
   Evidence levels are preserved: provider facts stay `adapter_attested`,
   Git facts `locally_verified`. This closeout repeats none of that
   validation; it records the merged outcome.
-- The live shadow cutover is unproven: no `tasks/g03.006.json` record is
-  published and the manual mechanical route stays authoritative. The review
-  holds two integration prerequisites for the shadow, both outside this
-  diff: Queue's clean-base gate fails on ignored artifacts present in a
-  normal checkout (`.effigy/`, `.DS_Store`, thousands of entries), which
-  holds required integration-write hooks by design; and the installed skill
-  does not yet contain the hook adapter the launcher resolves. The review's
-  remaining notes are non-blocking starter guidance, semantic labelling,
-  policy scope, and a documented containment edge.
+- The live shadow cutover is published: the required `task.closeout` hook
+  wrote the terminal record `.northstar/lifecycle/v1/tasks/g03.006.json`
+  (`status: complete`, revision 8, record digest
+  `sha256:025066786b2d9af4821307a2b06b15b6cab8bf47a4a816db22bed66b9faa8c9b`)
+  and the generated projection blocks in `docs/README.md` and
+  `docs/roadmaps/README.md` as commit
+  `d244d83ba61c3c0a4a2e25fa85b03b4dc29b4c5a` on synchronized main. The
+  record carries the reviewed head, the merge commit, and preserved
+  evidence levels (provider facts `adapter_attested`, Git facts
+  `locally_verified`); the projection digests match the published record.
+  The review's remaining notes stay non-blocking limits for later
+  hardening: starter `allowedPaths` guidance, semantic labelling, policy
+  scope, and a documented containment edge.
 
 ## Next task
 
-Return to Chatterbox for one bounded cutover task: install the merged skill,
-reach a clean synchronized integration checkout, run the shadow closeout,
-and verify the published portable digest with no-diff replay. No automatic
-successor is authorized.
+Cutover is complete; no bounded cutover task is needed. Return to
+Chatterbox for next planning direction. No automatic successor is
+authorized.
