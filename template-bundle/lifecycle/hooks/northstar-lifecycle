@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Copy-ready Queue hook launcher for the Northstar lifecycle adapter.
+#
+# Install at .paseo/hooks/northstar-lifecycle (committed, executable) and
+# declare it from .paseo/queue.json. Queue executes this pinned repository
+# file with literal argv and no shell. The launcher resolves the installed
+# Northstar skill — never the Northstar source checkout — and hands execution
+# to its lifecycle Queue-event adapter, which reads the generic event JSON on
+# stdin. Event data never reaches this script's arguments.
+set -euo pipefail
+
+for base in "$HOME/.agents/skills/northstar" "$HOME/.pi/agent/skills/northstar"; do
+  if [ -f "$base/scripts/lifecycle-queue-hook.ts" ]; then
+    exec bun run "$base/scripts/lifecycle-queue-hook.ts"
+  fi
+done
+
+echo "northstar lifecycle hook: installed Northstar skill not found under HOME" >&2
+exit 1

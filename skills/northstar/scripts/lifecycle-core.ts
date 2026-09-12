@@ -58,8 +58,8 @@ const TASK_PATH_RE = /^docs\/roadmaps\/g([0-9]{2})\/([0-9]{3})-([a-z0-9]+(?:-[a-
 const TIMESTAMP_RE = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]{3})?Z$/;
 const EVENT_ID_RE = /^[A-Za-z0-9._:-]{8,128}$/;
 
-const BEGIN_PREFIX = "<!-- northstar:lifecycle:begin";
-const END_SENTINEL = "<!-- northstar:lifecycle:end -->";
+export const BEGIN_PREFIX = "<!-- northstar:lifecycle:begin";
+export const END_SENTINEL = "<!-- northstar:lifecycle:end -->";
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const SCHEMA_DIR = path.resolve(SCRIPT_DIR, "..", "references", "lifecycle");
@@ -489,8 +489,18 @@ function checkCompletionEvidence(record: Record<string, unknown>, ctx: ReduceCon
 
   const integration = evidence.integration as Record<string, unknown> | undefined;
   check(integration !== undefined, "completion", "completion requires synchronized-main integration evidence");
-  check(integration!.synchronized_main_commit === merge!.merge_commit, "completion",
-    "synchronized main " + String(integration!.synchronized_main_commit) + " is not the merge commit " + String(merge!.merge_commit));
+  const syncCommit = String(integration!.synchronized_main_commit ?? "");
+  check(GIT_ID_RE.test(syncCommit), "completion", "integration evidence requires synchronized_main_commit");
+  // Synchronized main must contain the merge commit. Main may lawfully advance
+  // between the merge and closeout (interleaved publications, closeout
+  // Markdown), so ancestry — not equality — is the durable local proof. A
+  // locally_verified entry is proved by Git ancestry here; an attested entry
+  // stays attested and is never upgraded.
+  if (integration!.level === "locally_verified") {
+    check(typeof ctx.isAncestor === "function", "completion", "locally_verified integration ancestry requires a Git verifier");
+    check(ctx.isAncestor!(String(merge!.merge_commit), syncCommit), "completion",
+      "synchronized main " + syncCommit + " does not contain the merge commit " + String(merge!.merge_commit));
+  }
 
   const validation = evidence.validation as Record<string, unknown> | undefined;
   check(validation !== undefined, "completion", "completion requires validation evidence");
@@ -762,6 +772,19 @@ export function assertContained(repoRoot: string, relative: string): string {
   return resolved;
 }
 
+// Normalize an explicit caller-supplied path (relative or absolute) to a
+// repository-relative path and refuse any escape. Used by the explicit-path
+// render/compact commands and by adapter-supplied projection targets so an
+// absolute spelling cannot bypass the relative-path check.
+export function containRepoPath(repoRoot: string, value: string): string {
+  check(typeof value === "string" && value.length > 0, "containment", "empty path");
+  const absolute = path.isAbsolute(value) ? path.normalize(value) : path.resolve(repoRoot, value);
+  const relative = path.relative(repoRoot, absolute);
+  check(relative.length > 0 && !relative.startsWith("..") && !path.isAbsolute(relative),
+    "containment", "path escapes repository root: " + value);
+  return relative.split(path.sep).join("/");
+}
+
 // Follows symlinks on the nearest existing ancestor so a symlinked lifecycle
 // directory cannot redirect records outside the repository.
 export function assertRealContained(repoRoot: string, target: string): void {
@@ -875,7 +898,10 @@ export interface ApplyOptions {
   repoRoot: string;
   envelope: Record<string, unknown>;
   branch?: string;
-  target?: string;
+  // Repository-declared projection targets. Every target is containment- and
+  // symlink-checked before any mutation, then regenerated inside the record
+  // write lock. Exact changed paths are returned; nothing is staged.
+  targets?: string[];
   // Test seam: the atomic writer is injectable so interruption behavior can be
   // exercised without weakening the production path.
   writeFile?: (finalPath: string, data: string) => void;
@@ -899,6 +925,16 @@ export function applyEnvelope(options: ApplyOptions): ApplyResult {
   assertContained(repoRoot, identity.taskPath);
   const branch = options.branch ?? "main";
   assertBranch(repoRoot, branch);
+
+  // Validate every declared target before anything else: one bad target must
+  // fail closed ahead of any verification or mutation.
+  const targetPaths: string[] = [];
+  for (const target of options.targets ?? []) {
+    const contained = containRepoPath(repoRoot, target);
+    const absolute = path.resolve(repoRoot, contained);
+    assertRealContained(repoRoot, fs.existsSync(absolute) ? absolute : path.dirname(absolute));
+    targetPaths.push(absolute);
+  }
 
   const planning = envelope.planning as Record<string, unknown>;
   const commit = String(planning.commit);
@@ -948,15 +984,16 @@ export function applyEnvelope(options: ApplyOptions): ApplyResult {
     verifyRecordIntegrity(reduced.record);
     (options.writeFile ?? writeFileAtomic)(file, canonicalJson(reduced.record) + "\n");
     const changed = [path.relative(repoRoot, file)];
-    if (options.target !== undefined) {
-      const targetAbs = assertContained(repoRoot, options.target);
+    const projection = buildProjection(listRecords(repoRoot));
+    for (const targetAbs of targetPaths) {
       const existing = fs.existsSync(targetAbs) ? fs.readFileSync(targetAbs, "utf8") : "";
-      const projected = renderProjectionInto(existing, buildProjection(listRecords(repoRoot)));
+      const projected = renderProjectionInto(existing, projection);
       if (projected.changed) {
         writeFileAtomic(targetAbs, projected.text);
         changed.push(path.relative(repoRoot, targetAbs));
       }
     }
+    changed.sort();
     result = {
       status: "applied",
       task_id: identity.taskId,
@@ -1249,10 +1286,26 @@ async function runOracle(): Promise<number> {
     });
   };
 
-  const completed = reduce(completeEnvelope({}), closeoutRecord, { verifyCommit: () => true, isAncestor: () => true });
+  // A chain-aware ancestry verifier: the reviewed head is contained by the
+  // merge commit, which is contained by itself and an advanced main.
+  const descendantCommit = "1".repeat(40);
+  const chainAncestor = (ancestor: string, descendant: string): boolean =>
+    (ancestor === mergeHead && (descendant === mergeCommit || descendant === descendantCommit)) ||
+    (ancestor === mergeCommit && (descendant === mergeCommit || descendant === descendantCommit));
+
+  const completed = reduce(completeEnvelope({}), closeoutRecord, { verifyCommit: () => true, isAncestor: chainAncestor });
   check(completed.record.status === "complete" && completed.record.stage === "none", "oracle", "complete did not reach terminal state");
   verifyRecordIntegrity(completed.record);
   ok("complete requires and records merge, synchronized main, validation, and closeout evidence");
+
+  // Synchronized main lawfully advances past the merge commit (interleaved
+  // publications, closeout Markdown); ancestry is the durable local proof.
+  const advancedMain = reduce(completeEnvelope({
+    event_id: "oracle-complete-advanced-main",
+    evidence: { integration: { level: "locally_verified", source: "git", actor: "oracle", method: "synchronized_main", recorded_at: "2026-09-12T12:00:05.000Z", synchronized_main_commit: descendantCommit } },
+  }), closeoutRecord, { verifyCommit: () => true, isAncestor: chainAncestor });
+  check(advancedMain.record.status === "complete", "oracle", "completion rejected a synchronized main containing the merge commit");
+  ok("completion accepts a synchronized main that contains the merge commit");
 
   expectFail("completion rejects validation from an unrelated head", () => {
     reduce(completeEnvelope({
@@ -1274,8 +1327,8 @@ async function runOracle(): Promise<number> {
     reduce(completeEnvelope({
       event_id: "oracle-complete-bad-main",
       evidence: { integration: { level: "locally_verified", source: "git", actor: "oracle", method: "synchronized_main", recorded_at: "2026-09-12T12:00:05.000Z", synchronized_main_commit: "f".repeat(40) } },
-    }), closeoutRecord, { verifyCommit: () => true, isAncestor: () => true });
-  }, "not the merge commit");
+    }), closeoutRecord, { verifyCommit: () => true, isAncestor: chainAncestor });
+  }, "does not contain the merge commit");
 
   expectFail("advancing to merge without any review fails closed", () => {
     reduce(oracleEnvelope({
@@ -1562,7 +1615,7 @@ async function runOracle(): Promise<number> {
     fs.writeFileSync(targetAbs, "# Roadmaps\n\nHuman text stays.\n");
     const secondApply = applyEnvelope({
       repoRoot: repo,
-      target: targetRel,
+      targets: [targetRel],
       envelope: {
         schema_version: ENVELOPE_SCHEMA,
         event_id: "standalone-plan-0002",
@@ -1584,6 +1637,91 @@ async function runOracle(): Promise<number> {
       "oracle", "selected projection was not regenerated or lost human text");
     verifyProjectionText(renderedTarget, listRecords(repo));
     ok("apply regenerates a selected projection atomically with the record");
+
+    // Multi-target projections: every target is validated before any mutation,
+    // regenerated inside the record lock, and reported as exact changed paths.
+    const multiTargets = ["docs/multi-a.md", "docs/nested/multi-b.md"];
+    fs.mkdirSync(path.join(repo, "docs/nested"), { recursive: true });
+    fs.writeFileSync(path.join(repo, "docs/multi-a.md"), "# Multi A\n\nHuman text stays.\n");
+    fs.writeFileSync(path.join(repo, "docs/nested/multi-b.md"), "# Multi B\n\nKeep me.\n");
+    const multiTaskPath = "docs/roadmaps/g03/008-multi-target-task.md";
+    fs.writeFileSync(path.join(repo, multiTaskPath), "# Multi Target Task\n\nHuman narrative.\n");
+    run(["add", "-A"]);
+    run(["commit", "-q", "-m", "plan multi-target task"]);
+    const multiCommit = run(["rev-parse", "HEAD"]);
+    const multiEnvelope = {
+      schema_version: ENVELOPE_SCHEMA,
+      event_id: "standalone-plan-0003",
+      task_id: "g03.008",
+      task_path: multiTaskPath,
+      generation: "g03",
+      expected: { revision: 0, digest: null },
+      transition: "plan",
+      event_time: "2026-09-12T15:00:00.000Z",
+      actor: "oracle",
+      source: { adapter: "standalone" },
+      planning: { commit: multiCommit, task_blob_digest: digestBytes(fs.readFileSync(path.join(repo, multiTaskPath))) },
+    };
+    const multiApply = applyEnvelope({ repoRoot: repo, envelope: multiEnvelope, targets: multiTargets });
+    check(multiApply.changed_paths.length === 3, "oracle", "multi-target apply did not report all changed paths: " + multiApply.changed_paths.join(","));
+    check(canonicalJson(multiApply.changed_paths) === canonicalJson([...multiApply.changed_paths].sort()), "oracle", "multi-target changed paths are not sorted");
+    for (const rel of multiTargets) {
+      const text = fs.readFileSync(path.join(repo, rel), "utf8");
+      check(text.includes("g03.008"), "oracle", "multi-target projection missing the new task in " + rel);
+      check(text.includes(rel.endsWith("multi-a.md") ? "Human text stays." : "Keep me."), "oracle", "multi-target lost human text in " + rel);
+      verifyProjectionText(text, listRecords(repo));
+    }
+    ok("multi-target apply validates and renders every declared target");
+
+    // One invalid target must prevent all mutation, including the record.
+    const beforeBad = fs.readFileSync(path.join(repo, "docs/multi-a.md"), "utf8");
+    const recordCountBefore = listRecords(repo).length;
+    expectFail("escaping multi-target fails before any write", () => {
+      applyEnvelope({
+        repoRoot: repo,
+        targets: ["docs/multi-a.md", "../escape.md"],
+        envelope: {
+          schema_version: ENVELOPE_SCHEMA,
+          event_id: "standalone-plan-0004",
+          task_id: "g03.009",
+          task_path: "docs/roadmaps/g03/009-escape-task.md",
+          generation: "g03",
+          expected: { revision: 0, digest: null },
+          transition: "plan",
+          event_time: "2026-09-12T15:01:00.000Z",
+          actor: "oracle",
+          source: { adapter: "standalone" },
+          planning: { commit: secondCommit, task_blob_digest: digestOf("unresolvable") },
+        },
+      });
+    }, "escapes repository root");
+    check(listRecords(repo).length === recordCountBefore, "oracle", "rejected multi-target still wrote a record");
+    check(fs.readFileSync(path.join(repo, "docs/multi-a.md"), "utf8") === beforeBad, "oracle", "rejected multi-target still mutated a target");
+    ok("invalid multi-target declaration leaves the repository byte-identical");
+
+    // Explicit-path render/compact containment: escaping or symlinked paths
+    // must fail closed without writing.
+    const scriptPath = fileURLToPath(import.meta.url);
+    const runCliRaw = (args: string[]) => spawnSync(process.execPath, ["run", scriptPath, ...args], { cwd: repo, encoding: "utf8" });
+    const cliFail = (name: string, args: string[], match: string) => {
+      const result = runCliRaw(args);
+      check(result.status !== 0, "oracle", name + ": CLI unexpectedly succeeded");
+      check(String(result.stdout).includes(match), "oracle", name + ": output missed '" + match + "': " + result.stdout);
+    };
+    cliFail("render rejects an escaping records dir", ["render", "--records", "../../etc", "--target", "docs/multi-a.md"], "escapes repository root");
+    cliFail("render rejects an escaping target", ["render", "--records", ".northstar/lifecycle/v1/tasks", "--target", "../../outside.md"], "escapes repository root");
+    cliFail("compact rejects an escaping output", ["compact", "--records", ".northstar/lifecycle/v1/tasks", "--generation", "g03", "--out", "../../outside.json"], "escapes repository root");
+    const outsideDir = path.join(tmp, "outside-records");
+    fs.mkdirSync(outsideDir, { recursive: true });
+    fs.symlinkSync(outsideDir, path.join(repo, "symlinked-records"));
+    cliFail("render rejects a symlinked records dir", ["render", "--records", "symlinked-records", "--target", "docs/multi-a.md"], "escapes repository root");
+    fs.rmSync(path.join(repo, "symlinked-records"));
+    ok("explicit-path render and compact re-check containment");
+
+    // A clean explicit-path render still works against the declared paths.
+    const cleanRender = runCliRaw(["render", "--records", ".northstar/lifecycle/v1/tasks", "--target", "docs/multi-a.md"]);
+    check(cleanRender.status === 0, "oracle", "contained render failed: " + cleanRender.stdout);
+    ok("contained explicit-path render succeeds inside the repository");
 
     // 11. Static portability scan of this very source file.
     const ownSource = fs.readFileSync(fileURLToPath(import.meta.url), "utf8");
@@ -1628,6 +1766,21 @@ function parseFlags(args: string[]): { flags: Record<string, string | true>; res
 function resolveRepoRoot(flags: Record<string, string | true>): string {
   const start = typeof flags.repo === "string" ? flags.repo : process.cwd();
   return discoverRepoRoot(start);
+}
+
+// Projection targets arrive as repeatable --target values. parseFlags only
+// keeps the last one, so targets are also collected from the raw argument
+// list and must each pass explicit-path containment at apply time.
+function collectTargets(flags: Record<string, string | true>, rest: string[]): string[] {
+  const targets: string[] = [];
+  for (let i = 0; i < rest.length; i += 1) {
+    if (rest[i] === "--target" && typeof rest[i + 1] === "string") {
+      targets.push(rest[i + 1] as string);
+      i += 1;
+    }
+  }
+  if (typeof flags.target === "string" && !targets.includes(flags.target)) targets.push(flags.target);
+  return targets;
 }
 
 function readEnvelopeInput(value: string | true | undefined): Record<string, unknown> {
@@ -1683,33 +1836,48 @@ async function main(): Promise<void> {
       case "apply": {
         const repoRoot = resolveRepoRoot(flags);
         const envelope = readEnvelopeInput(flags.envelope);
-        const result = applyEnvelope({ repoRoot, envelope, branch: typeof flags.branch === "string" ? flags.branch : undefined, target: typeof flags.target === "string" ? flags.target : undefined });
+        const targetList = collectTargets(flags, rest);
+        const result = applyEnvelope({ repoRoot, envelope, branch: typeof flags.branch === "string" ? flags.branch : undefined, targets: targetList });
         printJson(result);
         return;
       }
       case "render": {
         check(typeof flags.records === "string" && typeof flags.target === "string", "usage", "render requires --records <dir> and --target <file>");
-        const recordsDir = flags.records as string;
-        const records = fs.readdirSync(recordsDir).filter((name) => name.endsWith(".json")).sort()
-          .map((name) => JSON.parse(fs.readFileSync(path.join(recordsDir, name), "utf8")) as Record<string, unknown>);
-        const target = flags.target as string;
-        const existing = fs.existsSync(target) ? fs.readFileSync(target, "utf8") : "";
+        const repoRoot = resolveRepoRoot(flags);
+        const recordsDir = containRepoPath(repoRoot, flags.records as string);
+        const target = containRepoPath(repoRoot, flags.target as string);
+        const recordsAbs = path.resolve(repoRoot, recordsDir);
+        check(fs.existsSync(recordsAbs) && fs.statSync(recordsAbs).isDirectory(), "containment", "records directory is missing or not a directory: " + recordsDir);
+        assertRealContained(repoRoot, recordsAbs);
+        const records = fs.readdirSync(recordsAbs).filter((name) => name.endsWith(".json")).sort()
+          .map((name) => JSON.parse(fs.readFileSync(path.join(recordsAbs, name), "utf8")) as Record<string, unknown>);
+        for (const record of records) verifyRecordIntegrity(record);
+        const targetAbs = path.resolve(repoRoot, target);
+        assertRealContained(repoRoot, fs.existsSync(targetAbs) ? targetAbs : path.dirname(targetAbs));
+        const existing = fs.existsSync(targetAbs) ? fs.readFileSync(targetAbs, "utf8") : "";
         const projection = buildProjection(records);
         const result = renderProjectionInto(existing, projection);
-        if (result.changed) writeFileAtomic(target, result.text);
+        if (result.changed) writeFileAtomic(targetAbs, result.text);
         printJson({ status: result.changed ? "applied" : "unchanged", task_id: "projection", revision: 0, digest: String(projection.source_digest), changed_paths: result.changed ? [target] : [] });
         return;
       }
       case "compact": {
         check(typeof flags.records === "string" && typeof flags.generation === "string" && typeof flags.out === "string", "usage", "compact requires --records, --generation, and --out");
-        const recordsDir = flags.records as string;
-        const records = fs.readdirSync(recordsDir).filter((name) => name.endsWith(".json")).sort()
-          .map((name) => JSON.parse(fs.readFileSync(path.join(recordsDir, name), "utf8")) as Record<string, unknown>);
+        const repoRoot = resolveRepoRoot(flags);
+        const recordsDir = containRepoPath(repoRoot, flags.records as string);
+        const out = containRepoPath(repoRoot, flags.out as string);
+        const recordsAbs = path.resolve(repoRoot, recordsDir);
+        check(fs.existsSync(recordsAbs) && fs.statSync(recordsAbs).isDirectory(), "containment", "records directory is missing or not a directory: " + recordsDir);
+        assertRealContained(repoRoot, recordsAbs);
+        const records = fs.readdirSync(recordsAbs).filter((name) => name.endsWith(".json")).sort()
+          .map((name) => JSON.parse(fs.readFileSync(path.join(recordsAbs, name), "utf8")) as Record<string, unknown>);
+        for (const record of records) verifyRecordIntegrity(record);
         const receipt = compactGeneration(records, flags.generation as string);
-        const out = flags.out as string;
+        const outAbs = path.resolve(repoRoot, out);
+        assertRealContained(repoRoot, fs.existsSync(outAbs) ? outAbs : path.dirname(outAbs));
         const bytes = canonicalJson(receipt) + "\n";
-        const changed = !fs.existsSync(out) || fs.readFileSync(out, "utf8") !== bytes;
-        if (changed) writeFileAtomic(out, bytes);
+        const changed = !fs.existsSync(outAbs) || fs.readFileSync(outAbs, "utf8") !== bytes;
+        if (changed) writeFileAtomic(outAbs, bytes);
         printJson({ status: changed ? "applied" : "unchanged", generation: flags.generation, changed_paths: changed ? [out] : [] });
         return;
       }
