@@ -15,9 +15,10 @@ that Northstar provides to consumer projects.
 ## Current work
 
 - Active generation: [`roadmaps/g03/README.md`](./roadmaps/g03/README.md)
-- Last completed task: `g03.005` portable lifecycle core
-- Active task: [`g03.006` portable lifecycle adoption](./roadmaps/g03/006-adopt-portable-lifecycle.md)
-- Approved frontier: `g03.006`; explicit execution authorization required
+- Last completed task: [`g03.006` portable lifecycle adoption](./roadmaps/g03/006-adopt-portable-lifecycle.md),
+  including the published live shadow cutover
+- Active task: none
+- Approved frontier: none; return to Chatterbox for next planning direction
 - Active spec: [`040-portable-task-lifecycle.md`](./specs/040-portable-task-lifecycle.md)
 - Intake: [`triage/README.md`](./triage/README.md)
 - Execution friction: [`../PAPERCUTS.md`](../PAPERCUTS.md)
