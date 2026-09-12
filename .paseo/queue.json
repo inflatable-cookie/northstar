@@ -22,7 +22,7 @@
       "argv": [],
       "timeoutMs": 30000,
       "maxOutputBytes": 65536,
-      "allowedPaths": [".northstar/lifecycle/", "docs/roadmaps/", "docs/README.md"],
+      "allowedPaths": [".northstar/lifecycle/", "docs/roadmaps/", "docs/handoffs/", "docs/README.md"],
       "commitSubject": {
         "prefix": "lifecycle",
         "maxBytes": 100
