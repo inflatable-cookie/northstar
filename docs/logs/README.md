@@ -48,6 +48,10 @@ and limitation evidence for the UI design planning and delivery protocol (`g03.0
 handoff transport, fixtures, exact-head rendered review). No separate
 routine log is required.
 
+`g03.005` is complete. Task `005-portable-lifecycle-core.md` retains the
+portable core outcome, PR #44, accepted exact-head review, merge commit,
+validation, and deferred limits. No separate routine log is required.
+
 ## Cross-project planning evidence
 
 - [Shared knowledge retrieval pilot](2026-09/05-093742-shared-knowledge-retrieval-pilot.md):

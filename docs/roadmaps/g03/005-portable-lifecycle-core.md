@@ -1,6 +1,6 @@
 # g03.005 Portable Lifecycle Core
 
-Status: ready
+Status: complete
 Owner: repo maintainers
 Created: 2026-09-12
 Governing refs: spec 040, system architecture, contract 001
@@ -122,9 +122,31 @@ task ledger, or if the renderer cannot preserve human-owned Markdown exactly.
 
 ## Evidence
 
-On completion, record outcome, focused and full validation, installed standalone
-fixture, PR, independently reviewed exact head, merge commit, and material
-limits. This lane still uses the existing manual Northstar closeout procedure.
+The completion evidence is recorded in the Closeout below. This lane still
+uses the existing manual Northstar closeout procedure.
+
+## Closeout
+
+- The provider-neutral lifecycle core is shipped in the installed Northstar
+  skill: Draft 2020-12 schemas, reducer, standalone adapter, canonical JSON,
+  safe CAS and atomic writes, deterministic Markdown projections, focused
+  adversarial fixtures, installed-consumer proof, reusable doctrine, and
+  copy-ready starter guidance.
+- PR [#44](https://github.com/inflatable-cookie/northstar/pull/44) was accepted
+  at exact head `7c9025f7487e5f28781821f748e09a246cb152db` by the independent
+  review in [comment 5647337751](https://github.com/inflatable-cookie/northstar/pull/44#issuecomment-5647337751)
+  and merged as `f7ef37084649f1ccb4194661de7c5bd522160b97`.
+- The accepted review recorded `check:lifecycle-core` passing 52/52 from both
+  source and the isolated installed consumer, source/install parity for 123
+  files, `effigy qa` (including `qa:docs`), and `git diff --check` on the exact
+  head. The integration checkout was clean and synchronized with `origin/main`
+  at the merge commit before this closeout.
+- No acceptance failure remains. Queue hooks, `.paseo/queue.json`, live
+  Northstar status-authority migration, and generation roll-up remain deferred
+  to their separately owned lanes. The review's non-blocking notes remain
+  limits for later hardening: explicit-path `render`/`compact` do not yet
+  re-check containment, and closeout commits necessarily follow the
+  merge-time synchronized-main evidence.
 
 ## Next task
 

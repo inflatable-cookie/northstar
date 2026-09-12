@@ -8,8 +8,8 @@ Mode: sequential
 
 - `g03`
 - Runway: `g03/README.md`
-- Last completed task: `g03.004` — UI design planning and delivery
-- Active task and approved frontier: `g03.005` — portable lifecycle core
+- Last completed task: `g03.005` — portable lifecycle core
+- Approved frontier: none; return to Chatterbox for planning
 
 ## Generation log
 
@@ -29,4 +29,5 @@ preservation oracle in contract 001 passes.
 
 ## Next task
 
-Execute `g03.005`; no automatic successor is approved.
+Return to Chatterbox to compile standalone adoption and relay the frozen
+generic hook boundary to Queue planning; no automatic successor is approved.
