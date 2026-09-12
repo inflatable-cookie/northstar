@@ -136,6 +136,214 @@ keys with different content, illegal transitions, review/head mismatch, merge
 without accepted exact-head review, and closeout without merge and validation
 evidence. A manual adapter must emit the same payload as Queue.
 
+## Authority and runtime split
+
+Keep four roles distinct:
+
+- the task Markdown owns semantic intent, scope, acceptance, stop conditions,
+  and approved execution policy;
+- the per-task lifecycle record owns portable mechanical state and evidence;
+- Queue owns its richer live operational state when installed;
+- front doors and generation summaries are derived projections.
+
+Queue's database is authoritative for an in-flight Queue run. Its durable
+Northstar checkpoints use a transactional outbox: store the transition intent
+in the same Queue transaction, apply it idempotently through the Northstar
+adapter, then mark it delivered. A crash may leave a pending delivery but must
+not lose or duplicate the transition.
+
+The repository remains conservatively recoverable if Queue disappears. The
+last accepted checkpoint may lag transient runtime activity, but it must never
+claim review, merge, or completion that was not durably proved. Queue may expose
+the fresher live view while connected.
+
+## Portable state model
+
+Use two axes. Do not copy Queue's complete phase vocabulary into Northstar.
+
+Task status:
+
+- `planned`: shaped but not approved for execution;
+- `ready`: approved and eligible when dependencies allow;
+- `active`: execution owns the task;
+- `blocked`: progress stopped, with a typed reason and resumption target;
+- `complete`: accepted delivery and closeout are durable;
+- `cancelled`: stopped without replacement;
+- `superseded`: replaced by named authority.
+
+Execution stage:
+
+- `none`, `dispatch`, `implementation`, `review`, `merge`, or `closeout`.
+
+Status answers whether the task may or did proceed. Stage answers where active
+or blocked work stopped. `complete`, `cancelled`, and `superseded` always use
+`none`. A blocked record preserves its prior status and stage so resumption is
+explicit.
+
+The core transition set should stay small:
+
+```text
+plan -> ready -> start -> advance-stage -> complete
+                    \-> block -> resume --/
+planned|ready|active|blocked -> cancel|supersede
+```
+
+Review revision moves from `review` back to `implementation`; it does not need a
+new task status. Provider failure, missing authority, and ordinary worker
+failure all use `blocked` with different reason codes.
+
+## Queue mapping and gaps
+
+The current Queue model maps cleanly in most places:
+
+| Northstar field | Current Queue source |
+| --- | --- |
+| Planning identity | `planningCommit`, `handoffPath`, `planningBase` |
+| Live version | task `version`, `coordinatorGeneration` |
+| Runtime state | `phase`, `reason`, held state, role runs |
+| Implementation | `prUrl`, `prHead`, worker completion |
+| Review | `resolution.review`, reviewer run and published comment |
+| Verification | `resolution.verification` |
+| Merge | `mergeHead`, `mergeBase`, `mergedCommit`, `externalMerge` |
+| Main synchronization | `syncedCommit` |
+| Closeout | closeout run completion and `closeoutCommit` |
+| Runtime provenance | task, run, workspace, agent, and profile identities |
+
+The first adapter needs to close these gaps:
+
+1. Queue submission has no explicit canonical `gNN.NNN` task ID and task path.
+2. Queue dependencies use Queue UUIDs, not portable Northstar task references.
+3. Validation is mostly prose in completion summaries rather than typed
+   command, result, head, and artifact receipts.
+4. Review evidence needs a portable reviewer identity and independence result,
+   not only Queue run metadata.
+5. Pre-closeout synchronized main and the final closeout commit need distinct
+   fields; `syncedCommit` currently serves both moments.
+6. Review-skip and other exceptional authority need an exact durable
+   authorization reference.
+7. Handoff consumption, retained limitations, and next-task disposition are
+   not structured Queue results.
+
+Queue phases map to the portable axes as follows:
+
+| Queue phases | Portable status | Portable stage |
+| --- | --- | --- |
+| `queued` | `ready` | `none` |
+| `dispatching`, `working` | `active` | `dispatch` or `implementation` |
+| `awaiting_review`, `reviewing`, `changes_requested`, `verifying` | `active` | `review` or `implementation` |
+| `merging` | `active` | `merge` |
+| `syncing`, `closing` | `active` | `closeout` |
+| `blocked`, `error`, `needs_attention` | `blocked` | preserve current stage |
+| `cancelled` | `cancelled` | `none` |
+| `done` | `complete` | `none` |
+
+Held and paused are scheduling controls, not Northstar task statuses. They stay
+in Queue unless they create a durable semantic block.
+
+## Durable checkpoint policy
+
+Do not commit every Queue heartbeat or stage change. Require repository
+checkpoints for:
+
+- planning promotion to `ready`;
+- a durable block, cancellation, or supersession;
+- accepted terminal closeout to `complete`;
+- generation closure and compaction.
+
+`active` stage changes may remain in the runtime store. The standalone adapter
+can retain them in local state or commit them when shared visibility matters.
+Both modes must produce the same terminal receipt from equivalent evidence.
+This equivalence is the portability oracle; identical intermediate commit
+history is not required.
+
+## Transition and record contracts
+
+Adapters submit a transition envelope. They do not construct or overwrite the
+canonical task record directly. The core validates the transition, merges
+evidence, increments the revision, writes canonical JSON, and returns its
+digest.
+
+Illustrative transition envelope:
+
+```json
+{
+  "schema": "northstar.lifecycle.transition.v1",
+  "event_id": "adapter-stable-id",
+  "task": {
+    "id": "g03.005",
+    "path": "docs/roadmaps/g03/005-example.md"
+  },
+  "expected": {
+    "revision": 2,
+    "digest": "sha256:..."
+  },
+  "transition": "complete",
+  "occurred_at": "2026-09-12T18:00:00Z",
+  "actor": {
+    "kind": "orchestrator",
+    "id": "portable-or-local-identity"
+  },
+  "evidence": {},
+  "source": {
+    "adapter": "paseo-northstar-queue",
+    "runtime_task_id": "optional"
+  }
+}
+```
+
+The canonical per-task record contains:
+
+- task ID, path, generation, planning commit, and task-blob digest;
+- current revision, content digest, status, stage, and resumption target;
+- canonical dependency references;
+- approved delivery and review policy with authorization references;
+- implementation and PR identity when applicable;
+- review verdict, exact head, durable review record, reviewer identity, and
+  independence result;
+- verification identity and result;
+- merge head, base, merge commit, and external-merge flag;
+- pre-closeout synchronized-main commit and final closeout commit;
+- typed validation results bound to a head;
+- handoff disposition, limitations, and next-task or `planning_required`
+  disposition;
+- adapter metadata isolated from portable fields; and
+- a compact list of applied durable event IDs and digests.
+
+The applied-event list is not Queue's event history. It exists so a delayed or
+repeated outbox delivery remains idempotent even after later transitions. Git
+history preserves prior record bodies. Generation compaction may reduce closed
+task records into a generation receipt after verifying their digests.
+
+## Standalone write protocol
+
+The bundled adapter should use this sequence for an authority-changing write:
+
+1. Resolve and verify the repository root, integration branch, task path, and
+   planning identity.
+2. Acquire a repository-wide lifecycle lock under Git's common directory.
+3. Reread the task record and verify expected revision and digest.
+4. Validate the transition and required evidence without mutating files.
+5. Write canonical JSON to a same-directory temporary file, flush it, and
+   atomically rename it over the task record.
+6. Regenerate any selected derived projection in the same operation.
+7. Release the lock and return changed paths, new revision, digest, and the
+   commit action still required.
+
+The command must refuse dirty owned paths, stale state, illegal branches,
+ambiguous task identity, and contradictory provider evidence. It must not
+stage, commit, push, merge, or choose the next task unless the invoking mode
+explicitly owns those actions.
+
+Separate task paths remove content conflicts between independent lanes. A
+repository-wide lock protects one shared checkout; expected revision and digest
+protect against stale writes from separate worktrees or machines. Git push can
+still race. The losing integration writer must update, reread, and replay its
+unchanged envelope rather than force or synthesize a merge.
+
+Queue's existing per-repository integration turn can serialize this operation
+after code merges. Standalone orchestration performs the same short integration
+step itself. Workers and reviewers never mutate lifecycle records.
+
 ## Concurrency and merge shape
 
 - Workers do not edit global front doors or lifecycle state in their PRs.
