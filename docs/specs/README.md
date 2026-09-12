@@ -5,8 +5,12 @@ architecture, contracts, and executable roadmaps.
 
 ## Active planning
 
-No active planning specs. Lasting lifecycle and UI-design delivery rules live
-in `docs/architecture/system-architecture.md`, `docs/contracts/001-working-rules.md`,
+- [`040-portable-task-lifecycle.md`](./040-portable-task-lifecycle.md) — active;
+  provider-neutral lifecycle core, standalone adapter, deterministic Markdown,
+  and document-agnostic Queue hook boundary. First execution task: `g03.005`.
+
+Lasting UI-design delivery rules live in
+`docs/architecture/system-architecture.md`, `docs/contracts/001-working-rules.md`,
 and `bundle-docs/sections/11-ui-design-delivery.md`.
 
 ## Lifecycle

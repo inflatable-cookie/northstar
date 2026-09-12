@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-09-11
+Updated: 2026-09-12
 Vision refs: docs/vision/001-northstar-delivery-vision.md
 
 ## Top-Level Stack
@@ -44,6 +44,31 @@ Vision refs: docs/vision/001-northstar-delivery-vision.md
   consumer feedback enters Northstar through the operator as evidence,
   papercuts, research, or planning input. Northstar does not select, dispatch,
   or manage consumer runs.
+
+## Portable task lifecycle
+
+Northstar owns a provider-neutral mechanical lifecycle below semantic roadmap
+planning. Task Markdown remains the authority for outcome, scope, acceptance,
+stop conditions, and approved execution policy. A versioned per-task JSON
+record owns status, stage, exact delivery identities, validation receipts,
+handoff disposition, and closeout completeness. Deterministic marked Markdown
+blocks project those records into browseable task and front-door views; the
+records remain canonical when a projection drifts.
+
+The installed skill supplies one reducer, schema set, standalone adapter, and
+renderer. It works without Paseo, Queue, network access, or a Northstar source
+checkout. Authority-changing writes use canonical serialization, task-local
+paths, a Git-common-directory lock, revision/digest compare-and-swap, and atomic
+replacement. Workers and reviewers do not edit lifecycle state. The integration
+owner applies receipts and owns any resulting commit.
+
+Live orchestration systems are optional adapters. They may keep richer
+transactional runtime state, but equivalent delivery facts must reduce to the
+same terminal Northstar receipt. Queue integration uses a repository-owned
+`.paseo/queue.json` control manifest and generic Queue event/result contracts.
+Queue does not import Northstar or parse its docs; the declared Northstar hook
+translates events into core transitions. Spec 040 owns the staged delivery and
+portability oracle.
 
 ## Language quality packs
 

@@ -7,8 +7,8 @@ generation remains expanded.
 
 - Active generation: [`g03`](./g03/README.md)
 - Last completed task: `g03.004` UI design planning and delivery
-- Active task: none; last completed `g03.004`
-- Approved frontier: none; return to Chatterbox for the next planning checkpoint
+- Active task: [`g03.005`](./g03/005-portable-lifecycle-core.md) portable lifecycle core
+- Approved frontier: `g03.005` only; no concurrent sibling or automatic successor
 - Closed generations: [`g01`](./archive/g01.md) and [`g02`](./archive/g02.md) roll-ups under `archive/`
 
 ## Rules
@@ -23,5 +23,5 @@ generation remains expanded.
 
 ## Next task
 
-Return to Chatterbox for the next planning checkpoint. The bounded watchlist is
-not execution authority.
+Execute `g03.005`, then return to Chatterbox. The bounded watchlist is not
+execution authority.

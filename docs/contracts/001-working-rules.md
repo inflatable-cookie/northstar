@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-09-11
+Updated: 2026-09-12
 Depends on: docs/architecture/system-architecture.md
 Authority owners: repo maintainers
 Affects: bundle-docs, template-bundle, skills, docs, scripts
@@ -86,6 +86,45 @@ non-authoritative.
   preservation but no longer belong in the active specs surface.
 - Keep the archive lean and traceable. Do not treat archived specs as canonical
   execution authority once architecture and contracts carry the truth.
+
+### Mechanical lifecycle state
+
+- Northstar's task lifecycle is provider-neutral and must work from the
+  installed skill without Paseo, Queue, network access, or the Northstar source
+  checkout.
+- Task Markdown owns semantic intent and execution policy. Versioned per-task
+  JSON owns portable mechanical status and delivery evidence. Generated
+  Markdown blocks are derived, machine-readable views with stable sentinels,
+  schema and source digests, fixed grammar, canonical order, and byte-idempotent
+  rendering.
+- Use the compact task statuses `planned`, `ready`, `active`, `blocked`,
+  `complete`, `cancelled`, and `superseded`. Track execution location separately
+  as `none`, `dispatch`, `implementation`, `review`, `merge`, or `closeout`.
+  Adapter-specific phases never become a second Northstar state vocabulary.
+- Authority-changing transitions use exact task/planning identity, stable event
+  IDs, revision/digest compare-and-swap, canonical JSON, atomic replacement,
+  and legal-transition validation. Identical retries are idempotent; stale or
+  conflicting writes fail without changing prior bytes.
+- Different tasks own different record paths. Workers and reviewers never edit
+  lifecycle records or shared projections. A standalone integration owner or a
+  declared orchestration hook applies them after verifying synchronized main.
+- Automation may compute eligible work and render currentness. It cannot choose
+  semantic priority, invent a next task, retire a spec, close a generation, or
+  discard unresolved meaning. Return `planning_required` when authority does
+  not settle the next move.
+- Live orchestration runtimes are optional. Equivalent standalone and adapter
+  executions must produce the same terminal receipt from equivalent evidence.
+  Runtime heartbeats, retries, notifications, and complete event history do not
+  belong in repository state.
+- Queue integration is repository-declared through `.paseo/queue.json`. Queue
+  emits generic versioned events and validates generic hook results; it does not
+  know Northstar task IDs, paths, lifecycle commands, or Markdown structure.
+  The Northstar starter hook performs that translation. Required hook intent is
+  persisted before execution and uncertain writes are reconciled before retry.
+
+Spec 040 owns the exact schema, reducer, standalone write protocol,
+deterministic projection grammar, generic hook boundary, proof matrix, and
+staged adoption.
 
 ### Papercuts feedback loop
 
