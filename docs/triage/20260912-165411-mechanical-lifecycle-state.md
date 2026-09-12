@@ -85,8 +85,9 @@ Use three layers rather than a second lifecycle engine:
    task receipts, and deterministic repository projections.
 2. A bundled standalone adapter applies those transitions directly to
    per-task repository state with atomic writes and compare-and-swap checks.
-3. Queue optionally owns richer live transactional execution and maps its
-   database records onto the same Northstar transitions and receipts.
+3. Queue optionally owns richer live transactional execution and emits generic
+   repository events to repository-declared hooks. A Northstar hook maps those
+   events onto the same Northstar transitions and receipts.
 
 Northstar must be complete without Queue. A repository with Effigy and the
 installed Northstar skill can create, inspect, advance, close, and compact task
@@ -94,18 +95,22 @@ state. The standalone path may be less convenient and offer fewer centralized
 operations, but it must preserve the same lifecycle invariants and final
 evidence.
 
-Queue must not define a second set of lifecycle semantics. It may add leases,
-callbacks, retries, provider routing, role runs, notifications, recovery, and
-queryable history. At durable boundaries it submits the same transition
-envelope the standalone adapter uses and records the accepted receipt version
-and digest. Queue-specific IDs remain additive metadata.
+Queue must not define Northstar lifecycle semantics or know Northstar's document
+layout. It may add leases, callbacks, retries, provider routing, role runs,
+notifications, recovery, queryable history, and generic repository hooks. At
+durable boundaries it emits a Queue event. The repository's declared Northstar
+hook converts that event to the transition envelope the standalone adapter uses
+and returns the accepted receipt version and digest. Queue-specific IDs remain
+additive metadata.
 
-Bind every Queue task to a canonical Northstar task ID and path. Do not infer
-`gNN.NNN` from the handoff name, branch, workspace, or prompt. At
-authority-changing points, the adapter passes a versioned payload to the
-Northstar lifecycle command. The happy-path closeout payload records accepted
-implementation and review heads, merge and synchronized-main identities,
-validation, handoff disposition, and final task state.
+For a Northstar repository, the hook binds each Queue task to a canonical
+Northstar task ID and path. Do not infer `gNN.NNN` from the handoff name,
+branch, workspace, or prompt. A non-Northstar repository may return a different
+opaque canonical identity or none. At authority-changing points, the hook
+passes a versioned payload to the Northstar lifecycle command. The happy-path
+closeout payload records accepted implementation and review heads, merge and
+synchronized-main identities, validation, handoff disposition, and final task
+state.
 
 Store one compact receipt per task rather than copying Queue's complete event
 stream into Git:
@@ -146,16 +151,116 @@ Keep four roles distinct:
 - Queue owns its richer live operational state when installed;
 - front doors and generation summaries are derived projections.
 
-Queue's database is authoritative for an in-flight Queue run. Its durable
-Northstar checkpoints use a transactional outbox: store the transition intent
-in the same Queue transaction, apply it idempotently through the Northstar
-adapter, then mark it delivered. A crash may leave a pending delivery but must
-not lose or duplicate the transition.
+Queue's database is authoritative for an in-flight Queue run. Repository hooks
+use a transactional outbox: Queue stores the generic event intent in the same
+transaction, invokes the pinned repository hook idempotently, then marks the
+delivery accepted. A crash may leave a pending delivery but must not lose or
+duplicate the event. Northstar's hook performs the Northstar transition; Queue
+does not understand the resulting repository files.
 
 The repository remains conservatively recoverable if Queue disappears. The
 last accepted checkpoint may lag transient runtime activity, but it must never
 claim review, merge, or completion that was not durably proved. Queue may expose
 the fresher live view while connected.
+
+## Generic Queue control manifest
+
+Queue should discover an optional, versioned repository control manifest. The
+exact path is unsettled; a dedicated `.paseo/queue.json` avoids coupling the
+plugin's schema evolution to the host `paseo.json` schema. Northstar's starter
+would install the standard Northstar hook declaration. Other repositories could
+declare different commands or no lifecycle hooks.
+
+The manifest describes generic Queue behavior only:
+
+- a committed instruction-artifact contract;
+- hooks bound to named Queue events;
+- hook mode: read-only gate or integration write;
+- required versus advisory delivery;
+- executable and fixed arguments;
+- working tree and base-commit requirements;
+- timeout and output limits;
+- allowed output paths for a write hook; and
+- static or bounded commit-message policy.
+
+Illustrative shape:
+
+```json
+{
+  "schema": "paseo.queue.control.v1",
+  "instruction_artifact": {
+    "kind": "committed_file"
+  },
+  "hooks": [
+    {
+      "on": "submission.validate",
+      "mode": "gate",
+      "required": true,
+      "command": ["effigy", "skill", "run", "--path", "...", "queue:preflight"]
+    },
+    {
+      "on": "integration.synchronized",
+      "mode": "integration_write",
+      "required": true,
+      "command": ["effigy", "skill", "run", "--path", "...", "queue:closeout"],
+      "allowed_paths": [".northstar/lifecycle/**", "docs/**"]
+    }
+  ]
+}
+```
+
+Names and broad illustrative paths above are not frozen. The Northstar starter
+should use narrower generated-path ownership wherever possible.
+
+Queue sends a generic `paseo.queue.event.v1` JSON document on standard input.
+It contains stable task/event IDs, event type and time, repository and base
+identity, committed instruction artifact, Queue version, current phase,
+dependencies, actor/run identities, PR/review/merge facts, and synchronized-main
+identity when available. Values are data; Queue never interpolates them into a
+shell command.
+
+The hook returns `paseo.queue.hook-result.v1` with an event ID, outcome
+(`accepted`, `blocked`, `failed`, or `no_change`), bounded summary, opaque
+repository metadata, changed paths, and optional requested commit subject.
+Northstar metadata may include canonical task ID, lifecycle revision, and
+receipt digest, but Queue stores it opaquely.
+
+For an integration-write hook, Queue:
+
+1. verifies clean synchronized `main` and pins the manifest commit and blob;
+2. invokes the fixed command with a minimal environment and bounded resources;
+3. validates the result schema and event identity;
+4. verifies the actual diff is confined to the manifest's allowed paths;
+5. stages only those paths, commits, pushes, and verifies remote identity; and
+6. records the hook result and published commit before advancing the task.
+
+A blocked or failed hook leaves no partial tracked mutation and prevents the
+required transition. The hook must be idempotent by Queue event ID. Queue
+reconciles an uncertain commit or push before retrying; it never runs the same
+write blindly.
+
+The manifest is trusted local executable configuration, like existing Paseo
+worktree hooks. Queue loads it only from the exact clean base used for the
+event, never from a worker callback, prompt, uncommitted file, or arbitrary PR
+branch. Version 1 should support local commands only; remote webhooks add secret,
+authentication, and delivery policy without helping the first use case.
+
+## Queue core decoupling
+
+The hook boundary exposes two current Queue assumptions that should become
+adapters:
+
+- Core submission should carry a generic committed instruction artifact
+  (`path`, commit, blob digest, media type) rather than a Northstar
+  `handoffPath`. The existing Northstar handoff command resolves and submits
+  that artifact.
+- Core closeout should emit `integration.synchronized` and run the declared
+  hook. The current Northstar-specific coordinator prompt and hard-coded docs
+  write allowlist become the legacy Northstar adapter until the hook path has
+  parity.
+
+Queue may keep its current product name. Its engine and persisted contracts
+should no longer require Northstar documents to operate.
 
 ## Portable state model
 
@@ -418,15 +523,15 @@ must not grow into a parallel scheduler, callback store, or provider runtime.
 
 If structured state becomes canonical for lifecycle facts, current Markdown
 front doors should stop repeating hand-maintained status. Keep their semantic
-runway and links, then either:
+runway and links, then render clearly marked derived blocks from the lifecycle
+index. The operator confirmed that committed Markdown is preferred so long as
+its grammar is deterministic and machine-readable.
 
-- render a clearly marked derived block from the lifecycle index; or
-- make `northstar/lifecycle status` the live status view and keep Markdown free
-  of volatile state.
-
-The first is friendlier on GitHub but retains generated commits. The second is
-cleaner but weakens browse-only visibility. This decision needs a prototype and
-operator preference.
+Generated blocks need stable start/end sentinels, schema version, source digest,
+fixed field labels or table columns, canonical task ordering, normalized line
+endings, and byte-stable rendering. Human edits inside a generated block fail
+verification and are replaced by regeneration. Narrative outside the block
+remains human-owned. Rendering the same receipt set twice must produce no diff.
 
 ## Adoption path
 
@@ -437,8 +542,9 @@ operator preference.
 3. Freeze the receipt schema, actor trust, idempotency, and conflict rules.
 4. Build a read-only validator/projector over fixtures and compare its output
    with current Northstar closeouts.
-5. Build the bundled standalone adapter, then add a Queue reference adapter that
-   produces identical receipts from equivalent facts.
+5. Build the bundled standalone adapter and generic Queue hook contract, then
+   add the Northstar Queue manifest and hook that produce identical receipts
+   from equivalent facts.
 6. Shadow one natural task: keep current Markdown authority while generating a
    terminal receipt and comparing the derived result.
 7. Run the two-concurrent-PR oracle.
@@ -448,9 +554,12 @@ operator preference.
 
 ## Open decisions
 
-- Whether browse-only GitHub status justifies committed generated projections.
-- Whether the Queue adapter invokes the Northstar command directly on
-  synchronized `main` or hands an authenticated receipt to an integration run.
+- Whether Queue control belongs in a dedicated `.paseo/queue.json` or a
+  namespaced extension of `paseo.json`.
+- The minimum generic Queue event vocabulary and integration-write result
+  contract.
+- Whether Queue itself owns the deterministic hook commit or invokes a separate
+  generic integration runner while retaining the same verification gates.
 - Which durable transitions the standalone adapter commits before terminal
   closeout, and how it behaves when no integration writer is available.
 - Which nonterminal dispositions merit portable receipts before final closeout.
