@@ -7,15 +7,18 @@ generation remains expanded.
 
 - Active generation: [`g03`](./g03/README.md)
 - Closed generations: [`g01`](./archive/g01.md) and [`g02`](./archive/g02.md) roll-ups under `archive/`
-- Current task, ready frontier, and delivery state are projected in the
-  generated lifecycle block below. The closeout hook refreshes it; the prose
-  here is semantic and is not hand-updated at closeout.
+- Mechanical task state and delivery evidence are projected in the generated
+  lifecycle block below, refreshed by the closeout hook at publication; the
+  prose here is semantic and is not hand-updated at closeout. An open lane's
+  dispatch authorization is its committed handoff and dispatch manifest.
 
 ## Rules
 
 - The active generation README owns the roadmap; `gNN.NNN` files are the sole
   executable Northstar tasks.
-- Tasks execute only when marked ready in the approved frontier.
+- Tasks execute only from an approved dispatch: a committed handoff plus the
+  task's own dispatch manifest. Mechanical readiness is the projected record
+  state, not a prose claim.
 - Completed tasks retain compact outcome and evidence until generation roll-up.
 - Passive observations live in the active generation's bounded watchlist and do
   not keep old generations open.
@@ -23,7 +26,7 @@ generation remains expanded.
 
 ## Next task
 
-The open lane runs until the closeout hook publishes its terminal record into
+An open lane runs until the closeout hook publishes its terminal record into
 the generated block below; no successor is automatic. After a lane closes,
 return to Chatterbox for direction. The bounded watchlist is not execution
 authority.

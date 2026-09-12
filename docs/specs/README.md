@@ -5,12 +5,26 @@ architecture, contracts, and executable roadmaps.
 
 ## Active planning
 
-None. The portable task lifecycle spec (040) is implementation-complete; its
-lasting clauses live in `docs/architecture/system-architecture.md`,
-`docs/contracts/001-working-rules.md`,
-[`skills/northstar/references/lifecycle/README.md`](../../skills/northstar/references/lifecycle/README.md),
-and `bundle-docs/sections/12-portable-task-lifecycle.md`. Northstar keeps no
-active spec open while the current frontier executes.
+None. The portable task lifecycle spec (040) is implementation-complete and
+has been removed after promotion. Retirement inventory:
+
+- Exact schemas, reducer, envelope/digest framing, standalone write protocol,
+  projection grammar, hook adapter behavior, and the proof matrix →
+  [`skills/northstar/references/lifecycle/README.md`](../../skills/northstar/references/lifecycle/README.md)
+  and the lifecycle self-tests (`check:lifecycle-core`,
+  `check:lifecycle-adoption`).
+- State model, authority boundaries, durable checkpoints, and the currentness
+  rules → `docs/contracts/001-working-rules.md` and
+  `bundle-docs/sections/12-portable-task-lifecycle.md`.
+- System shape and the hook-owned closeout publication →
+  `docs/architecture/system-architecture.md`.
+- Non-goals (no runtime history in Git, no repository-wide ledger, no
+  automated semantic priority, no second permanent closeout route) → the
+  section 12 boundary and contract 001 mechanical-lifecycle rules.
+- Queue-side closeout-prompt retirement note → section 12.
+- Historical delivery sequencing → Git history; complete and non-authoritative.
+
+Northstar keeps no active spec open while the current frontier executes.
 
 Lasting UI-design delivery rules live in
 `docs/architecture/system-architecture.md`, `docs/contracts/001-working-rules.md`,

@@ -8,9 +8,9 @@ Mode: sequential
 
 - `g03`
 - Runway: `g03/README.md`
-- Current task, ready frontier, and delivery state are projected in the
-  generated lifecycle blocks under `docs/README.md`, `docs/roadmaps/README.md`,
-  and `g03/README.md`; this index stays strategic.
+- Mechanical task state and delivery evidence are projected in the generated
+  lifecycle blocks under `docs/README.md`, `docs/roadmaps/README.md`, and
+  `g03/README.md`; this index stays strategic.
 - Next sequencing decision after the open lane closes: return to Chatterbox;
   no automatic successor.
 

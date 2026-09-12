@@ -3,14 +3,14 @@
 Status: complete
 Owner: repo maintainers
 Created: 2026-09-12
-Governing refs: spec 040, system architecture, contract 001
+Governing refs: system architecture, contract 001, bundle section 12
 Depends on: `g03.004` complete
 UI classification: none
 
 ## Outcome
 
 Ship the provider-neutral task-lifecycle schemas, reducer, standalone adapter,
-and deterministic Markdown renderer defined by spec 040. Prove the core works
+and deterministic Markdown renderer of the portable task lifecycle. Prove the core works
 without Paseo or Queue. Do not migrate live Northstar task authority or edit the
 Queue plugin in this lane.
 
@@ -44,7 +44,7 @@ Not applicable.
   siblings, no automatic successor.
 - **Completion:** schemas, state reducer, standalone command, deterministic
   renderer, fixtures, source/install parity, reusable doctrine, and focused
-  checks satisfy spec 040; independent review accepts the exact PR head; PR
+  checks satisfy the portable lifecycle contract; independent review accepts the exact PR head; PR
   merges; local `main` is synchronized; ordinary manual closeout records this
   task because live authority has not migrated yet.
 - **Owned mutable paths:** new lifecycle schemas/references/scripts/fixtures
@@ -52,10 +52,10 @@ Not applicable.
   templates under `bundle-docs/**` and `template-bundle/**`; necessary
   `effigy.toml` and `scripts/**` validation wiring; and its eventual worker
   handoff.
-- **Reserved closeout surfaces:** system architecture, contract 001, spec 040,
+- **Reserved closeout surfaces:** system architecture, contract 001,
   this task, `docs/roadmaps/g03/README.md`,
   `docs/roadmaps/README.md`, `docs/roadmaps/generation-index.md`,
-  `docs/README.md`, `docs/specs/README.md`, spec 040, and any justified compact
+  `docs/README.md`, `docs/specs/README.md`, and any justified compact
   evidence record.
 - **Worker:** automatic adequate complex implementation pool; reviewer must use
   an independent provider/model identity.

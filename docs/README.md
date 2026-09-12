@@ -15,11 +15,11 @@ that Northstar provides to consumer projects.
 ## Current work
 
 - Active generation: [`roadmaps/g03/README.md`](./roadmaps/g03/README.md)
-- Current task, ready frontier, and delivery state: projected in the generated
-  lifecycle block below and in the roadmaps front doors. The closeout hook
-  refreshes them; prose here stays semantic and is not hand-updated at
-  closeout.
-- Dispatch authorization for the open lane: that task's committed handoff and
+- Mechanical task state and delivery evidence: projected in the generated
+  lifecycle block below and the roadmaps front doors, refreshed by the
+  closeout hook at publication. Prose here stays semantic and is not
+  hand-updated at closeout.
+- Dispatch authorization for an open lane: that task's committed handoff and
   its dispatch manifest.
 - Intake: [`triage/README.md`](./triage/README.md)
 - Execution friction: [`../PAPERCUTS.md`](../PAPERCUTS.md)

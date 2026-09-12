@@ -15,21 +15,21 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 | Move material UI design decisions before dispatch and require rendered exact-head delivery review. | complete as `g03.004` | section 11, contract 001 | observe first natural consumer lanes |
 | Replace agent-written mechanical lifecycle bookkeeping with a portable core and deterministic projections. | complete as `g03.005` | system architecture, contract 001, bundle section 12 | continue with `g03.006` adoption |
 | Integrate rich runtimes without making Northstar or Queue depend on each other's internal structure. | complete as `g03.006`; terminal record and projections published as `d244d83` | bundle section 12; Queue contract v1 | Chatterbox next planning direction |
-| Finish hook-owned mechanical closeout and remove duplicate mutable Markdown state. | current: `g03.007` | system architecture, contract 001, bundle section 12; Queue g01.010 | hook-owned closeout proof, then Chatterbox |
-| Reduce repeated protocol enumerations and retire genuinely redundant modes without merging distinct behavior blindly. | queued | contract 001, later usage evidence | Chatterbox sequencing after the current lane |
+| Finish hook-owned mechanical closeout and remove duplicate mutable Markdown state. | active | system architecture, contract 001, bundle section 12; Queue g01.010 | closeout proof, then Chatterbox sequencing |
+| Reduce repeated protocol enumerations and retire genuinely redundant modes without merging distinct behavior blindly. | next | contract 001, later usage evidence | Chatterbox sequencing after the active goal |
 | Keep unresolved operator feedback visible without pinning old generations open. | watch | contract 001 | bounded watchlist below |
 
-The current lane's mechanical state — status, stage, revision, delivery
-digests — is the generated lifecycle block at the end of this file. The
-closeout hook refreshes it; runway rows above stay coarse goal-sequencing
-intent and are not a per-task status mirror.
+Task mechanical state — status, stage, revision, delivery digests — is the
+generated lifecycle block at the end of this file, refreshed by the closeout
+hook at publication. Runway rows above stay coarse goal-sequencing intent and
+are not a per-task status mirror.
 
 ## Current lane
 
-One lane executes at a time. Its dispatch authorization is the committed
-handoff plus the task's own dispatch manifest; no concurrent sibling and no
-automatic successor are authorized. Queue repository work remains separately
-owned and is not part of this lane.
+One lane executes at a time. Dispatch authorization for an open lane is its
+committed handoff plus the task's own dispatch manifest; no concurrent sibling
+and no automatic successor are authorized. Queue repository work remains
+separately owned and is not part of this runway.
 
 ## Bounded watchlist
 
@@ -59,8 +59,8 @@ completion in the runway above and in Git history.
 
 ## Next task
 
-The open lane runs until the closeout hook publishes its terminal record into
-the generated block below. After it closes, return to Chatterbox; do not
+An open lane runs until the closeout hook publishes its terminal record into
+the generated block below. After a lane closes, return to Chatterbox; do not
 dispatch a successor automatically.
 <!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v1 digest=sha256:b61aa082aa7612cc3d8848350f8e5de1ab59472b2c4f7b4c6cba74ae9d93228a -->
 | Task | Status | Stage | Revision | Record digest |
