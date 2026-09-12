@@ -159,8 +159,9 @@ routine tool prompts; it does not expand the child's Northstar authority.
   integration branch after operator confirmation, and provenance-labelled
   direction to the coordinator (`operator-confirmed direction`, `Chatterbox
   ruling`, `Chatterbox recommendation`, `administrative notice`); no
-  product/runtime implementation, worker supervision, review, or merge
-  authority.
+  worker supervision, review, or merge authority. A current explicit operator
+  instruction may authorize one local, reversible, low-risk direct change under
+  Chatterbox mode's complete gate; material implementation still dispatches.
 
 ## Conversation style
 

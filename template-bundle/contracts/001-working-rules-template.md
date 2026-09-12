@@ -341,8 +341,20 @@ informal habits.
   promotion, lane/dependency design, and the approved parallel frontier.
 - After explicit operator confirmation, Chatterbox edits, validates, commits,
   and pushes the coherent canonical planning update directly on the integration
-  branch. It does not dispatch a promotion worker and does not implement
-  product/runtime changes, accept reviews, or merge implementation PRs.
+  branch. It does not dispatch a promotion worker, accept reviews, or merge
+  implementation PRs.
+- Chatterbox is planning-first. A current explicit operator instruction may
+  authorize one named small direct change. Unambiguous language such as “make
+  this edit” or “fix this here” is sufficient; do not require a magic phrase.
+  The behavior must be settled; the
+  patch is local, reversible, low-risk, and focused-validation-ready; it adds no
+  dependency, migration, schema/data change, release or CI/workflow mutation,
+  external side effect, or cross-repository edit; no worker or PR owns the same
+  behavior or paths; and the shared integration checkout can preserve unrelated
+  state. File count alone is not the test. State the exception before editing,
+  stage only owned paths, validate, review, commit, and push the exact batch.
+  Authorization applies only to the named change. If a condition fails or the
+  work becomes material, stop and use the normal task and worker loop.
 - Chatterboxes share the checkout. They create unique
   `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files for new issues and update
   existing notes in place as those issues change, staged with

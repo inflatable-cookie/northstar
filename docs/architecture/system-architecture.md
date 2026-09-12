@@ -387,6 +387,14 @@ parallel frontier. Operator confirmation gates material promotion. Chatterbox
 commits the coherent planning state directly; no promotion-only worker sits
 between conversation and readiness.
 
+A current explicit operator instruction may also authorize one small direct
+change in the shared integration checkout. The behavior must be settled, the
+patch local, reversible, low-risk, unowned by an active worker or PR, and
+provable with focused validation; it may not add a dependency, migration,
+schema/data change, release or CI/workflow mutation, external side effect, or
+cross-repository edit. The grant ends with the named change. Material work
+still moves through a task and worker.
+
 Triage is mutable live intake. Chatterbox updates the existing note when the
 same issue changes instead of creating correction or deprecation notes. Full
 promotion deletes the source note in the coherent planning commit; partial
@@ -552,8 +560,9 @@ recommendations not yet accepted, evidence and alternatives, unresolved
 questions, and affected authority surfaces; only operator confirmation through
 the orchestrator makes it promotable.
 
-Chatterboxes have no planning, readiness, implementation, review, merge, or
-dispatch authority.
+In this superseded topology, chatterboxes had no planning, readiness,
+implementation, review, merge, or dispatch authority. The current topology
+above replaces that boundary.
 
 Each worker owns only the assigned ready tasks in its dedicated worktree and
 branch. Model routing treats current profiles as a portfolio. For each run the

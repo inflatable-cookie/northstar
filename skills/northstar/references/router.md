@@ -321,11 +321,14 @@ in place, and prunes them during promotion with exact-path git isolation. It
 reconciles triage notes and directly promotes canonical planning on the
 integration branch after explicit operator confirmation, and sends
 provenance-labelled direction to the coordinator. It does not implement
-product/runtime code, supervise workers, review PRs, or merge.
+product/runtime code by default, supervise workers, review PRs, or merge. A
+current explicit operator instruction may activate Chatterbox mode's bounded
+small-direct-change gate; that exception permits one local, reversible,
+low-risk change when no worker owns it and focused validation is available.
 
 **Precedence:** Explicit orchestrator, worker, planning-delegate, continuation,
-or PR-review requests keep those routes. A chatterbox asked to implement product
-code, review PRs, or merge refuses and points at the orchestrator.
+or PR-review requests keep those routes. A material implementation request stays
+with the coordinator/worker loop. PR review and merge stay outside Chatterbox.
 
 → [`modes/chatterbox.md`](./modes/chatterbox.md)
 

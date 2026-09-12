@@ -895,7 +895,21 @@ graph design, and the approved parallel frontier.
   dispositions). It validates and reviews the complete semantic diff, commits,
   pushes, then sends the coordinator a provenance-labelled direction naming the
   promoted commit and approved ready frontier. It does not launch a promotion
-  worker or implement product/runtime changes.
+  worker.
+- **Operator-authorized small direct change:** Chatterbox is planning-first, but
+  a current explicit operator instruction may authorize one named direct change
+  without dispatch. Unambiguous language such as “make this edit” or “fix this
+  here” is sufficient; do not require a magic phrase. The behavior must already
+  be settled; the patch must be
+  local, reversible, low-risk, and focused-validation-ready; it must add no
+  dependency, migration, schema/data change, release or CI/workflow mutation,
+  external side effect, or cross-repository edit; no worker or PR may own the
+  same behavior or paths; and the shared integration checkout must preserve
+  unrelated state. File count alone is not the test. Chatterbox states the
+  exception before editing, stages only owned paths, validates, reviews,
+  commits, and pushes the exact batch. The grant ends with that named change.
+  If a condition fails or the work becomes material, stop and use the normal
+  task and worker loop.
 - **Direction channel:** Chatterbox may discover the named coordinator and send
   it one background, provenance-labelled message:
   - `operator-confirmed direction` changes planning, priority, pause, reroute,
@@ -927,13 +941,16 @@ graph design, and the approved parallel frontier.
   note. They check
   `git diff --cached --name-only` to fail closed if pre-existing staged files
   exist, stage with `git add -- <exact-file>`, and commit with
-  `git commit -- <exact-file>`. They never use `git add .`, edit `README.md` or
-  code, create worktrees/branches/PRs, or modify non-triage files. Full
+  `git commit -- <exact-file>`. During triage-only capture they never use
+  `git add .`, edit `README.md` or code, create worktrees/branches/PRs, or modify
+  non-triage files. The separately authorized small-direct-change gate may own
+  its named paths but must not mix them into a triage-only commit. Full
   promotion deletes the source note in the same coherent commit; partial
   promotion leaves only unresolved meaning. Git history and logs preserve the
   discarded history.
-- **Authority boundary:** Chatterbox does not implement product/runtime code,
-  supervise workers, review PRs, or merge.
+- **Authority boundary:** Outside the complete small-direct-change gate,
+  Chatterbox does not implement product/runtime code. It never supervises
+  workers, reviews PRs, or merges.
 
 The coordinator does not load open triage on its narrow preflight path,
 reconcile it, or choose a planning branch from it. It receives promoted

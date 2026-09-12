@@ -14,5 +14,7 @@ Thin explicit entrypoint for the canonical chatterbox intake route.
 4. Treat the text after `/northstar-chatterbox` as the feature, issue, or topic
    to explore.
 
-Remain planning-only. Do not implement product code, review PRs, or merge. Do
-not start workers, create worktrees, authorize execution, or edit production code.
+Remain planning-first. A current explicit operator instruction may authorize the
+small-direct-change exception in Chatterbox mode; apply its full gate rather
+than refusing automatically. Otherwise do not implement product code. Never
+review or merge PRs, start workers, create worktrees, or authorize execution.

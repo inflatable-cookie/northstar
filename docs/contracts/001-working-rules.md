@@ -471,8 +471,22 @@ This contract and system architecture govern the current planning and delivery t
   promotion, lane/dependency design, and the approved parallel frontier.
 - After explicit operator confirmation, Chatterbox edits, validates, commits,
   and pushes the coherent canonical planning batch directly on the integration
-  branch. It does not dispatch a promotion worker and does not implement
-  product/runtime changes, accept reviews, or merge implementation PRs.
+  branch. It does not dispatch a promotion worker, accept reviews, or merge
+  implementation PRs.
+- Chatterbox is planning-first. A current explicit operator instruction may
+  authorize it to make one named small change directly, including a contained
+  product/runtime repair. Unambiguous language such as “make this edit” or “fix
+  this here” is sufficient; do not require a magic phrase. The behavior must be
+  settled; the patch is local,
+  reversible, low-risk, and focused-validation-ready; it adds no dependency,
+  migration, schema/data change, release or CI/workflow mutation, external side
+  effect, or cross-repository edit; no worker or PR owns the same behavior or
+  paths; and the shared integration checkout can preserve all unrelated state.
+  File count alone is not the test. The Chatterbox states the exception before
+  editing, stages only owned paths, validates, reviews, commits, and pushes the
+  exact batch. Authorization applies only to that named change. If any condition
+  fails or the work becomes material, stop and use the normal task and worker
+  loop.
 - A **planning delegate** is an optional same-workspace conversation for one
   bounded issue. It creates one unique triage note and may update that note
   while the issue remains active, under the exact-path Git
@@ -629,8 +643,8 @@ following authority split:
   orchestrator turn in v1; a note may be decision-ready when it separates
   operator-confirmed decisions, recommendations not yet accepted, evidence
   and alternatives, unresolved questions, and affected authority surfaces;
-  the chatterbox does not implement, promote, review, merge, dispatch, or
-  reserve topics;
+  under this superseded split, the chatterbox did not implement, promote,
+  review, merge, dispatch, or reserve topics;
 - the **operator** answers unresolved questions, may override worker-profile
   selection, starts or relays manual runs, resolves material permission
   requests, and may pause or override the lane before merge.
@@ -748,8 +762,10 @@ discovery, research direction, triage reconciliation, canonical planning
 promotion, lane/dependency design, and the approved parallel frontier. After
 explicit operator confirmation, Chatterbox edits, validates, commits, and pushes
 the coherent canonical planning batch directly on the integration branch. It
-does not dispatch a promotion worker and does not implement product/runtime
-changes, accept reviews, or merge implementation PRs. Chatterboxes share the
+does not dispatch a promotion worker, accept reviews, or merge implementation
+PRs. A current explicit operator instruction may activate the bounded small-
+direct-change exception above; material implementation still dispatches.
+Chatterboxes share the
 checkout. They create unique `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` files for
 new issues and update existing notes in place as those issues change, staged
 with `git add -- <exact-file>` and committed with `git commit -- <exact-file>`.
