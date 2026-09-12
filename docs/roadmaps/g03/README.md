@@ -15,15 +15,15 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 | Move material UI design decisions before dispatch and require rendered exact-head delivery review. | complete as `g03.004` | section 11, contract 001 | observe first natural consumer lanes |
 | Replace agent-written mechanical lifecycle bookkeeping with a portable core and deterministic projections. | complete as `g03.005` | spec 040, system architecture, contract 001 | continue with `g03.006` adoption |
 | Integrate rich runtimes without making Northstar or Queue depend on each other's internal structure. | complete as `g03.006`; terminal record and projections published as `d244d83` | spec 040; Queue contract v1 | Chatterbox next planning direction |
+| Finish hook-owned mechanical closeout and remove duplicate mutable Markdown state. | ready as `g03.007` | spec 040; Queue g01.010 | execute `g03.007` only |
 | Reduce repeated protocol enumerations and retire genuinely redundant modes without merging distinct behavior blindly. | planned | contract 001, later usage evidence | pending after `g03.001` |
 | Keep unresolved operator feedback visible without pinning old generations open. | watch | contract 001 | bounded watchlist below |
 
 ## Approved frontier
 
-`g03.006` is complete, including the published live shadow cutover. No task
-is approved; no concurrent sibling or automatic successor is authorized.
+`g03.007` only. No concurrent sibling or automatic successor is authorized.
 Queue repository work remains separately owned and is not part of this
-frontier. Return to Chatterbox for next planning direction.
+frontier.
 
 ## Bounded watchlist
 
@@ -45,8 +45,9 @@ frontier. Return to Chatterbox for next planning direction.
 - `004-ui-design-planning-and-delivery.md` — complete
 - `005-portable-lifecycle-core.md` — complete
 - `006-adopt-portable-lifecycle.md` — complete
+- `007-finish-hook-owned-closeout.md` — ready
 
 ## Next task
 
-`g03.006` cutover is published as `d244d83`. Return to Chatterbox for next
-planning direction. Do not dispatch automatically.
+Execute `g03.007` only. After its live hook result, return to Chatterbox; do not
+dispatch a successor automatically.

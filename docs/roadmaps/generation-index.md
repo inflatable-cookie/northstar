@@ -9,7 +9,7 @@ Mode: sequential
 - `g03`
 - Runway: `g03/README.md`
 - Last completed task: `g03.006` — portable lifecycle adoption (cutover published as `d244d83`)
-- Approved frontier: none; return to Chatterbox for next planning direction
+- Approved frontier: `g03.007` only — finish hook-owned closeout
 
 ## Generation log
 
@@ -29,5 +29,5 @@ preservation oracle in contract 001 passes.
 
 ## Next task
 
-`g03.006` cutover is published as `d244d83`. Return to Chatterbox for next
-planning direction; no automatic successor is approved.
+[`g03.007`](./g03/007-finish-hook-owned-closeout.md) is the sole approved
+frontier. No automatic successor is approved.
