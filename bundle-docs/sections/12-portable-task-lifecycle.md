@@ -62,8 +62,26 @@ Adopt records and generated blocks only after the standalone core passes its
 own oracle. Keep semantic priority human-owned. Return `planning_required` when
 authority does not settle the next move instead of selecting work.
 
-## Deferred
+Records begin at the adoption boundary; earlier closed tasks keep their Git
+and provider evidence, and no adapter fabricates receipts for them.
 
-Orchestration control manifests and generic event/result contracts belong to
-the orchestrator product, not this doctrine. A repository declares its hook
-translation later; until then the standalone adapter is the only writer.
+## Optional Queue driver
+
+A repository may declare `.paseo/queue.json` using Queue's frozen generic
+contracts so Queue events drive the same reducer through a thin repository
+hook. Queue stays document-system agnostic: it transports opaque events,
+executes a pinned committed launcher without a shell, validates the closed
+result, and owns staging, commit, push, and uncertain-effect reconciliation.
+It never learns Northstar paths, task IDs, commands, or Markdown.
+
+The hook adapter translates generic events into the same canonical
+transition envelopes the standalone adapter submits, preserves evidence
+levels exactly (provider facts attested, Git facts locally verified), and
+reduces a terminal receipt equivalent to the standalone path from equivalent
+facts. A repeated event is a no-diff replay. Required hooks that fail or
+diverge hold the transition visibly instead of silently degrading.
+
+Equivalent standalone and hook executions must produce the same portable
+digest. Two permanent closeout routes are forbidden: hand-maintained status
+fields retire together with their callers once generated projections carry
+them.

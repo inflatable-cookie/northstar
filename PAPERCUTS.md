@@ -5,6 +5,18 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 
 ## Open
 
+- **2026-09-12 — lexical containment breaks on doubled path separators in
+  fixtures:** building fixture repositories under `${TMPDIR}` with a trailing
+  slash (macOS `/var/folders/.../T/`) handed `applyEnvelope` a repo root
+  spelled with `//`, while `path.resolve` collapses separators, so containment
+  failed with a false "path escapes repository root"; impact is confusing
+  fixture failures for anyone passing raw `mktemp -d` paths into the lifecycle
+  core; plausible fix is normalizing `repoRoot` through `fs.realpathSync` (or
+  `path.normalize`) once inside `applyEnvelope`; affected surfaces are
+  `skills/northstar/scripts/lifecycle-core.ts` and every fixture that passes
+  `--repo` (worked around in `scripts/tests/lifecycle-adoption/self-test.sh`
+  by canonicalizing the scratch path with `cd && pwd -P`).
+
 - **2026-09-11 — adding one `qa:docs` task edits three mirrored lists:** wiring
   `check:ui-protocol` / `test:ui-protocol` into docs QA required the same exact
   task-list string in `effigy.toml`, the `stable_machine_contracts` entry in

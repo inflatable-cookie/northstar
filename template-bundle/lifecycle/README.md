@@ -1,12 +1,12 @@
 # Portable Lifecycle Starter
 
-Status: deferred starter
+Status: adoption starter
 Owner: repo maintainers
 Governing refs: bundle-docs/sections/12-portable-task-lifecycle.md
 
-This folder is the copy-ready pointer for a repository that adopts the portable
-task lifecycle. It carries guidance only; the installed Northstar skill owns the
-schemas, reducer, standalone adapter, and renderer.
+This folder is the copy-ready starter for a repository adopting the portable
+task lifecycle. It carries guidance plus the three hook files; the installed
+Northstar skill owns the schemas, reducer, adapters, and renderer.
 
 ## Artifact set
 
@@ -14,39 +14,63 @@ schemas, reducer, standalone adapter, and renderer.
 .northstar/lifecycle/v1/
   tasks/gNN.NNN.json
   generations/gNN.json        # derived only when a generation is closed
+  projection-targets.json     # declared projection surfaces
 ```
 
-Commit the per-task JSON records. Do not hand-edit them and do not let a worker
-or reviewer write them. One integration owner or declared hook applies
-transitions through the core, then commits the changed paths it returns.
+Commit the per-task JSON records. Do not hand-edit them and do not let a
+worker or reviewer write them. The lifecycle command or the declared hook
+applies transitions, then the integration owner commits the changed paths it
+returns.
 
 Task Markdown keeps outcome, scope, decisions, acceptance, stop conditions,
 policy, and UI brief. A generated block between stable sentinels projects the
-record. Leave everything outside the sentinels alone.
+record. Leave everything outside the sentinels alone; a task file opts into
+currentness by carrying the block.
 
-## Commands
+## Standalone commands
 
 ```bash
 bun run <installed-northstar>/scripts/lifecycle-core.ts oracle
 bun run <installed-northstar>/scripts/lifecycle-core.ts status --repo .
 bun run <installed-northstar>/scripts/lifecycle-core.ts frontier --repo .
 bun run <installed-northstar>/scripts/lifecycle-core.ts apply --repo . --envelope envelope.json
-bun run <installed-northstar>/scripts/lifecycle-core.ts render --records .northstar/lifecycle/v1/tasks --target docs/roadmaps/README.md
+bun run <installed-northstar>/scripts/lifecycle-core.ts render --repo . --records .northstar/lifecycle/v1/tasks --target docs/roadmaps/README.md
 ```
 
-The command returns changed paths, the new revision and digest, and the required
-commit action. It never stages, commits, pushes, merges, dispatches, or selects
-the next task.
+The command returns changed paths, the new revision and digest, and the
+required commit action. It never stages, commits, pushes, merges, dispatches,
+or selects the next task. Explicit paths are containment-checked; escaping,
+outside, or symlinked paths fail without changing bytes.
 
-## Deferred: orchestration hooks
+## Queue hook adoption
 
-`.paseo/queue.json`, generic event/result contracts, and automated projection
-writes are not part of this starter. They arrive in a later integration lane.
-Until then, run the standalone adapter and commit its returned paths by hand.
+To let Queue drive the same lifecycle, copy three files:
+
+1. `queue.json` → `.paseo/queue.json` (the control manifest);
+2. `hooks/northstar-lifecycle` → `.paseo/hooks/northstar-lifecycle`
+   (committed, executable, `chmod +x`);
+3. `projection-targets.json` → `.northstar/lifecycle/v1/projection-targets.json`
+   (then edit the target list to your front doors).
+
+The manifest binds a read-only `task.pre_dispatch` gate and a required
+integration-write hook for `task.blocked`, `task.cancelled`, and
+`task.closeout`. Queue executes the pinned launcher without a shell, validates
+result and changed paths, and owns staging, commit, push, and reconciliation.
+The adapter itself runs from the installed skill, so the repository depends on
+no Paseo, Queue, network, or Northstar source checkout.
+
+Adoption boundary: records begin with the first task dispatched after the
+manifest lands. Earlier closed tasks keep their Git and provider evidence;
+the closeout hook never fabricates receipts for them. The standalone adapter
+remains first-class and produces the same terminal receipt from equivalent
+facts. Remove hand-maintained status fields from front doors only after the
+generated projections carry them.
 
 ## Do not
 
 - copy runtime heartbeats, retries, or notifications into Git;
-- edit a generated block by hand;
+- edit a generated block, a record, or the manifest's executable by hand;
 - let automation choose priority, invent a next task, or retire a spec;
-- add a repository-wide mutable task ledger.
+- add a repository-wide mutable task ledger;
+- declare Queue paths, statuses, or commands inside `.northstar/` artifacts —
+  Queue metadata stays opaque and additive in Northstar receipts.

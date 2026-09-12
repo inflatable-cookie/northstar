@@ -1,0 +1,32 @@
+{
+  "schema": "paseo.queue.control.v1",
+  "hooks": [
+    {
+      "id": "lifecycle-gate",
+      "events": ["task.pre_dispatch"],
+      "mode": "read_only",
+      "delivery": "required",
+      "executable": ".paseo/hooks/northstar-lifecycle",
+      "argv": [],
+      "timeoutMs": 30000,
+      "maxOutputBytes": 65536,
+      "allowedPaths": [],
+      "commitSubject": null
+    },
+    {
+      "id": "lifecycle-state",
+      "events": ["task.blocked", "task.cancelled", "task.closeout"],
+      "mode": "integration_write",
+      "delivery": "required",
+      "executable": ".paseo/hooks/northstar-lifecycle",
+      "argv": [],
+      "timeoutMs": 30000,
+      "maxOutputBytes": 65536,
+      "allowedPaths": [".northstar/lifecycle/", "docs/roadmaps/", "docs/README.md"],
+      "commitSubject": {
+        "prefix": "lifecycle",
+        "maxBytes": 100
+      }
+    }
+  ]
+}

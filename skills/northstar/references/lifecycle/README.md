@@ -10,9 +10,9 @@ deterministic Markdown projector implemented in
 [`../../scripts/lifecycle-core.ts`](../../scripts/lifecycle-core.ts).
 
 The installed skill runs the whole surface without Paseo, Queue, network
-access, a daemon, a database, or the Northstar source checkout. Queue
-repository hooks are deliberately outside this lane; they submit the same
-transition envelope later.
+access, a daemon, a database, or the Northstar source checkout. Queue is an
+optional driver of the same reducer: its generic repository events reach the
+standalone core through the Northstar-owned hook adapter described below.
 
 ## Artifact set
 
@@ -35,6 +35,9 @@ derived projection. When the two disagree, the record wins.
 | [`task-record.schema.json`](./task-record.schema.json) | Canonical per-task mechanical state |
 | [`evidence.schema.json`](./evidence.schema.json) | One compact evidence entry |
 | [`projection.schema.json`](./projection.schema.json) | Generated Markdown block metadata |
+| [`queue-event.schema.json`](./queue-event.schema.json) | Frozen Queue generic event contract (closed mirror) |
+| [`queue-result.schema.json`](./queue-result.schema.json) | Frozen Queue hook-result contract (closed mirror) |
+| [`queue-control.schema.json`](./queue-control.schema.json) | Frozen Queue control-manifest contract (closed mirror) |
 
 ## Status and stage
 
@@ -92,7 +95,11 @@ local validation receipts. It cannot verify provider state, so a
 attestation into independent or cryptographic proof.
 
 Completion requires merge, synchronized-main, validation, and closeout handoff
-evidence. Standard delivery also requires a PR and an accepted review at the
+evidence. Synchronized main must contain the merge commit in its ancestry:
+main may lawfully advance between merge and closeout (interleaved
+publications, closeout Markdown), so ancestry — not equality — is the durable
+local proof, verified by Git when the entry is `locally_verified`.
+Standard delivery also requires a PR and an accepted review at the
 exact merged head. A declared `direct_delivery` or `review_skip` policy needs an
 exact `operator_authorized` authorization reference.
 
@@ -129,11 +136,53 @@ invents work; an empty runway returns `planning_required`. `compact` reduces a
 closed generation of terminal records into one generation receipt with source
 digests.
 
-## Deferred Queue integration
+## Generic Queue hook adapter
 
-`.paseo/queue.json`, Queue event/result contracts, generic repository hooks, and
-live Northstar status migration are later lanes. The copy-ready starter guidance
-ships at `template-bundle/lifecycle/README.md` and is explicitly marked deferred.
+Queue integration is live behind the frozen generic contracts at Queue
+`2c528543b00147556acd4a5ed74b3784d0fee056` (contract 005, spec 001): schemas
+`paseo.queue.control.v1`, `paseo.queue.event.v1`, and
+`paseo.queue.hook-result.v1`; events `task.pre_dispatch`, `task.blocked`,
+`task.cancelled`, and `task.closeout`. Queue stays document-system agnostic —
+it never learns Northstar paths, task IDs, commands, or Markdown.
+
+The installed adapter is [`../../scripts/lifecycle-queue-hook.ts`](../../scripts/lifecycle-queue-hook.ts).
+It reads one closed event on stdin, reconstructs the exact Northstar task and
+planning identity from the committed handoff and task history, maps the event
+to the same canonical transition envelopes the standalone adapter submits,
+pre-passes the whole chain through the pure reducer before touching a byte,
+and returns one closed hook result. Committed contract mirrors live beside
+the lifecycle schemas: `queue-event.schema.json`, `queue-result.schema.json`,
+and `queue-control.schema.json`.
+
+Event mapping:
+
+- `task.pre_dispatch` (read-only gate): verifies the instruction artifact
+  digest and that the planning identity reconstructed from committed task
+  history matches any existing record. Never writes.
+- `task.blocked` / `task.cancelled` (integration-write): applies a durable
+  `block` or `cancel` transition when a record exists; returns `ok` with an
+  explicit skip reason when no record exists yet — the durable state then
+  lives in Queue only, and the repository record never fabricates one.
+- `task.closeout` (integration-write): the cutover path. When no record
+  exists (the bootstrap case), it deterministically reduces the canonical
+  sequence from the reconstructed ready planning identity to a terminal
+  receipt using derived stable event IDs (`queue-<hash>-<seq>-<transition>`).
+  It never fabricates transient observations or claims earlier live tracking.
+  A repeated event is a no-diff replay; a completed record is never rewritten.
+
+Evidence levels are preserved, never upgraded: PR, review, and validation
+facts arrive through Queue's delivery object and are recorded
+`adapter_attested`; merge ancestry, synchronized main, and the instruction
+blob digest are locally verified Git facts recorded `locally_verified`. A
+delivery whose merge commit does not contain the reviewed head (a squash or
+rebase merge) is refused rather than fabricated.
+
+Writes are bounded twice: the adapter checks its computed changed paths
+against the manifest `allowedPaths` before writing, and Queue independently
+validates, stages, commits, and pushes exactly those paths. Projection
+targets come from the repository-declared
+`.northstar/lifecycle/v1/projection-targets.json`; a task file opts into
+currentness by already carrying a generated block.
 
 ## Commands
 
@@ -143,10 +192,21 @@ From the Northstar source checkout:
 effigy lifecycle:run oracle
 effigy lifecycle:run status --repo /path/to/repo
 effigy lifecycle:run frontier --repo /path/to/repo
-effigy lifecycle:run apply --repo /path/to/repo --envelope envelope.json [--target docs/roadmaps/gNN/README.md]
-effigy lifecycle:run render --records /path/to/.northstar/lifecycle/v1/tasks --target docs/roadmaps/gNN/README.md
+effigy lifecycle:run apply --repo /path/to/repo --envelope envelope.json [--target docs/roadmaps/gNN/README.md]...
+effigy lifecycle:run render --repo /path/to/repo --records .northstar/lifecycle/v1/tasks --target docs/roadmaps/gNN/README.md
+effigy lifecycle:run compact --repo /path/to/repo --records .northstar/lifecycle/v1/tasks --generation gNN --out .northstar/lifecycle/v1/generations/gNN.json
 effigy check:lifecycle-core
+effigy check:lifecycle-adoption
 ```
+
+`apply` accepts repeatable `--target` flags; every target is
+containment- and symlink-checked before any mutation, regenerated inside the
+record write lock, and reported in the exact changed-path list. Explicit-path
+`render` and `compact` re-check containment for the records directory and the
+output path and refuse escaping, absolute-outside, or symlinked paths. The
+command returns changed paths, the new revision and digest, and the required
+commit action. It never stages, commits, pushes, merges, dispatches, or
+selects the next task.
 
 From an installed skill, the same command resolves as
 `northstar/lifecycle:run` or directly as
