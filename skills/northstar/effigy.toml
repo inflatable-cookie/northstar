@@ -8,4 +8,6 @@ alias = "northstar"
 "check:agent-instructions" = [{ rhai = "scripts/check-agent-instructions.rhai" }]
 "check:language-packages" = [{ rhai = "scripts/check-language-packages.rhai" }]
 "language:route" = "bun run scripts/language-package-lifecycle.ts route {args}"
+"lifecycle:run" = "bun run scripts/lifecycle-core.ts {args}"
+"lifecycle:oracle" = "bun run scripts/lifecycle-core.ts oracle"
 "paseo:worktree" = [{ rhai = "scripts/paseo-worktree.rhai" }]

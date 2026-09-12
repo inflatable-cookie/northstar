@@ -181,7 +181,35 @@ Input fixtures live under `scripts/fixtures/consumer-compaction/`. A missing
 replay or a handcrafted after-tree that does not match retained provenance
 fails. Included in `effigy validate` / `effigy qa`.
 
+## Portable task lifecycle core (`check:lifecycle-core`, `lifecycle:run`)
+
+`check:lifecycle-core` runs the exhaustive in-process oracle for the portable
+task lifecycle, proves exact source/install parity for the whole skill, and runs
+the installed command from an isolated consumer directory outside the Northstar
+checkout. It is included in `effigy validate` / `effigy qa`.
+
+The oracle covers the full status/stage transition matrix, canonical JSON
+digests, event idempotency and conflicting reuse, stale revision, evidence-level
+fidelity, exact-head review and merge ancestry, block/resume/cancel, an
+independent-task ordering projection, byte-stable Markdown rendering with human
+text preservation, dirty-path rejection, lock contention, stale-lock recovery,
+an interrupted write, concurrent writers, generation compaction, and a static
+scan for provider or network imports.
+
+```bash
+effigy lifecycle:run oracle
+effigy lifecycle:run status --repo .
+effigy lifecycle:run apply --repo . --envelope envelope.json
+effigy lifecycle:run render --records .northstar/lifecycle/v1/tasks --target docs/roadmaps/README.md
+effigy check:lifecycle-core
+```
+
+Schemas and doctrine live under `skills/northstar/references/lifecycle/`.
+`.paseo/queue.json`, Queue event contracts, and live status-authority migration
+remain deferred to a later integration lane.
+
 ## Language package machine contracts (`check:language-packages`)
+
 
 Validate the generic machine contracts and review-oracle invariants for
 modular language quality packages:

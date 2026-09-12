@@ -20,6 +20,7 @@ Track template sections and their definition state.
 - [09-standard-docs-spine.md](./09-standard-docs-spine.md) - active
 - [10-automation-runtime-policy.md](./10-automation-runtime-policy.md) - active
 - [11-ui-design-delivery.md](./11-ui-design-delivery.md) - active
+- [12-portable-task-lifecycle.md](./12-portable-task-lifecycle.md) - active
 
 ## Quick reference
 

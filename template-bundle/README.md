@@ -154,6 +154,8 @@ Delete unused add-ons after copying the bundle.
 - `templates/`
 - `diagrams/`
 - `specs/`
+- `lifecycle/` -- copy-ready guidance for the portable task lifecycle; the
+  records themselves are generated under `.northstar/lifecycle/v1/`
 
 `templates/` here means top-level `docs/templates/`.
 Section-local template folders such as `docs/roadmaps/templates/`, `docs/logs/templates/`, and `docs/research/templates/` remain part of the core bundle when those sections exist.
