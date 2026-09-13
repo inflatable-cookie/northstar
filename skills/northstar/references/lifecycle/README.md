@@ -289,9 +289,10 @@ durable Markdown that still links to that exact handoff refuses the same way:
 the hook resolves relative, rooted, and reference-style Markdown links
 (through their definitions), ignores external URLs
 and the handoff itself, and only an exact local target blocks — so deletion
-never strands a backlink. The scan reads one tracked Markdown file at a time
-within a finite 4 MiB per-file bound; larger files refuse before any byte
-changes. A changed,
+never strands a backlink. The scan reads the NUL-delimited tracked-file listing
+within a finite 4 MiB transport bound, then reads one tracked Markdown file at
+a time within a finite 4 MiB per-file bound; larger listings fail with bounded
+process evidence and larger files refuse before any byte changes. A changed,
 missing (non-terminal record), symlinked, or otherwise ambiguous handoff
 fails closed before any byte changes; when the record is already terminal, a
 still-present exact handoff is consumed as an idempotent no-diff cleanup and
