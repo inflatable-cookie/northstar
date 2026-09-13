@@ -1,7 +1,7 @@
 # Roadmap Generation Index
 
 Status: active
-Updated: 2026-09-12
+Updated: 2026-09-14
 Mode: sequential
 
 ## Active generation
@@ -11,8 +11,8 @@ Mode: sequential
 - Mechanical task state and delivery evidence are projected in the generated
   lifecycle blocks under `docs/README.md`, `docs/roadmaps/README.md`, and
   `g03/README.md`; this index stays strategic.
-- Current approved lane: `g03.010`; replace the copied Queue hook runtime with
-  the trusted Effigy runner and auto-resolved Northstar skill selector.
+- Current approved lane: `g03.014`; bound tracked-file listing output in the
+  transient-handoff backlink guard.
 
 ## Generation log
 
@@ -37,5 +37,5 @@ it in the same rollover change.
 
 ## Next task
 
-`g03.010` is the only approved lane. After its hook-owned closeout, return to
-Chatterbox for the configuration-only portfolio rollout decision.
+`g03.014` is the only approved lane. After its hook-owned closeout and the held
+Bovine retry, return to Chatterbox; no successor is automatic.

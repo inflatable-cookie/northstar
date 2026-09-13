@@ -16,7 +16,8 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 | Keep an exhausted generation open in `planning_required` until an explicit rollover closes it. | complete as `g03.009`; terminal record published at `c9e3533` | contract 001, section 03, bundle section 12 | no further state-separation lane |
 | Run Queue lifecycle hooks through Effigy and the installed Northstar skill without copied repository code. | complete as `g03.010`; terminal state published at `36dc197` | contract 001, system architecture, bundle section 12; Queue contract 005 | portfolio rollout in progress |
 | Represent legitimate parallel active generations in portable lifecycle projections. | complete as `g03.011`; terminal record published at `99bbc94` | contract 001, bundle section 12; Underlay parallel mode | no further projection-shape lane |
-| Make lifecycle JSON and generated regions the sole mechanical currentness, with safe transient handoff consumption. | owned by `g03.012` | contract 001, bundle section 12, lifecycle reference | exact portfolio repair after the stricter oracle lands |
+| Make lifecycle JSON and generated regions the sole mechanical currentness, with safe transient handoff consumption. | complete as `g03.012` | contract 001, bundle section 12, lifecycle reference | portfolio repair continues from consumer evidence |
+| Keep transient-handoff backlink scanning bounded across large tracked repository indexes. | ready as `g03.014` | contract 001, lifecycle reference | repair the proven Bovine closeout hold |
 | Reduce repeated protocol enumerations and retire genuinely redundant modes without merging distinct behavior blindly. | next | contract 001, later usage evidence | Chatterbox sequencing after the active goal |
 | Keep unresolved operator feedback visible without pinning old generations open. | watch | contract 001 | bounded watchlist below |
 
@@ -27,10 +28,10 @@ are not a per-task status mirror.
 
 ## Current lane
 
-One lane executes at a time. Dispatch authorization for an open lane is its
-committed handoff plus the task's own dispatch manifest; no concurrent sibling
-and no automatic successor are authorized. Queue repository work remains
-separately owned and is not part of this runway.
+One lane executes at a time. `g03.014` is the approved active lane. Dispatch
+authorization is its committed handoff plus its task dispatch manifest; no
+concurrent sibling and no automatic successor are authorized. Queue repository
+work remains separately owned and is not part of this runway.
 
 ## Bounded watchlist
 
@@ -59,6 +60,7 @@ separately owned and is not part of this runway.
 - `011-support-parallel-active-generation-projections.md`
 - `012-enforce-sole-source-lifecycle-currentness.md`
 - `013-support-large-markdown-backlink-scan.md`
+- `014-bound-tracked-file-listing-output.md`
 
 Mechanical status lives in the lifecycle records: adopted tasks (`g03.006`
 onward) project it in the generated block below, earlier tasks keep their
@@ -66,10 +68,9 @@ completion in the runway above and in Git history.
 
 ## Next task
 
-The committed worker handoff owns the sole approved Northstar core lane. It
-repairs duplicate mechanical currentness and consumed-handoff backlinks before
-the exact portfolio correction wave. No sibling or automatic successor is
-approved.
+The committed g03.014 worker handoff owns the sole approved Northstar core lane.
+It bounds the tracked-file listing that precedes backlink scanning and restores
+the held Bovine closeout. No sibling or automatic successor is approved.
 <!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:402d1c52d91734e39eefaccdc0a2c68d57f18a17c3e000f3f8e558aa38a9ad58 -->
 | Generation | Disposition | Runway state |
 | --- | --- | --- |
