@@ -15,7 +15,7 @@
 # 5. Runs the hook adapter against real fixture repositories through the real
 #    Effigy route: pre-dispatch gate, hostile events, read-only binding,
 #    escape refusal, squash refusal, bootstrap closeout, idempotent replay,
-#    durable-backlink refusal with relative/rooted/fragment/titled/reference-style/indented/escaped/list-continuation/non-1-ordered/fenced/inline/external/mismatch
+#    durable-backlink refusal with relative/rooted/fragment/titled/reference-style/large-file/indented/escaped/list-continuation/non-1-ordered/fenced/inline/external/mismatch
 #    controls, the sole-source currentness cutover (the audit rejects
 #    Silo-shaped task headers, front-door frontiers, and Next-task columns
 #    while the cutover shape and retrospective history pass), block/cancel
@@ -697,6 +697,79 @@ link_case non1ordered "none" blocked $'Paragraph text.\n3. markers [the handoff]
 echo "conservative code-context refusals are atomic: OK"
 link_case sibling "handoffs/handoff-007.md" ok
 echo "relative, rooted, fragment, titled, reference-style, indented, escaped, list-continuation, non-1-ordered, fenced, inline, external, mismatch, and sibling controls: OK"
+
+echo "# large Markdown backlink scan bounds"
+write_markdown_filler() { # <path> <byte-count>
+  dd if=/dev/zero bs=1 count="$2" 2>/dev/null | tr '\0' 'x' > "$1"
+  printf '\n' >> "$1"
+}
+
+repoLargeClean="$scratch/repo-large-clean"
+build_fixture "$repoLargeClean"
+mkdir -p "$repoLargeClean/docs"
+write_markdown_filler "$repoLargeClean/docs/large-ledger.md" 300000
+git -C "$repoLargeClean" add -A
+git -C "$repoLargeClean" commit -qm "add large clean Markdown ledger"
+CURRENT_REPO="$repoLargeClean"
+read_facts "$(fixture_facts "$repoLargeClean" 006)"
+write_event "$scratch/closeout-large-clean.json" "evt-closeout-large-clean-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+large_clean_out=$(run_hook "$scratch/closeout-large-clean.json" "evt-closeout-large-clean-0001")
+expect_outcome "$large_clean_out" ok "large clean Markdown"
+[ ! -e "$repoLargeClean/docs/handoffs/handoff-006.md" ]
+[ -f "$repoLargeClean/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+[ -z "$(git -C "$repoLargeClean" diff --cached)" ]
+echo "large clean Markdown scans successfully: OK"
+
+repoLargeLink="$scratch/repo-large-link"
+build_fixture "$repoLargeLink"
+mkdir -p "$repoLargeLink/docs"
+write_markdown_filler "$repoLargeLink/docs/large-ledger.md" 300000
+printf '\nSee [the handoff](handoffs/handoff-006.md).\n' >> "$repoLargeLink/docs/large-ledger.md"
+git -C "$repoLargeLink" add -A
+git -C "$repoLargeLink" commit -qm "add large linked Markdown ledger"
+CURRENT_REPO="$repoLargeLink"
+read_facts "$(fixture_facts "$repoLargeLink" 006)"
+write_event "$scratch/closeout-large-link.json" "evt-closeout-large-link-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+large_link_handoff_digest=$(sha256sum "$repoLargeLink/docs/handoffs/handoff-006.md" | cut -d' ' -f1)
+large_link_ledger_digest=$(sha256sum "$repoLargeLink/docs/large-ledger.md" | cut -d' ' -f1)
+large_link_readme_digest=$(sha256sum "$repoLargeLink/docs/README.md" | cut -d' ' -f1)
+large_link_out=$(run_hook "$scratch/closeout-large-link.json" "evt-closeout-large-link-0001")
+expect_outcome "$large_link_out" blocked "large linked Markdown"
+[ "$(json_field "$large_link_out" "r.summary.includes('docs/large-ledger.md')")" = "true" ]
+[ ! -e "$repoLargeLink/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+[ -e "$repoLargeLink/docs/handoffs/handoff-006.md" ]
+[ "$large_link_handoff_digest" = "$(sha256sum "$repoLargeLink/docs/handoffs/handoff-006.md" | cut -d' ' -f1)" ]
+[ "$large_link_ledger_digest" = "$(sha256sum "$repoLargeLink/docs/large-ledger.md" | cut -d' ' -f1)" ]
+[ "$large_link_readme_digest" = "$(sha256sum "$repoLargeLink/docs/README.md" | cut -d' ' -f1)" ]
+[ -z "$(git -C "$repoLargeLink" status --porcelain)" ]
+echo "large exact-link refusal is atomic: OK"
+
+repoOversized="$scratch/repo-oversized"
+build_fixture "$repoOversized"
+mkdir -p "$repoOversized/docs"
+write_markdown_filler "$repoOversized/docs/oversized-ledger.md" $((4 * 1024 * 1024 + 1))
+git -C "$repoOversized" add -A
+git -C "$repoOversized" commit -qm "add oversized Markdown ledger"
+CURRENT_REPO="$repoOversized"
+read_facts "$(fixture_facts "$repoOversized" 006)"
+write_event "$scratch/closeout-oversized.json" "evt-closeout-oversized-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+oversized_handoff_digest=$(sha256sum "$repoOversized/docs/handoffs/handoff-006.md" | cut -d' ' -f1)
+oversized_readme_digest=$(sha256sum "$repoOversized/docs/README.md" | cut -d' ' -f1)
+oversized_out=$(run_hook "$scratch/closeout-oversized.json" "evt-closeout-oversized-0001")
+expect_outcome "$oversized_out" blocked "oversized Markdown"
+[ "$(json_field "$oversized_out" "r.summary.includes('oversized Markdown file docs/oversized-ledger.md')")" = "true" ]
+[ ! -e "$repoOversized/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+[ -e "$repoOversized/docs/handoffs/handoff-006.md" ]
+[ "$oversized_handoff_digest" = "$(sha256sum "$repoOversized/docs/handoffs/handoff-006.md" | cut -d' ' -f1)" ]
+[ "$oversized_readme_digest" = "$(sha256sum "$repoOversized/docs/README.md" | cut -d' ' -f1)" ]
+[ -z "$(git -C "$repoOversized" status --porcelain)" ]
+echo "above-4-MiB Markdown refusal is atomic: OK"
 
 echo "# changed handoff fails closed before any byte changes"
 repoC="$scratch/repo-changed"

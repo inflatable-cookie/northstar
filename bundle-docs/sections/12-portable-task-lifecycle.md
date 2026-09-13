@@ -178,7 +178,9 @@ blob digest, and only after the terminal receipt exists. Tracked durable
 Markdown that still links to that exact handoff refuses the same way — the
 hook resolves relative and rooted links, ignores external URLs and the
 handoff itself, and only an exact local target blocks — so deletion never
-strands a backlink. A changed, missing,
+strands a backlink. The scan reads one tracked Markdown file at a time within
+a finite 4 MiB per-file bound; larger files refuse before any byte changes. A
+changed, missing,
 symlinked, or otherwise ambiguous handoff fails closed before any byte
 changes; a repeated event replays without diff. Git retains the blob and the
 prose log and needs no task-status edit, evidence rewrite, roadmap pointer

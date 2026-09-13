@@ -679,7 +679,7 @@ interface ConsumableHandoff {
 // ---------------------------------------------------------------------------
 
 const BACKLINK_SCAN_MAX_FILES = 5000;
-const BACKLINK_SCAN_MAX_BYTES = 256 * 1024;
+const BACKLINK_SCAN_MAX_BYTES = 4 * 1024 * 1024;
 const MARKDOWN_LINK_RE = /\[[^\]]*\]\(\s*(?:<([^<>\s]+)>|([^\s)]+))(?:\s+[^)]*)?\)/g;
 const AUTOLINK_RE = /<([^<>\s]+)>/g;
 const EXTERNAL_TARGET_RE = /^[a-zA-Z][a-zA-Z0-9+.-]*:/;
