@@ -144,6 +144,18 @@ non-authoritative.
   instruction handoff by pinned path and blob identity. Changed, missing, or
   ambiguous handoffs fail closed; there is no second mechanical closeout
   route.
+- After adoption, per-task JSON is the sole mechanical status authority: a
+  lifecycle-managed task file carries no hand-maintained `Status:` header, and
+  generated regions are the sole mechanical currentness inside declared
+  projection targets. Human prose keeps goals, history, and policy; a
+  current-task or ready-frontier section must not repeat a lifecycle-managed
+  task's mutable status outside the generated region. `lifecycle:run
+  audit-currentness` proves the cutover with exact file, section, task, and
+  reason.
+- A closeout handoff is transient transport: durable Markdown never links to
+  the exact file the hook will consume, and the hook refuses atomically before
+  any byte changes when a tracked backlink still targets it. Git and the
+  terminal record preserve its identity.
 
 The installed lifecycle reference
 (`skills/northstar/references/lifecycle/README.md`), bundle section 12, and

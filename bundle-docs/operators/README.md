@@ -11,6 +11,8 @@ The normal day-to-day surfaces are:
 - `flattened-task-switchover-prompt.md` for the one-time milestone/card to task
   migration
 - `retire-roadmap-backlog-prompt.md` for the one-time backlog-to-triage cleanup
+- `lifecycle-currentness-portfolio-repair.md` for the bounded sole-source
+  currentness inventory and repair, one adopted repository at a time
 - `live-project-refocus-specimen.md` for a worked recovery example
 
 Maintenance-only pilot and pruning docs now live under

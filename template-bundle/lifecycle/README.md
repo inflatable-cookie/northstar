@@ -141,10 +141,17 @@ manifest lands. Earlier closed tasks keep their Git and provider evidence;
 the closeout hook never fabricates receipts for them. The standalone adapter
 remains first-class and produces the same terminal receipt from equivalent
 facts. Once the generated projections carry them, remove hand-maintained
-status fields from task headers and front doors in the same cutover; a
-routine closeout then edits no prose at all — no task-status edit, no
-evidence rewrite, no roadmap pointer edit, no front-door edit, and no prose
-log. Exceptional semantic decisions may still warrant a separate human log.
+status fields from task headers and front doors in the same cutover, along
+with any hand-maintained `Next Task` pointer or Next-task table column naming
+a lifecycle-managed task; keep goal history and retrospective sections, which
+stay legal. Prove the cutover from the installed skill with
+`effigy lifecycle:run audit-currentness --repo .`: it reports exact file,
+section, task, and reason for every duplicate. A routine closeout then edits
+no prose at all — no task-status edit, no evidence rewrite, no roadmap
+pointer edit, no front-door edit, and no prose log. Exceptional semantic
+decisions may still warrant a separate human log, but that log never links to
+the transient worker handoff: closeout refuses to delete a handoff that
+tracked durable Markdown still links to.
 
 ## Do not
 
@@ -153,5 +160,7 @@ log. Exceptional semantic decisions may still warrant a separate human log.
 - hand-edit a generated block, a record, or the manifest's program by hand;
 - let automation choose priority, invent a next task, or retire a spec;
 - add a repository-wide mutable task ledger;
+- link durable docs or logs to a transient worker handoff the closeout hook
+  will delete;
 - declare Queue paths, statuses, or commands inside `.northstar/` artifacts —
   Queue metadata stays opaque and additive in Northstar receipts.

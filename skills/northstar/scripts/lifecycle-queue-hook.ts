@@ -25,9 +25,10 @@
 // not permanent evidence: the hook deletes only the exact committed path whose
 // working-tree bytes still hash to the pinned blob digest, after the terminal
 // receipt exists. A changed, missing, symlinked, or otherwise ambiguous
-// handoff fails closed before any byte changes; Git retains the blob and the
-// record's handoff evidence retains its identity. A repeated event is a
-// no-diff replay.
+// handoff fails closed before any byte changes; tracked durable Markdown that
+// still links to the exact handoff refuses the same way, so deletion never
+// strands a backlink. Git retains the blob and the record's handoff evidence
+// retains its identity. A repeated event is a no-diff replay.
 //
 // The adapter never stages, commits, or pushes; Queue owns validated
 // integration publication.
@@ -38,6 +39,7 @@ import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   BEGIN_PREFIX,
+  END_SENTINEL,
   ENVELOPE_SCHEMA,
   LifecycleError,
   applyEnvelope,
@@ -662,6 +664,147 @@ interface ConsumableHandoff {
   absolutePath: string;
 }
 
+// ---------------------------------------------------------------------------
+// Durable backlink guard: a closeout handoff is transient transport, so the
+// hook refuses atomically when tracked durable Markdown still links to the
+// exact handoff it would delete. The scan is structural, bounded, and
+// deliberately fail-closed: tracked `.md` files only, standard Markdown
+// links (bare, angle-bracketed, titled, or reference-style resolved through
+// their definitions) plus `<autolinks>`, relative and rooted targets
+// resolved against the linking file, external URLs and the handoff itself
+// ignored, generated projection blocks stripped. Code contexts are not
+// distinguished: a link-shaped example also blocks, so no container
+// misclassification can strand a durable backlink. Only an exact local
+// target blocks; similarly named files never do.
+// ---------------------------------------------------------------------------
+
+const BACKLINK_SCAN_MAX_FILES = 5000;
+const BACKLINK_SCAN_MAX_BYTES = 256 * 1024;
+const MARKDOWN_LINK_RE = /\[[^\]]*\]\(\s*(?:<([^<>\s]+)>|([^\s)]+))(?:\s+[^)]*)?\)/g;
+const AUTOLINK_RE = /<([^<>\s]+)>/g;
+const EXTERNAL_TARGET_RE = /^[a-zA-Z][a-zA-Z0-9+.-]*:/;
+const REFERENCE_DEF_RE = /^[ ]{0,3}\[([^\]\n]+)\]:[ \t]*(?:<([^<>\n]+)>|(\S+))/gm;
+const REF_FULL_RE = /\[([^\]\n]+)\]\[([^\]\n]*)\]/g;
+const REF_COLLAPSED_RE = /\[([^\]\n]+)\]\[\]/g;
+const REF_SHORTCUT_RE = /(?<!!)\[([^\]\n]+)\](?!\(|\[)/g;
+
+function stripHookGeneratedBlocks(text: string): string {
+  let output = "";
+  let rest = text.replace(/\r\n/g, "\n");
+  for (;;) {
+    const start = rest.indexOf(BEGIN_PREFIX);
+    if (start === -1) {
+      output += rest;
+      return output;
+    }
+    const endScheme = rest.indexOf(END_SENTINEL, start);
+    if (endScheme === -1) {
+      output += rest;
+      return output;
+    }
+    output += rest.slice(0, start);
+    rest = rest.slice(endScheme + END_SENTINEL.length);
+  }
+}
+
+function resolveLinkTarget(sourceRel: string, rawTarget: string): string | null {
+  let target = rawTarget.trim();
+  const hash = target.indexOf("#");
+  if (hash !== -1) target = target.slice(0, hash);
+  if (target === "") return null;
+  if (EXTERNAL_TARGET_RE.test(target)) return null;
+  try {
+    target = decodeURIComponent(target);
+  } catch {
+    // Keep the raw spelling when it is not valid percent-encoding.
+  }
+  const normalized = target.startsWith("/")
+    ? path.posix.normalize(target.slice(1))
+    : path.posix.normalize(path.posix.join(path.posix.dirname(sourceRel), target));
+  if (normalized === "" || normalized === "." || normalized.startsWith("..")) return null;
+  return normalized;
+}
+
+// Every tracked Markdown file linking to the exact handoff path, sorted. The
+// handoff file itself never counts. Bounds fail closed: an unlistable tree,
+// an oversized file, or more files than the traversal bound refuses before
+// any byte changes rather than risking a missed backlink.
+
+export function findHandoffBacklinks(repoRoot: string, handoffRel: string): string[] {
+  const listed = spawnSync("git", ["ls-files", "-z"], { cwd: repoRoot });
+  if (listed.status !== 0) malfunction("git ls-files failed: " + String(listed.stderr || "").trim());
+  const tracked = String(listed.stdout).split("\0").filter((name) => name.length > 0 && name.endsWith(".md"));
+  if (tracked.length > BACKLINK_SCAN_MAX_FILES) {
+    refuse("backlink scan exceeds its " + BACKLINK_SCAN_MAX_FILES + "-file bound; refusing handoff deletion");
+  }
+  const backlinks: string[] = [];
+  for (const sourceRel of tracked.sort()) {
+    if (sourceRel === handoffRel) continue;
+    const absolute = path.join(repoRoot, sourceRel);
+    let stats: fs.Stats;
+    try {
+      stats = fs.lstatSync(absolute);
+    } catch {
+      continue;
+    }
+    if (!stats.isFile()) continue;
+    if (stats.size > BACKLINK_SCAN_MAX_BYTES) {
+      refuse("backlink scan found an oversized Markdown file " + sourceRel + "; refusing handoff deletion");
+    }
+    const bare = stripHookGeneratedBlocks(fs.readFileSync(absolute, "utf8"));
+    const targets = new Set<string>();
+    for (const pattern of [MARKDOWN_LINK_RE, AUTOLINK_RE]) {
+      pattern.lastIndex = 0;
+      let match: RegExpExecArray | null;
+      while ((match = pattern.exec(bare)) !== null) {
+        const target = match[1] ?? match[2];
+        if (target !== undefined) targets.add(target);
+      }
+    }
+    // Reference-style links resolve through their definitions: full
+    // `[text][label]`, collapsed `[text][]`, and shortcut `[text]` forms share
+    const definitions = new Map<string, string>();
+    REFERENCE_DEF_RE.lastIndex = 0;
+    let def: RegExpExecArray | null;
+    while ((def = REFERENCE_DEF_RE.exec(bare)) !== null) {
+      const target = def[2] ?? def[3];
+      // CommonMark reference labels are case-insensitive with collapsed
+      // internal whitespace.
+      if (target !== undefined) definitions.set(def[1].trim().replace(/\s+/g, " ").toLowerCase(), target);
+    }
+    const usage = bare.replace(REFERENCE_DEF_RE, "");
+    const useLabel = (label: string): void => {
+      const target = definitions.get(label.trim().replace(/\s+/g, " ").toLowerCase());
+      if (target !== undefined) targets.add(target);
+    };
+    REF_FULL_RE.lastIndex = 0;
+    let ref: RegExpExecArray | null;
+    while ((ref = REF_FULL_RE.exec(usage)) !== null) useLabel(ref[2] === "" ? ref[1] : ref[2]);
+    REF_COLLAPSED_RE.lastIndex = 0;
+    while ((ref = REF_COLLAPSED_RE.exec(usage)) !== null) useLabel(ref[1]);
+    REF_SHORTCUT_RE.lastIndex = 0;
+    while ((ref = REF_SHORTCUT_RE.exec(usage)) !== null) useLabel(ref[1]);
+    for (const raw of targets) {
+      if (resolveLinkTarget(sourceRel, raw) === handoffRel) {
+        backlinks.push(sourceRel);
+        break;
+      }
+    }
+  }
+  return backlinks;
+}
+
+// Refuse before any byte changes when tracked durable Markdown still links to
+// the exact handoff queued for deletion. Null consumables delete nothing and
+// need no guard.
+function guardHandoffBacklinks(repoRoot: string, consumable: ConsumableHandoff | null): void {
+  if (consumable === null) return;
+  const backlinks = findHandoffBacklinks(repoRoot, consumable.relativePath);
+  if (backlinks.length > 0) {
+    refuse("durable Markdown still links to the submitted handoff " + consumable.relativePath + ": " + backlinks.join(", ") + "; remove the backlink before closeout deletes it");
+  }
+}
+
 // Verify, before any byte changes, that the exact submitted handoff can be
 // consumed at publication time. The event pins the instruction path, commit,
 // and blob digest; the integration checkout must still carry that exact file.
@@ -709,6 +852,7 @@ function handleCloseout(repoRoot: string, event: Record<string, any>, binding: M
     const consumable = binding.mode === "integration_write"
       ? prepareHandoffConsumption(repoRoot, event, binding, true)
       : null;
+    guardHandoffBacklinks(repoRoot, consumable);
     const changedPaths: string[] = [];
     consumeHandoff(consumable, changedPaths);
     const uniqueChanged = [...new Set(changedPaths)].sort();
@@ -730,6 +874,7 @@ function handleCloseout(repoRoot: string, event: Record<string, any>, binding: M
   const consumable = binding.mode === "integration_write"
     ? prepareHandoffConsumption(repoRoot, event, binding, false)
     : null;
+  guardHandoffBacklinks(repoRoot, consumable);
   applyMapped(repoRoot, event, binding, identity, envelopes, current, "terminal record", consumable);
 }
 

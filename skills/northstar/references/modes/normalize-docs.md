@@ -73,7 +73,12 @@ Optional: `effigy check:posture-advisory` after structural edits.
    unresolved generations intact and name the blocker. Opening a new generation
    still follows the rollover gates in compile-roadmaps.
 8. Validate: `effigy qa`, `effigy qa:docs`, project-specific checks.
-9. Keep the live `Next Task` pointer in the roadmap front doors. Other front
+9. In standalone and pre-adoption repositories, keep the live `Next Task`
+   pointer in the roadmap front doors. In lifecycle-adopted repositories
+   remove hand-maintained task pointers instead: generated projections own
+   per-task currentness, task files carry no `Status:` header, and durable
+   files never link to a transient worker handoff. Prove it with
+   `effigy lifecycle:run audit-currentness --repo .`. Other front
    doors may summarize state or dependencies, but should not each own the
    active thread pointer.
 
