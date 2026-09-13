@@ -705,32 +705,117 @@ function stripHookGeneratedBlocks(text: string): string {
   }
 }
 
-// Remove fenced code blocks and inline code spans before link scanning: a
-// link-shaped example inside code renders no link, so deleting the handoff
-// cannot strand it. Fence runs of either character close only on a run of
-// the same character that is at least as long.
+// Remove code segments before link scanning: a link-shaped example inside
+// code renders no link, so deleting the handoff cannot strand it. Fenced
+// blocks, four-space indented examples, and inline spans are dropped; a
+// backslash-escaped backtick never opens or closes a span, so a real link
+// merely surrounded by escaped backticks is still detected. Fence runs of
+// either character close only on a run of the same character that is at
+// least as long.
 function stripCodeSegments(text: string): string {
   const kept: string[] = [];
   let fenceChar = "";
   let fenceLen = 0;
+  let prevBlank = true;
+  let prevBlock = true;
+  let inIndented = false;
   for (const line of text.split("\n")) {
-    if (fenceLen === 0) {
-      const open = /^ {0,3}(`{3,}|~{3,})/.exec(line);
-      if (open) {
-        fenceChar = open[1][0];
-        fenceLen = open[1].length;
-      } else {
-        kept.push(line.replace(/``[^`\n]*``|`[^`\n]*`/g, ""));
-      }
-    } else {
-      const trimmed = line.trim();
-      if (trimmed.length >= fenceLen && trimmed === fenceChar.repeat(trimmed.length)) {
+    const trimmed = line.trim();
+    if (fenceLen !== 0) {
+      if (trimmed === "") {
+        prevBlank = true;
+      } else if (trimmed.length >= fenceLen && trimmed === fenceChar.repeat(trimmed.length)) {
         fenceChar = "";
         fenceLen = 0;
+        prevBlank = false;
+        prevBlock = true;
+        inIndented = false;
+      } else {
+        prevBlank = false;
       }
+      continue;
+    }
+    const open = /^ {0,3}(`{3,}|~{3,})/.exec(line);
+    if (open) {
+      fenceChar = open[1][0];
+      fenceLen = open[1].length;
+      prevBlank = false;
+      prevBlock = true;
+      inIndented = false;
+    } else if (trimmed === "") {
+      kept.push(line);
+      prevBlank = true;
+    } else if (/^(?: {4,}|\t)/.test(line) && (prevBlank || prevBlock || inIndented)) {
+      inIndented = true;
+      prevBlank = false;
+      prevBlock = false;
+    } else {
+      kept.push(line);
+      inIndented = false;
+      prevBlank = false;
+      prevBlock = isBlockLine(trimmed);
     }
   }
-  return kept.join("\n");
+  return stripInlineSpans(kept.join("\n"));
+}
+
+// A non-paragraph block opener: headings, quotes, lists, rules, table rows,
+// HTML-ish lines, and link definitions. Four-space indented text after one of
+// these (or a blank line) is an indented code example; after paragraph text
+// it is a lazy continuation line and stays scannable.
+function isBlockLine(trimmed: string): boolean {
+  return /^(#{1,6}(\s|$)|>\s?|([-*+]|\d+[.)])(\s|$)|\||<|\[[^\]\n]+\]:|[*_-]{3,}\s*$)/.test(trimmed);
+}
+
+// Drop single-line code spans, honoring backslash escapes: `\`` never opens
+// or closes, and `\\` still escapes the backslash so a following backtick
+// stays a delimiter. An unmatched opener renders literally and scanning
+// resumes after it.
+function stripInlineSpans(text: string): string {
+  let out = "";
+  let i = 0;
+  while (i < text.length) {
+    const c = text[i];
+    if (c === "\\" && i + 1 < text.length) {
+      out += text.slice(i, i + 2);
+      i += 2;
+      continue;
+    }
+    if (c !== "`") {
+      out += c;
+      i += 1;
+      continue;
+    }
+    let open = i;
+    while (open < text.length && text[open] === "`") open += 1;
+    const run = open - i;
+    let j = open;
+    let closed = -1;
+    while (j < text.length) {
+      if (text[j] === "\\" && j + 1 < text.length) {
+        j += 2;
+        continue;
+      }
+      if (text[j] !== "`") {
+        j += 1;
+        continue;
+      }
+      let k = j;
+      while (k < text.length && text[k] === "`") k += 1;
+      if (k - j === run) {
+        closed = k;
+        break;
+      }
+      j = k;
+    }
+    if (closed === -1) {
+      out += c;
+      i += 1;
+    } else {
+      i = closed;
+    }
+  }
+  return out;
 }
 
 function resolveLinkTarget(sourceRel: string, rawTarget: string): string | null {
