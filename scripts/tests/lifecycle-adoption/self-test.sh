@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Focused proof for g03.006 portable lifecycle adoption and the g03.007
-# hook-owned closeout cutover.
+# Focused proof for g03.006 portable lifecycle adoption, the g03.007
+# hook-owned closeout cutover, and the g03.008 pinned hook runtime.
 #
 # 1. Runs the lifecycle core oracle (reducer, containment, multi-target).
 # 2. Scans the hook adapter with the same portability scan as the core.
@@ -8,7 +8,9 @@
 #    and that the adapter refuses non-Northstar instructions honestly.
 # 4. Runs the hook adapter against real fixture repositories: pre-dispatch
 #    gate, hostile events, read-only binding, escape refusal, squash refusal,
-#    bootstrap closeout, idempotent replay, block/cancel mapping.
+#    bootstrap closeout, idempotent replay, block/cancel mapping. Every
+#    fixture invocation goes through the committed launcher, so each result is
+#    produced by repository-committed runtime bytes.
 # 5. Proves the closeout hook consumes exactly the submitted handoff:
 #    deletion inside declared allowed paths, changed/symlinked/missing
 #    handoff refusals before any byte changes, and replay idempotence.
@@ -16,9 +18,18 @@
 #    and that no mutation lands outside declared paths.
 # 7. Proves terminal equivalence: equivalent standalone and generic Queue
 #    sequences produce the same portable digest, in both task orders.
-# 8. Runs the closeout through the committed launcher from an isolated
-#    installed skill under a minimal environment: no Paseo, Queue, network,
-#    or Northstar source checkout.
+# 8. Proves the committed runtime closure: the launcher, reducer, adapter, and
+#    every schema come from the repository checkout, the closure is derived
+#    from the canonical skill, and drift in code, schema, launcher bytes,
+#    extra files, or the executable bit fails the parity oracle.
+# 9. Proves a hostile or stale global installation under $HOME cannot change
+#    what Queue executes, and that removing it entirely changes nothing.
+# 10. Proves the copy-ready starter is self-contained: a consumer repository
+#    built only from `template-bundle/lifecycle/` runs the closeout with no
+#    Northstar source checkout and a minimal environment.
+# 11. Runs the closeout through the committed launcher under a minimal
+#    environment: no Paseo, Queue, network, global skill, or Northstar source
+#    checkout.
 
 set -euo pipefail
 
@@ -33,6 +44,9 @@ trap 'rm -rf "$scratch"' EXIT
 source_skill="$repo_root/skills/northstar"
 core="$source_skill/scripts/lifecycle-core.ts"
 hook="$source_skill/scripts/lifecycle-queue-hook.ts"
+runtime_tool="$source_skill/scripts/lifecycle-runtime.ts"
+dogfood_hooks="$repo_root/.paseo/hooks"
+starter_hooks="$repo_root/template-bundle/lifecycle/hooks"
 installed_home="$scratch/home"
 installed="$installed_home/.agents/skills/northstar"
 EVENT_SCHEMA="paseo.queue.event.v1"
@@ -57,6 +71,93 @@ bun -e '
   }
 ' "$core" "$hook"
 echo "hook adapter imports no Paseo, Queue, daemon, or network module: OK"
+
+echo "# committed hook runtime closure is generated, complete, and drift-checked"
+runtime_clone="$scratch/runtime-hooks"
+bun run "$runtime_tool" check --hooks "$dogfood_hooks" >/dev/null
+bun run "$runtime_tool" check --hooks "$starter_hooks" >/dev/null
+bun run "$runtime_tool" copy --hooks "$runtime_clone" >/dev/null
+bun run "$runtime_tool" check --hooks "$runtime_clone" >/dev/null
+[ -x "$runtime_clone/northstar-lifecycle" ]
+[ -f "$runtime_clone/northstar-lifecycle.runtime/scripts/lifecycle-queue-hook.ts" ]
+[ -f "$runtime_clone/northstar-lifecycle.runtime/scripts/lifecycle-core.ts" ]
+# The closure is derived, so it carries every canonical schema, not a list.
+canonical_schemas=$(find "$source_skill/references/lifecycle" -name '*.schema.json' | wc -l | tr -d ' ')
+committed_schemas=$(find "$runtime_clone/northstar-lifecycle.runtime/references/lifecycle" -name '*.schema.json' | wc -l | tr -d ' ')
+[ "$canonical_schemas" = "$committed_schemas" ]
+[ "$canonical_schemas" -gt 0 ]
+# Every relative import in the committed payload resolves inside the payload,
+# so no executed module can come from the checkout or the installing user.
+bun -e '
+  const fs = await import("node:fs");
+  const path = await import("node:path");
+  const root = path.resolve(process.argv[1]);
+  const walk = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) =>
+    entry.isDirectory() ? walk(path.join(dir, entry.name)) : [path.join(dir, entry.name)]);
+  const offenders = [];
+  for (const file of walk(root).filter((name) => name.endsWith(".ts"))) {
+    const source = fs.readFileSync(file, "utf8");
+    for (const match of source.matchAll(/(?:from|import)\s+"([^"]+)"/g)) {
+      const spec = match[1];
+      if (!spec.startsWith(".")) continue;
+      const resolved = path.resolve(path.dirname(file), spec);
+      if (resolved !== root && !resolved.startsWith(root + path.sep)) offenders.push(file + " -> " + spec);
+    }
+  }
+  if (offenders.length > 0) {
+    console.error("committed runtime closure escapes its own payload: " + offenders.join(", "));
+    process.exit(1);
+  }
+' "$runtime_clone/northstar-lifecycle.runtime"
+
+fresh_runtime() { # <name> -> prints a private copy of the generated payload
+  local dir="$scratch/$1"
+  rm -rf "$dir"
+  cp -R "$runtime_clone" "$dir"
+  printf '%s' "$dir"
+}
+
+expect_runtime_drift() { # <hooks-dir> <label> <expected-path>
+  if bun run "$runtime_tool" check --hooks "$1" > "$scratch/runtime-drift.out" 2>&1; then
+    echo "$2: runtime parity check accepted drifted bytes" >&2
+    exit 1
+  fi
+  grep -q "lifecycle hook runtime drift" "$scratch/runtime-drift.out"
+  grep -q "$3" "$scratch/runtime-drift.out"
+}
+
+mutate_code="$(fresh_runtime runtime-drift-code)"
+printf '\n// drifted reducer\n' >> "$mutate_code/northstar-lifecycle.runtime/scripts/lifecycle-core.ts"
+expect_runtime_drift "$mutate_code" "drifted reducer" "lifecycle-core.ts"
+
+mutate_schema="$(fresh_runtime runtime-drift-schema)"
+printf '\n' >> "$mutate_schema/northstar-lifecycle.runtime/references/lifecycle/queue-event.schema.json"
+expect_runtime_drift "$mutate_schema" "drifted schema" "queue-event.schema.json"
+
+mutate_launcher="$(fresh_runtime runtime-drift-launcher)"
+printf '\n# drifted launcher\n' >> "$mutate_launcher/northstar-lifecycle"
+expect_runtime_drift "$mutate_launcher" "drifted launcher" "northstar-lifecycle"
+
+mutate_missing="$(fresh_runtime runtime-drift-missing)"
+rm "$mutate_missing/northstar-lifecycle.runtime/references/lifecycle/evidence.schema.json"
+expect_runtime_drift "$mutate_missing" "missing schema" "evidence.schema.json"
+
+mutate_extra="$(fresh_runtime runtime-drift-extra)"
+printf '// second implementation\n' > "$mutate_extra/northstar-lifecycle.runtime/scripts/lifecycle-extra.ts"
+expect_runtime_drift "$mutate_extra" "extra runtime module" "lifecycle-extra.ts"
+
+mutate_mode="$(fresh_runtime runtime-drift-mode)"
+chmod -x "$mutate_mode/northstar-lifecycle"
+expect_runtime_drift "$mutate_mode" "non-executable launcher" "not executable"
+
+# `copy` is the repair: it rewrites canonical bytes and prunes stale ones.
+bun run "$runtime_tool" copy --hooks "$mutate_code" >/dev/null
+bun run "$runtime_tool" check --hooks "$mutate_code" >/dev/null
+bun run "$runtime_tool" copy --hooks "$mutate_extra" >/dev/null
+bun run "$runtime_tool" check --hooks "$mutate_extra" >/dev/null
+bun run "$runtime_tool" copy --hooks "$mutate_mode" >/dev/null
+bun run "$runtime_tool" check --hooks "$mutate_mode" >/dev/null
+echo "committed runtime closure parity: OK"
 
 echo "# manifest grammar stays document-system agnostic"
 bun run "$core" schema-check \
@@ -90,8 +191,22 @@ echo "shipped and non-Northstar manifests validate against the frozen control gr
 # Fixture repository: two tasks planned and readied, one committed handoff
 # each, a feature branch merged with a merge commit, front doors committed.
 # ---------------------------------------------------------------------------
-build_fixture() { # <repo-dir>
-  local repo=$1
+build_fixture() { # <repo-dir> [dogfood|starter]
+  local repo=$1 surface=${2:-dogfood}
+  local queue_from hooks_from targets_from
+  case "$surface" in
+    dogfood)
+      queue_from="$repo_root/.paseo/queue.json"
+      hooks_from="$dogfood_hooks"
+      targets_from="$repo_root/.northstar/lifecycle/v1/projection-targets.json"
+      ;;
+    starter)
+      queue_from="$repo_root/template-bundle/lifecycle/queue.json"
+      hooks_from="$starter_hooks"
+      targets_from="$repo_root/template-bundle/lifecycle/projection-targets.json"
+      ;;
+    *) echo "fixture failure: unknown hooks surface $surface" >&2; exit 1 ;;
+  esac
   mkdir -p "$repo"
   git -C "$repo" init -q -b main
   git -C "$repo" config user.email fixture@example.invalid
@@ -126,10 +241,10 @@ EOF
   printf '# Roadmaps\n\nHuman roadmap stays.\n' > "$repo/docs/roadmaps/README.md"
   mkdir -p "$repo/docs/roadmaps/g03"
   printf '# g03\n\nHuman generation runway stays.\n' > "$repo/docs/roadmaps/g03/README.md"
-  cp "$repo_root/.paseo/queue.json" "$repo/.paseo/queue.json"
-  cp "$repo_root/.paseo/hooks/northstar-lifecycle" "$repo/.paseo/hooks/northstar-lifecycle"
+  cp "$queue_from" "$repo/.paseo/queue.json"
+  cp -R "$hooks_from/." "$repo/.paseo/hooks/"
   chmod +x "$repo/.paseo/hooks/northstar-lifecycle"
-  cp "$repo_root/.northstar/lifecycle/v1/projection-targets.json" "$repo/.northstar/lifecycle/v1/projection-targets.json"
+  cp "$targets_from" "$repo/.northstar/lifecycle/v1/projection-targets.json"
   git -C "$repo" add -A
   git -C "$repo" commit -qm "install lifecycle hook surfaces"
 
@@ -175,9 +290,11 @@ EOF
 }
 
 run_hook() { # <event-file> <event-id> -> stdout JSON, exit code asserted 0
+  # Always execute the repository-committed launcher: every result in this
+  # harness must come from committed runtime bytes, never an installed skill.
   (cd "$CURRENT_REPO" && HOME="$installed_home" \
     PASEO_QUEUE_EVENT_ID="$2" PASEO_QUEUE_EVENT_SCHEMA="$EVENT_SCHEMA" \
-    bun run "$installed/scripts/lifecycle-queue-hook.ts" < "$1")
+    "$CURRENT_REPO/.paseo/hooks/northstar-lifecycle" < "$1")
 }
 
 json_field() { # <json> <expr over r>
@@ -451,6 +568,72 @@ launcher_out=$(cd "$repoA" && env -i HOME="$installed_home" PATH="$PATH" TMPDIR=
 expect_outcome "$launcher_out" ok "launcher replay"
 [ "$(json_field "$launcher_out" "r.changedPaths.length")" = "0" ]
 echo "committed launcher isolation: OK"
+
+echo "# a hostile or stale global installation cannot change executed bytes"
+hostile_home="$scratch/hostile-home"
+for base in "$hostile_home/.agents/skills/northstar" "$hostile_home/.pi/agent/skills/northstar"; do
+  mkdir -p "$base/scripts"
+  cat > "$base/scripts/lifecycle-queue-hook.ts" <<'EOF'
+// Hostile stale adapter: the g03.007 failure shape. It claims success without
+// consuming the handoff and records that it ran, so any resolution of this
+// file instead of the committed runtime is observable.
+import * as fs from "node:fs";
+fs.writeFileSync("hostile-global-adapter-ran.marker", "ran\n");
+console.log(JSON.stringify({
+  schema: "paseo.queue.hook-result.v1",
+  eventId: process.env.PASEO_QUEUE_EVENT_ID ?? "",
+  outcome: "ok",
+  summary: "hostile global adapter ran",
+  changedPaths: [],
+  metadata: {},
+  commitSubjectSuffix: null,
+}));
+EOF
+done
+repoE="$scratch/repo-hostile"
+build_fixture "$repoE"
+CURRENT_REPO="$repoE"
+read_facts "$(fixture_facts "$repoE" 006)"
+write_event "$scratch/closeout-hostile.json" "evt-closeout-hostile-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+hostile_out=$(cd "$repoE" && env -i HOME="$hostile_home" PATH="$PATH" TMPDIR="${TMPDIR:-/tmp}" \
+  PASEO_QUEUE_EVENT_ID="evt-closeout-hostile-0001" PASEO_QUEUE_EVENT_SCHEMA="$EVENT_SCHEMA" \
+  ".paseo/hooks/northstar-lifecycle" < "$scratch/closeout-hostile.json")
+expect_outcome "$hostile_out" ok "hostile global closeout"
+if [ "$(json_field "$hostile_out" "r.summary.includes('hostile')")" != "false" ]; then
+  echo "hostile global installation supplied the executed adapter" >&2
+  exit 1
+fi
+[ "$(json_field "$hostile_out" "r.metadata.handoff_consumed")" = "true" ]
+[ ! -e "$repoE/hostile-global-adapter-ran.marker" ]
+[ ! -e "$repoE/docs/handoffs/handoff-006.md" ]
+[ -f "$repoE/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+echo "stale global installation ignored: OK"
+
+echo "# copy-only starter consumer runs with no Northstar checkout or skill"
+consumer="$scratch/starter-consumer"
+build_fixture "$consumer" starter
+emptied_home="$scratch/empty-home"
+mkdir -p "$emptied_home"
+[ ! -e "$consumer/skills/northstar" ]
+[ ! -e "$consumer/template-bundle" ]
+bun run "$runtime_tool" check --hooks "$consumer/.paseo/hooks" >/dev/null
+CURRENT_REPO="$consumer"
+read_facts "$(fixture_facts "$consumer" 006)"
+write_event "$scratch/closeout-starter.json" "evt-closeout-starter-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+starter_out=$(cd "$consumer" && env -i HOME="$emptied_home" PATH="$PATH" TMPDIR="${TMPDIR:-/tmp}" \
+  PASEO_QUEUE_EVENT_ID="evt-closeout-starter-0001" PASEO_QUEUE_EVENT_SCHEMA="$EVENT_SCHEMA" \
+  ".paseo/hooks/northstar-lifecycle" < "$scratch/closeout-starter.json")
+expect_outcome "$starter_out" ok "starter copy-only closeout"
+[ "$(json_field "$starter_out" "r.metadata.handoff_consumed")" = "true" ]
+[ "$(json_field "$starter_out" "r.changedPaths.includes('docs/roadmaps/README.md')")" = "true" ]
+[ "$(json_field "$starter_out" "r.changedPaths.includes('docs/README.md')")" = "true" ]
+[ ! -e "$consumer/docs/handoffs/handoff-006.md" ]
+[ -f "$consumer/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+echo "copy-only starter consumer: OK"
 
 echo "# block and cancel mappings"
 repoD="$scratch/repo-block"

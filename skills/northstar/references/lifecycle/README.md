@@ -154,6 +154,21 @@ and returns one closed hook result. Committed contract mirrors live beside
 the lifecycle schemas: `queue-event.schema.json`, `queue-result.schema.json`,
 and `queue-control.schema.json`.
 
+Canonical source lives in this skill. A repository that declares the hook
+commits a byte-identical copy of the whole runtime closure under its own hooks
+directory: the launcher, the adapter, the reducer, and every
+`references/lifecycle/*.schema.json`. The committed launcher resolves only those
+bytes — never `$HOME`, a globally installed skill, `PATH`, the network, or the
+Northstar source checkout — so a stale or hostile installation cannot change
+what Queue executes. The launcher template is
+[`../../assets/templates/lifecycle-hook-launcher.sh`](../../assets/templates/lifecycle-hook-launcher.sh)
+and [`../../scripts/lifecycle-runtime.ts`](../../scripts/lifecycle-runtime.ts)
+is the one deterministic build and parity oracle: `copy` writes or refreshes
+the payload, and `check` fails on any missing, extra, or differing byte in
+code, schema, launcher bytes, or the executable bit. Copies are generated,
+never hand-maintained; the closure is derived, so every committed schema joins
+it automatically.
+
 Event mapping:
 
 - `task.pre_dispatch` (read-only gate): verifies the instruction artifact
@@ -228,3 +243,15 @@ selects the next task.
 From an installed skill, the same command resolves as
 `northstar/lifecycle:run` or directly as
 `bun run <installed>/scripts/lifecycle-core.ts <verb>`.
+
+Install or verify the committed Queue hook runtime from an installed skill:
+
+```bash
+bun run <installed-northstar>/scripts/lifecycle-runtime.ts copy [--hooks .paseo/hooks]
+bun run <installed-northstar>/scripts/lifecycle-runtime.ts check [--hooks .paseo/hooks]
+bun run <installed-northstar>/scripts/lifecycle-runtime.ts closure
+```
+
+`copy` defaults to `.paseo/hooks` relative to the working directory and is the
+only supported way to write the payload. Commit the result and re-run `copy`
+after the installed skill changes; `check` drives the drift gate.

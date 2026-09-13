@@ -5,8 +5,10 @@ Owner: repo maintainers
 Governing refs: bundle-docs/sections/12-portable-task-lifecycle.md
 
 This folder is the copy-ready starter for a repository adopting the portable
-task lifecycle. It carries guidance plus the three hook files; the installed
-Northstar skill owns the schemas, reducer, adapters, and renderer.
+task lifecycle. It carries guidance plus the complete committed hook runtime,
+so a copy-only consumer needs nothing from the author's checkout; the installed
+Northstar skill is the source you copy or generate the runtime from, not an
+execution dependency.
 
 ## Artifact set
 
@@ -15,6 +17,11 @@ Northstar skill owns the schemas, reducer, adapters, and renderer.
   tasks/gNN.NNN.json
   generations/gNN.json        # derived only when a generation is closed
   projection-targets.json     # declared projection surfaces
+
+.paseo/
+  queue.json
+  hooks/northstar-lifecycle
+  hooks/northstar-lifecycle.runtime/**   # complete committed runtime payload
 ```
 
 Commit the per-task JSON records. Do not hand-edit them and do not let a
@@ -46,14 +53,29 @@ outside, or symlinked paths fail without changing bytes.
 
 ## Queue hook adoption
 
-To let Queue drive the same lifecycle, copy three files:
+To let Queue drive the same lifecycle, copy four things:
 
 1. `queue.json` → `.paseo/queue.json` (the control manifest);
 2. `hooks/northstar-lifecycle` → `.paseo/hooks/northstar-lifecycle`
    (committed, executable, `chmod +x`);
-3. `projection-targets.json` → `.northstar/lifecycle/v1/projection-targets.json`
+3. `hooks/northstar-lifecycle.runtime/` → `.paseo/hooks/northstar-lifecycle.runtime/`
+   (the complete committed runtime payload: launcher, adapter, reducer, and
+   every lifecycle schema);
+4. `projection-targets.json` → `.northstar/lifecycle/v1/projection-targets.json`
    (then edit the target list to your front doors, including the active
    generation README).
+
+The committed runtime is the only implementation Queue executes. The launcher
+resolves `northstar-lifecycle.runtime/` beside itself and never `$HOME`, a
+globally installed skill, `PATH`, the network, or the Northstar source
+checkout, so a stale or hostile installation cannot change what runs. Copy the
+payload by hand, or generate it from the installed skill with
+`bun run <installed-northstar>/scripts/lifecycle-runtime.ts copy` and commit
+the result. Never hand-edit a copied runtime file: `lifecycle-runtime.ts copy`
+is the only supported way to rewrite the payload, and `lifecycle-runtime.ts
+check` is the parity oracle that fails on any missing, extra, or differing
+code, schema, launcher, or executable-bit byte. The closure is derived, so a
+new lifecycle schema is picked up automatically.
 
 Every declared currentness view belongs in the target list: the repository
 root front door, the roadmaps front door, and the active generation README.
@@ -71,9 +93,9 @@ removal of the exact consumed instruction handoff. The hook deletes only the
 exact committed path whose bytes still hash to the pinned blob digest; a
 changed, missing, or ambiguous handoff fails closed. Queue executes the
 pinned launcher without a shell, validates result and changed paths, and owns
-staging, commit, push, and reconciliation. The adapter itself runs from the
-installed skill, so the repository depends on no Paseo, Queue, network, or
-Northstar source checkout.
+staging, commit, push, and reconciliation. The adapter runs from the committed
+runtime payload, so normal hook execution depends on no Paseo, Queue, network,
+global install, or Northstar source checkout.
 
 Adoption boundary: records begin with the first task dispatched after the
 manifest lands. Earlier closed tasks keep their Git and provider evidence;
@@ -88,6 +110,8 @@ log. Exceptional semantic decisions may still warrant a separate human log.
 ## Do not
 
 - copy runtime heartbeats, retries, or notifications into Git;
+- hand-edit a copied runtime file or its launcher instead of re-running the
+  generator;
 - edit a generated block, a record, or the manifest's executable by hand;
 - let automation choose priority, invent a next task, or retire a spec;
 - add a repository-wide mutable task ledger;

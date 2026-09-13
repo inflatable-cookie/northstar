@@ -67,7 +67,12 @@ transactional runtime state, but equivalent delivery facts must reduce to the
 same terminal Northstar receipt. Queue integration uses a repository-owned
 `.paseo/queue.json` control manifest and generic Queue event/result contracts.
 Queue does not import Northstar or parse its docs; the declared Northstar hook
-translates events into core transitions.
+translates events into core transitions. That hook runtime is pinned to
+repository bytes: the launcher, adapter, reducer, and schemas are committed
+inside the checkout, the launcher resolves only them, and no global install,
+`PATH`, network, or source checkout can change what Queue executes. One
+deterministic parity oracle rejects drift between the canonical skill and the
+committed payload.
 
 Closeout is hook-owned where a required integration-write `task.closeout` hook
 is declared. One integration commit publishes the terminal record, regenerates
