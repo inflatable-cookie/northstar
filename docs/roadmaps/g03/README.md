@@ -71,7 +71,7 @@ completion in the runway above and in Git history.
 The committed g03.014 worker handoff owns the sole approved Northstar core lane.
 It bounds the tracked-file listing that precedes backlink scanning and restores
 the held Bovine closeout. No sibling or automatic successor is approved.
-<!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:402d1c52d91734e39eefaccdc0a2c68d57f18a17c3e000f3f8e558aa38a9ad58 -->
+<!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:4a18cfb7640f13e3000ac803804360d50f1890f5cb3ee3b61915626ae0edaf15 -->
 | Generation | Disposition | Runway state |
 | --- | --- | --- |
 | g03 | open | planning_required |
@@ -85,4 +85,5 @@ the held Bovine closeout. No sibling or automatic successor is approved.
 | g03.011 | complete | none | 8 | sha256:b006beb373606185905bfa5b56fd4a1f87dc3accb80141a82be312efdd5206dc |
 | g03.012 | complete | none | 8 | sha256:2ea341f845521a3162fc405e6528fb40d08b4e30b555b3de3af819f3c8bfc649 |
 | g03.013 | complete | none | 8 | sha256:b04543c372ffeb75b3fd0813e7f541f216d22f3c6bd3cb03dcd5e175ea225374 |
+| g03.014 | complete | none | 8 | sha256:625cb1913c3e02eedff7bfde13b7739bab45ac45d5017c550df775b210ab95dd |
 <!-- northstar:lifecycle:end -->
