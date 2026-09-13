@@ -7,11 +7,11 @@ without reconstructing the originating conversation.
 
 Create a handoff only when another thread genuinely needs to take over or the
 operator explicitly asks for one. A long thread, low context, or ordinary
-compaction is not enough if the same thread can continue from the live `Next Task`.
+compaction is not enough if the same thread can continue from canonical planning.
 
-Before writing a handoff, complete the honest closeout that belongs in the
-planning spine: update the current task, roadmap/currentness surfaces, and log
-when the work reached a meaningful stopping point.
+Before writing a handoff, settle the semantic planning needed by the next
+thread. Lifecycle-managed repositories leave mechanical state and closeout to
+the canonical record and generated projections.
 
 ## Naming
 
@@ -63,16 +63,13 @@ general doctrine. Repeat only dispatch state, worker boundaries, local runtime
 facts, the PR contract, and non-obvious tensions. If the handoff rivals its
 owning task or repeats multi-paragraph protocol text, compress it.
 
-## Current dispatch
-
-[`g03.010 — Adopt the Effigy-hosted lifecycle hook`](20260913-121953-adopt-effigy-hosted-lifecycle-hook.md)
-is the sole approved worker handoff.
-
 ## Relationship to logs
 
 - `docs/logs/` records evidence and decisions from work that happened.
 - `docs/handoffs/` explains how the next thread should pick the work up.
 - A handoff may link to a log, but it does not replace one.
+- Durable logs and planning files do not link to a transient worker handoff;
+  required closeout consumes that exact file.
 
 The handoff skill always writes the concrete file here and reports its absolute
 path to the operator.

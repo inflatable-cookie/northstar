@@ -19,7 +19,8 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 | Pin the complete Queue hook runtime to repository bytes and repeat the live self-hosting proof. | complete as `g03.008`; terminal record and exact handoff cleanup published as `305700c` | system architecture, contract 001, bundle section 12; `g03.007` live evidence | no further runtime-pinning lane |
 | Keep an exhausted generation open in `planning_required` until an explicit rollover closes it. | complete as `g03.009`; terminal record published at `c9e3533` | contract 001, section 03, bundle section 12 | no further state-separation lane |
 | Run Queue lifecycle hooks through Effigy and the installed Northstar skill without copied repository code. | complete as `g03.010`; terminal state published at `36dc197` | contract 001, system architecture, bundle section 12; Queue contract 005 | portfolio rollout in progress |
-| Represent legitimate parallel active generations in portable lifecycle projections. | ready as `g03.011` | contract 001, bundle section 12; Underlay parallel mode | one Northstar core lane before Underlay adoption |
+| Represent legitimate parallel active generations in portable lifecycle projections. | complete as `g03.011`; terminal record published at `99bbc94` | contract 001, bundle section 12; Underlay parallel mode | no further projection-shape lane |
+| Make lifecycle JSON and generated regions the sole mechanical currentness, with safe transient handoff consumption. | owned by `g03.012` | contract 001, bundle section 12, lifecycle reference | exact portfolio repair after the stricter oracle lands |
 | Reduce repeated protocol enumerations and retire genuinely redundant modes without merging distinct behavior blindly. | next | contract 001, later usage evidence | Chatterbox sequencing after the active goal |
 | Keep unresolved operator feedback visible without pinning old generations open. | watch | contract 001 | bounded watchlist below |
 
@@ -60,6 +61,7 @@ separately owned and is not part of this runway.
 - `009-separate-planning-required-from-generation-closure.md`
 - `010-adopt-effigy-hosted-lifecycle-hook.md`
 - `011-support-parallel-active-generation-projections.md`
+- `012-enforce-sole-source-lifecycle-currentness.md`
 
 Mechanical status lives in the lifecycle records: adopted tasks (`g03.006`
 onward) project it in the generated block below, earlier tasks keep their
@@ -67,10 +69,10 @@ completion in the runway above and in Git history.
 
 ## Next task
 
-`g03.011` is the sole Northstar core lane. It adds strict parallel-generation
-projection support before Underlay adopts the portable hook. The singular
-consumer rollout is already independent and does not authorize another
-Northstar sibling.
+The committed worker handoff owns the sole approved Northstar core lane. It
+repairs duplicate mechanical currentness and consumed-handoff backlinks before
+the exact portfolio correction wave. No sibling or automatic successor is
+approved.
 <!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:c76ee4aa379e276ee2c44a0d1957d10592ed292650aac1a6169b14ffba14cdd0 -->
 | Generation | Disposition | Runway state |
 | --- | --- | --- |
