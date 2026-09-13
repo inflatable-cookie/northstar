@@ -47,7 +47,7 @@ is never a generation disposition.
   tasks/gNN.NNN.json
   generations/gNN.json            # compaction receipt, written by compact
   generations/gNN.closure.json    # closure authority, written by the rollover
-  projection-targets.json         # declared surfaces + active generation
+  projection-targets.json         # declared surfaces + active generation set
 ```
 
 One record per task. Git history preserves prior bodies. The record keeps a
@@ -78,9 +78,9 @@ columns, and canonical ordering. Human text outside the sentinels is preserved
 exactly. Re-rendering an unchanged receipt set produces no diff.
 
 Every declared currentness view is a projection, not a hand-maintained mirror:
-the repository root front door, the roadmaps front door, and the active
+the repository root front door, the roadmaps front door, and each active
 generation README belong in `projection-targets.json` once the lifecycle is
-adopted. The projection block names the declared active generation, its
+adopted. The projection block names each declared active generation, its
 disposition, and its derived runway state above the canonical task table, and
 binds state and entries into one source digest, so an exhausted runway renders
 as `planning_required` — never as completion. Human prose outside the blocks
@@ -89,6 +89,32 @@ runway state, or latest delivery status in a form that goes stale at closeout.
 Rollover updates the declared targets and the active generation explicitly:
 when a generation closes, the outgoing generation README leaves the target list
 and the incoming one joins it in the same adoption step.
+
+## Active-generation set
+
+`projection-targets.json` declares the active generation set with exactly one
+of two exclusive keys; declaring both, neither, or a malformed set fails
+closed before any mutation:
+
+- `"active_generation": "gNN"` — the sequential form. One declared active
+  generation. Copy-ready starter material uses only this form, and sequential
+  consumers never migrate to the plural key.
+- `"active_generations": ["gNN", ...]` — the parallel form for repositories
+  that legitimately run more than one generation. It must be a non-empty,
+  lexically sorted, duplicate-free `gNN` list; unsorted input is rejected
+  rather than silently reordered.
+
+Both forms normalize to one active-generation set internally, and a task
+transition is valid only when its generation is in that set: an envelope for
+an undeclared generation refuses before any byte changes, with or without
+render targets. The plural form records an already-authorized repository
+mode; it never grants parallel planning authority by itself — the
+repository's own roadmap mode must authorize the declared set, and rollover,
+closure, and compaction stay human-owned. Rendering stays deterministic for
+both forms: the singular shape renders exactly one generation row and
+byte-identical historical output, while the parallel shape renders one row
+per active generation in lexical order above one task table whose entries
+stay grouped by generation and task id.
 
 ## Adoption
 

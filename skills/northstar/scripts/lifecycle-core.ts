@@ -762,31 +762,59 @@ export function projectionEntries(records: Record<string, unknown>[]): Projectio
     .sort((a, b) => (a.task_id < b.task_id ? -1 : a.task_id > b.task_id ? 1 : 0));
 }
 
-// The projection is scoped to the declared active generation: the state line
-// and the entry set describe exactly that generation, and the source digest
-// binds the state and entries together so neither can drift from the other.
-export function buildProjection(records: Record<string, unknown>[], state: GenerationState): Record<string, unknown> {
-  const entries = projectionEntries(records.filter((record) => record.generation === state.generation));
+// The projection binds each declared active generation's state and the
+// scoped entry set into one source digest. The singular form keeps the exact
+// historical object shape (and therefore byte-identical rendered blocks); the
+// parallel form renders one generation row per active generation in stable
+// lexical order, with task records grouped by generation and task id.
+export function buildProjectionStates(records: Record<string, unknown>[], declaredStates: GenerationState[]): Record<string, unknown> {
+  check(Array.isArray(declaredStates) && declaredStates.length > 0, "projection",
+    "projection requires at least one declared active generation");
+  const states = [...declaredStates].sort((a, b) => (a.generation < b.generation ? -1 : a.generation > b.generation ? 1 : 0));
+  check(new Set(states.map((state) => state.generation)).size === states.length, "projection",
+    "projection received duplicate generation states");
+  const activeSet = new Set(states.map((state) => state.generation));
+  const entries = projectionEntries(records.filter((record) => activeSet.has(String(record.generation))));
+  if (states.length === 1) {
+    const state = states[0]!;
+    const projection = {
+      schema_version: PROJECTION_SCHEMA,
+      generation: state.generation,
+      disposition: state.disposition,
+      runway_state: state.runway,
+      source_digest: digestOf({ disposition: state.disposition, entries, generation: state.generation, runway_state: state.runway }),
+      entries,
+    };
+    validateProjection(projection);
+    return projection;
+  }
+  const generations = states.map((state) => ({ generation: state.generation, disposition: state.disposition, runway_state: state.runway }));
   const projection = {
     schema_version: PROJECTION_SCHEMA,
-    generation: state.generation,
-    disposition: state.disposition,
-    runway_state: state.runway,
-    source_digest: digestOf({ disposition: state.disposition, entries, generation: state.generation, runway_state: state.runway }),
+    generations,
+    source_digest: digestOf({ entries, generations }),
     entries,
   };
   validateProjection(projection);
   return projection;
 }
 
+export function buildProjection(records: Record<string, unknown>[], state: GenerationState): Record<string, unknown> {
+  return buildProjectionStates(records, [state]);
+}
+
 export function renderProjectionBlock(projection: Record<string, unknown>): string {
   validateProjection(projection);
   const entries = projection.entries as ProjectionEntry[];
+  const stateRows = projection.generations !== undefined
+    ? (projection.generations as { generation: string; disposition: string; runway_state: string }[])
+      .map((row) => "| " + row.generation + " | " + row.disposition + " | " + row.runway_state + " |")
+    : ["| " + String(projection.generation) + " | " + String(projection.disposition) + " | " + String(projection.runway_state) + " |"];
   const lines = [
     BEGIN_PREFIX + " schema=" + PROJECTION_SCHEMA + " digest=" + String(projection.source_digest) + " -->",
     "| Generation | Disposition | Runway state |",
     "| --- | --- | --- |",
-    "| " + String(projection.generation) + " | " + String(projection.disposition) + " | " + String(projection.runway_state) + " |",
+    ...stateRows,
     "| Task | Status | Stage | Revision | Record digest |",
     "| --- | --- | --- | --- | --- |",
   ];
@@ -818,8 +846,8 @@ export function renderProjectionInto(text: string, projection: Record<string, un
   return { text: next, changed: next !== normalized, block };
 }
 
-export function verifyProjectionText(text: string, records: Record<string, unknown>[], state: GenerationState): void {
-  const projection = buildProjection(records, state);
+export function verifyProjectionText(text: string, records: Record<string, unknown>[], state: GenerationState | GenerationState[]): void {
+  const projection = buildProjectionStates(records, Array.isArray(state) ? state : [state]);
   const expected = renderProjectionBlock(projection);
   const range = findProjectionRange(text.replace(/\r\n/g, "\n"));
   check(range !== null, "projection-drift", "generated lifecycle block is missing");
@@ -834,14 +862,25 @@ export function verifyProjectionText(text: string, records: Record<string, unkno
 export interface ProjectionConfig {
   schema_version: string;
   targets: string[];
-  active_generation: string;
+  // Singular declared form. Present exactly when the config used the
+  // `active_generation` key, so doctrine and tooling can tell which spelling
+  // the repository committed.
+  active_generation?: string;
+  // Normalized active-generation set, in lexical order, for both forms. This
+  // is the membership authority: a task transition is valid only when its
+  // generation is in this set.
+  active_generations: string[];
 }
 
 // Read and validate the repository-declared projection configuration. The v2
-// config names the active generation, so every projection surface derives its
-// state from one declared source instead of guessing from record presence.
-// Returns null when the config is absent; callers decide whether that is
-// lawful for their surface.
+// config declares its active generations with exactly one of the singular
+// `active_generation` key or the plural `active_generations` key; the plural
+// form is a non-empty, lexically sorted, duplicate-free list of gNN
+// generations. Mixed, missing, unsorted, empty, or duplicated declarations
+// fail closed. The plural form records an already-authorized repository mode;
+// it never grants parallel planning authority by itself — the repository's
+// roadmap mode must authorize the set. Returns null when the config is
+// absent; callers decide whether that is lawful for their surface.
 export function readProjectionConfig(repoRoot: string): ProjectionConfig | null {
   const configPath = path.join(repoRoot, TARGETS_CONFIG_REL);
   if (!fs.existsSync(configPath)) return null;
@@ -854,17 +893,39 @@ export function readProjectionConfig(repoRoot: string): ProjectionConfig | null 
   check(parsed !== null && typeof parsed === "object" && !Array.isArray(parsed), "projection-config", "projection targets config is not an object");
   const config = parsed as Record<string, unknown>;
   check(config.schema_version === PROJECTION_TARGETS_SCHEMA,
-    "projection-config", "projection targets config has an unsupported schema_version: " + String(config.schema_version) + " (expected " + PROJECTION_TARGETS_SCHEMA + " with an active_generation)");
+    "projection-config", "projection targets config has an unsupported schema_version: " + String(config.schema_version) + " (expected " + PROJECTION_TARGETS_SCHEMA + " with an active_generation or active_generations declaration)");
   const declared = config.targets;
   check(Array.isArray(declared) && declared.length <= 64 && declared.every((t) => typeof t === "string" && t.length > 0),
     "projection-config", "projection targets config must carry at most 64 non-empty target paths");
   check(new Set(declared as string[]).size === (declared as string[]).length, "projection-config", "projection targets config has duplicate entries");
-  check(typeof config.active_generation === "string" && GENERATION_RE.test(config.active_generation),
-    "projection-config", "projection targets config must declare the active generation as gNN");
+  const hasSingular = Object.prototype.hasOwnProperty.call(config, "active_generation");
+  const hasPlural = Object.prototype.hasOwnProperty.call(config, "active_generations");
+  check(hasSingular !== hasPlural, "projection-config",
+    "projection targets config must declare exactly one of active_generation or active_generations, found " +
+    (hasSingular && hasPlural ? "both keys" : "neither key"));
+  let generations: string[];
+  if (hasSingular) {
+    check(typeof config.active_generation === "string" && GENERATION_RE.test(config.active_generation),
+      "projection-config", "projection targets config must declare the active generation as gNN");
+    generations = [config.active_generation as string];
+  } else {
+    const list = config.active_generations;
+    check(Array.isArray(list) && list.length > 0 && list.length <= 16,
+      "projection-config", "projection targets config must declare active_generations as 1-16 gNN generations");
+    check((list as unknown[]).every((g) => typeof g === "string" && GENERATION_RE.test(g)),
+      "projection-config", "projection targets config must declare every active generation as gNN");
+    const sorted = [...(list as string[])].sort();
+    check(canonicalJson(list) === canonicalJson(sorted), "projection-config",
+      "projection targets config must declare active_generations in lexical order; sorting is never silent");
+    check(new Set(list as string[]).size === (list as string[]).length, "projection-config",
+      "projection targets config declares duplicate active generations");
+    generations = list as string[];
+  }
   return {
     schema_version: PROJECTION_TARGETS_SCHEMA,
     targets: (declared as string[]).map((target) => containRepoPath(repoRoot, target)),
-    active_generation: config.active_generation as string,
+    ...(hasSingular ? { active_generation: generations[0] } : {}),
+    active_generations: generations,
   };
 }
 
@@ -1117,9 +1178,19 @@ export function applyEnvelope(options: ApplyOptions): ApplyResult {
   check(taskClosure === null || taskClosure.disposition !== "closed", "generation-closed",
     "generation " + identity.generation + " is closed by " + generationClosurePath(repoRoot, identity.generation).replace(repoRoot + path.sep, "") + "; its task records are sealed");
 
-  // Rendering projections requires the declared active generation; record-only
-  // writes stay lawful in repositories that have not declared one.
-  const config = targetPaths.length > 0 ? requireProjectionConfig(repoRoot) : null;
+  // The declared active-generation set is the membership authority: a task
+  // transition is valid only when its generation is in the normalized set.
+  // Rendering projections requires a declared set; record-only writes stay
+  // lawful in repositories that have not declared one.
+  const config = readProjectionConfig(repoRoot);
+  if (config !== null && !config.active_generations.includes(identity.generation)) {
+    fail("projection-config",
+      "generation " + identity.generation + " is not in the declared active-generation set (" + config.active_generations.join(", ") + ")");
+  }
+  if (targetPaths.length > 0) {
+    check(config !== null, "projection-config",
+      TARGETS_CONFIG_REL + " is missing; rendering lifecycle state requires a declared active-generation set");
+  }
 
   const file = recordFilePath(repoRoot, identity.taskId);
   assertRealContained(repoRoot, path.dirname(file));
@@ -1144,8 +1215,12 @@ export function applyEnvelope(options: ApplyOptions): ApplyResult {
     (options.writeFile ?? writeFileAtomic)(file, canonicalJson(reduced.record) + "\n");
     const changed = [path.relative(repoRoot, file)];
     const records = listRecords(repoRoot);
-    const state = config === null ? null : generationStateOf(records, config.active_generation, readGenerationClosure(repoRoot, config.active_generation));
-    const projection = state === null ? null : buildProjection(records, state);
+    let projection: Record<string, unknown> | null = null;
+    if (config !== null) {
+      const states = config.active_generations.map((generation) =>
+        generationStateOf(records, generation, readGenerationClosure(repoRoot, generation)));
+      projection = buildProjectionStates(records, states);
+    }
     for (const targetAbs of targetPaths) {
       const existing = fs.existsSync(targetAbs) ? fs.readFileSync(targetAbs, "utf8") : "";
       const projected = renderProjectionInto(existing, projection!);
@@ -1170,8 +1245,11 @@ export function applyEnvelope(options: ApplyOptions): ApplyResult {
 
 // Read-only modes
 
-export function frontierOf(records: Record<string, unknown>[], generation?: string): Record<string, unknown> {
-  const scoped = generation === undefined ? records : records.filter((record) => record.generation === generation);
+export function frontierOf(records: Record<string, unknown>[], generation?: string | string[]): Record<string, unknown> {
+  const scope = generation === undefined
+    ? undefined
+    : new Set(Array.isArray(generation) ? generation.map(String) : [String(generation)]);
+  const scoped = scope === undefined ? records : records.filter((record) => scope.has(String(record.generation)));
   const eligible = scoped
     .filter((record) => record.status === "ready")
     .map((record) => String(record.task_id))
@@ -1196,9 +1274,9 @@ export function verifyRepo(repoRoot: string, target?: string): Record<string, un
   if (target && fs.existsSync(target)) {
     try {
       const config = requireProjectionConfig(repoRoot);
-      const closure = readGenerationClosure(repoRoot, config.active_generation);
-      const state = generationStateOf(records, config.active_generation, closure);
-      verifyProjectionText(fs.readFileSync(target, "utf8"), records, state);
+      const states = config.active_generations.map((generation) =>
+        generationStateOf(records, generation, readGenerationClosure(repoRoot, generation)));
+      verifyProjectionText(fs.readFileSync(target, "utf8"), records, states);
     } catch (err) {
       problems.push((err as Error).message);
     }
@@ -2096,6 +2174,133 @@ async function runOracle(): Promise<number> {
     check(fs.readFileSync(path.join(repo, "docs/multi-a.md"), "utf8").includes("| g03 | open |"), "oracle", "contained render lost the generation state line");
     ok("contained explicit-path render succeeds inside the repository");
 
+    // 10b. Parallel active-generation membership: strict singular/plural union,
+    // deterministic multi-row rendering, and refusal of out-of-set generations.
+    const configRel = ".northstar/lifecycle/v1/projection-targets.json";
+    const configAbs = path.join(repo, configRel);
+    const singularConfigBytes = fs.readFileSync(configAbs, "utf8");
+    const pluralConfig = { schema_version: PROJECTION_TARGETS_SCHEMA, targets: [] as string[], active_generations: ["g03", "g04"] };
+    const restorePluralConfig = () => fs.writeFileSync(configAbs, canonicalJson(pluralConfig) + "\n");
+
+    const g04TaskPath = "docs/roadmaps/g04/010-parallel-task.md";
+    fs.mkdirSync(path.join(repo, "docs/roadmaps/g04"), { recursive: true });
+    fs.writeFileSync(path.join(repo, g04TaskPath), "# Parallel Task\n\nHuman narrative.\n");
+    run(["add", "-A"]);
+    run(["commit", "-q", "-m", "plan g04 parallel task"]);
+    const g04Commit = run(["rev-parse", "HEAD"]);
+    const g04PlanEnv = baseEnv({
+      event_id: "standalone-plan-g04-0001",
+      task_id: "g04.010",
+      task_path: g04TaskPath,
+      generation: "g04",
+      expected: { revision: 0, digest: null },
+      planning: { commit: g04Commit, task_blob_digest: digestBytes(fs.readFileSync(path.join(repo, g04TaskPath))) },
+    });
+
+    // The singular declaration is still committed: g04 is outside the set and
+    // refuses before any byte changes, with and without render targets.
+    const targetBeforeRefusal = fs.readFileSync(path.join(repo, "docs/multi-a.md"), "utf8");
+    expectFail("out-of-set generation transition with targets is refused", () => {
+      applyEnvelope({ repoRoot: repo, targets: ["docs/multi-a.md"], envelope: g04PlanEnv });
+    }, "not in the declared active-generation set");
+    expectFail("out-of-set generation record-only transition is refused", () => {
+      applyEnvelope({ repoRoot: repo, envelope: g04PlanEnv });
+    }, "not in the declared active-generation set");
+    check(!fs.existsSync(path.join(repo, ".northstar/lifecycle/v1/tasks/g04.010.json")), "oracle", "refused out-of-set transition still wrote a record");
+    check(fs.readFileSync(path.join(repo, "docs/multi-a.md"), "utf8") === targetBeforeRefusal, "oracle", "refused out-of-set transition still mutated a target");
+    ok("membership refusal keeps an out-of-set generation out of the projection");
+
+    // Declaring the parallel set admits both generations and renders one row
+    // per active generation in lexical order.
+    fs.writeFileSync(configAbs, canonicalJson(pluralConfig) + "\n");
+    run(["add", "-A"]);
+    run(["commit", "-q", "-m", "declare parallel active generations"]);
+    const recordsBeforePlural = listRecords(repo);
+    const singularBefore = fs.readFileSync(path.join(repo, "docs/multi-a.md"), "utf8");
+    const g04Apply = applyEnvelope({ repoRoot: repo, envelope: g04PlanEnv, targets: ["docs/multi-a.md"] });
+    check(g04Apply.status === "applied", "oracle", "parallel-set g04 plan was refused: " + JSON.stringify(g04Apply));
+    const pluralRendered = fs.readFileSync(path.join(repo, "docs/multi-a.md"), "utf8");
+    check(pluralRendered.includes("| g03 | open | planned |"), "oracle", "parallel render lost the g03 state row");
+    check(pluralRendered.includes("| g04 | open | planned |"), "oracle", "parallel render lost the g04 state row");
+    check(pluralRendered.indexOf("| g03 | open | planned |") < pluralRendered.indexOf("| g04 | open | planned |"), "oracle", "parallel state rows are not in lexical order");
+    check(pluralRendered.includes("| g04.010 | planned | none |"), "oracle", "parallel render lost the g04 entry");
+    check(pluralRendered.indexOf("| g03.005 |") < pluralRendered.indexOf("| g04.010 |"), "oracle", "parallel entries are not grouped by generation and task id");
+    check(pluralRendered.includes("Human text stays."), "oracle", "parallel render lost human text");
+    const verifyRun = runCliRaw(["verify", "--target", "docs/multi-a.md"]);
+    check(verifyRun.status === 0, "oracle", "parallel verify reported drift: " + verifyRun.stdout);
+    const replayRender = runCliRaw(["render", "--records", ".northstar/lifecycle/v1/tasks", "--target", "docs/multi-a.md"]);
+    check(replayRender.status === 0 && String(JSON.parse(replayRender.stdout).status) === "unchanged", "oracle", "parallel replay render changed bytes: " + replayRender.stdout);
+    ok("parallel declarations render one lexical row per active generation deterministically");
+
+    // Configuration union negatives: every malformed declaration fails closed
+    // before any mutation, then restores the committed plural declaration.
+    const expectConfigRefused = (name: string, variant: Record<string, unknown>, match: string) => {
+      fs.writeFileSync(configAbs, canonicalJson(variant) + "\n");
+      cliFailHere(name, ["render", "--records", ".northstar/lifecycle/v1/tasks", "--target", "docs/multi-a.md"], match);
+      restorePluralConfig();
+    };
+    expectConfigRefused("both singular and plural keys are refused",
+      { schema_version: PROJECTION_TARGETS_SCHEMA, targets: [], active_generation: "g03", active_generations: ["g03", "g04"] }, "exactly one");
+    expectConfigRefused("neither key is refused",
+      { schema_version: PROJECTION_TARGETS_SCHEMA, targets: [] }, "neither key");
+    expectConfigRefused("an empty parallel set is refused",
+      { schema_version: PROJECTION_TARGETS_SCHEMA, targets: [], active_generations: [] }, "1-16 gNN generations");
+    expectConfigRefused("an unsorted parallel set is refused without silent sorting",
+      { schema_version: PROJECTION_TARGETS_SCHEMA, targets: [], active_generations: ["g04", "g03"] }, "lexical order");
+    expectConfigRefused("a duplicate parallel set is refused",
+      { schema_version: PROJECTION_TARGETS_SCHEMA, targets: [], active_generations: ["g03", "g03", "g04"] }, "duplicate active generations");
+    ok("configuration union negatives fail closed before any byte changes");
+
+    // Projection schema negatives: the singular and parallel shapes are
+    // mutually exclusive, and the parallel rows are closed objects.
+    const g04Record = { ...secondRecord, task_id: "g04.010", generation: "g04" };
+    const parallelStateA = [
+      generationStateOf(recordsBeforePlural, "g03", null),
+      generationStateOf(recordsBeforePlural, "g04", null),
+    ];
+    const parallelStateB = [...parallelStateA].reverse();
+    const parallelProjectionA = buildProjectionStates([...recordsBeforePlural, g04Record], parallelStateA);
+    const parallelProjectionB = buildProjectionStates([...recordsBeforePlural, g04Record], parallelStateB);
+    check(canonicalJson(parallelProjectionA) === canonicalJson(parallelProjectionB), "oracle", "parallel projection depends on state order");
+    check(Array.isArray(parallelProjectionA.generations) && parallelProjectionA.generation === undefined, "oracle", "parallel projection kept singular keys");
+    check(canonicalJson(parallelProjectionA.generations) === canonicalJson([
+      { generation: "g03", disposition: "open", runway_state: "planned" },
+      { generation: "g04", disposition: "open", runway_state: "planning_required" },
+    ]), "oracle", "parallel rows lost their state axes");
+    expectFail("projection schema rejects mixed singular and parallel rows", () => validateProjection({
+      schema_version: PROJECTION_SCHEMA,
+      generation: "g03",
+      disposition: "open",
+      runway_state: "planned",
+      generations: [{ generation: "g04", disposition: "open", runway_state: "planned" }],
+      source_digest: parallelProjectionA.source_digest,
+      entries: [],
+    }));
+    expectFail("projection schema rejects a parallel row with an invented disposition", () => validateProjection({
+      schema_version: PROJECTION_SCHEMA,
+      generations: [{ generation: "g04", disposition: "sealed", runway_state: "planned" }],
+      source_digest: parallelProjectionA.source_digest,
+      entries: [],
+    }));
+    expectFail("projection schema rejects an empty parallel row set", () => validateProjection({
+      schema_version: PROJECTION_SCHEMA,
+      generations: [],
+      source_digest: parallelProjectionA.source_digest,
+      entries: [],
+    }));
+    ok("parallel projection shape is schema-checked and mutually exclusive with the singular shape");
+
+    // Existing singular output bytes: restoring the singular declaration
+    // re-renders the exact pre-parallel block, including its digest.
+    fs.writeFileSync(configAbs, singularConfigBytes);
+    const backToSingular = runCliRaw(["render", "--records", ".northstar/lifecycle/v1/tasks", "--target", "docs/multi-a.md"]);
+    check(backToSingular.status === 0, "oracle", "singular render after parallel mode failed: " + backToSingular.stdout);
+    const singularAfter = fs.readFileSync(path.join(repo, "docs/multi-a.md"), "utf8");
+    check(singularAfter === singularBefore, "oracle", "singular projection bytes changed across a parallel declaration");
+    check(!singularAfter.includes("g04.010"), "oracle", "singular render leaked out-of-set records");
+    restorePluralConfig();
+    ok("singular output bytes survive a parallel declaration unchanged");
+
     // 11. Static portability scan of this very source file.
     const ownSource = fs.readFileSync(fileURLToPath(import.meta.url), "utf8");
     const forbidden = forbiddenImportSpecifiers(ownSource);
@@ -2193,8 +2398,15 @@ async function main(): Promise<void> {
         const config = readProjectionConfig(repoRoot);
         check(config !== null || records.length === 0, "projection-config",
           TARGETS_CONFIG_REL + " is missing; lifecycle records exist but no active generation is declared");
-        const generation = config === null ? null : generationStateOf(records, config.active_generation, readGenerationClosure(repoRoot, config.active_generation));
-        printJson({ status: "ok", records, generation, frontier: frontierOf(records, config?.active_generation) });
+        const generations = config === null ? [] : config.active_generations.map((generation) =>
+          generationStateOf(records, generation, readGenerationClosure(repoRoot, generation)));
+        printJson({
+          status: "ok",
+          records,
+          generation: generations.length === 1 ? generations[0] : null,
+          generations,
+          frontier: frontierOf(records, config?.active_generations),
+        });
         return;
       }
       case "frontier": {
@@ -2203,7 +2415,7 @@ async function main(): Promise<void> {
         const config = readProjectionConfig(repoRoot);
         check(config !== null || records.length === 0, "projection-config",
           TARGETS_CONFIG_REL + " is missing; lifecycle records exist but no active generation is declared");
-        printJson(frontierOf(records, config?.active_generation));
+        printJson(frontierOf(records, config?.active_generations));
         return;
       }
       case "verify": {
@@ -2237,8 +2449,9 @@ async function main(): Promise<void> {
         assertRealContained(repoRoot, fs.existsSync(targetAbs) ? targetAbs : path.dirname(targetAbs));
         const existing = fs.existsSync(targetAbs) ? fs.readFileSync(targetAbs, "utf8") : "";
         const config = requireProjectionConfig(repoRoot);
-        const state = generationStateOf(records, config.active_generation, readGenerationClosure(repoRoot, config.active_generation));
-        const projection = buildProjection(records, state);
+        const states = config.active_generations.map((generation) =>
+          generationStateOf(records, generation, readGenerationClosure(repoRoot, generation)));
+        const projection = buildProjectionStates(records, states);
         const result = renderProjectionInto(existing, projection);
         if (result.changed) writeFileAtomic(targetAbs, result.text);
         printJson({ status: result.changed ? "applied" : "unchanged", task_id: "projection", revision: 0, digest: String(projection.source_digest), changed_paths: result.changed ? [target] : [] });
