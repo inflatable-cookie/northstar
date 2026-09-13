@@ -17,7 +17,7 @@ runner, so a consumer repository never commits or maintains a hook runtime.
   tasks/gNN.NNN.json
   generations/gNN.json            # compaction receipt, written by compact
   generations/gNN.closure.json    # closure authority, written by the rollover
-  projection-targets.json         # declared surfaces + active generation
+  projection-targets.json         # declared surfaces + active generation set
 
 .paseo/
   queue.json                      # generic Queue control manifest (v2)
@@ -30,7 +30,7 @@ returns.
 
 Task Markdown keeps outcome, scope, decisions, acceptance, stop conditions,
 policy, and UI brief. A generated block between stable sentinels projects the
-record and names the declared active generation, its disposition (`open` or
+record and names each declared active generation, its disposition (`open` or
 `closed`; never `complete`), and its derived runway state (`active`, `ready`,
 `blocked`, `planned`, or `planning_required`). An open generation whose records
 are all terminal projects `planning_required`: that asks planning to extend the
@@ -78,6 +78,15 @@ things:
    (then edit the target list to your front doors, including the active
    generation README, and declare your active generation).
 
+The starter declares one active generation with the singular
+`active_generation` key. A repository whose roadmap mode already authorizes
+parallel generations may instead declare the plural `active_generations`
+key: a non-empty, lexically sorted, duplicate-free `gNN` list. The two keys
+are mutually exclusive, an undeclared generation refuses every transition,
+and the plural form never grants parallel planning authority by itself — the
+repository's roadmap mode must authorize the set. Keep the sequential
+default unless the repository actually runs generations in parallel.
+
 ### External prerequisites
 
 The hook route depends on three host-side facts that no repository file can
@@ -111,11 +120,11 @@ host state, not in repository bytes. The manifest stays portable across
 hosts because it names only a runner ID.
 
 Every declared currentness view belongs in the target list: the repository
-root front door, the roadmaps front door, and the active generation README.
+root front door, the roadmaps front door, and each active generation's README.
 When a generation rolls over, change the target list in the same rollover
 step — the outgoing generation README leaves it and the incoming one joins
 it — so the projected currentness surface always names exactly the active
-generation.
+generation set.
 
 The manifest binds a read-only `task.pre_dispatch` gate and a required
 integration-write hook for `task.blocked`, `task.cancelled`, and

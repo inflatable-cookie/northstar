@@ -469,12 +469,30 @@ function prePass(envelopes: Record<string, unknown>[], current: Record<string, u
 }
 
 function projectionTargets(repoRoot: string, identity: NorthstarIdentity, binding: ManifestBinding, enforceAllowed: boolean): string[] {
-  // The v2 config is the single declared source of the active generation; a
-  // missing or v1 config refuses here exactly as it does in the core, so the
-  // hook never renders a projection whose generation state was guessed.
-  const config = readProjectionConfig(repoRoot);
-  if (config === null) refuse("projection targets config " + TARGETS_CONFIG + " is missing; it must declare the targets and the active generation");
-  readGenerationClosure(repoRoot, config.active_generation);
+  // The v2 config is the single declared source of the active-generation set
+  // (singular or parallel form); a missing or v1 config refuses here exactly
+  // as it does in the core, so the hook never renders a projection whose
+  // generation state was guessed. Every declared active generation is
+  // closure-checked before any byte changes.
+  const config = (() => {
+    try {
+      return readProjectionConfig(repoRoot);
+    } catch (err) {
+      // A malformed repository declaration is a repository defect, not a hook
+      // malfunction: refuse it as blocked with the validator's exact message.
+      if (err instanceof LifecycleError) refuse(err.message);
+      throw err;
+    }
+  })();
+  if (config === null) refuse("projection targets config " + TARGETS_CONFIG + " is missing; it must declare the targets and the active generation(s)");
+  for (const generation of config.active_generations) {
+    readGenerationClosure(repoRoot, generation);
+  }
+  // The declared set is the membership authority: a transition whose
+  // generation is outside it refuses before any byte changes.
+  if (!config.active_generations.includes(identity.generation)) {
+    refuse("generation " + identity.generation + " is not in the declared active-generation set (" + config.active_generations.join(", ") + ")");
+  }
   const targets: string[] = [];
   for (const declaredTarget of config.targets) {
     if (enforceAllowed && !pathIsAllowed(declaredTarget, binding.allowedPaths)) {

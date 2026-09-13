@@ -170,6 +170,17 @@ for manifest in "$dogfood_manifest" "$starter_manifest"; do
 done
 echo "v1/v2 manifest grammar: OK"
 
+# Sequential mode stays explicit: the dogfood and copy-ready starter configs
+# keep the singular active_generation key and never adopt the plural form.
+for config in "$repo_root/.northstar/lifecycle/v1/projection-targets.json" "$repo_root/template-bundle/lifecycle/projection-targets.json"; do
+  grep -q '"active_generation"' "$config" || { echo "sequential config $config lost its singular active_generation" >&2; exit 1; }
+  if grep -q '"active_generations"' "$config"; then
+    echo "sequential starter drift: $config adopted the plural active_generations key" >&2
+    exit 1
+  fi
+done
+echo "sequential starter stays singular: OK"
+
 # ---------------------------------------------------------------------------
 # Fixture repository: two tasks planned and readied, one committed handoff
 # each, a feature branch merged with a merge commit, front doors committed.
@@ -623,6 +634,149 @@ fi
 grep -q "stale or mismatched" "$scratch/compact-stale.out"
 rm "$repoA/.northstar/lifecycle/v1/generations/g03.closure.json" "$repoA/.northstar/lifecycle/v1/generations/g03.json"
 echo "closure-gated compaction: OK"
+
+echo "# parallel active-generation closeout publishes both generations"
+repoP="$scratch/repo-parallel"
+build_fixture "$repoP"
+mkdir -p "$repoP/docs/roadmaps/g04"
+printf '# Task g04.010\n\nStatus: ready\nOwner: fixture\n' > "$repoP/docs/roadmaps/g04/010-parallel-task.md"
+printf '# g04\n\nHuman parallel generation runway stays.\n' > "$repoP/docs/roadmaps/g04/README.md"
+git -C "$repoP" add -A
+git -C "$repoP" commit -qm "plan g04.010"
+cat > "$repoP/docs/handoffs/handoff-010.md" <<'EOF'
+---
+kind: northstar-handoff
+handoff_mode: worker-pr-loop
+worker_mode: implementation
+dispatch_authority: orchestrator
+---
+
+## Current State
+
+- Ready task: [`g04.010`](../roadmaps/g04/010-parallel-task.md)
+EOF
+git -C "$repoP" add -A
+git -C "$repoP" commit -qm "handoff for g04.010"
+# Declare the already-authorized parallel mode: both generations join the
+# active set and the g04 README joins the currentness targets.
+bun -e '
+  const fs = await import("node:fs");
+  const file = process.argv[1];
+  const config = JSON.parse(fs.readFileSync(file, "utf8"));
+  delete config.active_generation;
+  config.active_generations = ["g03", "g04"];
+  config.targets.push("docs/roadmaps/g04/README.md");
+  fs.writeFileSync(file, JSON.stringify(config, null, 2) + "\n");
+' "$repoP/.northstar/lifecycle/v1/projection-targets.json"
+git -C "$repoP" add -A
+git -C "$repoP" commit -qm "declare parallel active generations"
+
+CURRENT_REPO="$repoP"
+ic010=$(git -C "$repoP" log -1 --format=%H -- docs/handoffs/handoff-010.md)
+id010=$(git -C "$repoP" show "main:docs/handoffs/handoff-010.md" | sha256sum | cut -d' ' -f1)
+mcP=$(git -C "$repoP" rev-parse main)
+fhP=$(git -C "$repoP" rev-parse feature)
+write_event "$scratch/closeout-parallel.json" "evt-closeout-parallel-0001" "task.closeout" "lifecycle-state" "$mcP" \
+  "q-010" '"Implement g04.010 parallel fixture task"' \
+  "docs/handoffs/handoff-010.md" "$ic010" "$id010" "$(closeout_delivery "$fhP" "$mcP")"
+parallel=$(run_hook "$scratch/closeout-parallel.json" "evt-closeout-parallel-0001")
+expect_outcome "$parallel" ok "parallel closeout"
+[ "$(json_field "$parallel" "r.metadata.revision")" = "8" ]
+[ "$(json_field "$parallel" "r.commitSubjectSuffix")" = "g04.010 terminal record" ]
+for target in docs/README.md docs/roadmaps/README.md docs/roadmaps/g04/README.md; do
+  grep -q "Human" "$repoP/$target"
+  grep -q "| g03 | open | planning_required |" "$repoP/$target"
+  grep -q "| g04 | open | planning_required |" "$repoP/$target"
+  g03_row=$(grep -n "| g03 | open | planning_required |" "$repoP/$target" | head -1 | cut -d: -f1)
+  g04_row=$(grep -n "| g04 | open | planning_required |" "$repoP/$target" | head -1 | cut -d: -f1)
+  [ "$g03_row" -lt "$g04_row" ]
+  grep -q "| g04.010 | complete | none |" "$repoP/$target"
+  if grep -q "| g03.006 |" "$repoP/$target"; then
+    echo "parallel projection leaked an untracked g03 record into $target" >&2
+    exit 1
+  fi
+done
+[ ! -e "$repoP/docs/handoffs/handoff-010.md" ]
+[ -f "$repoP/.northstar/lifecycle/v1/tasks/g04.010.json" ]
+[ -z "$(git -C "$repoP" diff --cached)" ]
+echo "parallel active-generation closeout: OK"
+
+retry_parallel=$(run_hook "$scratch/closeout-parallel.json" "evt-closeout-parallel-0001")
+expect_outcome "$retry_parallel" ok "parallel closeout replay"
+[ "$(json_field "$retry_parallel" "r.changedPaths.length")" = "0" ]
+echo "parallel closeout replay is a no-diff no-op: OK"
+
+echo "# a generation outside the declared set is refused"
+repoO="$scratch/repo-outside"
+build_fixture "$repoO"
+mkdir -p "$repoO/docs/roadmaps/g05"
+printf '# Task g05.011\n\nStatus: ready\nOwner: fixture\n' > "$repoO/docs/roadmaps/g05/011-outside-task.md"
+cat > "$repoO/docs/handoffs/handoff-011.md" <<'EOF'
+---
+kind: northstar-handoff
+handoff_mode: worker-pr-loop
+worker_mode: implementation
+dispatch_authority: orchestrator
+---
+
+## Current State
+
+- Ready task: [`g05.011`](../roadmaps/g05/011-outside-task.md)
+EOF
+git -C "$repoO" add -A
+git -C "$repoO" commit -qm "plan out-of-set g05.011"
+CURRENT_REPO="$repoO"
+ic011=$(git -C "$repoO" log -1 --format=%H -- docs/handoffs/handoff-011.md)
+id011=$(git -C "$repoO" show "main:docs/handoffs/handoff-011.md" | sha256sum | cut -d' ' -f1)
+mcO=$(git -C "$repoO" rev-parse main)
+fhO=$(git -C "$repoO" rev-parse feature)
+write_event "$scratch/closeout-outside.json" "evt-closeout-outside-0001" "task.closeout" "lifecycle-state" "$mcO" \
+  "q-011" '"Implement g05.011 outside fixture task"' \
+  "docs/handoffs/handoff-011.md" "$ic011" "$id011" "$(closeout_delivery "$fhO" "$mcO")"
+outside=$(run_hook "$scratch/closeout-outside.json" "evt-closeout-outside-0001")
+expect_outcome "$outside" blocked "out-of-set closeout"
+json_field "$outside" "r.summary.includes('not in the declared active-generation set')" >/dev/null
+[ ! -e "$repoO/.northstar/lifecycle/v1/tasks/g05.011.json" ]
+[ -e "$repoO/docs/handoffs/handoff-011.md" ]
+[ -z "$(git -C "$repoO" status --porcelain)" ]
+echo "out-of-set generation refusal: OK"
+
+echo "# parallel configuration union negatives fail the hook closed"
+repoU="$scratch/repo-union"
+build_fixture "$repoU"
+CURRENT_REPO="$repoU"
+read_facts "$(fixture_facts "$repoU" 006)"
+union_case() { # <name> <config-json> <message-fragment>
+  printf '%s\n' "$2" > "$repoU/.northstar/lifecycle/v1/projection-targets.json"
+  write_event "$scratch/closeout-union.json" "evt-closeout-union-0001" "task.closeout" "lifecycle-state" "$MC" \
+    "q-006" '"Implement g03.006 fixture task"' \
+    "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+  local result
+  result=$(run_hook "$scratch/closeout-union.json" "evt-closeout-union-0001")
+  expect_outcome "$result" blocked "$1"
+  if ! json_field "$result" "r.summary.includes('$3')" >/dev/null; then
+    echo "$1: refusal missed '$3': $result" >&2
+    exit 1
+  fi
+  cp "$repo_root/.northstar/lifecycle/v1/projection-targets.json" "$repoU/.northstar/lifecycle/v1/projection-targets.json"
+  [ -z "$(git -C "$repoU" status --porcelain)" ]
+}
+union_case "mixed singular and plural keys" \
+  '{"schema_version":"northstar.lifecycle.projection-targets.v2","targets":["docs/README.md"],"active_generation":"g03","active_generations":["g03"]}' \
+  "exactly one"
+union_case "neither key" \
+  '{"schema_version":"northstar.lifecycle.projection-targets.v2","targets":["docs/README.md"]}' \
+  "neither key"
+union_case "empty parallel set" \
+  '{"schema_version":"northstar.lifecycle.projection-targets.v2","targets":["docs/README.md"],"active_generations":[]}' \
+  "1-16 gNN generations"
+union_case "unsorted parallel set" \
+  '{"schema_version":"northstar.lifecycle.projection-targets.v2","targets":["docs/README.md"],"active_generations":["g11","g03"]}' \
+  "lexical order"
+union_case "duplicate parallel set" \
+  '{"schema_version":"northstar.lifecycle.projection-targets.v2","targets":["docs/README.md"],"active_generations":["g03","g03"]}' \
+  "duplicate active generations"
+echo "parallel configuration union negatives: OK"
 
 echo "# resolution precedence and fail-closed behavior"
 # A hostile global installation supplies a fake adapter that claims success

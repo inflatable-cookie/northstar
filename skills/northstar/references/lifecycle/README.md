@@ -24,7 +24,7 @@ generation:
   tasks/gNN.NNN.json
   generations/gNN.json            # compaction receipt, written by compact
   generations/gNN.closure.json    # closure authority, written by the rollover
-  projection-targets.json         # declared surfaces + active generation
+  projection-targets.json         # declared surfaces + active generation set
 ```
 
 JSON is canonical. The Markdown block inside a task or front-door file is a
@@ -82,12 +82,38 @@ Planning a new task into the same generation moves the runway out of
 mirror exists. A closure record seals its generation: every transition against
 that generation's tasks refuses, and compaction refuses an open generation.
 
-Generated projections carry both axes: the block names the declared active
+Generated projections carry both axes: the block names each declared active
 generation, its disposition, and its runway state above the canonical task
 table, and the source digest binds the state and entries together. The active
-generation comes from `projection-targets.json` (schema
+generation set comes from `projection-targets.json` (schema
 `northstar.lifecycle.projection-targets.v2`); rollover updates that declaration
 explicitly.
+
+## Active-generation declaration
+
+The v2 config declares the active generation set with exactly one of two
+exclusive keys; declaring both, neither, or a malformed set fails closed
+before any mutation:
+
+- `"active_generation": "gNN"` — the sequential form. One declared active
+  generation. The copy-ready starter template uses only this form, and
+  sequential consumers never migrate to the plural key.
+- `"active_generations": ["gNN", ...]` — the parallel form for repositories
+  that legitimately run more than one generation. It must be a non-empty,
+  lexically sorted, duplicate-free list; unsorted input is rejected rather
+  than silently reordered.
+
+Both forms normalize to one active-generation set internally, and a task
+transition is valid only when its generation is in that set: an envelope for
+an undeclared generation refuses before any byte changes, with or without
+render targets. The plural form records an already-authorized repository
+mode; it never grants parallel planning authority by itself — the
+repository's own roadmap mode must authorize the declared set, and rollover,
+closure, and compaction stay human-owned decisions. Rendering stays
+deterministic for both forms: the singular shape renders exactly one
+generation row and byte-identical historical output, while the parallel shape
+renders one row per active generation in lexical order above one task table
+whose entries stay grouped by generation and task id.
 
 ## Transitions
 
@@ -246,9 +272,11 @@ Writes are bounded twice: the adapter checks its computed changed paths
 against the manifest `allowedPaths` before writing, and Queue independently
 validates, stages, commits, and pushes exactly those paths. Projection
 targets come from the repository-declared
-`.northstar/lifecycle/v1/projection-targets.json`; a task file opts into
+`.northstar/lifecycle/v1/projection-targets.json` (which declares the active
+generation set with exactly one of `active_generation` or the sorted,
+duplicate-free `active_generations` list); a task file opts into
 currentness by already carrying a generated block. Declare every currentness
-view — the root front door, the roadmaps front door, and the active
+view — the root front door, the roadmaps front door, and each active
 generation README — and change the declared targets explicitly when a
 generation rolls over.
 
@@ -286,7 +314,8 @@ effigy check:lifecycle-adoption
 containment- and symlink-checked before any mutation, regenerated inside the
 record write lock, and reported in the exact changed-path list. Rendering a
 projection requires `projection-targets.json` to declare the active
-generation. Explicit-path `render`, `tasks-digest`, and `compact` re-check
+generation set (the singular key or the parallel list). Explicit-path
+`render`, `tasks-digest`, and `compact` re-check
 containment for the records directory and the output path and refuse escaping,
 absolute-outside, or symlinked paths. The command returns changed paths, the
 new revision and digest, and the required commit action. It never stages,
