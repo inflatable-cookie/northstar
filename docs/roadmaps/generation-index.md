@@ -11,8 +11,8 @@ Mode: sequential
 - Mechanical task state and delivery evidence are projected in the generated
   lifecycle blocks under `docs/README.md`, `docs/roadmaps/README.md`, and
   `g03/README.md`; this index stays strategic.
-- Next sequencing decision after the open lane closes: return to Chatterbox;
-  no automatic successor.
+- Current approved lane: `g03.009`; it keeps exhausted generations in
+  `planning_required` until an explicit rollover closes them.
 
 ## Generation log
 
@@ -37,5 +37,5 @@ it in the same rollover change.
 
 ## Next task
 
-The open lane runs until the closeout hook publishes its terminal record;
-after that, return to Chatterbox. No automatic successor is approved.
+`g03.009` is the only approved lane. After its closeout hook publishes the
+terminal record, return to Chatterbox. No automatic successor is approved.
