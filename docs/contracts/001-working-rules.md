@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-09-12
+Updated: 2026-09-13
 Depends on: docs/architecture/system-architecture.md
 Authority owners: repo maintainers
 Affects: bundle-docs, template-bundle, skills, docs, scripts
@@ -127,8 +127,10 @@ non-authoritative.
 - Queue integration is repository-declared through `.paseo/queue.json`. Queue
   emits generic versioned events and validates generic hook results; it does not
   know Northstar task IDs, paths, lifecycle commands, or Markdown structure.
-  The Northstar starter hook performs that translation. Required hook intent is
-  persisted before execution and uncertain writes are reconciled before retry.
+  The installed Northstar skill's hook adapter performs that translation,
+  reached through the manifest's trusted-runner program; repositories carry no
+  copied hook runtime. Required hook intent is persisted before execution and
+  uncertain writes are reconciled before retry.
 - Repository checkpoints are required for promotion to `ready`, durable block,
   cancellation, or supersession, accepted terminal closeout, and generation
   closure. Closure is its own explicit artifact: the rollover commits the

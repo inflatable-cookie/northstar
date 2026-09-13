@@ -1,7 +1,7 @@
 # 12 - Portable Task Lifecycle
 
 Status: active
-Updated: 2026-09-12
+Updated: 2026-09-13
 
 ## Purpose
 
@@ -107,23 +107,28 @@ expanded sources.
 ## Optional Queue driver
 
 A repository may declare `.paseo/queue.json` using Queue's frozen generic
-contracts so Queue events drive the same reducer through a thin repository
-hook. Queue stays document-system agnostic: it transports opaque events,
-executes a pinned committed launcher without a shell, validates the closed
-result, and owns staging, commit, push, and uncertain-effect reconciliation.
-It never learns Northstar paths, task IDs, commands, or Markdown.
+contracts so Queue events drive the same reducer through the installed
+Northstar skill. Queue stays document-system agnostic: it transports opaque
+events, resolves an operator-approved trusted runner to an immutable host
+artifact, executes it without a shell, validates the closed result, and owns
+staging, commit, push, and uncertain-effect reconciliation. It never learns
+Northstar paths, task IDs, commands, or Markdown.
 
-The hook runtime is repository-committed, not installed-user-resolved. A
-repository that declares the hook commits the complete transitive runtime
-closure — launcher, adapter, reducer, and schemas — inside its own checkout,
-and the committed launcher resolves only those bytes. Normal Queue execution
-never resolves implementation code through `$HOME`, a globally installed
-skill, `PATH`, the network, or the author's source checkout, so a stale or
-hostile installation cannot change what runs. The copy-ready starter carries
-the same payload, so a consumer that copies the advertised artifacts has no
-hidden dependency. Source, starter, and dogfood bytes may be generated copies,
-but one deterministic parity check rejects drift in code, schemas, launcher
-bytes, or the executable bit.
+The runtime is the installed skill, not repository bytes. A v2 manifest binds
+the trusted runner `effigy` with the frozen literal argv
+`["skill", "run", "northstar/queue:hook", "--stdio", "passthrough"]`: Queue
+spawns the approved artifact, Effigy resolves the `northstar/queue:hook` task
+from the consumer repository's project-local skill first and then a unique
+global install, and the consumer repository stays the execution target. Skill
+scripts are `{skill}`-anchored, so no task resolves code relative to the
+consumer. Repositories commit configuration and generated state only — no
+launcher, no copied adapter, no copied schemas, and no host path, digest, or
+installation hint in Git. The trust boundary is operator-approved host state:
+the approved runner artifact and the installed skill. A missing or revoked
+runner, a missing skill, or an ambiguous global install fails closed before
+any process runs; no alternative closeout route exists. v1 manifests remain
+valid for repositories that still pin a committed repository executable, and
+no program transport detail enters lifecycle records or projections.
 
 The hook adapter translates generic events into the same canonical
 transition envelopes the standalone adapter submits, preserves evidence

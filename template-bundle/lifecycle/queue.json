@@ -1,13 +1,16 @@
 {
-  "schema": "paseo.queue.control.v1",
+  "schema": "paseo.queue.control.v2",
   "hooks": [
     {
       "id": "lifecycle-gate",
       "events": ["task.pre_dispatch"],
       "mode": "read_only",
       "delivery": "required",
-      "executable": ".paseo/hooks/northstar-lifecycle",
-      "argv": [],
+      "program": {
+        "kind": "trusted_runner",
+        "runner": "effigy",
+        "argv": ["skill", "run", "northstar/queue:hook", "--stdio", "passthrough"]
+      },
       "timeoutMs": 30000,
       "maxOutputBytes": 65536,
       "allowedPaths": [],
@@ -18,8 +21,11 @@
       "events": ["task.blocked", "task.cancelled", "task.closeout"],
       "mode": "integration_write",
       "delivery": "required",
-      "executable": ".paseo/hooks/northstar-lifecycle",
-      "argv": [],
+      "program": {
+        "kind": "trusted_runner",
+        "runner": "effigy",
+        "argv": ["skill", "run", "northstar/queue:hook", "--stdio", "passthrough"]
+      },
       "timeoutMs": 30000,
       "maxOutputBytes": 65536,
       "allowedPaths": [".northstar/lifecycle/", "docs/roadmaps/", "docs/handoffs/", "docs/README.md"],

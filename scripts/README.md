@@ -81,10 +81,12 @@ activation marker. With no compatible package installed, only the requested
 language workflow stops; it names the exact identity and the local
 installation route.
 
-The installed skill exposes the real operator adapter:
+The installed skill exposes the real operator adapter through its own Effigy
+catalog; every skill-owned script is `{skill}`-anchored, so the consumer
+repository stays the runtime target:
 
 ```bash
-effigy --repo /path/to/installed/northstar northstar/language:route \
+effigy skill run --path /path/to/installed/northstar northstar/language:route -- \
   --consumer /path/to/consumer \
   --language typescript \
   --workflow explicit_audit_repair \
@@ -205,8 +207,25 @@ effigy check:lifecycle-core
 ```
 
 Schemas and doctrine live under `skills/northstar/references/lifecycle/`.
-`.paseo/queue.json`, Queue event contracts, and live status-authority migration
-remain deferred to a later integration lane.
+`.paseo/queue.json` now declares the live v2 Queue control manifest, which
+binds Queue's trusted runner `effigy` to the `northstar/queue:hook` skill
+route; live status-authority migration belongs to the Queue integration lane.
+
+## Effigy-hosted lifecycle hook (`check:lifecycle-adoption`)
+
+`check:lifecycle-adoption` proves the Queue hook route end to end: the skill
+catalog exposes `northstar/queue:hook` with `{skill}`-anchored scripts; raw
+stdio carries exactly one hook result with preserved exit status; the v1 and
+v2 control-manifest grammars accept valid documents and refuse mixed programs,
+host paths, and digests; fixture repositories run the pre-dispatch gate,
+hostile-event refusals, read-only binding, escape and squash refusals,
+bootstrap closeout, idempotent replay, block/cancel mapping, terminal
+equivalence, and closure-gated compaction through the real frozen argv
+(`effigy skill run northstar/queue:hook --stdio passthrough`); resolution
+precedence, ambiguity, missing skill, and missing runner all fail closed; the
+configuration-only starter consumer closes out through the same route; and no
+live surface still carries a copied hook runtime. Included in
+`effigy validate` / `effigy qa`.
 
 ## Language package machine contracts (`check:language-packages`)
 

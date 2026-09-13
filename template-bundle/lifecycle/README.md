@@ -5,10 +5,10 @@ Owner: repo maintainers
 Governing refs: bundle-docs/sections/12-portable-task-lifecycle.md
 
 This folder is the copy-ready starter for a repository adopting the portable
-task lifecycle. It carries guidance plus the complete committed hook runtime,
-so a copy-only consumer needs nothing from the author's checkout; the installed
-Northstar skill is the source you copy or generate the runtime from, not an
-execution dependency.
+task lifecycle. It carries configuration and guidance only — no Northstar
+executable code. The lifecycle reducer, adapter, and schemas live in the
+installed Northstar skill; Queue executes them through the Effigy skill
+runner, so a consumer repository never commits or maintains a hook runtime.
 
 ## Artifact set
 
@@ -20,9 +20,7 @@ execution dependency.
   projection-targets.json         # declared surfaces + active generation
 
 .paseo/
-  queue.json
-  hooks/northstar-lifecycle
-  hooks/northstar-lifecycle.runtime/**   # complete committed runtime payload
+  queue.json                      # generic Queue control manifest (v2)
 ```
 
 Commit the per-task JSON records. Do not hand-edit them and do not let a
@@ -51,8 +49,11 @@ mismatched authority. Until that record exists, the generation stays open in
 
 ## Standalone commands
 
+The lifecycle surface stays first-class without Queue. From an installed
+Northstar skill:
+
 ```bash
-bun run <installed-northstar>/scripts/lifecycle-core.ts oracle
+effigy skill run --path <installed-northstar> northstar/lifecycle:oracle
 bun run <installed-northstar>/scripts/lifecycle-core.ts status --repo .
 bun run <installed-northstar>/scripts/lifecycle-core.ts frontier --repo .
 bun run <installed-northstar>/scripts/lifecycle-core.ts apply --repo . --envelope envelope.json
@@ -66,29 +67,48 @@ outside, or symlinked paths fail without changing bytes.
 
 ## Queue hook adoption
 
-To let Queue drive the same lifecycle, copy four things:
+The manifest selects Queue's trusted runner `effigy` with the frozen literal
+argv `["skill", "run", "northstar/queue:hook", "--stdio", "passthrough"]`.
+Queue resolves that runner ID to an operator-approved host artifact outside
+Git; the manifest carries no path, digest, version, or environment. Copy two
+things:
 
 1. `queue.json` → `.paseo/queue.json` (the control manifest);
-2. `hooks/northstar-lifecycle` → `.paseo/hooks/northstar-lifecycle`
-   (committed, executable, `chmod +x`);
-3. `hooks/northstar-lifecycle.runtime/` → `.paseo/hooks/northstar-lifecycle.runtime/`
-   (the complete committed runtime payload: launcher, adapter, reducer, and
-   every lifecycle schema);
-4. `projection-targets.json` → `.northstar/lifecycle/v1/projection-targets.json`
+2. `projection-targets.json` → `.northstar/lifecycle/v1/projection-targets.json`
    (then edit the target list to your front doors, including the active
    generation README, and declare your active generation).
 
-The committed runtime is the only implementation Queue executes. The launcher
-resolves `northstar-lifecycle.runtime/` beside itself and never `$HOME`, a
-globally installed skill, `PATH`, the network, or the Northstar source
-checkout, so a stale or hostile installation cannot change what runs. Copy the
-payload by hand, or generate it from the installed skill with
-`bun run <installed-northstar>/scripts/lifecycle-runtime.ts copy` and commit
-the result. Never hand-edit a copied runtime file: `lifecycle-runtime.ts copy`
-is the only supported way to rewrite the payload, and `lifecycle-runtime.ts
-check` is the parity oracle that fails on any missing, extra, or differing
-code, schema, launcher, or executable-bit byte. The closure is derived, so a
-new lifecycle schema is picked up automatically.
+### External prerequisites
+
+The hook route depends on three host-side facts that no repository file can
+supply. Each one fails closed: a missing prerequisite starts no process,
+records a visible failure, and never falls back to another closeout route.
+
+1. **Effigy version.** The installed `effigy` must support automatic qualified
+   skill resolution and `--stdio passthrough` — the release carrying accepted
+   PR #104 (Effigy `4f2b466` or later). Older versions reject the route.
+2. **Northstar skill resolution.** `northstar/queue:hook` resolves from the
+   consumer repository first: a project-local `.agents/skills/northstar`
+   directory wins over every global source. Without a project-local copy,
+   exactly one global install across the host's named skill roots
+   (`.agents/skills`, `.codex/skills`, `.claude/skills`, `.cursor/skills`)
+   must exist; symlinks to the same directory count once, and two distinct
+   global installs are ambiguous and fail. The repository stays the execution
+   target and working directory; the skill supplies the adapter bytes.
+3. **Host runner approval.** The host operator must approve trusted runner
+   `effigy` in Queue's trusted-runner registry. Approval is host-local state
+   outside Git; a missing, disabled, or revoked runner starts no process.
+
+### What Queue executes
+
+Queue pins the approved `effigy` artifact and spawns it with the literal argv,
+no shell, and the event JSON on stdin. Effigy resolves the skill, runs the
+`queue:hook` task with the consumer repository as target and working
+directory, and forwards raw stdin, stdout, stderr, and the exit status without
+an envelope. The adapter reads its schemas from the skill installation, so a
+skill upgrade changes what runs — that trust lives in the operator-approved
+host state, not in repository bytes. The manifest stays portable across
+hosts because it names only a runner ID.
 
 Every declared currentness view belongs in the target list: the repository
 root front door, the roadmaps front door, and the active generation README.
@@ -104,11 +124,8 @@ integration-write hook's allowed paths: closeout publishes one integration
 commit containing the terminal record, the regenerated projections, and the
 removal of the exact consumed instruction handoff. The hook deletes only the
 exact committed path whose bytes still hash to the pinned blob digest; a
-changed, missing, or ambiguous handoff fails closed. Queue executes the
-pinned launcher without a shell, validates result and changed paths, and owns
-staging, commit, push, and reconciliation. The adapter runs from the committed
-runtime payload, so normal hook execution depends on no Paseo, Queue, network,
-global install, or Northstar source checkout.
+changed, missing, or ambiguous handoff fails closed. Queue validates the
+result and changed paths, and owns staging, commit, push, and reconciliation.
 
 Adoption boundary: records begin with the first task dispatched after the
 manifest lands. Earlier closed tasks keep their Git and provider evidence;
@@ -122,10 +139,9 @@ log. Exceptional semantic decisions may still warrant a separate human log.
 
 ## Do not
 
-- copy runtime heartbeats, retries, or notifications into Git;
-- hand-edit a copied runtime file or its launcher instead of re-running the
-  generator;
-- edit a generated block, a record, or the manifest's executable by hand;
+- copy Northstar runtime code, launchers, or schemas into the repository;
+- put a host path, digest, version, or environment hint into the manifest;
+- hand-edit a generated block, a record, or the manifest's program by hand;
 - let automation choose priority, invent a next task, or retire a spec;
 - add a repository-wide mutable task ledger;
 - declare Queue paths, statuses, or commands inside `.northstar/` artifacts —
