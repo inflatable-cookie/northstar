@@ -15,7 +15,7 @@
 # 5. Runs the hook adapter against real fixture repositories through the real
 #    Effigy route: pre-dispatch gate, hostile events, read-only binding,
 #    escape refusal, squash refusal, bootstrap closeout, idempotent replay,
-#    durable-backlink refusal with relative/rooted/fragment/titled/external/mismatch
+#    durable-backlink refusal with relative/rooted/fragment/titled/reference-style/external/mismatch
 #    controls, the sole-source currentness cutover (the audit rejects
 #    Silo-shaped task headers, front-door frontiers, and Next-task columns
 #    while the cutover shape and retrospective history pass), block/cancel
@@ -655,11 +655,12 @@ fi
 echo "durable backlink refusal is atomic: OK"
 
 echo "# backlink link-resolution controls"
-link_case() { # <name> <link-target> <expected-outcome>
+link_case() { # <name> <link-target> <expected-outcome> [extra-log-lines]
   local dir="$scratch/repo-link-$1"
   build_fixture "$dir"
   mkdir -p "$dir/docs"
   printf '# Log\n\nSee [the handoff](%s).\n' "$2" > "$dir/docs/log.md"
+  if [ -n "${4:-}" ]; then printf '%s\n' "$4" >> "$dir/docs/log.md"; fi
   git -C "$dir" add -A
   git -C "$dir" commit -qm "log variant $1"
   CURRENT_REPO="$dir"
@@ -683,10 +684,13 @@ link_case exact "handoffs/handoff-006.md" blocked
 link_case rooted "/docs/handoffs/handoff-006.md" blocked
 link_case fragment "handoffs/handoff-006.md#evidence" blocked
 link_case titled 'handoffs/handoff-006.md "Worker handoff"' blocked
+link_case reffull "none" blocked $'See [the handoff][run].\n\n[run]: handoffs/handoff-006.md "dispatch source"'
+link_case refcollapsed "none" blocked $'See [the handoff][].\n\n[the handoff]: handoffs/handoff-006.md'
+link_case refshortcut "none" blocked $'See [dispatch-note] for context.\n\n[dispatch-note]: handoffs/handoff-006.md'
 link_case external "https://github.com/example/repo/blob/main/docs/handoffs/handoff-006.md" ok
 link_case mismatch "handoffs/handoff-006-v2.md" ok
 link_case sibling "handoffs/handoff-007.md" ok
-echo "relative, rooted, fragment, titled, external, mismatch, and sibling controls: OK"
+echo "relative, rooted, fragment, titled, reference-style, external, mismatch, and sibling controls: OK"
 
 echo "# changed handoff fails closed before any byte changes"
 repoC="$scratch/repo-changed"

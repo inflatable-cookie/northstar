@@ -1310,6 +1310,24 @@ const CURRENTNESS_HEADING_RE = /^(next\s*task|frontier|current\s+(lane|work|task
 // retrospective history, evidence, and coarse goal-sequencing intent.
 const EXEMPT_HEADING_RE = /(history|retrospective|retrospect|evidence|limitation|log|runway|watchlist|archive|roll-?up|previously|past\s+work)/i;
 const NEXT_TASK_COLUMN_RE = /^\s*next\s*task\s*$/i;
+// Headings that mark a retrospective subtree at any depth: history, evidence,
+// logs, and archives stay human-owned even for nested tables. The Generation
+// Runway and the watchlist are live sequencing surfaces, so their Next-task
+// columns are still audited.
+const RETROSPECTIVE_HEADING_RE = /(history|retrospective|retrospect|evidence|limitation|log|archive|roll-?up|previously|past\s+work)/i;
+
+// True when the outline chain above `index` passes through a retrospective
+// heading: pop to the parent on every same-or-higher heading so only real
+// ancestors count, never earlier siblings.
+function underRetrospective(headings: Array<{ heading: string; level: number; start: number }>, index: number): boolean {
+  const stack: Array<{ heading: string; level: number }> = [];
+  for (const h of headings) {
+    if (h.start >= index) break;
+    while (stack.length > 0 && stack[stack.length - 1].level >= h.level) stack.pop();
+    stack.push({ heading: h.heading, level: h.level });
+  }
+  return stack.some((h) => RETROSPECTIVE_HEADING_RE.test(h.heading));
+}
 
 // Remove every generated projection block so the audit only sees
 // hand-maintained prose. Unclosed begin sentinels are left in place: a broken
@@ -1370,9 +1388,11 @@ function terminalIds(text: string, terminal: Set<string>): string[] {
 // `Status:` header on a lifecycle-managed task path or declared target, a
 // terminal task ID inside a live-currentness section (nested subsections
 // belong to their parent) outside generated blocks, or a terminal task ID
-// inside a Next-task table column under a non-retrospective heading. Goal
-// history (`complete as gNN.NNN`), retrospective sections and tables, and
-// prose about nonterminal tasks never flag.
+// inside a Next-task table column. The Generation Runway is a live sequencing
+// surface, so its Next-task column is audited; a table is history only under
+// a retrospective outline ancestor. Goal history (`complete as gNN.NNN`),
+// retrospective sections and tables, and prose about nonterminal tasks never
+// flag.
 export function auditCurrentnessText(
   files: Record<string, string>,
   records: Array<Record<string, unknown>>,
@@ -1446,8 +1466,11 @@ export function auditCurrentnessText(
       }
     }
     // Next-task table columns naming a terminal task. Goal/state history
-    // cells in other columns stay legal, and tables under a retrospective or
-    // otherwise exempt heading are history, not live currentness.
+    // cells in other columns stay legal. A table is history only under a
+    // retrospective ancestor: the Generation Runway is a live sequencing
+    // surface, so its Next-task column is audited even though the heading
+    // contains runway, while a table under `## History > ### Prior
+    // sequencing` stays exempt at any depth.
     for (let i = 0; i < lines.length; i += 1) {
       const cells = lines[i].split("|").map((cell) => cell.trim());
       if (cells.length < 3 || cells[0] !== "" || cells[cells.length - 1] !== "") continue;
@@ -1455,8 +1478,9 @@ export function auditCurrentnessText(
       if (!inner.some((cell) => NEXT_TASK_COLUMN_RE.test(cell))) continue;
       const column = inner.findIndex((cell) => NEXT_TASK_COLUMN_RE.test(cell));
       if (i + 1 < lines.length && /^\|[\s:|-]+\|$/.test(lines[i + 1].trim())) i += 1;
-      const tableHeading = enclosingHeading(bare, lines.slice(0, i).join("\n").length + 1);
-      if (tableHeading !== null && EXEMPT_HEADING_RE.test(tableHeading.heading)) continue;
+      const tableOffset = lines.slice(0, i).join("\n").length + 1;
+      if (underRetrospective(headings, tableOffset)) continue;
+      const tableHeading = enclosingHeading(bare, tableOffset);
       const section = tableHeading === null ? "table" : "table: " + tableHeading.heading;
       for (let r = i + 1; r < lines.length; r += 1) {
         const rowCells = lines[r].split("|").map((cell) => cell.trim());
@@ -2532,8 +2556,10 @@ async function runOracle(): Promise<number> {
     const staleDoor = "# g03\n\n## Next Task\n\nContinue with `g03.011` now.\n";
     const readyDoor = "# g03\n\n## Next Task\n\nContinue with `g03.012` now.\n";
     const historyDoor = "# g03\n\n## History\n\nCompleted `g03.011` at `99bbc94`.\n";
-    const goalTable = "# g03\n\n## Generation Runway\n\n| Goal | State | Next Task |\n| --- | --- | --- |\n| Parallel projections. | complete as `g03.011` | exact portfolio repair |\n| Shipped projections. | complete as `g03.011` | continue with `g03.011` |\n";
+    const goalTable = "# g03\n\n## Generation Runway\n\n| Goal | State | Next Task |\n| --- | --- | --- |\n| Parallel projections. | complete as `g03.011` | exact portfolio repair |\n";
+    const retroTable = "# g03\n\n## History\n\n### Prior sequencing\n\n| Goal | State | Next Task |\n| --- | --- | --- |\n| Old lane. | complete as `g03.011` | continued with `g03.011` |\n";
     const staleTable = "# g03\n\n## Goals\n\n| Goal | State | Next Task |\n| --- | --- | --- |\n| Parallel projections. | ready as `g03.011` | continue with `g03.011` |\n";
+    const runwayStaleTable = "# g03\n\n## Generation Runway\n\n| Goal | State | Next Task |\n| --- | --- | --- |\n| Shipped projections. | complete as `g03.011` | continue with `g03.011` |\n";
     const liveTask = "# g03.012\n\nHuman outcome stays.\n";
     const staleFindings = auditCurrentnessText(
       { "docs/roadmaps/g03/011-task.md": staleTask, "docs/roadmaps/g03/012-task.md": liveTask, "docs/roadmaps/g03/README.md": staleDoor },
@@ -2547,6 +2573,15 @@ async function runOracle(): Promise<number> {
       auditRecords, ["docs/roadmaps/g03/README.md"]);
     check(tableFindings.some((v) => v.task === "g03.011" && v.reason === "stale-next-task-column"),
       "oracle", "audit accepted a Next-task column naming a terminal task");
+    const runwayFindings = auditCurrentnessText(
+      { "docs/roadmaps/g03/011-task.md": cutoverTask, "docs/roadmaps/g03/012-task.md": liveTask, "docs/roadmaps/g03/README.md": runwayStaleTable },
+      auditRecords, ["docs/roadmaps/g03/README.md"]);
+    check(runwayFindings.some((v) => v.task === "g03.011" && v.reason === "stale-next-task-column"),
+      "oracle", "audit exempted a Generation Runway Next-task column naming a terminal task");
+    const retroFindings = auditCurrentnessText(
+      { "docs/roadmaps/g03/011-task.md": cutoverTask, "docs/roadmaps/g03/012-task.md": liveTask, "docs/roadmaps/g03/README.md": retroTable },
+      auditRecords, ["docs/roadmaps/g03/README.md"]);
+    check(retroFindings.length === 0, "oracle", "audit rejected a retrospective History table: " + canonicalJson(retroFindings));
     const nestedDoor = "# g03\n\n## Next Task\n\nLane intro.\n\n### Detail\n\nContinue with `g03.011` now.\n";
     const nestedFindings = auditCurrentnessText(
       { "docs/roadmaps/g03/011-task.md": cutoverTask, "docs/roadmaps/g03/012-task.md": liveTask, "docs/roadmaps/g03/README.md": nestedDoor },

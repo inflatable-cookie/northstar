@@ -668,11 +668,11 @@ interface ConsumableHandoff {
 // Durable backlink guard: a closeout handoff is transient transport, so the
 // hook refuses atomically when tracked durable Markdown still links to the
 // exact handoff it would delete. The scan is structural and bounded: tracked
-// `.md` files only, standard Markdown links (bare, angle-bracketed, or titled)
-// plus `<autolinks>`, relative and rooted targets resolved against the linking
-// file, external URLs and the handoff itself ignored, generated projection
-// blocks stripped. Only an exact local target blocks; similarly named files
-// never do.
+// `.md` files only, standard Markdown links (bare, angle-bracketed, titled,
+// or reference-style resolved through their definitions) plus `<autolinks>`,
+// relative and rooted targets resolved against the linking file, external
+// URLs and the handoff itself ignored, generated projection blocks stripped.
+// Only an exact local target blocks; similarly named files never do.
 // ---------------------------------------------------------------------------
 
 const BACKLINK_SCAN_MAX_FILES = 5000;
@@ -680,6 +680,10 @@ const BACKLINK_SCAN_MAX_BYTES = 256 * 1024;
 const MARKDOWN_LINK_RE = /\[[^\]]*\]\(\s*(?:<([^<>\s]+)>|([^\s)]+))(?:\s+[^)]*)?\)/g;
 const AUTOLINK_RE = /<([^<>\s]+)>/g;
 const EXTERNAL_TARGET_RE = /^[a-zA-Z][a-zA-Z0-9+.-]*:/;
+const REFERENCE_DEF_RE = /^[ ]{0,3}\[([^\]\n]+)\]:[ \t]*(?:<([^<>\n]+)>|(\S+))/gm;
+const REF_FULL_RE = /\[([^\]\n]+)\]\[([^\]\n]*)\]/g;
+const REF_COLLAPSED_RE = /\[([^\]\n]+)\]\[\]/g;
+const REF_SHORTCUT_RE = /(?<!!)\[([^\]\n]+)\](?!\(|\[)/g;
 
 function stripHookGeneratedBlocks(text: string): string {
   let output = "";
@@ -722,6 +726,7 @@ function resolveLinkTarget(sourceRel: string, rawTarget: string): string | null 
 // handoff file itself never counts. Bounds fail closed: an unlistable tree,
 // an oversized file, or more files than the traversal bound refuses before
 // any byte changes rather than risking a missed backlink.
+
 export function findHandoffBacklinks(repoRoot: string, handoffRel: string): string[] {
   const listed = spawnSync("git", ["ls-files", "-z"], { cwd: repoRoot });
   if (listed.status !== 0) malfunction("git ls-files failed: " + String(listed.stderr || "").trim());
@@ -753,6 +758,29 @@ export function findHandoffBacklinks(repoRoot: string, handoffRel: string): stri
         if (target !== undefined) targets.add(target);
       }
     }
+    // Reference-style links resolve through their definitions: full
+    // `[text][label]`, collapsed `[text][]`, and shortcut `[text]` forms share
+    const definitions = new Map<string, string>();
+    REFERENCE_DEF_RE.lastIndex = 0;
+    let def: RegExpExecArray | null;
+    while ((def = REFERENCE_DEF_RE.exec(bare)) !== null) {
+      const target = def[2] ?? def[3];
+      // CommonMark reference labels are case-insensitive with collapsed
+      // internal whitespace.
+      if (target !== undefined) definitions.set(def[1].trim().replace(/\s+/g, " ").toLowerCase(), target);
+    }
+    const usage = bare.replace(REFERENCE_DEF_RE, "");
+    const useLabel = (label: string): void => {
+      const target = definitions.get(label.trim().replace(/\s+/g, " ").toLowerCase());
+      if (target !== undefined) targets.add(target);
+    };
+    REF_FULL_RE.lastIndex = 0;
+    let ref: RegExpExecArray | null;
+    while ((ref = REF_FULL_RE.exec(usage)) !== null) useLabel(ref[2] === "" ? ref[1] : ref[2]);
+    REF_COLLAPSED_RE.lastIndex = 0;
+    while ((ref = REF_COLLAPSED_RE.exec(usage)) !== null) useLabel(ref[1]);
+    REF_SHORTCUT_RE.lastIndex = 0;
+    while ((ref = REF_SHORTCUT_RE.exec(usage)) !== null) useLabel(ref[1]);
     for (const raw of targets) {
       if (resolveLinkTarget(sourceRel, raw) === handoffRel) {
         backlinks.push(sourceRel);

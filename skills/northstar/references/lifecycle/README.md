@@ -286,7 +286,8 @@ projections, and the removal of the exact submitted handoff. The hook deletes
 only the exact committed path whose working-tree bytes still hash to the
 pinned blob digest, and only after the terminal receipt exists. Tracked
 durable Markdown that still links to that exact handoff refuses the same way:
-the hook resolves relative and rooted Markdown links, ignores external URLs
+the hook resolves relative, rooted, and reference-style Markdown links
+(through their definitions), ignores external URLs
 and the handoff itself, and only an exact local target blocks — so deletion
 never strands a backlink. A changed,
 missing (non-terminal record), symlinked, or otherwise ambiguous handoff

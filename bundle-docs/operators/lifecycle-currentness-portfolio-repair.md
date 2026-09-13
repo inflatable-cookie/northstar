@@ -36,8 +36,9 @@ Phase 1: dry-run inventory (no edits)
    violations (file, section, task, reason).
 3. For every unreferenced worker handoff under `docs/handoffs/` (a handoff
    whose task already has a terminal record or a pending closeout), search
-   tracked Markdown for links resolving to that exact path. Relative and
-   rooted spellings count; external URLs and similarly named files do not.
+   tracked Markdown for links resolving to that exact path. Relative, rooted,
+   and reference-style spellings (resolved through their definitions) count;
+   external URLs and similarly named files do not.
 4. Classify each finding:
    - Definite: `duplicate-status-header` on a lifecycle-record task path or
      declared target; `stale-frontier` or `stale-next-task-column` naming a
