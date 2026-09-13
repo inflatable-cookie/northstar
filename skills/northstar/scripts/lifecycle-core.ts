@@ -1284,6 +1284,216 @@ export function verifyRepo(repoRoot: string, target?: string): Record<string, un
   return { status: problems.length === 0 ? "ok" : "drift", problems, record_count: records.length };
 }
 
+// ---------------------------------------------------------------------------
+// Sole-source currentness audit
+// ---------------------------------------------------------------------------
+
+// One duplicate mechanical currentness finding. `file` is the
+// repository-relative posix path, `section` the enclosing Markdown heading (or
+// `header` before the first heading, or `table` for a Next-task table column),
+// `task` the lifecycle-managed task ID whose mutable state was repeated, and
+// `reason` one of `duplicate-status-header`, `stale-frontier`,
+// `stale-next-task-column`, or `missing-task-file`.
+export interface CurrentnessViolation {
+  file: string;
+  section: string;
+  task: string;
+  reason: string;
+}
+
+const TASK_ID_SCAN_RE = /g[0-9]{2}\.[0-9]{3}(?![0-9])/g;
+const STATUS_HEADER_LINE_RE = /^Status:[ \t]*\S.*$/;
+// Headings that claim live currentness: a Next-task pointer, a frontier, or
+// the current lane. History-shaped headings are exempt (see below).
+const CURRENTNESS_HEADING_RE = /^(next\s*task|frontier|current\s+(lane|work|task|state)|ready\s+frontier|active\s+lane)\b/i;
+// Headings that stay human-owned even when they name a terminal task:
+// retrospective history, evidence, and coarse goal-sequencing intent.
+const EXEMPT_HEADING_RE = /(history|retrospective|retrospect|evidence|limitation|log|runway|watchlist|archive|roll-?up|previously|past\s+work)/i;
+const NEXT_TASK_COLUMN_RE = /^\s*next\s*task\s*$/i;
+
+// Remove every generated projection block so the audit only sees
+// hand-maintained prose. Unclosed begin sentinels are left in place: a broken
+// block is a projection failure that verify/report already own.
+function stripGeneratedBlocks(text: string): string {
+  const normalized = text.replace(/\r\n/g, "\n");
+  let output = "";
+  let rest = normalized;
+  for (;;) {
+    const range = findProjectionRange(rest);
+    if (range === null) {
+      output += rest;
+      return output;
+    }
+    output += rest.slice(0, range.start);
+    rest = rest.slice(range.end);
+  }
+}
+
+function enclosingHeading(text: string, index: number): { heading: string; level: number; lineStart: number } | null {
+  const before = text.slice(0, index);
+  const lines = before.split("\n");
+  for (let i = lines.length - 1; i >= 0; i -= 1) {
+    const match = /^(#{1,6})\s+(.*?)\s*$/.exec(lines[i]);
+    if (match) {
+      const offset = lines.slice(0, i).join("\n").length + (i === 0 ? 0 : 1);
+      return { heading: match[2].trim(), level: match[1].length, lineStart: offset };
+    }
+  }
+  return null;
+}
+
+function sectionEnd(text: string, from: number): number {
+  const rest = text.slice(from);
+  const match = /\n#{1,6}\s+/.exec(rest);
+  return match === null ? text.length : from + (match.index ?? 0);
+}
+
+function terminalIds(text: string, terminal: Set<string>): string[] {
+  const found = new Set<string>();
+  for (const match of text.matchAll(TASK_ID_SCAN_RE)) {
+    if (terminal.has(match[0])) found.add(match[0]);
+  }
+  return [...found].sort();
+}
+
+// Pure structural audit over caller-supplied file text. `files` maps
+// repository-relative posix paths to full file content, `records` carries at
+// least `task_id`, `status`, and `task_path`, and `targets` lists the declared
+// projection targets. Detection is exact and bounded: a hand-maintained
+// `Status:` header on a lifecycle-managed task path or declared target, a
+// terminal task ID inside a live-currentness section outside generated
+// blocks, or a terminal task ID inside a Next-task table column. Goal history
+// (`complete as gNN.NNN`), retrospective sections, and prose about
+// nonterminal tasks never flag.
+export function auditCurrentnessText(
+  files: Record<string, string>,
+  records: Array<Record<string, unknown>>,
+  targets: string[],
+): CurrentnessViolation[] {
+  const terminal = new Set<string>();
+  const taskPathOf = new Map<string, string>();
+  for (const record of records) {
+    const id = String(record.task_id ?? "");
+    if (!TASK_ID_RE.test(id)) continue;
+    if (TERMINAL_STATUSES.has(String(record.status ?? ""))) terminal.add(id);
+    if (typeof record.task_path === "string" && record.task_path.length > 0) taskPathOf.set(id, record.task_path);
+  }
+  const violations: CurrentnessViolation[] = [];
+  const push = (file: string, section: string, task: string, reason: string): void => {
+    if (!violations.some((v) => v.file === file && v.section === section && v.task === task && v.reason === reason)) {
+      violations.push({ file, section, task, reason });
+    }
+  };
+
+  // 1. Lifecycle-managed task paths carry no hand-maintained Status header.
+  for (const [id, taskPath] of taskPathOf) {
+    const content = files[taskPath];
+    if (content === undefined) {
+      push(taskPath, "-", id, "missing-task-file");
+      continue;
+    }
+    const bare = stripGeneratedBlocks(content);
+    const lines = bare.split("\n");
+    for (let i = 0; i < lines.length; i += 1) {
+      if (STATUS_HEADER_LINE_RE.test(lines[i])) {
+        const offset = lines.slice(0, i).join("\n").length + (i === 0 ? 0 : 1);
+        const enclosing = enclosingHeading(bare, offset);
+        push(taskPath, enclosing === null ? "header" : enclosing.heading, id, "duplicate-status-header");
+        break;
+      }
+    }
+  }
+
+  // 2. Declared projection targets carry no hand-maintained Status header and
+  // no live-currentness section or Next-task column naming a terminal task.
+  for (const target of targets) {
+    const content = files[target];
+    if (content === undefined) continue;
+    const bare = stripGeneratedBlocks(content);
+    const lines = bare.split("\n");
+    for (let i = 0; i < lines.length; i += 1) {
+      if (STATUS_HEADER_LINE_RE.test(lines[i])) {
+        const offset = lines.slice(0, i).join("\n").length + (i === 0 ? 0 : 1);
+        const enclosing = enclosingHeading(bare, offset);
+        // A target-level Status header duplicates generation currentness owned
+        // by the generated block; it names no single task, so task stays empty.
+        push(target, enclosing === null ? "header" : enclosing.heading, "", "duplicate-status-header");
+        break;
+      }
+    }
+    // Live-currentness sections naming a terminal task.
+    const headingRe = /^(#{1,6})\s+(.*?)\s*$/gm;
+    let heading: RegExpExecArray | null;
+    const headings: Array<{ heading: string; level: number; start: number; bodyStart: number }> = [];
+    while ((heading = headingRe.exec(bare)) !== null) {
+      headings.push({ heading: heading[2].trim(), level: heading[1].length, start: heading.index, bodyStart: heading.index + heading[0].length });
+    }
+    for (let h = 0; h < headings.length; h += 1) {
+      const current = headings[h];
+      if (!CURRENTNESS_HEADING_RE.test(current.heading) || EXEMPT_HEADING_RE.test(current.heading)) continue;
+      const end = sectionEnd(bare, current.bodyStart);
+      const body = bare.slice(current.bodyStart, end);
+      for (const id of terminalIds(body, terminal)) {
+        push(target, current.heading, id, "stale-frontier");
+      }
+    }
+    // Next-task table columns naming a terminal task. Goal/state history
+    // cells in other columns stay legal.
+    for (let i = 0; i < lines.length; i += 1) {
+      const cells = lines[i].split("|").map((cell) => cell.trim());
+      if (cells.length < 3 || cells[0] !== "" || cells[cells.length - 1] !== "") continue;
+      const inner = cells.slice(1, -1);
+      if (!inner.some((cell) => NEXT_TASK_COLUMN_RE.test(cell))) continue;
+      const column = inner.findIndex((cell) => NEXT_TASK_COLUMN_RE.test(cell));
+      if (i + 1 < lines.length && /^\|[\s:|-]+\|$/.test(lines[i + 1].trim())) i += 1;
+      for (let r = i + 1; r < lines.length; r += 1) {
+        const rowCells = lines[r].split("|").map((cell) => cell.trim());
+        if (rowCells.length < 3 || rowCells[0] !== "" || rowCells[rowCells.length - 1] !== "") break;
+        const rowInner = rowCells.slice(1, -1);
+        if (column >= rowInner.length) break;
+        const enclosing = enclosingHeading(bare, lines.slice(0, r).join("\n").length + 1);
+        const section = enclosing === null || EXEMPT_HEADING_RE.test(enclosing.heading) ? "table" : "table: " + enclosing.heading;
+        for (const id of terminalIds(rowInner[column], terminal)) {
+          push(target, section, id, "stale-next-task-column");
+        }
+      }
+    }
+  }
+  violations.sort((a, b) =>
+    a.file < b.file ? -1 : a.file > b.file ? 1 :
+    a.section < b.section ? -1 : a.section > b.section ? 1 :
+    a.task < b.task ? -1 : a.task > b.task ? 1 :
+    a.reason < b.reason ? -1 : a.reason > b.reason ? 1 : 0);
+  return violations;
+}
+
+// Repository-backed audit: lifecycle records plus declared projection
+// targets, read from disk. Missing record task files are reported; missing
+// declared targets stay owned by render/verify.
+export function auditCurrentness(repoRoot: string): { status: string; violations: CurrentnessViolation[] } {
+  const records = listRecords(repoRoot);
+  const config = readProjectionConfig(repoRoot);
+  check(config !== null || records.length === 0, "projection-config",
+    TARGETS_CONFIG_REL + " is missing; lifecycle records exist but no active generation is declared");
+  const targets = config === null ? [] : config.targets;
+  const wanted = new Set<string>();
+  for (const record of records) {
+    if (typeof record.task_path === "string") wanted.add(record.task_path);
+  }
+  for (const target of targets) wanted.add(target);
+  const files: Record<string, string> = {};
+  for (const relative of wanted) {
+    const absolute = path.resolve(repoRoot, relative);
+    if (!fs.existsSync(absolute) || !fs.statSync(absolute).isFile()) continue;
+    assertRealContained(repoRoot, absolute);
+    const bytes = fs.readFileSync(absolute, "utf8");
+    check(bytes.length <= 1024 * 1024, "audit", "audit target exceeds the 1 MiB read bound: " + relative);
+    files[relative] = bytes;
+  }
+  const violations = auditCurrentnessText(files, records, targets);
+  return { status: violations.length === 0 ? "ok" : "violations", violations };
+}
+
 // The exact terminal task summary set a closure record pins. Closure authoring
 // and compaction compute this digest the same way, so stale or mismatched
 // authority cannot pass.
@@ -2301,6 +2511,51 @@ async function runOracle(): Promise<number> {
     restorePluralConfig();
     ok("singular output bytes survive a parallel declaration unchanged");
 
+    // 10c. Sole-source currentness audit: Silo-shaped duplicates fail with
+    // exact file, section, task, and reason; cutover shapes pass.
+    const auditRecords = [
+      { task_id: "g03.011", generation: "g03", status: "complete", task_path: "docs/roadmaps/g03/011-task.md" },
+      { task_id: "g03.012", generation: "g03", status: "ready", task_path: "docs/roadmaps/g03/012-task.md" },
+    ];
+    const staleTask = "# g03.011\n\nStatus: Ready\n\nHuman outcome stays.\n";
+    const cutoverTask = "# g03.011\n\nHuman outcome stays.\n";
+    const staleDoor = "# g03\n\n## Next Task\n\nContinue with `g03.011` now.\n";
+    const readyDoor = "# g03\n\n## Next Task\n\nContinue with `g03.012` now.\n";
+    const historyDoor = "# g03\n\n## History\n\nCompleted `g03.011` at `99bbc94`.\n";
+    const goalTable = "# g03\n\n## Generation Runway\n\n| Goal | State | Next Task |\n| --- | --- | --- |\n| Parallel projections. | complete as `g03.011` | exact portfolio repair |\n";
+    const staleTable = "# g03\n\n## Generation Runway\n\n| Goal | State | Next Task |\n| --- | --- | --- |\n| Parallel projections. | ready as `g03.011` | continue with `g03.011` |\n";
+    const liveTask = "# g03.012\n\nHuman outcome stays.\n";
+    const staleFindings = auditCurrentnessText(
+      { "docs/roadmaps/g03/011-task.md": staleTask, "docs/roadmaps/g03/012-task.md": liveTask, "docs/roadmaps/g03/README.md": staleDoor },
+      auditRecords, ["docs/roadmaps/g03/README.md"]);
+    check(staleFindings.some((v) => v.file === "docs/roadmaps/g03/011-task.md" && v.task === "g03.011" && v.reason === "duplicate-status-header"),
+      "oracle", "audit accepted a terminal record beside Status: Ready");
+    check(staleFindings.some((v) => v.file === "docs/roadmaps/g03/README.md" && v.section === "Next Task" && v.task === "g03.011" && v.reason === "stale-frontier"),
+      "oracle", "audit accepted a Next Task section naming a terminal task");
+    const tableFindings = auditCurrentnessText(
+      { "docs/roadmaps/g03/011-task.md": cutoverTask, "docs/roadmaps/g03/012-task.md": liveTask, "docs/roadmaps/g03/README.md": staleTable },
+      auditRecords, ["docs/roadmaps/g03/README.md"]);
+    check(tableFindings.some((v) => v.task === "g03.011" && v.reason === "stale-next-task-column"),
+      "oracle", "audit accepted a Next-task column naming a terminal task");
+    const cleanFindings = auditCurrentnessText(
+      { "docs/roadmaps/g03/011-task.md": cutoverTask, "docs/roadmaps/g03/012-task.md": liveTask, "docs/roadmaps/g03/README.md": readyDoor },
+      auditRecords, ["docs/roadmaps/g03/README.md"]);
+    check(cleanFindings.length === 0, "oracle", "audit rejected the cutover shape: " + canonicalJson(cleanFindings));
+    const historyFindings = auditCurrentnessText(
+      { "docs/roadmaps/g03/011-task.md": cutoverTask, "docs/roadmaps/g03/012-task.md": liveTask, "docs/roadmaps/g03/README.md": historyDoor + "\n" + goalTable },
+      auditRecords, ["docs/roadmaps/g03/README.md"]);
+    check(historyFindings.length === 0, "oracle", "audit mistook retrospective history for currentness: " + canonicalJson(historyFindings));
+    const boundaryFindings = auditCurrentnessText(
+      { "docs/roadmaps/g03/011-task.md": cutoverTask, "docs/roadmaps/g03/012-task.md": liveTask, "docs/roadmaps/g03/README.md": "# g03\n\n## Next Task\n\nSee g03.0110 for details.\n" },
+      auditRecords, ["docs/roadmaps/g03/README.md"]);
+    check(boundaryFindings.length === 0, "oracle", "audit matched a task id inside a longer token: " + canonicalJson(boundaryFindings));
+    const blockHidingStale = BEGIN_PREFIX + " schema=northstar.lifecycle.projection.v2 digest=sha256:" + "0".repeat(64) + " -->\nStatus: complete\n\n## Next Task\n\nContinue with `g03.011`.\n" + END_SENTINEL + "\n";
+    const blockExempt = auditCurrentnessText(
+      { "docs/roadmaps/g03/011-task.md": cutoverTask, "docs/roadmaps/g03/012-task.md": liveTask, "docs/roadmaps/g03/README.md": "# g03\n\nHuman intent stays.\n" + blockHidingStale },
+      auditRecords, ["docs/roadmaps/g03/README.md"]);
+    check(blockExempt.length === 0, "oracle", "audit flagged generated-block content: " + canonicalJson(blockExempt));
+    ok("currentness audit rejects Silo-shaped duplicates and accepts the cutover");
+
     // 11. Static portability scan of this very source file.
     const ownSource = fs.readFileSync(fileURLToPath(import.meta.url), "utf8");
     const forbidden = forbiddenImportSpecifiers(ownSource);
@@ -2409,6 +2664,13 @@ async function main(): Promise<void> {
         });
         return;
       }
+      case "audit-currentness": {
+        const repoRoot = resolveRepoRoot(flags);
+        const result = auditCurrentness(repoRoot);
+        printJson(result);
+        if (result.status !== "ok") process.exitCode = 1;
+        return;
+      }
       case "frontier": {
         const repoRoot = resolveRepoRoot(flags);
         const records = listRecords(repoRoot);
@@ -2497,7 +2759,7 @@ async function main(): Promise<void> {
       default:
         printJson({
           status: "error",
-          message: "usage: lifecycle-core.ts <oracle|schema-check|status|frontier|verify|apply|render|tasks-digest|compact> [flags]",
+          message: "usage: lifecycle-core.ts <oracle|schema-check|status|frontier|verify|audit-currentness|apply|render|tasks-digest|compact> [flags]",
         });
         process.exitCode = 2;
     }

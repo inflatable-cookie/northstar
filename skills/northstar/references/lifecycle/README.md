@@ -284,7 +284,11 @@ Closeout consumes the instruction handoff. The `task.closeout` publication is
 one integration commit: the terminal record, the regenerated declared
 projections, and the removal of the exact submitted handoff. The hook deletes
 only the exact committed path whose working-tree bytes still hash to the
-pinned blob digest, and only after the terminal receipt exists. A changed,
+pinned blob digest, and only after the terminal receipt exists. Tracked
+durable Markdown that still links to that exact handoff refuses the same way:
+the hook resolves relative and rooted Markdown links, ignores external URLs
+and the handoff itself, and only an exact local target blocks — so deletion
+never strands a backlink. A changed,
 missing (non-terminal record), symlinked, or otherwise ambiguous handoff
 fails closed before any byte changes; when the record is already terminal, a
 still-present exact handoff is consumed as an idempotent no-diff cleanup and
@@ -302,6 +306,7 @@ From the Northstar source checkout:
 effigy lifecycle:run oracle
 effigy lifecycle:run status --repo /path/to/repo
 effigy lifecycle:run frontier --repo /path/to/repo
+effigy lifecycle:run audit-currentness --repo /path/to/repo
 effigy lifecycle:run apply --repo /path/to/repo --envelope envelope.json [--target docs/roadmaps/gNN/README.md]...
 effigy lifecycle:run render --repo /path/to/repo --records .northstar/lifecycle/v1/tasks --target docs/roadmaps/gNN/README.md
 effigy lifecycle:run tasks-digest --repo /path/to/repo --records .northstar/lifecycle/v1/tasks --generation gNN
@@ -320,6 +325,14 @@ containment for the records directory and the output path and refuse escaping,
 absolute-outside, or symlinked paths. The command returns changed paths, the
 new revision and digest, and the required commit action. It never stages,
 commits, pushes, merges, dispatches, or selects the next task.
+
+`audit-currentness` proves the sole-source cutover: it walks lifecycle-record
+task paths and declared projection targets outside generated blocks and
+reports exact file, section, task, and reason for every hand-maintained
+`Status:` header, every live-currentness section or Next-task table column
+naming a terminal task, and every record whose task file is missing. Goal
+history and retrospective sections stay legal; the adoption self-test holds
+the Silo-shaped negatives and the cutover positives.
 
 From an installed skill, the same command resolves through the skill catalog
 as `northstar/lifecycle:run` or `northstar/lifecycle:oracle`; every

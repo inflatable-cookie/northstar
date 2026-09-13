@@ -123,8 +123,14 @@ own oracle. Keep semantic priority human-owned. Return `planning_required` when
 authority does not settle the next move instead of selecting work.
 
 Records begin at the adoption boundary; earlier closed tasks keep their Git
-and provider evidence, and no adapter fabricates receipts for them. Compaction
-is destructive lifecycle maintenance: it requires the generation's committed
+and provider evidence, and no adapter fabricates receipts for them. The
+cutover removes duplicate mechanical Markdown state in the same step:
+lifecycle-managed task files carry no hand-maintained `Status:` header, and
+no declared front door keeps a live-currentness section or Next-task column
+naming a lifecycle-managed task. Goal history and retrospective sections stay
+legal. Prove it with `lifecycle:run audit-currentness`, which reports exact
+file, section, task, and reason. Compaction is destructive lifecycle
+maintenance: it requires the generation's committed
 closure record — closed disposition, exact generation, and a `tasks_digest`
 that still covers the terminal record set — and refuses missing, open, stale,
 mismatched, or ambiguous authority before producing a receipt or deleting
@@ -168,10 +174,13 @@ integration commit publishes the terminal record, regenerates every declared
 projection target, and removes the exact submitted instruction handoff. The
 handoff is a pinned transport artifact, not permanent evidence: the hook
 deletes only the exact committed path whose bytes still hash to the pinned
-blob digest, and only after the terminal receipt exists. A changed, missing,
+blob digest, and only after the terminal receipt exists. Tracked durable
+Markdown that still links to that exact handoff refuses the same way — the
+hook resolves relative and rooted links, ignores external URLs and the
+handoff itself, and only an exact local target blocks — so deletion never
+strands a backlink. A changed, missing,
 symlinked, or otherwise ambiguous handoff fails closed before any byte
 changes; a repeated event replays without diff. Git retains the blob and the
-record's handoff evidence retains its identity. Routine closeout writes no
 prose log and needs no task-status edit, evidence rewrite, roadmap pointer
 edit, or front-door edit; a semantic decision may still warrant a separate
 human log. Repository manifests must declare the handoff directory in the

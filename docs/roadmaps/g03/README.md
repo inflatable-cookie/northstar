@@ -1,7 +1,5 @@
 # g03
 
-Status: active
-
 `g03` makes Northstar compact by default: one strict lifecycle, bounded current
 state, explicit artifact pruning, and closed-generation roll-ups.
 
@@ -13,10 +11,8 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 | Complete consumer compaction through maintenance routes. | complete as `g03.002`; delivery evidence absorbed | contract 001 | no further compaction lane |
 | Flatten milestone/card execution into one generation task unit. | complete as `g03.003` | contract 001 | return to Chatterbox planning checkpoint |
 | Move material UI design decisions before dispatch and require rendered exact-head delivery review. | complete as `g03.004` | section 11, contract 001 | observe first natural consumer lanes |
-| Replace agent-written mechanical lifecycle bookkeeping with a portable core and deterministic projections. | complete as `g03.005` | system architecture, contract 001, bundle section 12 | continue with `g03.006` adoption |
-| Integrate rich runtimes without making Northstar or Queue depend on each other's internal structure. | complete as `g03.006`; terminal record and projections published as `d244d83` | bundle section 12; Queue contract v1 | Chatterbox next planning direction |
-| Finish hook-owned mechanical closeout and remove duplicate mutable Markdown state. | delivered as `g03.007`; exact handoff cleanup missed because the launcher resolved stale installed code | system architecture, contract 001, bundle section 12; Queue g01.010 | correct the execution boundary in `g03.008` |
-| Pin the complete Queue hook runtime to repository bytes and repeat the live self-hosting proof. | complete as `g03.008`; terminal record and exact handoff cleanup published as `305700c` | system architecture, contract 001, bundle section 12; `g03.007` live evidence | no further runtime-pinning lane |
+| Replace agent-written mechanical lifecycle bookkeeping with a portable core and deterministic projections. | complete as `g03.005` | system architecture, contract 001, bundle section 12 | adoption lane complete; observe use |
+| Finish hook-owned mechanical closeout and remove duplicate mutable Markdown state. | delivered as `g03.007`; exact handoff cleanup missed because the launcher resolved stale installed code | system architecture, contract 001, bundle section 12; Queue g01.010 | boundary correction complete; no further lane |
 | Keep an exhausted generation open in `planning_required` until an explicit rollover closes it. | complete as `g03.009`; terminal record published at `c9e3533` | contract 001, section 03, bundle section 12 | no further state-separation lane |
 | Run Queue lifecycle hooks through Effigy and the installed Northstar skill without copied repository code. | complete as `g03.010`; terminal state published at `36dc197` | contract 001, system architecture, bundle section 12; Queue contract 005 | portfolio rollout in progress |
 | Represent legitimate parallel active generations in portable lifecycle projections. | complete as `g03.011`; terminal record published at `99bbc94` | contract 001, bundle section 12; Underlay parallel mode | no further projection-shape lane |

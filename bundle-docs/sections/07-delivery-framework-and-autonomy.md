@@ -188,7 +188,10 @@ The intended default is:
   and closeout requirements
 
 That means a bare `continue` is valid only when the file state already makes
-the next move explicit.
+the next move explicit. In a lifecycle-adopted repository the `Next Task` is
+the committed handoff plus the task's dispatch manifest, with mechanical
+readiness projected from the record — never a hand-maintained pointer naming
+a lifecycle-managed task.
 
 If the previous `Next Task` does not point at a real ready task or explicit
 stop/reassessment step, the lane is not continuation-ready.
@@ -261,6 +264,14 @@ is:
    over
 6. leave one explicit next task in the highest-authority active surface that
    still governs the lane
+
+In a lifecycle-adopted repository, steps 1-3 and 6 are hook-owned, not
+hand edits: one integration commit publishes the terminal record,
+regenerates every declared projection, and consumes the exact instruction
+handoff. Human closeout settles semantic planning only — outcome, limits,
+and the continuation envelope — and durable files never link to the
+transient handoff the hook will delete. Prove the cutover with
+`lifecycle:run audit-currentness`.
 
 If the lane is stopping because the next work is not ready, the closeout should
 say that explicitly rather than pretending the sequence naturally continues.

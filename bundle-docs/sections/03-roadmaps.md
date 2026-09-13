@@ -143,6 +143,9 @@ The generation runway sits above individual tasks:
 - tasks turn those goals into executable slices with their own steps,
   acceptance, and closeout
 - `Next Task` remains the live continuation pointer in roadmap front doors
+  (standalone and pre-adoption repositories; lifecycle-adopted repositories
+  carry continuation in the committed handoff and generated projections —
+  see the curation rule below)
 
 The runway is not a catch-all, checkbox task list, or second current
 queue. Keep it stable between real strategy, task, or rollover changes.
@@ -269,6 +272,15 @@ command. Human prose there names the mechanism and durable intent; it does
 not duplicate the projected state, so ordinary closeout edits nothing by hand.
 
 ## Currentness curation rule
+
+The live-pointer bullets below govern standalone and pre-adoption
+repositories, where a hand-maintained pointer is the only currentness. In a
+lifecycle-adopted repository they are retired: per-task status and the ready
+frontier live in the generated projections, task files carry no `Status:`
+header, and no front door keeps a hand-maintained `## Next Task` pointer or
+Next-task table column naming a lifecycle-managed task. Goal history
+(`complete as gNN.NNN`) and retrospective sections stay legal; everything
+else current-task-shaped is proved with `lifecycle:run audit-currentness`.
 
 - In sequential mode, `docs/roadmaps/README.md`,
   `docs/roadmaps/generation-index.md`, and the active

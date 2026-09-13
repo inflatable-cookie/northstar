@@ -15,7 +15,11 @@
 # 5. Runs the hook adapter against real fixture repositories through the real
 #    Effigy route: pre-dispatch gate, hostile events, read-only binding,
 #    escape refusal, squash refusal, bootstrap closeout, idempotent replay,
-#    block/cancel mapping, terminal equivalence, and closure-gated compaction.
+#    durable-backlink refusal with relative/rooted/fragment/external/mismatch
+#    controls, the sole-source currentness cutover (the audit rejects
+#    Silo-shaped task headers, front-door frontiers, and Next-task columns
+#    while the cutover shape and retrospective history pass), block/cancel
+#    mapping, terminal equivalence, and closure-gated compaction.
 #    Every result is produced by the installed skill bytes reached through
 #    `effigy skill run northstar/queue:hook --stdio passthrough`.
 # 6. Proves resolution precedence and fail-closed behavior: project-local wins
@@ -206,7 +210,7 @@ build_fixture() { # <repo-dir> [dogfood|starter]
   printf '.effigy/\n' > "$repo/.gitignore"
   mkdir -p "$repo/docs/roadmaps/g03" "$repo/docs/handoffs" "$repo/.northstar/lifecycle/v1" "$repo/.paseo"
   for number in 006 007; do
-    printf '# Task g03.%s\n\nStatus: ready\nOwner: fixture\n' "$number" \
+    printf '# Task g03.%s\n\nOwner: fixture\n' "$number" \
       > "$repo/docs/roadmaps/g03/$number-fixture-task.md"
     git -C "$repo" add -A
     git -C "$repo" commit -qm "plan g03.$number"
@@ -565,6 +569,124 @@ while IFS= read -r line; do
 done < <(git -C "$repoA" status --porcelain)
 echo "exact handoff consumption: OK"
 
+echo "# sole-source currentness cutover over the real hook output"
+audit_cli=(bun run "$installed/scripts/lifecycle-core.ts" audit-currentness --repo)
+# The bootstrap closeout above left the positive shape: a terminal record, a
+# task file with no Status header, and front doors with no Next-task pointer.
+"${audit_cli[@]}" "$repoA" >/dev/null
+echo "positive cutover shape audits clean: OK"
+
+printf '\nStatus: Ready\n' >> "$repoA/docs/roadmaps/g03/006-fixture-task.md"
+if "${audit_cli[@]}" "$repoA" > "$scratch/audit-status.out" 2>&1; then
+  echo "audit accepted a terminal record beside Status: Ready" >&2
+  exit 1
+fi
+grep -q "duplicate-status-header" "$scratch/audit-status.out"
+grep -q "006-fixture-task.md" "$scratch/audit-status.out"
+git -C "$repoA" checkout -q -- docs/roadmaps/g03/006-fixture-task.md
+echo "stale task header rejected with exact file and reason: OK"
+
+cat >> "$repoA/docs/README.md" <<'EOF'
+
+## Next Task
+
+Continue with `g03.006` now.
+EOF
+if "${audit_cli[@]}" "$repoA" > "$scratch/audit-frontier.out" 2>&1; then
+  echo "audit accepted a Next Task section naming a terminal task" >&2
+  exit 1
+fi
+grep -q "stale-frontier" "$scratch/audit-frontier.out"
+git -C "$repoA" checkout -q -- docs/README.md
+echo "stale front-door frontier rejected: OK"
+
+cat >> "$repoA/docs/roadmaps/g03/README.md" <<'EOF'
+
+| Goal | State | Next Task |
+| --- | --- | --- |
+| Parallel projections. | ready as `g03.006` | continue with `g03.006` |
+EOF
+if "${audit_cli[@]}" "$repoA" > "$scratch/audit-column.out" 2>&1; then
+  echo "audit accepted a Next-task column naming a terminal task" >&2
+  exit 1
+fi
+grep -q "stale-next-task-column" "$scratch/audit-column.out"
+git -C "$repoA" checkout -q -- docs/roadmaps/g03/README.md
+echo "stale Next-task column rejected, goal history untouched: OK"
+
+cat >> "$repoA/docs/README.md" <<'EOF'
+
+## History
+
+Completed `g03.006` in the bootstrap closeout; the generated block below owns currentness.
+EOF
+"${audit_cli[@]}" "$repoA" >/dev/null
+git -C "$repoA" checkout -q -- docs/README.md
+"${audit_cli[@]}" "$repoA" >/dev/null
+echo "retrospective history stays legal: OK"
+
+echo "# durable handoff backlinks refuse closeout before any byte changes"
+repoB="$scratch/repo-backlink"
+build_fixture "$repoB"
+mkdir -p "$repoB/docs"
+cat > "$repoB/docs/implementation-log.md" <<'EOF'
+# Implementation log
+
+Durable evidence for the fixture lane. Dispatched from
+[the worker handoff](handoffs/handoff-006.md).
+EOF
+git -C "$repoB" add -A
+git -C "$repoB" commit -qm "durable log links the submitted handoff"
+CURRENT_REPO="$repoB"
+read_facts "$(fixture_facts "$repoB" 006)"
+write_event "$scratch/closeout-backlink.json" "evt-closeout-backlink-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+backlink_out=$(run_hook "$scratch/closeout-backlink.json" "evt-closeout-backlink-0001")
+expect_outcome "$backlink_out" blocked "durable backlink"
+[ "$(json_field "$backlink_out" "r.summary.includes('docs/implementation-log.md')")" = "true" ]
+[ ! -e "$repoB/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+[ -e "$repoB/docs/handoffs/handoff-006.md" ]
+if grep -q "g03.006 | complete" "$repoB/docs/README.md"; then
+  echo "refused closeout still mutated a projection" >&2
+  exit 1
+fi
+[ -z "$(git -C "$repoB" status --porcelain)" ]
+echo "durable backlink refusal is atomic: OK"
+
+echo "# backlink link-resolution controls"
+link_case() { # <name> <link-target> <expected-outcome>
+  local dir="$scratch/repo-link-$1"
+  build_fixture "$dir"
+  mkdir -p "$dir/docs"
+  printf '# Log\n\nSee [the handoff](%s).\n' "$2" > "$dir/docs/log.md"
+  git -C "$dir" add -A
+  git -C "$dir" commit -qm "log variant $1"
+  CURRENT_REPO="$dir"
+  read_facts "$(fixture_facts "$dir" 006)"
+  write_event "$scratch/closeout-link-$1.json" "evt-closeout-link-$1-0001" "task.closeout" "lifecycle-state" "$MC" \
+    "q-006" '"Implement g03.006 fixture task"' \
+    "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+  local result
+  result=$(run_hook "$scratch/closeout-link-$1.json" "evt-closeout-link-$1-0001")
+  expect_outcome "$result" "$3" "link control $1"
+  if [ "$3" = "blocked" ]; then
+    [ ! -e "$dir/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+    [ -e "$dir/docs/handoffs/handoff-006.md" ]
+    [ -z "$(git -C "$dir" status --porcelain)" ]
+  else
+    [ ! -e "$dir/docs/handoffs/handoff-006.md" ]
+    [ -f "$dir/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+  fi
+}
+link_case exact "handoffs/handoff-006.md" blocked
+link_case rooted "/docs/handoffs/handoff-006.md" blocked
+link_case fragment "handoffs/handoff-006.md#evidence" blocked
+link_case external "https://github.com/example/repo/blob/main/docs/handoffs/handoff-006.md" ok
+link_case mismatch "handoffs/handoff-006-v2.md" ok
+link_case sibling "handoffs/handoff-007.md" ok
+echo "relative, rooted, fragment, external, mismatch, and sibling controls: OK"
+
 echo "# changed handoff fails closed before any byte changes"
 repoC="$scratch/repo-changed"
 build_fixture "$repoC"
@@ -655,7 +777,7 @@ echo "# parallel active-generation closeout publishes both generations"
 repoP="$scratch/repo-parallel"
 build_fixture "$repoP"
 mkdir -p "$repoP/docs/roadmaps/g04"
-printf '# Task g04.010\n\nStatus: ready\nOwner: fixture\n' > "$repoP/docs/roadmaps/g04/010-parallel-task.md"
+printf '# Task g04.010\n\nOwner: fixture\n' > "$repoP/docs/roadmaps/g04/010-parallel-task.md"
 printf '# g04\n\nHuman parallel generation runway stays.\n' > "$repoP/docs/roadmaps/g04/README.md"
 git -C "$repoP" add -A
 git -C "$repoP" commit -qm "plan g04.010"
@@ -726,7 +848,7 @@ echo "# a generation outside the declared set is refused"
 repoO="$scratch/repo-outside"
 build_fixture "$repoO"
 mkdir -p "$repoO/docs/roadmaps/g05"
-printf '# Task g05.011\n\nStatus: ready\nOwner: fixture\n' > "$repoO/docs/roadmaps/g05/011-outside-task.md"
+printf '# Task g05.011\n\nOwner: fixture\n' > "$repoO/docs/roadmaps/g05/011-outside-task.md"
 cat > "$repoO/docs/handoffs/handoff-011.md" <<'EOF'
 ---
 kind: northstar-handoff
