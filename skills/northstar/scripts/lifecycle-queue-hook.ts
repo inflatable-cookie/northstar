@@ -667,13 +667,15 @@ interface ConsumableHandoff {
 // ---------------------------------------------------------------------------
 // Durable backlink guard: a closeout handoff is transient transport, so the
 // hook refuses atomically when tracked durable Markdown still links to the
-// exact handoff it would delete. The scan is structural and bounded: tracked
-// `.md` files only, standard Markdown links (bare, angle-bracketed, titled,
-// or reference-style resolved through their definitions) plus `<autolinks>`,
-// relative and rooted targets resolved against the linking file, external
-// URLs and the handoff itself ignored, generated projection blocks and code
-// segments stripped. Only an exact local target blocks; similarly named
-// files never do.
+// exact handoff it would delete. The scan is structural, bounded, and
+// deliberately fail-closed: tracked `.md` files only, standard Markdown
+// links (bare, angle-bracketed, titled, or reference-style resolved through
+// their definitions) plus `<autolinks>`, relative and rooted targets
+// resolved against the linking file, external URLs and the handoff itself
+// ignored, generated projection blocks stripped. Code contexts are not
+// distinguished: a link-shaped example also blocks, so no container
+// misclassification can strand a durable backlink. Only an exact local
+// target blocks; similarly named files never do.
 // ---------------------------------------------------------------------------
 
 const BACKLINK_SCAN_MAX_FILES = 5000;
@@ -703,205 +705,6 @@ function stripHookGeneratedBlocks(text: string): string {
     output += rest.slice(0, start);
     rest = rest.slice(endScheme + END_SENTINEL.length);
   }
-}
-
-// Remove code segments before link scanning: a link-shaped example inside
-// code renders no link, so deleting the handoff cannot strand it. Fenced
-// blocks, container-relative indented examples, and inline spans are dropped;
-// a backslash-escaped backtick never opens or closes a span, so a real link
-// merely surrounded by escaped backticks is still detected. Indentation is
-// parsed against the open list and quote containers: a list-item continuation
-// stays scannable while genuinely indented code does not. Fence runs of
-// either character close only on a run of the same character that is at
-// least as long. Tabs count as advancing to the next multiple of four
-// columns throughout.
-function indentWidth(line: string): number {
-  let width = 0;
-  for (const c of line) {
-    if (c === " ") {
-      width += 1;
-    } else if (c === "\t") {
-      width += 4 - (width % 4);
-    } else {
-      break;
-    }
-  }
-  return width;
-}
-
-// Consume list-item and blockquote prefixes starting at `indent`, pushing one
-// content indent per nesting level. Returns true when the line opens or
-// extends a container. A top-level marker must start before column four;
-// nested markers must reach their parent's content indent. Gaps of five or
-// more spaces (or an empty item) put content one past the marker; anything
-// narrower keeps its measured width.
-function openContainers(line: string, indent: number, containers: number[]): boolean {
-  let pos = indent;
-  let opened = false;
-  for (;;) {
-    const rest = line.slice(pos);
-    const item = /^([-*+]|\d{1,9}[.)])($|[ \t])/.exec(rest);
-    if (item !== null && (containers.length === 0 ? pos < 4 : pos >= containers[containers.length - 1])) {
-      let col = pos + item[1].length;
-      let k = pos + item[1].length;
-      let spaces = 0;
-      let tabbed = false;
-      while (line[k] === " " || line[k] === "\t") {
-        if (line[k] === " ") {
-          col += 1;
-          spaces += 1;
-        } else {
-          col += 4 - (col % 4);
-          tabbed = true;
-        }
-        k += 1;
-      }
-      const content = tabbed ? col : spaces < 5 ? col : pos + item[1].length + 1;
-      containers.push(k >= line.length || line.slice(k).trim() === "" ? pos + item[1].length + 1 : content);
-      pos = containers[containers.length - 1];
-      opened = true;
-      continue;
-    }
-    if (/^>/.test(rest) && (containers.length === 0 ? pos <= 3 : pos >= containers[containers.length - 1])) {
-      let content = pos + 1;
-      if (line[pos + 1] === " ") content += 1;
-      else if (line[pos + 1] === "\t") content += 4 - (content % 4);
-      containers.push(content);
-      pos = content;
-      opened = true;
-      continue;
-    }
-    break;
-  }
-  return opened;
-}
-
-function stripCodeSegments(text: string): string {
-  const kept: string[] = [];
-  let fenceChar = "";
-  let fenceLen = 0;
-  // Open list and quote containers with their content indents; indented code
-  // needs four columns beyond the innermost one.
-  const containers: number[] = [];
-  let prevBlank = true;
-  let prevBlock = true;
-  let inIndented = false;
-  for (const line of text.split("\n")) {
-    const trimmed = line.trim();
-    if (fenceLen !== 0) {
-      if (trimmed === "") {
-        prevBlank = true;
-      } else if (trimmed.length >= fenceLen && trimmed === fenceChar.repeat(trimmed.length)) {
-        fenceChar = "";
-        fenceLen = 0;
-        prevBlank = false;
-        prevBlock = true;
-        inIndented = false;
-      } else {
-        prevBlank = false;
-      }
-      continue;
-    }
-    const open = /^ {0,3}(`{3,}|~{3,})/.exec(line);
-    if (open) {
-      fenceChar = open[1][0];
-      fenceLen = open[1].length;
-      prevBlank = false;
-      prevBlock = true;
-      inIndented = false;
-      continue;
-    }
-    if (trimmed === "") {
-      kept.push(line);
-      prevBlank = true;
-      continue;
-    }
-    const indent = indentWidth(line);
-    let popped = false;
-    while (containers.length > 0 && indent < containers[containers.length - 1]) {
-      containers.pop();
-      popped = true;
-    }
-    if (popped) inIndented = false;
-    if (openContainers(line, indent, containers)) {
-      kept.push(line);
-      inIndented = false;
-      prevBlank = false;
-      prevBlock = true;
-      continue;
-    }
-    const threshold = (containers.length > 0 ? containers[containers.length - 1] : 0) + 4;
-    if (indent >= threshold && (prevBlank || prevBlock || inIndented)) {
-      inIndented = true;
-      prevBlank = false;
-      prevBlock = false;
-    } else {
-      kept.push(line);
-      inIndented = false;
-      prevBlank = false;
-      prevBlock = isBlockLine(trimmed);
-    }
-  }
-  return stripInlineSpans(kept.join("\n"));
-}
-
-// A non-paragraph block opener: headings, quotes, lists, rules, table rows,
-// HTML-ish lines, and link definitions. Four-space indented text after one of
-// these (or a blank line) is an indented code example; after paragraph text
-// it is a lazy continuation line and stays scannable.
-function isBlockLine(trimmed: string): boolean {
-  return /^(#{1,6}(\s|$)|>\s?|([-*+]|\d+[.)])(\s|$)|\||<|\[[^\]\n]+\]:|[*_-]{3,}\s*$)/.test(trimmed);
-}
-
-// Drop single-line code spans, honoring backslash escapes: `\`` never opens
-// or closes, and `\\` still escapes the backslash so a following backtick
-// stays a delimiter. An unmatched opener renders literally and scanning
-// resumes after it.
-function stripInlineSpans(text: string): string {
-  let out = "";
-  let i = 0;
-  while (i < text.length) {
-    const c = text[i];
-    if (c === "\\" && i + 1 < text.length) {
-      out += text.slice(i, i + 2);
-      i += 2;
-      continue;
-    }
-    if (c !== "`") {
-      out += c;
-      i += 1;
-      continue;
-    }
-    let open = i;
-    while (open < text.length && text[open] === "`") open += 1;
-    const run = open - i;
-    let j = open;
-    let closed = -1;
-    while (j < text.length) {
-      if (text[j] === "\\" && j + 1 < text.length) {
-        j += 2;
-        continue;
-      }
-      if (text[j] !== "`") {
-        j += 1;
-        continue;
-      }
-      let k = j;
-      while (k < text.length && text[k] === "`") k += 1;
-      if (k - j === run) {
-        closed = k;
-        break;
-      }
-      j = k;
-    }
-    if (closed === -1) {
-      out += c;
-      i += 1;
-    } else {
-      i = closed;
-    }
-  }
-  return out;
 }
 
 function resolveLinkTarget(sourceRel: string, rawTarget: string): string | null {
@@ -948,7 +751,7 @@ export function findHandoffBacklinks(repoRoot: string, handoffRel: string): stri
     if (stats.size > BACKLINK_SCAN_MAX_BYTES) {
       refuse("backlink scan found an oversized Markdown file " + sourceRel + "; refusing handoff deletion");
     }
-    const bare = stripCodeSegments(stripHookGeneratedBlocks(fs.readFileSync(absolute, "utf8")));
+    const bare = stripHookGeneratedBlocks(fs.readFileSync(absolute, "utf8"));
     const targets = new Set<string>();
     for (const pattern of [MARKDOWN_LINK_RE, AUTOLINK_RE]) {
       pattern.lastIndex = 0;

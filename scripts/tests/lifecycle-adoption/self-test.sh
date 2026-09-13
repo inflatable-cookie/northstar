@@ -15,7 +15,7 @@
 # 5. Runs the hook adapter against real fixture repositories through the real
 #    Effigy route: pre-dispatch gate, hostile events, read-only binding,
 #    escape refusal, squash refusal, bootstrap closeout, idempotent replay,
-#    durable-backlink refusal with relative/rooted/fragment/titled/reference-style/external/mismatch
+#    durable-backlink refusal with relative/rooted/fragment/titled/reference-style/indented/escaped/list-continuation/non-1-ordered/fenced/inline/external/mismatch
 #    controls, the sole-source currentness cutover (the audit rejects
 #    Silo-shaped task headers, front-door frontiers, and Next-task columns
 #    while the cutover shape and retrospective history pass), block/cancel
@@ -689,13 +689,14 @@ link_case refcollapsed "none" blocked $'See [the handoff][].\n\n[the handoff]: h
 link_case refshortcut "none" blocked $'See [dispatch-note] for context.\n\n[dispatch-note]: handoffs/handoff-006.md'
 link_case external "https://github.com/example/repo/blob/main/docs/handoffs/handoff-006.md" ok
 link_case mismatch "handoffs/handoff-006-v2.md" ok
-link_case codeexample "none" ok $'```md\nSee [the handoff](handoff-006.md).\n```\n\nQuoted `[the handoff](handoff-006.md)` stays inline.'
-link_case indented "none" ok $'Example:\n\n    See [the handoff](handoffs/handoff-006.md).'
+link_case codeexample "none" blocked $'```md\nSee [the handoff](handoffs/handoff-006.md).\n```\n\nQuoted `[the handoff](handoffs/handoff-006.md)` stays inline.'
+link_case indented "none" blocked $'Example:\n\n    See [the handoff](handoffs/handoff-006.md).'
 link_case escaped "none" blocked $'\\`See [the handoff](handoffs/handoff-006.md).\\`'
 link_case listcontinuation "none" blocked $'- item\n    continuation [the handoff](handoffs/handoff-006.md).'
-echo "code examples never block closeout: OK"
+link_case non1ordered "none" blocked $'Paragraph text.\n3. markers [the handoff](handoffs/handoff-006.md).'
+echo "conservative code-context refusals are atomic: OK"
 link_case sibling "handoffs/handoff-007.md" ok
-echo "relative, rooted, fragment, titled, reference-style, indented, escaped, list-continuation, external, mismatch, and sibling controls: OK"
+echo "relative, rooted, fragment, titled, reference-style, indented, escaped, list-continuation, non-1-ordered, fenced, inline, external, mismatch, and sibling controls: OK"
 
 echo "# changed handoff fails closed before any byte changes"
 repoC="$scratch/repo-changed"
