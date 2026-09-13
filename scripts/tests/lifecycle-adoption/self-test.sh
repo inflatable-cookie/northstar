@@ -15,7 +15,7 @@
 # 5. Runs the hook adapter against real fixture repositories through the real
 #    Effigy route: pre-dispatch gate, hostile events, read-only binding,
 #    escape refusal, squash refusal, bootstrap closeout, idempotent replay,
-#    durable-backlink refusal with relative/rooted/fragment/external/mismatch
+#    durable-backlink refusal with relative/rooted/fragment/titled/external/mismatch
 #    controls, the sole-source currentness cutover (the audit rejects
 #    Silo-shaped task headers, front-door frontiers, and Next-task columns
 #    while the cutover shape and retrospective history pass), block/cancel
@@ -682,10 +682,11 @@ link_case() { # <name> <link-target> <expected-outcome>
 link_case exact "handoffs/handoff-006.md" blocked
 link_case rooted "/docs/handoffs/handoff-006.md" blocked
 link_case fragment "handoffs/handoff-006.md#evidence" blocked
+link_case titled 'handoffs/handoff-006.md "Worker handoff"' blocked
 link_case external "https://github.com/example/repo/blob/main/docs/handoffs/handoff-006.md" ok
 link_case mismatch "handoffs/handoff-006-v2.md" ok
 link_case sibling "handoffs/handoff-007.md" ok
-echo "relative, rooted, fragment, external, mismatch, and sibling controls: OK"
+echo "relative, rooted, fragment, titled, external, mismatch, and sibling controls: OK"
 
 echo "# changed handoff fails closed before any byte changes"
 repoC="$scratch/repo-changed"

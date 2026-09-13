@@ -1342,10 +1342,17 @@ function enclosingHeading(text: string, index: number): { heading: string; level
   return null;
 }
 
-function sectionEnd(text: string, from: number): number {
-  const rest = text.slice(from);
-  const match = /\n#{1,6}\s+/.exec(rest);
-  return match === null ? text.length : from + (match.index ?? 0);
+// A section runs to the next heading of the same or higher level. Nested
+// subsections belong to their parent: a terminal task named under a `###
+// Detail` inside `## Next Task` is still live-currentness prose.
+function sectionEnd(text: string, from: number, level: number): number {
+  const headingRe = /^(#{1,6})\s+/gm;
+  headingRe.lastIndex = from;
+  let match: RegExpExecArray | null;
+  while ((match = headingRe.exec(text)) !== null) {
+    if (match[1].length <= level) return match.index;
+  }
+  return text.length;
 }
 
 function terminalIds(text: string, terminal: Set<string>): string[] {
@@ -1361,10 +1368,11 @@ function terminalIds(text: string, terminal: Set<string>): string[] {
 // least `task_id`, `status`, and `task_path`, and `targets` lists the declared
 // projection targets. Detection is exact and bounded: a hand-maintained
 // `Status:` header on a lifecycle-managed task path or declared target, a
-// terminal task ID inside a live-currentness section outside generated
-// blocks, or a terminal task ID inside a Next-task table column. Goal history
-// (`complete as gNN.NNN`), retrospective sections, and prose about
-// nonterminal tasks never flag.
+// terminal task ID inside a live-currentness section (nested subsections
+// belong to their parent) outside generated blocks, or a terminal task ID
+// inside a Next-task table column under a non-retrospective heading. Goal
+// history (`complete as gNN.NNN`), retrospective sections and tables, and
+// prose about nonterminal tasks never flag.
 export function auditCurrentnessText(
   files: Record<string, string>,
   records: Array<Record<string, unknown>>,
@@ -1431,14 +1439,15 @@ export function auditCurrentnessText(
     for (let h = 0; h < headings.length; h += 1) {
       const current = headings[h];
       if (!CURRENTNESS_HEADING_RE.test(current.heading) || EXEMPT_HEADING_RE.test(current.heading)) continue;
-      const end = sectionEnd(bare, current.bodyStart);
+      const end = sectionEnd(bare, current.bodyStart, current.level);
       const body = bare.slice(current.bodyStart, end);
       for (const id of terminalIds(body, terminal)) {
         push(target, current.heading, id, "stale-frontier");
       }
     }
     // Next-task table columns naming a terminal task. Goal/state history
-    // cells in other columns stay legal.
+    // cells in other columns stay legal, and tables under a retrospective or
+    // otherwise exempt heading are history, not live currentness.
     for (let i = 0; i < lines.length; i += 1) {
       const cells = lines[i].split("|").map((cell) => cell.trim());
       if (cells.length < 3 || cells[0] !== "" || cells[cells.length - 1] !== "") continue;
@@ -1446,13 +1455,14 @@ export function auditCurrentnessText(
       if (!inner.some((cell) => NEXT_TASK_COLUMN_RE.test(cell))) continue;
       const column = inner.findIndex((cell) => NEXT_TASK_COLUMN_RE.test(cell));
       if (i + 1 < lines.length && /^\|[\s:|-]+\|$/.test(lines[i + 1].trim())) i += 1;
+      const tableHeading = enclosingHeading(bare, lines.slice(0, i).join("\n").length + 1);
+      if (tableHeading !== null && EXEMPT_HEADING_RE.test(tableHeading.heading)) continue;
+      const section = tableHeading === null ? "table" : "table: " + tableHeading.heading;
       for (let r = i + 1; r < lines.length; r += 1) {
         const rowCells = lines[r].split("|").map((cell) => cell.trim());
         if (rowCells.length < 3 || rowCells[0] !== "" || rowCells[rowCells.length - 1] !== "") break;
         const rowInner = rowCells.slice(1, -1);
         if (column >= rowInner.length) break;
-        const enclosing = enclosingHeading(bare, lines.slice(0, r).join("\n").length + 1);
-        const section = enclosing === null || EXEMPT_HEADING_RE.test(enclosing.heading) ? "table" : "table: " + enclosing.heading;
         for (const id of terminalIds(rowInner[column], terminal)) {
           push(target, section, id, "stale-next-task-column");
         }
@@ -2522,8 +2532,8 @@ async function runOracle(): Promise<number> {
     const staleDoor = "# g03\n\n## Next Task\n\nContinue with `g03.011` now.\n";
     const readyDoor = "# g03\n\n## Next Task\n\nContinue with `g03.012` now.\n";
     const historyDoor = "# g03\n\n## History\n\nCompleted `g03.011` at `99bbc94`.\n";
-    const goalTable = "# g03\n\n## Generation Runway\n\n| Goal | State | Next Task |\n| --- | --- | --- |\n| Parallel projections. | complete as `g03.011` | exact portfolio repair |\n";
-    const staleTable = "# g03\n\n## Generation Runway\n\n| Goal | State | Next Task |\n| --- | --- | --- |\n| Parallel projections. | ready as `g03.011` | continue with `g03.011` |\n";
+    const goalTable = "# g03\n\n## Generation Runway\n\n| Goal | State | Next Task |\n| --- | --- | --- |\n| Parallel projections. | complete as `g03.011` | exact portfolio repair |\n| Shipped projections. | complete as `g03.011` | continue with `g03.011` |\n";
+    const staleTable = "# g03\n\n## Goals\n\n| Goal | State | Next Task |\n| --- | --- | --- |\n| Parallel projections. | ready as `g03.011` | continue with `g03.011` |\n";
     const liveTask = "# g03.012\n\nHuman outcome stays.\n";
     const staleFindings = auditCurrentnessText(
       { "docs/roadmaps/g03/011-task.md": staleTask, "docs/roadmaps/g03/012-task.md": liveTask, "docs/roadmaps/g03/README.md": staleDoor },
@@ -2537,6 +2547,12 @@ async function runOracle(): Promise<number> {
       auditRecords, ["docs/roadmaps/g03/README.md"]);
     check(tableFindings.some((v) => v.task === "g03.011" && v.reason === "stale-next-task-column"),
       "oracle", "audit accepted a Next-task column naming a terminal task");
+    const nestedDoor = "# g03\n\n## Next Task\n\nLane intro.\n\n### Detail\n\nContinue with `g03.011` now.\n";
+    const nestedFindings = auditCurrentnessText(
+      { "docs/roadmaps/g03/011-task.md": cutoverTask, "docs/roadmaps/g03/012-task.md": liveTask, "docs/roadmaps/g03/README.md": nestedDoor },
+      auditRecords, ["docs/roadmaps/g03/README.md"]);
+    check(nestedFindings.some((v) => v.section === "Next Task" && v.task === "g03.011" && v.reason === "stale-frontier"),
+      "oracle", "audit let a nested subsection evade stale-frontier detection");
     const cleanFindings = auditCurrentnessText(
       { "docs/roadmaps/g03/011-task.md": cutoverTask, "docs/roadmaps/g03/012-task.md": liveTask, "docs/roadmaps/g03/README.md": readyDoor },
       auditRecords, ["docs/roadmaps/g03/README.md"]);

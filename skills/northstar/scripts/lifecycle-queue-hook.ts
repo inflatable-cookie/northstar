@@ -668,15 +668,16 @@ interface ConsumableHandoff {
 // Durable backlink guard: a closeout handoff is transient transport, so the
 // hook refuses atomically when tracked durable Markdown still links to the
 // exact handoff it would delete. The scan is structural and bounded: tracked
-// `.md` files only, standard Markdown links plus `<autolinks>`, relative and
-// rooted targets resolved against the linking file, external URLs ignored,
-// the handoff itself ignored, generated projection blocks stripped. Only an
-// exact local target blocks; similarly named files never do.
+// `.md` files only, standard Markdown links (bare, angle-bracketed, or titled)
+// plus `<autolinks>`, relative and rooted targets resolved against the linking
+// file, external URLs and the handoff itself ignored, generated projection
+// blocks stripped. Only an exact local target blocks; similarly named files
+// never do.
 // ---------------------------------------------------------------------------
 
 const BACKLINK_SCAN_MAX_FILES = 5000;
 const BACKLINK_SCAN_MAX_BYTES = 256 * 1024;
-const MARKDOWN_LINK_RE = /\[[^\]]*\]\(([^)\s]+)\)/g;
+const MARKDOWN_LINK_RE = /\[[^\]]*\]\(\s*(?:<([^<>\s]+)>|([^\s)]+))(?:\s+[^)]*)?\)/g;
 const AUTOLINK_RE = /<([^<>\s]+)>/g;
 const EXTERNAL_TARGET_RE = /^[a-zA-Z][a-zA-Z0-9+.-]*:/;
 
@@ -747,7 +748,10 @@ export function findHandoffBacklinks(repoRoot: string, handoffRel: string): stri
     for (const pattern of [MARKDOWN_LINK_RE, AUTOLINK_RE]) {
       pattern.lastIndex = 0;
       let match: RegExpExecArray | null;
-      while ((match = pattern.exec(bare)) !== null) targets.add(match[1]);
+      while ((match = pattern.exec(bare)) !== null) {
+        const target = match[1] ?? match[2];
+        if (target !== undefined) targets.add(target);
+      }
     }
     for (const raw of targets) {
       if (resolveLinkTarget(sourceRel, raw) === handoffRel) {
