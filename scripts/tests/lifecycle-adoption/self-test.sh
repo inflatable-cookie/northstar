@@ -692,9 +692,10 @@ link_case mismatch "handoffs/handoff-006-v2.md" ok
 link_case codeexample "none" ok $'```md\nSee [the handoff](handoff-006.md).\n```\n\nQuoted `[the handoff](handoff-006.md)` stays inline.'
 link_case indented "none" ok $'Example:\n\n    See [the handoff](handoffs/handoff-006.md).'
 link_case escaped "none" blocked $'\\`See [the handoff](handoffs/handoff-006.md).\\`'
+link_case listcontinuation "none" blocked $'- item\n    continuation [the handoff](handoffs/handoff-006.md).'
 echo "code examples never block closeout: OK"
 link_case sibling "handoffs/handoff-007.md" ok
-echo "relative, rooted, fragment, titled, reference-style, indented, escaped, external, mismatch, and sibling controls: OK"
+echo "relative, rooted, fragment, titled, reference-style, indented, escaped, list-continuation, external, mismatch, and sibling controls: OK"
 
 echo "# changed handoff fails closed before any byte changes"
 repoC="$scratch/repo-changed"

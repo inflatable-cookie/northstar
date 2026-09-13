@@ -707,15 +707,82 @@ function stripHookGeneratedBlocks(text: string): string {
 
 // Remove code segments before link scanning: a link-shaped example inside
 // code renders no link, so deleting the handoff cannot strand it. Fenced
-// blocks, four-space indented examples, and inline spans are dropped; a
-// backslash-escaped backtick never opens or closes a span, so a real link
-// merely surrounded by escaped backticks is still detected. Fence runs of
+// blocks, container-relative indented examples, and inline spans are dropped;
+// a backslash-escaped backtick never opens or closes a span, so a real link
+// merely surrounded by escaped backticks is still detected. Indentation is
+// parsed against the open list and quote containers: a list-item continuation
+// stays scannable while genuinely indented code does not. Fence runs of
 // either character close only on a run of the same character that is at
-// least as long.
+// least as long. Tabs count as advancing to the next multiple of four
+// columns throughout.
+function indentWidth(line: string): number {
+  let width = 0;
+  for (const c of line) {
+    if (c === " ") {
+      width += 1;
+    } else if (c === "\t") {
+      width += 4 - (width % 4);
+    } else {
+      break;
+    }
+  }
+  return width;
+}
+
+// Consume list-item and blockquote prefixes starting at `indent`, pushing one
+// content indent per nesting level. Returns true when the line opens or
+// extends a container. A top-level marker must start before column four;
+// nested markers must reach their parent's content indent. Gaps of five or
+// more spaces (or an empty item) put content one past the marker; anything
+// narrower keeps its measured width.
+function openContainers(line: string, indent: number, containers: number[]): boolean {
+  let pos = indent;
+  let opened = false;
+  for (;;) {
+    const rest = line.slice(pos);
+    const item = /^([-*+]|\d{1,9}[.)])($|[ \t])/.exec(rest);
+    if (item !== null && (containers.length === 0 ? pos < 4 : pos >= containers[containers.length - 1])) {
+      let col = pos + item[1].length;
+      let k = pos + item[1].length;
+      let spaces = 0;
+      let tabbed = false;
+      while (line[k] === " " || line[k] === "\t") {
+        if (line[k] === " ") {
+          col += 1;
+          spaces += 1;
+        } else {
+          col += 4 - (col % 4);
+          tabbed = true;
+        }
+        k += 1;
+      }
+      const content = tabbed ? col : spaces < 5 ? col : pos + item[1].length + 1;
+      containers.push(k >= line.length || line.slice(k).trim() === "" ? pos + item[1].length + 1 : content);
+      pos = containers[containers.length - 1];
+      opened = true;
+      continue;
+    }
+    if (/^>/.test(rest) && (containers.length === 0 ? pos <= 3 : pos >= containers[containers.length - 1])) {
+      let content = pos + 1;
+      if (line[pos + 1] === " ") content += 1;
+      else if (line[pos + 1] === "\t") content += 4 - (content % 4);
+      containers.push(content);
+      pos = content;
+      opened = true;
+      continue;
+    }
+    break;
+  }
+  return opened;
+}
+
 function stripCodeSegments(text: string): string {
   const kept: string[] = [];
   let fenceChar = "";
   let fenceLen = 0;
+  // Open list and quote containers with their content indents; indented code
+  // needs four columns beyond the innermost one.
+  const containers: number[] = [];
   let prevBlank = true;
   let prevBlock = true;
   let inIndented = false;
@@ -742,10 +809,29 @@ function stripCodeSegments(text: string): string {
       prevBlank = false;
       prevBlock = true;
       inIndented = false;
-    } else if (trimmed === "") {
+      continue;
+    }
+    if (trimmed === "") {
       kept.push(line);
       prevBlank = true;
-    } else if (/^(?: {4,}|\t)/.test(line) && (prevBlank || prevBlock || inIndented)) {
+      continue;
+    }
+    const indent = indentWidth(line);
+    let popped = false;
+    while (containers.length > 0 && indent < containers[containers.length - 1]) {
+      containers.pop();
+      popped = true;
+    }
+    if (popped) inIndented = false;
+    if (openContainers(line, indent, containers)) {
+      kept.push(line);
+      inIndented = false;
+      prevBlank = false;
+      prevBlock = true;
+      continue;
+    }
+    const threshold = (containers.length > 0 ? containers[containers.length - 1] : 0) + 4;
+    if (indent >= threshold && (prevBlank || prevBlock || inIndented)) {
       inIndented = true;
       prevBlank = false;
       prevBlock = false;
