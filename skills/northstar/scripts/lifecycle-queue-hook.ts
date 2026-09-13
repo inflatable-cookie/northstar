@@ -679,6 +679,7 @@ interface ConsumableHandoff {
 // ---------------------------------------------------------------------------
 
 const BACKLINK_SCAN_MAX_FILES = 5000;
+const BACKLINK_SCAN_MAX_LISTING_BYTES = 4 * 1024 * 1024;
 const BACKLINK_SCAN_MAX_BYTES = 4 * 1024 * 1024;
 const MARKDOWN_LINK_RE = /\[[^\]]*\]\(\s*(?:<([^<>\s]+)>|([^\s)]+))(?:\s+[^)]*)?\)/g;
 const AUTOLINK_RE = /<([^<>\s]+)>/g;
@@ -725,14 +726,46 @@ function resolveLinkTarget(sourceRel: string, rawTarget: string): string | null 
   return normalized;
 }
 
+function boundedProcessText(value: unknown): string {
+  const text = String(value ?? "").trim();
+  return text.length <= 512 ? text : text.slice(0, 512) + "...";
+}
+
+function processEvidence(result: ReturnType<typeof spawnSync>): string {
+  const evidence: string[] = [];
+  const error = result.error as (Error & { code?: string }) | undefined;
+  if (error) {
+    const identity = error.code ?? error.name ?? "unknown error";
+    const detail = boundedProcessText(error.message);
+    evidence.push("error " + identity + (detail ? " (" + detail + ")" : ""));
+  }
+  if (result.signal !== null) evidence.push("signal " + String(result.signal));
+  if (result.status === null) evidence.push("status null");
+  else if (result.status !== 0) evidence.push("exit status " + String(result.status));
+  const stderr = boundedProcessText(result.stderr);
+  if (stderr) evidence.push("stderr " + stderr);
+  return evidence.join("; ");
+}
+
 // Every tracked Markdown file linking to the exact handoff path, sorted. The
 // handoff file itself never counts. Bounds fail closed: an unlistable tree,
 // an oversized file, or more files than the traversal bound refuses before
 // any byte changes rather than risking a missed backlink.
 
 export function findHandoffBacklinks(repoRoot: string, handoffRel: string): string[] {
-  const listed = spawnSync("git", ["ls-files", "-z"], { cwd: repoRoot });
-  if (listed.status !== 0) malfunction("git ls-files failed: " + String(listed.stderr || "").trim());
+  const listed = spawnSync("git", ["ls-files", "-z"], {
+    cwd: repoRoot,
+    maxBuffer: BACKLINK_SCAN_MAX_LISTING_BYTES,
+  });
+  if (listed.error || listed.signal !== null || listed.status !== 0) {
+    malfunction("git ls-files failed: " + (processEvidence(listed) || "abnormal process termination"));
+  }
+  const listingBytes = Buffer.isBuffer(listed.stdout)
+    ? listed.stdout.byteLength
+    : Buffer.byteLength(String(listed.stdout ?? ""), "utf8");
+  if (listingBytes > BACKLINK_SCAN_MAX_LISTING_BYTES) {
+    refuse("backlink scan tracked-file listing exceeds its " + BACKLINK_SCAN_MAX_LISTING_BYTES + "-byte bound; refusing handoff deletion");
+  }
   const tracked = String(listed.stdout).split("\0").filter((name) => name.length > 0 && name.endsWith(".md"));
   if (tracked.length > BACKLINK_SCAN_MAX_FILES) {
     refuse("backlink scan exceeds its " + BACKLINK_SCAN_MAX_FILES + "-file bound; refusing handoff deletion");

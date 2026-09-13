@@ -748,6 +748,91 @@ expect_outcome "$large_link_out" blocked "large linked Markdown"
 [ -z "$(git -C "$repoLargeLink" status --porcelain)" ]
 echo "large exact-link refusal is atomic: OK"
 
+echo "# tracked listing transport bound"
+make_long_path() {
+  local character=$1 count=$2
+  printf '%*s' "$count" '' | tr ' ' "$character"
+}
+
+repoLargeListing="$scratch/repo-large-listing"
+build_fixture "$repoLargeListing"
+listing_prefix="$repoLargeListing/docs/$(make_long_path x 200)/$(make_long_path y 200)"
+mkdir -p "$listing_prefix"
+for number in $(seq -w 1 4000); do
+  printf '# Listing fixture %s\n' "$number" > "$listing_prefix/file-$number.md"
+done
+git -C "$repoLargeListing" add -A
+git -C "$repoLargeListing" commit -qm "add large tracked Markdown listing"
+listing_bytes=$(git -C "$repoLargeListing" ls-files -z | wc -c | tr -d ' ')
+if [ "$listing_bytes" -le $((1024 * 1024)) ] || [ "$listing_bytes" -ge $((4 * 1024 * 1024)) ]; then
+  echo "fixture listing is not between 1 MiB and 4 MiB: $listing_bytes" >&2
+  exit 1
+fi
+CURRENT_REPO="$repoLargeListing"
+read_facts "$(fixture_facts "$repoLargeListing" 006)"
+write_event "$scratch/closeout-large-listing.json" "evt-closeout-large-listing-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+large_listing_out=$(run_hook "$scratch/closeout-large-listing.json" "evt-closeout-large-listing-0001")
+expect_outcome "$large_listing_out" ok "large tracked listing"
+[ ! -e "$repoLargeListing/docs/handoffs/handoff-006.md" ]
+[ -f "$repoLargeListing/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+echo "large tracked listing ($listing_bytes bytes) scans successfully: OK"
+
+repoOverflowListing="$scratch/repo-overflow-listing"
+build_fixture "$repoOverflowListing"
+overflow_prefix="$repoOverflowListing/docs/$(make_long_path a 210)/$(make_long_path b 210)/$(make_long_path c 210)/$(make_long_path d 210)"
+mkdir -p "$overflow_prefix"
+for number in $(seq -w 1 5000); do
+  printf '# Overflow fixture %s\n' "$number" > "$overflow_prefix/file-$number.md"
+done
+git -C "$repoOverflowListing" add -A
+git -C "$repoOverflowListing" commit -qm "add over-cap tracked Markdown listing"
+overflow_bytes=$(git -C "$repoOverflowListing" ls-files -z | wc -c | tr -d ' ')
+if [ "$overflow_bytes" -le $((4 * 1024 * 1024)) ]; then
+  echo "fixture listing does not exceed 4 MiB: $overflow_bytes" >&2
+  exit 1
+fi
+CURRENT_REPO="$repoOverflowListing"
+read_facts "$(fixture_facts "$repoOverflowListing" 006)"
+write_event "$scratch/closeout-overflow-listing.json" "evt-closeout-overflow-listing-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+overflow_handoff_digest=$(sha256sum "$repoOverflowListing/docs/handoffs/handoff-006.md" | cut -d' ' -f1)
+overflow_readme_digest=$(sha256sum "$repoOverflowListing/docs/README.md" | cut -d' ' -f1)
+overflow_out=$(run_hook "$scratch/closeout-overflow-listing.json" "evt-closeout-overflow-listing-0001")
+expect_outcome "$overflow_out" failed "over-cap tracked listing"
+json_field "$overflow_out" "r.summary.includes('git ls-files failed')" >/dev/null
+json_field "$overflow_out" "r.summary.includes('ENOBUFS')" >/dev/null
+json_field "$overflow_out" "r.summary.includes('signal SIGTERM')" >/dev/null
+json_field "$overflow_out" "r.summary.includes('status null')" >/dev/null
+[ ! -e "$repoOverflowListing/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+[ -e "$repoOverflowListing/docs/handoffs/handoff-006.md" ]
+[ "$overflow_handoff_digest" = "$(sha256sum "$repoOverflowListing/docs/handoffs/handoff-006.md" | cut -d' ' -f1)" ]
+[ "$overflow_readme_digest" = "$(sha256sum "$repoOverflowListing/docs/README.md" | cut -d' ' -f1)" ]
+[ -z "$(git -C "$repoOverflowListing" status --porcelain)" ]
+echo "over-cap tracked listing ($overflow_bytes bytes) refuses atomically with process evidence: OK"
+
+fake_git_dir="$scratch/fake-git"
+mkdir -p "$fake_git_dir"
+real_git=$(command -v git)
+cat > "$fake_git_dir/git" <<EOF
+#!/usr/bin/env bash
+if [ "\$1" = "ls-files" ]; then
+  echo "synthetic tracked listing failure" >&2
+  exit 73
+fi
+exec "$real_git" "\$@"
+EOF
+chmod +x "$fake_git_dir/git"
+git_failure_out=$(PATH="$fake_git_dir:$PATH" run_hook "$scratch/closeout-overflow-listing.json" "evt-closeout-overflow-listing-0001")
+expect_outcome "$git_failure_out" failed "non-zero tracked listing"
+json_field "$git_failure_out" "r.summary.includes('exit status 73')" >/dev/null
+json_field "$git_failure_out" "r.summary.includes('stderr synthetic tracked listing failure')" >/dev/null
+[ ! -e "$repoOverflowListing/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+[ -e "$repoOverflowListing/docs/handoffs/handoff-006.md" ]
+echo "non-zero tracked listing reports exit and stderr evidence: OK"
+
 repoOversized="$scratch/repo-oversized"
 build_fixture "$repoOversized"
 mkdir -p "$repoOversized/docs"
