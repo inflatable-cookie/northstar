@@ -17,7 +17,7 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 | Run Queue lifecycle hooks through Effigy and the installed Northstar skill without copied repository code. | complete as `g03.010`; terminal state published at `36dc197` | contract 001, system architecture, bundle section 12; Queue contract 005 | portfolio rollout in progress |
 | Represent legitimate parallel active generations in portable lifecycle projections. | complete as `g03.011`; terminal record published at `99bbc94` | contract 001, bundle section 12; Underlay parallel mode | no further projection-shape lane |
 | Make lifecycle JSON and generated regions the sole mechanical currentness, with safe transient handoff consumption. | complete as `g03.012` | contract 001, bundle section 12, lifecycle reference | portfolio repair continues from consumer evidence |
-| Keep transient-handoff backlink scanning bounded across large tracked repository indexes. | ready as `g03.014` | contract 001, lifecycle reference | repair the proven Bovine closeout hold |
+| Keep transient-handoff backlink scanning bounded across large tracked repository indexes. | complete through `g03.014`; aggregate scan follow-up ready as `g03.015` | contract 001, lifecycle reference | admit Bovine's legitimate 18,190-file, 37.5 MiB scan within finite limits |
 | Reduce repeated protocol enumerations and retire genuinely redundant modes without merging distinct behavior blindly. | next | contract 001, later usage evidence | Chatterbox sequencing after the active goal |
 | Keep unresolved operator feedback visible without pinning old generations open. | watch | contract 001 | bounded watchlist below |
 
@@ -28,7 +28,7 @@ are not a per-task status mirror.
 
 ## Current lane
 
-One lane executes at a time. `g03.014` is the approved active lane. Dispatch
+One lane executes at a time. `g03.015` is the approved active lane. Dispatch
 authorization is its committed handoff plus its task dispatch manifest; no
 concurrent sibling and no automatic successor are authorized. Queue repository
 work remains separately owned and is not part of this runway.
@@ -61,6 +61,7 @@ work remains separately owned and is not part of this runway.
 - `012-enforce-sole-source-lifecycle-currentness.md`
 - `013-support-large-markdown-backlink-scan.md`
 - `014-bound-tracked-file-listing-output.md`
+- `015-bound-aggregate-backlink-scan.md`
 
 Mechanical status lives in the lifecycle records: adopted tasks (`g03.006`
 onward) project it in the generated block below, earlier tasks keep their
@@ -68,9 +69,10 @@ completion in the runway above and in Git history.
 
 ## Next task
 
-The committed g03.014 worker handoff owns the sole approved Northstar core lane.
-It bounds the tracked-file listing that precedes backlink scanning and restores
-the held Bovine closeout. No sibling or automatic successor is approved.
+The committed g03.015 worker handoff owns the sole approved Northstar core lane.
+It replaces the obsolete standalone 5,000-file refusal with combined finite
+file-count and aggregate-byte bounds that admit the real Bovine repository. No
+sibling or automatic successor is approved.
 <!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:4a18cfb7640f13e3000ac803804360d50f1890f5cb3ee3b61915626ae0edaf15 -->
 | Generation | Disposition | Runway state |
 | --- | --- | --- |
