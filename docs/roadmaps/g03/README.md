@@ -58,6 +58,7 @@ separately owned and is not part of this runway.
 - `010-adopt-effigy-hosted-lifecycle-hook.md`
 - `011-support-parallel-active-generation-projections.md`
 - `012-enforce-sole-source-lifecycle-currentness.md`
+- `013-support-large-markdown-backlink-scan.md`
 
 Mechanical status lives in the lifecycle records: adopted tasks (`g03.006`
 onward) project it in the generated block below, earlier tasks keep their
