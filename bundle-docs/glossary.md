@@ -56,7 +56,7 @@ One-page reference for terms used across Northstar docs.
   selector. Neither is planning authority.
 
 **Generation**
-:: A numbered era of roadmap tasks (`g01`, `g02`, `g03`). Holds 20-40 tasks before rollover is warranted. In parallel mode, multiple generations may be active simultaneously as independent queues.
+:: A numbered era of roadmap tasks (`g01`, `g02`, `g03`). Holds 20-40 tasks before rollover is warranted. In parallel mode, multiple generations may be active simultaneously as independent queues. Its machine state has two axes: disposition (`open` or `closed`, changed only by an explicit closure record; never `complete`) and derived runway state (`active`, `ready`, `blocked`, `planned`, or `planning_required` — the exhausted state that asks planning for the next decision).
 
 **Lane**
 : An active line of work within a roadmap. Each active generation owns one

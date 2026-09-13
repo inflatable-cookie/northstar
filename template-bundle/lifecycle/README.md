@@ -15,8 +15,9 @@ execution dependency.
 ```text
 .northstar/lifecycle/v1/
   tasks/gNN.NNN.json
-  generations/gNN.json        # derived only when a generation is closed
-  projection-targets.json     # declared projection surfaces
+  generations/gNN.json            # compaction receipt, written by compact
+  generations/gNN.closure.json    # closure authority, written by the rollover
+  projection-targets.json         # declared surfaces + active generation
 
 .paseo/
   queue.json
@@ -31,10 +32,22 @@ returns.
 
 Task Markdown keeps outcome, scope, decisions, acceptance, stop conditions,
 policy, and UI brief. A generated block between stable sentinels projects the
-record. Leave everything outside the sentinels alone; a task file opts into
+record and names the declared active generation, its disposition (`open` or
+`closed`; never `complete`), and its derived runway state (`active`, `ready`,
+`blocked`, `planned`, or `planning_required`). An open generation whose records
+are all terminal projects `planning_required`: that asks planning to extend the
+same generation or make a reasoned rollover decision, and never implies
+closure. Leave everything outside the sentinels alone; a task file opts into
 currentness by carrying the block. Lifecycle-managed task files carry no
 hand-maintained status line and no closeout evidence rewrite: the record and
 the projections own mechanical state.
+
+Generation closure is explicit and separate from an exhausted runway: a
+rollover commits `generations/gNN.closure.json` (closed disposition plus the
+`tasks_digest` printed by the lifecycle `tasks-digest` command) only after the
+preservation oracle passes, and `compact` refuses missing, open, stale, or
+mismatched authority. Until that record exists, the generation stays open in
+`planning_required`.
 
 ## Standalone commands
 
@@ -63,7 +76,7 @@ To let Queue drive the same lifecycle, copy four things:
    every lifecycle schema);
 4. `projection-targets.json` → `.northstar/lifecycle/v1/projection-targets.json`
    (then edit the target list to your front doors, including the active
-   generation README).
+   generation README, and declare your active generation).
 
 The committed runtime is the only implementation Queue executes. The launcher
 resolves `northstar-lifecycle.runtime/` beside itself and never `$HOME`, a

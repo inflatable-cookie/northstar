@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://northstar.invalid/schemas/lifecycle-generation-closure.v1.json",
+  "title": "Northstar generation closure record v1",
+  "description": "Explicit, repository-verifiable closure authority for one generation, committed at .northstar/lifecycle/v1/generations/gNN.closure.json. Absence of the record leaves the generation open; an exhausted runway is planning_required, not closure. The tasks digest pins the exact terminal record set the closure covers, so compaction refuses missing, open, stale, mismatched, or ambiguous authority. Complete is never a generation disposition.",
+  "type": "object",
+  "required": ["schema_version", "generation", "disposition", "reason", "tasks_digest"],
+  "properties": {
+    "schema_version": { "const": "northstar.lifecycle.generation-closure.v1" },
+    "generation": {
+      "type": "string",
+      "pattern": "^g[0-9]{2}$"
+    },
+    "disposition": {
+      "enum": ["open", "closed"]
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tasks_digest": {
+      "description": "Digest of the sorted terminal task summaries the closure covers, as printed by the tasks-digest command. Compaction recomputes it and refuses any drift.",
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "closed_at": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{3})?Z$"
+    },
+    "preservation_evidence": {
+      "description": "Optional reference to the preservation oracle output (promoted authority, rehomed commitments, selected evidence) that authorized the closure.",
+      "$ref": "evidence.schema.json#/$defs/evidenceEntry"
+    }
+  },
+  "additionalProperties": false
+}

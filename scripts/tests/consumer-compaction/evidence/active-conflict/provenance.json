@@ -11,7 +11,7 @@
   "scenario": "active-conflict",
   "skill_path": "/Users/tom/.agents/skills/northstar",
   "skill_procedure_relative": "references/lifecycle-maintenance.md",
-  "skill_procedure_sha256": "sha256:06cf010e83d0d08deb444fddd709f1a8073c7e8ec0d5e32a7b47721029b11734",
+  "skill_procedure_sha256": "sha256:ceaad9c587b305234918842a3260d86cfd0c1fb4cd24669c0c058cda47cd9c5e",
   "started_at": "2026-09-09T13:40:00Z",
   "workspace_id": "wks_a3e5efb3a55b2682"
 }

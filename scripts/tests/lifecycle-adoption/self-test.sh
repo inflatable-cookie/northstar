@@ -15,19 +15,25 @@
 #    deletion inside declared allowed paths, changed/symlinked/missing
 #    handoff refusals before any byte changes, and replay idempotence.
 # 6. Proves the active generation README is a deterministic projection target
-#    and that no mutation lands outside declared paths.
+#    and that no mutation lands outside declared paths; the generated block
+#    names the active generation, its open disposition, and the derived
+#    planning_required runway after the only task reaches terminal state.
 # 7. Proves terminal equivalence: equivalent standalone and generic Queue
 #    sequences produce the same portable digest, in both task orders.
-# 8. Proves the committed runtime closure: the launcher, reducer, adapter, and
+# 8. Proves generation compaction consumes exact closure authority through the
+#    committed runtime: terminal records alone refuse, tasks-digest authors the
+#    closure, a fresh closed record compacts, replay is a no-op, stale
+#    authority refuses, and removing the closure reopens the generation.
+# 9. Proves the committed runtime closure: the launcher, reducer, adapter, and
 #    every schema come from the repository checkout, the closure is derived
 #    from the canonical skill, and drift in code, schema, launcher bytes,
 #    extra files, or the executable bit fails the parity oracle.
-# 9. Proves a hostile or stale global installation under $HOME cannot change
+# 10. Proves a hostile or stale global installation under $HOME cannot change
 #    what Queue executes, and that removing it entirely changes nothing.
-# 10. Proves the copy-ready starter is self-contained: a consumer repository
+# 11. Proves the copy-ready starter is self-contained: a consumer repository
 #    built only from `template-bundle/lifecycle/` runs the closeout with no
 #    Northstar source checkout and a minimal environment.
-# 11. Runs the closeout through the committed launcher under a minimal
+# 12. Runs the closeout through the committed launcher under a minimal
 #    environment: no Paseo, Queue, network, global skill, or Northstar source
 #    checkout.
 
@@ -245,6 +251,17 @@ EOF
   cp -R "$hooks_from/." "$repo/.paseo/hooks/"
   chmod +x "$repo/.paseo/hooks/northstar-lifecycle"
   cp "$targets_from" "$repo/.northstar/lifecycle/v1/projection-targets.json"
+  if [ "$surface" = starter ]; then
+    # Adoption edit: the copied starter declares its own scaffold generation;
+    # this consumer's active generation is g03.
+    bun -e '
+      const fs = await import("node:fs");
+      const file = process.argv[1];
+      const config = JSON.parse(fs.readFileSync(file, "utf8"));
+      config.active_generation = "g03";
+      fs.writeFileSync(file, JSON.stringify(config, null, 2) + "\n");
+    ' "$repo/.northstar/lifecycle/v1/projection-targets.json"
+  fi
   git -C "$repo" add -A
   git -C "$repo" commit -qm "install lifecycle hook surfaces"
 
@@ -414,8 +431,9 @@ echo "reserved manifest path refusal: OK"
 echo "# undeclared projection target is refused before any write"
 cat > "$repoA/.northstar/lifecycle/v1/projection-targets.json" <<'EOF'
 {
-  "schema_version": "northstar.lifecycle.projection-targets.v1",
-  "targets": ["docs/README.md", "outside/leak.md"]
+  "schema_version": "northstar.lifecycle.projection-targets.v2",
+  "targets": ["docs/README.md", "outside/leak.md"],
+  "active_generation": "g03"
 }
 EOF
 write_event "$scratch/closeout-escape.json" "evt-closeout-escape-0001" "task.closeout" "lifecycle-state" "$MC" \
@@ -484,6 +502,7 @@ expect_outcome "$closeout" ok "bootstrap closeout"
 [ "$(json_field "$closeout" "r.changedPaths.includes('docs/handoffs/handoff-006.md')")" = "true" ]
 [ "$(json_field "$closeout" "r.metadata.handoff_consumed")" = "true" ]
 grep -q "Human front door stays." "$repoA/docs/README.md"
+grep -q "| g03 | open | planning_required |" "$repoA/docs/README.md"
 grep -q "| g03.006 | complete | none |" "$repoA/docs/README.md"
 grep -q "Human roadmap stays." "$repoA/docs/roadmaps/README.md"
 grep -q "northstar:lifecycle:begin" "$repoA/docs/README.md"
@@ -495,6 +514,16 @@ grep -q "| g03.006 | complete | none |" "$repoA/docs/roadmaps/g03/README.md"
 digest_a=$(json_field "$closeout" "r.metadata.portable_digest")
 [ -n "$digest_a" ]
 echo "bootstrap closeout: OK"
+
+echo "# exhausted open generation projects planning_required, not completion"
+[ ! -e "$repoA/.northstar/lifecycle/v1/generations/g03.closure.json" ]
+runway_count=$(grep -h "| g03 | open | planning_required |" "$repoA/docs/README.md" "$repoA/docs/roadmaps/README.md" "$repoA/docs/roadmaps/g03/README.md" | wc -l | tr -d ' ')
+[ "$runway_count" = "3" ]
+if grep -q "| g03 | complete" "$repoA/docs/README.md"; then
+  echo "projection labeled an open generation complete" >&2
+  exit 1
+fi
+echo "runway state line: OK"
 
 echo "# exact handoff consumption inside declared paths only"
 git -C "$repoA" status --porcelain | grep -q " D docs/handoffs/handoff-006.md"
@@ -569,6 +598,34 @@ expect_outcome "$launcher_out" ok "launcher replay"
 [ "$(json_field "$launcher_out" "r.changedPaths.length")" = "0" ]
 echo "committed launcher isolation: OK"
 
+echo "# generation compaction consumes exact closure authority"
+installed_core="$installed/scripts/lifecycle-core.ts"
+compact_cmd=(compact --records .northstar/lifecycle/v1/tasks --generation g03 --out .northstar/lifecycle/v1/generations/g03.json)
+if (cd "$repoA" && bun run "$installed_core" "${compact_cmd[@]}" > "$scratch/compact-noclosure.out" 2>&1); then
+  echo "compaction without closure authority succeeded" >&2
+  exit 1
+fi
+grep -q "closure record" "$scratch/compact-noclosure.out"
+[ ! -e "$repoA/.northstar/lifecycle/v1/generations/g03.json" ]
+tasks_json=$(cd "$repoA" && bun run "$installed_core" tasks-digest --records .northstar/lifecycle/v1/tasks --generation g03)
+tasks_digest=$(json_field "$tasks_json" "r.tasks_digest")
+[ -n "$tasks_digest" ]
+mkdir -p "$repoA/.northstar/lifecycle/v1/generations"
+printf '{\n  "schema_version": "northstar.lifecycle.generation-closure.v1",\n  "generation": "g03",\n  "disposition": "closed",\n  "reason": "fixture rollover boundary after preservation oracle",\n  "tasks_digest": "%s",\n  "closed_at": "2026-09-12T23:00:00.000Z"\n}\n' "$tasks_digest" > "$repoA/.northstar/lifecycle/v1/generations/g03.closure.json"
+compact_out=$(cd "$repoA" && bun run "$installed_core" "${compact_cmd[@]}")
+[ "$(json_field "$compact_out" "r.status")" = "applied" ]
+[ "$(json_field "$(cat "$repoA/.northstar/lifecycle/v1/generations/g03.json")" "r.source_digest")" = "$tasks_digest" ]
+compact_replay=$(cd "$repoA" && bun run "$installed_core" "${compact_cmd[@]}")
+[ "$(json_field "$compact_replay" "r.status")" = "unchanged" ]
+printf '{\n  "schema_version": "northstar.lifecycle.generation-closure.v1",\n  "generation": "g03",\n  "disposition": "closed",\n  "reason": "stale authority",\n  "tasks_digest": "sha256:%s",\n  "closed_at": "2026-09-12T23:00:00.000Z"\n}\n' "0000000000000000000000000000000000000000000000000000000000000000" > "$repoA/.northstar/lifecycle/v1/generations/g03.closure.json"
+if (cd "$repoA" && bun run "$installed_core" "${compact_cmd[@]}" > "$scratch/compact-stale.out" 2>&1); then
+  echo "stale closure authority accepted" >&2
+  exit 1
+fi
+grep -q "stale or mismatched" "$scratch/compact-stale.out"
+rm "$repoA/.northstar/lifecycle/v1/generations/g03.closure.json" "$repoA/.northstar/lifecycle/v1/generations/g03.json"
+echo "closure-gated compaction: OK"
+
 echo "# a hostile or stale global installation cannot change executed bytes"
 hostile_home="$scratch/hostile-home"
 for base in "$hostile_home/.agents/skills/northstar" "$hostile_home/.pi/agent/skills/northstar"; do
@@ -631,6 +688,7 @@ expect_outcome "$starter_out" ok "starter copy-only closeout"
 [ "$(json_field "$starter_out" "r.metadata.handoff_consumed")" = "true" ]
 [ "$(json_field "$starter_out" "r.changedPaths.includes('docs/roadmaps/README.md')")" = "true" ]
 [ "$(json_field "$starter_out" "r.changedPaths.includes('docs/README.md')")" = "true" ]
+grep -q "| g03 | open | planning_required |" "$consumer/docs/README.md"
 [ ! -e "$consumer/docs/handoffs/handoff-006.md" ]
 [ -f "$consumer/.northstar/lifecycle/v1/tasks/g03.006.json" ]
 echo "copy-only starter consumer: OK"

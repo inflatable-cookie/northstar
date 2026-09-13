@@ -27,12 +27,26 @@ import { fileURLToPath } from "node:url";
 
 export const RECORD_SCHEMA = "northstar.lifecycle.task-record.v1";
 export const ENVELOPE_SCHEMA = "northstar.lifecycle.transition.v1";
-export const PROJECTION_SCHEMA = "northstar.lifecycle.projection.v1";
+export const PROJECTION_SCHEMA = "northstar.lifecycle.projection.v2";
 export const GENERATION_RECEIPT_SCHEMA = "northstar.lifecycle.generation-receipt.v1";
-export const FRONTIER_SCHEMA = "northstar.lifecycle.frontier.v1";
+export const GENERATION_CLOSURE_SCHEMA = "northstar.lifecycle.generation-closure.v1";
+export const FRONTIER_SCHEMA = "northstar.lifecycle.frontier.v2";
+export const PROJECTION_TARGETS_SCHEMA = "northstar.lifecycle.projection-targets.v2";
 
 export const STATUSES = ["planned", "ready", "active", "blocked", "complete", "cancelled", "superseded"] as const;
 export const STAGES = ["none", "dispatch", "implementation", "review", "merge", "closeout"] as const;
+
+// Generation disposition is open or closed and changes only through an
+// explicit committed closure record; complete is never a generation label.
+export const DISPOSITIONS = ["open", "closed"] as const;
+
+// Derived runway state of one generation, with deterministic precedence for
+// mixed records: live work outranks dispatchable work, which outranks a
+// declared blocker, which outranks unstarted plans. planning_required is the
+// exhausted state: no nonterminal approved work remains, so the open
+// generation asks planning for its next decision instead of implying closure.
+export const RUNWAY_STATES = ["planning_required", "planned", "blocked", "ready", "active"] as const;
+export const RUNWAY_PRECEDENCE = ["active", "ready", "blocked", "planned"] as const;
 export const TERMINAL_STATUSES = new Set(["complete", "cancelled", "superseded"]);
 export const EVIDENCE_LEVELS = ["locally_verified", "adapter_attested", "operator_authorized"] as const;
 export const TRANSITIONS = ["plan", "ready", "start", "advance_stage", "block", "resume", "complete", "cancel", "supersede"] as const;
@@ -60,6 +74,9 @@ const EVENT_ID_RE = /^[A-Za-z0-9._:-]{8,128}$/;
 
 export const BEGIN_PREFIX = "<!-- northstar:lifecycle:begin";
 export const END_SENTINEL = "<!-- northstar:lifecycle:end -->";
+
+const GENERATION_RE = /^g[0-9]{2}$/;
+export const TARGETS_CONFIG_REL = ".northstar/lifecycle/v1/projection-targets.json";
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const SCHEMA_DIR = path.resolve(SCRIPT_DIR, "..", "references", "lifecycle");
@@ -294,6 +311,10 @@ export function validateRecord(record: unknown): void {
 
 export function validateProjection(projection: unknown): void {
   validateAgainstSchemaFile(projection, schemaPath("projection.schema.json"));
+}
+
+export function validateGenerationClosure(closure: unknown): void {
+  validateAgainstSchemaFile(closure, schemaPath("generation-closure.schema.json"));
 }
 
 // ---------------------------------------------------------------------------
@@ -646,6 +667,78 @@ export function reduce(envelope: Record<string, unknown>, current: Record<string
 }
 
 // ---------------------------------------------------------------------------
+// Generation disposition and derived runway state
+// ---------------------------------------------------------------------------
+
+export interface GenerationState {
+  generation: string;
+  disposition: string;
+  runway: string;
+}
+
+// One closed machine vocabulary for the derived runway state. Nonterminal
+// records never collapse into planning_required: the precedence list keeps
+// parallel ready, active, blocked, and planned work separately visible.
+export function runwayOf(records: Record<string, unknown>[]): string {
+  const present = new Set<string>();
+  for (const record of records) {
+    const status = String(record.status);
+    check((STATUSES as readonly string[]).includes(status), "runway", "unknown task status: " + status);
+    if (!TERMINAL_STATUSES.has(status)) present.add(status);
+  }
+  for (const state of RUNWAY_PRECEDENCE) {
+    if (present.has(state)) return state;
+  }
+  return "planning_required";
+}
+
+export function generationClosurePath(repoRoot: string, generation: string): string {
+  check(typeof generation === "string" && GENERATION_RE.test(generation), "identity", "invalid generation: " + String(generation));
+  return path.join(lifecycleRoot(repoRoot), "generations", generation + ".closure.json");
+}
+
+// Closure authority is exact and repository-verifiable: the committed record
+// must carry this generation and validate against the closure schema.
+// Absence of the file is the open disposition, never an error here.
+export function verifyGenerationClosure(closure: Record<string, unknown>, generation: string): void {
+  validateGenerationClosure(closure);
+  check(closure.generation === generation, "generation-closure",
+    "closure record names generation " + String(closure.generation) + ", expected " + generation);
+}
+
+export function readGenerationClosure(repoRoot: string, generation: string): Record<string, unknown> | null {
+  const file = generationClosurePath(repoRoot, generation);
+  if (!fs.existsSync(file)) return null;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(fs.readFileSync(file, "utf8"));
+  } catch {
+    return fail("closure-parse", "generation closure record is not valid JSON: " + file);
+  }
+  check(parsed !== null && typeof parsed === "object" && !Array.isArray(parsed), "closure-parse", "generation closure record is not an object: " + file);
+  const closure = parsed as Record<string, unknown>;
+  verifyGenerationClosure(closure, generation);
+  return closure;
+}
+
+export function generationStateOf(records: Record<string, unknown>[], generation: string, closure: Record<string, unknown> | null): GenerationState {
+  check(typeof generation === "string" && GENERATION_RE.test(generation), "identity", "invalid generation: " + String(generation));
+  let disposition = "open";
+  if (closure !== null) {
+    verifyGenerationClosure(closure, generation);
+    disposition = String(closure.disposition);
+  }
+  const scoped = records.filter((record) => record.generation === generation);
+  const runway = runwayOf(scoped);
+  if (disposition === "closed") {
+    const offender = scoped.find((record) => !TERMINAL_STATUSES.has(String(record.status)));
+    check(offender === undefined, "generation-closed",
+      "generation " + generation + " is closed but " + String(offender?.task_id ?? "(unknown)") + " is " + String(offender?.status ?? "nonterminal"));
+  }
+  return { generation, disposition, runway };
+}
+
+// ---------------------------------------------------------------------------
 // Deterministic Markdown projections
 // ---------------------------------------------------------------------------
 
@@ -669,13 +762,21 @@ export function projectionEntries(records: Record<string, unknown>[]): Projectio
     .sort((a, b) => (a.task_id < b.task_id ? -1 : a.task_id > b.task_id ? 1 : 0));
 }
 
-export function buildProjection(records: Record<string, unknown>[]): Record<string, unknown> {
-  const entries = projectionEntries(records);
-  return {
+// The projection is scoped to the declared active generation: the state line
+// and the entry set describe exactly that generation, and the source digest
+// binds the state and entries together so neither can drift from the other.
+export function buildProjection(records: Record<string, unknown>[], state: GenerationState): Record<string, unknown> {
+  const entries = projectionEntries(records.filter((record) => record.generation === state.generation));
+  const projection = {
     schema_version: PROJECTION_SCHEMA,
-    source_digest: digestOf(entries),
+    generation: state.generation,
+    disposition: state.disposition,
+    runway_state: state.runway,
+    source_digest: digestOf({ disposition: state.disposition, entries, generation: state.generation, runway_state: state.runway }),
     entries,
   };
+  validateProjection(projection);
+  return projection;
 }
 
 export function renderProjectionBlock(projection: Record<string, unknown>): string {
@@ -683,6 +784,9 @@ export function renderProjectionBlock(projection: Record<string, unknown>): stri
   const entries = projection.entries as ProjectionEntry[];
   const lines = [
     BEGIN_PREFIX + " schema=" + PROJECTION_SCHEMA + " digest=" + String(projection.source_digest) + " -->",
+    "| Generation | Disposition | Runway state |",
+    "| --- | --- | --- |",
+    "| " + String(projection.generation) + " | " + String(projection.disposition) + " | " + String(projection.runway_state) + " |",
     "| Task | Status | Stage | Revision | Record digest |",
     "| --- | --- | --- | --- | --- |",
   ];
@@ -714,8 +818,8 @@ export function renderProjectionInto(text: string, projection: Record<string, un
   return { text: next, changed: next !== normalized, block };
 }
 
-export function verifyProjectionText(text: string, records: Record<string, unknown>[]): void {
-  const projection = buildProjection(records);
+export function verifyProjectionText(text: string, records: Record<string, unknown>[], state: GenerationState): void {
+  const projection = buildProjection(records, state);
   const expected = renderProjectionBlock(projection);
   const range = findProjectionRange(text.replace(/\r\n/g, "\n"));
   check(range !== null, "projection-drift", "generated lifecycle block is missing");
@@ -726,6 +830,50 @@ export function verifyProjectionText(text: string, records: Record<string, unkno
 // ---------------------------------------------------------------------------
 // Standalone adapter: repository discovery, lock, CAS, atomic write
 // ---------------------------------------------------------------------------
+
+export interface ProjectionConfig {
+  schema_version: string;
+  targets: string[];
+  active_generation: string;
+}
+
+// Read and validate the repository-declared projection configuration. The v2
+// config names the active generation, so every projection surface derives its
+// state from one declared source instead of guessing from record presence.
+// Returns null when the config is absent; callers decide whether that is
+// lawful for their surface.
+export function readProjectionConfig(repoRoot: string): ProjectionConfig | null {
+  const configPath = path.join(repoRoot, TARGETS_CONFIG_REL);
+  if (!fs.existsSync(configPath)) return null;
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(fs.readFileSync(configPath, "utf8"));
+  } catch {
+    return fail("projection-config", "projection targets config is not valid JSON: " + TARGETS_CONFIG_REL);
+  }
+  check(parsed !== null && typeof parsed === "object" && !Array.isArray(parsed), "projection-config", "projection targets config is not an object");
+  const config = parsed as Record<string, unknown>;
+  check(config.schema_version === PROJECTION_TARGETS_SCHEMA,
+    "projection-config", "projection targets config has an unsupported schema_version: " + String(config.schema_version) + " (expected " + PROJECTION_TARGETS_SCHEMA + " with an active_generation)");
+  const declared = config.targets;
+  check(Array.isArray(declared) && declared.length <= 64 && declared.every((t) => typeof t === "string" && t.length > 0),
+    "projection-config", "projection targets config must carry at most 64 non-empty target paths");
+  check(new Set(declared as string[]).size === (declared as string[]).length, "projection-config", "projection targets config has duplicate entries");
+  check(typeof config.active_generation === "string" && GENERATION_RE.test(config.active_generation),
+    "projection-config", "projection targets config must declare the active generation as gNN");
+  return {
+    schema_version: PROJECTION_TARGETS_SCHEMA,
+    targets: (declared as string[]).map((target) => containRepoPath(repoRoot, target)),
+    active_generation: config.active_generation as string,
+  };
+}
+
+export function requireProjectionConfig(repoRoot: string): ProjectionConfig {
+  const config = readProjectionConfig(repoRoot);
+  check(config !== null, "projection-config",
+    TARGETS_CONFIG_REL + " is missing; rendering lifecycle state requires the declared active generation");
+  return config as ProjectionConfig;
+}
 
 function git(args: string[], cwd: string): string {
   const result = spawnSync("git", args, { cwd, encoding: "utf8" });
@@ -962,6 +1110,17 @@ export function applyEnvelope(options: ApplyOptions): ApplyResult {
     },
   };
 
+  // A closed generation is terminal history: every envelope against its tasks
+  // refuses, so exhausted-runway records can never be resurrected or retracted
+  // through the lifecycle path.
+  const taskClosure = readGenerationClosure(repoRoot, identity.generation);
+  check(taskClosure === null || taskClosure.disposition !== "closed", "generation-closed",
+    "generation " + identity.generation + " is closed by " + generationClosurePath(repoRoot, identity.generation).replace(repoRoot + path.sep, "") + "; its task records are sealed");
+
+  // Rendering projections requires the declared active generation; record-only
+  // writes stay lawful in repositories that have not declared one.
+  const config = targetPaths.length > 0 ? requireProjectionConfig(repoRoot) : null;
+
   const file = recordFilePath(repoRoot, identity.taskId);
   assertRealContained(repoRoot, path.dirname(file));
   let result: ApplyResult | null = null;
@@ -984,10 +1143,12 @@ export function applyEnvelope(options: ApplyOptions): ApplyResult {
     verifyRecordIntegrity(reduced.record);
     (options.writeFile ?? writeFileAtomic)(file, canonicalJson(reduced.record) + "\n");
     const changed = [path.relative(repoRoot, file)];
-    const projection = buildProjection(listRecords(repoRoot));
+    const records = listRecords(repoRoot);
+    const state = config === null ? null : generationStateOf(records, config.active_generation, readGenerationClosure(repoRoot, config.active_generation));
+    const projection = state === null ? null : buildProjection(records, state);
     for (const targetAbs of targetPaths) {
       const existing = fs.existsSync(targetAbs) ? fs.readFileSync(targetAbs, "utf8") : "";
-      const projected = renderProjectionInto(existing, projection);
+      const projected = renderProjectionInto(existing, projection!);
       if (projected.changed) {
         writeFileAtomic(targetAbs, projected.text);
         changed.push(path.relative(repoRoot, targetAbs));
@@ -1009,14 +1170,15 @@ export function applyEnvelope(options: ApplyOptions): ApplyResult {
 
 // Read-only modes
 
-export function frontierOf(records: Record<string, unknown>[]): Record<string, unknown> {
-  const eligible = records
+export function frontierOf(records: Record<string, unknown>[], generation?: string): Record<string, unknown> {
+  const scoped = generation === undefined ? records : records.filter((record) => record.generation === generation);
+  const eligible = scoped
     .filter((record) => record.status === "ready")
     .map((record) => String(record.task_id))
     .sort();
   return {
     schema_version: FRONTIER_SCHEMA,
-    status: eligible.length > 0 ? "ready" : "planning_required",
+    status: runwayOf(scoped),
     eligible,
   };
 }
@@ -1033,7 +1195,10 @@ export function verifyRepo(repoRoot: string, target?: string): Record<string, un
   }
   if (target && fs.existsSync(target)) {
     try {
-      verifyProjectionText(fs.readFileSync(target, "utf8"), records);
+      const config = requireProjectionConfig(repoRoot);
+      const closure = readGenerationClosure(repoRoot, config.active_generation);
+      const state = generationStateOf(records, config.active_generation, closure);
+      verifyProjectionText(fs.readFileSync(target, "utf8"), records, state);
     } catch (err) {
       problems.push((err as Error).message);
     }
@@ -1041,14 +1206,17 @@ export function verifyRepo(repoRoot: string, target?: string): Record<string, un
   return { status: problems.length === 0 ? "ok" : "drift", problems, record_count: records.length };
 }
 
-export function compactGeneration(records: Record<string, unknown>[], generation: string): Record<string, unknown> {
+// The exact terminal task summary set a closure record pins. Closure authoring
+// and compaction compute this digest the same way, so stale or mismatched
+// authority cannot pass.
+export function terminalTaskSummaries(records: Record<string, unknown>[], generation: string): Record<string, unknown>[] {
   const scoped = records.filter((record) => record.generation === generation);
   check(scoped.length > 0, "compaction", "no records for generation " + generation);
   for (const record of scoped) {
     check(TERMINAL_STATUSES.has(String(record.status)), "compaction",
       "generation " + generation + " is not closed: " + String(record.task_id) + " is " + String(record.status));
   }
-  const tasks = scoped
+  return scoped
     .map((record) => ({
       task_id: String(record.task_id),
       revision: Number(record.revision),
@@ -1057,10 +1225,30 @@ export function compactGeneration(records: Record<string, unknown>[], generation
       merge_commit: ((record.evidence as Record<string, unknown> | undefined)?.merge as Record<string, unknown> | undefined)?.merge_commit ?? null,
     }))
     .sort((a, b) => (a.task_id < b.task_id ? -1 : a.task_id > b.task_id ? 1 : 0));
+}
+
+export function generationTasksDigest(records: Record<string, unknown>[], generation: string): string {
+  return digestOf(terminalTaskSummaries(records, generation));
+}
+
+// Compaction is destructive lifecycle maintenance, so terminal records are
+// necessary but never sufficient: the caller must supply the generation's
+// committed closure record, and it must be closed, name this generation, and
+// pin the exact terminal set being reduced. Missing, open, stale, mismatched,
+// or ambiguous authority refuses before any receipt exists.
+export function compactGeneration(records: Record<string, unknown>[], generation: string, closure: Record<string, unknown>): Record<string, unknown> {
+  verifyGenerationClosure(closure, generation);
+  check(closure.disposition === "closed", "compaction",
+    "generation " + generation + " closure record is not closed; an open generation is not compactable");
+  const tasks = terminalTaskSummaries(records, generation);
+  const tasksDigest = digestOf(tasks);
+  check(closure.tasks_digest === tasksDigest, "compaction",
+    "closure authority is stale or mismatched: tasks digest " + String(closure.tasks_digest) + " does not cover the current terminal records (" + tasksDigest + ")");
   return {
     schema_version: GENERATION_RECEIPT_SCHEMA,
     generation,
-    source_digest: digestOf(tasks),
+    source_digest: tasksDigest,
+    closure_digest: digestOf(closure),
     tasks,
   };
 }
@@ -1380,23 +1568,142 @@ async function runOracle(): Promise<number> {
 
   expectFail("resume without a block fails", () => reduce(oracleEnvelope({ event_id: "oracle-resume-bad", transition: "resume", expected: { revision: 4, digest: active.digest } }), active, {}), "blocked");
 
-  check(frontierOf([planResult.record]).status === "planning_required", "oracle", "frontier invented eligible work");
+  check(frontierOf([planResult.record]).status === "planned", "oracle", "frontier collapsed planned work into planning_required");
   const readyRecord = reduce(oracleEnvelope({ event_id: "oracle-ready-0002", transition: "ready", expected: { revision: 1, digest: planResult.record.digest } }), planResult.record, {}).record;
-  check(frontierOf([readyRecord]).status === "ready", "oracle", "frontier did not surface a ready task");
-  ok("frontier returns planning_required when no ready work exists");
+  check(frontierOf([readyRecord]).status === "ready" && canonicalJson(frontierOf([readyRecord]).eligible) === canonicalJson([readyRecord.task_id]), "oracle", "frontier did not surface a ready task");
+  ok("frontier reports the derived runway state and never invents eligible work");
+
+  // 7b. One closed vocabulary: derived runway state and generation disposition.
+  // Exhaustive subset proof: every combination of task statuses reduces to the
+  // declared precedence, and no nonterminal mix ever collapses into
+  // planning_required.
+  const runwayStatusMembers = ["planned", "ready", "active", "blocked", "complete", "cancelled", "superseded"] as const;
+  const expectedRunway = (subset: Set<string>): string => {
+    for (const state of RUNWAY_PRECEDENCE) {
+      if (subset.has(state)) return state;
+    }
+    return "planning_required";
+  };
+  let runwayMismatches = 0;
+  let nonterminalCollapsed = 0;
+  for (let mask = 0; mask < (1 << runwayStatusMembers.length); mask += 1) {
+    const subset = new Set<string>();
+    runwayStatusMembers.forEach((status, bit) => {
+      if (mask & (1 << bit)) subset.add(status);
+    });
+    const records = [...subset].map((status, index) => ({
+      task_id: "g03.0" + String(index),
+      generation: "g03",
+      status,
+    }));
+    const actual = runwayOf(records);
+    if (actual !== expectedRunway(subset)) runwayMismatches += 1;
+    const hasNonterminal = [...subset].some((status) => !TERMINAL_STATUSES.has(status));
+    if (hasNonterminal && actual === "planning_required") nonterminalCollapsed += 1;
+  }
+  check(runwayMismatches === 0, "oracle", "runway precedence has " + runwayMismatches + " mismatches");
+  check(nonterminalCollapsed === 0, "oracle", "a nonterminal mix collapsed into planning_required");
+  ok("runway precedence is deterministic across all " + (1 << runwayStatusMembers.length) + " status subsets");
+  check(frontierOf([{ task_id: "g03.001", generation: "g03", status: "blocked" }]).status === "blocked",
+    "oracle", "frontier hid a blocked generation behind planning_required");
+  check(frontierOf([{ task_id: "g03.001", generation: "g03", status: "planned" }]).status === "planned",
+    "oracle", "frontier hid planned work behind planning_required");
+  check(frontierOf([{ task_id: "g03.001", generation: "g03", status: "active" }], "g03").status === "active",
+    "oracle", "frontier hid live work behind planning_required");
+  ok("frontier exposes ready, active, blocked, and planned work without collapsing states");
+
+  // Disposition is its own axis: absence of the closure record is open, and
+  // complete is never a generation label.
+  const openState = generationStateOf([], "g03", null);
+  check(openState.disposition === "open" && openState.runway === "planning_required", "oracle", "an absent closure record did not default to open");
+  const closureOf = (records: Record<string, unknown>[], overrides: Record<string, unknown> = {}): Record<string, unknown> => ({
+    schema_version: GENERATION_CLOSURE_SCHEMA,
+    generation: "g03",
+    disposition: "closed",
+    reason: "rollover boundary reached after preservation oracle",
+    tasks_digest: generationTasksDigest(records, "g03"),
+    closed_at: "2026-09-13T12:00:00.000Z",
+    ...overrides,
+  });
+  const terminalFixture = [
+    { task_id: "g03.001", generation: "g03", status: "complete", revision: 2, digest: digestOf("a"), evidence: {} },
+    { task_id: "g03.002", generation: "g03", status: "superseded", revision: 4, digest: digestOf("b"), evidence: {} },
+  ];
+  const closedState = generationStateOf(terminalFixture, "g03", closureOf(terminalFixture));
+  check(closedState.disposition === "closed" && closedState.runway === "planning_required", "oracle", "closed terminal generation did not reduce to planning_required runway");
+  ok("generation disposition stays open by default and closed only by explicit closure record");
+
+  expectFail("closure record for another generation is ambiguous authority", () => {
+    generationStateOf(terminalFixture, "g04", closureOf(terminalFixture));
+  }, "expected g04");
+  expectFail("invalid closure record fails its schema", () => {
+    generationStateOf(terminalFixture, "g03", closureOf(terminalFixture, { disposition: "sealed" }));
+  }, "disposition");
+  expectFail("a closed generation with live records is incoherent", () => {
+    generationStateOf([...terminalFixture, { task_id: "g03.003", generation: "g03", status: "active", revision: 1, digest: digestOf("c"), evidence: {} }], "g03", closureOf(terminalFixture));
+  }, "is closed but g03.003 is active");
+  ok("closure authority is generation-bound, schema-checked, and refuses open records");
+
+  // Compaction consumes explicit closure authority; terminal records alone
+  // never authorize it.
+  const receiptFresh = compactGeneration(terminalFixture, "g03", closureOf(terminalFixture));
+  const receiptFreshB = compactGeneration([...terminalFixture].reverse(), "g03", closureOf(terminalFixture));
+  check(canonicalJson(receiptFresh) === canonicalJson(receiptFreshB), "oracle", "compaction is order-dependent");
+  check(receiptFresh.source_digest === closureOf(terminalFixture).tasks_digest, "oracle", "receipt digest did not match the closure-pinned tasks digest");
+  check(typeof receiptFresh.closure_digest === "string" && receiptFresh.closure_digest.startsWith("sha256:"), "oracle", "receipt lost its closure provenance");
+  expectFail("all-terminal records without closure authority do not compact", () => {
+    compactGeneration(terminalFixture, "g03", null as unknown as Record<string, unknown>);
+  });
+  expectFail("an open closure record is not compaction authority", () => {
+    compactGeneration(terminalFixture, "g03", closureOf(terminalFixture, { disposition: "open" }));
+  }, "is not compactable");
+  expectFail("stale closure authority refuses compaction", () => {
+    compactGeneration(terminalFixture, "g03", closureOf(terminalFixture, { tasks_digest: digestOf("stale-set") }));
+  }, "stale or mismatched");
+  expectFail("a nonterminal record refuses the tasks digest itself", () => {
+    generationTasksDigest([...terminalFixture, { task_id: "g03.003", generation: "g03", status: "active", revision: 1, digest: digestOf("c"), evidence: {} }], "g03");
+  }, "is not closed: g03.003 is active");
+  ok("compaction requires closed, fresh, generation-exact closure authority");
 
   // 8. Deterministic projection and human-text preservation.
   const secondPlan = oracleEnvelope({ task_id: "g03.006", task_path: "docs/roadmaps/g03/006-portable-lifecycle-core.md", event_id: "oracle-plan-0002-plan", planning: { commit: PLANNING_COMMIT, task_blob_digest: digestOf("other-blob") } });
   const secondRecord = reduce(secondPlan, null, {}).record;
-  const projectionA = buildProjection([completed.record, secondRecord]);
-  const projectionB = buildProjection([secondRecord, completed.record]);
+  const projectionState = generationStateOf([completed.record, secondRecord], "g03", null);
+  check(projectionState.runway === "planned", "oracle", "mixed terminal+planned records did not project planned runway");
+  const projectionA = buildProjection([completed.record, secondRecord], projectionState);
+  const projectionB = buildProjection([secondRecord, completed.record], generationStateOf([secondRecord, completed.record], "g03", null));
   check(canonicalJson(projectionA) === canonicalJson(projectionB), "oracle", "projection depends on input order");
+  check(projectionA.runway_state === "planned" && projectionA.disposition === "open" && projectionA.generation === "g03", "oracle", "projection lost its generation state axes");
   ok("projection ordering is canonical regardless of input order");
+
+  // The source digest binds the state: a runway or disposition change is a
+  // byte change, and foreign-generation records never enter the projection.
+  const exhaustedState = generationStateOf([completed.record], "g03", null);
+  const projectionExhausted = buildProjection([completed.record], exhaustedState);
+  check(projectionExhausted.source_digest !== projectionA.source_digest, "oracle", "runway change did not move the projection digest");
+  const g04Record = { ...completed.record, task_id: "g04.001", generation: "g04" };
+  check(buildProjection([completed.record, secondRecord, g04Record], projectionState).entries.length === 2,
+    "oracle", "projection leaked records from outside the active generation");
+  const readyProbe = buildProjection([completed.record, secondRecord], { generation: "g03", disposition: "open", runway: "ready" });
+  check(readyProbe.source_digest !== projectionA.source_digest, "oracle", "an invented runway did not change the digest");
+  ok("projection binds generation state into the source digest and scopes entries to the active generation");
+
   check(recordFilePath("/tmp/repo", "g03.005") !== recordFilePath("/tmp/repo", "g03.006"), "oracle", "two tasks share one record path");
   expectFail("projection schema rejects an invented status", () => validateProjection({
     schema_version: PROJECTION_SCHEMA,
+    generation: "g03",
+    disposition: "open",
+    runway_state: "planned",
     source_digest: projectionA.source_digest,
     entries: [{ task_id: "g03.005", status: "invented", stage: "none", revision: 1, record_digest: digestOf("x") }],
+  }));
+  expectFail("projection schema rejects a generation-complete label", () => validateProjection({
+    schema_version: PROJECTION_SCHEMA,
+    generation: "g03",
+    disposition: "complete",
+    runway_state: "planning_required",
+    source_digest: projectionA.source_digest,
+    entries: [],
   }));
   ok("parallel tasks write separate record paths and share no receipt path");
 
@@ -1404,15 +1711,18 @@ async function runOracle(): Promise<number> {
   const firstRender = renderProjectionInto(humanText, projectionA);
   check(firstRender.changed === true, "oracle", "first render reported no change");
   check(firstRender.text.startsWith(humanText), "oracle", "render discarded human text before the block");
+  check(firstRender.text.includes("| g03 | open | planned |"), "oracle", "render lost the generation state line");
   const secondRender = renderProjectionInto(firstRender.text, projectionA);
   check(secondRender.changed === false && secondRender.text === firstRender.text, "oracle", "repeat render changed bytes");
   ok("repeat render is a byte-stable no-op that preserves human text");
 
-  verifyProjectionText(firstRender.text, [completed.record, secondRecord]);
+  verifyProjectionText(firstRender.text, [completed.record, secondRecord], projectionState);
   const drifted = firstRender.text.replace("| complete |", "| active |");
-  expectFail("hand-edited generated content fails verification", () => verifyProjectionText(drifted, [completed.record, secondRecord]), "drift");
+  expectFail("hand-edited generated content fails verification", () => verifyProjectionText(drifted, [completed.record, secondRecord], projectionState), "drift");
+  const driftedState = firstRender.text.replace("| g03 | open | planned |", "| g03 | complete | planning_required |");
+  expectFail("a hand-edited generation state line fails verification", () => verifyProjectionText(driftedState, [completed.record, secondRecord], projectionState), "drift");
   const outsideEdit = firstRender.text + "\nAnother human paragraph.\n";
-  verifyProjectionText(outsideEdit, [completed.record, secondRecord]);
+  verifyProjectionText(outsideEdit, [completed.record, secondRecord], projectionState);
   ok("narrative outside the sentinels stays human-owned");
 
   // 9. Portable digest isolates adapter metadata.
@@ -1439,6 +1749,12 @@ async function runOracle(): Promise<number> {
     const taskPath = "docs/roadmaps/g03/005-portable-lifecycle-core.md";
     fs.mkdirSync(path.join(repo, "docs/roadmaps/g03"), { recursive: true });
     fs.writeFileSync(path.join(repo, taskPath), "# Portable Lifecycle Core\n\nHuman narrative.\n");
+    fs.mkdirSync(path.join(repo, ".northstar/lifecycle/v1"), { recursive: true });
+    fs.writeFileSync(path.join(repo, ".northstar/lifecycle/v1/projection-targets.json"), canonicalJson({
+      schema_version: PROJECTION_TARGETS_SCHEMA,
+      targets: [] as string[],
+      active_generation: "g03",
+    }) + "\n");
     run(["add", "-A"]);
     run(["commit", "-q", "-m", "plan task"]);
     const planningCommit = run(["rev-parse", "HEAD"]);
@@ -1478,11 +1794,13 @@ async function runOracle(): Promise<number> {
 
     const escapeTarget = path.join(tmp, "escape-target");
     fs.mkdirSync(escapeTarget, { recursive: true });
+    fs.renameSync(path.join(repo, ".northstar"), path.join(tmp, "northstar-real"));
     fs.symlinkSync(escapeTarget, path.join(repo, ".northstar"));
     expectFail("symlinked record directory escape is rejected", () => {
       applyEnvelope({ repoRoot: repo, envelope: baseEnv({ event_id: "standalone-symlink-0001" }) });
     }, "escapes repository root");
     fs.rmSync(path.join(repo, ".northstar"));
+    fs.renameSync(path.join(tmp, "northstar-real"), path.join(repo, ".northstar"));
     ok("symlinked lifecycle directory cannot redirect records outside the repository");
 
     const planApply = step(baseEnv({ event_id: "standalone-plan-0001" }));    check(planApply.status === "applied" && planApply.revision === 1, "oracle", "standalone plan did not apply");
@@ -1592,16 +1910,70 @@ async function runOracle(): Promise<number> {
 
     // Render + verify + compact through the standalone surfaces.
     const targetFile = path.join(repo, taskPath);
-    const projection = buildProjection(listRecords(repo));
+    const scriptPath = fileURLToPath(import.meta.url);
+    const runCliRaw = (args: string[]) => spawnSync(process.execPath, ["run", scriptPath, ...args], { cwd: repo, encoding: "utf8" });
+    const cliFailHere = (name: string, args: string[], match: string) => {
+      const result = runCliRaw(args);
+      check(result.status !== 0, "oracle", name + ": CLI unexpectedly succeeded");
+      check(String(result.stdout).includes(match), "oracle", name + ": output missed '" + match + "': " + result.stdout);
+    };
+    const repoRecordsAtClose = listRecords(repo);
+    const fixtureState = () => generationStateOf(listRecords(repo), "g03", readGenerationClosure(repo, "g03"));
+    const repoStateAtClose = fixtureState();
+    check(repoStateAtClose.disposition === "open" && repoStateAtClose.runway === "planning_required", "oracle", "an exhausted open generation did not derive planning_required");
+    const projection = buildProjection(repoRecordsAtClose, repoStateAtClose);
     const rendered = renderProjectionInto(fs.readFileSync(targetFile, "utf8"), projection);
     fs.writeFileSync(targetFile, rendered.text);
+    check(rendered.text.includes("| g03 | open | planning_required |"), "oracle", "rendered block did not name the planning_required runway");
     check(verifyRepo(repo, targetFile).status === "ok", "oracle", "verify reported drift after a clean render");
-    ok("standalone verify accepts a freshly rendered projection");
+    ok("standalone verify accepts a freshly rendered planning_required projection");
 
-    const receiptA = compactGeneration(listRecords(repo), "g03");
-    const receiptB = compactGeneration([...listRecords(repo)].reverse(), "g03");
+    // Compaction consumes explicit closure authority through the core and the
+    // CLI; terminal records alone refuse.
+    const closureRel = ".northstar/lifecycle/v1/generations/g03.closure.json";
+    const receiptOutRel = ".northstar/lifecycle/v1/generations/g03.json";
+    const tasksDigest = generationTasksDigest(repoRecordsAtClose, "g03");
+    const oracleClosure: Record<string, unknown> = {
+      schema_version: GENERATION_CLOSURE_SCHEMA,
+      generation: "g03",
+      disposition: "closed",
+      reason: "oracle rollover boundary after the preservation oracle",
+      tasks_digest: tasksDigest,
+      closed_at: "2026-09-12T13:30:00.000Z",
+    };
+    const receiptA = compactGeneration(repoRecordsAtClose, "g03", oracleClosure);
+    const receiptB = compactGeneration([...repoRecordsAtClose].reverse(), "g03", oracleClosure);
     check(canonicalJson(receiptA) === canonicalJson(receiptB), "oracle", "compaction is order-dependent");
+    check(receiptA.source_digest === tasksDigest, "oracle", "receipt digest did not bind the closure-pinned tasks digest");
     ok("generation compaction is deterministic with no churn");
+
+    cliFailHere("compaction without closure authority is refused", ["compact", "--records", ".northstar/lifecycle/v1/tasks", "--generation", "g03", "--out", receiptOutRel], "closure record");
+    check(!fs.existsSync(path.join(repo, receiptOutRel)), "oracle", "refused compaction still produced a receipt");
+    const digestRun = runCliRaw(["tasks-digest", "--records", ".northstar/lifecycle/v1/tasks", "--generation", "g03"]);
+    check(digestRun.status === 0, "oracle", "tasks-digest failed: " + digestRun.stdout);
+    check(String(JSON.parse(digestRun.stdout).tasks_digest) === tasksDigest, "oracle", "CLI tasks digest drifted from the core digest");
+    fs.mkdirSync(path.join(repo, ".northstar/lifecycle/v1/generations"), { recursive: true });
+    fs.writeFileSync(path.join(repo, closureRel), canonicalJson(oracleClosure) + "\n");
+    const compactRun = runCliRaw(["compact", "--records", ".northstar/lifecycle/v1/tasks", "--generation", "g03", "--out", receiptOutRel]);
+    check(compactRun.status === 0, "oracle", "authorized compaction failed: " + compactRun.stdout);
+    check(String(JSON.parse(fs.readFileSync(path.join(repo, receiptOutRel), "utf8")).source_digest) === tasksDigest, "oracle", "receipt did not record the closure-pinned digest");
+    const compactReplay = runCliRaw(["compact", "--records", ".northstar/lifecycle/v1/tasks", "--generation", "g03", "--out", receiptOutRel]);
+    check(compactReplay.status === 0 && String(JSON.parse(compactReplay.stdout).status) === "unchanged", "oracle", "compaction replay rewrote bytes");
+    fs.writeFileSync(path.join(repo, closureRel), canonicalJson({ ...oracleClosure, tasks_digest: digestOf("stale-set") }) + "\n");
+    cliFailHere("stale closure authority refuses compaction", ["compact", "--records", ".northstar/lifecycle/v1/tasks", "--generation", "g03", "--out", receiptOutRel], "stale or mismatched");
+    ok("compaction consumes exact closure authority and replays without churn");
+
+    // A closed generation seals its task records against every transition;
+    // removing the closure record reopens the generation.
+    fs.rmSync(path.join(repo, receiptOutRel), { force: true });
+    fs.writeFileSync(path.join(repo, closureRel), canonicalJson(oracleClosure) + "\n");
+    expectFail("a transition into a closed generation fails sealed", () => {
+      applyEnvelope({ repoRoot: repo, envelope: baseEnv({ event_id: "standalone-sealed-0001" }) });
+    }, "records are sealed");
+    check(fs.existsSync(path.join(repo, closureRel)) && !fs.existsSync(path.join(repo, receiptOutRel)), "oracle", "sealed refusal mutated lifecycle state");
+    fs.rmSync(path.join(repo, closureRel));
+    fs.rmSync(path.join(repo, receiptOutRel), { force: true });
+    ok("a closed generation seals its task records; absence of the closure record is open");
 
     // Selected projection regeneration happens inside the same locked write.
     const secondTaskPath = "docs/roadmaps/g03/007-second-task.md";
@@ -1635,7 +2007,7 @@ async function runOracle(): Promise<number> {
     const renderedTarget = fs.readFileSync(targetAbs, "utf8");
     check(renderedTarget.includes(BEGIN_PREFIX) && renderedTarget.includes("g03.007") && renderedTarget.includes("Human text stays."),
       "oracle", "selected projection was not regenerated or lost human text");
-    verifyProjectionText(renderedTarget, listRecords(repo));
+    verifyProjectionText(renderedTarget, listRecords(repo), fixtureState());
     ok("apply regenerates a selected projection atomically with the record");
 
     // Multi-target projections: every target is validated before any mutation,
@@ -1669,7 +2041,7 @@ async function runOracle(): Promise<number> {
       const text = fs.readFileSync(path.join(repo, rel), "utf8");
       check(text.includes("g03.008"), "oracle", "multi-target projection missing the new task in " + rel);
       check(text.includes(rel.endsWith("multi-a.md") ? "Human text stays." : "Keep me."), "oracle", "multi-target lost human text in " + rel);
-      verifyProjectionText(text, listRecords(repo));
+      verifyProjectionText(text, listRecords(repo), fixtureState());
     }
     ok("multi-target apply validates and renders every declared target");
 
@@ -1700,9 +2072,8 @@ async function runOracle(): Promise<number> {
     ok("invalid multi-target declaration leaves the repository byte-identical");
 
     // Explicit-path render/compact containment: escaping or symlinked paths
-    // must fail closed without writing.
-    const scriptPath = fileURLToPath(import.meta.url);
-    const runCliRaw = (args: string[]) => spawnSync(process.execPath, ["run", scriptPath, ...args], { cwd: repo, encoding: "utf8" });
+    // must fail closed without writing. (runCliRaw is defined above; every
+    // invocation here executes the same committed source.)
     const cliFail = (name: string, args: string[], match: string) => {
       const result = runCliRaw(args);
       check(result.status !== 0, "oracle", name + ": CLI unexpectedly succeeded");
@@ -1718,9 +2089,11 @@ async function runOracle(): Promise<number> {
     fs.rmSync(path.join(repo, "symlinked-records"));
     ok("explicit-path render and compact re-check containment");
 
-    // A clean explicit-path render still works against the declared paths.
+    // A clean explicit-path render still works against the declared paths and
+    // carries the generation state line.
     const cleanRender = runCliRaw(["render", "--records", ".northstar/lifecycle/v1/tasks", "--target", "docs/multi-a.md"]);
     check(cleanRender.status === 0, "oracle", "contained render failed: " + cleanRender.stdout);
+    check(fs.readFileSync(path.join(repo, "docs/multi-a.md"), "utf8").includes("| g03 | open |"), "oracle", "contained render lost the generation state line");
     ok("contained explicit-path render succeeds inside the repository");
 
     // 11. Static portability scan of this very source file.
@@ -1817,12 +2190,20 @@ async function main(): Promise<void> {
       case "status": {
         const repoRoot = resolveRepoRoot(flags);
         const records = listRecords(repoRoot);
-        printJson({ status: "ok", records, frontier: frontierOf(records) });
+        const config = readProjectionConfig(repoRoot);
+        check(config !== null || records.length === 0, "projection-config",
+          TARGETS_CONFIG_REL + " is missing; lifecycle records exist but no active generation is declared");
+        const generation = config === null ? null : generationStateOf(records, config.active_generation, readGenerationClosure(repoRoot, config.active_generation));
+        printJson({ status: "ok", records, generation, frontier: frontierOf(records, config?.active_generation) });
         return;
       }
       case "frontier": {
         const repoRoot = resolveRepoRoot(flags);
-        printJson(frontierOf(listRecords(repoRoot)));
+        const records = listRecords(repoRoot);
+        const config = readProjectionConfig(repoRoot);
+        check(config !== null || records.length === 0, "projection-config",
+          TARGETS_CONFIG_REL + " is missing; lifecycle records exist but no active generation is declared");
+        printJson(frontierOf(records, config?.active_generation));
         return;
       }
       case "verify": {
@@ -1855,10 +2236,25 @@ async function main(): Promise<void> {
         const targetAbs = path.resolve(repoRoot, target);
         assertRealContained(repoRoot, fs.existsSync(targetAbs) ? targetAbs : path.dirname(targetAbs));
         const existing = fs.existsSync(targetAbs) ? fs.readFileSync(targetAbs, "utf8") : "";
-        const projection = buildProjection(records);
+        const config = requireProjectionConfig(repoRoot);
+        const state = generationStateOf(records, config.active_generation, readGenerationClosure(repoRoot, config.active_generation));
+        const projection = buildProjection(records, state);
         const result = renderProjectionInto(existing, projection);
         if (result.changed) writeFileAtomic(targetAbs, result.text);
         printJson({ status: result.changed ? "applied" : "unchanged", task_id: "projection", revision: 0, digest: String(projection.source_digest), changed_paths: result.changed ? [target] : [] });
+        return;
+      }
+      case "tasks-digest": {
+        check(typeof flags.records === "string" && typeof flags.generation === "string", "usage", "tasks-digest requires --records <dir> and --generation <gNN>");
+        const repoRoot = resolveRepoRoot(flags);
+        const recordsDir = containRepoPath(repoRoot, flags.records as string);
+        const recordsAbs = path.resolve(repoRoot, recordsDir);
+        check(fs.existsSync(recordsAbs) && fs.statSync(recordsAbs).isDirectory(), "containment", "records directory is missing or not a directory: " + recordsDir);
+        assertRealContained(repoRoot, recordsAbs);
+        const records = fs.readdirSync(recordsAbs).filter((name) => name.endsWith(".json")).sort()
+          .map((name) => JSON.parse(fs.readFileSync(path.join(recordsAbs, name), "utf8")) as Record<string, unknown>);
+        for (const record of records) verifyRecordIntegrity(record);
+        printJson({ generation: flags.generation, tasks_digest: generationTasksDigest(records, flags.generation as string) });
         return;
       }
       case "compact": {
@@ -1872,7 +2268,11 @@ async function main(): Promise<void> {
         const records = fs.readdirSync(recordsAbs).filter((name) => name.endsWith(".json")).sort()
           .map((name) => JSON.parse(fs.readFileSync(path.join(recordsAbs, name), "utf8")) as Record<string, unknown>);
         for (const record of records) verifyRecordIntegrity(record);
-        const receipt = compactGeneration(records, flags.generation as string);
+        const closurePath = generationClosurePath(repoRoot, flags.generation as string);
+        const closure = readGenerationClosure(repoRoot, flags.generation as string);
+        check(closure !== null, "compaction",
+          "generation " + flags.generation + " has no closure record at " + path.relative(repoRoot, closurePath) + "; terminal records alone are not closure authority");
+        const receipt = compactGeneration(records, flags.generation as string, closure as Record<string, unknown>);
         const outAbs = path.resolve(repoRoot, out);
         assertRealContained(repoRoot, fs.existsSync(outAbs) ? outAbs : path.dirname(outAbs));
         const bytes = canonicalJson(receipt) + "\n";
@@ -1884,7 +2284,7 @@ async function main(): Promise<void> {
       default:
         printJson({
           status: "error",
-          message: "usage: lifecycle-core.ts <oracle|schema-check|status|frontier|verify|apply|render|compact> [flags]",
+          message: "usage: lifecycle-core.ts <oracle|schema-check|status|frontier|verify|apply|render|tasks-digest|compact> [flags]",
         });
         process.exitCode = 2;
     }

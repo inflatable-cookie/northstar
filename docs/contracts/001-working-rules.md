@@ -101,6 +101,14 @@ non-authoritative.
   `complete`, `cancelled`, and `superseded`. Track execution location separately
   as `none`, `dispatch`, `implementation`, `review`, `merge`, or `closeout`.
   Adapter-specific phases never become a second Northstar state vocabulary.
+- Keep generation state on its own axis. Disposition is `open` or `closed` and
+  changes only by committing an explicit closure record; `complete` is never a
+  generation label. Runway state is derived from task records as `active`,
+  `ready`, `blocked`, `planned`, or `planning_required` (all approved work
+  terminal), in that precedence, and projections expose it for the declared
+  active generation. An exhausted runway requests planning; it never implies
+  closure, compaction, or a next generation. Compaction requires the closed
+  closure record with a tasks digest that still covers the terminal records.
 - Authority-changing transitions use exact task/planning identity, stable event
   IDs, revision/digest compare-and-swap, canonical JSON, atomic replacement,
   and legal-transition validation. Identical retries are idempotent; stale or
@@ -123,7 +131,9 @@ non-authoritative.
   persisted before execution and uncertain writes are reconciled before retry.
 - Repository checkpoints are required for promotion to `ready`, durable block,
   cancellation, or supersession, accepted terminal closeout, and generation
-  closure. Transient active stages may stay in runtime state. The last
+  closure. Closure is its own explicit artifact: the rollover commits the
+  closure record after the preservation oracle passes. Transient active stages
+  may stay in runtime state. The last
   repository checkpoint is conservative: it may lag activity but never claims
   review, merge, or completion without durable proof.
 - Where a required integration-write `task.closeout` hook is declared, it owns

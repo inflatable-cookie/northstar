@@ -88,11 +88,16 @@ lane state there first.
 
 Record rollover reason in `docs/roadmaps/generation-index.md`.
 
-In a lifecycle-adopted repository, rollover also updates the declared
-projection targets explicitly: the outgoing generation README leaves
+In a lifecycle-adopted repository, closing the outgoing generation is explicit,
+not inferred: commit the closure record at
+`.northstar/lifecycle/v1/generations/gNN.closure.json` (closed disposition plus
+the `tasks_digest` printed by the lifecycle `tasks-digest` command) only after
+the preservation oracle passes. Rollover also changes the declared projection
+targets and the active generation explicitly in the same change: the outgoing
+generation README leaves
 `.northstar/lifecycle/v1/projection-targets.json` and the incoming one joins
-it in the same rollover change, so the projected currentness surface always
-names exactly the active generation.
+it, so the projected currentness surface always names exactly the active
+generation.
 
 ## Closed-generation compaction without another rollover
 
@@ -102,11 +107,17 @@ safely closed expanded generation with `docs/roadmaps/archive/gNN.md`.
 
 Inventory each expanded `gNN/` tree and classify it as active, safely closed,
 or unresolved from content and references. A completed task does not close
-a generation. Apply the preservation oracle before deletion: promote unique
+a generation, and an exhausted runway is `planning_required`, not closure:
+lifecycle projections keep an open generation whose records are all terminal
+in `planning_required` until a rollover commits the explicit closure record.
+Apply the preservation oracle before deletion: promote unique
 authority, rehome open commitments, retain selected evidence, rewrite current
 links, then remove only the classified sources. Leave ambiguous generations
 intact. Explicit parallel active generations require inspection; do not close
-them by counting folders.
+them by counting folders. Compaction consumes the closure record — closed
+disposition plus a `tasks_digest` that still covers the terminal record set —
+and refuses missing, open, stale, mismatched, or ambiguous authority before
+any receipt or deletion.
 
 Installed maintenance follows
 [`skills/northstar/references/lifecycle-maintenance.md`](../../skills/northstar/references/lifecycle-maintenance.md).
@@ -152,9 +163,12 @@ enough. The runway is coarse human intent at goal granularity: it stays
 stable between real strategy, task, or rollover changes. In a lifecycle-
 adopted repository it must not become a per-task status mirror — the
 generated projections and the task records own per-task mechanical state —
-and it must not name the ready frontier or the latest delivery status in a
-form that goes stale at closeout. Keep the runway's state tokens about goal
-sequencing, not about the live task pipeline.
+and it must not name the ready frontier, the derived runway state, or the
+latest delivery status in a form that goes stale at closeout. Keep the runway's
+state tokens about goal sequencing, not about the live task pipeline. When the
+approved work runs out, the generated block shows `planning_required`; that is
+a request for the next planning decision inside the same generation, not a
+signal that the generation is finished.
 
 ### Parallel mode exception
 

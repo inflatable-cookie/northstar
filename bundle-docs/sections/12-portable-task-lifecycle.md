@@ -30,12 +30,24 @@ Task status is one of `planned`, `ready`, `active`, `blocked`, `complete`,
 task may or did proceed. Stage locates active or blocked work. Terminal
 statuses use `none`. Adapter phrases never become a second status vocabulary.
 
+Generation state is a separate axis and never borrows task words. Disposition
+is `open` or `closed` and changes only when a closure record is committed at
+`generations/gNN.closure.json`; absence of the record is open. Runway state is
+mechanically derived from the generation's task records as `active`, `ready`,
+`blocked`, `planned`, or `planning_required`, in that precedence order.
+`planning_required` is the exhausted state of an open generation whose records
+are all terminal: it keeps the same generation open and routes the next
+move to planning. Nonterminal records never collapse into it, and `complete`
+is never a generation disposition.
+
 ## Artifact set
 
 ```text
 .northstar/lifecycle/v1/
   tasks/gNN.NNN.json
-  generations/gNN.json
+  generations/gNN.json            # compaction receipt, written by compact
+  generations/gNN.closure.json    # closure authority, written by the rollover
+  projection-targets.json         # declared surfaces + active generation
 ```
 
 One record per task. Git history preserves prior bodies. The record keeps a
@@ -53,9 +65,11 @@ or declared hook applies it.
 
 Repository checkpoints are required for promotion to `ready`, durable block,
 cancellation, or supersession, accepted terminal closeout, and generation
-closure. The last repository checkpoint is conservative: it may lag live
-activity, but it never claims review, merge, or completion without durable
-proof.
+closure. Closure is its own explicit artifact: the rollover commits the
+closure record after the preservation oracle passes, and no reducer transition
+or hook event ever infers it from an empty frontier. The last repository
+checkpoint is conservative: it may lag live activity, but it never claims
+review, merge, or completion without durable proof.
 
 ## Rendering
 
@@ -66,9 +80,13 @@ exactly. Re-rendering an unchanged receipt set produces no diff.
 Every declared currentness view is a projection, not a hand-maintained mirror:
 the repository root front door, the roadmaps front door, and the active
 generation README belong in `projection-targets.json` once the lifecycle is
-adopted. Human prose outside the blocks keeps semantic meaning but must not
-restate the active task, ready frontier, or latest delivery status in a form
-that goes stale at closeout. Rollover updates the declared targets explicitly:
+adopted. The projection block names the declared active generation, its
+disposition, and its derived runway state above the canonical task table, and
+binds state and entries into one source digest, so an exhausted runway renders
+as `planning_required` — never as completion. Human prose outside the blocks
+keeps semantic meaning but must not restate the active task, ready frontier,
+runway state, or latest delivery status in a form that goes stale at closeout.
+Rollover updates the declared targets and the active generation explicitly:
 when a generation closes, the outgoing generation README leaves the target list
 and the incoming one joins it in the same adoption step.
 
@@ -79,7 +97,12 @@ own oracle. Keep semantic priority human-owned. Return `planning_required` when
 authority does not settle the next move instead of selecting work.
 
 Records begin at the adoption boundary; earlier closed tasks keep their Git
-and provider evidence, and no adapter fabricates receipts for them.
+and provider evidence, and no adapter fabricates receipts for them. Compaction
+is destructive lifecycle maintenance: it requires the generation's committed
+closure record — closed disposition, exact generation, and a `tasks_digest`
+that still covers the terminal record set — and refuses missing, open, stale,
+mismatched, or ambiguous authority before producing a receipt or deleting
+expanded sources.
 
 ## Optional Queue driver
 

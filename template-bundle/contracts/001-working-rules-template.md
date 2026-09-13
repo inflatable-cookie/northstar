@@ -522,6 +522,13 @@ informal habits.
   `## Generation Runway`.
 - Finishing a task, suite, or lane of roadmaps does not close the generation;
   stay inside the active generation until the sequencing baseline needs a reset.
+- In a lifecycle-adopted repository, keep generation state on its own axis:
+  disposition is `open` or `closed` and changes only by committing an explicit
+  closure record; `complete` is never a generation label. Runway state is
+  derived from task records (`active`, `ready`, `blocked`, `planned`,
+  `planning_required`) and an exhausted runway requests planning instead of
+  implying rollover. Compaction consumes the closure record, never an empty
+  frontier.
 
 Every planning artifact belongs to one lifecycle class with a default disposition:
 
