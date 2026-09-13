@@ -136,12 +136,25 @@ an unpinned path, weakened lifecycle evidence, synthetic historic records, or a
 second closeout authority. A hook failure stays visible and is repaired through
 the same task/event; do not launch a closeout agent.
 
-## Evidence
+## Evidence and limitation
 
-Mechanical delivery evidence will live in
-`.northstar/lifecycle/v1/tasks/g03.007.json` after the required hook closes this
-task. The submitted handoff remains recoverable from its pinned planning commit
-after its live path is consumed.
+`g03.007` published its terminal record and regenerated projections in
+`a402dbd` — `.northstar/lifecycle/v1/tasks/g03.007.json`, `docs/README.md`,
+`docs/roadmaps/README.md`, and `docs/roadmaps/g03/README.md` — from one
+required hook publication, with no closeout agent and no closeout workspace.
+The submitted handoff remains recoverable from its pinned planning commit.
+
+Limitation: that publication did not consume
+`docs/handoffs/20260912-235520-finish-hook-owned-closeout.md`; the file
+remained in the tree. The committed adapter already consumed the exact handoff,
+but the committed launcher executed the stale globally installed adapter
+`7893b8f1a8916ad0de23e9fc4622272878f5aa98e1eafa078dcd4c7af4c54cab`, which
+predates that change. The record is accurate about everything it published and
+silent about a cleanup that never ran. Its JSON and Queue receipt stay
+immutable; `g03.008` removed the stranded handoff as explicit corrective
+repository cleanup and pinned the complete runtime to committed bytes. Queue's
+published-event retry returns the stored result, so no replay of `g03.007`
+happened and none is claimed.
 
 ## Next task
 

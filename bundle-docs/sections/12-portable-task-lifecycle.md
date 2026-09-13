@@ -90,6 +90,18 @@ executes a pinned committed launcher without a shell, validates the closed
 result, and owns staging, commit, push, and uncertain-effect reconciliation.
 It never learns Northstar paths, task IDs, commands, or Markdown.
 
+The hook runtime is repository-committed, not installed-user-resolved. A
+repository that declares the hook commits the complete transitive runtime
+closure — launcher, adapter, reducer, and schemas — inside its own checkout,
+and the committed launcher resolves only those bytes. Normal Queue execution
+never resolves implementation code through `$HOME`, a globally installed
+skill, `PATH`, the network, or the author's source checkout, so a stale or
+hostile installation cannot change what runs. The copy-ready starter carries
+the same payload, so a consumer that copies the advertised artifacts has no
+hidden dependency. Source, starter, and dogfood bytes may be generated copies,
+but one deterministic parity check rejects drift in code, schemas, launcher
+bytes, or the executable bit.
+
 The hook adapter translates generic events into the same canonical
 transition envelopes the standalone adapter submits, preserves evidence
 levels exactly (provider facts attested, Git facts locally verified), and
