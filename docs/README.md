@@ -40,9 +40,10 @@ that Northstar provides to consumer projects.
 
 Closed generations and superseded procedure are not current authority. Start
 from this page and the active `g03` runway; archives are provenance only.
-<!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v1 digest=sha256:85d2e348b9b559258f98662942025ccbce7e7f3aa9f56f39acb1fdf207bd6d2a -->
+<!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v1 digest=sha256:7a403d04c442c6d5f2b982e60644fd318f2ff7cb6241afbbbb6ff7f9bac44e9b -->
 | Task | Status | Stage | Revision | Record digest |
 | --- | --- | --- | --- | --- |
 | g03.006 | complete | none | 8 | sha256:025066786b2d9af4821307a2b06b15b6cab8bf47a4a816db22bed66b9faa8c9b |
 | g03.007 | complete | none | 8 | sha256:a5b8006f700e791ff4bb68f504746a9f2431bb1711abd70292673e536a80b9ad |
+| g03.008 | complete | none | 8 | sha256:888d75786d747f9965efa51b4b492c005aaf967a8f6504715e3b6be0f2760099 |
 <!-- northstar:lifecycle:end -->
