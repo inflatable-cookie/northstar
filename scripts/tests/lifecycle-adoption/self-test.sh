@@ -214,7 +214,22 @@ build_fixture() { # <repo-dir> [dogfood|starter]
     git -C "$repo" add -A
     git -C "$repo" commit -qm "ready g03.$number"
 
-    cat > "$repo/docs/handoffs/handoff-$number.md" <<EOF
+    if [ "$number" = 006 ]; then
+      cat > "$repo/docs/handoffs/handoff-$number.md" <<EOF
+---
+kind: northstar-handoff
+handoff_mode: worker-pr-loop
+worker_mode: implementation
+dispatch_authority: orchestrator
+roadmap: docs/roadmaps/g03/$number-fixture-task.md
+---
+
+## Current State
+
+Ready task g03.$number is pinned by the machine-readable roadmap field.
+EOF
+    else
+      cat > "$repo/docs/handoffs/handoff-$number.md" <<EOF
 ---
 kind: northstar-handoff
 handoff_mode: worker-pr-loop
@@ -226,6 +241,7 @@ dispatch_authority: orchestrator
 
 - Ready task: [\`g03.$number\`](../roadmaps/g03/$number-fixture-task.md)
 EOF
+    fi
     git -C "$repo" add -A
     git -C "$repo" commit -qm "handoff for g03.$number"
   done

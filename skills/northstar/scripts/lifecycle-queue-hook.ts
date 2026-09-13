@@ -225,8 +225,17 @@ function reconstructIdentity(repoRoot: string, event: Record<string, any>): Nort
   const frontmatter = text.startsWith("---\n") ? text.slice(0, frontmatterEnd === -1 ? text.length : frontmatterEnd) : "";
   if (!frontmatter.includes("kind: northstar-handoff")) refuse("instruction artifact is not a Northstar handoff");
 
-  // Candidates are roadmap links in the handoff whose link text is a task id.
+  // Candidates may be declared by the handoff's machine-readable `roadmap:`
+  // field or by roadmap links whose link text is a task id. The frontmatter
+  // form is the canonical handoff shape; links remain useful in prose.
   const candidates = new Map<string, string>();
+  const roadmapField = /^roadmap:\s*([^\s#]+)\s*$/m.exec(frontmatter);
+  if (roadmapField !== null) {
+    const taskPath = normalizeRepoRelative(roadmapField[1]!, "roadmap path");
+    const pathMatch = TASK_PATH_RE.exec(taskPath);
+    if (pathMatch === null) refuse("handoff roadmap field is not a Northstar task path: " + taskPath);
+    candidates.set("g" + pathMatch[1] + "." + pathMatch[2], taskPath);
+  }
   const linkRe = /\[`?(g[0-9]{2}\.[0-9]{3})`?\]\(([^)\s]+)\)/g;
   let match: RegExpExecArray | null;
   while ((match = linkRe.exec(text)) !== null) {
