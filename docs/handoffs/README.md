@@ -63,6 +63,11 @@ general doctrine. Repeat only dispatch state, worker boundaries, local runtime
 facts, the PR contract, and non-obvious tensions. If the handoff rivals its
 owning task or repeats multi-paragraph protocol text, compress it.
 
+## Current dispatch
+
+[`g03.010 — Adopt the Effigy-hosted lifecycle hook`](20260913-121953-adopt-effigy-hosted-lifecycle-hook.md)
+is the sole approved worker handoff.
+
 ## Relationship to logs
 
 - `docs/logs/` records evidence and decisions from work that happened.

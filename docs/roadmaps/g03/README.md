@@ -17,7 +17,8 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 | Integrate rich runtimes without making Northstar or Queue depend on each other's internal structure. | complete as `g03.006`; terminal record and projections published as `d244d83` | bundle section 12; Queue contract v1 | Chatterbox next planning direction |
 | Finish hook-owned mechanical closeout and remove duplicate mutable Markdown state. | delivered as `g03.007`; exact handoff cleanup missed because the launcher resolved stale installed code | system architecture, contract 001, bundle section 12; Queue g01.010 | correct the execution boundary in `g03.008` |
 | Pin the complete Queue hook runtime to repository bytes and repeat the live self-hosting proof. | complete as `g03.008`; terminal record and exact handoff cleanup published as `305700c` | system architecture, contract 001, bundle section 12; `g03.007` live evidence | no further runtime-pinning lane |
-| Keep an exhausted generation open in `planning_required` until an explicit rollover closes it. | active as `g03.009` | contract 001, section 03, bundle section 12 | one lifecycle semantics lane |
+| Keep an exhausted generation open in `planning_required` until an explicit rollover closes it. | complete as `g03.009`; terminal record published at `c9e3533` | contract 001, section 03, bundle section 12 | no further state-separation lane |
+| Run Queue lifecycle hooks through Effigy and the installed Northstar skill without copied repository code. | active as `g03.010` | contract 001, system architecture, bundle section 12; Queue contract 005 | one self-hosted cutover lane |
 | Reduce repeated protocol enumerations and retire genuinely redundant modes without merging distinct behavior blindly. | next | contract 001, later usage evidence | Chatterbox sequencing after the active goal |
 | Keep unresolved operator feedback visible without pinning old generations open. | watch | contract 001 | bounded watchlist below |
 
@@ -56,6 +57,7 @@ separately owned and is not part of this runway.
 - `007-finish-hook-owned-closeout.md`
 - `008-pin-queue-hook-runtime.md`
 - `009-separate-planning-required-from-generation-closure.md`
+- `010-adopt-effigy-hosted-lifecycle-hook.md`
 
 Mechanical status lives in the lifecycle records: adopted tasks (`g03.006`
 onward) project it in the generated block below, earlier tasks keep their
@@ -63,9 +65,9 @@ completion in the runway above and in Git history.
 
 ## Next task
 
-An open lane runs until the closeout hook publishes its terminal record into
-the generated block below. After a lane closes, return to Chatterbox; do not
-dispatch a successor automatically.
+`g03.010` is the sole approved lane. It runs until the closeout hook publishes
+its terminal record through the trusted Effigy route. Do not dispatch portfolio
+rollout or another sibling before that proof.
 <!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:dd0d09bfe955233aa0b32f9414a29aeede9f66f097a01c15189e235ac25bb518 -->
 | Generation | Disposition | Runway state |
 | --- | --- | --- |

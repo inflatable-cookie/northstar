@@ -11,8 +11,8 @@ Mode: sequential
 - Mechanical task state and delivery evidence are projected in the generated
   lifecycle blocks under `docs/README.md`, `docs/roadmaps/README.md`, and
   `g03/README.md`; this index stays strategic.
-- Current approved lane: `g03.009`; it keeps exhausted generations in
-  `planning_required` until an explicit rollover closes them.
+- Current approved lane: `g03.010`; replace the copied Queue hook runtime with
+  the trusted Effigy runner and auto-resolved Northstar skill selector.
 
 ## Generation log
 
@@ -37,5 +37,5 @@ it in the same rollover change.
 
 ## Next task
 
-`g03.009` is the only approved lane. After its closeout hook publishes the
-terminal record, return to Chatterbox. No automatic successor is approved.
+`g03.010` is the only approved lane. After its hook-owned closeout, return to
+Chatterbox for the configuration-only portfolio rollout decision.
