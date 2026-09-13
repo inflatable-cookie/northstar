@@ -88,6 +88,12 @@ lane state there first.
 
 Record rollover reason in `docs/roadmaps/generation-index.md`.
 
+In a lifecycle-adopted repository, rollover also updates the declared
+projection targets explicitly: the outgoing generation README leaves
+`.northstar/lifecycle/v1/projection-targets.json` and the incoming one joins
+it in the same rollover change, so the projected currentness surface always
+names exactly the active generation.
+
 ## Closed-generation compaction without another rollover
 
 Refresh, normalization, and authorized docs cleanup must inspect already-closed
@@ -142,7 +148,13 @@ Recommended shape:
 
 Use a small state vocabulary such as `active`, `next`, `blocked`, `deferred`,
 and `done`. Keep the list short enough to scan; three to seven goals is usually
-enough.
+enough. The runway is coarse human intent at goal granularity: it stays
+stable between real strategy, task, or rollover changes. In a lifecycle-
+adopted repository it must not become a per-task status mirror — the
+generated projections and the task records own per-task mechanical state —
+and it must not name the ready frontier or the latest delivery status in a
+form that goes stale at closeout. Keep the runway's state tokens about goal
+sequencing, not about the live task pipeline.
 
 ### Parallel mode exception
 
@@ -161,15 +173,21 @@ it to bypass closeout discipline for related work that should share a queue.
 
 ## Content contract (per task file)
 
-1. `Status`, `Owner`, `Created`, `Depends on`, `Governing refs`,
-   `Dispatch manifest`
+1. `Owner`, `Created`, `Depends on`, `Governing refs`, `Dispatch manifest`
 2. `## Outcome`
 3. `## Decisions` (when the task settles provisional design)
 4. `## Work` (ordered steps with checkboxes)
 5. `## Acceptance and review oracle`
 6. `## Stop conditions`
-7. `## Evidence` (on completion: PR, head, merge, validation, limits)
+7. `## Evidence` (semantic outcome, limits, and continuation)
 8. `## Next task`
+
+Mechanical task status is not hand-maintained. Repositories that adopted the
+portable task lifecycle keep status, PR, review, merge, and validation
+identities in the per-task JSON record and its generated projection; the task
+header carries no `Status:` line and closeout rewrites nothing. Standalone or
+pre-adoption repositories keep a hand-maintained `Status:` line and record
+mechanical delivery identities in `## Evidence` on completion.
 
 ## Scope and granularity rule
 
@@ -229,6 +247,12 @@ See also the runway rule in
 - `docs/roadmaps/gNN/README.md` for each active generation
 - Refresh those surfaces whenever the active task or generation changes so
   operators do not have to reconstruct the live lane from stale front doors.
+
+In a lifecycle-adopted repository, the mechanical layer of those surfaces —
+per-task status, revision, delivery digests, and the ready frontier — is a
+generated projection, refreshed by the closeout hook or the standalone
+command. Human prose there names the mechanism and durable intent; it does
+not duplicate the projected state, so ordinary closeout edits nothing by hand.
 
 ## Currentness curation rule
 

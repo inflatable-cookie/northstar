@@ -25,7 +25,9 @@ returns.
 Task Markdown keeps outcome, scope, decisions, acceptance, stop conditions,
 policy, and UI brief. A generated block between stable sentinels projects the
 record. Leave everything outside the sentinels alone; a task file opts into
-currentness by carrying the block.
+currentness by carrying the block. Lifecycle-managed task files carry no
+hand-maintained status line and no closeout evidence rewrite: the record and
+the projections own mechanical state.
 
 ## Standalone commands
 
@@ -50,21 +52,38 @@ To let Queue drive the same lifecycle, copy three files:
 2. `hooks/northstar-lifecycle` → `.paseo/hooks/northstar-lifecycle`
    (committed, executable, `chmod +x`);
 3. `projection-targets.json` → `.northstar/lifecycle/v1/projection-targets.json`
-   (then edit the target list to your front doors).
+   (then edit the target list to your front doors, including the active
+   generation README).
+
+Every declared currentness view belongs in the target list: the repository
+root front door, the roadmaps front door, and the active generation README.
+When a generation rolls over, change the target list in the same rollover
+step — the outgoing generation README leaves it and the incoming one joins
+it — so the projected currentness surface always names exactly the active
+generation.
 
 The manifest binds a read-only `task.pre_dispatch` gate and a required
 integration-write hook for `task.blocked`, `task.cancelled`, and
-`task.closeout`. Queue executes the pinned launcher without a shell, validates
-result and changed paths, and owns staging, commit, push, and reconciliation.
-The adapter itself runs from the installed skill, so the repository depends on
-no Paseo, Queue, network, or Northstar source checkout.
+`task.closeout`. Keep the handoff directory (default `docs/handoffs/`) in the
+integration-write hook's allowed paths: closeout publishes one integration
+commit containing the terminal record, the regenerated projections, and the
+removal of the exact consumed instruction handoff. The hook deletes only the
+exact committed path whose bytes still hash to the pinned blob digest; a
+changed, missing, or ambiguous handoff fails closed. Queue executes the
+pinned launcher without a shell, validates result and changed paths, and owns
+staging, commit, push, and reconciliation. The adapter itself runs from the
+installed skill, so the repository depends on no Paseo, Queue, network, or
+Northstar source checkout.
 
 Adoption boundary: records begin with the first task dispatched after the
 manifest lands. Earlier closed tasks keep their Git and provider evidence;
 the closeout hook never fabricates receipts for them. The standalone adapter
 remains first-class and produces the same terminal receipt from equivalent
-facts. Remove hand-maintained status fields from front doors only after the
-generated projections carry them.
+facts. Once the generated projections carry them, remove hand-maintained
+status fields from task headers and front doors in the same cutover; a
+routine closeout then edits no prose at all — no task-status edit, no
+evidence rewrite, no roadmap pointer edit, no front-door edit, and no prose
+log. Exceptional semantic decisions may still warrant a separate human log.
 
 ## Do not
 

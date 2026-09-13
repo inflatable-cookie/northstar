@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Governing refs: spec 040, system architecture, contract 001
+Governing refs: system architecture, contract 001, bundle section 12
 
 This directory carries the provider-neutral task lifecycle contract: Draft
 2020-12 schemas plus the doctrine for the reducer, standalone adapter, and
@@ -182,7 +182,24 @@ against the manifest `allowedPaths` before writing, and Queue independently
 validates, stages, commits, and pushes exactly those paths. Projection
 targets come from the repository-declared
 `.northstar/lifecycle/v1/projection-targets.json`; a task file opts into
-currentness by already carrying a generated block.
+currentness by already carrying a generated block. Declare every currentness
+view — the root front door, the roadmaps front door, and the active
+generation README — and change the declared targets explicitly when a
+generation rolls over.
+
+Closeout consumes the instruction handoff. The `task.closeout` publication is
+one integration commit: the terminal record, the regenerated declared
+projections, and the removal of the exact submitted handoff. The hook deletes
+only the exact committed path whose working-tree bytes still hash to the
+pinned blob digest, and only after the terminal receipt exists. A changed,
+missing (non-terminal record), symlinked, or otherwise ambiguous handoff
+fails closed before any byte changes; when the record is already terminal, a
+still-present exact handoff is consumed as an idempotent no-diff cleanup and
+an absent one is the normal replay shape. The manifest must declare the
+handoff directory in the closeout hook's `allowedPaths` for the cleanup to
+publish. Git retains the blob; the record's `evidence.handoff` entry retains
+its identity. `task.blocked` and `task.cancelled` never touch the handoff:
+the task may resume and the instruction stays authoritative.
 
 ## Commands
 

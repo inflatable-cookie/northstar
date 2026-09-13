@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Focused proof for g03.006 portable lifecycle adoption.
+# Focused proof for g03.006 portable lifecycle adoption and the g03.007
+# hook-owned closeout cutover.
 #
 # 1. Runs the lifecycle core oracle (reducer, containment, multi-target).
 # 2. Scans the hook adapter with the same portability scan as the core.
@@ -8,9 +9,14 @@
 # 4. Runs the hook adapter against real fixture repositories: pre-dispatch
 #    gate, hostile events, read-only binding, escape refusal, squash refusal,
 #    bootstrap closeout, idempotent replay, block/cancel mapping.
-# 5. Proves terminal equivalence: equivalent standalone and generic Queue
+# 5. Proves the closeout hook consumes exactly the submitted handoff:
+#    deletion inside declared allowed paths, changed/symlinked/missing
+#    handoff refusals before any byte changes, and replay idempotence.
+# 6. Proves the active generation README is a deterministic projection target
+#    and that no mutation lands outside declared paths.
+# 7. Proves terminal equivalence: equivalent standalone and generic Queue
 #    sequences produce the same portable digest, in both task orders.
-# 6. Runs the closeout through the committed launcher from an isolated
+# 8. Runs the closeout through the committed launcher from an isolated
 #    installed skill under a minimal environment: no Paseo, Queue, network,
 #    or Northstar source checkout.
 
@@ -91,7 +97,6 @@ build_fixture() { # <repo-dir>
   git -C "$repo" config user.email fixture@example.invalid
   git -C "$repo" config user.name Fixture
   mkdir -p "$repo/docs/roadmaps/g03" "$repo/docs/handoffs" "$repo/.northstar/lifecycle/v1" "$repo/.paseo/hooks"
-
   for number in 006 007; do
     printf '# Task g03.%s\n\nStatus: ready\nOwner: fixture\n' "$number" \
       > "$repo/docs/roadmaps/g03/$number-fixture-task.md"
@@ -119,6 +124,8 @@ EOF
 
   printf '# Project\n\nHuman front door stays.\n' > "$repo/docs/README.md"
   printf '# Roadmaps\n\nHuman roadmap stays.\n' > "$repo/docs/roadmaps/README.md"
+  mkdir -p "$repo/docs/roadmaps/g03"
+  printf '# g03\n\nHuman generation runway stays.\n' > "$repo/docs/roadmaps/g03/README.md"
   cp "$repo_root/.paseo/queue.json" "$repo/.paseo/queue.json"
   cp "$repo_root/.paseo/hooks/northstar-lifecycle" "$repo/.paseo/hooks/northstar-lifecycle"
   chmod +x "$repo/.paseo/hooks/northstar-lifecycle"
@@ -268,9 +275,24 @@ ro=$(run_hook "$scratch/closeout-ro.json" "evt-closeout-ro-0001")
 expect_outcome "$ro" ok "read-only closeout"
 [ "$(json_field "$ro" "r.changedPaths.length")" = "0" ]
 [ ! -e "$repoA/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+[ -e "$repoA/docs/handoffs/handoff-006.md" ]
 cp "$scratch/saved-manifest.json" "$repoA/.paseo/queue.json"
 [ -z "$(git -C "$repoA" status --porcelain)" ]
 echo "read-only closeout binding: OK"
+
+echo "# reserved manifest paths are refused"
+bun -e '
+  const fs = await import("node:fs");
+  const manifest = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+  manifest.hooks[1].allowedPaths.push(".paseo/queue.json");
+  fs.writeFileSync(process.argv[2], JSON.stringify(manifest, null, 2) + "\n");
+' "$scratch/saved-manifest.json" "$repoA/.paseo/queue.json"
+reserved=$(run_hook "$scratch/closeout-ro.json" "evt-closeout-ro-0001")
+expect_outcome "$reserved" blocked "reserved allowedPath"
+json_field "$reserved" "r.summary.includes('reserved path')" >/dev/null
+cp "$scratch/saved-manifest.json" "$repoA/.paseo/queue.json"
+[ -z "$(git -C "$repoA" status --porcelain)" ]
+echo "reserved manifest path refusal: OK"
 
 echo "# undeclared projection target is refused before any write"
 cat > "$repoA/.northstar/lifecycle/v1/projection-targets.json" <<'EOF'
@@ -286,9 +308,20 @@ escape=$(run_hook "$scratch/closeout-escape.json" "evt-closeout-escape-0001")
 expect_outcome "$escape" blocked "escaping projection target"
 json_field "$escape" "r.summary.includes('allowedPaths')" >/dev/null
 [ ! -e "$repoA/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+[ -e "$repoA/docs/handoffs/handoff-006.md" ]
 cp "$repo_root/.northstar/lifecycle/v1/projection-targets.json" "$repoA/.northstar/lifecycle/v1/projection-targets.json"
 [ -z "$(git -C "$repoA" status --porcelain)" ]
 echo "projection-target escape refusal: OK"
+
+echo "# escaping instruction path fails closed before any read"
+write_event "$scratch/closeout-dots.json" "evt-closeout-dots-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/roadmaps/../handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+dots=$(run_hook "$scratch/closeout-dots.json" "evt-closeout-dots-0001")
+expect_outcome "$dots" blocked "parent-segment instruction path"
+json_field "$dots" "r.summary.includes('parent segment')" >/dev/null
+[ -z "$(git -C "$repoA" status --porcelain)" ]
+echo "instruction path escape refusal: OK"
 
 echo "# squash-shaped delivery is refused rather than fabricated"
 repoS="$scratch/repo-squash"
@@ -330,20 +363,82 @@ expect_outcome "$closeout" ok "bootstrap closeout"
 [ "$(json_field "$closeout" "r.commitSubjectSuffix")" = "g03.006 terminal record" ]
 [ "$(json_field "$closeout" "r.changedPaths.includes('docs/README.md')")" = "true" ]
 [ "$(json_field "$closeout" "r.changedPaths.includes('docs/roadmaps/README.md')")" = "true" ]
+[ "$(json_field "$closeout" "r.changedPaths.includes('docs/roadmaps/g03/README.md')")" = "true" ]
+[ "$(json_field "$closeout" "r.changedPaths.includes('docs/handoffs/handoff-006.md')")" = "true" ]
+[ "$(json_field "$closeout" "r.metadata.handoff_consumed")" = "true" ]
 grep -q "Human front door stays." "$repoA/docs/README.md"
 grep -q "| g03.006 | complete | none |" "$repoA/docs/README.md"
 grep -q "Human roadmap stays." "$repoA/docs/roadmaps/README.md"
 grep -q "northstar:lifecycle:begin" "$repoA/docs/README.md"
+grep -q "Human generation runway stays." "$repoA/docs/roadmaps/g03/README.md"
+grep -q "| g03.006 | complete | none |" "$repoA/docs/roadmaps/g03/README.md"
+[ ! -e "$repoA/docs/handoffs/handoff-006.md" ]
 [ -z "$(git -C "$repoA" diff --cached)" ]
 [ "$(git -C "$repoA" rev-parse HEAD)" = "$MC" ]
 digest_a=$(json_field "$closeout" "r.metadata.portable_digest")
 [ -n "$digest_a" ]
 echo "bootstrap closeout: OK"
 
+echo "# exact handoff consumption inside declared paths only"
+git -C "$repoA" status --porcelain | grep -q " D docs/handoffs/handoff-006.md"
+while IFS= read -r line; do
+  [ -z "$line" ] && continue
+  path="${line:3}"
+  case "$path" in
+    .northstar/lifecycle/*|docs/roadmaps/*|docs/handoffs/*|docs/README.md) ;;
+    *)
+      echo "mutation outside declared allowed paths: $path" >&2
+      exit 1
+      ;;
+  esac
+done < <(git -C "$repoA" status --porcelain)
+echo "exact handoff consumption: OK"
+
+echo "# changed handoff fails closed before any byte changes"
+repoC="$scratch/repo-changed"
+build_fixture "$repoC"
+CURRENT_REPO="$repoC"
+read_facts "$(fixture_facts "$repoC" 006)"
+printf '\nLate editorial change.\n' >> "$repoC/docs/handoffs/handoff-006.md"
+write_event "$scratch/closeout-c.json" "evt-closeout-c-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+changed=$(run_hook "$scratch/closeout-c.json" "evt-closeout-c-0001")
+expect_outcome "$changed" blocked "changed handoff"
+json_field "$changed" "r.summary.includes('changed since its pinned instruction blob')" >/dev/null
+[ -e "$repoC/docs/handoffs/handoff-006.md" ]
+[ ! -e "$repoC/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+[ "$(git -C "$repoC" status --porcelain)" = " M docs/handoffs/handoff-006.md" ]
+git -C "$repoC" checkout -q -- docs/handoffs/handoff-006.md
+echo "changed handoff refusal: OK"
+
+echo "# symlinked handoff fails closed"
+outside_file="$scratch/outside-handoff-target.md"
+cp "$repoC/docs/handoffs/handoff-006.md" "$outside_file"
+rm "$repoC/docs/handoffs/handoff-006.md"
+ln -s "$outside_file" "$repoC/docs/handoffs/handoff-006.md"
+symlink=$(run_hook "$scratch/closeout-c.json" "evt-closeout-c-0001")
+expect_outcome "$symlink" blocked "symlinked handoff"
+json_field "$symlink" "r.summary.includes('symlink')" >/dev/null
+[ -L "$repoC/docs/handoffs/handoff-006.md" ]
+[ ! -e "$repoC/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+rm "$repoC/docs/handoffs/handoff-006.md"
+echo "symlinked handoff refusal: OK"
+
+echo "# missing handoff with a non-terminal record fails closed"
+missing=$(run_hook "$scratch/closeout-c.json" "evt-closeout-c-0001")
+expect_outcome "$missing" blocked "missing handoff"
+json_field "$missing" "r.summary.includes('missing from the integration checkout')" >/dev/null
+[ ! -e "$repoC/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+[ "$(git -C "$repoC" status --porcelain)" = " D docs/handoffs/handoff-006.md" ]
+git -C "$repoC" checkout -q -- docs/handoffs/handoff-006.md
+echo "missing handoff refusal: OK"
+
 echo "# identical retry is a no-diff replay"
 retry=$(run_hook "$scratch/closeout-a.json" "evt-closeout-a-0001")
 expect_outcome "$retry" ok "closeout retry"
 [ "$(json_field "$retry" "r.changedPaths.length")" = "0" ]
+[ ! -e "$repoA/docs/handoffs/handoff-006.md" ]
 status_before=$(git -C "$repoA" status --porcelain)
 run_hook "$scratch/closeout-a.json" "evt-closeout-a-0001" >/dev/null
 [ "$status_before" = "$(git -C "$repoA" status --porcelain)" ]

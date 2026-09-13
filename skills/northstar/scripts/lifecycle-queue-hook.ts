@@ -19,6 +19,16 @@
 // reconstructed ready planning identity with derived stable event IDs; it
 // never claims earlier live tracking. A repeated event is a no-diff replay.
 //
+// The closeout publication is exactly one integration commit: the terminal
+// record, the regenerated declared projections, and the removal of the exact
+// submitted instruction handoff. The handoff is a pinned transport artifact,
+// not permanent evidence: the hook deletes only the exact committed path whose
+// working-tree bytes still hash to the pinned blob digest, after the terminal
+// receipt exists. A changed, missing, symlinked, or otherwise ambiguous
+// handoff fails closed before any byte changes; Git retains the blob and the
+// record's handoff evidence retains its identity. A repeated event is a
+// no-diff replay.
+//
 // The adapter never stages, commits, or pushes; Queue owns validated
 // integration publication.
 
@@ -487,6 +497,7 @@ function applyMapped(
   envelopes: Record<string, unknown>[],
   current: Record<string, unknown> | null,
   verb: string,
+  consumable: ConsumableHandoff | null = null,
 ): void {
   // Read-only runs validate without writing, so the allowedPaths gate for
   // computed writes does not apply; containment still holds.
@@ -512,6 +523,9 @@ function applyMapped(
     changedPaths.push(...applied.changed_paths);
     if (applied.status === "applied") replayed = false;
   }
+  // The deletion runs only after the terminal record and projections are on
+  // disk; a refusal anywhere above left the checkout untouched.
+  consumeHandoff(consumable, changedPaths);
   const uniqueChanged = [...new Set(changedPaths)].sort();
   for (const changedPath of uniqueChanged) {
     if (!pathIsAllowed(changedPath, binding.allowedPaths)) refuse("computed change " + changedPath + " is outside the manifest allowedPaths");
@@ -519,13 +533,15 @@ function applyMapped(
   const suffix = uniqueChanged.length > 0 ? subjectSuffix(identity, verb) : null;
   emit(String(event.eventId), "ok",
     (replayed ? "replayed without changes: " : "applied: ") + identity.taskId + " " + verb +
-    " at revision " + String(finalRecord.revision) + " (" + String(finalRecord.portable_digest).slice(0, 19) + ")",
+    " at revision " + String(finalRecord.revision) + " (" + String(finalRecord.portable_digest).slice(0, 19) + ")" +
+    (consumable !== null ? "; consumed handoff " + consumable.relativePath : ""),
     {
       task_id: identity.taskId,
       revision: Number(finalRecord.revision),
       digest: String(finalRecord.digest),
       portable_digest: String(finalRecord.portable_digest),
       replayed,
+      handoff_consumed: consumable !== null,
     },
     uniqueChanged, suffix);
 }
@@ -606,13 +622,69 @@ function handleCancelled(repoRoot: string, event: Record<string, any>, binding: 
   applyMapped(repoRoot, event, binding, identity, [envelope], current, "cancelled");
 }
 
+// ---------------------------------------------------------------------------
+// Exact handoff consumption
+// ---------------------------------------------------------------------------
+
+interface ConsumableHandoff {
+  relativePath: string;
+  absolutePath: string;
+}
+
+// Verify, before any byte changes, that the exact submitted handoff can be
+// consumed at publication time. The event pins the instruction path, commit,
+// and blob digest; the integration checkout must still carry that exact file.
+// Missing is lawful only under the explicit idempotent replay rule (the
+// terminal record already exists and an earlier publication consumed the
+// file), which the caller declares with allowMissing.
+function prepareHandoffConsumption(repoRoot: string, event: Record<string, any>, binding: ManifestBinding, allowMissing: boolean): ConsumableHandoff | null {
+  const instruction = event.task.instruction;
+  if (instruction === null || instruction === undefined) return null;
+  const relativePath = normalizeRepoRelative(String(instruction.path), "instruction path");
+  const absolutePath = path.join(repoRoot, relativePath);
+  let stats: fs.Stats;
+  try {
+    stats = fs.lstatSync(absolutePath);
+  } catch {
+    if (allowMissing) return null;
+    refuse("submitted handoff " + relativePath + " is missing from the integration checkout");
+  }
+  if (stats.isSymbolicLink()) refuse("submitted handoff " + relativePath + " is a symlink; refusing an ambiguous deletion");
+  if (!stats.isFile()) refuse("submitted handoff " + relativePath + " is not a regular file");
+  const digest = digestBytes(fs.readFileSync(absolutePath));
+  if (digest !== String(instruction.digest)) {
+    refuse("submitted handoff " + relativePath + " changed since its pinned instruction blob (" + digest + " != " + String(instruction.digest) + ")");
+  }
+  if (!pathIsAllowed(relativePath, binding.allowedPaths)) {
+    refuse("submitted handoff " + relativePath + " is not declared in the manifest allowedPaths");
+  }
+  return { relativePath, absolutePath };
+}
+
+function consumeHandoff(consumable: ConsumableHandoff | null, changedPaths: string[]): void {
+  if (consumable === null) return;
+  fs.unlinkSync(consumable.absolutePath);
+  changedPaths.push(consumable.relativePath);
+}
+
 function handleCloseout(repoRoot: string, event: Record<string, any>, binding: ManifestBinding): void {
   const identity = reconstructIdentity(repoRoot, event);
   const current = readRecord(repoRoot, identity.taskId);
   if (current !== null && String(current.status) === "complete") {
+    // Explicit idempotent rule: the terminal record exists, so a still-present
+    // exact handoff is leftover transport from an earlier publication and its
+    // consumption is a no-diff cleanup. A changed or ambiguous file still
+    // refuses; absence is the normal replay shape.
+    const consumable = binding.mode === "integration_write"
+      ? prepareHandoffConsumption(repoRoot, event, binding, true)
+      : null;
+    const changedPaths: string[] = [];
+    consumeHandoff(consumable, changedPaths);
+    const uniqueChanged = [...new Set(changedPaths)].sort();
     emit(String(event.eventId), "ok",
       "lifecycle record for " + identity.taskId + " is already complete; no changes",
-      { task_id: identity.taskId, replayed: true, portable_digest: String(current.portable_digest) }, [], null);
+      { task_id: identity.taskId, replayed: true, portable_digest: String(current.portable_digest), handoff_consumed: consumable !== null },
+      uniqueChanged, uniqueChanged.length > 0 ? subjectSuffix(identity, "terminal record") : null);
     return;
   }
   if (current !== null && ["cancelled", "superseded"].includes(String(current.status))) {
@@ -622,7 +694,12 @@ function handleCloseout(repoRoot: string, event: Record<string, any>, binding: M
   const instructionPath = normalizeRepoRelative(String(event.task.instruction.path), "instruction path");
   const evidence = buildCloseoutEvidence(repoRoot, event, instructionPath);
   const envelopes = buildCloseoutEnvelopes(identity, event, evidence, current);
-  applyMapped(repoRoot, event, binding, identity, envelopes, current, "terminal record");
+  // Missing-at-base fails closed for a non-terminal record: the hook deletes
+  // only the exact pinned file it verified, never a guessed path.
+  const consumable = binding.mode === "integration_write"
+    ? prepareHandoffConsumption(repoRoot, event, binding, false)
+    : null;
+  applyMapped(repoRoot, event, binding, identity, envelopes, current, "terminal record", consumable);
 }
 
 // ---------------------------------------------------------------------------

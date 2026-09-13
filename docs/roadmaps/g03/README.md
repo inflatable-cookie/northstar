@@ -13,17 +13,23 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 | Complete consumer compaction through maintenance routes. | complete as `g03.002`; delivery evidence absorbed | contract 001 | no further compaction lane |
 | Flatten milestone/card execution into one generation task unit. | complete as `g03.003` | contract 001 | return to Chatterbox planning checkpoint |
 | Move material UI design decisions before dispatch and require rendered exact-head delivery review. | complete as `g03.004` | section 11, contract 001 | observe first natural consumer lanes |
-| Replace agent-written mechanical lifecycle bookkeeping with a portable core and deterministic projections. | complete as `g03.005` | spec 040, system architecture, contract 001 | continue with `g03.006` adoption |
-| Integrate rich runtimes without making Northstar or Queue depend on each other's internal structure. | complete as `g03.006`; terminal record and projections published as `d244d83` | spec 040; Queue contract v1 | Chatterbox next planning direction |
-| Finish hook-owned mechanical closeout and remove duplicate mutable Markdown state. | ready as `g03.007` | spec 040; Queue g01.010 | execute `g03.007` only |
-| Reduce repeated protocol enumerations and retire genuinely redundant modes without merging distinct behavior blindly. | planned | contract 001, later usage evidence | pending after `g03.001` |
+| Replace agent-written mechanical lifecycle bookkeeping with a portable core and deterministic projections. | complete as `g03.005` | system architecture, contract 001, bundle section 12 | continue with `g03.006` adoption |
+| Integrate rich runtimes without making Northstar or Queue depend on each other's internal structure. | complete as `g03.006`; terminal record and projections published as `d244d83` | bundle section 12; Queue contract v1 | Chatterbox next planning direction |
+| Finish hook-owned mechanical closeout and remove duplicate mutable Markdown state. | active | system architecture, contract 001, bundle section 12; Queue g01.010 | closeout proof, then Chatterbox sequencing |
+| Reduce repeated protocol enumerations and retire genuinely redundant modes without merging distinct behavior blindly. | next | contract 001, later usage evidence | Chatterbox sequencing after the active goal |
 | Keep unresolved operator feedback visible without pinning old generations open. | watch | contract 001 | bounded watchlist below |
 
-## Approved frontier
+Task mechanical state — status, stage, revision, delivery digests — is the
+generated lifecycle block at the end of this file, refreshed by the closeout
+hook at publication. Runway rows above stay coarse goal-sequencing intent and
+are not a per-task status mirror.
 
-`g03.007` only. No concurrent sibling or automatic successor is authorized.
-Queue repository work remains separately owned and is not part of this
-frontier.
+## Current lane
+
+One lane executes at a time. Dispatch authorization for an open lane is its
+committed handoff plus the task's own dispatch manifest; no concurrent sibling
+and no automatic successor are authorized. Queue repository work remains
+separately owned and is not part of this runway.
 
 ## Bounded watchlist
 
@@ -37,17 +43,27 @@ frontier.
 - Atlas, triage/cleanup, and language-package feedback remain operator-provided
   evidence only. They are not ready Northstar execution lanes.
 
-## Tasks
+## Task files
 
-- `001-compact-default-lifecycle.md` — complete
-- `002-complete-consumer-compaction.md` — complete
-- `003-flatten-execution-tasks.md` — complete
-- `004-ui-design-planning-and-delivery.md` — complete
-- `005-portable-lifecycle-core.md` — complete
-- `006-adopt-portable-lifecycle.md` — complete
-- `007-finish-hook-owned-closeout.md` — ready
+- `001-compact-default-lifecycle.md`
+- `002-complete-consumer-compaction.md`
+- `003-flatten-execution-tasks.md`
+- `004-ui-design-planning-and-delivery.md`
+- `005-portable-lifecycle-core.md`
+- `006-adopt-portable-lifecycle.md`
+- `007-finish-hook-owned-closeout.md`
+
+Mechanical status lives in the lifecycle records: adopted tasks (`g03.006`
+onward) project it in the generated block below, earlier tasks keep their
+completion in the runway above and in Git history.
 
 ## Next task
 
-Execute `g03.007` only. After its live hook result, return to Chatterbox; do not
+An open lane runs until the closeout hook publishes its terminal record into
+the generated block below. After a lane closes, return to Chatterbox; do not
 dispatch a successor automatically.
+<!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v1 digest=sha256:b61aa082aa7612cc3d8848350f8e5de1ab59472b2c4f7b4c6cba74ae9d93228a -->
+| Task | Status | Stage | Revision | Record digest |
+| --- | --- | --- | --- | --- |
+| g03.006 | complete | none | 8 | sha256:025066786b2d9af4821307a2b06b15b6cab8bf47a4a816db22bed66b9faa8c9b |
+<!-- northstar:lifecycle:end -->

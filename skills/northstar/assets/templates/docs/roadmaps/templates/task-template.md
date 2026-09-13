@@ -2,7 +2,6 @@
 
 **Type: TEMPLATE** -- Copy to `docs/roadmaps/gNN/NNN-<slug>.md` and fill in for each executable task.
 
-Status: draft
 Owner: <owner>
 Created: YYYY-MM-DD
 Governing refs: <architecture files>, <contract files>
@@ -68,7 +67,17 @@ task is `ready`.
 
 ## Evidence
 
-On completion, record: outcome, validation actually run, PR link, reviewed exact head, merge commit, and material limits or blockers.
+Record the semantic outcome: what actually changed, material limits or
+blockers, and the continuation envelope. Do not restate mechanical task status
+or delivery identities in prose.
+
+- Lifecycle-adopted repositories keep mechanical status, PR, review, merge,
+  and validation identities in the per-task JSON record and its generated
+  projection block; the closeout hook publishes them. Add no status line to
+  the task header and no evidence rewrite at closeout.
+- Standalone or pre-adoption repositories keep a hand-maintained `Status:`
+  line in this header and record validation actually run, PR link, reviewed
+  exact head, and merge commit here on completion.
 
 ## Next task
 

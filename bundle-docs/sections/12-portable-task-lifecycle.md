@@ -16,8 +16,9 @@ stop conditions, execution policy, and UI brief. A versioned per-task JSON
 record owns portable mechanical state and delivery evidence. Generated Markdown
 blocks are derived views. JSON is canonical when the two disagree.
 
-The lifecycle core is provider-neutral. It may be driven by the standalone
-adapter or, later, by a declared orchestration hook. Equivalent facts must
+The lifecycle core is provider-neutral. The standalone adapter drives it
+directly, and a repository-declared Queue hook drives it through the same
+envelopes. Equivalent facts must
 reduce to the same terminal receipt in both modes. The core does not schedule,
 dispatch, review, merge, or choose work.
 
@@ -50,11 +51,26 @@ conflicting, dirty, escaping, or interrupted writes fail without changing prior
 bytes. Workers and reviewers never write lifecycle state; an integration owner
 or declared hook applies it.
 
+Repository checkpoints are required for promotion to `ready`, durable block,
+cancellation, or supersession, accepted terminal closeout, and generation
+closure. The last repository checkpoint is conservative: it may lag live
+activity, but it never claims review, merge, or completion without durable
+proof.
+
 ## Rendering
 
 Generated blocks use stable sentinels, a schema version, a source digest, fixed
 columns, and canonical ordering. Human text outside the sentinels is preserved
 exactly. Re-rendering an unchanged receipt set produces no diff.
+
+Every declared currentness view is a projection, not a hand-maintained mirror:
+the repository root front door, the roadmaps front door, and the active
+generation README belong in `projection-targets.json` once the lifecycle is
+adopted. Human prose outside the blocks keeps semantic meaning but must not
+restate the active task, ready frontier, or latest delivery status in a form
+that goes stale at closeout. Rollover updates the declared targets explicitly:
+when a generation closes, the outgoing generation README leaves the target list
+and the incoming one joins it in the same adoption step.
 
 ## Adoption
 
@@ -81,7 +97,25 @@ reduces a terminal receipt equivalent to the standalone path from equivalent
 facts. A repeated event is a no-diff replay. Required hooks that fail or
 diverge hold the transition visibly instead of silently degrading.
 
+Hook-owned closeout is the mechanical closeout authority. One required
+integration commit publishes the terminal record, regenerates every declared
+projection target, and removes the exact submitted instruction handoff. The
+handoff is a pinned transport artifact, not permanent evidence: the hook
+deletes only the exact committed path whose bytes still hash to the pinned
+blob digest, and only after the terminal receipt exists. A changed, missing,
+symlinked, or otherwise ambiguous handoff fails closed before any byte
+changes; a repeated event replays without diff. Git retains the blob and the
+record's handoff evidence retains its identity. Routine closeout writes no
+prose log and needs no task-status edit, evidence rewrite, roadmap pointer
+edit, or front-door edit; a semantic decision may still warrant a separate
+human log. Repository manifests must declare the handoff directory in the
+closeout hook's allowed paths for the cleanup to publish.
+
 Equivalent standalone and hook executions must produce the same portable
 digest. Two permanent closeout routes are forbidden: hand-maintained status
 fields retire together with their callers once generated projections carry
-them.
+them. Lifecycle-managed task templates ship no hand-maintained status line and
+no closeout evidence rewrite; standalone and pre-adoption repositories keep
+both and record delivery identities on the task by hand. Queue-side, the
+repository's Northstar-specific closeout prompt retires once generic hooks
+prove parity; it must not survive as a second permanent route.

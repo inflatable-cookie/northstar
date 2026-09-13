@@ -5,16 +5,20 @@ generation remains expanded.
 
 ## Current state
 
-- Last completed task: `g03.006` portable lifecycle adoption
-- Active task: `g03.007` finish hook-owned closeout
-- Approved frontier: `g03.007` only
+- Active generation: [`g03`](./g03/README.md)
 - Closed generations: [`g01`](./archive/g01.md) and [`g02`](./archive/g02.md) roll-ups under `archive/`
+- Mechanical task state and delivery evidence are projected in the generated
+  lifecycle block below, refreshed by the closeout hook at publication; the
+  prose here is semantic and is not hand-updated at closeout. An open lane's
+  dispatch authorization is its committed handoff and dispatch manifest.
 
 ## Rules
 
 - The active generation README owns the roadmap; `gNN.NNN` files are the sole
   executable Northstar tasks.
-- Tasks execute only when marked ready in the approved frontier.
+- Tasks execute only from an approved dispatch: a committed handoff plus the
+  task's own dispatch manifest. Mechanical readiness is the projected record
+  state, not a prose claim.
 - Completed tasks retain compact outcome and evidence until generation roll-up.
 - Passive observations live in the active generation's bounded watchlist and do
   not keep old generations open.
@@ -22,9 +26,10 @@ generation remains expanded.
 
 ## Next task
 
-[`g03.007`](./g03/007-finish-hook-owned-closeout.md) removes the remaining
-manual closeout duplicates and must prove the hook-only route live. The bounded
-watchlist is not execution authority.
+An open lane runs until the closeout hook publishes its terminal record into
+the generated block below; no successor is automatic. After a lane closes,
+return to Chatterbox for direction. The bounded watchlist is not execution
+authority.
 <!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v1 digest=sha256:b61aa082aa7612cc3d8848350f8e5de1ab59472b2c4f7b4c6cba74ae9d93228a -->
 | Task | Status | Stage | Revision | Record digest |
 | --- | --- | --- | --- | --- |

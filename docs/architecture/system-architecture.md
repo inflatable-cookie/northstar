@@ -67,8 +67,19 @@ transactional runtime state, but equivalent delivery facts must reduce to the
 same terminal Northstar receipt. Queue integration uses a repository-owned
 `.paseo/queue.json` control manifest and generic Queue event/result contracts.
 Queue does not import Northstar or parse its docs; the declared Northstar hook
-translates events into core transitions. Spec 040 owns the staged delivery and
-portability oracle.
+translates events into core transitions.
+
+Closeout is hook-owned where a required integration-write `task.closeout` hook
+is declared. One integration commit publishes the terminal record, regenerates
+every declared projection target — including the active generation README —
+and removes the exact submitted instruction handoff. The handoff is a pinned
+transport artifact: the hook deletes only the exact committed path whose bytes
+still hash to the pinned blob digest, and a changed, missing, symlinked, or
+ambiguous handoff fails closed before any byte changes. Git retains the blob;
+the record's handoff evidence retains its identity. The exact schema, reducer,
+write protocol, projection grammar, hook boundary, and proof matrix live in
+the installed lifecycle reference and bundle section 12, proven by the
+lifecycle self-tests.
 
 ## Language quality packs
 

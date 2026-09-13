@@ -1,9 +1,8 @@
 # g03.006 Adopt Portable Lifecycle
 
-Status: complete
 Owner: repo maintainers
 Created: 2026-09-12
-Governing refs: spec 040, system architecture, contract 001
+Governing refs: system architecture, contract 001, bundle section 12
 Depends on: `g03.005` complete; Queue PR #8 merged as `7da4eeb` and installed
 UI classification: none
 
@@ -24,7 +23,8 @@ passes.
 - [x] The exact Queue contract version and supported event set are recorded in
       this task before dispatch.
 - [x] Scope, authority, portability, and terminal-equivalence boundaries are
-      fixed by spec 040.
+      fixed by the portable lifecycle contract (now bundle section 12 and the
+      lifecycle reference).
 - [x] UI classification is `none`.
 - [x] No Northstar task is executable while the external prerequisite is open.
 
@@ -85,7 +85,7 @@ Not applicable.
   surfaces under `bundle-docs/**` and `template-bundle/**`; `.paseo/queue.json`;
   `.northstar/lifecycle/**`; necessary `effigy.toml` and focused test wiring;
   generated blocks and directly displaced mechanical instructions.
-- **Reserved closeout surfaces:** architecture, contract 001, spec 040, this
+- **Reserved closeout surfaces:** architecture, contract 001, this
   task, g03 runway and roadmap indexes, project/docs front doors, lifecycle
   receipts and projections, consumed handoff, and justified compact evidence.
 - **Worker:** automatic adequate complex implementation pool; reviewer must use
@@ -171,33 +171,20 @@ cutover.
   terminal-equivalence proof are shipped: explicit-path containment repair,
   validated multi-target writes, ancestry-based completion semantics,
   a 58-check core oracle, and standalone/hook terminal records sharing the
-  same `portable_digest` in both task orders.
+  same portable digest in both task orders.
 - PR [#45](https://github.com/inflatable-cookie/northstar/pull/45) was
-  accepted at exact head
-  `60d302d0f8f67f7c1b413c7fa6fdc04f66158aaa` by the independent review in
-  [comment 5648708967](https://github.com/inflatable-cookie/northstar/pull/45#issuecomment-5648708967)
-  and merged as `64f953e58547f7d9a8236a1cfe588ea5099fc66b`.
-- The accepted review ran the focused lifecycle/adoption/equivalence
-  fixtures at the exact head (core oracle 58 checks, installed-consumer and
-  standalone paths, Queue frozen-contract cross-checks, launcher isolation,
-  terminal equivalence), plus `effigy qa:docs`, `effigy qa`,
-  `effigy check:posture-advisory` (0 warnings), and `git diff --check`.
-  Evidence levels are preserved: provider facts stay `adapter_attested`,
-  Git facts `locally_verified`. This closeout repeats none of that
-  validation; it records the merged outcome.
+  accepted by independent review and merged; the accepted review ran the
+  focused lifecycle/adoption/equivalence fixtures plus `effigy qa:docs`,
+  `effigy qa`, `effigy check:posture-advisory`, and `git diff --check`.
 - The live shadow cutover is published: the required `task.closeout` hook
-  wrote the terminal record `.northstar/lifecycle/v1/tasks/g03.006.json`
-  (`status: complete`, revision 8, record digest
-  `sha256:025066786b2d9af4821307a2b06b15b6cab8bf47a4a816db22bed66b9faa8c9b`)
-  and the generated projection blocks in `docs/README.md` and
-  `docs/roadmaps/README.md` as commit
-  `d244d83ba61c3c0a4a2e25fa85b03b4dc29b4c5a` on synchronized main. The
-  record carries the reviewed head, the merge commit, and preserved
-  evidence levels (provider facts `adapter_attested`, Git facts
-  `locally_verified`); the projection digests match the published record.
-  The review's remaining notes stay non-blocking limits for later
-  hardening: starter `allowedPaths` guidance, semantic labelling, policy
-  scope, and a documented containment edge.
+  wrote the terminal record
+  `.northstar/lifecycle/v1/tasks/g03.006.json` and the generated projection
+  blocks as commit `d244d83ba61c3c0a4a2e25fa85b03b4dc29b4c5a` on
+  synchronized main. That record is the one mechanical authority for this
+  task's status, revision, digest, and delivery identities at their declared
+  evidence levels; this closeout keeps semantic outcome and limits only.
+- Remaining limits for later hardening: starter `allowedPaths` guidance,
+  semantic labelling, policy scope, and a documented containment edge.
 
 ## Next task
 
