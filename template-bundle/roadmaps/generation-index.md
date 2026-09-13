@@ -41,7 +41,10 @@ Finishing a task, suite, or lane of roadmaps does **not** mark the generation
 as complete. The generation remains open until the rollover conditions above are
 met. After closing one task, compile or continue the next task inside the same
 generation. Do not treat the end of a planned sequence as a generation closeout
-event.
+event. In a lifecycle-adopted repository, an exhausted runway projects as
+`planning_required` — the open generation asking for its next planning
+decision — and closure happens only when a rollover commits the explicit
+closure record at `.northstar/lifecycle/v1/generations/gNN.closure.json`.
 
 Before opening the next generation in sequential mode:
 - close, supersede, or rehome every task in the current generation.

@@ -17,7 +17,7 @@ for routine consumer maintenance.
 | Normalize docs (spine hygiene, bootstrap, migration) | Apply this procedure for already-closed generations and for a rollover this mode is already performing | None for classified closed generations. Opening a new generation still follows rollover gates. |
 | Docs cleanup with bounded repair authorized | Apply this procedure | None after that authorization. |
 | Docs cleanup read-only | Inventory, classify, and propose only | Do not mutate. |
-| Compile-roadmaps rollover closeout | Apply this procedure as the closeout, then open the next generation only if rollover conditions already hold | Rollover is a separate sequencing decision, not a prerequisite for compacting already-closed generations. |
+| Compile-roadmaps rollover closeout | Apply this procedure as the closeout, then open the next generation only if rollover conditions already hold | Rollover is a separate sequencing decision, not a prerequisite for compacting already-closed generations. Commit the outgoing generation's closure record (`generations/gNN.closure.json`, closed disposition plus the `tasks_digest` printed by the lifecycle `tasks-digest` command) as part of the rollover change, after the preservation oracle passes. |
 
 Do not ask for a second blanket confirmation after repair is already
 authorized. Do not treat compaction of a classified closed generation as a
@@ -43,7 +43,16 @@ blocker. Do not label lifecycle state `current` while a classified closed
 generation remains expanded unless that unresolved blocker or a bounded
 migration disposition is explicit.
 
-A completed task alone does not close a generation.
+A completed task alone does not close a generation, and an exhausted runway is
+`planning_required`, not closure: in a lifecycle-adopted repository an open
+generation whose records are all terminal stays open in `planning_required`
+until a rollover decision commits the explicit closure record. Compaction of a
+lifecycle-adopted repository requires that closure record at
+`.northstar/lifecycle/v1/generations/gNN.closure.json` — closed disposition,
+exact generation, and a `tasks_digest` that still covers the terminal record
+set (print it with the lifecycle `tasks-digest` command). Missing, open,
+stale, mismatched, or ambiguous authority refuses the compaction; treat the
+refusal as an unresolved blocker, not something to work around.
 
 ## Procedure
 
@@ -81,7 +90,9 @@ From content and references, not from folder count:
 - **active** — the sequential current generation, or an explicit parallel
   active generation named as active by front doors;
 - **safely closed** — generation-index or equivalent closure record says
-  closed, no task remains executable, and no unresolved
+  closed, no task remains executable, and — in a lifecycle-adopted repository
+  — the committed closure record exists and passes the authority check in the
+  stop-semantics note above; no unresolved
   preservation blocker remains after promotion/rehoming in the later steps;
 - **unresolved** — conflicting active/closed state, missing ownership, unique
   authority or open commitment without a destination, or explicit parallel

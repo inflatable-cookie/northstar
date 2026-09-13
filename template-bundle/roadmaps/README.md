@@ -20,15 +20,22 @@ planning outcomes have been promoted out of specs.
 - Finishing a task, suite, or lane of roadmaps does **not** close the
   generation. After one task closes, compile or continue the next task inside
   the same generation. The generation stays open until the rollover conditions
-  above are met.
+  above are met. In a lifecycle-adopted repository, an exhausted runway
+  projects `planning_required` — a request for the next planning decision,
+  never a completion label; `closed` arrives only when a rollover commits the
+  explicit closure record.
 - When refocus invalidates the sequencing baseline across multiple tasks,
   prefer a clean new generation over patching stale work in place.
 - Treat rollover as full generation closeout, not a convenience reset:
   close or rehome every task in the current generation first, then purge
-  stale specs from `docs/specs/` before opening the next generation.
+  stale specs from `docs/specs/` before opening the next generation. In a
+  lifecycle-adopted repository, the same rollover commits the outgoing
+  generation's closure record and updates the declared projection targets
+  and active generation.
 - Refresh, normalization, and authorized docs cleanup compact already-closed
-  generations the same way, without opening a new generation. Leave unresolved
-  generations expanded and name the blocker.
+  generations the same way, without opening a new generation. Compaction
+  consumes the closure record and refuses an open or stale authority. Leave
+  unresolved generations expanded and name the blocker.
 
 ## Layout
 

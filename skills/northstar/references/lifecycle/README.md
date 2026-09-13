@@ -16,12 +16,15 @@ standalone core through the Northstar-owned hook adapter described below.
 
 ## Artifact set
 
-Live records use one path per task:
+Live records use one path per task, and closure uses one explicit record per
+generation:
 
 ```text
 .northstar/lifecycle/v1/
   tasks/gNN.NNN.json
-  generations/gNN.json        # derived only when a generation is closed
+  generations/gNN.json            # compaction receipt, written by compact
+  generations/gNN.closure.json    # closure authority, written by the rollover
+  projection-targets.json         # declared surfaces + active generation
 ```
 
 JSON is canonical. The Markdown block inside a task or front-door file is a
@@ -35,6 +38,7 @@ derived projection. When the two disagree, the record wins.
 | [`task-record.schema.json`](./task-record.schema.json) | Canonical per-task mechanical state |
 | [`evidence.schema.json`](./evidence.schema.json) | One compact evidence entry |
 | [`projection.schema.json`](./projection.schema.json) | Generated Markdown block metadata |
+| [`generation-closure.schema.json`](./generation-closure.schema.json) | Explicit generation closure authority |
 | [`queue-event.schema.json`](./queue-event.schema.json) | Frozen Queue generic event contract (closed mirror) |
 | [`queue-result.schema.json`](./queue-result.schema.json) | Frozen Queue hook-result contract (closed mirror) |
 | [`queue-control.schema.json`](./queue-control.schema.json) | Frozen Queue control-manifest contract (closed mirror) |
@@ -52,6 +56,37 @@ Stage locates active or blocked work:
 Terminal statuses use `none`. A blocked record keeps its prior status, prior
 stage, typed reason, and explicit resume target. Adapter phases and Queue
 terminology never become a second Northstar status.
+
+## Generation disposition and runway state
+
+Generation state has two separate axes, and they never collapse into each
+other:
+
+- **Disposition** is `open` or `closed`. It changes only when a closure record
+  is committed at `generations/gNN.closure.json`; absence of the record is the
+  open disposition. `complete` is never a generation disposition.
+- **Runway state** is derived mechanically from the generation's task records:
+  `active`, `ready`, `blocked`, `planned`, or `planning_required`. Precedence
+  is exactly that order — live work outranks dispatchable work, which outranks
+  a declared blocker, which outranks unstarted plans. `planning_required` is
+  the exhausted state: no nonterminal approved work remains. It keeps the same
+  generation open and asks planning to extend it or make a reasoned rollover
+  decision; it never implies completion, closure, or a next generation.
+
+An open generation whose records are all terminal projects
+`planning_required`. Nonterminal records never collapse into it: mixed ready,
+active, blocked, and planned work stays visible under the bounded vocabulary.
+Planning a new task into the same generation moves the runway out of
+`planning_required` through the normal lifecycle path — no hand-edited status
+mirror exists. A closure record seals its generation: every transition against
+that generation's tasks refuses, and compaction refuses an open generation.
+
+Generated projections carry both axes: the block names the declared active
+generation, its disposition, and its runway state above the canonical task
+table, and the source digest binds the state and entries together. The active
+generation comes from `projection-targets.json` (schema
+`northstar.lifecycle.projection-targets.v2`); rollover updates that declaration
+explicitly.
 
 ## Transitions
 
@@ -131,10 +166,19 @@ produces no diff, and a hand-edited block fails verification.
 
 ## Frontier and compaction
 
-`frontier` returns eligible `ready` tasks only. It never picks priority or
-invents work; an empty runway returns `planning_required`. `compact` reduces a
-closed generation of terminal records into one generation receipt with source
-digests.
+`frontier` reports the active generation's derived runway state plus the
+eligible `ready` tasks. It never picks priority or invents work;
+`planning_required` means no nonterminal approved work remains — a planning
+decision is requested, not a rollover.
+
+Compaction is destructive lifecycle maintenance, so terminal records are
+necessary but never sufficient. `compact` requires the generation's committed
+closure record and refuses missing, open, stale, mismatched, or ambiguous
+authority before producing a receipt: the record must name the generation, say
+`closed`, and pin the exact terminal task set via `tasks_digest` (printed by
+`tasks-digest`). The receipt records the closure digest as provenance. Rollover
+authors the closure record only after the preservation oracle passes; it is a
+human-owned sequencing decision, never a reducer transition.
 
 ## Generic Queue hook adapter
 
@@ -226,6 +270,7 @@ effigy lifecycle:run status --repo /path/to/repo
 effigy lifecycle:run frontier --repo /path/to/repo
 effigy lifecycle:run apply --repo /path/to/repo --envelope envelope.json [--target docs/roadmaps/gNN/README.md]...
 effigy lifecycle:run render --repo /path/to/repo --records .northstar/lifecycle/v1/tasks --target docs/roadmaps/gNN/README.md
+effigy lifecycle:run tasks-digest --repo /path/to/repo --records .northstar/lifecycle/v1/tasks --generation gNN
 effigy lifecycle:run compact --repo /path/to/repo --records .northstar/lifecycle/v1/tasks --generation gNN --out .northstar/lifecycle/v1/generations/gNN.json
 effigy check:lifecycle-core
 effigy check:lifecycle-adoption
@@ -233,12 +278,13 @@ effigy check:lifecycle-adoption
 
 `apply` accepts repeatable `--target` flags; every target is
 containment- and symlink-checked before any mutation, regenerated inside the
-record write lock, and reported in the exact changed-path list. Explicit-path
-`render` and `compact` re-check containment for the records directory and the
-output path and refuse escaping, absolute-outside, or symlinked paths. The
-command returns changed paths, the new revision and digest, and the required
-commit action. It never stages, commits, pushes, merges, dispatches, or
-selects the next task.
+record write lock, and reported in the exact changed-path list. Rendering a
+projection requires `projection-targets.json` to declare the active
+generation. Explicit-path `render`, `tasks-digest`, and `compact` re-check
+containment for the records directory and the output path and refuse escaping,
+absolute-outside, or symlinked paths. The command returns changed paths, the
+new revision and digest, and the required commit action. It never stages,
+commits, pushes, merges, dispatches, or selects the next task.
 
 From an installed skill, the same command resolves as
 `northstar/lifecycle:run` or directly as

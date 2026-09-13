@@ -71,6 +71,10 @@ one-task-at-a-time improvisation.
    be marked closed, superseded, or rehomed and that stale specs
    from that generation can be archived or removed from `docs/specs/`. Perform
    that closeout with [`../lifecycle-maintenance.md`](../lifecycle-maintenance.md).
+   In a lifecycle-adopted repository, the rollover change commits the outgoing
+   generation's closure record (`generations/gNN.closure.json`, closed
+   disposition plus the `tasks_digest` printed by the lifecycle `tasks-digest`
+   command) and declares the incoming generation in the projection targets.
    The same procedure also compacts already-closed generations during
    maintenance without opening a new generation.
 17. Treat any remaining spec for the lane as context only; do not let it outrank

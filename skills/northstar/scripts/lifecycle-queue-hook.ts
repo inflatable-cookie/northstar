@@ -46,6 +46,8 @@ import {
   digestBytes,
   discoverRepoRoot,
   parseTaskIdentity,
+  readGenerationClosure,
+  readProjectionConfig,
   readRecord,
   reduce,
   validateAgainstSchemaFile,
@@ -455,28 +457,18 @@ function prePass(envelopes: Record<string, unknown>[], current: Record<string, u
 }
 
 function projectionTargets(repoRoot: string, identity: NorthstarIdentity, binding: ManifestBinding, enforceAllowed: boolean): string[] {
-  const configPath = path.join(repoRoot, TARGETS_CONFIG);
+  // The v2 config is the single declared source of the active generation; a
+  // missing or v1 config refuses here exactly as it does in the core, so the
+  // hook never renders a projection whose generation state was guessed.
+  const config = readProjectionConfig(repoRoot);
+  if (config === null) refuse("projection targets config " + TARGETS_CONFIG + " is missing; it must declare the targets and the active generation");
+  readGenerationClosure(repoRoot, config.active_generation);
   const targets: string[] = [];
-  if (fs.existsSync(configPath)) {
-    let config: Record<string, any>;
-    try {
-      config = JSON.parse(fs.readFileSync(configPath, "utf8"));
-    } catch {
-      refuse("projection targets config is not valid JSON");
+  for (const declaredTarget of config.targets) {
+    if (enforceAllowed && !pathIsAllowed(declaredTarget, binding.allowedPaths)) {
+      refuse("projection target " + declaredTarget + " is not declared in the manifest allowedPaths");
     }
-    if (config.schema_version !== "northstar.lifecycle.projection-targets.v1") refuse("projection targets config has an unsupported schema_version");
-    const declared = config.targets;
-    if (!Array.isArray(declared) || declared.length > 64 || declared.some((t: unknown) => typeof t !== "string" || t.length === 0)) {
-      refuse("projection targets config must carry at most 64 non-empty target paths");
-    }
-    if (new Set(declared).size !== declared.length) refuse("projection targets config has duplicate entries");
-    for (const declaredTarget of declared as string[]) {
-      const contained = containRepoPath(repoRoot, declaredTarget);
-      if (enforceAllowed && !pathIsAllowed(contained, binding.allowedPaths)) {
-        refuse("projection target " + contained + " is not declared in the manifest allowedPaths");
-      }
-      targets.push(contained);
-    }
+    targets.push(declaredTarget);
   }
   // A task file opts into currentness by already carrying a generated block.
   const taskAbs = path.join(repoRoot, identity.taskPath);
