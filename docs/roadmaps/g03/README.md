@@ -18,7 +18,8 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 | Finish hook-owned mechanical closeout and remove duplicate mutable Markdown state. | delivered as `g03.007`; exact handoff cleanup missed because the launcher resolved stale installed code | system architecture, contract 001, bundle section 12; Queue g01.010 | correct the execution boundary in `g03.008` |
 | Pin the complete Queue hook runtime to repository bytes and repeat the live self-hosting proof. | complete as `g03.008`; terminal record and exact handoff cleanup published as `305700c` | system architecture, contract 001, bundle section 12; `g03.007` live evidence | no further runtime-pinning lane |
 | Keep an exhausted generation open in `planning_required` until an explicit rollover closes it. | complete as `g03.009`; terminal record published at `c9e3533` | contract 001, section 03, bundle section 12 | no further state-separation lane |
-| Run Queue lifecycle hooks through Effigy and the installed Northstar skill without copied repository code. | active as `g03.010` | contract 001, system architecture, bundle section 12; Queue contract 005 | one self-hosted cutover lane |
+| Run Queue lifecycle hooks through Effigy and the installed Northstar skill without copied repository code. | complete as `g03.010`; terminal state published at `36dc197` | contract 001, system architecture, bundle section 12; Queue contract 005 | portfolio rollout in progress |
+| Represent legitimate parallel active generations in portable lifecycle projections. | ready as `g03.011` | contract 001, bundle section 12; Underlay parallel mode | one Northstar core lane before Underlay adoption |
 | Reduce repeated protocol enumerations and retire genuinely redundant modes without merging distinct behavior blindly. | next | contract 001, later usage evidence | Chatterbox sequencing after the active goal |
 | Keep unresolved operator feedback visible without pinning old generations open. | watch | contract 001 | bounded watchlist below |
 
@@ -58,6 +59,7 @@ separately owned and is not part of this runway.
 - `008-pin-queue-hook-runtime.md`
 - `009-separate-planning-required-from-generation-closure.md`
 - `010-adopt-effigy-hosted-lifecycle-hook.md`
+- `011-support-parallel-active-generation-projections.md`
 
 Mechanical status lives in the lifecycle records: adopted tasks (`g03.006`
 onward) project it in the generated block below, earlier tasks keep their
@@ -65,9 +67,10 @@ completion in the runway above and in Git history.
 
 ## Next task
 
-`g03.010` is the sole approved lane. It runs until the closeout hook publishes
-its terminal record through the trusted Effigy route. Do not dispatch portfolio
-rollout or another sibling before that proof.
+`g03.011` is the sole Northstar core lane. It adds strict parallel-generation
+projection support before Underlay adopts the portable hook. The singular
+consumer rollout is already independent and does not authorize another
+Northstar sibling.
 <!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:20b31a07b2d67ca5d3d97c67c425959656f7d30aaab43b0b9287c834fd4545bb -->
 | Generation | Disposition | Runway state |
 | --- | --- | --- |
