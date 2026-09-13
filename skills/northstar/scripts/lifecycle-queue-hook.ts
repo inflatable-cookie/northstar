@@ -671,8 +671,9 @@ interface ConsumableHandoff {
 // `.md` files only, standard Markdown links (bare, angle-bracketed, titled,
 // or reference-style resolved through their definitions) plus `<autolinks>`,
 // relative and rooted targets resolved against the linking file, external
-// URLs and the handoff itself ignored, generated projection blocks stripped.
-// Only an exact local target blocks; similarly named files never do.
+// URLs and the handoff itself ignored, generated projection blocks and code
+// segments stripped. Only an exact local target blocks; similarly named
+// files never do.
 // ---------------------------------------------------------------------------
 
 const BACKLINK_SCAN_MAX_FILES = 5000;
@@ -702,6 +703,34 @@ function stripHookGeneratedBlocks(text: string): string {
     output += rest.slice(0, start);
     rest = rest.slice(endScheme + END_SENTINEL.length);
   }
+}
+
+// Remove fenced code blocks and inline code spans before link scanning: a
+// link-shaped example inside code renders no link, so deleting the handoff
+// cannot strand it. Fence runs of either character close only on a run of
+// the same character that is at least as long.
+function stripCodeSegments(text: string): string {
+  const kept: string[] = [];
+  let fenceChar = "";
+  let fenceLen = 0;
+  for (const line of text.split("\n")) {
+    if (fenceLen === 0) {
+      const open = /^ {0,3}(`{3,}|~{3,})/.exec(line);
+      if (open) {
+        fenceChar = open[1][0];
+        fenceLen = open[1].length;
+      } else {
+        kept.push(line.replace(/``[^`\n]*``|`[^`\n]*`/g, ""));
+      }
+    } else {
+      const trimmed = line.trim();
+      if (trimmed.length >= fenceLen && trimmed === fenceChar.repeat(trimmed.length)) {
+        fenceChar = "";
+        fenceLen = 0;
+      }
+    }
+  }
+  return kept.join("\n");
 }
 
 function resolveLinkTarget(sourceRel: string, rawTarget: string): string | null {
@@ -748,7 +777,7 @@ export function findHandoffBacklinks(repoRoot: string, handoffRel: string): stri
     if (stats.size > BACKLINK_SCAN_MAX_BYTES) {
       refuse("backlink scan found an oversized Markdown file " + sourceRel + "; refusing handoff deletion");
     }
-    const bare = stripHookGeneratedBlocks(fs.readFileSync(absolute, "utf8"));
+    const bare = stripCodeSegments(stripHookGeneratedBlocks(fs.readFileSync(absolute, "utf8")));
     const targets = new Set<string>();
     for (const pattern of [MARKDOWN_LINK_RE, AUTOLINK_RE]) {
       pattern.lastIndex = 0;

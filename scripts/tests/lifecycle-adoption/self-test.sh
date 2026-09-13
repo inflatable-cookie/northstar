@@ -689,6 +689,8 @@ link_case refcollapsed "none" blocked $'See [the handoff][].\n\n[the handoff]: h
 link_case refshortcut "none" blocked $'See [dispatch-note] for context.\n\n[dispatch-note]: handoffs/handoff-006.md'
 link_case external "https://github.com/example/repo/blob/main/docs/handoffs/handoff-006.md" ok
 link_case mismatch "handoffs/handoff-006-v2.md" ok
+link_case codeexample "none" ok $'```md\nSee [the handoff](handoff-006.md).\n```\n\nQuoted `[the handoff](handoff-006.md)` stays inline.'
+echo "code examples never block closeout: OK"
 link_case sibling "handoffs/handoff-007.md" ok
 echo "relative, rooted, fragment, titled, reference-style, external, mismatch, and sibling controls: OK"
 

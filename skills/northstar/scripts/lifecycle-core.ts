@@ -1313,8 +1313,7 @@ const NEXT_TASK_COLUMN_RE = /^\s*next\s*task\s*$/i;
 // Headings that mark a retrospective subtree at any depth: history, evidence,
 // logs, and archives stay human-owned even for nested tables. The Generation
 // Runway and the watchlist are live sequencing surfaces, so their Next-task
-// columns are still audited.
-const RETROSPECTIVE_HEADING_RE = /(history|retrospective|retrospect|evidence|limitation|log|archive|roll-?up|previously|past\s+work)/i;
+const RETROSPECTIVE_HEADING_RE = /(history|retrospective|retrospect|evidence|limitation|\blog\b|archive|roll-?up|previously|past\s+work)/i;
 
 // True when the outline chain above `index` passes through a retrospective
 // heading: pop to the parent on every same-or-higher heading so only real
@@ -2582,6 +2581,12 @@ async function runOracle(): Promise<number> {
       { "docs/roadmaps/g03/011-task.md": cutoverTask, "docs/roadmaps/g03/012-task.md": liveTask, "docs/roadmaps/g03/README.md": retroTable },
       auditRecords, ["docs/roadmaps/g03/README.md"]);
     check(retroFindings.length === 0, "oracle", "audit rejected a retrospective History table: " + canonicalJson(retroFindings));
+    const backlogTable = "# g03\n\n## Backlog\n\n| Goal | State | Next Task |\n| --- | --- | --- |\n| Old idea. | deferred | continue with `g03.011` |\n";
+    const backlogFindings = auditCurrentnessText(
+      { "docs/roadmaps/g03/011-task.md": cutoverTask, "docs/roadmaps/g03/012-task.md": liveTask, "docs/roadmaps/g03/README.md": backlogTable },
+      auditRecords, ["docs/roadmaps/g03/README.md"]);
+    check(backlogFindings.some((v) => v.task === "g03.011" && v.reason === "stale-next-task-column"),
+      "oracle", "audit exempted a live Backlog table through the log substring");
     const nestedDoor = "# g03\n\n## Next Task\n\nLane intro.\n\n### Detail\n\nContinue with `g03.011` now.\n";
     const nestedFindings = auditCurrentnessText(
       { "docs/roadmaps/g03/011-task.md": cutoverTask, "docs/roadmaps/g03/012-task.md": liveTask, "docs/roadmaps/g03/README.md": nestedDoor },
