@@ -15,7 +15,8 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 | Move material UI design decisions before dispatch and require rendered exact-head delivery review. | complete as `g03.004` | section 11, contract 001 | observe first natural consumer lanes |
 | Replace agent-written mechanical lifecycle bookkeeping with a portable core and deterministic projections. | complete as `g03.005` | system architecture, contract 001, bundle section 12 | continue with `g03.006` adoption |
 | Integrate rich runtimes without making Northstar or Queue depend on each other's internal structure. | complete as `g03.006`; terminal record and projections published as `d244d83` | bundle section 12; Queue contract v1 | Chatterbox next planning direction |
-| Finish hook-owned mechanical closeout and remove duplicate mutable Markdown state. | active | system architecture, contract 001, bundle section 12; Queue g01.010 | closeout proof, then Chatterbox sequencing |
+| Finish hook-owned mechanical closeout and remove duplicate mutable Markdown state. | delivered as `g03.007`; exact handoff cleanup missed because the launcher resolved stale installed code | system architecture, contract 001, bundle section 12; Queue g01.010 | correct the execution boundary in `g03.008` |
+| Pin the complete Queue hook runtime to repository bytes and repeat the live self-hosting proof. | active as `g03.008` | system architecture, contract 001, bundle section 12; `g03.007` live evidence | one corrective self-hosting lane |
 | Reduce repeated protocol enumerations and retire genuinely redundant modes without merging distinct behavior blindly. | next | contract 001, later usage evidence | Chatterbox sequencing after the active goal |
 | Keep unresolved operator feedback visible without pinning old generations open. | watch | contract 001 | bounded watchlist below |
 
@@ -52,6 +53,7 @@ separately owned and is not part of this runway.
 - `005-portable-lifecycle-core.md`
 - `006-adopt-portable-lifecycle.md`
 - `007-finish-hook-owned-closeout.md`
+- `008-pin-queue-hook-runtime.md`
 
 Mechanical status lives in the lifecycle records: adopted tasks (`g03.006`
 onward) project it in the generated block below, earlier tasks keep their
