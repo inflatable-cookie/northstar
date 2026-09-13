@@ -71,7 +71,7 @@ completion in the runway above and in Git history.
 projection support before Underlay adopts the portable hook. The singular
 consumer rollout is already independent and does not authorize another
 Northstar sibling.
-<!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:20b31a07b2d67ca5d3d97c67c425959656f7d30aaab43b0b9287c834fd4545bb -->
+<!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:c76ee4aa379e276ee2c44a0d1957d10592ed292650aac1a6169b14ffba14cdd0 -->
 | Generation | Disposition | Runway state |
 | --- | --- | --- |
 | g03 | open | planning_required |
@@ -82,4 +82,5 @@ Northstar sibling.
 | g03.008 | complete | none | 8 | sha256:888d75786d747f9965efa51b4b492c005aaf967a8f6504715e3b6be0f2760099 |
 | g03.009 | complete | none | 8 | sha256:c8a09f2d3daad05e3b90235bc50f256c3932eeddaee668adecd9dad1183ac8e2 |
 | g03.010 | complete | none | 8 | sha256:109f4252bc5259b1cc87938aed24095f99dcf687d9236c93b32d1bd5e7ce537d |
+| g03.011 | complete | none | 8 | sha256:b006beb373606185905bfa5b56fd4a1f87dc3accb80141a82be312efdd5206dc |
 <!-- northstar:lifecycle:end -->
