@@ -178,8 +178,11 @@ blob digest, and only after the terminal receipt exists. Tracked durable
 Markdown that still links to that exact handoff refuses the same way — the
 hook resolves relative and rooted links, ignores external URLs and the
 handoff itself, and only an exact local target blocks — so deletion never
-strands a backlink. The scan reads one tracked Markdown file at a time within
-a finite 4 MiB per-file bound; larger files refuse before any byte changes. A
+strands a backlink. The scan admits at most 25,000 tracked Markdown files and
+64 MiB of aggregate Markdown bytes, then reads one tracked Markdown file at a
+time within a finite 4 MiB per-file bound. Aggregate sizes are preflighted from
+`lstat` before content is read; larger files or aggregates refuse before any
+byte changes. A
 changed, missing,
 symlinked, or otherwise ambiguous handoff fails closed before any byte
 changes; a repeated event replays without diff. Git retains the blob and the
