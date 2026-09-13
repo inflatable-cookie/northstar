@@ -345,8 +345,9 @@ def main():
         for package in PACKAGES:
             result_path = os.path.join(ROOT, f"public-{package['language']}.json")
             routed = run([
-                "effigy", "--repo", os.path.join(REPO, "skills", "northstar"),
-                "northstar/language:route", "--",
+                "effigy", "skill", "run", "--path", os.path.join(REPO, "skills", "northstar"),
+                "northstar/language:route", "--repo", os.path.join(REPO, "skills", "northstar"),
+                "--",
                 "--registry", public_registry_path,
                 "--consumer", consumer,
                 "--state-root", public_state,
@@ -371,8 +372,9 @@ def main():
             handle.write("<!-- northstar:rust-quality:start -->\n<!-- northstar:rust-quality:end -->\n")
         marker_result_path = os.path.join(ROOT, "public-marker.json")
         marker_run = run([
-            "effigy", "--repo", os.path.join(REPO, "skills", "northstar"),
-            "northstar/language:route", "--",
+            "effigy", "skill", "run", "--path", os.path.join(REPO, "skills", "northstar"),
+            "northstar/language:route", "--repo", os.path.join(REPO, "skills", "northstar"),
+            "--",
             "--registry", public_registry_path,
             "--consumer", marker_consumer,
             "--state-root", public_state,

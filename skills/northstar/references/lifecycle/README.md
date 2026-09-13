@@ -41,7 +41,8 @@ derived projection. When the two disagree, the record wins.
 | [`generation-closure.schema.json`](./generation-closure.schema.json) | Explicit generation closure authority |
 | [`queue-event.schema.json`](./queue-event.schema.json) | Frozen Queue generic event contract (closed mirror) |
 | [`queue-result.schema.json`](./queue-result.schema.json) | Frozen Queue hook-result contract (closed mirror) |
-| [`queue-control.schema.json`](./queue-control.schema.json) | Frozen Queue control-manifest contract (closed mirror) |
+| [`queue-control.schema.json`](./queue-control.schema.json) | Frozen Queue control-manifest contract v1 (closed mirror) |
+| [`queue-control-v2.schema.json`](./queue-control-v2.schema.json) | Frozen Queue control-manifest contract v2 with the trusted-runner program union (closed mirror) |
 
 ## Status and stage
 
@@ -182,12 +183,14 @@ human-owned sequencing decision, never a reducer transition.
 
 ## Generic Queue hook adapter
 
-Queue integration is live behind the frozen generic contracts at Queue
-`2c528543b00147556acd4a5ed74b3784d0fee056` (contract 005, spec 001): schemas
-`paseo.queue.control.v1`, `paseo.queue.event.v1`, and
-`paseo.queue.hook-result.v1`; events `task.pre_dispatch`, `task.blocked`,
-`task.cancelled`, and `task.closeout`. Queue stays document-system agnostic —
-it never learns Northstar paths, task IDs, commands, or Markdown.
+Queue integration is live behind the frozen generic contracts: schemas
+`paseo.queue.control.v1`, `paseo.queue.control.v2`, `paseo.queue.event.v1`,
+and `paseo.queue.hook-result.v1`; events `task.pre_dispatch`, `task.blocked`,
+`task.cancelled`, and `task.closeout`. v1 pins a committed repository
+executable; v2 adds a closed program union whose `trusted_runner` variant
+names only an operator-approved runner ID with literal arguments. Queue stays
+document-system agnostic — it never learns Northstar paths, task IDs,
+commands, or Markdown.
 
 The installed adapter is [`../../scripts/lifecycle-queue-hook.ts`](../../scripts/lifecycle-queue-hook.ts).
 It reads one closed event on stdin, reconstructs the exact Northstar task and
@@ -196,22 +199,25 @@ to the same canonical transition envelopes the standalone adapter submits,
 pre-passes the whole chain through the pure reducer before touching a byte,
 and returns one closed hook result. Committed contract mirrors live beside
 the lifecycle schemas: `queue-event.schema.json`, `queue-result.schema.json`,
-and `queue-control.schema.json`.
+`queue-control.schema.json`, and `queue-control-v2.schema.json`.
 
-Canonical source lives in this skill. A repository that declares the hook
-commits a byte-identical copy of the whole runtime closure under its own hooks
-directory: the launcher, the adapter, the reducer, and every
-`references/lifecycle/*.schema.json`. The committed launcher resolves only those
-bytes — never `$HOME`, a globally installed skill, `PATH`, the network, or the
-Northstar source checkout — so a stale or hostile installation cannot change
-what Queue executes. The launcher template is
-[`../../assets/templates/lifecycle-hook-launcher.sh`](../../assets/templates/lifecycle-hook-launcher.sh)
-and [`../../scripts/lifecycle-runtime.ts`](../../scripts/lifecycle-runtime.ts)
-is the one deterministic build and parity oracle: `copy` writes or refreshes
-the payload, and `check` fails on any missing, extra, or differing byte in
-code, schema, launcher bytes, or the executable bit. Copies are generated,
-never hand-maintained; the closure is derived, so every committed schema joins
-it automatically.
+Canonical source lives in this skill, and the skill is the only runtime. The
+skill catalog exposes the adapter as the task `northstar/queue:hook`, and the
+control manifest selects Queue's trusted runner `effigy` with the frozen
+literal argv `["skill", "run", "northstar/queue:hook", "--stdio",
+"passthrough"]`. Queue resolves the approved runner artifact on the host,
+Effigy resolves the skill from the consumer repository first and then a unique
+global install, and the consumer repository stays the execution target and
+working directory. Every skill-owned script is anchored with `{skill}`, so no
+task resolves implementation code relative to the consumer. No repository
+commits a launcher, a copied adapter, or copied schemas, and no host path,
+digest, or installation hint enters Git. The trust boundary is the
+operator-approved host state: the approved runner artifact and the installed
+skill. A missing runner, a missing skill, or an ambiguous global install fails
+closed before any process runs; there is no fallback closeout route. The
+adapter still accepts v1 manifests so existing repositories keep working until
+they migrate, and no program transport detail — runner IDs, argv, digests —
+enters lifecycle records or projections.
 
 Event mapping:
 
@@ -286,18 +292,10 @@ absolute-outside, or symlinked paths. The command returns changed paths, the
 new revision and digest, and the required commit action. It never stages,
 commits, pushes, merges, dispatches, or selects the next task.
 
-From an installed skill, the same command resolves as
-`northstar/lifecycle:run` or directly as
-`bun run <installed>/scripts/lifecycle-core.ts <verb>`.
-
-Install or verify the committed Queue hook runtime from an installed skill:
-
-```bash
-bun run <installed-northstar>/scripts/lifecycle-runtime.ts copy [--hooks .paseo/hooks]
-bun run <installed-northstar>/scripts/lifecycle-runtime.ts check [--hooks .paseo/hooks]
-bun run <installed-northstar>/scripts/lifecycle-runtime.ts closure
-```
-
-`copy` defaults to `.paseo/hooks` relative to the working directory and is the
-only supported way to write the payload. Commit the result and re-run `copy`
-after the installed skill changes; `check` drives the drift gate.
+From an installed skill, the same command resolves through the skill catalog
+as `northstar/lifecycle:run` or `northstar/lifecycle:oracle`; every
+skill-owned script is `{skill}`-anchored, so the consumer repository stays the
+runtime target. The Queue hook adapter resolves the same way as
+`northstar/queue:hook` and expects the closed event JSON on raw stdin with
+Queue's `PASEO_QUEUE_EVENT_ID` and `PASEO_QUEUE_EVENT_SCHEMA` environment
+variables set.

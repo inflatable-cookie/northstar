@@ -149,10 +149,22 @@ function loadBinding(repoRoot: string, event: Record<string, any>): ManifestBind
   } catch {
     refuse("control manifest is not valid JSON");
   }
+  // The manifest schema name selects the frozen contract mirror. v1 keeps its
+  // repository-executable grammar for existing consumers; v2 adds the closed
+  // program union with trusted-runner programs. The program itself stays
+  // opaque here: Queue resolves and executes it, and no program transport
+  // detail enters lifecycle state.
+  const schemaName = String(manifest.schema ?? "");
+  const schemaFile = schemaName === "paseo.queue.control.v1"
+    ? "queue-control.schema.json"
+    : schemaName === "paseo.queue.control.v2"
+      ? "queue-control-v2.schema.json"
+      : null;
+  if (schemaFile === null) refuse("control manifest declares unsupported schema " + JSON.stringify(schemaName));
   try {
-    validateAgainstSchemaFile(manifest, path.join(SCHEMA_DIR, "queue-control.schema.json"));
+    validateAgainstSchemaFile(manifest, path.join(SCHEMA_DIR, schemaFile));
   } catch (err) {
-    if (err instanceof LifecycleError) refuse("control manifest is not a valid paseo.queue.control.v1 document: " + err.message);
+    if (err instanceof LifecycleError) refuse("control manifest is not a valid " + schemaName + " document: " + err.message);
     throw err;
   }
   const hooks = manifest.hooks as Record<string, any>[];

@@ -33,6 +33,6 @@ mkdir -p "$consumer"
 )
 
 echo "# installed command surface resolves through the skill catalogue"
-effigy --repo "$installed" lifecycle:oracle >/dev/null
+effigy skill run --path "$installed" northstar/lifecycle:oracle --repo "$installed" >/dev/null
 
 echo "lifecycle-core self-test: OK"
