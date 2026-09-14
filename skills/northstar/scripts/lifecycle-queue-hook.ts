@@ -678,8 +678,9 @@ interface ConsumableHandoff {
 // target blocks; similarly named files never do.
 // ---------------------------------------------------------------------------
 
-const BACKLINK_SCAN_MAX_FILES = 5000;
+const BACKLINK_SCAN_MAX_FILES = 25_000;
 const BACKLINK_SCAN_MAX_LISTING_BYTES = 4 * 1024 * 1024;
+const BACKLINK_SCAN_MAX_AGGREGATE_BYTES = 64 * 1024 * 1024;
 const BACKLINK_SCAN_MAX_BYTES = 4 * 1024 * 1024;
 const MARKDOWN_LINK_RE = /\[[^\]]*\]\(\s*(?:<([^<>\s]+)>|([^\s)]+))(?:\s+[^)]*)?\)/g;
 const AUTOLINK_RE = /<([^<>\s]+)>/g;
@@ -748,9 +749,10 @@ function processEvidence(result: ReturnType<typeof spawnSync>): string {
 }
 
 // Every tracked Markdown file linking to the exact handoff path, sorted. The
-// handoff file itself never counts. Bounds fail closed: an unlistable tree,
-// an oversized file, or more files than the traversal bound refuses before
-// any byte changes rather than risking a missed backlink.
+// handoff file itself never counts as a backlink candidate. Bounds fail
+// closed: an unlistable tree, too many files, too much aggregate content, or
+// an oversized file refuses before any byte changes rather than risking a
+// missed backlink.
 
 export function findHandoffBacklinks(repoRoot: string, handoffRel: string): string[] {
   const listed = spawnSync("git", ["ls-files", "-z"], {
@@ -770,7 +772,8 @@ export function findHandoffBacklinks(repoRoot: string, handoffRel: string): stri
   if (tracked.length > BACKLINK_SCAN_MAX_FILES) {
     refuse("backlink scan exceeds its " + BACKLINK_SCAN_MAX_FILES + "-file bound; refusing handoff deletion");
   }
-  const backlinks: string[] = [];
+  const candidates: Array<{ sourceRel: string; absolute: string }> = [];
+  let aggregateBytes = 0;
   for (const sourceRel of tracked.sort()) {
     if (sourceRel === handoffRel) continue;
     const absolute = path.join(repoRoot, sourceRel);
@@ -784,6 +787,14 @@ export function findHandoffBacklinks(repoRoot: string, handoffRel: string): stri
     if (stats.size > BACKLINK_SCAN_MAX_BYTES) {
       refuse("backlink scan found an oversized Markdown file " + sourceRel + "; refusing handoff deletion");
     }
+    if (aggregateBytes > BACKLINK_SCAN_MAX_AGGREGATE_BYTES - stats.size) {
+      refuse("backlink scan aggregate Markdown size exceeds its " + BACKLINK_SCAN_MAX_AGGREGATE_BYTES + "-byte bound; refusing handoff deletion");
+    }
+    aggregateBytes += stats.size;
+    candidates.push({ sourceRel, absolute });
+  }
+  const backlinks: string[] = [];
+  for (const { sourceRel, absolute } of candidates) {
     const bare = stripHookGeneratedBlocks(fs.readFileSync(absolute, "utf8"));
     const targets = new Set<string>();
     for (const pattern of [MARKDOWN_LINK_RE, AUTOLINK_RE]) {

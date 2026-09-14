@@ -290,9 +290,11 @@ the hook resolves relative, rooted, and reference-style Markdown links
 (through their definitions), ignores external URLs
 and the handoff itself, and only an exact local target blocks — so deletion
 never strands a backlink. The scan reads the NUL-delimited tracked-file listing
-within a finite 4 MiB transport bound, then reads one tracked Markdown file at
-a time within a finite 4 MiB per-file bound; larger listings fail with bounded
-process evidence and larger files refuse before any byte changes. A changed,
+within a finite 4 MiB transport bound, admits at most 25,000 tracked Markdown
+files and 64 MiB of aggregate Markdown bytes, then reads one file at a time
+within a finite 4 MiB per-file bound. Aggregate sizes are preflighted from
+`lstat` before content is read; larger listings fail with bounded process
+evidence and larger files or aggregates refuse before any byte changes. A changed,
 missing (non-terminal record), symlinked, or otherwise ambiguous handoff
 fails closed before any byte changes; when the record is already terminal, a
 still-present exact handoff is consumed as an idempotent no-diff cleanup and

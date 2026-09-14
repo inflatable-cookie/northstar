@@ -703,6 +703,9 @@ write_markdown_filler() { # <path> <byte-count>
   dd if=/dev/zero bs=1 count="$2" 2>/dev/null | tr '\0' 'x' > "$1"
   printf '\n' >> "$1"
 }
+write_sparse_markdown() { # <path> <byte-count>
+  truncate -s "$2" "$1"
+}
 
 repoLargeClean="$scratch/repo-large-clean"
 build_fixture "$repoLargeClean"
@@ -747,6 +750,84 @@ expect_outcome "$large_link_out" blocked "large linked Markdown"
 [ "$large_link_readme_digest" = "$(sha256sum "$repoLargeLink/docs/README.md" | cut -d' ' -f1)" ]
 [ -z "$(git -C "$repoLargeLink" status --porcelain)" ]
 echo "large exact-link refusal is atomic: OK"
+
+echo "# aggregate Markdown scan bounds"
+repoBovineShape="$scratch/repo-bovine-shaped"
+build_fixture "$repoBovineShape"
+mkdir -p "$repoBovineShape/docs/bovine"
+bovine_existing=$(git -C "$repoBovineShape" ls-files -- '*.md' | wc -l | tr -d ' ')
+bovine_needed=$((18190 - bovine_existing))
+for number in $(seq -w 1 "$bovine_needed"); do
+  write_sparse_markdown "$repoBovineShape/docs/bovine/file-$number.md" 2160
+done
+git -C "$repoBovineShape" add -A
+git -C "$repoBovineShape" commit -qm "add Bovine-shaped Markdown set"
+bovine_files=$(git -C "$repoBovineShape" ls-files -- '*.md' | wc -l | tr -d ' ')
+[ "$bovine_files" = 18190 ]
+CURRENT_REPO="$repoBovineShape"
+read_facts "$(fixture_facts "$repoBovineShape" 006)"
+write_event "$scratch/closeout-bovine-shaped.json" "evt-closeout-bovine-shaped-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+bovine_out=$(run_hook "$scratch/closeout-bovine-shaped.json" "evt-closeout-bovine-shaped-0001")
+expect_outcome "$bovine_out" ok "Bovine-shaped aggregate Markdown set"
+[ ! -e "$repoBovineShape/docs/handoffs/handoff-006.md" ]
+[ -f "$repoBovineShape/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+echo "Bovine-shaped Markdown set ($bovine_files files, roughly 37.5 MiB) scans successfully: OK"
+
+repoCountOverflow="$scratch/repo-count-overflow"
+build_fixture "$repoCountOverflow"
+mkdir -p "$repoCountOverflow/docs/count-overflow"
+count_existing=$(git -C "$repoCountOverflow" ls-files -- '*.md' | wc -l | tr -d ' ')
+count_needed=$((25001 - count_existing))
+for number in $(seq -w 1 "$count_needed"); do
+  printf '# Count overflow fixture %s\n' "$number" > "$repoCountOverflow/docs/count-overflow/file-$number.md"
+done
+git -C "$repoCountOverflow" add -A
+git -C "$repoCountOverflow" commit -qm "add over-count Markdown set"
+count_files=$(git -C "$repoCountOverflow" ls-files -- '*.md' | wc -l | tr -d ' ')
+[ "$count_files" = 25001 ]
+CURRENT_REPO="$repoCountOverflow"
+read_facts "$(fixture_facts "$repoCountOverflow" 006)"
+write_event "$scratch/closeout-count-overflow.json" "evt-closeout-count-overflow-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+count_handoff_digest=$(sha256sum "$repoCountOverflow/docs/handoffs/handoff-006.md" | cut -d' ' -f1)
+count_readme_digest=$(sha256sum "$repoCountOverflow/docs/README.md" | cut -d' ' -f1)
+count_out=$(run_hook "$scratch/closeout-count-overflow.json" "evt-closeout-count-overflow-0001")
+expect_outcome "$count_out" blocked "over-count Markdown set"
+json_field "$count_out" "r.summary.includes('25000-file bound')" >/dev/null
+[ ! -e "$repoCountOverflow/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+[ -e "$repoCountOverflow/docs/handoffs/handoff-006.md" ]
+[ "$count_handoff_digest" = "$(sha256sum "$repoCountOverflow/docs/handoffs/handoff-006.md" | cut -d' ' -f1)" ]
+[ "$count_readme_digest" = "$(sha256sum "$repoCountOverflow/docs/README.md" | cut -d' ' -f1)" ]
+[ -z "$(git -C "$repoCountOverflow" status --porcelain)" ]
+echo "over-count Markdown set ($count_files files) refuses atomically: OK"
+
+repoAggregateOverflow="$scratch/repo-aggregate-overflow"
+build_fixture "$repoAggregateOverflow"
+mkdir -p "$repoAggregateOverflow/docs/aggregate-overflow"
+for number in $(seq -w 1 65); do
+  write_sparse_markdown "$repoAggregateOverflow/docs/aggregate-overflow/file-$number.md" $((1024 * 1024))
+done
+git -C "$repoAggregateOverflow" add -A
+git -C "$repoAggregateOverflow" commit -qm "add over-aggregate Markdown set"
+CURRENT_REPO="$repoAggregateOverflow"
+read_facts "$(fixture_facts "$repoAggregateOverflow" 006)"
+write_event "$scratch/closeout-aggregate-overflow.json" "evt-closeout-aggregate-overflow-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+aggregate_handoff_digest=$(sha256sum "$repoAggregateOverflow/docs/handoffs/handoff-006.md" | cut -d' ' -f1)
+aggregate_readme_digest=$(sha256sum "$repoAggregateOverflow/docs/README.md" | cut -d' ' -f1)
+aggregate_out=$(run_hook "$scratch/closeout-aggregate-overflow.json" "evt-closeout-aggregate-overflow-0001")
+expect_outcome "$aggregate_out" blocked "over-aggregate Markdown set"
+json_field "$aggregate_out" "r.summary.includes('aggregate Markdown size')" >/dev/null
+[ ! -e "$repoAggregateOverflow/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+[ -e "$repoAggregateOverflow/docs/handoffs/handoff-006.md" ]
+[ "$aggregate_handoff_digest" = "$(sha256sum "$repoAggregateOverflow/docs/handoffs/handoff-006.md" | cut -d' ' -f1)" ]
+[ "$aggregate_readme_digest" = "$(sha256sum "$repoAggregateOverflow/docs/README.md" | cut -d' ' -f1)" ]
+[ -z "$(git -C "$repoAggregateOverflow" status --porcelain)" ]
+echo "over-aggregate Markdown set (more than 64 MiB) refuses atomically: OK"
 
 echo "# tracked listing transport bound"
 make_long_path() {
