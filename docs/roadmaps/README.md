@@ -30,7 +30,7 @@ An open lane runs until the closeout hook publishes its terminal record into
 the generated block below; no successor is automatic. After a lane closes,
 return to Chatterbox for direction. The bounded watchlist is not execution
 authority.
-<!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:dbb957118c0b7a9e8ffcd1cf2af1d8ccd8777ae311a5d04867760686b0b9e21f -->
+<!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:7462ffd84a47570b2387ade319b3bb05ae7df9cb3e5825a297d7c8597caeda74 -->
 | Generation | Disposition | Runway state |
 | --- | --- | --- |
 | g03 | open | planning_required |
@@ -46,4 +46,5 @@ authority.
 | g03.013 | complete | none | 8 | sha256:b04543c372ffeb75b3fd0813e7f541f216d22f3c6bd3cb03dcd5e175ea225374 |
 | g03.014 | complete | none | 8 | sha256:625cb1913c3e02eedff7bfde13b7739bab45ac45d5017c550df775b210ab95dd |
 | g03.015 | complete | none | 8 | sha256:c1035ad4e0adc5dec9a9723c622acadf1e2ab689883f1711e4f2c435ac519df8 |
+| g03.016 | complete | none | 8 | sha256:a841a07bb97a64cf4d2bc3f5d3fb4f76c990d07c46d47fded5db68aa6c9c16be |
 <!-- northstar:lifecycle:end -->
