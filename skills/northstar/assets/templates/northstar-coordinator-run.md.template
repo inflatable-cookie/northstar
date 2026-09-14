@@ -3,7 +3,7 @@ title: {{TOPIC}} worker handoff
 kind: northstar-handoff
 handoff_mode: worker-pr-loop
 worker_mode: implementation
-dispatch_authority: orchestrator
+dispatch_authority: coordinator
 handoff: single-file-path-only
 status: ready-to-launch
 owner: {{OWNER}}
@@ -34,7 +34,7 @@ Here is the state the worker is inheriting:
 - **Planning base commit:** `{{BASE_REF}}`
 - **Pushed main verification:** `{{REMOTE_VERIFICATION}}`
 - **Planning checkout:** `{{CLEAN_OR_EXPLICIT_EXCEPTION}}`
-- **Worker mode:** implementation worker dispatched by the orchestrator; this
+- **Worker mode:** implementation worker dispatched by the coordinator; this
   handoff activates the worker-only worktree preflight.
 - **Planning artifacts included at the base:** `{{COMMITTED_REF}}`
 - **Worker branch:** `{{WORKER_BRANCH}}`
@@ -58,8 +58,8 @@ Here is the state the worker is inheriting:
 - **Dispatch topology:** `{{FRONTIER_LANES_LAUNCHED_WITH_THIS_ONE}}`
 - **Parallel safety check:** `{{NO_SHARED_MUTABLE_SCOPE_OR_OTHER_REASON_SERIAL}}`
 - **Surfaces this lane owns:** `{{MUTABLE_AND_CLOSEOUT_SURFACES_OWNED}}`
-- **Integration ownership:** `{{PARTITIONED_OR_NAMED_ORCHESTRATOR_INTEGRATION_STEP}}`
-- **Merge ordering:** same-repository PRs merge one at a time; the orchestrator
+- **Integration ownership:** `{{PARTITIONED_OR_NAMED_COORDINATOR_INTEGRATION_STEP}}`
+- **Merge ordering:** same-repository PRs merge one at a time; the coordinator
   refreshes this head against current `main` and re-reviews it if a sibling lane
   merges first
 - **Canonical refs:** {{ARCHITECTURE_REFS}}; {{CONTRACT_REFS}}
@@ -76,7 +76,7 @@ Here is the state the worker is inheriting:
 - **PR base/head:** `{{PR_BASE_AND_HEAD}}`
 - **PR URL:** `{{PR_URL_OR_PENDING}}`
 - **Review state:** `{{AWAITING_REVIEW_OR_OTHER_STATE}}`
-- **Merge path:** orchestrator after accepted review of the current head and
+- **Merge path:** coordinator after accepted review of the current head and
   passing required checks
 
 ## Boundaries
@@ -99,7 +99,7 @@ Please keep this run inside the named runway:
   operator instead of resolving it yourself.
 - Work only in the clean worker worktree selected by `Completion Protocol`.
   Never edit the planning checkout or an unrelated dirty checkout.
-- Do not merge the PR. Merge belongs to the orchestrator after its accepted
+- Do not merge the PR. Merge belongs to the coordinator after its accepted
   review/check gate.
 
 ## Important Context
@@ -153,7 +153,7 @@ report what changed, validation run, what remains, and any planning decision.
 ### Before you start
 
 1. This handoff's `worker_mode: implementation` and
-   `dispatch_authority: orchestrator` activate worker mode. Before broad reads,
+   `dispatch_authority: coordinator` activate worker mode. Before broad reads,
    run:
    `git rev-parse --show-toplevel`, `git branch --show-current`,
    `git status --porcelain`, and `git worktree list --porcelain`.
@@ -234,7 +234,7 @@ report what changed, validation run, what remains, and any planning decision.
 
 ### Review and merge path
 
-The orchestrator launches an independent review child in this worker workspace
+The coordinator launches an independent review child in this worker workspace
 under a serial clean exact-head lease to review the PR against the canonical
 refs, diff, review oracle, and checks. The reviewer must use a different
 underlying provider/model identity from the authoring worker; profile renames,
@@ -256,9 +256,9 @@ Requested changes are: `{{REQUESTED_CHANGES_OR_NONE}}`. The PR should link the
 task, spec, changed surfaces, evidence, validation, and unresolved
 items. When the exact reviewed head is still current, required checks pass, the
 PR is mergeable into the intended base, and no stricter repository rule or
-explicit operator pause applies, the orchestrator merges without another
+explicit operator pause applies, the coordinator merges without another
 approval prompt. When an otherwise-valid merge gate holds and a
-connector/provider write is refused, the orchestrator may use an
+connector/provider write is refused, the coordinator may use an
 already-authenticated, repository-approved native write transport and re-verify
 provider state; it never weakens the gate, solicits credentials, or improvises
 an undeclared transport. Merge, post-merge reconciliation, closeout, frontier recomputation, and

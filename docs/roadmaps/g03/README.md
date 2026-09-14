@@ -71,7 +71,7 @@ completion in the runway above and in Git history.
 ## Next task
 
 The committed g03.016 worker handoff owns the sole approved Northstar protocol
-lane. It makes economical Chatterbox the default, replaces planning delegate
+lane. It makes economical Chatterbox the default, replaces the planning-delegate role
 with bounded frontier Oracle, and standardizes delivery on the Coordinator
 role. No sibling or automatic successor is approved.
 <!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:dbb957118c0b7a9e8ffcd1cf2af1d8ccd8777ae311a5d04867760686b0b9e21f -->

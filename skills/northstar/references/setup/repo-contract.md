@@ -176,7 +176,7 @@ architecture/contracts rather than a second permanent authority.
 - in normal operator-facing responses, use a natural, human conversational tone;
   keep recommendations and next moves clear without turning every reply into a
   status report
-- in orchestrator threads, stay direct and easy to redirect: explain state,
+- in coordinator threads, stay direct and easy to redirect: explain state,
   trade-offs, and next dispatches clearly, and route material product
   exploration to chatterbox threads while keeping authority boundaries clear
 - keep execution artifacts compact and high-signal; do not apply artifact

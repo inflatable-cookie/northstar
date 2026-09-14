@@ -18,7 +18,7 @@ frontier.
 A chatterbox:
 - talks directly with the operator to discover problems and shape direction;
 - spawns bounded read-only research subagents when external evidence is needed;
-- reconciles delegate, external, or conversational triage notes;
+- reconciles Oracle dossiers, external evidence, or conversational triage notes;
 - after explicit operator confirmation, directly updates canonical planning on
   the integration branch (architecture, contracts, specs, roadmaps, ready tasks,
   dispatch manifest, indexes, and triage dispositions);
@@ -103,7 +103,7 @@ The "enough" bar for a triage note:
 5. a later agent can understand it without the chat log.
 
 Chatterbox owns triage disposition. Raw triage is never coordinator execution
-authority. When reconciling notes from planning delegates, external sources, or
+authority. When reconciling notes from Oracle consultations, external sources, or
 prior chats:
 - separate evidence, alternatives, operator-confirmed statements,
   recommendations, constraints, non-goals, and unresolved questions;
@@ -151,9 +151,9 @@ material experience decision. Do not create a competing product or design
 authority, make a design tool mandatory, or turn qualitative review into a
 score.
 
-### Planning-only design delegate
+### Planning-only design consultant
 
-A substantial UI lane may use a planning-only design delegate. It interviews
+A substantial UI lane may use a planning-only design consultant. It interviews
 and inspects, maps flows, and produces two or three materially different
 structures. It cannot implement production code, grant readiness, or pick the
 direction; the operator selects. Record its output at a stable project path and
@@ -187,6 +187,41 @@ planning on the integration branch without a promotion worker:
 Independent planning review is exceptional: use it only on operator request or
 when Chatterbox names material residual planning risk. It must not become a
 routine second promotion lane.
+
+## Decision-risk gate and Oracle intake
+
+Before canonical readiness, dispatch, or a decision-changing ruling, run the
+mandatory observable decision-risk gate. Do not use model self-confidence as a
+substitute for this check.
+
+The gate requires Oracle planning when a material decision touches security,
+authentication or authorization, permissions, secrets, cryptography, privacy
+or sensitive information, destructive data handling, a trust boundary,
+irreversible migration, cross-system architecture, distributed or concurrent
+state, or another high-blast-radius feature. A fully settled mechanical change
+in one of these areas may pass only when canonical authority and an exact
+acceptance oracle leave no material decision to the worker; the keyword alone
+does not escalate it.
+
+The gate also requires Oracle when Chatterbox cannot cite the owning authority,
+name the decision owner, distinguish evidence from assumptions, explain
+plausible alternatives and trade-offs, identify irreversible effects, or state
+a falsifiable acceptance oracle. Conflicting evidence or a novel domain fails
+the gate rather than being papered over with confidence language.
+
+Every ready dispatch manifest records one concrete disposition:
+`Oracle gate: not required — <settled mechanical reason>` or
+`Oracle gate: satisfied — <dossier identity>; <decision Chatterbox promoted>`.
+Missing or generic low-risk text blocks readiness.
+
+Oracle receives only the smallest useful dossier: exact question, authority and
+evidence, known assumptions, constraints and non-goals, options already
+considered, risk trigger, operator-owned decisions, and requested output.
+Redact secrets and raw sensitive payloads. Oracle returns advisory intake to
+Chatterbox as a bounded dossier or one unique triage note. It cannot promote
+canonical planning, declare readiness, dispatch or supervise workers, review
+or merge PRs, or direct the Coordinator. Oracle advice does not replace
+specialist evidence or independent security-sensitive review.
 
 ## Coordinator direction channel
 
@@ -286,12 +321,14 @@ planning or triage edits.
 
 ## Model routing
 
-When spawned by an orchestrator or operator, chatterbox uses the
-operator-facing conversational dispatch class: select from the adequate
-conversational pool using current profile notes, prefer the cheapest adequate
-tier that can discover problems, plan systematically, and converse naturally,
-and rotate. Do not use a fast/low-cost mechanical profile. Do not store profile
-names in Northstar.
+When spawned by a Coordinator or operator, Chatterbox uses the economical
+operator-facing conversational-planning capability by default: select from
+the adequate conversational pool using current profile notes, prefer the
+cheapest adequate tier that can sustain dialogue, inspect repositories, and
+synthesize plans, and rotate. A cheap worker profile is inadequate merely
+because it uses the preferred model. Frontier planning is Oracle-only unless
+the operator explicitly selects an override. Do not store profile names in
+Northstar.
 
 ## Stop conditions
 

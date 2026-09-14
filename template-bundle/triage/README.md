@@ -30,14 +30,13 @@ roadmap item, or implementation request.
 Triage notes are mutable. Chatterboxes create a unique file for a new issue and
 update that file when later conversation corrects or develops the issue. They do
 not create correction, addendum, or deprecation notes for content that belongs
-in an existing note. The original filename remains stable. Planning delegates
-may update the note for their current bounded issue; Chatterbox owns wider
-reconciliation.
+in an existing note. The original filename remains stable. An Oracle may update
+the note for its current bounded issue; Chatterbox owns wider reconciliation.
 
-Chatterboxes and planning delegates share the working checkout and isolate
+Chatterboxes and Oracle consultations share the working checkout and isolate
 triage-only commits to exact note paths after verifying clean pre-stage index
 state. They do not modify this `README.md`, create worktrees, branches, or PRs.
-Planning delegates report their notes to Chatterbox, which reconciles triage and
+Oracle reports its dossier or note to Chatterbox, which reconciles triage and
 directly promotes canonical planning after explicit operator confirmation. Raw
 triage is never coordinator execution authority.
 

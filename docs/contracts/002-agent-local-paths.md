@@ -5,7 +5,7 @@ Owner: repo maintainers
 Updated: 2026-08-31
 Depends on: `docs/contracts/001-working-rules.md`
 Affects: `AGENTS.md`, `skills/northstar/`, `template-bundle/`,
-`docs/handoffs/`, and manual worker/planning-delegate launch procedures
+`docs/handoffs/`, and manual worker launch procedures
 
 ## Purpose
 
@@ -23,7 +23,7 @@ script and not a secret store.
 - `.agents.local.env` is local-only, ignored by Git, and created on first need.
 - `AGENTS.md` is the required discovery point for the contract.
 
-Implementation workers and planning delegates must read `.agents.local.env`
+Implementation workers must read `.agents.local.env`
 when their dispatched lane needs a manual local path. Other normal-mode agents
 must not inspect or require it merely because the repository supports delegated
 lanes. A valid harness-provided worktree is sufficient and does not require this
@@ -70,16 +70,16 @@ in it. Read `KEY=VALUE` entries as data; never execute or `source` the file.
 
 ## Nested-agent worktree boundary
 
-A worker or subagent must not start a second orchestrator workflow, dispatch a
+A worker or subagent must not start a second Coordinator workflow, dispatch a
 new worker, or create a nested worktree unless the operator explicitly assigned
 that separate lane and the local-path contract is satisfied. When a harness or
-parent orchestrator already owns the worktree, use it and do not create another
-one. A planning delegate may spawn its handoff-bounded read-only research
-subagents, but they receive no worktree or Git/provider authority.
+parent Coordinator already owns the worktree, use it and do not create another
+one. An Oracle may spawn only bounded, read-only research subagents from its
+dossier; they receive no worktree or Git/provider authority.
 
 ## Handoff requirements
 
-An implementation-worker or planning-delegate handoff must state whether the
+An implementation-worker handoff must state whether the
 worktree is harness-managed or manual. For a manual fallback it must point to
 the resolved local container path, not a hard-coded temporary directory. A
 lane that cannot establish this boundary stops before editing.

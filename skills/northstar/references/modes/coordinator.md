@@ -1,4 +1,4 @@
-# Orchestrator Mode
+# Coordinator Mode
 
 Use this mode when the user wants Northstar to coordinate a material lane:
 verify factual preflight, launch the approved frontier from the canonical
@@ -42,7 +42,7 @@ Your default job is mechanical coordination:
 - send Chatterbox exactly one administrative notice with completed state when
   the canonical runway is empty, then yield.
 
-**Paseo dispatch is implicit inside Paseo.** When the current orchestrator
+**Paseo dispatch is implicit inside Paseo.** When the current coordinator
 thread exposes Paseo's profile, workspace, agent, and follow-up tools, that
 injected tool surface authorizes routine dispatch of an already-approved, ready
 Northstar worker lane. Do not ask for permission or merely suggest Paseo before
@@ -51,7 +51,7 @@ not evidence that the current thread is running in Paseo. When the required
 tools are absent, give the operator the handoff's **absolute path** for manual
 launch and relay. Neither route widens authority for missing planning choices,
 permission requests, destructive workspace cleanup, review, or merge. Merge
-authority comes from the orchestrator lane's accepted review/check gate, not
+authority comes from the coordinator lane's accepted review/check gate, not
 from the transport adapter.
 
 ## Paseo launch settings
@@ -63,8 +63,8 @@ launch bundle. Materialize its provider/model identity and copy its `modeId`,
 Omit only profile fields that are absent; never omit, replace, or downgrade a
 present `modeId` to the provider default or an ask-for-permission mode.
 
-For workers, reviewers, chatterboxes, planning delegates, bounded research
-children, mechanical projection workers, and successor orchestrators, require
+For workers, reviewers, chatterboxes, bounded Oracle consultations, bounded research children,
+mechanical projection workers, and successor Coordinators, require
 the effective selected-profile permission mode to be the operator-configured
 full-accept/full-access mode. Reject the child launch before creation when the
 profile has no such mode or the materialized call would differ from it. Report
@@ -106,31 +106,44 @@ escalation. A worker's pre-PR decision blocker always uses the decision-request
 route below. The coordinator does not turn the observation into a plan,
 operator question, or triage write.
 
-## Conversational planning delegates
+## Frontier Oracle consultations
 
-When the operator explicitly asks to explore a single topic in parallel, the
-operator or coordinator may launch a lightweight planning delegate. This is an
-optional same-workspace conversation (in Paseo, a visible agent tab in the
-current project workspace; not a separate worktree workspace).
+When the operator or Chatterbox identifies a material unresolved planning
+question, Chatterbox may request one bounded **Oracle** consultation. Oracle is
+an optional issue-scoped frontier planning conversation, not a second planning
+authority. It may converse with the operator, inspect the named evidence,
+challenge assumptions, compare options, design a workflow or UI concept, and
+strengthen acceptance oracles.
 
-The delegate talks directly with the operator, creates one unique timestamped
-`docs/triage/YYYYMMDD-HHMMSS-<slug>.md` file, may update that same note for its
-bounded issue using exact-path Git isolation, and reports its note path and
-summary to Chatterbox. It may spawn bounded
-read-only research subagents that return sourced findings to it. The delegate
-does not edit canonical planning, open a planning PR, promote, decide
-readiness, or contact the coordinator. Chatterbox reconciles the note and
-directly promotes canonical planning after operator confirmation.
+The consultation receives the smallest useful dossier: exact question, owning
+authority and evidence, known assumptions, constraints and non-goals, options
+already considered, the risk trigger, operator-owned decisions, and requested
+output. Secrets and raw sensitive payloads are redacted. Oracle returns a
+bounded dossier or one unique triage note to Chatterbox, never to the
+Coordinator directly.
 
-Select the delegate from the adequate frontier/high-reasoning
-conversational-planning pool in current adapter notes and rotate recent use like
-every other dispatch class. An operator-named profile wins; a locally preferred
-profile is configuration, not a Northstar dependency.
+Oracle cannot promote canonical planning, declare readiness, dispatch or
+supervise workers, review or merge implementation PRs, or direct the
+Coordinator. Chatterbox reconciles its advisory intake against authority and
+operator direction before any canonical promotion or dispatch.
+
+Invoke Oracle only for a material unresolved architecture or product choice,
+substantial UI workflow, conflicting authority, costly-to-reverse decision,
+difficult acceptance oracle, or an explicit operator request. Scope, duration,
+documentation volume, and worker failure alone are not triggers. A settled
+mechanical change may use `Oracle gate: not required` only when canonical
+authority and an exact falsifiable acceptance oracle leave no material worker
+decision.
+
+Select Oracle from the adequate frontier planning pool in current adapter
+notes, rotate recent use, and keep the capability name provider-neutral. An
+operator-selected profile wins; local profile configuration is not Northstar
+doctrine.
 
 ## Chatterbox spawn and intake
 
-When the operator explicitly asks the orchestrator to spawn a chatterbox thread
-for an issue, feature idea, or exploratory chat, the orchestrator launches an
+When the operator explicitly asks the coordinator to spawn a chatterbox thread
+for an issue, feature idea, or exploratory chat, the coordinator launches an
 independent planning thread without a handoff file. Spawned chatterboxes live in
 this coordinator's own workspace as sibling agent tabs; several independent
 chatterboxes may coexist there.
@@ -146,7 +159,7 @@ In Paseo:
 - apply the capitalized label `Chatterbox=true` on the agent; reject launch
   configuration if that label is omitted or lowercased;
 - set `notifyOnFinish: false` so long-running idle chatterbox turns do not spam
-  the parent orchestrator;
+  the parent coordinator;
 - select from the adequate operator-facing conversational pool in current
   profile notes under the diversified-routing rule; an explicitly named
   profile overrides selection;
@@ -309,29 +322,29 @@ operator-confirmed direction. Other blockers follow their named escalation
 path; do not reconstruct opaque or incomplete capsules. Return them to the
 discovering child.
 
-## Fresh orchestrator continuation
+## Fresh Coordinator continuation
 
 This path starts only when the operator explicitly asks the current
-orchestrator to hand its live lane to a fresh orchestrator thread. It is an
+coordinator to hand its live lane to a fresh coordinator thread. It is an
 ownership transfer, not a second planner over the same mutable lane.
 
-The source stays in Orchestrator mode and fills the generic seven-section
+The source stays in Coordinator mode and fills the generic seven-section
 handoff. Do not add a public mode or a continuation template. The frontmatter
 must declare:
 
 ```yaml
-handoff_mode: orchestrator-continuation
-orchestrator_mode: economical-coordination
-dispatch_authority: orchestrator
+handoff_mode: coordinator-continuation
+coordinator_mode: economical-coordination
+dispatch_authority: coordinator
 ```
 
 Reject the launch before dispatch if the successor would be routed through
-generic handoff, worker, or planning-delegate mode.
+generic handoff, worker, or Oracle mode.
 
 The handoff records the current authority chain, open operator questions,
 active and paused lanes, ready frontier, worker and PR transport identities,
 review/merge state, touched triage notes, repository state, and the next
-orchestrator action. Before automatic dispatch, the source reconciles the live
+coordinator action. Before automatic dispatch, the source reconciles the live
 card, roadmap, log, handoff, and front doors, commits and pushes that coherent
 state, and verifies the remote tip. It then stops planning, dispatch, review,
 and merge mutations for the transferred lane. It does not compete with the successor.
@@ -339,7 +352,7 @@ and merge mutations for the transferred lane. It does not compete with the succe
 The successor receives only `Read and follow <absolute-handoff-path>.` as the
 initial prompt. Reject agent creation if that prompt includes a transcript or a
 second task description. The successor reads the committed handoff, enters
-normal orchestrator mode, reloads current repository authority, and checks that
+normal coordinator mode, reloads current repository authority, and checks that
 the recorded state still matches current `main`. It does not activate worker
 mode, run the worker worktree preflight, or inherit private conversation as
 authority.
@@ -348,7 +361,7 @@ When Paseo tools are injected, the source:
 
 1. resolves its current project and repository checkout without guessing an
    ambiguous workspace;
-2. lists current profiles, builds the adequate orchestrator-role pool whose
+2. lists current profiles, builds the adequate coordinator-role pool whose
    notes cover economical coordination — runway state tracking, dispatch,
    revision routing, operator communication, and merge-gate verification —
    and applies the diversified-routing rule unless the operator
@@ -357,7 +370,7 @@ When Paseo tools are injected, the source:
    Reject the transport plan if it uses `branch-off` worktree isolation or a
    different project path;
 4. creates the successor agent there with the capitalized label
-   `Orchestrator=true`, the complete selected profile materialized under the
+   `Coordinator=true`, the complete selected profile materialized under the
    Paseo launch-settings rule, finish notifications enabled, and the single
    absolute-handoff prompt. Reject launch configuration if that label is
    omitted or lowercased;
@@ -423,10 +436,10 @@ Chatterbox after operator confirmation.
    parallel groups; do not choose a discretionary subset or invent extra
    concurrency.
 6. **Write the worker handoff file(s).** Fill
-   `assets/templates/northstar-orchestrator-run.md.template` into one concrete
+   `assets/templates/northstar-coordinator-run.md.template` into one concrete
    worker handoff under `docs/handoffs/YYYYMMDD-HHMMSS-<slug>.md` per selected
    frontier lane. Each handoff must declare `handoff_mode: worker-pr-loop`,
-   `worker_mode: implementation`, and `dispatch_authority: orchestrator`. Commit
+   `worker_mode: implementation`, and `dispatch_authority: coordinator`. Commit
    and push on `main`.
 7. **Dispatch child workers and yield.** In Paseo:
    - call `list_profiles` and select by role notes and the diversified-routing
@@ -491,7 +504,7 @@ Chatterbox after operator confirmation.
 
 ## Worker file contract
 
-The orchestrator creates exactly one concrete worker handoff from the shared
+The coordinator creates exactly one concrete worker handoff from the shared
 handoff template per worker lane, commits it to `main`, pushes `main`, and
 verifies the remote tip before dispatch. When independent roadmap lanes are
 selected together on the ready frontier, create one such handoff per lane;
@@ -507,7 +520,7 @@ sibling checkout.
 
 The file must say, in substance:
 
-- worker mode is active because this handoff was dispatched by an orchestrator;
+- worker mode is active because this handoff was dispatched by a Coordinator;
 - you are the implementation worker, not the planning authority;
 - normal-mode worktree rules do not apply; do not infer worker mode from a path,
   branch, or harness without this handoff;
@@ -566,7 +579,7 @@ The file must say, in substance:
 - return a newly discovered product threshold, contract choice, or acceptance
   rule to planning instead of choosing it in implementation;
 - finish the assigned runway with a pushed branch and a reviewable PR;
-- do not merge or invent a new architecture; merge belongs to the orchestrator
+- do not merge or invent a new architecture; merge belongs to the coordinator
   after its accepted review/check gate;
 - if this worker is frontier, the handoff already records both exceptional
   reasoning and highest-priority or material-consequence reasons; do not treat
@@ -592,7 +605,7 @@ A lane joins the frontier only when all of these hold:
 - its own worktree, branch, and committed handoff.
 
 Same-repository lanes must additionally partition their mutable and
-closeout/front-door surfaces, or reserve one named orchestrator integration step
+closeout/front-door surfaces, or reserve one named coordinator integration step
 before launch. Two workers never own the same front door.
 
 When a condition fails, keep only that edge or lane serial and name the exact
@@ -601,7 +614,7 @@ Do not serialize unrelated ready work around one blocked edge. Do not
 manufacture parallelism by inventing speculative cards or by splitting one
 coherent issue-fix lane into diagnosis and repair workers.
 
-The orchestrator launches every safe ready-frontier lane. It does not impose a
+The coordinator launches every safe ready-frontier lane. It does not impose a
 global thread count or wait for another worker to finish before creating a new
 thread. A control-plane workspace or agent creation failure belongs to that
 lane's transport state; preserve every returned workspace or agent identity so
@@ -651,13 +664,13 @@ changes the plan.
 ## Model routing
 
 Treat configured profiles as a portfolio, not one remembered default. At every
-worker, planning-delegate, or fresh-orchestrator dispatch, build the adequate
+worker, Oracle, or fresh-coordinator dispatch, build the adequate
 pool for the role from current role-profile notes and any explicit adapter cost
 metadata, prefer the cheapest adequate tier, then vary provider/model identity
 before reusing a recent route. Adequacy comes before price or rotation: an
 inadequate cheap route is excluded, never rotated into. Use adapter-visible
 recent-agent history when the adapter exposes it; otherwise remember only the
-routes launched in the current orchestrator run. Northstar owns no durable
+routes launched in the current coordinator run. Northstar owns no durable
 usage ledger and stores no profile, provider, model, price, balance, or
 allowance value.
 
@@ -667,9 +680,10 @@ Select by capability:
   reliable tool use, concise state tracking, and bounded verification; higher
   reasoning effort is an escalation for material operator-facing discovery or
   review-oracle design, not the default;
-- orchestrator continuations and operator-facing planning delegates: the
-  adequate orchestrator-role pool, rotated by the same rule; an explicitly
-  named profile wins;
+- coordinator continuations: the adequate coordinator-role pool, rotated by
+  the same rule; an explicitly named profile wins;
+- Oracle consultations: the adequate frontier planning pool, used only after
+  the observable decision-risk gate or an explicit operator request;
 - chatterbox threads: the adequate operator-facing conversational pool,
   rotated by the same rule; an explicitly named profile wins;
 - review children: the cheapest adequate independent-review pool under the
@@ -681,7 +695,7 @@ Select by capability:
 - ordinary bounded implementation: the cheapest adequate non-frontier
   day-to-day implementation pool. The selected profile's live notes must
   explicitly fit implementation or general day-to-day work;
-- audit, documentation-grind, review, planning, and coordinator profiles are
+- audit, documentation-grind, review, planning, Oracle, and coordinator profiles are
   excluded from implementation lanes even when the work is long,
   documentation-heavy, or touches many files;
 - actual audits and exact non-semantic documentation projection whose decisions
@@ -758,12 +772,12 @@ Stop and return to planning or the operator when:
   requirements, or require new credentials;
 - a manual worktree is needed but the local path contract has not been satisfied;
 - control-plane launch state is ambiguous enough that retrying could create a
-  duplicate workspace, worker, or successor orchestrator;
+  duplicate workspace, worker, or successor coordinator;
 - continuation launch would need a Paseo product/API change, a workspace-label
   field, or browser/computer-use pinning;
 - chatterbox spawn would use worktree isolation or enable finish notifications;
 - an implementation worker or ordinary subagent would need to start a nested
-  orchestrator or worker lane. A planning delegate may use only bounded
+  coordinator or worker lane. An Oracle may use only bounded
   read-only research subagents;
 - an escalation capsule is incomplete or opaque;
 - no configured non-frontier profile fits an ordinary worker lane. Report the
@@ -776,10 +790,10 @@ When a summary is useful, lead it with:
 1. what is now true;
 2. current state (`discovery`, `planning`, `ready-to-launch`,
    `worker-in-flight`, `awaiting-review`, `changes-requested`, `merged`,
-   `orchestrator-continuation-yielded`, or `paused`);
+   `coordinator-continuation-yielded`, or `paused`);
 3. the next operator action or information needed.
 
-Keep protocol detail underneath that summary. The orchestrator is successful
+Keep protocol detail underneath that summary. The coordinator is successful
 only when the worker's implementation is represented by a reviewable PR and the
 Northstar planning/log surfaces reflect the actual outcome. Do not force the
 checkpoint shape into ordinary exploratory conversation.

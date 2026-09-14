@@ -81,7 +81,7 @@ informal habits.
 - Triage notes use the handoff filename shape
   `YYYYMMDD-HHMMSS-<slug>.md`. Their Markdown body is intentionally flexible;
   triage is for fast capture, not premature schema.
-- Chatterbox, planning-delegate, refresh, and cleanup runs may capture useful
+- Chatterbox, Oracle, refresh, and cleanup runs may capture useful
   unresolved threads. The mechanical coordinator does not load or reconcile
   triage during preflight and never chooses work from it.
 - Creating or updating a lightweight triage note is an allowed capture write;
@@ -223,7 +223,7 @@ informal habits.
 
 ### Parallel lane scheduling
 
-- Parallel dispatch is the default. The orchestrator maps ready work as a
+- Parallel dispatch is the default. The coordinator maps ready work as a
   dependency graph, refreshes the ready frontier at every dispatch checkpoint,
   and launches every safe frontier lane without a global thread budget or a
   second operator request. It does not wait for another worker to finish before
@@ -233,7 +233,7 @@ informal habits.
   decision, and its own ready tasks, validation, evidence, stop conditions,
   worktree, branch, and handoff.
 - Same-repository lanes must partition mutable and closeout/front-door surfaces
-  or reserve one named orchestrator integration step. Two workers never own the
+  or reserve one named coordinator integration step. Two workers never own the
   same front door.
 - A serial decision must name the dependency, shared surface, or unresolved
   authority. Do not serialize unrelated ready work around one blocked edge,
@@ -250,7 +250,7 @@ informal habits.
   exists. Do not record a fixed worker count, provider, or model.
 - Workspace placement and agent parentage are separate axes: with Paseo,
   create the dedicated worktree workspace first, then create the worker from the
-  orchestrator's agent-scoped tool context with that returned workspace ID.
+  coordinator's agent-scoped tool context with that returned workspace ID.
   Workspace placement does not detach parentage. Detached root, schedule,
   generic detached, or unproven CLI launches are rejected. Finish
   notifications remain enabled and review follow-up resumes the same child.
@@ -266,7 +266,7 @@ informal habits.
   the cheapest adequate tier, then vary provider/model identity before
   reusing a recent route. Adequacy filters before price or rotation.
 - Use adapter-visible recent-agent history when it exists; otherwise remember
-  only routes launched in the current orchestrator run. Do not create a
+  only routes launched in the current coordinator run. Do not create a
   durable usage ledger or encode local profile, provider, model, price,
   balance, or allowance values.
 - Implementation profiles must explicitly fit implementation or general
@@ -290,43 +290,63 @@ informal habits.
   that attempt; choose another adequate route from the lane's pool. If no
   adequate route remains, report the gap; do not silently escalate. An
   operator-named profile remains an explicit override.
-- The orchestrator's normal route is an economical coordinator; higher
+- The coordinator's normal route is an economical coordinator; higher
   reasoning effort is an escalation. Review children select from their own
   adequate review pools; a frontier review route is reserved for residual
   risk that settled planning, explicit oracles, and tests cannot bound.
 
-### Conversational planning delegation
+### Frontier Oracle and decision-risk gate
 
-- An operator may start a lightweight planning delegate for one issue in
-  parallel. In Paseo it is a visible agent tab in the current project
-  workspace, not a new worktree workspace.
-- The delegate creates one unique timestamped
-  `docs/triage/YYYYMMDD-HHMMSS-<slug>.md` file and may update that same note for
-  its current bounded issue using exact-path Git isolation.
-- It talks directly with the operator and separates confirmed decisions,
-  recommendations, evidence, and open questions; it does not edit canonical
-  planning, open a planning PR, promote, decide readiness, or contact the
-  coordinator.
-- Bounded research subagents are read-only and return sourced findings to the
-  delegate. They do not write, contact the operator, or start nested lanes.
-- When ready, the delegate sends Chatterbox the absolute note path and summary
-  (or uses manual operator relay). Chatterbox reconciles the note against
-  current authority and promotes, retains, splits, or removes it.
+- Chatterbox is the sole persistent operator-facing planning authority. Route
+  ordinary planning through an economical conversational-planning capability
+  that can sustain dialogue, inspect a repository, and synthesize plans.
+- **Oracle** is an optional issue-scoped frontier planning consultation. It may
+  converse with the operator, inspect named evidence, challenge assumptions,
+  compare options, design a workflow or UI concept, and strengthen acceptance
+  oracles. It returns a bounded dossier or one unique triage note to Chatterbox.
+- Oracle cannot promote canonical planning, declare readiness, dispatch or
+  supervise workers, review or merge implementation PRs, or direct the
+  Coordinator. It never becomes a second planning authority.
+- Invoke Oracle only for a material unresolved architecture or product choice,
+  substantial UI workflow, conflicting authority, costly-to-reverse decision,
+  difficult acceptance oracle, or explicit operator request. Scope, duration,
+  documentation volume, and worker failure alone are not triggers.
+- Before readiness, dispatch, or a decision-changing ruling, run the mandatory
+  observable decision-risk gate. Do not use model self-confidence as evidence.
+  Material decisions touching security, authentication or authorization,
+  permissions, secrets, cryptography, privacy or sensitive information,
+  destructive data handling, a trust boundary, irreversible migration,
+  cross-system architecture, distributed or concurrent state, or another
+  high-blast-radius feature require Oracle planning.
+- A fully settled mechanical change may pass without Oracle only when canonical
+  authority and an exact acceptance oracle leave no material decision to the
+  worker; keywords alone do not escalate it. The gate fails when the owner,
+  authority, evidence versus assumptions, alternatives and trade-offs,
+  irreversible effects, or a falsifiable acceptance oracle cannot be stated.
+- Every ready dispatch manifest records `Oracle gate: not required — <settled
+  mechanical reason>` or `Oracle gate: satisfied — <dossier identity>;
+  <decision Chatterbox promoted>`. Missing or generic low-risk text blocks
+  readiness.
+- The smallest useful Oracle dossier carries the exact question, owning
+  authority and evidence, known assumptions, constraints and non-goals, options
+  already considered, risk trigger, operator-owned decisions, and requested
+  output. Redact secrets and raw sensitive payloads. Oracle advice never
+  replaces specialist evidence or independent security-sensitive review.
 
-### Fresh orchestrator continuation
+### Fresh coordinator continuation
 
-- On operator request, the source orchestrator may transfer its whole live
-  lane to a fresh orchestrator through the generic seven-section handoff with
-  `handoff_mode: orchestrator-continuation`,
-  `orchestrator_mode: economical-coordination`, and
-  `dispatch_authority: orchestrator`.
+- On operator request, the source coordinator may transfer its whole live
+  lane to a fresh coordinator through the generic seven-section handoff with
+  `handoff_mode: coordinator-continuation`,
+  `coordinator_mode: economical-coordination`, and
+  `dispatch_authority: coordinator`.
 - After that handoff is pushed and dispatched, the source yields planning,
   dispatch, review, and merge mutations for the transferred lane. The successor
-  enters normal orchestrator mode and does not run worker or planning-delegate
+  enters normal Coordinator mode and does not run worker or Oracle
   preflight.
 - With Paseo, create a separate `local` workspace for the same project and
-  checkout, copy a current orchestrator-role profile, apply the capitalized
-  `Orchestrator=true` label, and use only the absolute handoff path as the
+  checkout, copy a current coordinator-role profile, apply the capitalized
+  `Coordinator=true` label, and use only the absolute handoff path as the
   prompt. Reject a `branch-off` worktree or a different project path. Preserve
   returned identities and do not retry an ambiguous creation.
 - Missing pin/reorder support is not a launch failure; placement stays manual.
@@ -415,7 +435,7 @@ informal habits.
 ### Independent review children and serial workspace lease
 
 - Worker PRs normally receive an independent review child in direct PR-review
-  mode unless the operator explicitly asks the orchestrator thread to review
+  mode unless the operator explicitly asks the coordinator thread to review
   directly.
 - In Paseo, create the reviewer child with the worker `workspaceId`, preserving
   parentage, visible tab placement, and `notifyOnFinish: true`. Do not create a
@@ -433,7 +453,7 @@ informal habits.
 - Requested changes return to the same worker; the revised head returns to the
   same distinct reviewer when available; a replacement reviewer starts a fresh
   complete review.
-- The orchestrator does not duplicate the full diff review. Before merge it
+- The coordinator does not duplicate the full diff review. Before merge it
   verifies the coordination gate: the verdict names the exact current head,
   blocking findings are resolved or superseded on the provider, required
   checks pass, base ancestry and mergeability are current, and no stricter
@@ -459,9 +479,9 @@ informal habits.
   to answer without opening a blocker log or PR thread. Missing or opaque
   capsules return to the discovering child.
 
-### Orchestrator merge authority
+### Coordinator merge authority
 
-- Starting an orchestrator-owned worker lane pre-authorizes the orchestrator to
+- Starting a Coordinator-owned worker lane pre-authorizes the Coordinator to
   merge that lane's PR after an independent review child — or an
   operator-requested direct review — accepts the exact current head; the posted
   verdict must name that head, and all required checks pass.
@@ -485,7 +505,7 @@ informal habits.
     untouched, and return a context-complete reconciliation blocker to Chatterbox;
     never reset, stash, rebase, discard changes, or dispatch from stale local state.
 - A stricter repository rule or explicit operator pause still wins.
-- Workers, planning delegates, and standalone direct-review threads never merge.
+- Workers, Oracle consultations, and standalone direct-review threads never merge.
 
 ### Direct PR review boundary
 

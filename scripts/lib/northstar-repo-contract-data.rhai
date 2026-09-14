@@ -141,7 +141,7 @@ fn required_files() {
         "skills/northstar/scripts/paseo-worktree.rhai",
         "skills/northstar/assets/templates/effigy.native.toml.template",
         "skills/northstar/assets/templates/northstar-handoff.md.template",
-        "skills/northstar/assets/templates/northstar-orchestrator-run.md.template",
+        "skills/northstar/assets/templates/northstar-coordinator-run.md.template",
         "skills/northstar/assets/templates/docs/roadmaps/templates/task-template.md",
         "template-bundle/roadmaps/templates/task-template.md",
         "scripts/lib/northstar-repo-contract-data.rhai",
