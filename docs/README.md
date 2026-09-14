@@ -40,7 +40,7 @@ that Northstar provides to consumer projects.
 
 Closed generations and superseded procedure are not current authority. Start
 from this page and the active `g03` runway; archives are provenance only.
-<!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:4a18cfb7640f13e3000ac803804360d50f1890f5cb3ee3b61915626ae0edaf15 -->
+<!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:dbb957118c0b7a9e8ffcd1cf2af1d8ccd8777ae311a5d04867760686b0b9e21f -->
 | Generation | Disposition | Runway state |
 | --- | --- | --- |
 | g03 | open | planning_required |
@@ -55,4 +55,5 @@ from this page and the active `g03` runway; archives are provenance only.
 | g03.012 | complete | none | 8 | sha256:2ea341f845521a3162fc405e6528fb40d08b4e30b555b3de3af819f3c8bfc649 |
 | g03.013 | complete | none | 8 | sha256:b04543c372ffeb75b3fd0813e7f541f216d22f3c6bd3cb03dcd5e175ea225374 |
 | g03.014 | complete | none | 8 | sha256:625cb1913c3e02eedff7bfde13b7739bab45ac45d5017c550df775b210ab95dd |
+| g03.015 | complete | none | 8 | sha256:c1035ad4e0adc5dec9a9723c622acadf1e2ab689883f1711e4f2c435ac519df8 |
 <!-- northstar:lifecycle:end -->
