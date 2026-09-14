@@ -138,11 +138,11 @@ One-page reference for terms used across Northstar docs.
   planning on the integration branch and sends provenance-labelled direction to
   the coordinator.
 
-**Planning delegate**
-: An optional lightweight same-workspace conversation for exploring one issue
-  in parallel. Creates one unique timestamped triage file, may keep that note
-  current for the bounded issue under exact-path Git isolation, and reports to
-  Chatterbox; does not open planning PRs or contact the coordinator.
+**Oracle**
+: An optional, issue-scoped frontier planning consultation. Receives a minimal
+  redacted dossier, may challenge evidence and alternatives, and returns
+  bounded advisory intake to Chatterbox. It cannot promote planning, declare
+  readiness, dispatch, review, merge, or direct the Coordinator.
 
 **Coordinator**
 : The mechanical delivery manager. Performs factual preflight, launches the

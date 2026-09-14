@@ -120,7 +120,7 @@ compatibility aliases.
 | Mode file | Use when |
 | --- | --- |
 | `pr-review.md` | Review an existing PR and post every required change on the provider review surface |
-| `orchestrator.md` | Question-led planning, one pushed worker handoff under `docs/handoffs/`, bounded PR review loop |
+| `coordinator.md` | Question-led planning, one pushed worker handoff under `docs/handoffs/`, bounded PR review loop |
 | `cleanup-docs.md` | Inventory `/docs`, rehome clear drift, and disposition triage notes without blind deletion |
 | `normalize-docs.md` | Bootstrap, migrate, or ongoing docs-spine hygiene |
 | `plan-from-scratch.md` | Planning coverage still missing |
@@ -139,7 +139,7 @@ Templates live under `skills/northstar/assets/templates/`.
 ## Activation rules
 
 - **Implicit (auto-invoke):** plan, research, recover, normalize, direct PR
-  review, explicit orchestrator-thread, or long-horizon strategic-planning
+  review, explicit coordinator-thread, or long-horizon strategic-planning
   language in the user message — covered by the `northstar` skill description.
 - **Handoff:** only when the user clearly wants a continuation brief or fresh
   thread. The router and handoff mode forbid compaction-only or bare `continue`.
@@ -149,7 +149,7 @@ Templates live under `skills/northstar/assets/templates/`.
   acquires a missing official package into durable operator state and returns
   its verified entrypoint. Detection of a language alone never installs or
   activates anything.
-- **Triage:** Chatterbox, planning-delegate, refresh, and cleanup conversations
+- **Triage:** Chatterbox, Oracle, refresh, and cleanup conversations
   capture unresolved useful threads in `docs/triage/`; the mechanical
   coordinator does not scan or reconcile them.
 

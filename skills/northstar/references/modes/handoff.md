@@ -10,8 +10,8 @@ Do not create a handoff merely because the thread is long, context is compacted,
 or the next task is already clear in the live planning surfaces.
 
 Do not use this mode as the successor runtime for
-`handoff_mode: orchestrator-continuation`. That successor enters Orchestrator
-mode. The source orchestrator reuses the generic seven-section template; it
+`handoff_mode: coordinator-continuation`. That successor enters Coordinator
+mode. The source coordinator reuses the generic seven-section template; it
 does not add a public continuation mode or template.
 
 ## Tone: write like a thoughtful teammate
@@ -41,7 +41,7 @@ choice has not been made yet.”
   placement, naming, and tone rules
 - [`../../assets/templates/northstar-handoff.md.template`](../../assets/templates/northstar-handoff.md.template)
   — the generic human-friendly handoff template
-- `../../assets/templates/northstar-orchestrator-run.md.template` — the worker
+- `../../assets/templates/northstar-coordinator-run.md.template` — the worker
   handoff extension, using the same seven core sections and adding worker/PR
   instructions inside `## Completion Protocol`
 
@@ -80,7 +80,7 @@ choice has not been made yet.”
 
 ## Worker handoffs
 
-The orchestrator/worktree flow reuses this exact writing flow. It uses the
+The coordinator/worktree flow reuses this exact writing flow. It uses the
 worker extension template, writes the file under `docs/handoffs/` of the owning
 repo, and gives the operator the **absolute path** to that file after the
 prepared `main` branch has been committed and pushed. Do not dispatch with only

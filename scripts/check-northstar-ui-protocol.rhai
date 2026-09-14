@@ -93,7 +93,7 @@ require_contains(handoff_contract, "### UI Design Brief", "handoff contract");
 require_contains(handoff_contract, "Important Context", "handoff contract");
 require_contains(handoff_contract, "seven top-level sections", "handoff contract");
 
-let worker_template = read("skills/northstar/assets/templates/northstar-orchestrator-run.md.template");
+let worker_template = read("skills/northstar/assets/templates/northstar-coordinator-run.md.template");
 let worker_handoff = ui::validate_ui_handoff(worker_template, true);
 require(worker_handoff["ok"],
     "worker handoff template failed the seven-section UI transport: " +

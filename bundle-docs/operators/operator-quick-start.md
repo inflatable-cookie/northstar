@@ -91,7 +91,7 @@ to pick one mode:
   `northstar` (TypeScript package, explicit audit-and-repair)
 - “Audit and fix this entire TypeScript/Svelte repository” ->
   `northstar` (TypeScript package, explicit repository audit-and-repair)
-- **Coordinate a Northstar lane (runway, dispatch, gated merge)** -> `northstar` (orchestrator mode)
+- **Coordinate a Northstar lane (runway, dispatch, gated merge)** -> `northstar` (coordinator mode)
 
 Language quality policy is package-owned. Northstar's installed
 `northstar/language:route` task selects the registry pin, acquires and verifies
@@ -100,7 +100,7 @@ to follow. Consumer repositories still own activation markers, profiles,
 toolchains, exclusions, and dependency policy. Removing the former top-level
 language skills does not remove these workflows.
 
-During Chatterbox, planning-delegate, refresh, or cleanup work, use
+During Chatterbox, Oracle, refresh, or cleanup work, use
 `docs/triage/` for unresolved capture. Update an existing note when the same
 issue changes; do not create corrective notes around it. Full promotion deletes
 the note, while partial promotion leaves only unresolved meaning. The mechanical
@@ -114,18 +114,18 @@ project's real idempotent setup task, then replays machine-local
 `effigy deps link` state. Tailor scripts and metadata instructions to the
 repository rather than treating the starter wording as doctrine.
 
-In this mode, the orchestrator commits and pushes the planning state and one
+In this mode, the coordinator commits and pushes the planning state and one
 worker handoff under `docs/handoffs/` per dispatched lane before dispatch. The
 operator receives each handoff's absolute path; no second prompt or copied
 context is needed. Each handoff lists sibling repos to symlink into the worktree
 container directory before project setup needs them.
 
 In Paseo, workspace isolation and agent parentage are separate: the
-orchestrator creates each lane's dedicated worktree workspace first, then
+coordinator creates each lane's dedicated worktree workspace first, then
 creates the worker as a child agent from its own scoped surface using that
 returned workspace ID. Workspace placement does not detach parentage. Detached
 root launches, schedules, generic detached runs, or unproven CLI substitutes are
-rejected. Finish notifications remain enabled so the orchestrator receives
+rejected. Finish notifications remain enabled so the coordinator receives
 completion and resumes the same child for revisions. Without Paseo or when
 scoped tools are absent, you get every absolute handoff path for manual launch
 without pretended parentage.
@@ -135,7 +135,7 @@ canonical dispatch manifest and launches every approved ready-frontier lane
 without a global thread budget.
 A provider spend cap, quota, rate limit, or unavailable profile pauses
 or reroutes only that lane; unrelated ready work keeps launching. If the
-selected day-to-day route is unavailable, the orchestrator chooses another
+selected day-to-day route is unavailable, the coordinator chooses another
 adequate route from that lane's diversified pool rather than spending a
 frontier worker. If
 no suitable route remains, that lane keeps its handoff and workspace so recovery
@@ -147,7 +147,7 @@ authority. Same-repo PRs still merge one at a time, and a changed or
 conflict-resolved remaining head goes back to review before it can merge.
 
 Ordinary workers draw from the cheapest adequate day-to-day implementation pool, and the
-orchestrator varies provider/model identity between runs instead of reusing
+coordinator varies provider/model identity between runs instead of reusing
 one remembered route. Audit, documentation-grind, review, planning, and
 coordinator profiles are not implementation workers, even for large or
 documentation-heavy changes. Frontier workers are rare: the lane must be both
@@ -157,13 +157,23 @@ reasons. A risky but well-specified change can still use a capable non-frontier
 worker; its independent review child keeps material review. A frontier review
 route is reserved for residual risk that settled planning, explicit oracles,
 and tests cannot bound. You can name a profile to
-override. If no adequate profile fits, the orchestrator reports that gap
+override. If no adequate profile fits, the coordinator reports that gap
 instead of silently spending the expensive one.
 
-You can also spin off a lightweight planning delegate for one topic. It runs as
-a same-workspace conversation, creates one unique triage note, may keep that
-note current during its bounded discussion, and reports it to Chatterbox for
-reconciliation and direct promotion.
+For a material unresolved planning question, Chatterbox may request one
+bounded frontier Oracle consultation. Oracle receives a minimal dossier with
+the exact question, authority/evidence, assumptions, constraints, options,
+risk trigger, operator-owned decisions, and requested output. Redact secrets
+and raw sensitive payloads. Oracle returns advisory intake to Chatterbox; it
+cannot promote planning, declare readiness, dispatch, review, merge, or direct
+the Coordinator.
+
+Before readiness or dispatch, the mandatory observable decision-risk gate
+requires Oracle for material security, privacy, sensitive-information,
+trust-boundary, irreversible, distributed/concurrent, or complex cross-system
+decisions unless canonical authority and an exact acceptance oracle prove the
+change fully mechanical. Each ready manifest records a concrete `Oracle gate`
+disposition.
 
 Worker PRs normally receive an independent review child: the coordinator
 passes the worker's exact `workspaceId`, creates no review workspace, verifies
@@ -176,24 +186,24 @@ reviewed head. Revised heads return to the same reviewer agent; only definitive
 unavailability permits a replacement, still in the worker workspace. The
 coordinator does not duplicate the review; it verifies the
 verdict head, findings, checks, ancestry, mergeability, and pause state before
-merging. You can still ask the orchestrator thread to review a PR directly.
+merging. You can still ask the coordinator thread to review a PR directly.
 
-You can also ask the current orchestrator to hand its live lane to a fresh
-orchestrator. It writes and pushes one ordinary seven-section handoff, then
+You can also ask the current coordinator to hand its live lane to a fresh
+coordinator. It writes and pushes one ordinary seven-section handoff, then
 yields that lane. With Paseo, the successor starts in a separate local workspace
-for the same project, with a current orchestrator profile, the capitalized
-`Orchestrator` label, and only the absolute handoff path as its prompt. Sidebar
+for the same project, with a current coordinator profile, the capitalized
+`Coordinator` label, and only the absolute handoff path as its prompt. Sidebar
 pinning stays a manual click unless Paseo later exposes a native pin control.
 Without Paseo you still get that absolute path and can launch the successor
 yourself. The old thread is not archived or deleted as part of the transfer.
 
 After a review requests changes, provider comments record the findings but do
-not wake a finished worker. A Paseo-backed orchestrator must prompt the same
+not wake a finished worker. A Paseo-backed coordinator must prompt the same
 originating agent to read the comments, revise, validate, and push. It must not
 silently launch a replacement.
 
 When an independent review child accepts the exact current worker PR head and
-the coordinator's merge gate holds, the orchestrator may merge that lane
+the coordinator's merge gate holds, the coordinator may merge that lane
 without asking the operator again. A changed head, failed or pending check,
 stricter repository rule, explicit operator pause, or ambiguous merge state
 stops that path. When a connector write is refused while the gate remains

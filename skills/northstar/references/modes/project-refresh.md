@@ -6,7 +6,7 @@ an existing project: inspect every planning and agent-facing facet, repair clear
 staleness, and route unresolved work to the right internal mode.
 
 This is a normal-mode operation. In normal-mode worktree checks are not part of
-this mode. Do not inspect worker-local path configuration, start an orchestrator,
+this mode. Do not inspect worker-local path configuration, start a Coordinator,
 or create a worker/worktree. A refresh can run in the current checkout using the
 repository's normal operating context.
 
@@ -118,7 +118,7 @@ Use the narrowest route that resolves the first material blocker:
 6. architecture refocus for bounded active-code architecture pressure;
 7. research or pre-execution discovery for unresolved evidence or intent;
 8. roadmap compilation only when planning is already coherent;
-9. orchestrator mode only when the operator explicitly wants a worker/PR loop.
+9. coordinator mode only when the operator explicitly wants a worker/PR loop.
 
 Do not claim the project is refreshed merely because Effigy health is green. Do
 not claim planning is complete merely because files exist.

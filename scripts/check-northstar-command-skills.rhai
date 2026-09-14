@@ -208,11 +208,11 @@ require(fs::is_file(path::join(root, "references/packages/installed-package-rout
 
 let router_text = fs::read_file(path::join(root, "references/router.md"));
 let handoff_contract_text = fs::read_file(path::join(root, "references/handoff-contract.md"));
-let orchestrator_text = fs::read_file(path::join(root, "references/modes/orchestrator.md"));
+let coordinator_text = fs::read_file(path::join(root, "references/modes/coordinator.md"));
 let handoff_mode_text = fs::read_file(path::join(root, "references/modes/handoff.md"));
-let continuation_router = h2_section(router_text, "## Orchestrator-continuation activation");
-let continuation_contract = h3_section(handoff_contract_text, "### Orchestrator-continuation activation");
-let continuation_mode = h2_section(orchestrator_text, "## Fresh orchestrator continuation");
+let continuation_router = h2_section(router_text, "## Coordinator-continuation activation");
+let continuation_contract = h3_section(handoff_contract_text, "### Coordinator-continuation activation");
+let continuation_mode = h2_section(coordinator_text, "## Fresh Coordinator continuation");
 let generic_template = fs::read_file(path::join(root, "assets/templates/northstar-handoff.md.template"));
 let generic_h2 = 0;
 for line in str::split_lines(generic_template) {
@@ -221,25 +221,25 @@ for line in str::split_lines(generic_template) {
     }
 }
 
-require(continuation_router.contains("handoff_mode: orchestrator-continuation") &&
-    continuation_router.contains("orchestrator_mode: economical-coordination") &&
-    continuation_router.contains("dispatch_authority: orchestrator"),
+require(continuation_router.contains("handoff_mode: coordinator-continuation") &&
+    continuation_router.contains("coordinator_mode: economical-coordination") &&
+    continuation_router.contains("dispatch_authority: coordinator"),
     "router continuation activation is missing the three settled fields");
 require(continuation_router.contains("does not run the worker startup") &&
     continuation_router.contains("the launch before those other routes"),
-    "router does not reject worker, planning-delegate, or handoff successor routing");
-require(continuation_contract.contains("handoff_mode: orchestrator-continuation") &&
+    "router does not reject worker, Oracle, or handoff successor routing");
+require(continuation_contract.contains("handoff_mode: coordinator-continuation") &&
     continuation_contract.contains("Do not add a public mode or a second continuation template"),
     "handoff contract continuation overlay is incomplete");
-require(main_text.contains("handoff_mode: orchestrator-continuation") &&
-    main_text.contains("does not run worker or planning-delegate"),
-    "skill outcome does not keep continuation in orchestrator mode");
+require(main_text.contains("handoff_mode: coordinator-continuation") &&
+    main_text.contains("does not run worker or Oracle"),
+    "skill outcome does not keep continuation in coordinator mode");
 require(handoff_mode_text.contains("Do not use this mode as the successor runtime"),
     "handoff-writing mode can be used as continuation runtime");
 require(!continuation_mode.contains("handoff_mode: worker-pr-loop") &&
     !continuation_mode.contains("planning_mode: conversational-discovery"),
-    "continuation procedure activates worker or planning-delegate metadata");
-require(!fs::is_file(path::join(root, "assets/templates/northstar-orchestrator-continuation.md.template")),
+    "continuation procedure activates worker or Oracle metadata");
+require(!fs::is_file(path::join(root, "assets/templates/northstar-coordinator-continuation.md.template")),
     "continuation added a public template");
 require(generic_h2 == 7 && !generic_template.contains("handoff_mode:"),
     "generic handoff template is no longer seven sections without activation fields");
@@ -255,9 +255,9 @@ require(continuation_mode.contains("creates a separate `local` workspace") &&
     "continuation launch does not reject worker isolation or a different project path");
 
 require(continuation_mode.contains("capitalized label") &&
-    continuation_mode.contains("`Orchestrator=true`") &&
+    continuation_mode.contains("`Coordinator=true`") &&
     continuation_mode.contains("omitted or lowercased"),
-    "continuation launch does not require the capitalized Orchestrator label");
+    "continuation launch does not require the capitalized Coordinator label");
 
 require(continuation_mode.contains("Read and follow <absolute-handoff-path>.") &&
     continuation_mode.contains("transcript or a") &&
@@ -282,7 +282,7 @@ require(continuation_mode.contains("Without Paseo") &&
 
 // Card 127: chatterbox spawn is a parent-attached sibling child in the
 // coordinator's current workspace; it never creates a workspace.
-let chatterbox_spawn = h2_section(orchestrator_text, "## Chatterbox spawn and intake");
+let chatterbox_spawn = h2_section(coordinator_text, "## Chatterbox spawn and intake");
 require(chatterbox_spawn.contains("parent-attached child agent") &&
     chatterbox_spawn.contains("current workspace") &&
     chatterbox_spawn.contains("agent-scoped creation call") &&
@@ -294,11 +294,15 @@ require(!fs::is_file(path::join(root, "assets/templates/northstar-discovery-dele
     "deleted discovery-delegate template still present");
 require(!fs::is_file(path::join(root, "assets/templates/northstar-documentation-projection.md.template")),
     "deleted documentation-projection template still present");
+require(!fs::is_file(path::join(root, "references/modes/orchestrator.md")),
+    "superseded Orchestrator mode still present; Coordinator has no alias");
+require(!fs::is_file(path::join(root, "assets/templates/northstar-orchestrator-run.md.template")),
+    "superseded Orchestrator worker template still present; Coordinator has no alias");
 
 // Card 128: Spec 037 structural fixtures
 let chatterbox_mode_text = fs::read_file(path::join(root, "references/modes/chatterbox.md"));
 require(chatterbox_mode_text.contains("primary operator-facing planning authority") &&
-    chatterbox_mode_text.contains("reconciles delegate, external, or conversational triage notes") &&
+    chatterbox_mode_text.contains("reconciles Oracle dossiers, external evidence, or conversational triage notes") &&
     chatterbox_mode_text.contains("directly updates canonical planning"),
     "chatterbox mode missing primary planning and promotion authority");
 
@@ -309,15 +313,51 @@ require(chatterbox_triage.contains("update the existing note in place") &&
     chatterbox_triage.contains("after partial promotion, edit the note down"),
     "chatterbox mode missing mutable triage or promotion-time pruning");
 
-require(orchestrator_text.contains("mechanical delivery management") &&
-    orchestrator_text.contains("canonical dispatch manifest published by Chatterbox") &&
-    orchestrator_text.contains("narrow fast path"),
-    "orchestrator mode missing mechanical coordination role");
+let oracle_section = h2_section(coordinator_text, "## Frontier Oracle consultations");
+require(oracle_section.contains("issue-scoped frontier planning conversation") &&
+    oracle_section.contains("smallest useful dossier") &&
+    oracle_section.contains("Secrets and raw sensitive payloads are redacted") &&
+    oracle_section.contains("never to the\nCoordinator directly") &&
+    oracle_section.contains("cannot promote canonical planning") &&
+    oracle_section.contains("worker failure alone are not triggers"),
+    "Coordinator mode missing bounded Oracle authority and dossier rules");
 
-let orchestrator_triage = h2_section(orchestrator_text, "## Triage boundary");
-require(orchestrator_triage.contains("does not load, reconcile, edit, or prune") &&
-    orchestrator_triage.contains("never chooses a planning branch") &&
-    orchestrator_triage.contains("provenance-labelled recommendation"),
+let gate_section = h2_section(chatterbox_mode_text, "## Decision-risk gate and Oracle intake");
+for marker in [
+    "mandatory observable decision-risk gate",
+    "Do not use model self-confidence",
+    "security",
+    "privacy",
+    "sensitive information",
+    "trust boundary",
+    "irreversible migration",
+    "cross-system architecture",
+    "settled mechanical",
+    "falsifiable acceptance oracle",
+    "Oracle gate: not required",
+    "Oracle gate: satisfied",
+    "Redact secrets and raw sensitive payloads",
+] {
+    require(gate_section.contains(marker), "Oracle decision-risk gate missing: " + marker);
+}
+require(gate_section.contains("It cannot promote"),
+    "Oracle gate weakens planning authority boundary");
+require(gate_section.contains("direct the Coordinator"),
+    "Oracle gate weakens Coordinator authority boundary");
+
+require(fs::is_file(path::join(root, "references/modes/coordinator.md")) &&
+    fs::is_file(path::join(root, "assets/templates/northstar-coordinator-run.md.template")),
+    "Coordinator mode/template pair is incomplete");
+
+require(coordinator_text.contains("mechanical delivery management") &&
+    coordinator_text.contains("canonical dispatch manifest published by Chatterbox") &&
+    coordinator_text.contains("narrow fast path"),
+    "coordinator mode missing mechanical coordination role");
+
+let coordinator_triage = h2_section(coordinator_text, "## Triage boundary");
+require(coordinator_triage.contains("does not load, reconcile, edit, or prune") &&
+    coordinator_triage.contains("never chooses a planning branch") &&
+    coordinator_triage.contains("provenance-labelled recommendation"),
     "coordinator triage boundary is not mechanical");
 
 let direction_section = h2_section(chatterbox_mode_text, "## Coordinator direction channel");
@@ -326,13 +366,13 @@ require(direction_section.contains("operator-confirmed direction") &&
     direction_section.contains("administrative notice"),
     "chatterbox direction channel missing 3 provenance types");
 
-let orchestrator_posture = h2_section(orchestrator_text, "## Operating posture");
-require(orchestrator_posture.contains("complete approved ready frontier") &&
-    orchestrator_posture.contains("event-bounded turns") &&
-    orchestrator_posture.contains("never poll or call wait primitives"),
-    "orchestrator missing full-frontier launch or post-dispatch yield");
+let coordinator_posture = h2_section(coordinator_text, "## Operating posture");
+require(coordinator_posture.contains("complete approved ready frontier") &&
+    coordinator_posture.contains("event-bounded turns") &&
+    coordinator_posture.contains("never poll or call wait primitives"),
+    "coordinator missing full-frontier launch or post-dispatch yield");
 
-let paseo_launch_settings = h2_section(orchestrator_text, "## Paseo launch settings");
+let paseo_launch_settings = h2_section(coordinator_text, "## Paseo launch settings");
 require(paseo_launch_settings.contains("selected profile as a complete") &&
     paseo_launch_settings.contains("launch bundle. Materialize"),
     "Paseo child launch does not treat profiles as complete launch bundles");
@@ -349,16 +389,16 @@ for child_class in [
     "workers",
     "reviewers",
     "chatterboxes",
-    "planning delegates",
+    "Oracle consultations",
     "bounded research",
     "mechanical projection workers",
-    "successor orchestrators",
+    "successor Coordinators",
 ] {
     require(paseo_launch_settings.contains(child_class),
         "Paseo launch-settings rule omits child class: " + child_class);
 }
 
-let review_child_section = h2_section(orchestrator_text, "## Independent review children and serial workspace lease");
+let review_child_section = h2_section(coordinator_text, "## Independent review children and serial workspace lease");
 require(review_child_section.contains("existing worker workspace") &&
     review_child_section.contains("serial clean") &&
     review_child_section.contains("pass that same value explicitly") &&
@@ -376,7 +416,7 @@ require(!fs::read_file(path::join(repo_root, "docs/architecture/system-architect
         .contains("creates a dedicated checkout/worktree workspace for the PR head"),
     "canonical docs retain superseded review-workspace creation instructions");
 
-let escalation_section = h2_section(orchestrator_text, "## Context-complete operator escalations");
+let escalation_section = h2_section(coordinator_text, "## Context-complete operator escalations");
 require(escalation_section.contains("10-part capsule") &&
     escalation_section.contains("headline") &&
     escalation_section.contains("observed versus intended behavior") &&
@@ -385,9 +425,9 @@ require(escalation_section.contains("10-part capsule") &&
     "escalation capsule definition incomplete");
 
 // Card 128: Spec 037 negative fixtures
-require(orchestrator_text.contains("Raw triage notes are never authority"),
+require(coordinator_text.contains("Raw triage notes are never authority"),
     "raw-triage dispatch forbidden check missing");
-require(orchestrator_text.contains("without designing lanes"),
+require(coordinator_text.contains("without designing lanes"),
     "coordinator semantic lane design forbidden check missing");
 require(direction_section.contains("Inspect coordinator state once to avoid duplicate messages") &&
     direction_section.contains("do not poll"),
@@ -398,7 +438,7 @@ require(review_child_section.contains("verify the worker is idle") &&
     "concurrent workspace lease protection missing");
 let pr_review_text = fs::read_file(path::join(root, "references/modes/pr-review.md"));
 require(pr_review_text.contains("post the durable verdict on the provider naming the exact head SHA reviewed") &&
-    orchestrator_text.contains("durable accepted verdict names the exact current head"),
+    coordinator_text.contains("durable accepted verdict names the exact current head"),
     "exact head verification missing in pr-review or coordinator merge gate");
 require(escalation_section.contains("opaque or incomplete capsules") &&
     escalation_section.contains("do not reconstruct"),
@@ -407,15 +447,15 @@ require(escalation_section.contains("opaque or incomplete capsules") &&
 // Card 129: Spec 037 continuous coordinator fixtures
 
 // Structural contract assertions
-require(orchestrator_text.contains("continuous") &&
-    orchestrator_text.contains("coordinator action chain") &&
-    orchestrator_text.contains("without waiting for an operator `continue`"),
+require(coordinator_text.contains("continuous") &&
+    coordinator_text.contains("coordinator action chain") &&
+    coordinator_text.contains("without waiting for an operator `continue`"),
     "coordinator missing continuous action chain without continue");
-require(orchestrator_text.contains("does not notify Chatterbox") &&
-    (orchestrator_text.contains("active children") || orchestrator_text.contains("child waits")),
+require(coordinator_text.contains("does not notify Chatterbox") &&
+    (coordinator_text.contains("active children") || coordinator_text.contains("child waits")),
     "waiting child chatterbox silence missing");
-require(orchestrator_text.contains("canonical runway is empty") &&
-    orchestrator_text.contains("administrative notice with completed state"),
+require(coordinator_text.contains("canonical runway is empty") &&
+    coordinator_text.contains("administrative notice with completed state"),
     "empty runway administrative notice missing");
 require(review_child_section.contains("different underlying provider/model identity") &&
     review_child_section.contains("reject the same provider/model"),
@@ -423,8 +463,8 @@ require(review_child_section.contains("different underlying provider/model ident
 require(review_child_section.contains("fail closed") &&
     review_child_section.contains("distinct reviewer"),
     "fail-closed reviewer qualification check missing");
-require(orchestrator_text.contains("approved native write transport") &&
-    orchestrator_text.contains("solicit credentials"),
+require(coordinator_text.contains("approved native write transport") &&
+    coordinator_text.contains("solicit credentials"),
     "authenticated write fallback check missing");
 require(chatterbox_mode_text.contains("administrative notice with completed state") &&
     chatterbox_mode_text.contains("canonical runway is empty") &&

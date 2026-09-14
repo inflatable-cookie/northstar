@@ -41,8 +41,8 @@ ordinary continuation:
 
 - bare `continue`, "keep going", "context is full", compaction alone
 - routine batch closeout without asking for a handoff file
-- an orchestrator-owned planning delegate, implementation-worker, or
-  orchestrator-continuation lane; use Orchestrator mode so the successor keeps
+- a Coordinator-owned Oracle consultation, implementation-worker, or
+  coordinator-continuation lane; use Coordinator mode so the successor keeps
   planning, dispatch, PR review, merge, and promotion instead of writing another
   note or entering worker/delegate preflight
 
@@ -58,13 +58,13 @@ Northstar state**, rather than one narrow review:
 - refresh, bring up to date, or check every Northstar facet.
 
 This is normal mode. Do not run worker-mode worktree preflight, inspect
-worker-local path configuration, start an orchestrator, or create a worker from
+worker-local path configuration, start a Coordinator, or create a worker from
 this route. Open `modes/project-refresh.md`; it checks instruction surfaces,
 docs structure, architecture/authority, planning readiness, currentness,
 validation, and distribution, then reuses one narrower route for the first
 material blocker.
 
-**Precedence:** An explicit worker/PR/orchestrator request wins. A specific
+**Precedence:** An explicit worker/PR/coordinator request wins. A specific
 AGENTS review, planning-readiness review, or discovery request wins when the
 operator does not ask for the broader refresh.
 
@@ -121,8 +121,8 @@ remains plan-only and operator-owned. If the operator does not yet know the
 project's aim, guide first-principles discovery or route away from Atlas rather
 than inventing a destination.
 
-If the request is an explicit orchestrator, worker, worktree, or PR loop, choose
-**Orchestrator** mode instead. If the request is only to test existing planning
+If the request is an explicit coordinator, worker, worktree, or PR loop, choose
+**Coordinator** mode instead. If the request is only to test existing planning
 coherence, choose **Planning readiness review**. If coherent canonical surfaces
 only need tasks, choose roadmap compilation.
 
@@ -145,13 +145,13 @@ This is an internal mode of the single public `northstar` authority. It is
 provider-neutral, plan-only, and non-mutating by default; it cannot clear a map,
 make a card ready, or replace normal spec, promotion, roadmap, or operator gates.
 
-**Precedence:** If the user explicitly asks for an orchestrator thread, separate
+**Precedence:** If the user explicitly asks for a Coordinator thread, separate
 worker/worktree preparation, or PR review around a readiness/discovery lane,
-choose **Orchestrator** mode even when the request also mentions readiness or
-discovery; treat discovery as the Orchestrator's planning lane. Direct
+choose **Coordinator** mode even when the request also mentions readiness or
+discovery; treat discovery as the Coordinator's planning lane. Direct
 readiness, intent, project-language, decision-prototype, questionnaire, or
 reframe
-requests without that orchestrator/worker/worktree/PR language remain
+requests without that coordinator/worker/worktree/PR language remain
 **Pre-execution discovery**.
 
 → [`modes/pre-execution-discovery.md`](./modes/pre-execution-discovery.md)
@@ -165,10 +165,10 @@ provider. Every blocking finding must appear on the PR; chat is only the
 operator summary.
 
 An explicit request to manage the surrounding discovery, planning, worker, or
-closeout loop remains **Orchestrator** mode. A direct review request does not
+closeout loop remains **Coordinator** mode. A direct review request does not
 activate worker mode or the worker startup preflight.
 
-Orchestrator-launched review children use this same mode in the worker's exact
+Coordinator-launched review children use this same mode in the worker's exact
 existing workspace: creation passes the retained worker `workspaceId`, creates
 no review workspace, and verifies the returned placement. Re-review resumes the
 retained reviewer `agentId` in that workspace. The reviewer holds a serial clean
@@ -199,11 +199,11 @@ no operator-selected concept evidence, stop and return the lane to planning
 visual language stay with the consumer repository; tests, screenshots, and style
 detectors never grant design approval.
 
-**Precedence:** an explicit orchestrator or worker dispatch keeps its route and
+**Precedence:** an explicit coordinator or worker dispatch keeps its route and
 loads this skill inside the worker; a bare review request for a UI PR uses this
 route alongside direct PR review.
 
-## 9. Orchestrator thread
+## 9. Coordinator thread
 
 Use when the user wants Northstar to coordinate a lane: consume the canonical
 dispatch manifest, verify factual prerequisites, launch the approved frontier,
@@ -213,13 +213,13 @@ across merge, closeout, and next-ready dispatch without an operator `continue`,
 route a worker's pre-PR semantic decision blocker to Chatterbox instead of
 questioning the operator directly, notify Chatterbox administratively only when
 the runway is empty, and own the merge gate; or
-continue from a committed `orchestrator-continuation` handoff. Canonical
+continue from a committed `coordinator-continuation` handoff. Canonical
 planning and promotion belong to Chatterbox. This is an internal mode of the
 single public authority; the operator relays messages between threads when no
 control-plane tools are available. When Paseo injects its orchestration tools,
 the mode uses them for routine dispatch without a separate permission prompt.
 
-→ [`modes/orchestrator.md`](./modes/orchestrator.md)
+→ [`modes/coordinator.md`](./modes/coordinator.md)
 
 ## 10. Agent instruction review
 
@@ -326,50 +326,50 @@ current explicit operator instruction may activate Chatterbox mode's bounded
 small-direct-change gate; that exception permits one local, reversible,
 low-risk change when no worker owns it and focused validation is available.
 
-**Precedence:** Explicit orchestrator, worker, planning-delegate, continuation,
+**Precedence:** Explicit coordinator, worker, Oracle, continuation,
 or PR-review requests keep those routes. A material implementation request stays
 with the coordinator/worker loop. PR review and merge stay outside Chatterbox.
 
 → [`modes/chatterbox.md`](./modes/chatterbox.md)
 
-## Orchestrator-continuation activation
+## Coordinator-continuation activation
 
 This path applies **only** when a committed handoff declares all three fields:
 
 ```yaml
-handoff_mode: orchestrator-continuation
-orchestrator_mode: economical-coordination
-dispatch_authority: orchestrator
+handoff_mode: coordinator-continuation
+coordinator_mode: economical-coordination
+dispatch_authority: coordinator
 ```
 
-The successor opens [`modes/orchestrator.md`](./modes/orchestrator.md) and
-continues as a normal orchestrator thread. It does not run the worker startup
-fast path, planning-delegate preflight, or generic handoff-writing mode. Reject
-the launch before those other routes if the successor was aimed at worker,
-planning-delegate, or handoff mode.
+The successor opens [`modes/coordinator.md`](./modes/coordinator.md) and
+continues as a normal Coordinator thread. It does not run the worker startup
+fast path, Oracle preflight, or generic handoff-writing mode. Reject the launch before those other routes
+if the successor was aimed at worker, Oracle, or handoff mode.
 
 ## Worker startup fast path
 
 This fast path applies **only** to worker mode. Activate worker mode by first
-reading the handoff path supplied by the orchestrator — the operator-facing
+reading the handoff path supplied by the coordinator — the operator-facing
 path is always absolute — and confirming its frontmatter declares:
 
 ```yaml
 handoff_mode: worker-pr-loop
 worker_mode: implementation
-dispatch_authority: orchestrator
+dispatch_authority: coordinator
 ```
 
-Normal-mode agents, planning/orchestrator threads, review threads, and agents
+Normal-mode agents, planning/coordinator threads, review threads, and agents
 that merely happen to be inside a worktree do not run this probe and do not
 inspect `.agents.local.env` for worker purposes. Do not infer worker mode from a
 branch name, filesystem path, or harness presence. If the dispatch metadata is
 absent, stop the worker launch and report the missing handoff boundary.
 
-A planning delegate is an optional same-workspace conversation that captures
-unique triage notes and reports to Chatterbox. It does not activate this
-implementation worker fast path. An `orchestrator-continuation` handoff follows
-Orchestrator mode and does not activate this path.
+Oracle is an optional issue-scoped frontier consultation that receives a
+minimal redacted dossier and returns advisory intake to Chatterbox. It does
+not activate this implementation worker fast path. A
+`coordinator-continuation` handoff follows Coordinator mode and does not
+activate this path.
 
 After worker mode is activated, before broad repository reads, run one quick
 read-only probe from the current context:

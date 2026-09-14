@@ -31,28 +31,28 @@ A worker handoff must declare all three frontmatter fields:
 ```yaml
 handoff_mode: worker-pr-loop
 worker_mode: implementation
-dispatch_authority: orchestrator
+dispatch_authority: coordinator
 ```
 
 These fields explicitly activate worker mode. The worktree preflight applies
-only after a worker thread has received and read this orchestrator-dispatched
-handoff. Normal-mode agents, planning/orchestrator threads, and agents that
+only after a worker thread has received and read this coordinator-dispatched
+  handoff. Normal-mode agents, planning/Coordinator threads, and agents that
 merely happen to be in a worktree must not perform the worker preflight or
 inspect worker-local path configuration.
 
-### Orchestrator-continuation activation
+### Coordinator-continuation activation
 
-A fresh-orchestrator continuation reuses the generic seven-section handoff.
+A fresh-coordinator continuation reuses the generic seven-section handoff.
 It must declare all three frontmatter fields:
 
 ```yaml
-handoff_mode: orchestrator-continuation
-orchestrator_mode: economical-coordination
-dispatch_authority: orchestrator
+handoff_mode: coordinator-continuation
+coordinator_mode: economical-coordination
+dispatch_authority: coordinator
 ```
 
-These fields activate normal orchestrator mode for the successor. They do not
-activate worker mode, planning-delegate preflight, or the handoff-writing route.
+These fields activate normal Coordinator mode for the successor. They do not
+activate worker mode, Oracle preflight, or the handoff-writing route.
 Do not add a public mode or a second continuation template. The source yields
 planning, dispatch, review, and merge mutations for the transferred lane after
 the pushed handoff is dispatched.
@@ -136,7 +136,7 @@ or copies multi-paragraph protocol text, treat that as a compression signal.
   - for a worker handoff dispatched beside other frontier lanes, the sibling
     lanes launched with it, the mutable and closeout surfaces this lane owns,
     and whether shared closeout is partitioned or reserved for a named
-    orchestrator integration step. Record the reason any related lane was kept
+    coordinator integration step. Record the reason any related lane was kept
     serial;
   - for a worker handoff, the model capability profile selected under the
     diversified-routing rule (adequate pool, cheapest adequate tier,
@@ -156,10 +156,10 @@ or copies multi-paragraph protocol text, treat that as a compression signal.
     existing path; never delete, replace, or overwrite. The committed handoff
     in the selected `HEAD` is canonical and must be verified before any
     sibling-path mutation;
-  - for an orchestrator-continuation handoff, the current authority chain, open
+  - for a coordinator-continuation handoff, the current authority chain, open
     operator questions, active and paused lanes, ready frontier, worker and PR
     transport identities, review/merge state, touched triage notes, repository
-    state, and the next orchestrator action. The successor reloads current
+    state, and the next coordinator action. The successor reloads current
     `main`; private conversation is not authority.
 - `Boundaries` includes at least one explicit out-of-scope boundary and any hard
   constraints the next thread must respect.
@@ -171,8 +171,8 @@ or copies multi-paragraph protocol text, treat that as a compression signal.
 - `Completion Protocol` points back to the repo's task,
   currentness, and log surfaces. It names the continuation envelope or pause
   signal, the next task, and unresolved risks. Worker handoffs also put the
-  worker/PR flow and serial review lease here. Orchestrator-continuation handoffs
-  tell the successor to re-enter normal orchestrator mode from the absolute path,
+  worker/PR flow and serial review lease here. Coordinator-continuation handoffs
+  tell the successor to re-enter normal Coordinator mode from the absolute path,
   and tell the source to yield the lane.
 
 ## Validity rules

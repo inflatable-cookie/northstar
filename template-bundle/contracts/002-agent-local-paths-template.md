@@ -18,7 +18,7 @@ than in tracked docs, shell history, or ad hoc prompts.
 
 - `.agents.local.env.example` is tracked and documents supported keys.
 - `.agents.local.env` is local-only, ignored by Git, and created on first need.
-- `AGENTS.md` references this contract for orchestrator-dispatched implementation
+- `AGENTS.md` references this contract for coordinator-dispatched implementation
   workers.
 
 ## Supported keys
@@ -56,6 +56,6 @@ do not execute or `source` the file.
 - If validation or creation fails, stop and report the boundary failure.
 
 An implementation worker or ordinary subagent must not start a second
-orchestrator workflow or create a nested worktree when a parent
-harness/orchestrator already owns the lane. A planning delegate is a
+coordinator workflow or create a nested worktree when a parent
+harness/Coordinator already owns the lane. An Oracle is a
 same-workspace conversation; it gets no worktree or Git/provider authority.

@@ -29,7 +29,7 @@ router's generic language section into the installed-package route at
 | Pre-execution discovery | Readiness mapping, intent rounds, project language, decision prototypes, questionnaires, or reframe |
 | PR review | User asks a thread to review an existing PR |
 | UI design delivery | A UI-classified implementation or review lane has an approved brief; run the `northstar-ui` skill's Build or Review route |
-| Orchestrator | User wants a Northstar lane coordinated — manifest-defined frontier dispatch, review-child lease in worker workspace, and gated merge — or a committed orchestrator-continuation handoff; canonical planning and promotion belong to chatterbox |
+| Coordinator | User wants a Northstar lane coordinated — manifest-defined frontier dispatch, review-child lease in worker workspace, and gated merge — or a committed coordinator-continuation handoff; canonical planning and promotion belong to chatterbox |
 | Docs cleanup | User wants `/docs` files and folders inspected and reworked to fit Northstar |
 | Chatterbox | User wants primary planning authority, problem exploration, canonical promotion, triage reconciliation, or coordinator direction; or uses `northstar chatterbox` / `/northstar-chatterbox` |
 | Normalize docs | Bootstrap, migrate, or keep docs spine healthy over time |
@@ -43,12 +43,12 @@ When the target is the Northstar source repo, also read
 is not a contract gap by itself.
 
 Worker mode is explicit, not a default startup step. It is active only when an
-orchestrator dispatches a thread with a handoff whose frontmatter declares
+coordinator dispatches a thread with a handoff whose frontmatter declares
 `handoff_mode: worker-pr-loop`, `worker_mode: implementation`, and
-`dispatch_authority: orchestrator`. Tell the operator that handoff's **absolute
+`dispatch_authority: coordinator`. Tell the operator that handoff's **absolute
 path**; that path is the only dispatch artifact. A repository-relative path is
 valid only after the current root is already the owning repository. Normal
-planning, review, discovery, readiness, and orchestrator threads do not run a
+planning, review, discovery, readiness, and coordinator threads do not run a
 worktree probe or inspect `.agents.local.env` merely because worker support
 exists. Once worker mode is activated, follow the router's lightweight
 four-command worktree fast path, verify the committed handoff in the selected
@@ -57,17 +57,17 @@ tracked handoff lists in the worktree container directory. A launcher lifecycle
 creates them before project setup; only the manual fallback worker creates an
 absent link after preflight.
 
-A planning delegate is distinct from worker mode. It is an optional
-same-workspace conversation for one bounded issue; it creates one unique
-triage file and may update that file while the issue remains active under
-exact-path Git isolation, reports to Chatterbox, and does not
-activate worker preflight, create worktrees, or open PRs.
+Oracle is distinct from worker mode. It is an optional, issue-scoped frontier
+planning consultation for one bounded question; it receives a minimal redacted
+dossier and returns advisory intake to Chatterbox. Oracle does not promote
+canonical planning, declare readiness, dispatch or supervise workers, review or
+merge PRs, or direct the Coordinator.
 
-A fresh orchestrator continuation is distinct from both. Its handoff declares
-`handoff_mode: orchestrator-continuation`,
-`orchestrator_mode: economical-coordination`, and
-`dispatch_authority: orchestrator`. The successor enters normal orchestrator
-mode from that absolute path and does not run worker or planning-delegate
+A fresh coordinator continuation is distinct from both. Its handoff declares
+`handoff_mode: coordinator-continuation`,
+`coordinator_mode: economical-coordination`, and
+`dispatch_authority: coordinator`. The successor enters normal coordinator
+mode from that absolute path and does not run worker or Oracle
 preflight. The source yields the transferred lane after pushed dispatch.
 
 Whenever a Northstar mode creates a Paseo child from a selected profile,
@@ -75,8 +75,8 @@ materialize the complete profile into the launch: provider/model plus `modeId`,
 `thinkingOptionId`, and `featureValues` mapped to the agent settings. Preserve
 the operator-configured full-accept/full-access permission mode; never omit or
 downgrade it to the provider default or an ask-for-permission mode. This applies
-to every spawned worker, reviewer, chatterbox, delegate, research child,
-mechanical projection worker, and successor orchestrator. Full accept removes
+to every spawned worker, reviewer, chatterbox, Oracle, research child,
+mechanical projection worker, and successor coordinator. Full accept removes
 routine tool prompts; it does not expand the child's Northstar authority.
 
 ## Outcomes by mode
@@ -126,7 +126,7 @@ routine tool prompts; it does not expand the child's Northstar authority.
 - **Recovery:** trustworthy planning surfaces and canonical refs restored.
 - **Normalize:** compact lifecycle spine installed/maintained; already-closed
   generations compacted without waiting for another rollover; Effigy-first QA.
-- **Orchestrator:** mechanical delivery management as the default job —
+- **Coordinator:** mechanical delivery management as the default job —
   parallel-first dispatch of the whole approved ready frontier without a global
   thread budget, lane-local provider/profile routing, diversified economical
   routing (adequate pool, cheapest adequate tier, recent-use rotation) with
@@ -145,9 +145,9 @@ routine tool prompts; it does not expand the child's Northstar authority.
   decision requests routed to Chatterbox for a cited ruling or operator
   conversation before same-worker resume, bounded authenticated
   native write fallback on connector refusal after an unchanged merge gate,
-  self-contained operator escalation relay, optional fresh-orchestrator
+  self-contained operator escalation relay, optional fresh-coordinator
   continuation through a pushed seven-section handoff and a separate local
-  workspace with `Orchestrator=true`, one pushed worker handoff under
+  workspace with `Coordinator=true`, one pushed worker handoff under
   `docs/handoffs/` per launched lane, and accepted-review plus check-gated merge
   without a second operator prompt.
 - **Handoff:** a human-friendly seven-section file under `docs/handoffs/`, with
@@ -175,14 +175,14 @@ into dry status reports or bureaucratic protocol recitations.
 - use summaries and outcome/state/next structure when they help, not by reflex;
 - preserve room for curiosity, tentative ideas, and productive exploration.
 
-Orchestrator threads have a stronger version of this rule: stay a clear, human
+Coordinator threads have a stronger version of this rule: stay a clear, human
 coordination partner. Explain runway state, trade-offs, and next dispatches
 without protocol recitation, and make redirection easy. Material product
 exploration does not happen in this thread: route it to a chatterbox and keep
 the coordination and authority boundaries firm without making the conversation
 feel like a workflow form.
 
-When Chatterbox, a planning delegate, refresh, or cleanup surfaces a useful
+When Chatterbox, Oracle, refresh, or cleanup surfaces a useful
 observation, idea, plan, or question that will not be resolved immediately,
 capture it in `docs/triage/`. Update the same note as the issue changes. The
 mechanical coordinator does not scan or reconcile triage.
@@ -223,7 +223,7 @@ Northstar source repo, expanded doctrine lives at
   shared contract.
 - Papercuts starter: `assets/templates/PAPERCUTS.md`
 - Handoff template: [`assets/templates/northstar-handoff.md.template`](./assets/templates/northstar-handoff.md.template)
-- Orchestrator worker handoff extension: [`assets/templates/northstar-orchestrator-run.md.template`](./assets/templates/northstar-orchestrator-run.md.template)
+- Coordinator worker handoff extension: [`assets/templates/northstar-coordinator-run.md.template`](./assets/templates/northstar-coordinator-run.md.template)
 - Handoff directory: `docs/handoffs/`
 - Triage directory: `docs/triage/`
 - Handoff contract: [`references/handoff-contract.md`](./references/handoff-contract.md)
