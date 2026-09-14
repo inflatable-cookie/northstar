@@ -81,7 +81,7 @@ informal habits.
 - Triage notes use the handoff filename shape
   `YYYYMMDD-HHMMSS-<slug>.md`. Their Markdown body is intentionally flexible;
   triage is for fast capture, not premature schema.
-- Chatterbox, Oracle, refresh, and cleanup runs may capture useful
+- Chatterbox, operator-approved frontier-advisor, refresh, and cleanup runs may capture useful
   unresolved threads. The mechanical coordinator does not load or reconcile
   triage during preflight and never chooses work from it.
 - Creating or updating a lightweight triage note is an allowed capture write;
@@ -295,43 +295,32 @@ informal habits.
   adequate review pools; a frontier review route is reserved for residual
   risk that settled planning, explicit oracles, and tests cannot bound.
 
-### Frontier Oracle and decision-risk gate
+### Planning-risk check and optional frontier second opinion
 
 - Chatterbox is the sole persistent operator-facing planning authority. Route
   ordinary planning through an economical conversational-planning capability
   that can sustain dialogue, inspect a repository, and synthesize plans.
-- **Oracle** is an optional issue-scoped frontier planning consultation. It may
-  converse with the operator, inspect named evidence, challenge assumptions,
-  compare options, design a workflow or UI concept, and strengthen acceptance
-  oracles. It returns a bounded dossier or one unique triage note to Chatterbox.
-- Oracle cannot promote canonical planning, declare readiness, dispatch or
-  supervise workers, review or merge implementation PRs, or direct the
-  Coordinator. It never becomes a second planning authority.
-- Invoke Oracle only for a material unresolved architecture or product choice,
-  substantial UI workflow, conflicting authority, costly-to-reverse decision,
-  difficult acceptance oracle, or explicit operator request. Scope, duration,
-  documentation volume, and worker failure alone are not triggers.
-- Before readiness, dispatch, or a decision-changing ruling, run the mandatory
-  observable decision-risk gate. Do not use model self-confidence as evidence.
-  Material decisions touching security, authentication or authorization,
-  permissions, secrets, cryptography, privacy or sensitive information,
-  destructive data handling, a trust boundary, irreversible migration,
-  cross-system architecture, distributed or concurrent state, or another
-  high-blast-radius feature require Oracle planning.
-- A fully settled mechanical change may pass without Oracle only when canonical
-  authority and an exact acceptance oracle leave no material decision to the
-  worker; keywords alone do not escalate it. The gate fails when the owner,
-  authority, evidence versus assumptions, alternatives and trade-offs,
-  irreversible effects, or a falsifiable acceptance oracle cannot be stated.
-- Every ready dispatch manifest records `Oracle gate: not required — <settled
-  mechanical reason>` or `Oracle gate: satisfied — <dossier identity>;
-  <decision Chatterbox promoted>`. Missing or generic low-risk text blocks
-  readiness.
-- The smallest useful Oracle dossier carries the exact question, owning
-  authority and evidence, known assumptions, constraints and non-goals, options
-  already considered, risk trigger, operator-owned decisions, and requested
-  output. Redact secrets and raw sensitive payloads. Oracle advice never
-  replaces specialist evidence or independent security-sensitive review.
+- Before readiness, dispatch, or a decision-changing ruling, Chatterbox checks
+  observable planning completeness. Model self-confidence is not evidence.
+  Chatterbox must be able to cite the owning authority, name the decision owner,
+  separate evidence from assumptions, explain plausible alternatives and
+  trade-offs, identify irreversible effects, and state a falsifiable acceptance
+  oracle. Missing or conflicting answers block readiness until resolved with
+  the operator or necessary specialist evidence.
+- Security, authentication or authorization, permissions, secrets,
+  cryptography, privacy or sensitive information, destructive data handling,
+  trust boundaries, irreversible migration, cross-system architecture,
+  distributed or concurrent state, and other high-blast-radius work demand
+  stronger evidence and review. They do not automatically create or authorize
+  another planning thread.
+- Chatterbox may recommend a bounded frontier second opinion for a material
+  unresolved architecture, product, UI-workflow, security, or acceptance-oracle
+  question. It must not create or request that thread without explicit operator
+  approval for the consultation. Use the host's ordinary advisor or committee
+  mechanism. Send only the exact question and minimum necessary evidence;
+  redact secrets and raw sensitive payloads. The result is advisory intake and
+  Chatterbox retains planning authority. Ready manifests require no
+  second-opinion field.
 
 ### Fresh coordinator continuation
 
@@ -342,7 +331,7 @@ informal habits.
   `dispatch_authority: coordinator`.
 - After that handoff is pushed and dispatched, the source yields planning,
   dispatch, review, and merge mutations for the transferred lane. The successor
-  enters normal Coordinator mode and does not run worker or Oracle
+  enters normal Coordinator mode and does not run worker or advisor
   preflight.
 - With Paseo, create a separate `local` workspace for the same project and
   checkout, copy a current coordinator-role profile, apply the capitalized
@@ -505,7 +494,7 @@ informal habits.
     untouched, and return a context-complete reconciliation blocker to Chatterbox;
     never reset, stash, rebase, discard changes, or dispatch from stale local state.
 - A stricter repository rule or explicit operator pause still wins.
-- Workers, Oracle consultations, and standalone direct-review threads never merge.
+- Workers, frontier advisors, and standalone direct-review threads never merge.
 
 ### Direct PR review boundary
 

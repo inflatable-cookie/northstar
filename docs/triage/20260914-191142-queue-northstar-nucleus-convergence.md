@@ -101,7 +101,7 @@ chat history:
 - human, agent, and service principal.
 
 The normal workflow is continuous: intake, planning conversation, risk-based
-Oracle consultation, operator approval, dispatch, implementation, review,
+optional operator-approved frontier advice, dispatch, implementation, review,
 revision, merge, closeout, and durable knowledge capture. Each step has an
 explicit owner, state, evidence, and recovery path. The UI presents the same
 work through planning rooms, task views, code workspaces, review surfaces, and

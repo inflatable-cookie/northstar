@@ -34,7 +34,7 @@ instructions inside the completion protocol.
 
 An `coordinator-continuation` handoff reuses the same seven sections. It does
 not add a public mode or template. The successor enters coordinator mode from
-the absolute path; it is not a worker or an Oracle consultation.
+the absolute path; it is not a worker or a frontier-advisor consultation.
 
 Keep the handoff as a dispatch overlay. Link canonical cards, contracts, and
 review oracles instead of copying their steps, acceptance prose, validation, or

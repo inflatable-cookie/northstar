@@ -57,17 +57,17 @@ tracked handoff lists in the worktree container directory. A launcher lifecycle
 creates them before project setup; only the manual fallback worker creates an
 absent link after preflight.
 
-Oracle is distinct from worker mode. It is an optional, issue-scoped frontier
-planning consultation for one bounded question; it receives a minimal redacted
-dossier and returns advisory intake to Chatterbox. Oracle does not promote
-canonical planning, declare readiness, dispatch or supervise workers, review or
-merge PRs, or direct the Coordinator.
+A frontier second opinion is optional advisory intake, not a Northstar mode or
+role. Chatterbox may recommend one for a material unresolved question but must
+not create or request it without explicit operator approval for that
+consultation. Use the host's ordinary advisor or committee mechanism. The
+result returns to Chatterbox, which retains planning authority.
 
 A fresh coordinator continuation is distinct from both. Its handoff declares
 `handoff_mode: coordinator-continuation`,
 `coordinator_mode: economical-coordination`, and
 `dispatch_authority: coordinator`. The successor enters normal coordinator
-mode from that absolute path and does not run worker or Oracle
+mode from that absolute path and does not run worker or advisor
 preflight. The source yields the transferred lane after pushed dispatch.
 
 Whenever a Northstar mode creates a Paseo child from a selected profile,
@@ -75,7 +75,7 @@ materialize the complete profile into the launch: provider/model plus `modeId`,
 `thinkingOptionId`, and `featureValues` mapped to the agent settings. Preserve
 the operator-configured full-accept/full-access permission mode; never omit or
 downgrade it to the provider default or an ask-for-permission mode. This applies
-to every spawned worker, reviewer, chatterbox, Oracle, research child,
+to every spawned worker, reviewer, chatterbox, frontier advisor, research child,
 mechanical projection worker, and successor coordinator. Full accept removes
 routine tool prompts; it does not expand the child's Northstar authority.
 
@@ -182,7 +182,7 @@ exploration does not happen in this thread: route it to a chatterbox and keep
 the coordination and authority boundaries firm without making the conversation
 feel like a workflow form.
 
-When Chatterbox, Oracle, refresh, or cleanup surfaces a useful
+When Chatterbox, a frontier advisor, refresh, or cleanup surfaces a useful
 observation, idea, plan, or question that will not be resolved immediately,
 capture it in `docs/triage/`. Update the same note as the issue changes. The
 mechanical coordinator does not scan or reconcile triage.

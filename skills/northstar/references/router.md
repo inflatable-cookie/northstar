@@ -41,7 +41,7 @@ ordinary continuation:
 
 - bare `continue`, "keep going", "context is full", compaction alone
 - routine batch closeout without asking for a handoff file
-- a Coordinator-owned Oracle consultation, implementation-worker, or
+- an operator-approved frontier-advisor consultation, implementation-worker, or
   coordinator-continuation lane; use Coordinator mode so the successor keeps
   planning, dispatch, PR review, merge, and promotion instead of writing another
   note or entering worker/delegate preflight
@@ -326,7 +326,7 @@ current explicit operator instruction may activate Chatterbox mode's bounded
 small-direct-change gate; that exception permits one local, reversible,
 low-risk change when no worker owns it and focused validation is available.
 
-**Precedence:** Explicit coordinator, worker, Oracle, continuation,
+**Precedence:** Explicit coordinator, worker, advisor, continuation,
 or PR-review requests keep those routes. A material implementation request stays
 with the coordinator/worker loop. PR review and merge stay outside Chatterbox.
 
@@ -344,8 +344,8 @@ dispatch_authority: coordinator
 
 The successor opens [`modes/coordinator.md`](./modes/coordinator.md) and
 continues as a normal Coordinator thread. It does not run the worker startup
-fast path, Oracle preflight, or generic handoff-writing mode. Reject the launch before those other routes
-if the successor was aimed at worker, Oracle, or handoff mode.
+fast path, advisor routing, or generic handoff-writing mode. Reject the launch before those other routes
+if the successor was aimed at worker, advisor, or handoff mode.
 
 ## Worker startup fast path
 
@@ -365,9 +365,9 @@ inspect `.agents.local.env` for worker purposes. Do not infer worker mode from a
 branch name, filesystem path, or harness presence. If the dispatch metadata is
 absent, stop the worker launch and report the missing handoff boundary.
 
-Oracle is an optional issue-scoped frontier consultation that receives a
-minimal redacted dossier and returns advisory intake to Chatterbox. It does
-not activate this implementation worker fast path. A
+A frontier second opinion is optional advisor or committee intake created only
+after explicit operator approval. It is not a Northstar mode and does not
+activate this implementation worker fast path. A
 `coordinator-continuation` handoff follows Coordinator mode and does not
 activate this path.
 

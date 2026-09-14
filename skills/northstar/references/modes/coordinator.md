@@ -63,7 +63,7 @@ launch bundle. Materialize its provider/model identity and copy its `modeId`,
 Omit only profile fields that are absent; never omit, replace, or downgrade a
 present `modeId` to the provider default or an ask-for-permission mode.
 
-For workers, reviewers, chatterboxes, bounded Oracle consultations, bounded research children,
+For workers, reviewers, chatterboxes, operator-approved frontier advisors, bounded research children,
 mechanical projection workers, and successor Coordinators, require
 the effective selected-profile permission mode to be the operator-configured
 full-accept/full-access mode. Reject the child launch before creation when the
@@ -106,39 +106,16 @@ escalation. A worker's pre-PR decision blocker always uses the decision-request
 route below. The coordinator does not turn the observation into a plan,
 operator question, or triage write.
 
-## Frontier Oracle consultations
+## Optional planning second opinions
 
-When the operator or Chatterbox identifies a material unresolved planning
-question, Chatterbox may request one bounded **Oracle** consultation. Oracle is
-an optional issue-scoped frontier planning conversation, not a second planning
-authority. It may converse with the operator, inspect the named evidence,
-challenge assumptions, compare options, design a workflow or UI concept, and
-strengthen acceptance oracles.
-
-The consultation receives the smallest useful dossier: exact question, owning
-authority and evidence, known assumptions, constraints and non-goals, options
-already considered, the risk trigger, operator-owned decisions, and requested
-output. Secrets and raw sensitive payloads are redacted. Oracle returns a
-bounded dossier or one unique triage note to Chatterbox, never to the
-Coordinator directly.
-
-Oracle cannot promote canonical planning, declare readiness, dispatch or
-supervise workers, review or merge implementation PRs, or direct the
-Coordinator. Chatterbox reconciles its advisory intake against authority and
-operator direction before any canonical promotion or dispatch.
-
-Invoke Oracle only for a material unresolved architecture or product choice,
-substantial UI workflow, conflicting authority, costly-to-reverse decision,
-difficult acceptance oracle, or an explicit operator request. Scope, duration,
-documentation volume, and worker failure alone are not triggers. A settled
-mechanical change may use `Oracle gate: not required` only when canonical
-authority and an exact falsifiable acceptance oracle leave no material worker
-decision.
-
-Select Oracle from the adequate frontier planning pool in current adapter
-notes, rotate recent use, and keep the capability name provider-neutral. An
-operator-selected profile wins; local profile configuration is not Northstar
-doctrine.
+A frontier second opinion is optional advisory intake owned by Chatterbox, not
+a Coordinator role or dispatch gate. The Coordinator never infers, launches,
+or requests one from task subject matter, worker failure, risk labels, or model
+self-confidence. If Chatterbox recommends one, it remains only a recommendation
+until the operator explicitly approves that consultation. The operator-facing
+planning thread uses the host's ordinary advisor or committee mechanism and
+reconciles the result before promotion. Coordinator work resumes only from the
+resulting canonical plan or operator-confirmed direction.
 
 ## Chatterbox spawn and intake
 
@@ -339,7 +316,7 @@ dispatch_authority: coordinator
 ```
 
 Reject the launch before dispatch if the successor would be routed through
-generic handoff, worker, or Oracle mode.
+generic handoff, worker, or advisor mode.
 
 The handoff records the current authority chain, open operator questions,
 active and paused lanes, ready frontier, worker and PR transport identities,
@@ -664,7 +641,7 @@ changes the plan.
 ## Model routing
 
 Treat configured profiles as a portfolio, not one remembered default. At every
-worker, Oracle, or fresh-coordinator dispatch, build the adequate
+worker, frontier-advisor, or fresh-coordinator dispatch, build the adequate
 pool for the role from current role-profile notes and any explicit adapter cost
 metadata, prefer the cheapest adequate tier, then vary provider/model identity
 before reusing a recent route. Adequacy comes before price or rotation: an
@@ -682,20 +659,20 @@ Select by capability:
   review-oracle design, not the default;
 - coordinator continuations: the adequate coordinator-role pool, rotated by
   the same rule; an explicitly named profile wins;
-- Oracle consultations: the adequate frontier planning pool, used only after
-  the observable decision-risk gate or an explicit operator request;
+- frontier-advisor consultations: the adequate frontier planning pool, used
+  only after explicit operator approval for that consultation;
 - chatterbox threads: the adequate operator-facing conversational pool,
   rotated by the same rule; an explicitly named profile wins;
 - review children: the cheapest adequate independent-review pool under the
   diversified-routing rule; a frontier review route only when the diff
-  retains residual risk that settled planning, explicit oracles, tests, and
+  retains residual risk that settled planning, acceptance oracles, tests, and
   an economical independent review cannot bound;
 - exact mechanical documentation projection: fast/low-cost profile, low or
   medium reasoning;
 - ordinary bounded implementation: the cheapest adequate non-frontier
   day-to-day implementation pool. The selected profile's live notes must
   explicitly fit implementation or general day-to-day work;
-- audit, documentation-grind, review, planning, Oracle, and coordinator profiles are
+- audit, documentation-grind, review, planning, advisor, and coordinator profiles are
   excluded from implementation lanes even when the work is long,
   documentation-heavy, or touches many files;
 - actual audits and exact non-semantic documentation projection whose decisions
@@ -777,8 +754,8 @@ Stop and return to planning or the operator when:
   field, or browser/computer-use pinning;
 - chatterbox spawn would use worktree isolation or enable finish notifications;
 - an implementation worker or ordinary subagent would need to start a nested
-  coordinator or worker lane. An Oracle may use only bounded
-  read-only research subagents;
+  coordinator or worker lane. A frontier advisor may use only bounded
+  read-only research subagents after the operator-approved consultation begins;
 - an escalation capsule is incomplete or opaque;
 - no configured non-frontier profile fits an ordinary worker lane. Report the
   profile gap instead of silently promoting it to frontier.

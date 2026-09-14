@@ -446,23 +446,19 @@ promotion deletes the source note in the coherent planning commit; partial
 promotion leaves only unresolved meaning. Git history and logs retain the
 history.
 
-The optional frontier planning path is:
+Chatterbox checks observable planning completeness before readiness, dispatch,
+or a decision-changing ruling. It must cite authority, name the decision owner,
+separate evidence from assumptions, explain material alternatives and
+trade-offs, identify irreversible effects, and state a falsifiable acceptance
+oracle. Security-sensitive and high-blast-radius work demands stronger evidence
+and review, but never creates another planning thread automatically.
 
-`operator <-> Chatterbox -> bounded Oracle dossier -> Chatterbox reconciliation/promotion`
-
-Oracle may inspect named evidence, challenge assumptions, compare options, and
-strengthen acceptance oracles. It has no canonical, readiness, dispatch,
-Coordinator, PR, or merge authority. The dossier is minimal and redacts secrets
-and raw sensitive payloads. Chatterbox owns triage disposition and may send one
-provenance-labelled direction to the named Coordinator.
-
-Before readiness, dispatch, or a decision-changing ruling, Chatterbox runs the
-mandatory observable decision-risk gate. Material security, privacy, sensitive
-information, trust-boundary, irreversible, distributed/concurrent, or complex
-cross-system decisions require a satisfied Oracle gate unless canonical
-authority and an exact acceptance oracle prove the change is fully mechanical.
-Every ready manifest records `Oracle gate: not required` with a concrete reason
-or `Oracle gate: satisfied` with the dossier identity and promoted decision.
+Chatterbox may recommend one bounded frontier second opinion for a material
+unresolved question. Creation requires explicit operator approval for that
+consultation and uses the host's ordinary advisor or committee mechanism. The
+minimum necessary evidence is supplied with secrets and raw sensitive payloads
+redacted. The result is advisory intake; Chatterbox retains planning and
+promotion authority. Ready manifests require no second-opinion field.
 
 The coordinator consumes the published plan. It verifies factual prerequisites
 and launches the complete approved frontier; it does not design lanes or decide
@@ -479,8 +475,9 @@ An already-authenticated repository-native write transport may replace a
 refused connector write after the unchanged gate, followed by provider-state
 verification; transport fallback never weakens merge authority.
 
-The live role topology is Chatterbox, optional Oracle, Coordinator,
-implementation Worker, and independent Reviewer. Lifecycle execution and
+The live role topology is Chatterbox, Coordinator, implementation Worker, and
+independent Reviewer. Optional frontier advisors are operator-approved intake,
+not Northstar roles. Lifecycle execution and
 verification are mechanisms, not additional operator-facing roles. Each worker
 retains its isolated workspace. Its independent reviewer is a
 Coordinator-owned visible agent tab placed in that same workspace under a
@@ -504,9 +501,10 @@ uses the economical conversational-planning capability by default; a cheap
 worker profile is inadequate if it cannot sustain dialogue, repository
 inspection, and planning synthesis. Build an adequate Coordinator-role pool
 for delivery, prefer the cheapest adequate tier, and vary provider/model
-identity between runs. Frontier planning is reserved for bounded Oracle
-consultations after the observable decision-risk gate or an explicit operator
-request. An operator-selected profile remains an override.
+identity between runs. Frontier planning is available only as an explicitly
+operator-approved advisor or committee consultation. Chatterbox may recommend
+it but never launches it automatically. An operator-selected profile remains an
+override.
 
 ## UI design planning and delivery
 

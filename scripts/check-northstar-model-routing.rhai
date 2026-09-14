@@ -148,7 +148,8 @@ require_row("pre-PR decisions return to Chatterbox", "operator guidance", operat
 require_row("pre-PR decisions return to Chatterbox", "worker handoff template", worker_template, "complete 10-part blocker capsule");
 require_row("pre-PR decisions return to Chatterbox", "skill outcome", skill, "pre-PR worker decision requests routed to Chatterbox");
 
-// Row 12 — the mandatory observable risk gate and bounded Oracle dossier.
+// Row 12 — observable planning completeness stays with Chatterbox; frontier
+// advice is recommendation-only until the operator explicitly approves it.
 for entry in [
     #{ "name": "working rules", "text": contract },
     #{ "name": "architecture", "text": architecture },
@@ -156,111 +157,70 @@ for entry in [
     #{ "name": "working-rules template", "text": template },
     #{ "name": "chatterbox mode", "text": chatterbox_mode },
 ] {
-    require_row("Oracle gate is explicit", entry["name"], entry["text"], "mandatory observable decision-risk gate");
-    require_row("Oracle gate is explicit", entry["name"], entry["text"], "Oracle gate: satisfied");
-    require_row("Oracle gate is explicit", entry["name"], entry["text"], "Oracle gate: not required");
+    require_row("planning-risk check is explicit", entry["name"], entry["text"], "observable planning completeness");
+    require_row("frontier advice requires approval", entry["name"], entry["text"], "explicit operator approval");
+    require_row("frontier advice is not a gate", entry["name"], entry["text"], "Ready manifests require no second-opinion field");
 }
 for marker in [
     "security",
     "privacy",
     "sensitive information",
-    "trust boundary",
+    "trust boundaries",
     "irreversible",
     "cross-system",
     "distributed or concurrent",
-    "settled mechanical",
     "falsifiable acceptance oracle",
     "model self-confidence",
+    "do not automatically create or authorize another planning thread",
 ] {
     require_row("risk classes are observable", "chatterbox mode", chatterbox_mode, marker);
 }
 for marker in [
     "exact question",
-    "authority and evidence",
-    "known assumptions",
-    "constraints and non-goals",
-    "options already considered",
-    "risk trigger",
-    "operator-owned decisions",
-    "requested output",
+    "minimum necessary evidence",
     "raw sensitive payloads",
+    "ordinary advisor or committee mechanism",
+    "Do not create, spawn, or request",
 ] {
-    require_row("Oracle dossier is minimal and redacted", "chatterbox mode", chatterbox_mode, marker);
+    require_row("frontier advice is bounded and operator-approved", "chatterbox mode", chatterbox_mode, marker);
 }
 
-fn is_nonempty(value) {
-    str::trim(value).len() > 0
+fn planning_complete(decision) {
+    decision["authority_complete"] && decision["owner_named"] &&
+        decision["evidence_separated"] && decision["alternatives_explained"] &&
+        decision["irreversible_effects_identified"] && decision["oracle_falsifiable"]
 }
 
-fn decision_requires_oracle(decision) {
-    let risk = decision["material_risk"] || decision["explicit_request"];
-    if !risk {
-        return !decision["authority_complete"] || !decision["owner_named"] ||
-            !decision["evidence_separated"] || !decision["alternatives_explained"] ||
-            !decision["irreversible_effects_identified"] || !decision["oracle_falsifiable"];
-    }
-    if decision["settled_mechanical"] && decision["authority_complete"] &&
-        decision["oracle_falsifiable"] {
-        return false;
-    }
-    true
+fn advisor_launch_authorized(decision) {
+    decision["operator_approved"]
 }
 
-fn valid_oracle_dossier(dossier) {
-    for field in [
-        "exact_question", "authority_evidence", "known_assumptions",
-        "constraints_non_goals", "options", "risk_trigger",
-        "operator_decisions", "requested_output",
-    ] {
-        if !is_nonempty(dossier[field]) {
-            return false;
-        }
-    }
-    !dossier["exact_question"].contains("sk-live") &&
-        !dossier["authority_evidence"].contains("raw sensitive payload")
-}
-
-fn run_oracle_gate_fixtures() {
+fn run_planning_risk_fixtures() {
     let security_decision = #{
-        "material_risk": true,
-        "explicit_request": false,
-        "settled_mechanical": false,
         "authority_complete": true,
         "owner_named": true,
         "evidence_separated": true,
         "alternatives_explained": true,
         "irreversible_effects_identified": true,
         "oracle_falsifiable": true,
+        "operator_approved": false,
     };
-    require(decision_requires_oracle(security_decision),
-        "security-risk fixture incorrectly bypassed Oracle");
-
-    let mechanical_control = security_decision;
-    mechanical_control["settled_mechanical"] = true;
-    require(!decision_requires_oracle(mechanical_control),
-        "settled mechanical fixture incorrectly required Oracle");
+    require(planning_complete(security_decision),
+        "complete security planning fixture was rejected");
+    require(!advisor_launch_authorized(security_decision),
+        "risk label automatically authorized a frontier advisor");
 
     let incomplete_low_risk = security_decision;
-    incomplete_low_risk["material_risk"] = false;
     incomplete_low_risk["authority_complete"] = false;
-    require(decision_requires_oracle(incomplete_low_risk),
-        "incomplete low-risk fixture incorrectly passed the gate");
+    require(!planning_complete(incomplete_low_risk),
+        "incomplete low-risk fixture incorrectly passed planning completeness");
 
-    let dossier = #{
-        "exact_question": "Which bounded option satisfies the settled contract?",
-        "authority_evidence": "contract 001 and cited acceptance evidence",
-        "known_assumptions": "the operator owns the product choice",
-        "constraints_non_goals": "no schema or release change",
-        "options": "A versus B with trade-offs",
-        "risk_trigger": "costly-to-reverse architecture choice",
-        "operator_decisions": "operator selects the direction",
-        "requested_output": "bounded recommendation and falsifiable oracle",
-    };
-    require(valid_oracle_dossier(dossier), "valid Oracle dossier fixture was rejected");
-    dossier["exact_question"] = "send sk-live-secret and raw sensitive payload";
-    require(!valid_oracle_dossier(dossier), "redacted dossier fixture was accepted");
+    let approved_advisor = security_decision;
+    approved_advisor["operator_approved"] = true;
+    require(advisor_launch_authorized(approved_advisor),
+        "explicit operator approval did not authorize the consultation");
 }
-run_oracle_gate_fixtures();
+run_planning_risk_fixtures();
 
 // Row 13 — Northstar stays portable (provider-neutral search plus parity).
 // The per-surface assertions above cover both the live contract and the

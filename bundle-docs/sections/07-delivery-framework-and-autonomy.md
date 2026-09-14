@@ -645,8 +645,8 @@ into the agent creation call. The effective permission mode must remain the
 operator-configured full-accept/full-access mode. A launch that omits the
 profile's `modeId`, falls back to the provider default, or downgrades to an
 ask-for-permission mode is invalid and stops before child creation. This rule
-applies to workers, review children, chatterboxes, bounded Oracle consultations,
-research children, mechanical projection workers, and successor Coordinators.
+applies to workers, review children, chatterboxes, operator-approved frontier
+advisors, research children, mechanical projection workers, and successor Coordinators.
 It removes routine tool-approval interruptions without widening the child's
 Northstar authority, write scope, destructive-action authority, review role, or
 merge role.
@@ -680,7 +680,7 @@ current `main` and any changed or conflict-resolved head is reviewed again.
 ## Economical worker routing
 
 Worker routing is economical and diversified by default. Select by current
-role-profile notes, not stored model IDs. For every worker, Oracle, or
+role-profile notes, not stored model IDs. For every worker, frontier advisor, or
 fresh-Coordinator run, build the adequate pool for the role from those
 notes and any explicit adapter cost metadata, prefer the cheapest adequate
 tier, then vary provider/model identity before reusing a recent route.
@@ -708,7 +708,7 @@ reasons in the handoff and rotate within the adequate frontier pool too.
 Priority alone, complexity alone, broad scope, or a risk-domain label is
 insufficient.
 
-Keep frontier/high effort for bounded Oracle consultations and material
+Keep frontier/high effort for explicitly operator-approved second opinions and material
 operator-facing discovery or review-oracle design; the Coordinator's own
 normal route is economical. Risky surfaces still require a clear review
 oracle and material independent review; a material but settled lane may use a
@@ -813,52 +813,35 @@ Capability classes stay portable; no local profile, model, price, or allowance
 enters reusable policy. The separate ten-PR observation cohort decides
 whether the split holds; one anecdote never rewrites it.
 
-## Frontier Oracle and decision-risk gate
+## Planning-risk check and optional frontier second opinion
 
-Chatterbox remains the sole persistent operator-facing planning authority. Route
-ordinary planning through an economical conversational-planning capability
-that can sustain dialogue, inspect a repository, and synthesize canonical
-planning. Frontier capacity is reserved for the optional, bounded **Oracle**.
+Chatterbox remains the sole persistent operator-facing planning authority.
+Route ordinary planning through an economical conversational-planning
+capability that can sustain dialogue, inspect a repository, and synthesize
+canonical planning.
 
-Oracle is an issue-scoped frontier consultation. It may converse with the
-operator, inspect named evidence, challenge assumptions, compare options,
-design a workflow or UI concept, and strengthen acceptance oracles. It returns
-advisory intake to Chatterbox as a bounded dossier or one unique triage note.
-Oracle cannot promote canonical planning, declare readiness, dispatch or
-supervise workers, review or merge implementation PRs, or direct the
-Coordinator. It does not create a second planning authority.
+Before readiness, dispatch, or a decision-changing ruling, Chatterbox checks
+observable planning completeness. Model self-confidence is not evidence.
+Chatterbox must be able to cite the owning authority, name the decision owner,
+separate evidence from assumptions, explain plausible options and trade-offs,
+identify irreversible effects, and state a falsifiable acceptance oracle.
+Missing or conflicting answers block readiness until Chatterbox resolves them
+with the operator or obtains the necessary specialist evidence.
 
-Invoke Oracle only for a material unresolved architecture or product choice,
-substantial UI workflow, conflicting authority, costly-to-reverse decision,
-difficult acceptance oracle, or explicit operator request. Scope, duration,
-documentation volume, and worker failure alone are not triggers.
+Security, authentication or authorization, permissions, secrets, cryptography,
+privacy or sensitive information, destructive data handling, trust boundaries,
+irreversible migration, cross-system architecture, distributed or concurrent
+state, and other high-blast-radius work demand stronger evidence and review.
+They do not automatically create or authorize another planning thread.
 
-Before canonical readiness, dispatch, or a decision-changing ruling, run a
-mandatory observable decision-risk gate. Do not use model self-confidence as
-evidence. Oracle planning is required when a material decision touches
-security, authentication or authorization, permissions, secrets,
-cryptography, privacy or sensitive information, destructive data handling, a
-trust boundary, irreversible migration, cross-system architecture, distributed
-or concurrent state, or another high-blast-radius feature. A fully settled
-mechanical change may pass without Oracle only when canonical authority and an
-exact acceptance oracle leave no material decision to the worker; keywords
-alone do not escalate it.
-
-The gate also fails when Chatterbox cannot cite the owning authority, name the
-decision owner, separate evidence from assumptions, explain plausible options
-and trade-offs, identify irreversible effects, or state a falsifiable
-acceptance oracle. Conflicting evidence or a novel domain fails closed.
-
-Every ready dispatch manifest records exactly one concrete disposition:
-`Oracle gate: not required — <settled mechanical reason>` or
-`Oracle gate: satisfied — <dossier identity>; <decision Chatterbox promoted>`.
-An absent or generic low-risk claim blocks readiness.
-
-The smallest useful Oracle dossier contains the exact question, authority and
-evidence, known assumptions, constraints and non-goals, options already
-considered, risk trigger, operator-owned decisions, and requested output.
-Redact secrets and raw sensitive payloads. Oracle advice never substitutes for
-specialist evidence or independent security-sensitive review.
+Chatterbox may recommend a bounded frontier second opinion for a material
+unresolved architecture, product, UI-workflow, security, or acceptance-oracle
+question. It must not create or request that thread without explicit operator
+approval for the consultation. Use the host's ordinary advisor or committee
+mechanism. Send only the exact question and minimum necessary evidence; redact
+secrets and raw sensitive payloads. The result is advisory intake. Chatterbox
+owns the decision, promotion, and dispatch recommendation. Ready manifests
+require no second-opinion field.
 
 ## Fresh Coordinator continuation
 
@@ -1065,7 +1048,7 @@ auto-merge on PR creation. Merge is allowed only when:
 - no stricter repository rule or explicit operator pause requires human action.
 
 A changed head requires another review. Ambiguous provider or merge state stops
-before retry. Workers and Oracle consultations never merge. A standalone
+before retry. Workers and frontier-advisor consultations never merge. A standalone
 direct-review thread does not inherit Coordinator merge authority.
 
 A refused connector or provider write does not invalidate an otherwise-current

@@ -100,7 +100,7 @@ to follow. Consumer repositories still own activation markers, profiles,
 toolchains, exclusions, and dependency policy. Removing the former top-level
 language skills does not remove these workflows.
 
-During Chatterbox, Oracle, refresh, or cleanup work, use
+During Chatterbox, operator-approved frontier-advisor, refresh, or cleanup work, use
 `docs/triage/` for unresolved capture. Update an existing note when the same
 issue changes; do not create corrective notes around it. Full promotion deletes
 the note, while partial promotion leaves only unresolved meaning. The mechanical
@@ -160,20 +160,17 @@ and tests cannot bound. You can name a profile to
 override. If no adequate profile fits, the coordinator reports that gap
 instead of silently spending the expensive one.
 
-For a material unresolved planning question, Chatterbox may request one
-bounded frontier Oracle consultation. Oracle receives a minimal dossier with
-the exact question, authority/evidence, assumptions, constraints, options,
-risk trigger, operator-owned decisions, and requested output. Redact secrets
-and raw sensitive payloads. Oracle returns advisory intake to Chatterbox; it
-cannot promote planning, declare readiness, dispatch, review, merge, or direct
-the Coordinator.
+Chatterbox checks planning completeness before readiness or dispatch. Material
+security, privacy, trust-boundary, irreversible, distributed/concurrent, or
+complex cross-system decisions demand stronger evidence and review, but they do
+not automatically create another planning thread.
 
-Before readiness or dispatch, the mandatory observable decision-risk gate
-requires Oracle for material security, privacy, sensitive-information,
-trust-boundary, irreversible, distributed/concurrent, or complex cross-system
-decisions unless canonical authority and an exact acceptance oracle prove the
-change fully mechanical. Each ready manifest records a concrete `Oracle gate`
-disposition.
+For one material unresolved question, Chatterbox may recommend a bounded
+frontier second opinion. It cannot create or request the consultation until you
+explicitly approve it. The planning thread then uses the host's ordinary advisor
+or committee mechanism with the minimum necessary evidence and redacts secrets
+and raw sensitive payloads. The result is advisory; Chatterbox still owns the
+decision and promotion. Ready manifests require no second-opinion field.
 
 Worker PRs normally receive an independent review child: the coordinator
 passes the worker's exact `workspaceId`, creates no review workspace, verifies

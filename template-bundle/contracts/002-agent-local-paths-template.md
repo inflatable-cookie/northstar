@@ -57,5 +57,6 @@ do not execute or `source` the file.
 
 An implementation worker or ordinary subagent must not start a second
 coordinator workflow or create a nested worktree when a parent
-harness/Coordinator already owns the lane. An Oracle is a
-same-workspace conversation; it gets no worktree or Git/provider authority.
+harness/Coordinator already owns the lane. An operator-approved frontier
+advisor is a same-workspace conversation; it gets no worktree or Git/provider
+authority.

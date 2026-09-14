@@ -138,11 +138,10 @@ One-page reference for terms used across Northstar docs.
   planning on the integration branch and sends provenance-labelled direction to
   the coordinator.
 
-**Oracle**
-: An optional, issue-scoped frontier planning consultation. Receives a minimal
-  redacted dossier, may challenge evidence and alternatives, and returns
-  bounded advisory intake to Chatterbox. It cannot promote planning, declare
-  readiness, dispatch, review, merge, or direct the Coordinator.
+**Frontier second opinion**
+: Optional advisory planning intake created only after explicit operator
+  approval. Chatterbox may recommend it and uses the host's ordinary advisor or
+  committee mechanism, but it is not a Northstar role or automatic gate.
 
 **Coordinator**
 : The mechanical delivery manager. Performs factual preflight, launches the

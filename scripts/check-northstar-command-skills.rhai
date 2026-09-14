@@ -227,18 +227,18 @@ require(continuation_router.contains("handoff_mode: coordinator-continuation") &
     "router continuation activation is missing the three settled fields");
 require(continuation_router.contains("does not run the worker startup") &&
     continuation_router.contains("the launch before those other routes"),
-    "router does not reject worker, Oracle, or handoff successor routing");
+    "router does not reject worker, advisor, or handoff successor routing");
 require(continuation_contract.contains("handoff_mode: coordinator-continuation") &&
     continuation_contract.contains("Do not add a public mode or a second continuation template"),
     "handoff contract continuation overlay is incomplete");
 require(main_text.contains("handoff_mode: coordinator-continuation") &&
-    main_text.contains("does not run worker or Oracle"),
+    main_text.contains("does not run worker or advisor"),
     "skill outcome does not keep continuation in coordinator mode");
 require(handoff_mode_text.contains("Do not use this mode as the successor runtime"),
     "handoff-writing mode can be used as continuation runtime");
 require(!continuation_mode.contains("handoff_mode: worker-pr-loop") &&
     !continuation_mode.contains("planning_mode: conversational-discovery"),
-    "continuation procedure activates worker or Oracle metadata");
+    "continuation procedure activates worker or advisor metadata");
 require(!fs::is_file(path::join(root, "assets/templates/northstar-coordinator-continuation.md.template")),
     "continuation added a public template");
 require(generic_h2 == 7 && !generic_template.contains("handoff_mode:"),
@@ -302,7 +302,7 @@ require(!fs::is_file(path::join(root, "assets/templates/northstar-orchestrator-r
 // Card 128: Spec 037 structural fixtures
 let chatterbox_mode_text = fs::read_file(path::join(root, "references/modes/chatterbox.md"));
 require(chatterbox_mode_text.contains("primary operator-facing planning authority") &&
-    chatterbox_mode_text.contains("reconciles Oracle dossiers, external evidence, or conversational triage notes") &&
+    chatterbox_mode_text.contains("reconciles operator-approved advisor intake, external evidence, or conversational triage notes") &&
     chatterbox_mode_text.contains("directly updates canonical planning"),
     "chatterbox mode missing primary planning and promotion authority");
 
@@ -313,37 +313,33 @@ require(chatterbox_triage.contains("update the existing note in place") &&
     chatterbox_triage.contains("after partial promotion, edit the note down"),
     "chatterbox mode missing mutable triage or promotion-time pruning");
 
-let oracle_section = h2_section(coordinator_text, "## Frontier Oracle consultations");
-require(oracle_section.contains("issue-scoped frontier planning conversation") &&
-    oracle_section.contains("smallest useful dossier") &&
-    oracle_section.contains("Secrets and raw sensitive payloads are redacted") &&
-    oracle_section.contains("never to the\nCoordinator directly") &&
-    oracle_section.contains("cannot promote canonical planning") &&
-    oracle_section.contains("worker failure alone are not triggers"),
-    "Coordinator mode missing bounded Oracle authority and dossier rules");
+let advisor_section = h2_section(coordinator_text, "## Optional planning second opinions");
+require(advisor_section.contains("Coordinator role or dispatch gate") &&
+    advisor_section.contains("never infers, launches,\nor requests one") &&
+    advisor_section.contains("explicitly approves that consultation") &&
+    advisor_section.contains("ordinary advisor or committee mechanism"),
+    "Coordinator mode permits automatic frontier-advisor escalation");
 
-let gate_section = h2_section(chatterbox_mode_text, "## Decision-risk gate and Oracle intake");
+let gate_section = h2_section(chatterbox_mode_text, "## Planning-risk check and optional frontier second opinion");
 for marker in [
-    "mandatory observable decision-risk gate",
+    "observable planning completeness",
     "Do not use model self-confidence",
     "security",
     "privacy",
     "sensitive information",
-    "trust boundary",
+    "trust boundaries",
     "irreversible migration",
     "cross-system architecture",
-    "settled mechanical",
     "falsifiable acceptance oracle",
-    "Oracle gate: not required",
-    "Oracle gate: satisfied",
-    "Redact secrets and raw sensitive payloads",
+    "do not automatically create or authorize another planning thread",
+    "Do not create, spawn, or request",
+    "explicit operator approval",
+    "ordinary advisor or committee mechanism",
+    "redact secrets and\nraw sensitive payloads",
+    "Ready manifests require no second-opinion field",
 ] {
-    require(gate_section.contains(marker), "Oracle decision-risk gate missing: " + marker);
+    require(gate_section.contains(marker), "planning-risk or frontier-advisor rule missing: " + marker);
 }
-require(gate_section.contains("It cannot promote"),
-    "Oracle gate weakens planning authority boundary");
-require(gate_section.contains("direct the Coordinator"),
-    "Oracle gate weakens Coordinator authority boundary");
 
 require(fs::is_file(path::join(root, "references/modes/coordinator.md")) &&
     fs::is_file(path::join(root, "assets/templates/northstar-coordinator-run.md.template")),
@@ -389,7 +385,7 @@ for child_class in [
     "workers",
     "reviewers",
     "chatterboxes",
-    "Oracle consultations",
+    "frontier advisors",
     "bounded research",
     "mechanical projection workers",
     "successor Coordinators",

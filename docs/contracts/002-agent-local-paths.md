@@ -74,8 +74,9 @@ A worker or subagent must not start a second Coordinator workflow, dispatch a
 new worker, or create a nested worktree unless the operator explicitly assigned
 that separate lane and the local-path contract is satisfied. When a harness or
 parent Coordinator already owns the worktree, use it and do not create another
-one. An Oracle may spawn only bounded, read-only research subagents from its
-dossier; they receive no worktree or Git/provider authority.
+one. An operator-approved frontier advisor may spawn only bounded, read-only
+research subagents within that consultation; they receive no worktree or
+Git/provider authority.
 
 ## Handoff requirements
 

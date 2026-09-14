@@ -149,7 +149,7 @@ Templates live under `skills/northstar/assets/templates/`.
   acquires a missing official package into durable operator state and returns
   its verified entrypoint. Detection of a language alone never installs or
   activates anything.
-- **Triage:** Chatterbox, Oracle, refresh, and cleanup conversations
+- **Triage:** Chatterbox, operator-approved frontier advisor, refresh, and cleanup conversations
   capture unresolved useful threads in `docs/triage/`; the mechanical
   coordinator does not scan or reconcile them.
 

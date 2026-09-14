@@ -52,7 +52,7 @@ dispatch_authority: coordinator
 ```
 
 These fields activate normal Coordinator mode for the successor. They do not
-activate worker mode, Oracle preflight, or the handoff-writing route.
+activate worker mode, advisor routing, or the handoff-writing route.
 Do not add a public mode or a second continuation template. The source yields
 planning, dispatch, review, and merge mutations for the transferred lane after
 the pushed handoff is dispatched.
