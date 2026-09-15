@@ -19,7 +19,8 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 | Make lifecycle JSON and generated regions the sole mechanical currentness, with safe transient handoff consumption. | complete as `g03.012` | contract 001, bundle section 12, lifecycle reference | portfolio repair continues from consumer evidence |
 | Keep transient-handoff backlink scanning bounded across large tracked repository indexes. | complete through `g03.015`; Bovine closeout recovered | contract 001, lifecycle reference | no further scan-bound lane |
 | Reduce repeated protocol enumerations and retire genuinely redundant modes without merging distinct behavior blindly. | complete as `g03.016` | contract 001, section 07, skill architecture | observe economical Chatterbox use |
-| Reject transient worker-handoff backlinks at the accepted PR head before merge. | ready as `g03.017`; waits on Queue g01.020 | contract 001, lifecycle reference; Queue Spec 007 | adopt reviewed-head pre-merge hook |
+| Reject transient worker-handoff backlinks at the accepted PR head before merge. | complete as `g03.017`; terminal record published at `c156c10` | contract 001, lifecycle reference; Queue Spec 007 | no further backlink-timing lane |
+| Consume closed-generation lifecycle task fragments into one verified receipt. | ready as `g03.018` | contract 001, lifecycle maintenance, lifecycle reference | implement mechanical catch-up pruning |
 | Keep unresolved operator feedback visible without pinning old generations open. | watch | contract 001 | bounded watchlist below |
 
 Task mechanical state — status, stage, revision, delivery digests — is the
@@ -29,11 +30,10 @@ are not a per-task status mirror.
 
 ## Current lane
 
-One lane executes at a time. `g03.017` is the approved lane and waits on Queue
-task `a1571254-17e5-414c-9bc0-d80146c6288c`. Dispatch authorization is its
-committed handoff plus its task dispatch manifest; no concurrent sibling and no
-automatic successor are authorized. Queue repository work remains separately
-owned.
+One lane executes at a time. `g03.018` is the approved lane. Dispatch
+authorization is its committed handoff plus its task dispatch manifest; no
+concurrent sibling and no automatic successor are authorized. Queue repository
+work remains separately owned.
 
 ## Bounded watchlist
 
@@ -66,6 +66,7 @@ owned.
 - `015-bound-aggregate-backlink-scan.md`
 - `016-economical-chatterbox-frontier-oracle.md`
 - `017-reject-transient-handoff-backlinks-before-merge.md`
+- `018-consume-closed-generation-lifecycle-fragments.md`
 
 Mechanical status lives in the lifecycle records: adopted tasks (`g03.006`
 onward) project it in the generated block below, earlier tasks keep their
@@ -73,9 +74,10 @@ completion in the runway above and in Git history.
 
 ## Next task
 
-`g03.017` is the sole approved Northstar lane. It adopts Queue's reviewed-head
-pre-merge hook after Queue task `a1571254-17e5-414c-9bc0-d80146c6288c`
-completes. No sibling or automatic successor is approved.
+`g03.018` is the sole approved Northstar lane. It makes closed-generation
+receipt publication consume the covered per-task lifecycle fragments and lets
+ordinary Queue closeout catch up older eligible generations. No sibling or
+automatic successor is approved.
 <!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:61cbcaa211d39eece4079cadf4adcc31bf69536b66130a8c6ce53cc0e4a2cbdf -->
 | Generation | Disposition | Runway state |
 | --- | --- | --- |
