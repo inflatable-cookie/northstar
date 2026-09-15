@@ -20,7 +20,7 @@ runner, so a consumer repository never commits or maintains a hook runtime.
   projection-targets.json         # declared surfaces + active generation set
 
 .paseo/
-  queue.json                      # generic Queue control manifest (v2)
+  queue.json                      # generic Queue control manifest (v3)
 ```
 
 Commit the per-task JSON records. Do not hand-edit them and do not let a
@@ -126,9 +126,17 @@ step — the outgoing generation README leaves it and the incoming one joins
 it — so the projected currentness surface always names exactly the active
 generation set.
 
-The manifest binds a read-only `task.pre_dispatch` gate and a required
+The manifest binds a read-only `task.pre_dispatch` gate, a required read-only
+`task.pre_merge` gate targeted at `reviewed_head`, and a required
 integration-write hook for `task.blocked`, `task.cancelled`, and
-`task.closeout`. Keep the handoff directory (default `docs/handoffs/`) in the
+`task.closeout`. The pre-merge gate runs in the retained task workspace at the
+accepted exact PR head after independent review; it proves the pinned
+instruction artifact against that head and refuses when tracked durable
+Markdown still links to the exact submitted handoff, naming the linking path.
+Queue returns that refusal to the retained worker through the ordinary PR
+revision loop. The gate is the same shared resolver closeout uses, so the
+transient-handoff invariant has one parser and one set of bounds. Keep the
+handoff directory (default `docs/handoffs/`) in the
 integration-write hook's allowed paths: closeout publishes one integration
 commit containing the terminal record, the regenerated projections, and the
 removal of the exact consumed instruction handoff. The hook deletes only the

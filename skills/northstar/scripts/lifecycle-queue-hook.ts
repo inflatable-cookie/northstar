@@ -1,6 +1,7 @@
 // Northstar repository hook adapter for Queue's generic repository events.
 //
-// Queue sends one closed `paseo.queue.event.v1` JSON object on stdin. This
+// Queue sends one closed `paseo.queue.event.v1` or `paseo.queue.event.v2`
+// JSON object on stdin. This
 // adapter validates it against the committed frozen contract schema,
 // reconstructs the exact Northstar task and planning identity from committed
 // evidence, maps the supported generic events onto the same canonical
@@ -19,6 +20,11 @@
 // reconstructed ready planning identity with derived stable event IDs; it
 // never claims earlier live tracking. A repeated event is a no-diff replay.
 //
+// The reviewed-head pre-merge gate is read-only: it binds the pinned
+// instruction artifact to the exact accepted PR head and runs the shared
+// backlink resolver before merge, so a routine durable backlink returns to the
+// retained worker through the ordinary PR revision loop. It changes no bytes.
+//
 // The closeout publication is exactly one integration commit: the terminal
 // record, the regenerated declared projections, and the removal of the exact
 // submitted instruction handoff. The handoff is a pinned transport artifact,
@@ -26,7 +32,8 @@
 // working-tree bytes still hash to the pinned blob digest, after the terminal
 // receipt exists. A changed, missing, symlinked, or otherwise ambiguous
 // handoff fails closed before any byte changes; tracked durable Markdown that
-// still links to the exact handoff refuses the same way, so deletion never
+// still links to the exact handoff refuses through the same shared resolver,
+// so deletion never
 // strands a backlink. Git retains the blob and the record's handoff evidence
 // retains its identity. A repeated event is a no-diff replay.
 //
@@ -39,7 +46,6 @@ import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   BEGIN_PREFIX,
-  END_SENTINEL,
   ENVELOPE_SCHEMA,
   LifecycleError,
   applyEnvelope,
@@ -56,9 +62,23 @@ import {
   verifyRecordIntegrity,
   type ReduceContext,
 } from "./lifecycle-core.ts";
+import {
+  BacklinkError,
+  guardHandoffBacklinks,
+} from "./lifecycle-backlink.ts";
 
 const RESULT_SCHEMA = "paseo.queue.hook-result.v1";
 const EVENT_SCHEMA = "paseo.queue.event.v1";
+const EVENT_SCHEMA_V2 = "paseo.queue.event.v2";
+const CONTROL_SCHEMAS: Record<string, string> = {
+  "paseo.queue.control.v1": "queue-control.schema.json",
+  "paseo.queue.control.v2": "queue-control-v2.schema.json",
+  "paseo.queue.control.v3": "queue-control-v3.schema.json",
+};
+const EVENT_SCHEMAS: Record<string, string> = {
+  [EVENT_SCHEMA]: "queue-event.schema.json",
+  [EVENT_SCHEMA_V2]: "queue-event-v2.schema.json",
+};
 const EVENT_TIMESTAMP_RE = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]{3})?Z$/;
 const GIT_ID_RE = /^[0-9a-f]{40}$|^[0-9a-f]{64}$/;
 const TASK_PATH_RE = /^docs\/roadmaps\/g([0-9]{2})\/([0-9]{3})-[a-z0-9]+(?:-[a-z0-9]+)*\.md$/;
@@ -127,6 +147,7 @@ function isAncestor(repoRoot: string, ancestor: string, descendant: string): boo
 
 interface ManifestBinding {
   mode: "read_only" | "integration_write";
+  target: "integration_base" | "reviewed_head";
   allowedPaths: string[];
   commitSubject: { prefix: string; maxBytes: number } | null;
 }
@@ -153,15 +174,12 @@ function loadBinding(repoRoot: string, event: Record<string, any>): ManifestBind
   }
   // The manifest schema name selects the frozen contract mirror. v1 keeps its
   // repository-executable grammar for existing consumers; v2 adds the closed
-  // program union with trusted-runner programs. The program itself stays
+  // program union with trusted-runner programs; v3 adds one closed target so a
+  // hook can run at the reviewed head before merge. The program itself stays
   // opaque here: Queue resolves and executes it, and no program transport
   // detail enters lifecycle state.
   const schemaName = String(manifest.schema ?? "");
-  const schemaFile = schemaName === "paseo.queue.control.v1"
-    ? "queue-control.schema.json"
-    : schemaName === "paseo.queue.control.v2"
-      ? "queue-control-v2.schema.json"
-      : null;
+  const schemaFile = CONTROL_SCHEMAS[schemaName] ?? null;
   if (schemaFile === null) refuse("control manifest declares unsupported schema " + JSON.stringify(schemaName));
   try {
     validateAgainstSchemaFile(manifest, path.join(SCHEMA_DIR, schemaFile));
@@ -173,10 +191,21 @@ function loadBinding(repoRoot: string, event: Record<string, any>): ManifestBind
   const ids = new Set(hooks.map((hook) => hook.id));
   if (ids.size !== hooks.length) refuse("control manifest has duplicate hook ids");
   for (const hook of hooks) {
+    const events = hook.events as string[];
+    const reviewedHead = events.includes("task.pre_merge");
     if (hook.mode === "read_only" && (hook.allowedPaths as string[]).length > 0) refuse("read_only hook " + hook.id + " may not declare allowed paths");
     if (hook.mode === "read_only" && hook.commitSubject !== null && hook.commitSubject !== undefined) refuse("read_only hook " + hook.id + " may not declare a commit subject");
     if (hook.mode === "integration_write" && (hook.commitSubject === null || hook.commitSubject === undefined)) refuse("integration_write hook " + hook.id + " requires a commit subject");
-    if ((hook.events as string[]).includes("task.pre_dispatch") && hook.mode !== "read_only") refuse("task.pre_dispatch accepts only read_only hooks");
+    if (events.includes("task.pre_dispatch") && hook.mode !== "read_only") refuse("task.pre_dispatch accepts only read_only hooks");
+    if ("target" in hook) {
+      if (reviewedHead && hook.target !== "reviewed_head") refuse("task.pre_merge requires target reviewed_head on hook " + hook.id);
+      if (!reviewedHead && hook.target !== "integration_base") refuse("only task.pre_merge may target the reviewed head on hook " + hook.id);
+    }
+    if (reviewedHead) {
+      if (events.length !== 1) refuse("task.pre_merge must be the only event on hook " + hook.id);
+      if (hook.mode !== "read_only") refuse("task.pre_merge accepts only read_only hooks");
+      if (hook.delivery !== "required") refuse("task.pre_merge requires required delivery");
+    }
     for (const allowed of hook.allowedPaths as string[]) {
       const normalized = allowed.endsWith("/")
         ? normalizeRepoRelative(allowed.slice(0, -1), "allowed path") + "/"
@@ -191,6 +220,7 @@ function loadBinding(repoRoot: string, event: Record<string, any>): ManifestBind
   if (!(binding.events as string[]).includes(event.event)) refuse("hook " + event.hookId + " does not bind event " + event.event);
   return {
     mode: binding.mode,
+    target: ("target" in binding && binding.target ? binding.target : "integration_base") as "integration_base" | "reviewed_head",
     allowedPaths: (binding.allowedPaths as string[]).map((allowed) =>
       allowed.endsWith("/") ? normalizeRepoRelative(allowed.slice(0, -1), "allowed path") + "/" : normalizeRepoRelative(allowed, "allowed path")),
     commitSubject: binding.commitSubject ?? null,
@@ -607,6 +637,36 @@ function handlePreDispatch(repoRoot: string, event: Record<string, any>): void {
     [], null);
 }
 
+// The pre-merge gate runs read-only at the exact accepted reviewed head. It
+// binds the pinned instruction artifact to that head, then runs the same
+// shared resolver closeout uses, so a durable Markdown backlink returns to the
+// retained worker through the ordinary PR revision loop instead of surfacing
+// after merge. It changes no bytes: no record, no projection, no index, no
+// HEAD. A refusal carries no changed paths and no commit subject, which is the
+// signal Queue routes as the next semantic revision finding.
+function handlePreMerge(repoRoot: string, event: Record<string, any>, binding: ManifestBinding): void {
+  if (binding.mode !== "read_only") malfunction("task.pre_merge binding is not read_only");
+  if (binding.target !== "reviewed_head") malfunction("task.pre_merge binding does not target the reviewed head");
+  const repository = event.repository as Record<string, unknown>;
+  if (repository.target !== "reviewed_head") malfunction("task.pre_merge event does not target the reviewed head");
+  if (event.task.instruction === null || event.task.instruction === undefined) refuse("task.pre_merge requires the pinned instruction artifact");
+  const identity = reconstructIdentity(repoRoot, event);
+  const instructionPath = normalizeRepoRelative(String(event.task.instruction.path), "instruction path");
+  const reviewedHead = String(repository.baseCommit);
+  const head = String(git(["rev-parse", "HEAD"], repoRoot));
+  if (head !== reviewedHead) malfunction("retained workspace HEAD " + head + " is not the declared reviewed head " + reviewedHead);
+  const deliveryHead = event.delivery.head;
+  if (deliveryHead !== null && deliveryHead !== undefined && String(deliveryHead) !== reviewedHead) {
+    malfunction("delivery head " + String(deliveryHead) + " is not the declared reviewed head " + reviewedHead);
+  }
+  verifyReviewedHeadHandoff(repoRoot, event, instructionPath, reviewedHead);
+  guardHandoffBacklinks(repoRoot, instructionPath);
+  emit(String(event.eventId), "ok",
+    "pre-merge gate found no durable Markdown backlink to " + instructionPath + " for " + identity.taskId,
+    { task_id: identity.taskId, task_path: identity.taskPath, handoff: instructionPath, reviewed_head: reviewedHead, mode: "read_only", backlinks: 0 },
+    [], null);
+}
+
 function handleBlocked(repoRoot: string, event: Record<string, any>, binding: ManifestBinding): void {
   const identity = reconstructIdentity(repoRoot, event);
   const current = readRecord(repoRoot, identity.taskId);
@@ -663,192 +723,6 @@ interface ConsumableHandoff {
   relativePath: string;
   absolutePath: string;
 }
-
-// ---------------------------------------------------------------------------
-// Durable backlink guard: a closeout handoff is transient transport, so the
-// hook refuses atomically when tracked durable Markdown still links to the
-// exact handoff it would delete. The scan is structural, bounded, and
-// deliberately fail-closed: tracked `.md` files only, standard Markdown
-// links (bare, angle-bracketed, titled, or reference-style resolved through
-// their definitions) plus `<autolinks>`, relative and rooted targets
-// resolved against the linking file, external URLs and the handoff itself
-// ignored, generated projection blocks stripped. Code contexts are not
-// distinguished: a link-shaped example also blocks, so no container
-// misclassification can strand a durable backlink. Only an exact local
-// target blocks; similarly named files never do.
-// ---------------------------------------------------------------------------
-
-const BACKLINK_SCAN_MAX_FILES = 25_000;
-const BACKLINK_SCAN_MAX_LISTING_BYTES = 4 * 1024 * 1024;
-const BACKLINK_SCAN_MAX_AGGREGATE_BYTES = 64 * 1024 * 1024;
-const BACKLINK_SCAN_MAX_BYTES = 4 * 1024 * 1024;
-const MARKDOWN_LINK_RE = /\[[^\]]*\]\(\s*(?:<([^<>\s]+)>|([^\s)]+))(?:\s+[^)]*)?\)/g;
-const AUTOLINK_RE = /<([^<>\s]+)>/g;
-const EXTERNAL_TARGET_RE = /^[a-zA-Z][a-zA-Z0-9+.-]*:/;
-const REFERENCE_DEF_RE = /^[ ]{0,3}\[([^\]\n]+)\]:[ \t]*(?:<([^<>\n]+)>|(\S+))/gm;
-const REF_FULL_RE = /\[([^\]\n]+)\]\[([^\]\n]*)\]/g;
-const REF_COLLAPSED_RE = /\[([^\]\n]+)\]\[\]/g;
-const REF_SHORTCUT_RE = /(?<!!)\[([^\]\n]+)\](?!\(|\[)/g;
-
-function stripHookGeneratedBlocks(text: string): string {
-  let output = "";
-  let rest = text.replace(/\r\n/g, "\n");
-  for (;;) {
-    const start = rest.indexOf(BEGIN_PREFIX);
-    if (start === -1) {
-      output += rest;
-      return output;
-    }
-    const endScheme = rest.indexOf(END_SENTINEL, start);
-    if (endScheme === -1) {
-      output += rest;
-      return output;
-    }
-    output += rest.slice(0, start);
-    rest = rest.slice(endScheme + END_SENTINEL.length);
-  }
-}
-
-function resolveLinkTarget(sourceRel: string, rawTarget: string): string | null {
-  let target = rawTarget.trim();
-  const hash = target.indexOf("#");
-  if (hash !== -1) target = target.slice(0, hash);
-  if (target === "") return null;
-  if (EXTERNAL_TARGET_RE.test(target)) return null;
-  try {
-    target = decodeURIComponent(target);
-  } catch {
-    // Keep the raw spelling when it is not valid percent-encoding.
-  }
-  const normalized = target.startsWith("/")
-    ? path.posix.normalize(target.slice(1))
-    : path.posix.normalize(path.posix.join(path.posix.dirname(sourceRel), target));
-  if (normalized === "" || normalized === "." || normalized.startsWith("..")) return null;
-  return normalized;
-}
-
-function boundedProcessText(value: unknown): string {
-  const text = String(value ?? "").trim();
-  return text.length <= 512 ? text : text.slice(0, 512) + "...";
-}
-
-function processEvidence(result: ReturnType<typeof spawnSync>): string {
-  const evidence: string[] = [];
-  const error = result.error as (Error & { code?: string }) | undefined;
-  if (error) {
-    const identity = error.code ?? error.name ?? "unknown error";
-    const detail = boundedProcessText(error.message);
-    evidence.push("error " + identity + (detail ? " (" + detail + ")" : ""));
-  }
-  if (result.signal !== null) evidence.push("signal " + String(result.signal));
-  if (result.status === null) evidence.push("status null");
-  else if (result.status !== 0) evidence.push("exit status " + String(result.status));
-  const stderr = boundedProcessText(result.stderr);
-  if (stderr) evidence.push("stderr " + stderr);
-  return evidence.join("; ");
-}
-
-// Every tracked Markdown file linking to the exact handoff path, sorted. The
-// handoff file itself never counts as a backlink candidate. Bounds fail
-// closed: an unlistable tree, too many files, too much aggregate content, or
-// an oversized file refuses before any byte changes rather than risking a
-// missed backlink.
-
-export function findHandoffBacklinks(repoRoot: string, handoffRel: string): string[] {
-  const listed = spawnSync("git", ["ls-files", "-z"], {
-    cwd: repoRoot,
-    maxBuffer: BACKLINK_SCAN_MAX_LISTING_BYTES,
-  });
-  if (listed.error || listed.signal !== null || listed.status !== 0) {
-    malfunction("git ls-files failed: " + (processEvidence(listed) || "abnormal process termination"));
-  }
-  const listingBytes = Buffer.isBuffer(listed.stdout)
-    ? listed.stdout.byteLength
-    : Buffer.byteLength(String(listed.stdout ?? ""), "utf8");
-  if (listingBytes > BACKLINK_SCAN_MAX_LISTING_BYTES) {
-    refuse("backlink scan tracked-file listing exceeds its " + BACKLINK_SCAN_MAX_LISTING_BYTES + "-byte bound; refusing handoff deletion");
-  }
-  const tracked = String(listed.stdout).split("\0").filter((name) => name.length > 0 && name.endsWith(".md"));
-  if (tracked.length > BACKLINK_SCAN_MAX_FILES) {
-    refuse("backlink scan exceeds its " + BACKLINK_SCAN_MAX_FILES + "-file bound; refusing handoff deletion");
-  }
-  const candidates: Array<{ sourceRel: string; absolute: string }> = [];
-  let aggregateBytes = 0;
-  for (const sourceRel of tracked.sort()) {
-    if (sourceRel === handoffRel) continue;
-    const absolute = path.join(repoRoot, sourceRel);
-    let stats: fs.Stats;
-    try {
-      stats = fs.lstatSync(absolute);
-    } catch {
-      continue;
-    }
-    if (!stats.isFile()) continue;
-    if (stats.size > BACKLINK_SCAN_MAX_BYTES) {
-      refuse("backlink scan found an oversized Markdown file " + sourceRel + "; refusing handoff deletion");
-    }
-    if (aggregateBytes > BACKLINK_SCAN_MAX_AGGREGATE_BYTES - stats.size) {
-      refuse("backlink scan aggregate Markdown size exceeds its " + BACKLINK_SCAN_MAX_AGGREGATE_BYTES + "-byte bound; refusing handoff deletion");
-    }
-    aggregateBytes += stats.size;
-    candidates.push({ sourceRel, absolute });
-  }
-  const backlinks: string[] = [];
-  for (const { sourceRel, absolute } of candidates) {
-    const bare = stripHookGeneratedBlocks(fs.readFileSync(absolute, "utf8"));
-    const targets = new Set<string>();
-    for (const pattern of [MARKDOWN_LINK_RE, AUTOLINK_RE]) {
-      pattern.lastIndex = 0;
-      let match: RegExpExecArray | null;
-      while ((match = pattern.exec(bare)) !== null) {
-        const target = match[1] ?? match[2];
-        if (target !== undefined) targets.add(target);
-      }
-    }
-    // Reference-style links resolve through their definitions: full
-    // `[text][label]`, collapsed `[text][]`, and shortcut `[text]` forms share
-    const definitions = new Map<string, string>();
-    REFERENCE_DEF_RE.lastIndex = 0;
-    let def: RegExpExecArray | null;
-    while ((def = REFERENCE_DEF_RE.exec(bare)) !== null) {
-      const target = def[2] ?? def[3];
-      // CommonMark reference labels are case-insensitive with collapsed
-      // internal whitespace.
-      if (target !== undefined) definitions.set(def[1].trim().replace(/\s+/g, " ").toLowerCase(), target);
-    }
-    const usage = bare.replace(REFERENCE_DEF_RE, "");
-    const useLabel = (label: string): void => {
-      const target = definitions.get(label.trim().replace(/\s+/g, " ").toLowerCase());
-      if (target !== undefined) targets.add(target);
-    };
-    REF_FULL_RE.lastIndex = 0;
-    let ref: RegExpExecArray | null;
-    while ((ref = REF_FULL_RE.exec(usage)) !== null) useLabel(ref[2] === "" ? ref[1] : ref[2]);
-    REF_COLLAPSED_RE.lastIndex = 0;
-    while ((ref = REF_COLLAPSED_RE.exec(usage)) !== null) useLabel(ref[1]);
-    REF_SHORTCUT_RE.lastIndex = 0;
-    while ((ref = REF_SHORTCUT_RE.exec(usage)) !== null) useLabel(ref[1]);
-    for (const raw of targets) {
-      if (resolveLinkTarget(sourceRel, raw) === handoffRel) {
-        backlinks.push(sourceRel);
-        break;
-      }
-    }
-  }
-  return backlinks;
-}
-
-// Refuse before any byte changes when tracked durable Markdown still links to
-// the exact handoff queued for deletion. Null consumables delete nothing and
-// need no guard.
-function guardHandoffBacklinks(repoRoot: string, consumable: ConsumableHandoff | null): void {
-  if (consumable === null) return;
-  const backlinks = findHandoffBacklinks(repoRoot, consumable.relativePath);
-  if (backlinks.length > 0) {
-    refuse("durable Markdown still links to the submitted handoff " + consumable.relativePath + ": " + backlinks.join(", ") + "; remove the backlink before closeout deletes it");
-  }
-}
-
 // Verify, before any byte changes, that the exact submitted handoff can be
 // consumed at publication time. The event pins the instruction path, commit,
 // and blob digest; the integration checkout must still carry that exact file.
@@ -885,6 +759,25 @@ function consumeHandoff(consumable: ConsumableHandoff | null, changedPaths: stri
   changedPaths.push(consumable.relativePath);
 }
 
+// Prove, read-only, that the reviewed head still carries the exact pinned
+// handoff. The pre-merge gate reads the blob at the declared reviewed head
+// rather than the working tree, so the proof does not depend on checkout
+// cleanliness; a missing or changed artifact refuses before the resolver runs.
+function verifyReviewedHeadHandoff(repoRoot: string, event: Record<string, any>, handoffRel: string, reviewedHead: string): void {
+  const blob = gitBlob(repoRoot, reviewedHead, handoffRel);
+  const digest = digestBytes(blob);
+  if (digest !== String(event.task.instruction.digest)) {
+    refuse("submitted handoff " + handoffRel + " at the reviewed head " + reviewedHead + " changed since its pinned instruction blob (" + digest + " != " + String(event.task.instruction.digest) + ")");
+  }
+}
+
+// A null consumable deletes nothing, so the shared backlink guard (the same
+// resolver the pre-merge gate runs) does not apply.
+function guardConsumableBacklinks(repoRoot: string, consumable: ConsumableHandoff | null): void {
+  if (consumable === null) return;
+  guardHandoffBacklinks(repoRoot, consumable.relativePath);
+}
+
 function handleCloseout(repoRoot: string, event: Record<string, any>, binding: ManifestBinding): void {
   const identity = reconstructIdentity(repoRoot, event);
   const current = readRecord(repoRoot, identity.taskId);
@@ -896,7 +789,7 @@ function handleCloseout(repoRoot: string, event: Record<string, any>, binding: M
     const consumable = binding.mode === "integration_write"
       ? prepareHandoffConsumption(repoRoot, event, binding, true)
       : null;
-    guardHandoffBacklinks(repoRoot, consumable);
+    guardConsumableBacklinks(repoRoot, consumable);
     const changedPaths: string[] = [];
     consumeHandoff(consumable, changedPaths);
     const uniqueChanged = [...new Set(changedPaths)].sort();
@@ -918,7 +811,7 @@ function handleCloseout(repoRoot: string, event: Record<string, any>, binding: M
   const consumable = binding.mode === "integration_write"
     ? prepareHandoffConsumption(repoRoot, event, binding, false)
     : null;
-  guardHandoffBacklinks(repoRoot, consumable);
+  guardConsumableBacklinks(repoRoot, consumable);
   applyMapped(repoRoot, event, binding, identity, envelopes, current, "terminal record", consumable);
 }
 
@@ -940,16 +833,19 @@ async function main(): Promise<void> {
     malfunction("event input is not valid JSON");
   }
   try {
-    validateAgainstSchemaFile(event, path.join(SCHEMA_DIR, "queue-event.schema.json"));
+    const eventSchemaName = String(event.schema ?? "");
+    const eventSchemaFile = EVENT_SCHEMAS[eventSchemaName] ?? null;
+    if (eventSchemaFile === null) malfunction("event declares unsupported schema " + JSON.stringify(eventSchemaName));
+    validateAgainstSchemaFile(event, path.join(SCHEMA_DIR, eventSchemaFile));
   } catch (err) {
-    if (err instanceof LifecycleError) malfunction("event is not a valid " + EVENT_SCHEMA + " document: " + err.message);
+    if (err instanceof LifecycleError) malfunction("event is not a valid " + String(event.schema) + " document: " + err.message);
     throw err;
   }
 
   // Queue sets these non-secret variables per execution; a mismatch means the
   // stdin payload and the execution environment disagree.
   if (process.env.PASEO_QUEUE_EVENT_ID !== String(event.eventId)) refuse("PASEO_QUEUE_EVENT_ID does not match the event payload");
-  if (process.env.PASEO_QUEUE_EVENT_SCHEMA !== EVENT_SCHEMA) refuse("PASEO_QUEUE_EVENT_SCHEMA is not " + EVENT_SCHEMA);
+  if (process.env.PASEO_QUEUE_EVENT_SCHEMA !== String(event.schema)) refuse("PASEO_QUEUE_EVENT_SCHEMA is not " + String(event.schema));
 
   const repoRoot = discoverRepoRoot(String(event.repository.root));
   const binding = loadBinding(repoRoot, event);
@@ -957,6 +853,9 @@ async function main(): Promise<void> {
   switch (String(event.event)) {
     case "task.pre_dispatch":
       handlePreDispatch(repoRoot, event);
+      return;
+    case "task.pre_merge":
+      handlePreMerge(repoRoot, event, binding);
       return;
     case "task.blocked":
       handleBlocked(repoRoot, event, binding);
@@ -975,6 +874,10 @@ async function main(): Promise<void> {
 main().catch((err) => {
   const eventId = process.env.PASEO_QUEUE_EVENT_ID ?? "";
   if (err instanceof HookOutcome) {
+    emit(eventId, err.outcome, err.message, {}, [], null);
+    return;
+  }
+  if (err instanceof BacklinkError) {
     emit(eventId, err.outcome, err.message, {}, [], null);
     return;
   }

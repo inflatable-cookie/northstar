@@ -146,8 +146,8 @@ artifact, executes it without a shell, validates the closed result, and owns
 staging, commit, push, and uncertain-effect reconciliation. It never learns
 Northstar paths, task IDs, commands, or Markdown.
 
-The runtime is the installed skill, not repository bytes. A v2 manifest binds
-the trusted runner `effigy` with the frozen literal argv
+The runtime is the installed skill, not repository bytes. A v2 or v3 manifest
+binds the trusted runner `effigy` with the frozen literal argv
 `["skill", "run", "northstar/queue:hook", "--stdio", "passthrough"]`: Queue
 spawns the approved artifact, Effigy resolves the `northstar/queue:hook` task
 from the consumer repository's project-local skill first and then a unique
@@ -162,6 +162,19 @@ any process runs; no alternative closeout route exists. v1 manifests remain
 valid for repositories that still pin a committed repository executable, and
 no program transport detail enters lifecycle records or projections.
 
+A v3 manifest adds one closed hook `target`. `task.pre_merge` requires
+`target: reviewed_head`, `mode: read_only`, `delivery: required`, and its own
+hook entry; every other event keeps `target: integration_base`. Queue runs the
+reviewed-head gate in the retained task workspace at the accepted exact PR
+head, after the independent reviewer verdict and before merge. Northstar's
+bounded exact-backlink resolver proves the transient-handoff invariant there:
+a tracked durable Markdown link to the exact submitted handoff refuses, names
+the linking path, and returns to the retained worker through the ordinary PR
+revision loop. The resolver is one import-safe module shared with the closeout
+guard, so the pre-merge gate and the publication guard can never disagree about
+the file, listing, aggregate, or per-file bounds; the pre-merge gate changes no
+bytes and returns no changed paths or commit subject.
+
 The hook adapter translates generic events into the same canonical
 transition envelopes the standalone adapter submits, preserves evidence
 levels exactly (provider facts attested, Git facts locally verified), and
@@ -175,8 +188,9 @@ projection target, and removes the exact submitted instruction handoff. The
 handoff is a pinned transport artifact, not permanent evidence: the hook
 deletes only the exact committed path whose bytes still hash to the pinned
 blob digest, and only after the terminal receipt exists. Tracked durable
-Markdown that still links to that exact handoff refuses the same way — the
-hook resolves relative and rooted links, ignores external URLs and the
+Markdown that still links to that exact handoff refuses through the same
+shared resolver the reviewed-head gate runs — the hook resolves relative and
+rooted links, ignores external URLs and the
 handoff itself, and only an exact local target blocks — so deletion never
 strands a backlink. The scan admits at most 25,000 tracked Markdown files and
 64 MiB of aggregate Markdown bytes, then reads one tracked Markdown file at a

@@ -9,11 +9,14 @@
 # 3. Proves raw stdio transport: the frozen argv yields exactly one hook-result
 #    object on stdout, diagnostics stay on stderr, and task exit status passes
 #    through.
-# 4. Proves the shipped v1 and v2 control-manifest grammars: valid documents
-#    validate, program unions refuse mixing, and no host path or fallback
-#    executable can enter a trusted-runner manifest.
+# 4. Proves the shipped v1, v2, and v3 control-manifest grammars: valid
+#    documents validate, program unions refuse mixing, the v3 target rules
+#    refuse a wrong or missing target, and no host path or fallback executable
+#    can enter a trusted-runner manifest.
 # 5. Runs the hook adapter against real fixture repositories through the real
-#    Effigy route: pre-dispatch gate, hostile events, read-only binding,
+#    Effigy route: pre-dispatch gate, the read-only reviewed-head pre-merge gate
+#    (clean pass, durable-backlink refusal, and byte identity with the closeout
+#    refusal from one shared resolver), hostile events, read-only binding,
 #    escape refusal, squash refusal, bootstrap closeout, idempotent replay,
 #    durable-backlink refusal with relative/rooted/fragment/titled/reference-style/large-file/indented/escaped/list-continuation/non-1-ordered/fenced/inline/external/mismatch
 #    controls, the sole-source currentness cutover (the audit rejects
@@ -47,6 +50,7 @@ hook="$source_skill/scripts/lifecycle-queue-hook.ts"
 dogfood_manifest="$repo_root/.paseo/queue.json"
 starter_manifest="$repo_root/template-bundle/lifecycle/queue.json"
 EVENT_SCHEMA="paseo.queue.event.v1"
+EVENT_SCHEMA_V2="paseo.queue.event.v2"
 FROZEN_ARGV=(skill run northstar/queue:hook --stdio passthrough)
 CURRENT_REPO=""
 
@@ -72,6 +76,24 @@ bun -e '
 ' "$core" "$hook"
 echo "hook adapter imports no Paseo, Queue, daemon, or network module: OK"
 
+echo "# one import-safe resolver serves both gates"
+bun -e '
+  const fs = await import("node:fs");
+  const hook = fs.readFileSync(process.argv[1], "utf8");
+  const shared = fs.readFileSync(process.argv[2], "utf8");
+  const fail = (message) => { console.error(message); process.exit(1); };
+  if (!hook.includes("from \"./lifecycle-backlink.ts\"")) fail("hook does not import the shared backlink module");
+  if (!hook.includes("guardHandoffBacklinks")) fail("hook does not call the shared guard");
+  if (/BACKLINK_SCAN_MAX|MARKDOWN_LINK_RE|REFERENCE_DEF_RE|AUTOLINK_RE/.test(hook)) fail("hook still carries a second backlink parser or its bounds");
+  if (!/export function findHandoffBacklinks/.test(shared)) fail("shared module does not export the resolver");
+  if (!/export function guardHandoffBacklinks/.test(shared)) fail("shared module does not export the guard");
+  const imports = shared.match(/^import .*$/gm) ?? [];
+  for (const line of imports) {
+    if (!/(node:child_process|node:fs|node:path|\.\/lifecycle-core\.ts)/.test(line)) fail("shared module imports an unexpected surface: " + line);
+  }
+' "$hook" "$source_skill/scripts/lifecycle-backlink.ts"
+echo "single shared resolver with no second parser or bounds: OK"
+
 echo "# skill catalog exposes the hook route with skill-anchored scripts"
 catalog=$(effigy skill tasks --path "$source_skill" 2>&1)
 printf '%s\n' "$catalog" | grep -q "northstar/queue:hook"
@@ -94,15 +116,11 @@ printf '%s\n' "$resolution" | grep -q "$source_skill./scripts/lifecycle-core.ts 
 echo "skill catalog resolution: OK"
 
 # ---------------------------------------------------------------------------
-# Manifest grammar: v1 and v2 mirrors, program-union negatives
+# Manifest and event mirrors: v1/v2/v3 grammars, target rules, negatives
 # ---------------------------------------------------------------------------
 schema_check() { # <schema> <instance>
   bun run "$core" schema-check --schema "$1" --instance "$2" >/dev/null
 }
-
-echo "# manifest grammar stays document-system agnostic"
-schema_check "$source_skill/references/lifecycle/queue-control-v2.schema.json" "$dogfood_manifest"
-schema_check "$source_skill/references/lifecycle/queue-control-v2.schema.json" "$starter_manifest"
 
 cat > "$scratch/plain-v1-manifest.json" <<'EOF'
 {
@@ -145,22 +163,127 @@ cat > "$scratch/plain-v2-manifest.json" <<'EOF'
 EOF
 schema_check "$source_skill/references/lifecycle/queue-control-v2.schema.json" "$scratch/plain-v2-manifest.json"
 
-expect_schema_reject() { # <instance-json-string> <label>
-  printf '%s' "$1" > "$scratch/negative-manifest.json"
-  if schema_check "$source_skill/references/lifecycle/queue-control-v2.schema.json" "$scratch/negative-manifest.json" 2>/dev/null; then
-    echo "v2 grammar accepted an invalid manifest: $2" >&2
+cat > "$scratch/plain-v3-manifest.json" <<'EOF'
+{
+  "schema": "paseo.queue.control.v3",
+  "hooks": [
+    {
+      "id": "json-ledger",
+      "events": ["task.closeout"],
+      "mode": "integration_write",
+      "delivery": "required",
+      "target": "integration_base",
+      "program": { "kind": "repository", "executable": "hooks/append-ledger" },
+      "timeoutMs": 5000,
+      "maxOutputBytes": 4096,
+      "allowedPaths": ["ledger/"],
+      "commitSubject": { "prefix": "ledger", "maxBytes": 60 }
+    }
+  ]
+}
+EOF
+schema_check "$source_skill/references/lifecycle/queue-control-v3.schema.json" "$scratch/plain-v3-manifest.json"
+
+# The dogfood and copy-ready starter adopt the reviewed-head event.
+echo "# manifest grammar stays document-system agnostic"
+schema_check "$source_skill/references/lifecycle/queue-control-v3.schema.json" "$dogfood_manifest"
+schema_check "$source_skill/references/lifecycle/queue-control-v3.schema.json" "$starter_manifest"
+for manifest in "$dogfood_manifest" "$starter_manifest"; do
+  bun -e '
+    const fs = await import("node:fs");
+    const file = process.argv[1];
+    const manifest = JSON.parse(fs.readFileSync(file, "utf8"));
+    const fail = (message) => { console.error(file + ": " + message); process.exit(1); };
+    if (manifest.schema !== "paseo.queue.control.v3") fail("manifest is not v3");
+    const premerge = manifest.hooks.find((hook) => hook.id === "repository-pre-merge");
+    if (!premerge) fail("manifest declares no repository-pre-merge hook");
+    if (premerge.events.length !== 1 || premerge.events[0] !== "task.pre_merge") fail("pre-merge hook does not bind exactly task.pre_merge");
+    if (premerge.mode !== "read_only") fail("pre-merge hook is not read_only");
+    if (premerge.delivery !== "required") fail("pre-merge delivery is not required");
+    if (premerge.target !== "reviewed_head") fail("pre-merge hook does not target the reviewed head");
+    if (premerge.allowedPaths.length !== 0 || premerge.commitSubject !== null) fail("pre-merge hook declares write authority");
+    for (const hook of manifest.hooks) {
+      if (hook.id === "repository-pre-merge") continue;
+      if (hook.target !== "integration_base") fail(hook.id + " does not target the integration base");
+    }
+  ' "$manifest"
+done
+
+# Pre-g01.020 manifests stay byte-shaped and valid: derive the v2 document and
+# a v3 document without the pre-merge binding from the live manifest.
+bun -e '
+  const fs = await import("node:fs");
+  const manifest = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+  manifest.schema = "paseo.queue.control.v2";
+  manifest.hooks = manifest.hooks.filter((hook) => !hook.events.includes("task.pre_merge")).map(({ target, ...rest }) => rest);
+  fs.writeFileSync(process.argv[2], JSON.stringify(manifest, null, 2) + "\n");
+  const legacy = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+  legacy.hooks = legacy.hooks.filter((hook) => !hook.events.includes("task.pre_merge"));
+  fs.writeFileSync(process.argv[3], JSON.stringify(legacy, null, 2) + "\n");
+' "$dogfood_manifest" "$scratch/derived-v2-manifest.json" "$scratch/derived-v3-no-premerge.json"
+schema_check "$source_skill/references/lifecycle/queue-control-v2.schema.json" "$scratch/derived-v2-manifest.json"
+schema_check "$source_skill/references/lifecycle/queue-control-v3.schema.json" "$scratch/derived-v3-no-premerge.json"
+
+# A v2 manifest is closed: the v3 target field has no meaning there.
+expect_schema_reject() { # <schema-file> <instance-json-string> <label>
+  printf '%s' "$2" > "$scratch/negative-manifest.json"
+  if schema_check "$1" "$scratch/negative-manifest.json" 2>/dev/null; then
+    echo "grammar accepted an invalid manifest: $3" >&2
     exit 1
   fi
 }
 
+V1_MIRROR="$source_skill/references/lifecycle/queue-control.schema.json"
+V2_MIRROR="$source_skill/references/lifecycle/queue-control-v2.schema.json"
+V3_MIRROR="$source_skill/references/lifecycle/queue-control-v3.schema.json"
 # A v2 hook may not mix program variants or keep the retired v1 pair.
-expect_schema_reject '{"schema":"paseo.queue.control.v2","hooks":[{"id":"h","events":["task.closeout"],"mode":"integration_write","delivery":"required","program":{"kind":"trusted_runner","runner":"effigy","argv":["x"]},"executable":"hooks/legacy","timeoutMs":5000,"maxOutputBytes":4096,"commitSubject":{"prefix":"l","maxBytes":40}}]}' "program plus retired executable"
-expect_schema_reject '{"schema":"paseo.queue.control.v2","hooks":[{"id":"h","events":["task.closeout"],"mode":"integration_write","delivery":"required","program":{"kind":"trusted_runner","runner":"effigy","executable":"hooks/legacy"},"timeoutMs":5000,"maxOutputBytes":4096,"commitSubject":{"prefix":"l","maxBytes":40}}]}' "mixed program fields"
+expect_schema_reject "$V2_MIRROR" '{"schema":"paseo.queue.control.v2","hooks":[{"id":"h","events":["task.closeout"],"mode":"integration_write","delivery":"required","program":{"kind":"trusted_runner","runner":"effigy","argv":["x"]},"executable":"hooks/legacy","timeoutMs":5000,"maxOutputBytes":4096,"commitSubject":{"prefix":"l","maxBytes":40}}]}' "program plus retired executable"
+expect_schema_reject "$V2_MIRROR" '{"schema":"paseo.queue.control.v2","hooks":[{"id":"h","events":["task.closeout"],"mode":"integration_write","delivery":"required","program":{"kind":"trusted_runner","runner":"effigy","executable":"hooks/legacy"},"timeoutMs":5000,"maxOutputBytes":4096,"commitSubject":{"prefix":"l","maxBytes":40}}]}' "mixed program fields"
 # A repository cannot authorize host code: no absolute runner path, no digest,
 # no version, no environment, no installation hint.
-expect_schema_reject '{"schema":"paseo.queue.control.v2","hooks":[{"id":"h","events":["task.closeout"],"mode":"integration_write","delivery":"required","program":{"kind":"trusted_runner","runner":"/usr/local/bin/effigy","argv":[]},"timeoutMs":5000,"maxOutputBytes":4096,"commitSubject":{"prefix":"l","maxBytes":40}}]}' "runner id carries a host path"
-expect_schema_reject '{"schema":"paseo.queue.control.v2","hooks":[{"id":"h","events":["task.closeout"],"mode":"integration_write","delivery":"required","program":{"kind":"trusted_runner","runner":"effigy","argv":[],"digest":"sha256:0000000000000000000000000000000000000000000000000000000000000000"},"timeoutMs":5000,"maxOutputBytes":4096,"commitSubject":{"prefix":"l","maxBytes":40}}]}' "program carries a digest"
-expect_schema_reject '{"schema":"paseo.queue.control.v2","hooks":[{"id":"h","events":["task.closeout"],"mode":"integration_write","delivery":"required","program":{"kind":"trusted_runner","runner":"effigy","argv":[],"version":"1.2.3"},"timeoutMs":5000,"maxOutputBytes":4096,"commitSubject":{"prefix":"l","maxBytes":40}}]}' "program carries a version"
+expect_schema_reject "$V2_MIRROR" '{"schema":"paseo.queue.control.v2","hooks":[{"id":"h","events":["task.closeout"],"mode":"integration_write","delivery":"required","program":{"kind":"trusted_runner","runner":"/usr/local/bin/effigy","argv":[]},"timeoutMs":5000,"maxOutputBytes":4096,"commitSubject":{"prefix":"l","maxBytes":40}}]}' "runner id carries a host path"
+expect_schema_reject "$V2_MIRROR" '{"schema":"paseo.queue.control.v2","hooks":[{"id":"h","events":["task.closeout"],"mode":"integration_write","delivery":"required","program":{"kind":"trusted_runner","runner":"effigy","argv":[],"digest":"sha256:0000000000000000000000000000000000000000000000000000000000000000"},"timeoutMs":5000,"maxOutputBytes":4096,"commitSubject":{"prefix":"l","maxBytes":40}}]}' "program carries a digest"
+expect_schema_reject "$V2_MIRROR" '{"schema":"paseo.queue.control.v2","hooks":[{"id":"h","events":["task.closeout"],"mode":"integration_write","delivery":"required","program":{"kind":"trusted_runner","runner":"effigy","argv":[],"version":"1.2.3"},"timeoutMs":5000,"maxOutputBytes":4096,"commitSubject":{"prefix":"l","maxBytes":40}}]}' "program carries a version"
+expect_schema_reject "$V2_MIRROR" '{"schema":"paseo.queue.control.v2","hooks":[{"id":"h","events":["task.closeout"],"mode":"integration_write","delivery":"required","target":"integration_base","program":{"kind":"repository","executable":"hooks/x"},"timeoutMs":5000,"maxOutputBytes":4096,"commitSubject":{"prefix":"l","maxBytes":40}}]}' "v2 hook carries the v3 target field"
+# A v3 hook must declare one target, and the closed set is two values.
+expect_schema_reject "$V3_MIRROR" '{"schema":"paseo.queue.control.v3","hooks":[{"id":"h","events":["task.closeout"],"mode":"integration_write","delivery":"required","program":{"kind":"repository","executable":"hooks/x"},"timeoutMs":5000,"maxOutputBytes":4096,"commitSubject":{"prefix":"l","maxBytes":40}}]}' "v3 hook omits target"
+expect_schema_reject "$V3_MIRROR" '{"schema":"paseo.queue.control.v3","hooks":[{"id":"h","events":["task.closeout"],"mode":"integration_write","delivery":"required","target":"reviewed-head","program":{"kind":"repository","executable":"hooks/x"},"timeoutMs":5000,"maxOutputBytes":4096,"commitSubject":{"prefix":"l","maxBytes":40}}]}' "v3 hook invents a target"
+expect_schema_reject "$V3_MIRROR" '{"schema":"paseo.queue.control.v3","hooks":[{"id":"h","events":["task.closeout"],"mode":"integration_write","delivery":"required","target":"integration_base","executable":"hooks/legacy","timeoutMs":5000,"maxOutputBytes":4096,"commitSubject":{"prefix":"l","maxBytes":40}}]}' "v3 hook keeps the retired executable pair"
+
+# Frozen event mirrors: v1 stays exact, v2 adds the closed repository target.
+V1_EVENT_MIRROR="$source_skill/references/lifecycle/queue-event.schema.json"
+V2_EVENT_MIRROR="$source_skill/references/lifecycle/queue-event-v2.schema.json"
+cat > "$scratch/plain-v1-event.json" <<'EOF'
+{
+  "schema": "paseo.queue.event.v1",
+  "eventId": "evt-mirror-v1",
+  "hookId": "lifecycle-state",
+  "event": "task.closeout",
+  "occurredAt": "2026-09-15T08:00:00.000Z",
+  "attempt": 1,
+  "repository": { "root": "/tmp/example", "baseBranch": "main", "baseCommit": "1111111111111111111111111111111111111111" },
+  "task": { "id": "q", "title": "", "phase": "", "instruction": null },
+  "delivery": { "prUrl": null, "prNumber": null, "head": null, "review": null, "mergeCommit": null, "integrationCommit": null, "summary": "" }
+}
+EOF
+schema_check "$V1_EVENT_MIRROR" "$scratch/plain-v1-event.json"
+cat > "$scratch/plain-v2-event.json" <<'EOF'
+{
+  "schema": "paseo.queue.event.v2",
+  "eventId": "evt-mirror-v2",
+  "hookId": "repository-pre-merge",
+  "event": "task.pre_merge",
+  "occurredAt": "2026-09-15T08:00:00.000Z",
+  "attempt": 1,
+  "repository": { "root": "/tmp/example", "baseBranch": "main", "baseCommit": "1111111111111111111111111111111111111111", "target": "reviewed_head" },
+  "task": { "id": "q", "title": "", "phase": "", "instruction": null },
+  "delivery": { "prUrl": null, "prNumber": null, "head": null, "review": null, "mergeCommit": null, "integrationCommit": null, "summary": "" }
+}
+EOF
+schema_check "$V2_EVENT_MIRROR" "$scratch/plain-v2-event.json"
+expect_schema_reject "$V2_EVENT_MIRROR" '{"schema":"paseo.queue.event.v2","eventId":"e","hookId":"h","event":"task.pre_merge","occurredAt":"2026-09-15T08:00:00.000Z","attempt":1,"repository":{"root":"/tmp/example","baseBranch":"main","baseCommit":"1111111111111111111111111111111111111111"},"task":{"id":"q","title":"","phase":"","instruction":null},"delivery":{"prUrl":null,"prNumber":null,"head":null,"review":null,"mergeCommit":null,"integrationCommit":null,"summary":""}}' "v2 event omits the repository target"
+expect_schema_reject "$V1_EVENT_MIRROR" '{"schema":"paseo.queue.event.v1","eventId":"e","hookId":"h","event":"task.closeout","occurredAt":"2026-09-15T08:00:00.000Z","attempt":1,"repository":{"root":"/tmp/example","baseBranch":"main","baseCommit":"1111111111111111111111111111111111111111","target":"integration_base"},"task":{"id":"q","title":"","phase":"","instruction":null},"delivery":{"prUrl":null,"prNumber":null,"head":null,"review":null,"mergeCommit":null,"integrationCommit":null,"summary":""}}' "v1 event carries the v2 repository target"
+
 # The dogfood and starter manifests name only a runner ID and literal argv.
 for manifest in "$dogfood_manifest" "$starter_manifest"; do
   if grep -qE '"/|/Users/|/opt/|digest|versionLabel|sourcePath' "$manifest"; then
@@ -172,7 +295,7 @@ for manifest in "$dogfood_manifest" "$starter_manifest"; do
     exit 1
   fi
 done
-echo "v1/v2 manifest grammar: OK"
+echo "v1/v2/v3 manifest and event grammar: OK"
 
 # Sequential mode stays explicit: the dogfood and copy-ready starter configs
 # keep the singular active_generation key and never adopt the plural form.
@@ -311,13 +434,35 @@ write_event() { # <file> <event-id> <event> <hook-id> <base> <queue-task> <title
 EOF
 }
 
+write_premerge_event() { # <file> <event-id> <queue-task> <title-json> <reviewed-head> <instruction-path> <instruction-commit> <instruction-digest-hex>
+  local file=$1 eventId=$2 qtask=$3 title=$4 head=$5 ipath=$6 icommit=$7 idigest=$8
+  cat > "$file" <<EOF
+{
+  "schema": "$EVENT_SCHEMA_V2",
+  "eventId": "$eventId",
+  "hookId": "repository-pre-merge",
+  "event": "task.pre_merge",
+  "occurredAt": "2026-09-15T08:00:00.000Z",
+  "attempt": 1,
+  "repository": {"root": "$CURRENT_REPO", "baseBranch": "feature", "baseCommit": "$head", "target": "reviewed_head"},
+  "task": {"id": "$qtask", "title": $title, "phase": "review",
+    "instruction": {"path": "$ipath", "commit": "$icommit", "digest": "sha256:$idigest", "mediaType": "text/markdown"}},
+  "delivery": {"prUrl": "https://github.com/example/repo/pull/53", "prNumber": 53, "head": "$head", "review": "approved at head", "mergeCommit": null, "integrationCommit": null, "summary": "independent review accepted"}
+}
+EOF
+}
+
 run_hook() { # <event-file> <event-id> [home-dir]
   # Always execute through the frozen Effigy route: the qualified selector
   # resolves the installed skill, and the consumer repository stays the
   # execution target. Every result in this harness comes from skill bytes.
+  # The declared event schema is read from the payload, exactly as Queue's
+  # environment variable would carry it.
   local home="${3:-$installed_home}"
+  local schema
+  schema=$(grep -o '"schema": "[^"]*"' "$1" | head -1 | cut -d'"' -f4)
   (cd "$CURRENT_REPO" && HOME="$home" \
-    PASEO_QUEUE_EVENT_ID="$2" PASEO_QUEUE_EVENT_SCHEMA="$EVENT_SCHEMA" \
+    PASEO_QUEUE_EVENT_ID="$2" PASEO_QUEUE_EVENT_SCHEMA="$schema" \
     effigy "${FROZEN_ARGV[@]}" < "$1")
 }
 
@@ -407,6 +552,11 @@ badschema=$(run_hook "$scratch/badschema.json" "x")
 expect_outcome "$badschema" failed "unknown event key"
 json_field "$badschema" "r.summary.includes('not a valid')" >/dev/null
 
+printf '%s\n' '{"schema": "paseo.queue.event.v9", "eventId": "x"}' > "$scratch/badschema9.json"
+badschema9=$(run_hook "$scratch/badschema9.json" "x")
+expect_outcome "$badschema9" failed "unknown event schema"
+json_field "$badschema9" "r.summary.includes('unsupported schema')" >/dev/null
+
 (cd "$repoA" && HOME="$installed_home" \
   PASEO_QUEUE_EVENT_ID="different-id" PASEO_QUEUE_EVENT_SCHEMA="$EVENT_SCHEMA" \
   bun run "$installed/scripts/lifecycle-queue-hook.ts" < "$scratch/pre.json" > "$scratch/envmismatch.out")
@@ -447,7 +597,7 @@ echo "# reserved manifest paths are refused"
 bun -e '
   const fs = await import("node:fs");
   const manifest = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
-  manifest.hooks[1].allowedPaths.push(".paseo/queue.json");
+  manifest.hooks.find((hook) => hook.id === "lifecycle-state").allowedPaths.push(".paseo/queue.json");
   fs.writeFileSync(process.argv[2], JSON.stringify(manifest, null, 2) + "\n");
 ' "$scratch/saved-manifest.json" "$repoA/.paseo/queue.json"
 reserved=$(run_hook "$scratch/closeout-ro.json" "evt-closeout-ro-0001")
@@ -697,6 +847,143 @@ link_case non1ordered "none" blocked $'Paragraph text.\n3. markers [the handoff]
 echo "conservative code-context refusals are atomic: OK"
 link_case sibling "handoffs/handoff-007.md" ok
 echo "relative, rooted, fragment, titled, reference-style, indented, escaped, list-continuation, non-1-ordered, fenced, inline, external, mismatch, and sibling controls: OK"
+
+echo "# pre-merge gate runs read-only at the exact reviewed head"
+repoPre="$scratch/repo-pre-merge"
+build_fixture "$repoPre"
+git -C "$repoPre" checkout -q feature
+mkdir -p "$repoPre/docs"
+cat > "$repoPre/docs/review-notes.md" <<'EOF'
+# Review notes
+
+Canonical task: [g03.006](../roadmaps/g03/006-fixture-task.md)
+Canonical contract: [working rules](../contracts/001-working-rules.md)
+EOF
+git -C "$repoPre" add -A
+git -C "$repoPre" commit -qm "review notes cite canonical evidence"
+CURRENT_REPO="$repoPre"
+read_facts "$(fixture_facts "$repoPre" 006)"
+pre_clean_head=$(git -C "$repoPre" rev-parse HEAD)
+write_premerge_event "$scratch/premerge-clean.json" "evt-premerge-clean-0001" "q-006" '"Implement g03.006 fixture task"' "$pre_clean_head" "docs/handoffs/handoff-006.md" "$IC" "$ID"
+clean_pre=$(run_hook "$scratch/premerge-clean.json" "evt-premerge-clean-0001")
+expect_outcome "$clean_pre" ok "clean pre-merge head"
+[ "$(json_field "$clean_pre" "r.changedPaths.length")" = "0" ]
+[ "$(json_field "$clean_pre" "r.commitSubjectSuffix")" = "null" ]
+[ "$(json_field "$clean_pre" "r.metadata.reviewed_head")" = "$pre_clean_head" ]
+[ ! -e "$repoPre/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+[ -e "$repoPre/docs/handoffs/handoff-006.md" ]
+[ -z "$(git -C "$repoPre" status --porcelain)" ]
+[ "$(git -C "$repoPre" rev-parse HEAD)" = "$pre_clean_head" ]
+echo "clean reviewed head passes read-only: OK"
+
+# A durable exact backlink refuses before merge, names the linking path, and
+# leaves every byte, the index, HEAD, and the lifecycle record untouched.
+cat > "$repoPre/docs/implementation-log.md" <<'EOF'
+# Implementation log
+
+Dispatched from [the worker handoff](handoffs/handoff-006.md).
+EOF
+git -C "$repoPre" add -A
+git -C "$repoPre" commit -qm "durable log links the submitted handoff"
+pre_bad_head=$(git -C "$repoPre" rev-parse HEAD)
+pre_handoff_digest=$(sha256sum "$repoPre/docs/handoffs/handoff-006.md" | cut -d' ' -f1)
+pre_log_digest=$(sha256sum "$repoPre/docs/implementation-log.md" | cut -d' ' -f1)
+write_premerge_event "$scratch/premerge-backlink.json" "evt-premerge-backlink-0001" "q-006" '"Implement g03.006 fixture task"' "$pre_bad_head" "docs/handoffs/handoff-006.md" "$IC" "$ID"
+blocked_pre=$(run_hook "$scratch/premerge-backlink.json" "evt-premerge-backlink-0001")
+expect_outcome "$blocked_pre" blocked "pre-merge backlink"
+[ "$(json_field "$blocked_pre" "r.summary.includes('docs/implementation-log.md')")" = "true" ]
+[ "$(json_field "$blocked_pre" "r.changedPaths.length")" = "0" ]
+[ "$(json_field "$blocked_pre" "r.commitSubjectSuffix")" = "null" ]
+[ ! -e "$repoPre/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+[ -e "$repoPre/docs/handoffs/handoff-006.md" ]
+[ -z "$(git -C "$repoPre" status --porcelain)" ]
+[ "$(git -C "$repoPre" rev-parse HEAD)" = "$pre_bad_head" ]
+[ "$pre_handoff_digest" = "$(sha256sum "$repoPre/docs/handoffs/handoff-006.md" | cut -d' ' -f1)" ]
+[ "$pre_log_digest" = "$(sha256sum "$repoPre/docs/implementation-log.md" | cut -d' ' -f1)" ]
+# One shared resolver: the refusal is byte-identical to the closeout refusal.
+[ "$(json_field "$blocked_pre" "r.summary")" = "$(json_field "$backlink_out" "r.summary")" ]
+echo "durable pre-merge backlink refuses read-only and matches closeout: OK"
+
+# A failed required pre-merge gate carries no changed path and no commit
+# subject. Queue routes exactly that result through the retained worker's
+# ordinary semantic revision loop; it creates no closeout occurrence.
+[ "$(json_field "$blocked_pre" "r.outcome")" = "blocked" ]
+[ "$(json_field "$blocked_pre" "r.changedPaths.length")" = "0" ]
+[ "$(json_field "$blocked_pre" "r.commitSubjectSuffix")" = "null" ]
+echo "ordinary revision-routing signal: OK"
+
+# The binding rules live in the adapter, so a malformed reviewed-head hook
+# refuses before it can scan or write.
+echo "# pre-merge binding rules fail closed through the adapter"
+cp "$repoPre/.paseo/queue.json" "$scratch/premerge-manifest-saved.json"
+premerge_binding_case() { # <label> <expected-substring> <mutation-js-file>
+  cp "$scratch/premerge-manifest-saved.json" "$repoPre/.paseo/queue.json"
+  bun -e '
+    const fs = await import("node:fs");
+    const mutation = fs.readFileSync(process.argv[3], "utf8");
+    const manifest = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+    const hook = manifest.hooks.find((entry) => entry.id === "repository-pre-merge");
+    new Function("hook", mutation)(hook);
+    fs.writeFileSync(process.argv[2], JSON.stringify(manifest, null, 2) + "\n");
+  ' "$scratch/premerge-manifest-saved.json" "$repoPre/.paseo/queue.json" "$3"
+  local result
+  result=$(run_hook "$scratch/premerge-backlink.json" "evt-premerge-backlink-0001")
+  expect_outcome "$result" blocked "$1"
+  if [ "$(json_field "$result" "r.summary.includes('$2')")" != "true" ]; then
+    echo "$1: refusal did not name '$2': $result" >&2
+    exit 1
+  fi
+}
+printf 'hook.target = "integration_base";' > "$scratch/mut-target.js"
+printf 'hook.events = ["task.pre_merge", "task.closeout"];' > "$scratch/mut-events.js"
+printf 'hook.delivery = "advisory";' > "$scratch/mut-delivery.js"
+printf 'hook.mode = "integration_write"; hook.commitSubject = { prefix: "lifecycle", maxBytes: 60 };' > "$scratch/mut-mode.js"
+premerge_binding_case "pre-merge target mismatch" "requires target reviewed_head" "$scratch/mut-target.js"
+premerge_binding_case "pre-merge mixed events" "must be the only event" "$scratch/mut-events.js"
+premerge_binding_case "pre-merge advisory delivery" "requires required delivery" "$scratch/mut-delivery.js"
+premerge_binding_case "pre-merge write mode" "accepts only read_only hooks" "$scratch/mut-mode.js"
+cp "$scratch/premerge-manifest-saved.json" "$repoPre/.paseo/queue.json"
+[ -z "$(git -C "$repoPre" status --porcelain)" ]
+echo "pre-merge binding refusals: OK"
+
+# Pre-g01.020 repositories keep their prior lifecycle behavior. A v2 manifest
+# and a v3 manifest without the pre-merge binding both close out unchanged and
+# cannot declare the reviewed-head event.
+echo "# manifests without the pre-merge binding keep prior lifecycle behavior"
+repoCompatV2="$scratch/repo-compat-v2"
+build_fixture "$repoCompatV2"
+cp "$scratch/derived-v2-manifest.json" "$repoCompatV2/.paseo/queue.json"
+git -C "$repoCompatV2" add -A
+git -C "$repoCompatV2" commit -qm "install the pre-g01.020 v2 manifest"
+CURRENT_REPO="$repoCompatV2"
+read_facts "$(fixture_facts "$repoCompatV2" 006)"
+write_event "$scratch/closeout-v2.json" "evt-closeout-v2-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+compat_v2=$(run_hook "$scratch/closeout-v2.json" "evt-closeout-v2-0001")
+expect_outcome "$compat_v2" ok "v2 closeout"
+[ ! -e "$repoCompatV2/docs/handoffs/handoff-006.md" ]
+[ -f "$repoCompatV2/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+write_premerge_event "$scratch/premerge-v2.json" "evt-premerge-v2-0001" "q-007" '"Implement g03.007 fixture task"' "$FH" "docs/handoffs/handoff-007.md" "$IC" "$ID"
+compat_premerge=$(run_hook "$scratch/premerge-v2.json" "evt-premerge-v2-0001")
+expect_outcome "$compat_premerge" blocked "v2 manifest has no pre-merge binding"
+[ "$(json_field "$compat_premerge" "r.summary.includes('not declared in the control manifest')")" = "true" ]
+
+repoCompatV3="$scratch/repo-compat-v3"
+build_fixture "$repoCompatV3"
+cp "$scratch/derived-v3-no-premerge.json" "$repoCompatV3/.paseo/queue.json"
+git -C "$repoCompatV3" add -A
+git -C "$repoCompatV3" commit -qm "install a v3 manifest without the pre-merge binding"
+CURRENT_REPO="$repoCompatV3"
+read_facts "$(fixture_facts "$repoCompatV3" 006)"
+write_event "$scratch/closeout-v3nopre.json" "evt-closeout-v3nopre-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+compat_v3=$(run_hook "$scratch/closeout-v3nopre.json" "evt-closeout-v3nopre-0001")
+expect_outcome "$compat_v3" ok "v3 manifest without pre-merge"
+[ ! -e "$repoCompatV3/docs/handoffs/handoff-006.md" ]
+[ -f "$repoCompatV3/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+echo "old-manifest compatibility: OK"
 
 echo "# large Markdown backlink scan bounds"
 write_markdown_filler() { # <path> <byte-count>

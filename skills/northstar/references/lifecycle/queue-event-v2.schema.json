@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://northstar.invalid/schemas/queue-event.v2.json",
+  "title": "Queue generic repository hook event v2 (paseo.queue.event.v2)",
+  "description": "Northstar's committed record of the frozen Queue generic event contract at Queue main 2887837 (g01.020, spec 007). v2 retains every v1 field and adds the closed `repository.target`. For `task.pre_merge`, `repository.target` is `reviewed_head`, `repository.root` is the retained Queue task workspace, `repository.baseCommit` is the accepted exact PR head, `task.instruction` is the Queue-pinned submitted artifact, `delivery` carries accepted exact-head evidence, and merge and integration commits are null. The hook adapter validates its stdin against this closed schema. Queue remains document-system agnostic: every field is opaque data.",
+  "type": "object",
+  "required": ["schema", "eventId", "hookId", "event", "occurredAt", "attempt", "repository", "task", "delivery"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "const": "paseo.queue.event.v2" },
+    "eventId": { "type": "string", "minLength": 1, "maxLength": 240 },
+    "hookId": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,62}$" },
+    "event": { "enum": ["task.pre_dispatch", "task.blocked", "task.cancelled", "task.closeout", "task.pre_merge"] },
+    "occurredAt": { "type": "string", "minLength": 1 },
+    "attempt": { "type": "integer", "minimum": 1 },
+    "repository": { "$ref": "#/$defs/repository" },
+    "task": { "$ref": "#/$defs/task" },
+    "delivery": { "$ref": "#/$defs/delivery" }
+  },
+  "$defs": {
+    "gitId": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "nullableString": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+    "target": { "enum": ["integration_base", "reviewed_head"] },
+    "repository": {
+      "type": "object",
+      "required": ["root", "baseBranch", "baseCommit", "target"],
+      "additionalProperties": false,
+      "properties": {
+        "root": { "type": "string", "minLength": 1 },
+        "baseBranch": { "type": "string", "minLength": 1 },
+        "baseCommit": { "$ref": "#/$defs/gitId" },
+        "target": { "$ref": "#/$defs/target" }
+      }
+    },
+    "instruction": {
+      "type": "object",
+      "required": ["path", "commit", "digest", "mediaType"],
+      "additionalProperties": false,
+      "properties": {
+        "path": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "commit": { "$ref": "#/$defs/gitId" },
+        "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+        "mediaType": { "type": "string", "minLength": 1, "maxLength": 200 }
+      }
+    },
+    "task": {
+      "type": "object",
+      "required": ["id", "title", "phase", "instruction"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "title": { "type": "string" },
+        "phase": { "type": "string" },
+        "instruction": { "oneOf": [{ "$ref": "#/$defs/instruction" }, { "type": "null" }] }
+      }
+    },
+    "delivery": {
+      "type": "object",
+      "required": ["prUrl", "prNumber", "head", "review", "mergeCommit", "integrationCommit", "summary"],
+      "additionalProperties": false,
+      "properties": {
+        "prUrl": { "$ref": "#/$defs/nullableString" },
+        "prNumber": { "oneOf": [{ "type": "integer", "minimum": 1 }, { "type": "null" }] },
+        "head": { "$ref": "#/$defs/nullableString" },
+        "review": { "$ref": "#/$defs/nullableString" },
+        "mergeCommit": { "$ref": "#/$defs/nullableString" },
+        "integrationCommit": { "$ref": "#/$defs/nullableString" },
+        "summary": { "type": "string" }
+      }
+    }
+  }
+}
