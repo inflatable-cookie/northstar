@@ -46,10 +46,12 @@ fragments. Git history keeps every removed detailed record.
 | [`generation-receipt.schema.json`](./generation-receipt.schema.json) | Durable compact receipt for a consumed closed generation |
 | [`queue-event.schema.json`](./queue-event.schema.json) | Frozen Queue generic event contract v1 (closed mirror) |
 | [`queue-event-v2.schema.json`](./queue-event-v2.schema.json) | Frozen Queue generic event contract v2 with the closed `repository.target` (closed mirror) |
+| [`queue-event-v3.schema.json`](./queue-event-v3.schema.json) | Frozen Queue generic event contract v3 with the closed `prospective_merge` target and `mergeCandidate` (closed mirror) |
 | [`queue-result.schema.json`](./queue-result.schema.json) | Frozen Queue hook-result contract (closed mirror) |
 | [`queue-control.schema.json`](./queue-control.schema.json) | Frozen Queue control-manifest contract v1 (closed mirror) |
 | [`queue-control-v2.schema.json`](./queue-control-v2.schema.json) | Frozen Queue control-manifest contract v2 with the trusted-runner program union (closed mirror) |
 | [`queue-control-v3.schema.json`](./queue-control-v3.schema.json) | Frozen Queue control-manifest contract v3 with the closed hook `target` (closed mirror) |
+| [`queue-control-v4.schema.json`](./queue-control-v4.schema.json) | Frozen Queue control-manifest contract v4 with the closed `prospective_merge` hook target (closed mirror) |
 
 ## Status and stage
 
@@ -242,12 +244,16 @@ resurrecting a per-task fragment.
 
 Queue integration is live behind the frozen generic contracts: schemas
 `paseo.queue.control.v1`, `paseo.queue.control.v2`, `paseo.queue.control.v3`,
-`paseo.queue.event.v1`, `paseo.queue.event.v2`, and
+`paseo.queue.control.v4`, `paseo.queue.event.v1`, `paseo.queue.event.v2`,
+`paseo.queue.event.v3`, and
 `paseo.queue.hook-result.v1`; events `task.pre_dispatch`, `task.pre_merge`,
 `task.blocked`, `task.cancelled`, and `task.closeout`. v1 pins a committed
 repository executable; v2 adds a closed program union whose `trusted_runner`
 variant names only an operator-approved runner ID with literal arguments; v3
-adds one closed `target`, and `task.pre_merge` requires `reviewed_head`. Queue
+adds one closed `target`, and `task.pre_merge` requires `reviewed_head`; v4
+extends that closed target set with `prospective_merge`, and a v3 event carries
+the closed `mergeCandidate` (40-hex integration base, reviewed head, candidate
+commit, and candidate tree) for that target only. Queue
 stays document-system agnostic — it never learns Northstar paths, task IDs,
 commands, or Markdown.
 
@@ -258,9 +264,9 @@ to the same canonical transition envelopes the standalone adapter submits,
 pre-passes the whole chain through the pure reducer before touching a byte,
 and returns one closed hook result. Committed contract mirrors live beside
 the lifecycle schemas: `queue-event.schema.json`,
-`queue-event-v2.schema.json`, `queue-result.schema.json`,
-`queue-control.schema.json`, `queue-control-v2.schema.json`, and
-`queue-control-v3.schema.json`. The bounded exact-backlink resolver lives in
+`queue-event-v2.schema.json`, `queue-event-v3.schema.json`, `queue-result.schema.json`,
+`queue-control.schema.json`, `queue-control-v2.schema.json`,
+`queue-control-v3.schema.json`, and `queue-control-v4.schema.json`. The bounded exact-backlink resolver lives in
 [`../../scripts/lifecycle-backlink.ts`](../../scripts/lifecycle-backlink.ts),
 an import-safe module both the pre-merge gate and the closeout guard call, so
 the transient-handoff invariant has exactly one parser and one set of bounds.
@@ -298,6 +304,15 @@ to that head and runs the shared backlink resolver against the exact submitted
   returns no changed paths and no commit subject. This is the same resolver and
   the same bounds the closeout guard uses, so the routine worker defect is
   corrected before merge rather than after.
+- `task.pre_merge` (read-only gate at `target: prospective_merge`): Queue runs
+  it in its own candidate checkout after accepting the candidate, before merge.
+  The v3 event carries the closed `mergeCandidate`; the gate proves the checkout
+  HEAD and tree equal the candidate commit and tree, the repository base equals
+  the integration base, the delivery head equals the reviewed head, and the
+  candidate's two parents are base then head — then reuses the same pinned
+  instruction proof and shared backlink resolver on the candidate tree. Any
+  identity mismatch, wrong schema/target pair, or durable backlink refuses
+  read-only with no changed paths and no commit subject.
 - `task.blocked` / `task.cancelled` (integration-write): applies a durable
   `block` or `cancel` transition when a record exists; returns `ok` with an
   explicit skip reason when no record exists yet — the durable state then

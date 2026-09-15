@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://northstar.invalid/schemas/queue-event.v3.json",
+  "title": "Queue generic repository hook event v3 (paseo.queue.event.v3)",
+  "description": "Northstar's committed record of the frozen Queue generic event contract at Queue main 4443185 (g01.031, spec 015). v3 retains every v2 field and carries the prospective-merge run: `repository.target` is the closed `prospective_merge`, `repository.root` is the Queue-owned candidate checkout, `repository.baseCommit` is the declared integration base, and the closed `mergeCandidate` carries the 40-hex `integrationBase`, `reviewedHead`, `commit`, and `tree` identities. v3 exists only for `task.pre_merge`; any other event, target, or candidate shape is invalid here. The hook adapter validates its stdin against this closed schema. Queue remains document-system agnostic: every field is opaque data.",
+  "type": "object",
+  "required": ["schema", "eventId", "hookId", "event", "occurredAt", "attempt", "repository", "task", "delivery"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "const": "paseo.queue.event.v3" },
+    "eventId": { "type": "string", "minLength": 1, "maxLength": 240 },
+    "hookId": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,62}$" },
+    "event": { "enum": ["task.pre_merge"] },
+    "occurredAt": { "type": "string", "minLength": 1 },
+    "attempt": { "type": "integer", "minimum": 1 },
+    "repository": { "$ref": "#/$defs/repository" },
+    "task": { "$ref": "#/$defs/task" },
+    "delivery": { "$ref": "#/$defs/delivery" }
+  },
+  "$defs": {
+    "gitId": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+    "nullableString": { "oneOf": [{ "type": "string" }, { "type": "null" }] },
+    "mergeCandidate": {
+      "type": "object",
+      "required": ["integrationBase", "reviewedHead", "commit", "tree"],
+      "additionalProperties": false,
+      "properties": {
+        "integrationBase": { "$ref": "#/$defs/gitId" },
+        "reviewedHead": { "$ref": "#/$defs/gitId" },
+        "commit": { "$ref": "#/$defs/gitId" },
+        "tree": { "$ref": "#/$defs/gitId" }
+      }
+    },
+    "repository": {
+      "type": "object",
+      "required": ["root", "baseBranch", "baseCommit", "target", "mergeCandidate"],
+      "additionalProperties": false,
+      "properties": {
+        "root": { "type": "string", "minLength": 1 },
+        "baseBranch": { "type": "string", "minLength": 1 },
+        "baseCommit": { "$ref": "#/$defs/gitId" },
+        "target": { "const": "prospective_merge" },
+        "mergeCandidate": { "$ref": "#/$defs/mergeCandidate" }
+      }
+    },
+    "instruction": {
+      "type": "object",
+      "required": ["path", "commit", "digest", "mediaType"],
+      "additionalProperties": false,
+      "properties": {
+        "path": { "type": "string", "minLength": 1, "maxLength": 1024 },
+        "commit": { "$ref": "#/$defs/gitId" },
+        "digest": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+        "mediaType": { "type": "string", "minLength": 1, "maxLength": 200 }
+      }
+    },
+    "task": {
+      "type": "object",
+      "required": ["id", "title", "phase", "instruction"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "title": { "type": "string" },
+        "phase": { "type": "string" },
+        "instruction": { "oneOf": [{ "$ref": "#/$defs/instruction" }, { "type": "null" }] }
+      }
+    },
+    "delivery": {
+      "type": "object",
+      "required": ["prUrl", "prNumber", "head", "review", "mergeCommit", "integrationCommit", "summary"],
+      "additionalProperties": false,
+      "properties": {
+        "prUrl": { "$ref": "#/$defs/nullableString" },
+        "prNumber": { "oneOf": [{ "type": "integer", "minimum": 1 }, { "type": "null" }] },
+        "head": { "$ref": "#/$defs/nullableString" },
+        "review": { "$ref": "#/$defs/nullableString" },
+        "mergeCommit": { "$ref": "#/$defs/nullableString" },
+        "integrationCommit": { "$ref": "#/$defs/nullableString" },
+        "summary": { "type": "string" }
+      }
+    }
+  }
+}
