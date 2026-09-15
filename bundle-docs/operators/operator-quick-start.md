@@ -56,6 +56,8 @@ to pick one mode:
   `northstar reframe`
 - Planning, problem exploration, canonical promotion, or intake chat -> chatterbox:
   `northstar chatterbox` or `/northstar-chatterbox`
+- Move the live Chatterbox into a fresh tab in the same workspace ->
+  `chatterbox refresh`; append `using <provider>/<model>` for an exact model
 - Sound planning; need tasks -> planning: `compile-roadmaps`
 - Plan was right but changed -> recovery: `replan-after-change`
 - Drifted or messy state -> recovery: `refocus-drifted-project` or `sweep-audit-repair`
@@ -75,6 +77,8 @@ to pick one mode:
 - “Refocus this subsystem's architecture” -> `northstar` (architecture-refocus)
 - “Restate that in project language” -> `northstar` (reframe)
 - “Explore this problem or side idea with me” -> `/northstar-chatterbox`
+- “Chatterbox refresh” -> pushed continuation handoff, same-workspace successor
+  tab, and Queue attention transfer when Queue is installed
 - “Run a planning readiness review on this existing project” -> `northstar`
   (planning-readiness-review)
 - “Shape the long-horizon direction for this project with me” -> `northstar`

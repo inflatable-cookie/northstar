@@ -345,6 +345,23 @@ informal habits.
 
 ### Chatterbox planning and canonical promotion
 
+- `chatterbox refresh` writes and pushes the generic seven-section handoff with
+  `handoff_mode: chatterbox-continuation`,
+  `chatterbox_mode: conversational-planning`, and
+  `dispatch_authority: chatterbox`.
+- With Paseo, create one parent-attached `Chatterbox=true` child tab in the
+  source's exact workspace with `notifyOnFinish: false`; create no workspace or
+  worktree. Preserve current effective runtime settings unless the operator
+  names an exact available model. Never silently substitute another model.
+- Preflight unfinished Queue tasks routed to the source. After exact-workspace
+  creation, atomically transfer their attention route to the successor while
+  preserving immutable origins and all delivery identities/state. The
+  successor stays read-only until `Ownership transfer complete`.
+- Yield only after creation and exact task transfer are verified. Never retry
+  an ambiguous result or archive, detach, stop, or rename the source thread or
+  workspace. Without Paseo, return the handoff for manual launch; without
+  Queue, skip task transfer.
+
 - **Chatterbox** is the primary operator-facing planning authority. It owns
   discovery, research direction, triage reconciliation, canonical planning
   promotion, lane/dependency design, and the approved parallel frontier.

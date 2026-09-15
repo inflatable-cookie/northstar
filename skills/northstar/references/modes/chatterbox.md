@@ -87,6 +87,83 @@ than filling in a workflow form.
 - stay on topic loosely: one long-running chatterbox may explore several related
   issues over time.
 
+## Chatterbox refresh
+
+When the operator says `chatterbox refresh`, `refresh chatterbox`, or asks this
+Chatterbox to move its live conversation to a fresh thread, treat that request
+as authority for one ownership transfer. An optional model follows the request,
+for example `chatterbox refresh using <provider>/<model>`. This route
+does not archive, stop, detach, rename, or otherwise dispose of the source
+thread or its workspace.
+
+Use the generic seven-section handoff with this frontmatter overlay:
+
+```yaml
+handoff_mode: chatterbox-continuation
+chatterbox_mode: conversational-planning
+dispatch_authority: chatterbox
+```
+
+Capture the live conversational state that canonical planning cannot recover:
+operator-confirmed preferences, open questions, tentative ideas, active triage
+notes, promoted commits, approved or pending Queue work, and the next useful
+conversation move. Point to current authority instead of copying it. Commit and
+push the handoff on the integration branch, verify the remote tip, and use its
+absolute path as the successor's only initial prompt:
+
+```text
+Read and follow <absolute-handoff-path>.
+```
+
+Before creating the successor, inspect Queue through
+`queue.origin-notification-transfer-preflight` when the adapter is installed.
+The Queue skill's `northstar-transfer-origin.mjs preflight` helper is the CLI
+fallback and derives the source only from `PASEO_AGENT_ID`. Record the returned
+plan ID, workspace ID, and exact unfinished task IDs/versions whose current
+attention target is this Chatterbox. If matching tasks exist but the transfer
+capability or preflight is unavailable, stop before agent creation and return
+the handoff path plus the blocker. Never infer task ownership from titles,
+repository names, or the planning docs.
+
+In Paseo:
+
+1. Resolve this agent's exact current workspace and effective runtime settings.
+2. If no model was named, preserve the current effective provider/model,
+   `modeId`, `thinkingOptionId`, and supported feature values. If the operator
+   named a model, resolve it through current profiles and provider/model
+   discovery. Use an exact matching adequate Chatterbox profile when available;
+   otherwise inspect provider support before constructing the launch. Never
+   substitute or silently fall back to another model.
+3. Create one parent-attached child agent with title `Chatterbox`, capitalized
+   label `Chatterbox=true`, `notifyOnFinish: false`, the complete full-access
+   settings, and the exact current `workspaceId`. Do not create a workspace or
+   use worktree isolation. Verify the returned workspace ID equals the source
+   workspace and retain the returned agent ID.
+4. Call `queue.origin-notification-transfer` with the exact preflight plan and
+   successor ID, or use `northstar-transfer-origin.mjs transfer
+   <successor-agent-id>` with that plan. Transfer every planned task from this
+   Chatterbox's attention route to that exact successor. Preserve each immutable
+   original origin, task identity, worker, reviewer, coordinator, PR, workspace,
+   phase, dependency, and notification policy. Verify the returned plan,
+   workspace, source, successor, and task ID/version set; an empty set is a
+   valid result. A changed set requires a fresh preflight and must not partially
+   apply.
+5. Send the successor one explicit `Ownership transfer complete` follow-up with
+   `background: true, notifyOnFinish: false`. The handoff tells the successor to
+   remain read-only until that message arrives.
+
+If agent creation or Queue transfer returns an identity with an ambiguous
+outcome, preserve every returned identity and stop. Do not retry into a
+duplicate successor or partially reparent tasks. The source retains ownership
+until creation, exact-workspace verification, Queue transfer, and the explicit
+completion message all succeed. It then stops planning, promotion, direct
+changes, Queue rulings, and coordinator direction for the transferred lane. It
+may remain open as history but must not compete with the successor.
+
+Without Paseo, write and push the handoff, return its absolute path, and explain
+that launch is manual. Without Queue, skip task transfer. A missing optional
+adapter does not make Northstar unusable.
+
 ## Discovery, triage, and reconciliation
 
 When a new issue or idea is coherent enough for later reference, write one

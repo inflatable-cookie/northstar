@@ -843,6 +843,27 @@ secrets and raw sensitive payloads. The result is advisory intake. Chatterbox
 owns the decision, promotion, and dispatch recommendation. Ready manifests
 require no second-opinion field.
 
+## Chatterbox refresh
+
+`chatterbox refresh` transfers one live planning conversation to a fresh
+Chatterbox. The source writes and pushes the generic seven-section handoff with
+`handoff_mode: chatterbox-continuation`,
+`chatterbox_mode: conversational-planning`, and
+`dispatch_authority: chatterbox`. The successor starts as a parent-attached tab
+in the source's exact current workspace; no workspace or worktree is created.
+An operator may name the model. Otherwise preserve the source's effective
+runtime settings. Never substitute an unavailable named model.
+
+Queue integration preflights the exact unfinished tasks whose current attention
+target is the source, then atomically transfers that route to the verified
+successor while preserving immutable origin provenance and all delivery state.
+The successor stays read-only until it receives `Ownership transfer complete`.
+The source yields planning and Queue attention only after same-workspace agent
+creation and exact task transfer are verified. Ambiguous creation or transfer
+is never retried into duplicate state. The source thread and workspace remain
+intact. Without Paseo, return the absolute handoff path for manual launch;
+without Queue, omit only the task-transfer step.
+
 ## Fresh Coordinator continuation
 
 An operator may ask the current Coordinator to transfer its whole live lane to

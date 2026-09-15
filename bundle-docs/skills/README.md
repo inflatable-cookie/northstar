@@ -131,6 +131,7 @@ compatibility aliases.
 | `refocus-drifted-project.md` | Broad drift or untrustworthy state |
 | `sweep-audit-repair.md` | Structured sweep pass |
 | `handoff.md` | User **explicitly** asks for handoff / fresh thread |
+| `chatterbox.md` | Primary planning and `chatterbox refresh` continuation |
 | `atlas.md` | User-guided long-horizon direction and a coarse strategic runway |
 
 Setup references live under `skills/northstar/references/setup/`.
@@ -142,7 +143,9 @@ Templates live under `skills/northstar/assets/templates/`.
   review, explicit coordinator-thread, or long-horizon strategic-planning
   language in the user message — covered by the `northstar` skill description.
 - **Handoff:** only when the user clearly wants a continuation brief or fresh
-  thread. The router and handoff mode forbid compaction-only or bare `continue`.
+  thread. `chatterbox refresh` routes to Chatterbox mode so it can create the
+  same-workspace successor and transfer Queue attention. The router and handoff
+  mode forbid compaction-only or bare `continue`.
 - **Language quality:** explicit audit-and-repair or everyday authoring
   intent — or an exact registered activation marker in the consumer — routes
   through the installed core skill's `language:route` task. It securely

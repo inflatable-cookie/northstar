@@ -41,6 +41,9 @@ ordinary continuation:
 
 - bare `continue`, "keep going", "context is full", compaction alone
 - routine batch closeout without asking for a handoff file
+- `chatterbox refresh`, `refresh chatterbox`, or another explicit transfer of a
+  live Chatterbox conversation; route those through Chatterbox mode so it can
+  create the successor and transfer Queue attention
 - an operator-approved frontier-advisor consultation, implementation-worker, or
   coordinator-continuation lane; use Coordinator mode so the successor keeps
   planning, dispatch, PR review, merge, and promotion instead of writing another
@@ -313,6 +316,8 @@ the coordinator; or when the thread is already a chatterbox:
 - `/northstar-chatterbox`;
 - "you're a chatterbox on X", or exploratory intake/planning chat;
 - an already-spawned chatterbox thread.
+- `chatterbox refresh`, `refresh chatterbox`, or a request to move the current
+  Chatterbox into a fresh thread, optionally with a named model.
 
 This is an internal mode of the single public `northstar` authority. A chatterbox
 is the primary human-facing planning authority. It shares the checkout, creates
@@ -331,6 +336,21 @@ or PR-review requests keep those routes. A material implementation request stays
 with the coordinator/worker loop. PR review and merge stay outside Chatterbox.
 
 → [`modes/chatterbox.md`](./modes/chatterbox.md)
+
+## Chatterbox-continuation activation
+
+This path applies only when a committed handoff declares all three fields:
+
+```yaml
+handoff_mode: chatterbox-continuation
+chatterbox_mode: conversational-planning
+dispatch_authority: chatterbox
+```
+
+The successor opens [`modes/chatterbox.md`](./modes/chatterbox.md), remains
+read-only until the source sends `Ownership transfer complete`, then continues
+as the sole Chatterbox for that lane. It does not enter generic handoff,
+Coordinator, worker, reviewer, or advisor mode.
 
 ## Coordinator-continuation activation
 

@@ -569,6 +569,18 @@ This contract and system architecture govern the current planning and delivery t
   without explicit operator approval for that consultation. Use the host's
   ordinary advisor or committee mechanism. Chatterbox remains responsible for
   the decision and canonical planning.
+- `chatterbox refresh` is an ownership transfer through a pushed seven-section
+  handoff declaring `handoff_mode: chatterbox-continuation`,
+  `chatterbox_mode: conversational-planning`, and
+  `dispatch_authority: chatterbox`. Paseo creates one `Chatterbox=true` child
+  tab in the source's exact current workspace with `notifyOnFinish: false` and
+  no new workspace or worktree. Queue preflights and atomically transfers every
+  unfinished task attention route from source to successor while retaining
+  immutable origin provenance and delivery state. The successor stays
+  read-only until `Ownership transfer complete`; the source yields only after
+  exact creation and transfer verification. Ambiguous outcomes are not retried.
+  Neither source thread nor workspace is archived, detached, stopped, or
+  renamed. A named model is exact; no silent substitute is allowed.
 - Chatterbox owns every triage disposition. Raw triage and external intake are
   never coordinator execution authority. Chatterbox reconciles them against
   current authority, resolves conflicts with the operator, and promotes,

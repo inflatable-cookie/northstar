@@ -4,9 +4,10 @@ Use this contract when a Northstar repo needs a fresh-thread brief or
 continuation artifact. A handoff is a note for the next person or agent, not a
 replacement for the live planning spine.
 
-Do not create one merely because the current thread is nearing compaction. If
-the same thread can continue after compaction, use normal closeout and continue
-from the existing `Next Task`.
+Do not create one merely because a harness might compact the same thread. If
+the thread will continue in place, use normal closeout and continue from the
+existing `Next Task`. An explicit `chatterbox refresh` is different: it
+transfers ownership to a newly created thread through the overlay below.
 
 ## Required Sections
 
@@ -56,6 +57,24 @@ activate worker mode, advisor routing, or the handoff-writing route.
 Do not add a public mode or a second continuation template. The source yields
 planning, dispatch, review, and merge mutations for the transferred lane after
 the pushed handoff is dispatched.
+
+### Chatterbox-continuation activation
+
+A Chatterbox refresh reuses the generic seven-section handoff. It must declare:
+
+```yaml
+handoff_mode: chatterbox-continuation
+chatterbox_mode: conversational-planning
+dispatch_authority: chatterbox
+```
+
+These fields activate Chatterbox mode for the successor. `Current State`
+records the source Chatterbox ID, current workspace ID, active triage and
+planning state, and the exact unfinished Queue task IDs found by preflight.
+`Completion Protocol` tells the successor to stay read-only until it receives
+`Ownership transfer complete`. The source yields only after same-workspace
+creation and Queue attention transfer are verified. Do not add another handoff
+template.
 
 ### Consumer trailing sections
 
@@ -118,6 +137,10 @@ there. Repeat only dispatch-specific state, worker boundaries, runtime/worktree
 facts, the PR contract, and non-obvious tensions. Completeness comes from
 resolvable refs plus that state, not pasted prose.
 
+Worker handoffs are transient transport. Durable tasks, logs, roadmaps, and
+front doors must never link to the exact worker handoff that Queue closeout will
+consume. Link the canonical task, PR, commit, contract, or durable log instead.
+
 Do not impose a hard line limit. If a handoff rivals or exceeds its owning card,
 or copies multi-paragraph protocol text, treat that as a compression signal.
 
@@ -161,6 +184,11 @@ or copies multi-paragraph protocol text, treat that as a compression signal.
     transport identities, review/merge state, touched triage notes, repository
     state, and the next coordinator action. The successor reloads current
     `main`; private conversation is not authority.
+  - for a chatterbox-continuation handoff, the source agent and workspace IDs,
+    live operator-confirmed and tentative conversational state, active triage
+    notes, promoted commits, exact preflighted Queue task IDs, and the next
+    useful question. The successor reloads current `main`; private conversation
+    is context, not durable authority.
 - `Boundaries` includes at least one explicit out-of-scope boundary and any hard
   constraints the next thread must respect.
 - `Important Context` captures roadmap/log lineage, the relationship between
@@ -174,12 +202,15 @@ or copies multi-paragraph protocol text, treat that as a compression signal.
   worker/PR flow and serial review lease here. Coordinator-continuation handoffs
   tell the successor to re-enter normal Coordinator mode from the absolute path,
   and tell the source to yield the lane.
+  Chatterbox-continuation handoffs tell the successor to remain read-only until
+  the source confirms same-workspace creation and Queue attention transfer.
 
 ## Validity rules
 
 A handoff is valid only when another thread genuinely needs to take over or the
 user explicitly asked for a handoff artifact. Low context, compaction, or normal
-thread-budget pressure alone is not enough.
+thread-budget pressure alone is not enough unless the operator explicitly asks
+for a Chatterbox refresh and successor-thread transfer.
 
 The handoff must be useful without the originating transcript. It may point at
 canonical files rather than copy their full contents, but it must explain what

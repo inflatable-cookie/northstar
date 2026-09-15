@@ -31,7 +31,7 @@ router's generic language section into the installed-package route at
 | UI design delivery | A UI-classified implementation or review lane has an approved brief; run the `northstar-ui` skill's Build or Review route |
 | Coordinator | User wants a Northstar lane coordinated — manifest-defined frontier dispatch, review-child lease in worker workspace, and gated merge — or a committed coordinator-continuation handoff; canonical planning and promotion belong to chatterbox |
 | Docs cleanup | User wants `/docs` files and folders inspected and reworked to fit Northstar |
-| Chatterbox | User wants primary planning authority, problem exploration, canonical promotion, triage reconciliation, or coordinator direction; or uses `northstar chatterbox` / `/northstar-chatterbox` |
+| Chatterbox | User wants primary planning authority, problem exploration, canonical promotion, triage reconciliation, coordinator direction, or a `chatterbox refresh`; or uses `northstar chatterbox` / `/northstar-chatterbox` |
 | Normalize docs | Bootstrap, migrate, or keep docs spine healthy over time |
 | Research | Evidence → architecture/contracts |
 | Recovery | Drifted or changed planning state |
@@ -69,6 +69,14 @@ A fresh coordinator continuation is distinct from both. Its handoff declares
 `dispatch_authority: coordinator`. The successor enters normal coordinator
 mode from that absolute path and does not run worker or advisor
 preflight. The source yields the transferred lane after pushed dispatch.
+
+A Chatterbox refresh is another explicit continuation. Its handoff declares
+`handoff_mode: chatterbox-continuation`,
+`chatterbox_mode: conversational-planning`, and
+`dispatch_authority: chatterbox`. With Paseo, the successor is a child tab in
+the source's exact current workspace. The source transfers every preflighted
+unfinished Queue attention route to it, verifies the exact result, then yields;
+neither thread nor workspace is archived or detached.
 
 Whenever a Northstar mode creates a Paseo child from a selected profile,
 materialize the complete profile into the launch: provider/model plus `modeId`,
@@ -162,6 +170,9 @@ routine tool prompts; it does not expand the child's Northstar authority.
   worker supervision, review, or merge authority. A current explicit operator
   instruction may authorize one local, reversible, low-risk direct change under
   Chatterbox mode's complete gate; material implementation still dispatches.
+  `chatterbox refresh` writes a pushed continuation handoff, creates a successor
+  child tab in the same Paseo workspace, transfers unfinished Queue attention,
+  and yields without disposing of the source.
 
 ## Conversation style
 

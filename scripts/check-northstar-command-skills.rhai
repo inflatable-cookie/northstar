@@ -213,6 +213,8 @@ let handoff_mode_text = fs::read_file(path::join(root, "references/modes/handoff
 let continuation_router = h2_section(router_text, "## Coordinator-continuation activation");
 let continuation_contract = h3_section(handoff_contract_text, "### Coordinator-continuation activation");
 let continuation_mode = h2_section(coordinator_text, "## Fresh Coordinator continuation");
+let chatterbox_continuation_router = h2_section(router_text, "## Chatterbox-continuation activation");
+let chatterbox_continuation_contract = h3_section(handoff_contract_text, "### Chatterbox-continuation activation");
 let generic_template = fs::read_file(path::join(root, "assets/templates/northstar-handoff.md.template"));
 let generic_h2 = 0;
 for line in str::split_lines(generic_template) {
@@ -243,6 +245,17 @@ require(!fs::is_file(path::join(root, "assets/templates/northstar-coordinator-co
     "continuation added a public template");
 require(generic_h2 == 7 && !generic_template.contains("handoff_mode:"),
     "generic handoff template is no longer seven sections without activation fields");
+
+require(chatterbox_continuation_router.contains("handoff_mode: chatterbox-continuation") &&
+    chatterbox_continuation_router.contains("chatterbox_mode: conversational-planning") &&
+    chatterbox_continuation_router.contains("dispatch_authority: chatterbox") &&
+    chatterbox_continuation_router.contains("Ownership transfer complete"),
+    "router chatterbox-continuation activation is incomplete");
+require(chatterbox_continuation_contract.contains("source Chatterbox ID") &&
+    chatterbox_continuation_contract.contains("current workspace ID") &&
+    chatterbox_continuation_contract.contains("exact unfinished Queue task IDs") &&
+    chatterbox_continuation_contract.contains("Do not add another handoff"),
+    "handoff contract chatterbox-continuation overlay is incomplete");
 
 require(continuation_mode.contains("stops planning, dispatch, review") &&
     continuation_mode.contains("merge mutations for the transferred lane") &&
@@ -305,6 +318,30 @@ require(chatterbox_mode_text.contains("primary operator-facing planning authorit
     chatterbox_mode_text.contains("reconciles operator-approved advisor intake, external evidence, or conversational triage notes") &&
     chatterbox_mode_text.contains("directly updates canonical planning"),
     "chatterbox mode missing primary planning and promotion authority");
+
+let chatterbox_refresh = h2_section(chatterbox_mode_text, "## Chatterbox refresh");
+for marker in [
+    "`chatterbox refresh`",
+    "exact current `workspaceId`",
+    "parent-attached child agent",
+    "`Chatterbox=true`",
+    "`notifyOnFinish: false`",
+    "Never\n   substitute or silently fall back to another model",
+    "`queue.origin-notification-transfer-preflight`",
+    "exact unfinished task IDs/versions",
+    "`queue.origin-notification-transfer`",
+    "Preserve each immutable",
+    "`Ownership transfer complete`",
+    "Do not retry into a\nduplicate successor",
+    "does not archive, stop, detach, rename",
+    "Without Paseo",
+    "Without Queue",
+] {
+    require(chatterbox_refresh.contains(marker), "chatterbox refresh rule missing: " + marker);
+}
+require(!chatterbox_refresh.contains("create a separate `local` workspace") &&
+    !chatterbox_refresh.contains("branch-off"),
+    "chatterbox refresh must stay in the current workspace");
 
 let chatterbox_triage = h2_section(chatterbox_mode_text, "## Discovery, triage, and reconciliation");
 require(chatterbox_triage.contains("update the existing note in place") &&

@@ -550,9 +550,12 @@ The file must say, in substance:
 - stop on missing contracts, ambiguous intent, scope expansion, or validation
   failure that changes the plan;
 - update execution evidence and closeout surfaces as required by the cards;
+- never add a durable Markdown link to this transient worker handoff. Evidence
+  links to the canonical task, PR, commit, contract, or durable log instead;
 - before PR creation or revision, try to falsify the diff: enumerate universal,
   exact, and negative claims, exercise each review-oracle counterexample, map it
-  to proof, and reconcile card, roadmap, log, handoff, and front-door state;
+  to proof, confirm no tracked durable Markdown links to the exact submitted
+  handoff, and reconcile card, roadmap, log, handoff, and front-door state;
 - return a newly discovered product threshold, contract choice, or acceptance
   rule to planning instead of choosing it in implementation;
 - finish the assigned runway with a pushed branch and a reviewable PR;
