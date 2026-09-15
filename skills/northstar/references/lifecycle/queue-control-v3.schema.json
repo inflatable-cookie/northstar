@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://northstar.invalid/schemas/queue-control.v3.json",
+  "title": "Queue generic control manifest v3 (paseo.queue.control.v3)",
+  "description": "Northstar's committed record of the frozen Queue control-manifest contract at Queue main 2887837 (g01.020, reviewed-head pre-merge hooks; contract 005, spec 007). The grammar is document-system agnostic: no Northstar paths, commands, IDs, or Markdown rules appear. A v3 hook adds one closed target field to the v2 program union. `task.pre_merge` is the reviewed-head event: it requires `target: reviewed_head`, `mode: read_only`, `delivery: required`, and must be the only event on its hook. Every other event keeps `target: integration_base`, and a definition that mixes events with different targets is invalid; repositories use separate hook entries. The manifest carries no runner path, digest, version, environment, host, or installation hint. Binding cross-rules (unique ids and events, read_only restrictions, integration_write commit subject, and the target/event correlation) are enforced by adapter code; the 64 KiB byte cap is a file-size check.",
+  "type": "object",
+  "required": ["schema", "hooks"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "const": "paseo.queue.control.v3" },
+    "hooks": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 16,
+      "items": { "$ref": "#/$defs/hook" }
+    }
+  },
+  "$defs": {
+    "eventName": { "enum": ["task.pre_dispatch", "task.blocked", "task.cancelled", "task.closeout", "task.pre_merge"] },
+    "target": { "enum": ["integration_base", "reviewed_head"] },
+    "repoPath": { "type": "string", "minLength": 1, "maxLength": 1024 },
+    "allowedPath": { "type": "string", "minLength": 1, "maxLength": 1024 },
+    "argvValue": { "type": "string", "maxLength": 1024 },
+    "runnerId": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,62}$" },
+    "commitSubject": {
+      "type": "object",
+      "required": ["prefix", "maxBytes"],
+      "additionalProperties": false,
+      "properties": {
+        "prefix": { "type": "string", "minLength": 1, "maxLength": 50 },
+        "maxBytes": { "type": "integer", "minimum": 20, "maximum": 100 }
+      }
+    },
+    "repositoryProgram": {
+      "type": "object",
+      "required": ["kind", "executable"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "repository" },
+        "executable": { "$ref": "#/$defs/repoPath" },
+        "argv": { "type": "array", "maxItems": 32, "items": { "$ref": "#/$defs/argvValue" } }
+      }
+    },
+    "trustedRunnerProgram": {
+      "type": "object",
+      "required": ["kind", "runner"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "const": "trusted_runner" },
+        "runner": { "$ref": "#/$defs/runnerId" },
+        "argv": { "type": "array", "maxItems": 32, "items": { "$ref": "#/$defs/argvValue" } }
+      }
+    },
+    "hook": {
+      "type": "object",
+      "required": ["id", "events", "mode", "delivery", "target", "program", "timeoutMs", "maxOutputBytes"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,62}$" },
+        "events": { "type": "array", "minItems": 1, "maxItems": 4, "items": { "$ref": "#/$defs/eventName" }, "uniqueItems": true },
+        "mode": { "enum": ["read_only", "integration_write"] },
+        "delivery": { "enum": ["required", "advisory"] },
+        "target": { "$ref": "#/$defs/target" },
+        "program": { "oneOf": [{ "$ref": "#/$defs/repositoryProgram" }, { "$ref": "#/$defs/trustedRunnerProgram" }] },
+        "timeoutMs": { "type": "integer", "minimum": 100, "maximum": 120000 },
+        "maxOutputBytes": { "type": "integer", "minimum": 1024, "maximum": 1048576 },
+        "allowedPaths": { "type": "array", "maxItems": 64, "items": { "$ref": "#/$defs/allowedPath" } },
+        "commitSubject": { "oneOf": [{ "$ref": "#/$defs/commitSubject" }, { "type": "null" }] }
+      }
+    }
+  }
+}

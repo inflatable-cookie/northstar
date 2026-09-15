@@ -1,11 +1,28 @@
 {
-  "schema": "paseo.queue.control.v2",
+  "schema": "paseo.queue.control.v3",
   "hooks": [
     {
       "id": "lifecycle-gate",
       "events": ["task.pre_dispatch"],
       "mode": "read_only",
       "delivery": "required",
+      "target": "integration_base",
+      "program": {
+        "kind": "trusted_runner",
+        "runner": "effigy",
+        "argv": ["skill", "run", "northstar/queue:hook", "--stdio", "passthrough"]
+      },
+      "timeoutMs": 30000,
+      "maxOutputBytes": 65536,
+      "allowedPaths": [],
+      "commitSubject": null
+    },
+    {
+      "id": "repository-pre-merge",
+      "events": ["task.pre_merge"],
+      "mode": "read_only",
+      "delivery": "required",
+      "target": "reviewed_head",
       "program": {
         "kind": "trusted_runner",
         "runner": "effigy",
@@ -21,6 +38,7 @@
       "events": ["task.blocked", "task.cancelled", "task.closeout"],
       "mode": "integration_write",
       "delivery": "required",
+      "target": "integration_base",
       "program": {
         "kind": "trusted_runner",
         "runner": "effigy",

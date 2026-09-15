@@ -39,10 +39,12 @@ derived projection. When the two disagree, the record wins.
 | [`evidence.schema.json`](./evidence.schema.json) | One compact evidence entry |
 | [`projection.schema.json`](./projection.schema.json) | Generated Markdown block metadata |
 | [`generation-closure.schema.json`](./generation-closure.schema.json) | Explicit generation closure authority |
-| [`queue-event.schema.json`](./queue-event.schema.json) | Frozen Queue generic event contract (closed mirror) |
+| [`queue-event.schema.json`](./queue-event.schema.json) | Frozen Queue generic event contract v1 (closed mirror) |
+| [`queue-event-v2.schema.json`](./queue-event-v2.schema.json) | Frozen Queue generic event contract v2 with the closed `repository.target` (closed mirror) |
 | [`queue-result.schema.json`](./queue-result.schema.json) | Frozen Queue hook-result contract (closed mirror) |
 | [`queue-control.schema.json`](./queue-control.schema.json) | Frozen Queue control-manifest contract v1 (closed mirror) |
 | [`queue-control-v2.schema.json`](./queue-control-v2.schema.json) | Frozen Queue control-manifest contract v2 with the trusted-runner program union (closed mirror) |
+| [`queue-control-v3.schema.json`](./queue-control-v3.schema.json) | Frozen Queue control-manifest contract v3 with the closed hook `target` (closed mirror) |
 
 ## Status and stage
 
@@ -210,12 +212,14 @@ human-owned sequencing decision, never a reducer transition.
 ## Generic Queue hook adapter
 
 Queue integration is live behind the frozen generic contracts: schemas
-`paseo.queue.control.v1`, `paseo.queue.control.v2`, `paseo.queue.event.v1`,
-and `paseo.queue.hook-result.v1`; events `task.pre_dispatch`, `task.blocked`,
-`task.cancelled`, and `task.closeout`. v1 pins a committed repository
-executable; v2 adds a closed program union whose `trusted_runner` variant
-names only an operator-approved runner ID with literal arguments. Queue stays
-document-system agnostic — it never learns Northstar paths, task IDs,
+`paseo.queue.control.v1`, `paseo.queue.control.v2`, `paseo.queue.control.v3`,
+`paseo.queue.event.v1`, `paseo.queue.event.v2`, and
+`paseo.queue.hook-result.v1`; events `task.pre_dispatch`, `task.pre_merge`,
+`task.blocked`, `task.cancelled`, and `task.closeout`. v1 pins a committed
+repository executable; v2 adds a closed program union whose `trusted_runner`
+variant names only an operator-approved runner ID with literal arguments; v3
+adds one closed `target`, and `task.pre_merge` requires `reviewed_head`. Queue
+stays document-system agnostic — it never learns Northstar paths, task IDs,
 commands, or Markdown.
 
 The installed adapter is [`../../scripts/lifecycle-queue-hook.ts`](../../scripts/lifecycle-queue-hook.ts).
@@ -224,8 +228,13 @@ planning identity from the committed handoff and task history, maps the event
 to the same canonical transition envelopes the standalone adapter submits,
 pre-passes the whole chain through the pure reducer before touching a byte,
 and returns one closed hook result. Committed contract mirrors live beside
-the lifecycle schemas: `queue-event.schema.json`, `queue-result.schema.json`,
-`queue-control.schema.json`, and `queue-control-v2.schema.json`.
+the lifecycle schemas: `queue-event.schema.json`,
+`queue-event-v2.schema.json`, `queue-result.schema.json`,
+`queue-control.schema.json`, `queue-control-v2.schema.json`, and
+`queue-control-v3.schema.json`. The bounded exact-backlink resolver lives in
+[`../../scripts/lifecycle-backlink.ts`](../../scripts/lifecycle-backlink.ts),
+an import-safe module both the pre-merge gate and the closeout guard call, so
+the transient-handoff invariant has exactly one parser and one set of bounds.
 
 Canonical source lives in this skill, and the skill is the only runtime. The
 skill catalog exposes the adapter as the task `northstar/queue:hook`, and the
@@ -250,6 +259,16 @@ Event mapping:
 - `task.pre_dispatch` (read-only gate): verifies the instruction artifact
   digest and that the planning identity reconstructed from committed task
   history matches any existing record. Never writes.
+- `task.pre_merge` (read-only gate at `target: reviewed_head`): Queue runs it
+  in the retained task workspace at the accepted exact PR head, after the
+  reviewer verdict and before merge. It binds the pinned instruction artifact
+to that head and runs the shared backlink resolver against the exact submitted
+  handoff. A tracked durable Markdown link to that handoff refuses, naming the
+  linking path; Queue returns the same PR and workspace to the retained worker
+  as the next ordinary semantic revision. The gate changes no bytes, so it
+  returns no changed paths and no commit subject. This is the same resolver and
+  the same bounds the closeout guard uses, so the routine worker defect is
+  corrected before merge rather than after.
 - `task.blocked` / `task.cancelled` (integration-write): applies a durable
   `block` or `cancel` transition when a record exists; returns `ok` with an
   explicit skip reason when no record exists yet — the durable state then
@@ -284,9 +303,10 @@ Closeout consumes the instruction handoff. The `task.closeout` publication is
 one integration commit: the terminal record, the regenerated declared
 projections, and the removal of the exact submitted handoff. The hook deletes
 only the exact committed path whose working-tree bytes still hash to the
-pinned blob digest, and only after the terminal receipt exists. Tracked
-durable Markdown that still links to that exact handoff refuses the same way:
-the hook resolves relative, rooted, and reference-style Markdown links
+pinned blob digest, and only after the terminal receipt exists. The same
+shared backlink guard the pre-merge gate runs refuses closeout
+atomically when durable Markdown still links to that exact handoff: the hook
+resolves relative, rooted, and reference-style Markdown links
 (through their definitions), ignores external URLs
 and the handoff itself, and only an exact local target blocks — so deletion
 never strands a backlink. The scan reads the NUL-delimited tracked-file listing
