@@ -16,7 +16,9 @@
 # 5. Runs the hook adapter against real fixture repositories through the real
 #    Effigy route: pre-dispatch gate, the read-only reviewed-head pre-merge gate
 #    (clean pass, durable-backlink refusal, and byte identity with the closeout
-#    refusal from one shared resolver), hostile events, read-only binding,
+#    refusal from one shared resolver), the read-only prospective-merge gate
+#    (clean pass, candidate identity proofs, schema/target correlation, binding
+#    rules, and the same shared backlink refusal), hostile events, read-only binding,
 #    escape refusal, squash refusal, bootstrap closeout, idempotent replay,
 #    durable-backlink refusal with relative/rooted/fragment/titled/reference-style/large-file/indented/escaped/list-continuation/non-1-ordered/fenced/inline/external/mismatch
 #    controls, the sole-source currentness cutover (the audit rejects
@@ -52,6 +54,7 @@ dogfood_manifest="$repo_root/.paseo/queue.json"
 starter_manifest="$repo_root/template-bundle/lifecycle/queue.json"
 EVENT_SCHEMA="paseo.queue.event.v1"
 EVENT_SCHEMA_V2="paseo.queue.event.v2"
+EVENT_SCHEMA_V3="paseo.queue.event.v3"
 FROZEN_ARGV=(skill run northstar/queue:hook --stdio passthrough)
 CURRENT_REPO=""
 
@@ -237,6 +240,8 @@ expect_schema_reject() { # <schema-file> <instance-json-string> <label>
 V1_MIRROR="$source_skill/references/lifecycle/queue-control.schema.json"
 V2_MIRROR="$source_skill/references/lifecycle/queue-control-v2.schema.json"
 V3_MIRROR="$source_skill/references/lifecycle/queue-control-v3.schema.json"
+V4_MIRROR="$source_skill/references/lifecycle/queue-control-v4.schema.json"
+V3_EVENT_MIRROR="$source_skill/references/lifecycle/queue-event-v3.schema.json"
 # A v2 hook may not mix program variants or keep the retired v1 pair.
 expect_schema_reject "$V2_MIRROR" '{"schema":"paseo.queue.control.v2","hooks":[{"id":"h","events":["task.closeout"],"mode":"integration_write","delivery":"required","program":{"kind":"trusted_runner","runner":"effigy","argv":["x"]},"executable":"hooks/legacy","timeoutMs":5000,"maxOutputBytes":4096,"commitSubject":{"prefix":"l","maxBytes":40}}]}' "program plus retired executable"
 expect_schema_reject "$V2_MIRROR" '{"schema":"paseo.queue.control.v2","hooks":[{"id":"h","events":["task.closeout"],"mode":"integration_write","delivery":"required","program":{"kind":"trusted_runner","runner":"effigy","executable":"hooks/legacy"},"timeoutMs":5000,"maxOutputBytes":4096,"commitSubject":{"prefix":"l","maxBytes":40}}]}' "mixed program fields"
@@ -285,6 +290,62 @@ schema_check "$V2_EVENT_MIRROR" "$scratch/plain-v2-event.json"
 expect_schema_reject "$V2_EVENT_MIRROR" '{"schema":"paseo.queue.event.v2","eventId":"e","hookId":"h","event":"task.pre_merge","occurredAt":"2026-09-15T08:00:00.000Z","attempt":1,"repository":{"root":"/tmp/example","baseBranch":"main","baseCommit":"1111111111111111111111111111111111111111"},"task":{"id":"q","title":"","phase":"","instruction":null},"delivery":{"prUrl":null,"prNumber":null,"head":null,"review":null,"mergeCommit":null,"integrationCommit":null,"summary":""}}' "v2 event omits the repository target"
 expect_schema_reject "$V1_EVENT_MIRROR" '{"schema":"paseo.queue.event.v1","eventId":"e","hookId":"h","event":"task.closeout","occurredAt":"2026-09-15T08:00:00.000Z","attempt":1,"repository":{"root":"/tmp/example","baseBranch":"main","baseCommit":"1111111111111111111111111111111111111111","target":"integration_base"},"task":{"id":"q","title":"","phase":"","instruction":null},"delivery":{"prUrl":null,"prNumber":null,"head":null,"review":null,"mergeCommit":null,"integrationCommit":null,"summary":""}}' "v1 event carries the v2 repository target"
 
+# Frozen prospective-merge mirrors: v4 adds the closed prospective_merge hook
+# target to the v3 grammar, and v3 carries the closed mergeCandidate for
+# task.pre_merge at that target only.
+cat > "$scratch/plain-v4-manifest.json" <<'EOF'
+{
+  "schema": "paseo.queue.control.v4",
+  "hooks": [
+    {
+      "id": "candidate-pre-merge",
+      "events": ["task.pre_merge"],
+      "mode": "read_only",
+      "delivery": "required",
+      "target": "prospective_merge",
+      "program": { "kind": "trusted_runner", "runner": "effigy", "argv": ["skill", "run", "northstar/queue:hook", "--stdio", "passthrough"] },
+      "timeoutMs": 30000,
+      "maxOutputBytes": 65536,
+      "allowedPaths": [],
+      "commitSubject": null
+    }
+  ]
+}
+EOF
+schema_check "$V4_MIRROR" "$scratch/plain-v4-manifest.json"
+cat > "$scratch/plain-v3-event.json" <<'EOF'
+{
+  "schema": "paseo.queue.event.v3",
+  "eventId": "evt-mirror-v3",
+  "hookId": "candidate-pre-merge",
+  "event": "task.pre_merge",
+  "occurredAt": "2026-09-15T08:00:00.000Z",
+  "attempt": 1,
+  "repository": { "root": "/tmp/example", "baseBranch": "main", "baseCommit": "1111111111111111111111111111111111111111", "target": "prospective_merge", "mergeCandidate": { "integrationBase": "1111111111111111111111111111111111111111", "reviewedHead": "2222222222222222222222222222222222222222", "commit": "3333333333333333333333333333333333333333", "tree": "4444444444444444444444444444444444444444" } },
+  "task": { "id": "q", "title": "", "phase": "", "instruction": null },
+  "delivery": { "prUrl": null, "prNumber": null, "head": null, "review": null, "mergeCommit": null, "integrationCommit": null, "summary": "" }
+}
+EOF
+schema_check "$V3_EVENT_MIRROR" "$scratch/plain-v3-event.json"
+# A v3 manifest cannot select the prospective target; only v4 declares it.
+expect_schema_reject "$V3_MIRROR" '{"schema":"paseo.queue.control.v3","hooks":[{"id":"h","events":["task.pre_merge"],"mode":"read_only","delivery":"required","target":"prospective_merge","program":{"kind":"repository","executable":"hooks/x"},"timeoutMs":5000,"maxOutputBytes":4096}]}' "v3 hook selects prospective_merge"
+# A v4 hook still declares exactly one closed target.
+expect_schema_reject "$V4_MIRROR" '{"schema":"paseo.queue.control.v4","hooks":[{"id":"h","events":["task.closeout"],"mode":"integration_write","delivery":"required","program":{"kind":"repository","executable":"hooks/x"},"timeoutMs":5000,"maxOutputBytes":4096,"commitSubject":{"prefix":"l","maxBytes":40}}]}' "v4 hook omits target"
+expect_schema_reject "$V4_MIRROR" '{"schema":"paseo.queue.control.v4","hooks":[{"id":"h","events":["task.closeout"],"mode":"integration_write","delivery":"required","target":"candidate","program":{"kind":"repository","executable":"hooks/x"},"timeoutMs":5000,"maxOutputBytes":4096,"commitSubject":{"prefix":"l","maxBytes":40}}]}' "v4 hook invents a target"
+# A v3 event exists only for task.pre_merge at prospective_merge with the
+# full closed candidate: any other event, target, or candidate shape is out.
+V3_BASE='{"schema":"paseo.queue.event.v3","eventId":"e","hookId":"h","event":"task.pre_merge","occurredAt":"2026-09-15T08:00:00.000Z","attempt":1,"repository":{"root":"/tmp/example","baseBranch":"main","baseCommit":"1111111111111111111111111111111111111111","target":"prospective_merge","mergeCandidate":{"integrationBase":"1111111111111111111111111111111111111111","reviewedHead":"2222222222222222222222222222222222222222","commit":"3333333333333333333333333333333333333333","tree":"4444444444444444444444444444444444444444"}},"task":{"id":"q","title":"","phase":"","instruction":null},"delivery":{"prUrl":null,"prNumber":null,"head":null,"review":null,"mergeCommit":null,"integrationCommit":null,"summary":""}}'
+expect_schema_reject "$V3_EVENT_MIRROR" "${V3_BASE/task.pre_merge/task.closeout}" "v3 event on another event"
+expect_schema_reject "$V3_EVENT_MIRROR" "${V3_BASE/prospective_merge/reviewed_head}" "v3 event at the reviewed head"
+expect_schema_reject "$V3_EVENT_MIRROR" '{"schema":"paseo.queue.event.v3","eventId":"e","hookId":"h","event":"task.pre_merge","occurredAt":"2026-09-15T08:00:00.000Z","attempt":1,"repository":{"root":"/tmp/example","baseBranch":"main","baseCommit":"1111111111111111111111111111111111111111","target":"prospective_merge"},"task":{"id":"q","title":"","phase":"","instruction":null},"delivery":{"prUrl":null,"prNumber":null,"head":null,"review":null,"mergeCommit":null,"integrationCommit":null,"summary":""}}' "v3 event omits the merge candidate"
+V3_SHORT_candidate=$(printf '%s' "$V3_BASE" | sed 's/"commit":"3333333333333333333333333333333333333333"/"commit":"3333333"/')
+expect_schema_reject "$V3_EVENT_MIRROR" "$V3_SHORT_candidate" "v3 candidate carries a short commit"
+V3_LONG_candidate=$(printf '%s' "$V3_BASE" | sed 's/"tree":"4444444444444444444444444444444444444444"/"tree":"4444444444444444444444444444444444444444444444444444444444444444"/')
+expect_schema_reject "$V3_EVENT_MIRROR" "$V3_LONG_candidate" "v3 candidate carries a 64-hex tree"
+V3_EXTRA_candidate=$(printf '%s' "$V3_BASE" | sed 's/"tree":"4444444444444444444444444444444444444444"/"tree":"4444444444444444444444444444444444444444","base":"1111111111111111111111111111111111111111"/')
+expect_schema_reject "$V3_EVENT_MIRROR" "$V3_EXTRA_candidate" "v3 candidate carries an extra field"
+echo "v4/v3 prospective-merge grammar: OK"
+
 # The dogfood and starter manifests name only a runner ID and literal argv.
 for manifest in "$dogfood_manifest" "$starter_manifest"; do
   if grep -qE '"/|/Users/|/opt/|digest|versionLabel|sourcePath' "$manifest"; then
@@ -296,7 +357,7 @@ for manifest in "$dogfood_manifest" "$starter_manifest"; do
     exit 1
   fi
 done
-echo "v1/v2/v3 manifest and event grammar: OK"
+echo "v1/v2/v3/v4 manifest and event grammar: OK"
 
 # Sequential mode stays explicit: the dogfood and copy-ready starter configs
 # keep the singular active_generation key and never adopt the plural form.
@@ -449,6 +510,26 @@ write_premerge_event() { # <file> <event-id> <queue-task> <title-json> <reviewed
   "task": {"id": "$qtask", "title": $title, "phase": "review",
     "instruction": {"path": "$ipath", "commit": "$icommit", "digest": "sha256:$idigest", "mediaType": "text/markdown"}},
   "delivery": {"prUrl": "https://github.com/example/repo/pull/53", "prNumber": 53, "head": "$head", "review": "approved at head", "mergeCommit": null, "integrationCommit": null, "summary": "independent review accepted"}
+}
+EOF
+}
+
+write_prospective_event() { # <file> <event-id> <hook-id> <queue-task> <title-json> <base> <integration-base> <reviewed-head> <candidate> <tree> <instruction-path> <instruction-commit> <instruction-digest-hex> [delivery-head]
+  local file=$1 eventId=$2 hookId=$3 qtask=$4 title=$5 base=$6 ibase=$7 rhead=$8 candidate=$9 tree=${10} ipath=${11} icommit=${12} idigest=${13}
+  local dhead=${14:-$rhead}
+  cat > "$file" <<EOF
+{
+  "schema": "$EVENT_SCHEMA_V3",
+  "eventId": "$eventId",
+  "hookId": "$hookId",
+  "event": "task.pre_merge",
+  "occurredAt": "2026-09-15T08:00:00.000Z",
+  "attempt": 1,
+  "repository": {"root": "$CURRENT_REPO", "baseBranch": "main", "baseCommit": "$base", "target": "prospective_merge",
+    "mergeCandidate": {"integrationBase": "$ibase", "reviewedHead": "$rhead", "commit": "$candidate", "tree": "$tree"}},
+  "task": {"id": "$qtask", "title": $title, "phase": "review",
+    "instruction": {"path": "$ipath", "commit": "$icommit", "digest": "sha256:$idigest", "mediaType": "text/markdown"}},
+  "delivery": {"prUrl": "https://github.com/example/repo/pull/53", "prNumber": 53, "head": "$dhead", "review": "approved at head", "mergeCommit": null, "integrationCommit": null, "summary": "independent review accepted"}
 }
 EOF
 }
@@ -946,6 +1027,262 @@ premerge_binding_case "pre-merge write mode" "accepts only read_only hooks" "$sc
 cp "$scratch/premerge-manifest-saved.json" "$repoPre/.paseo/queue.json"
 [ -z "$(git -C "$repoPre" status --porcelain)" ]
 echo "pre-merge binding refusals: OK"
+
+echo "# prospective-merge gate proves the declared candidate read-only"
+repoPro="$scratch/repo-prospective"
+build_fixture "$repoPro"
+# Promote the pre-merge hook to the v4 prospective target.
+bun -e '
+  const fs = await import("node:fs");
+  const manifest = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+  manifest.schema = "paseo.queue.control.v4";
+  const hook = manifest.hooks.find((entry) => entry.id === "repository-pre-merge");
+  hook.id = "candidate-pre-merge";
+  hook.target = "prospective_merge";
+  fs.writeFileSync(process.argv[1], JSON.stringify(manifest, null, 2) + "\n");
+' "$repoPro/.paseo/queue.json"
+schema_check "$V4_MIRROR" "$repoPro/.paseo/queue.json"
+git -C "$repoPro" add -A
+git -C "$repoPro" commit -qm "select the v4 prospective-merge binding"
+# A new review head on feature, then the prospective candidate merges it onto main.
+git -C "$repoPro" checkout -q feature
+mkdir -p "$repoPro/docs"
+cat > "$repoPro/docs/review-notes.md" <<'EOF'
+# Review notes
+
+Canonical task: [g03.006](../roadmaps/g03/006-fixture-task.md)
+EOF
+git -C "$repoPro" add -A
+git -C "$repoPro" commit -qm "review notes cite canonical evidence"
+CURRENT_REPO="$repoPro"
+read_facts "$(fixture_facts "$repoPro" 006)"
+pro_base=$MC
+pro_head=$FH
+git -C "$repoPro" checkout -qb candidate main
+git -C "$repoPro" merge -q --no-ff feature -m "prospective merge of the reviewed head"
+pro_candidate=$(git -C "$repoPro" rev-parse HEAD)
+pro_tree=$(git -C "$repoPro" rev-parse 'HEAD^{tree}')
+[ "$(git -C "$repoPro" log -1 --format=%P HEAD)" = "$pro_base $pro_head" ]
+write_prospective_event "$scratch/prospective-clean.json" "evt-prospective-clean-0001" "candidate-pre-merge" \
+  "q-006" '"Implement g03.006 fixture task"' "$pro_base" "$pro_base" "$pro_head" "$pro_candidate" "$pro_tree" \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID"
+clean_pro=$(run_hook "$scratch/prospective-clean.json" "evt-prospective-clean-0001")
+expect_outcome "$clean_pro" ok "clean prospective candidate"
+[ "$(json_field "$clean_pro" "r.changedPaths.length")" = "0" ]
+[ "$(json_field "$clean_pro" "r.commitSubjectSuffix")" = "null" ]
+[ "$(json_field "$clean_pro" "r.metadata.target")" = "prospective_merge" ]
+[ "$(json_field "$clean_pro" "r.metadata.candidate_commit")" = "$pro_candidate" ]
+[ "$(json_field "$clean_pro" "r.metadata.reviewed_head")" = "$pro_head" ]
+[ ! -e "$repoPro/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+[ -e "$repoPro/docs/handoffs/handoff-006.md" ]
+[ -z "$(git -C "$repoPro" status --porcelain)" ]
+[ "$(git -C "$repoPro" rev-parse HEAD)" = "$pro_candidate" ]
+echo "clean prospective candidate passes read-only: OK"
+
+# Every candidate identity mismatch fails closed before scanning, with no
+# record, no changed path, no commit subject, and an untouched checkout.
+prospective_identity_case() { # <label> <expected-substring> <event-file> <expected-outcome> <event-id>
+  local result
+  result=$(run_hook "$3" "$5")
+  expect_outcome "$result" "$4" "$1"
+  if [ "$(json_field "$result" "r.summary.includes('$2')")" != "true" ]; then
+    echo "$1: refusal did not name '$2': $result" >&2
+    exit 1
+  fi
+  [ "$(json_field "$result" "r.changedPaths.length")" = "0" ]
+  [ "$(json_field "$result" "r.commitSubjectSuffix")" = "null" ]
+  [ ! -e "$repoPro/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+  [ "$(git -C "$repoPro" status --porcelain)" = "" ]
+  [ "$(git -C "$repoPro" rev-parse HEAD)" = "$pro_candidate" ]
+}
+# Declared tree is not the checkout tree.
+write_prospective_event "$scratch/prospective-tree.json" "evt-prospective-treediff" "candidate-pre-merge" \
+  "q-006" '"Implement g03.006 fixture task"' "$pro_base" "$pro_base" "$pro_head" "$pro_candidate" \
+  "4444444444444444444444444444444444444444" "docs/handoffs/handoff-006.md" "$IC" "$ID"
+prospective_identity_case "candidate tree mismatch" "not the declared candidate tree" "$scratch/prospective-tree.json" failed "evt-prospective-treediff"
+# Checkout HEAD is not the declared candidate commit.
+write_prospective_event "$scratch/prospective-head.json" "evt-prospective-headdiff" "candidate-pre-merge" \
+  "q-006" '"Implement g03.006 fixture task"' "$pro_base" "$pro_base" "$pro_head" "$pro_head" "$pro_tree" \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID"
+prospective_identity_case "candidate HEAD mismatch" "not the declared candidate commit" "$scratch/prospective-head.json" failed "evt-prospective-headdiff"
+# Declared candidate is absent locally.
+write_prospective_event "$scratch/prospective-absent.json" "evt-prospective-absent" "candidate-pre-merge" \
+  "q-006" '"Implement g03.006 fixture task"' "$pro_base" "$pro_base" "$pro_head" \
+  "0000000000000000000000000000000000000000" "$pro_tree" "docs/handoffs/handoff-006.md" "$IC" "$ID"
+prospective_identity_case "absent candidate commit" "is not present locally" "$scratch/prospective-absent.json" blocked "evt-prospective-absent"
+# Declared base is not the integration base.
+write_prospective_event "$scratch/prospective-base.json" "evt-prospective-basediff" "candidate-pre-merge" \
+  "q-006" '"Implement g03.006 fixture task"' "$pro_base" "$pro_head" "$pro_head" "$pro_candidate" "$pro_tree" \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID"
+prospective_identity_case "integration base mismatch" "not the declared integration base" "$scratch/prospective-base.json" failed "evt-prospective-basediff"
+# Delivery head is not the reviewed head.
+write_prospective_event "$scratch/prospective-delivery.json" "evt-prospective-deliverydiff" "candidate-pre-merge" \
+  "q-006" '"Implement g03.006 fixture task"' "$pro_base" "$pro_base" "$pro_head" "$pro_candidate" "$pro_tree" \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$pro_base"
+prospective_identity_case "delivery head mismatch" "not the declared reviewed head" "$scratch/prospective-delivery.json" failed "evt-prospective-deliverydiff"
+# A missing delivery head refuses before scanning.
+bun -e '
+  const fs = await import("node:fs");
+  const event = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+  event.delivery.head = null;
+  event.eventId = "evt-prospective-nohead";
+  fs.writeFileSync(process.argv[2], JSON.stringify(event, null, 2) + "\n");
+' "$scratch/prospective-clean.json" "$scratch/prospective-nohead.json"
+prospective_identity_case "missing delivery head" "requires the delivery head" "$scratch/prospective-nohead.json" blocked "evt-prospective-nohead"
+# Candidate parents in the wrong order refuse: merge main into the head.
+git -C "$repoPro" checkout -qb reversed "$pro_head"
+git -C "$repoPro" merge -q --no-ff main -m "reversed prospective merge"
+pro_reversed=$(git -C "$repoPro" rev-parse HEAD)
+pro_reversed_tree=$(git -C "$repoPro" rev-parse 'HEAD^{tree}')
+[ "$(git -C "$repoPro" log -1 --format=%P HEAD)" = "$pro_head $pro_base" ]
+git -C "$repoPro" checkout -q candidate
+write_prospective_event "$scratch/prospective-order.json" "evt-prospective-order" "candidate-pre-merge" \
+  "q-006" '"Implement g03.006 fixture task"' "$pro_base" "$pro_base" "$pro_head" "$pro_reversed" "$pro_reversed_tree" \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID"
+# The reversed checkout is the execution target for this one case.
+CURRENT_REPO="$repoPro"
+git -C "$repoPro" checkout -q reversed
+order_out=$(run_hook "$scratch/prospective-order.json" "evt-prospective-order")
+expect_outcome "$order_out" blocked "reversed candidate parents"
+[ "$(json_field "$order_out" "r.summary.includes('parents in order')")" = "true" ]
+[ "$(json_field "$order_out" "r.changedPaths.length")" = "0" ]
+[ ! -e "$repoPro/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+[ "$(git -C "$repoPro" status --porcelain)" = "" ]
+[ "$(git -C "$repoPro" rev-parse HEAD)" = "$pro_reversed" ]
+git -C "$repoPro" checkout -q candidate
+echo "candidate identity refusals: OK"
+
+# Malformed v3 payloads never reach policy evaluation.
+prospective_schema_case() { # <label> <expected-substring> <mutation-js>
+  bun -e '
+    const fs = await import("node:fs");
+    const event = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+    new Function("event", fs.readFileSync(process.argv[3], "utf8"))(event);
+    event.eventId = "evt-prospective-malformed";
+    fs.writeFileSync(process.argv[2], JSON.stringify(event, null, 2) + "\n");
+  ' "$scratch/prospective-clean.json" "$scratch/prospective-malformed.json" "$3"
+  local result
+  result=$(run_hook "$scratch/prospective-malformed.json" "evt-prospective-malformed")
+  expect_outcome "$result" failed "$1"
+  if [ "$(json_field "$result" "r.summary.includes('not a valid paseo.queue.event.v3')")" != "true" ]; then
+    echo "$1: refusal did not name the v3 schema: $result" >&2
+    exit 1
+  fi
+  [ ! -e "$repoPro/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+  [ "$(git -C "$repoPro" status --porcelain)" = "" ]
+}
+printf 'event.repository.mergeCandidate.tree = "abc";' > "$scratch/mut-short-id.js"
+printf 'event.repository.mergeCandidate.base = event.repository.mergeCandidate.integrationBase;' > "$scratch/mut-extra-field.js"
+printf 'delete event.repository.mergeCandidate;' > "$scratch/mut-no-candidate.js"
+printf 'event.event = "task.closeout";' > "$scratch/mut-other-event.js"
+prospective_schema_case "short candidate id" "v3" "$scratch/mut-short-id.js"
+prospective_schema_case "extra candidate field" "v3" "$scratch/mut-extra-field.js"
+prospective_schema_case "missing candidate" "v3" "$scratch/mut-no-candidate.js"
+prospective_schema_case "v3 on another event" "v3" "$scratch/mut-other-event.js"
+echo "malformed v3 payload refusals: OK"
+
+# Wrong schema/target pairs fail closed on both sides of the version cut.
+cat > "$scratch/prospective-v2.json" <<EOF
+{
+  "schema": "$EVENT_SCHEMA_V2",
+  "eventId": "evt-prospective-v2pair",
+  "hookId": "candidate-pre-merge",
+  "event": "task.pre_merge",
+  "occurredAt": "2026-09-15T08:00:00.000Z",
+  "attempt": 1,
+  "repository": {"root": "$CURRENT_REPO", "baseBranch": "feature", "baseCommit": "$pro_head", "target": "reviewed_head"},
+  "task": {"id": "q-006", "title": "Implement g03.006 fixture task", "phase": "review",
+    "instruction": {"path": "docs/handoffs/handoff-006.md", "commit": "$IC", "digest": "sha256:$ID", "mediaType": "text/markdown"}},
+  "delivery": {"prUrl": "https://github.com/example/repo/pull/53", "prNumber": 53, "head": "$pro_head", "review": "approved at head", "mergeCommit": null, "integrationCommit": null, "summary": "independent review accepted"}
+}
+EOF
+v2pair=$(run_hook "$scratch/prospective-v2.json" "evt-prospective-v2pair")
+expect_outcome "$v2pair" blocked "v2 event at the prospective binding"
+[ "$(json_field "$v2pair" "r.summary.includes('requires event schema paseo.queue.event.v3')")" = "true" ]
+[ ! -e "$repoPro/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+[ "$(git -C "$repoPro" status --porcelain)" = "" ]
+CURRENT_REPO="$repoPre"
+bun -e '
+  const fs = await import("node:fs");
+  const event = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+  event.hookId = "repository-pre-merge";
+  event.repository.root = process.argv[3];
+  event.eventId = "evt-prospective-v3pair";
+  fs.writeFileSync(process.argv[2], JSON.stringify(event, null, 2) + "\n");
+' "$scratch/prospective-clean.json" "$scratch/prospective-v3pair.json" "$repoPre"
+v3pair=$(run_hook "$scratch/prospective-v3pair.json" "evt-prospective-v3pair")
+expect_outcome "$v3pair" failed "v3 event at the reviewed-head binding"
+[ "$(json_field "$v3pair" "r.summary.includes('does not target the reviewed head')")" = "true" ]
+CURRENT_REPO="$repoPro"
+[ -z "$(git -C "$repoPre" status --porcelain)" ]
+[ -z "$(git -C "$repoPro" status --porcelain)" ]
+echo "schema/target pair refusals: OK"
+
+# The prospective binding keeps the read-only correlation: write mode, mixed
+# events, advisory delivery, and a pre-v4 manifest each refuse before scanning.
+cp "$repoPro/.paseo/queue.json" "$scratch/prospective-manifest-saved.json"
+prospective_binding_case() { # <label> <expected-substring> <mutation-js-file>
+  cp "$scratch/prospective-manifest-saved.json" "$repoPro/.paseo/queue.json"
+  bun -e '
+    const fs = await import("node:fs");
+    const mutation = fs.readFileSync(process.argv[3], "utf8");
+    const manifest = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+    const hook = manifest.hooks.find((entry) => entry.id === "candidate-pre-merge");
+    new Function("hook", "manifest", mutation)(hook, manifest);
+    fs.writeFileSync(process.argv[2], JSON.stringify(manifest, null, 2) + "\n");
+  ' "$scratch/prospective-manifest-saved.json" "$repoPro/.paseo/queue.json" "$3"
+  local result
+  result=$(run_hook "$scratch/prospective-clean.json" "evt-prospective-clean-0001")
+  expect_outcome "$result" blocked "$1"
+  if [ "$(json_field "$result" "r.summary.includes('$2')")" != "true" ]; then
+    echo "$1: refusal did not name '$2': $result" >&2
+    exit 1
+  fi
+}
+printf 'hook.mode = "integration_write"; hook.commitSubject = { prefix: "lifecycle", maxBytes: 60 };' > "$scratch/mut-pro-mode.js"
+printf 'hook.events = ["task.pre_merge", "task.closeout"];' > "$scratch/mut-pro-events.js"
+printf 'hook.delivery = "advisory";' > "$scratch/mut-pro-delivery.js"
+printf 'manifest.schema = "paseo.queue.control.v3";' > "$scratch/mut-pro-downgrade.js"
+prospective_binding_case "prospective write mode" "accepts only read_only hooks" "$scratch/mut-pro-mode.js"
+prospective_binding_case "prospective mixed events" "must be the only event" "$scratch/mut-pro-events.js"
+prospective_binding_case "prospective advisory delivery" "requires required delivery" "$scratch/mut-pro-delivery.js"
+prospective_binding_case "prospective target on a v3 manifest" "not a valid paseo.queue.control.v3" "$scratch/mut-pro-downgrade.js"
+cp "$scratch/prospective-manifest-saved.json" "$repoPro/.paseo/queue.json"
+[ -z "$(git -C "$repoPro" status --porcelain)" ]
+echo "prospective binding refusals: OK"
+
+# A durable exact backlink in the candidate tree refuses read-only with the
+# same resolver message the closeout and reviewed-head gates produce.
+git -C "$repoPro" checkout -q feature
+cat > "$repoPro/docs/implementation-log.md" <<'EOF'
+# Implementation log
+
+Dispatched from [the worker handoff](handoffs/handoff-006.md).
+EOF
+git -C "$repoPro" add -A
+git -C "$repoPro" commit -qm "durable log links the submitted handoff"
+pro_head2=$(git -C "$repoPro" rev-parse feature)
+git -C "$repoPro" checkout -qb candidate2 main
+git -C "$repoPro" merge -q --no-ff feature -m "prospective merge of the linked head"
+pro_candidate2=$(git -C "$repoPro" rev-parse HEAD)
+pro_tree2=$(git -C "$repoPro" rev-parse 'HEAD^{tree}')
+git -C "$repoPro" checkout -q candidate2
+pro_log_digest=$(sha256sum "$repoPro/docs/implementation-log.md" | cut -d' ' -f1)
+write_prospective_event "$scratch/prospective-backlink.json" "evt-prospective-backlink-0001" "candidate-pre-merge" \
+  "q-006" '"Implement g03.006 fixture task"' "$pro_base" "$pro_base" "$pro_head2" "$pro_candidate2" "$pro_tree2" \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID"
+blocked_pro=$(run_hook "$scratch/prospective-backlink.json" "evt-prospective-backlink-0001")
+expect_outcome "$blocked_pro" blocked "prospective backlink"
+[ "$(json_field "$blocked_pro" "r.summary.includes('docs/implementation-log.md')")" = "true" ]
+[ "$(json_field "$blocked_pro" "r.changedPaths.length")" = "0" ]
+[ "$(json_field "$blocked_pro" "r.commitSubjectSuffix")" = "null" ]
+[ "$(json_field "$blocked_pro" "r.summary")" = "$(json_field "$backlink_out" "r.summary")" ]
+[ ! -e "$repoPro/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+[ -e "$repoPro/docs/handoffs/handoff-006.md" ]
+[ -z "$(git -C "$repoPro" status --porcelain)" ]
+[ "$(git -C "$repoPro" rev-parse HEAD)" = "$pro_candidate2" ]
+[ "$pro_log_digest" = "$(sha256sum "$repoPro/docs/implementation-log.md" | cut -d' ' -f1)" ]
+echo "durable prospective backlink refuses read-only with the shared message: OK"
 
 # Pre-g01.020 repositories keep their prior lifecycle behavior. A v2 manifest
 # and a v3 manifest without the pre-merge binding both close out unchanged and

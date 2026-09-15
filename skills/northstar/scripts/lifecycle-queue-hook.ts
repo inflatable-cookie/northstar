@@ -1,7 +1,7 @@
 // Northstar repository hook adapter for Queue's generic repository events.
 //
-// Queue sends one closed `paseo.queue.event.v1` or `paseo.queue.event.v2`
-// JSON object on stdin. This
+// Queue sends one closed `paseo.queue.event.v1`, `paseo.queue.event.v2`, or
+// `paseo.queue.event.v3` JSON object on stdin. This
 // adapter validates it against the committed frozen contract schema,
 // reconstructs the exact Northstar task and planning identity from committed
 // evidence, maps the supported generic events onto the same canonical
@@ -74,17 +74,21 @@ import {
 const RESULT_SCHEMA = "paseo.queue.hook-result.v1";
 const EVENT_SCHEMA = "paseo.queue.event.v1";
 const EVENT_SCHEMA_V2 = "paseo.queue.event.v2";
+const EVENT_SCHEMA_V3 = "paseo.queue.event.v3";
 const CONTROL_SCHEMAS: Record<string, string> = {
   "paseo.queue.control.v1": "queue-control.schema.json",
   "paseo.queue.control.v2": "queue-control-v2.schema.json",
   "paseo.queue.control.v3": "queue-control-v3.schema.json",
+  "paseo.queue.control.v4": "queue-control-v4.schema.json",
 };
 const EVENT_SCHEMAS: Record<string, string> = {
   [EVENT_SCHEMA]: "queue-event.schema.json",
   [EVENT_SCHEMA_V2]: "queue-event-v2.schema.json",
+  [EVENT_SCHEMA_V3]: "queue-event-v3.schema.json",
 };
 const EVENT_TIMESTAMP_RE = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]{3})?Z$/;
 const GIT_ID_RE = /^[0-9a-f]{40}$|^[0-9a-f]{64}$/;
+const CANDIDATE_ID_RE = /^[0-9a-f]{40}$/;
 const TASK_PATH_RE = /^docs\/roadmaps\/g([0-9]{2})\/([0-9]{3})-[a-z0-9]+(?:-[a-z0-9]+)*\.md$/;
 const TASK_LABEL_RE = /g[0-9]{2}\.[0-9]{3}/g;
 const MANIFEST_MAX_BYTES = 64 * 1024;
@@ -151,7 +155,7 @@ function isAncestor(repoRoot: string, ancestor: string, descendant: string): boo
 
 interface ManifestBinding {
   mode: "read_only" | "integration_write";
-  target: "integration_base" | "reviewed_head";
+  target: "integration_base" | "reviewed_head" | "prospective_merge";
   allowedPaths: string[];
   commitSubject: { prefix: string; maxBytes: number } | null;
 }
@@ -179,7 +183,9 @@ function loadBinding(repoRoot: string, event: Record<string, any>): ManifestBind
   // The manifest schema name selects the frozen contract mirror. v1 keeps its
   // repository-executable grammar for existing consumers; v2 adds the closed
   // program union with trusted-runner programs; v3 adds one closed target so a
-  // hook can run at the reviewed head before merge. The program itself stays
+  // hook can run at the reviewed head before merge; v4 extends that closed
+  // target set with prospective_merge so a hook can run in the Queue-owned
+  // candidate checkout before merge. The program itself stays
   // opaque here: Queue resolves and executes it, and no program transport
   // detail enters lifecycle state.
   const schemaName = String(manifest.schema ?? "");
@@ -202,8 +208,9 @@ function loadBinding(repoRoot: string, event: Record<string, any>): ManifestBind
     if (hook.mode === "integration_write" && (hook.commitSubject === null || hook.commitSubject === undefined)) refuse("integration_write hook " + hook.id + " requires a commit subject");
     if (events.includes("task.pre_dispatch") && hook.mode !== "read_only") refuse("task.pre_dispatch accepts only read_only hooks");
     if ("target" in hook) {
-      if (reviewedHead && hook.target !== "reviewed_head") refuse("task.pre_merge requires target reviewed_head on hook " + hook.id);
+      if (reviewedHead && hook.target !== "reviewed_head" && hook.target !== "prospective_merge") refuse("task.pre_merge requires target reviewed_head or prospective_merge on hook " + hook.id);
       if (!reviewedHead && hook.target !== "integration_base") refuse("only task.pre_merge may target the reviewed head on hook " + hook.id);
+      if (hook.target === "prospective_merge" && schemaName !== "paseo.queue.control.v4") refuse("target prospective_merge requires control schema paseo.queue.control.v4 on hook " + hook.id);
     }
     if (reviewedHead) {
       if (events.length !== 1) refuse("task.pre_merge must be the only event on hook " + hook.id);
@@ -224,7 +231,7 @@ function loadBinding(repoRoot: string, event: Record<string, any>): ManifestBind
   if (!(binding.events as string[]).includes(event.event)) refuse("hook " + event.hookId + " does not bind event " + event.event);
   return {
     mode: binding.mode,
-    target: ("target" in binding && binding.target ? binding.target : "integration_base") as "integration_base" | "reviewed_head",
+    target: ("target" in binding && binding.target ? binding.target : "integration_base") as "integration_base" | "reviewed_head" | "prospective_merge",
     allowedPaths: (binding.allowedPaths as string[]).map((allowed) =>
       allowed.endsWith("/") ? normalizeRepoRelative(allowed.slice(0, -1), "allowed path") + "/" : normalizeRepoRelative(allowed, "allowed path")),
     commitSubject: binding.commitSubject ?? null,
@@ -670,6 +677,10 @@ function handlePreDispatch(repoRoot: string, event: Record<string, any>): void {
 // signal Queue routes as the next semantic revision finding.
 function handlePreMerge(repoRoot: string, event: Record<string, any>, binding: ManifestBinding): void {
   if (binding.mode !== "read_only") malfunction("task.pre_merge binding is not read_only");
+  if (binding.target === "prospective_merge") {
+    handleProspectiveMerge(repoRoot, event, binding);
+    return;
+  }
   if (binding.target !== "reviewed_head") malfunction("task.pre_merge binding does not target the reviewed head");
   const repository = event.repository as Record<string, unknown>;
   if (repository.target !== "reviewed_head") malfunction("task.pre_merge event does not target the reviewed head");
@@ -688,6 +699,57 @@ function handlePreMerge(repoRoot: string, event: Record<string, any>, binding: M
   emit(String(event.eventId), "ok",
     "pre-merge gate found no durable Markdown backlink to " + instructionPath + " for " + identity.taskId,
     { task_id: identity.taskId, task_path: identity.taskPath, handoff: instructionPath, reviewed_head: reviewedHead, mode: "read_only", backlinks: 0 },
+    [], null);
+}
+
+function requireCandidateId(value: unknown, what: string): string {
+  if (typeof value !== "string" || !CANDIDATE_ID_RE.test(value)) refuse("merge candidate does not carry a usable 40-hex " + what);
+  return value;
+}
+
+// The prospective-merge gate runs read-only in the Queue-owned candidate
+// checkout. It proves the declared candidate identity locally — checkout HEAD
+// and tree equal the candidate commit and tree, the repository base equals
+// the integration base, the delivery head equals the reviewed head, and the
+// candidate's two parents are base then head — then reuses the same pinned
+// instruction proof and shared backlink resolver as the reviewed-head gate.
+// It changes no bytes: no record, no projection, no index, no HEAD. A refusal
+// carries no changed paths and no commit subject, which is the signal Queue
+// routes as the next semantic revision finding.
+function handleProspectiveMerge(repoRoot: string, event: Record<string, any>, binding: ManifestBinding): void {
+  if (binding.mode !== "read_only") malfunction("task.pre_merge binding is not read_only");
+  if (String(event.schema) !== EVENT_SCHEMA_V3) refuse("prospective_merge requires event schema " + EVENT_SCHEMA_V3);
+  const repository = event.repository as Record<string, unknown>;
+  if (repository.target !== "prospective_merge") malfunction("task.pre_merge event does not target prospective_merge");
+  if (event.task.instruction === null || event.task.instruction === undefined) refuse("task.pre_merge requires the pinned instruction artifact");
+  const candidate = repository.mergeCandidate as Record<string, unknown> | null | undefined;
+  if (candidate === null || candidate === undefined || typeof candidate !== "object") refuse("prospective_merge requires the closed mergeCandidate");
+  const integrationBase = requireCandidateId(candidate.integrationBase, "integration base");
+  const reviewedHead = requireCandidateId(candidate.reviewedHead, "reviewed head");
+  const candidateCommit = requireCandidateId(candidate.commit, "candidate commit");
+  const candidateTree = requireCandidateId(candidate.tree, "candidate tree");
+  if (!commitExists(repoRoot, candidateCommit)) refuse("candidate commit " + candidateCommit + " is not present locally");
+  const identity = reconstructIdentity(repoRoot, event);
+  const instructionPath = normalizeRepoRelative(String(event.task.instruction.path), "instruction path");
+  const head = String(git(["rev-parse", "HEAD"], repoRoot));
+  if (head !== candidateCommit) malfunction("candidate checkout HEAD " + head + " is not the declared candidate commit " + candidateCommit);
+  const tree = String(git(["rev-parse", "HEAD^{tree}"], repoRoot));
+  if (tree !== candidateTree) malfunction("candidate checkout tree " + tree + " is not the declared candidate tree " + candidateTree);
+  if (String(repository.baseCommit) !== integrationBase) malfunction("repository base " + String(repository.baseCommit) + " is not the declared integration base " + integrationBase);
+  const deliveryHead = event.delivery.head;
+  if (deliveryHead === null || deliveryHead === undefined) refuse("prospective_merge requires the delivery head");
+  if (String(deliveryHead) !== reviewedHead) {
+    malfunction("delivery head " + String(deliveryHead) + " is not the declared reviewed head " + reviewedHead);
+  }
+  const parents = String(git(["log", "-1", "--format=%P", candidateCommit], repoRoot)).split(" ").filter((parent) => parent.length > 0);
+  if (parents.length !== 2 || parents[0] !== integrationBase || parents[1] !== reviewedHead) {
+    refuse("candidate commit " + candidateCommit + " does not carry the integration base and reviewed head as its parents in order");
+  }
+  verifyReviewedHeadHandoff(repoRoot, event, instructionPath, candidateCommit);
+  guardHandoffBacklinks(repoRoot, instructionPath);
+  emit(String(event.eventId), "ok",
+    "prospective-merge gate found no durable Markdown backlink to " + instructionPath + " for " + identity.taskId,
+    { task_id: identity.taskId, task_path: identity.taskPath, handoff: instructionPath, target: "prospective_merge", candidate_commit: candidateCommit, candidate_tree: candidateTree, integration_base: integrationBase, reviewed_head: reviewedHead, mode: "read_only", backlinks: 0 },
     [], null);
 }
 
