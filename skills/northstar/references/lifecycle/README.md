@@ -21,14 +21,18 @@ generation:
 
 ```text
 .northstar/lifecycle/v1/
-  tasks/gNN.NNN.json
-  generations/gNN.json            # compaction receipt, written by compact
+  tasks/gNN.NNN.json              # per-task records for open/active generations
+  generations/gNN.json            # compact receipt; replaces covered task fragments
   generations/gNN.closure.json    # closure authority, written by the rollover
   projection-targets.json         # declared surfaces + active generation set
 ```
 
 JSON is canonical. The Markdown block inside a task or front-door file is a
 derived projection. When the two disagree, the record wins.
+
+Once a generation is closed by committed authority, its compact receipt is the
+live machine record: receipt publication consumes exactly the covered task
+fragments. Git history keeps every removed detailed record.
 
 ## Schemas
 
@@ -39,6 +43,7 @@ derived projection. When the two disagree, the record wins.
 | [`evidence.schema.json`](./evidence.schema.json) | One compact evidence entry |
 | [`projection.schema.json`](./projection.schema.json) | Generated Markdown block metadata |
 | [`generation-closure.schema.json`](./generation-closure.schema.json) | Explicit generation closure authority |
+| [`generation-receipt.schema.json`](./generation-receipt.schema.json) | Durable compact receipt for a consumed closed generation |
 | [`queue-event.schema.json`](./queue-event.schema.json) | Frozen Queue generic event contract v1 (closed mirror) |
 | [`queue-event-v2.schema.json`](./queue-event-v2.schema.json) | Frozen Queue generic event contract v2 with the closed `repository.target` (closed mirror) |
 | [`queue-result.schema.json`](./queue-result.schema.json) | Frozen Queue hook-result contract (closed mirror) |
@@ -209,6 +214,30 @@ authority before producing a receipt: the record must name the generation, say
 authors the closure record only after the preservation oracle passes; it is a
 human-owned sequencing decision, never a reducer transition.
 
+Publication consumes the fragments the receipt covers, so a closed generation
+keeps exactly one live machine representation:
+
+- with the exact full fragment set and no receipt, the canonical receipt is
+  written first and then exactly those fragments are deleted;
+- with a valid receipt plus remaining exact fragments, only the remainder is
+  deleted — the crash-safe catch-up path after an interrupted cleanup;
+- with a valid receipt and no fragments, the operation is unchanged and the
+  receipt bytes are never rewritten;
+- a partial fragment set without a receipt, a nonterminal record, a stale or
+  conflicting closure, a malformed receipt, a symlinked fragment, or an
+  escaping path refuses before any write or deletion.
+
+`catch-up` discovers every committed closed generation in lexical order and
+does the same work for all of them in one locked pass. Open and
+`planning_required` generations are outside deletion authority and stay
+byte-for-byte untouched. The Queue hook adapter invokes the same catch-up
+during `task.closeout`, so a current terminal transition and every eligible
+historical generation publish in one integration result with exact
+`changed_paths`. Receipts keep the canonical terminal summaries, the source
+task-set digest, and the closure digest, so dependency resolution and
+currentness audit can still resolve a compacted closed generation without
+resurrecting a per-task fragment.
+
 ## Generic Queue hook adapter
 
 Queue integration is live behind the frozen generic contracts: schemas
@@ -279,6 +308,9 @@ to that head and runs the shared backlink resolver against the exact submitted
   receipt using derived stable event IDs (`queue-<hash>-<seq>-<transition>`).
   It never fabricates transient observations or claims earlier live tracking.
   A repeated event is a no-diff replay; a completed record is never rewritten.
+  The same run also catches up every eligible historical closed generation,
+  so the terminal transition and the compact receipts and exact fragment
+  deletions it authorizes publish in one integration result.
 
 Evidence levels are preserved, never upgraded: PR, review, and validation
 facts arrive through Queue's delivery object and are recorded
@@ -301,7 +333,8 @@ generation rolls over.
 
 Closeout consumes the instruction handoff. The `task.closeout` publication is
 one integration commit: the terminal record, the regenerated declared
-projections, and the removal of the exact submitted handoff. The hook deletes
+projections, the removal of the exact submitted handoff, and every catch-up
+compaction the closure records authorize. The hook deletes
 only the exact committed path whose working-tree bytes still hash to the
 pinned blob digest, and only after the terminal receipt exists. The same
 shared backlink guard the pre-merge gate runs refuses closeout
@@ -337,6 +370,7 @@ effigy lifecycle:run apply --repo /path/to/repo --envelope envelope.json [--targ
 effigy lifecycle:run render --repo /path/to/repo --records .northstar/lifecycle/v1/tasks --target docs/roadmaps/gNN/README.md
 effigy lifecycle:run tasks-digest --repo /path/to/repo --records .northstar/lifecycle/v1/tasks --generation gNN
 effigy lifecycle:run compact --repo /path/to/repo --records .northstar/lifecycle/v1/tasks --generation gNN --out .northstar/lifecycle/v1/generations/gNN.json
+effigy lifecycle:run catch-up --repo /path/to/repo
 effigy check:lifecycle-core
 effigy check:lifecycle-adoption
 ```
@@ -348,7 +382,12 @@ projection requires `projection-targets.json` to declare the active
 generation set (the singular key or the parallel list). Explicit-path
 `render`, `tasks-digest`, and `compact` re-check
 containment for the records directory and the output path and refuse escaping,
-absolute-outside, or symlinked paths. The command returns changed paths, the
+absolute-outside, or symlinked paths. `compact` publishes the canonical
+receipt and deletes exactly the fragments it covers, under the lifecycle lock;
+`catch-up` does the same for every committed closed generation in lexical
+order. `tasks-digest` reads the receipt's source digest once a generation is
+already compacted, so closure authoring and later audit stay stable across the
+pruning boundary. The command returns changed paths, the
 new revision and digest, and the required commit action. It never stages,
 commits, pushes, merges, dispatches, or selects the next task.
 

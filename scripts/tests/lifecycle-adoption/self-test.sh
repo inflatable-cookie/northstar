@@ -22,7 +22,8 @@
 #    controls, the sole-source currentness cutover (the audit rejects
 #    Silo-shaped task headers, front-door frontiers, and Next-task columns
 #    while the cutover shape and retrospective history pass), block/cancel
-#    mapping, terminal equivalence, and closure-gated compaction.
+#    mapping, terminal equivalence, closure-gated compaction, and closeout
+#    catch-up consumption of eligible historical closed generations.
 #    Every result is produced by the installed skill bytes reached through
 #    `effigy skill run northstar/queue:hook --stdio passthrough`.
 # 6. Proves resolution precedence and fail-closed behavior: project-local wins
@@ -1615,7 +1616,7 @@ const step = (transition: string, extra: Record<string, unknown> = {}) => {
     event_id: "standalone-" + spec.event_id + "-" + String(seq).padStart(2, "0") + "-" + transition,
     task_id: spec.task_id,
     task_path: spec.task_path,
-    generation: "g03",
+    generation: spec.generation ?? "g03",
     expected: current === null ? { revision: 0, digest: null } : { revision: Number(current.revision), digest: String(current.digest) },
     transition,
     event_time: occurredAt,
@@ -1791,6 +1792,104 @@ for number in 006 007; do
   echo "g03.$number portable digest $s_a"
 done
 echo "terminal equivalence in both task orders: OK"
+
+echo "# closeout catch-up consumes eligible historical closed generations"
+# A current closeout must publish its own terminal transition plus every
+# eligible historical closed generation in one integration result. The
+# historical generation here is driven to terminal by the standalone core, then
+# closed by committed authority with its fragments still present.
+repoK="$scratch/repo-catchup"
+build_fixture "$repoK"
+CURRENT_REPO="$repoK"
+read_facts "$(fixture_facts "$repoK" 006)"
+mkdir -p "$repoK/docs/roadmaps/g01"
+printf '# Old lane g01.001\n\nOwner: fixture\n' > "$repoK/docs/roadmaps/g01/001-old-lane.md"
+printf '# g01\n\nHuman old generation runway stays.\n' > "$repoK/docs/roadmaps/g01/README.md"
+git -C "$repoK" add -A
+git -C "$repoK" commit -qm "plan historical g01.001"
+pcK=$(git -C "$repoK" log -1 --format=%H -- docs/roadmaps/g01/001-old-lane.md)
+digestK=$(git -C "$repoK" cat-file blob "$pcK:docs/roadmaps/g01/001-old-lane.md" | sha256sum | cut -d' ' -f1 | sed 's/^/sha256:/')
+cat > "$scratch/spec-hist-g01.json" <<EOF
+{
+  "event_id": "hist-g01-001",
+  "task_id": "g01.001",
+  "task_path": "docs/roadmaps/g01/001-old-lane.md",
+  "generation": "g01",
+  "planning_commit": "$pcK",
+  "planning_blob_digest": "$digestK",
+  "occurred_at": "2026-09-12T20:00:00.000Z",
+  "targets": [],
+  "transitions": $full_transitions,
+  "evidence": $(evidence_json "docs/handoffs/handoff-006.md" "$FH" "$MC")
+}
+EOF
+# The historical generation is outside the declared active set, so the
+# declaration is set aside for the record-only chain and restored after.
+mv "$repoK/.northstar/lifecycle/v1/projection-targets.json" "$scratch/targets-g03.json"
+bun run "$driver" "$installed/scripts/lifecycle-core.ts" "$repoK" "$scratch/spec-hist-g01.json" >/dev/null
+mv "$scratch/targets-g03.json" "$repoK/.northstar/lifecycle/v1/projection-targets.json"
+[ -f "$repoK/.northstar/lifecycle/v1/tasks/g01.001.json" ]
+tasks_digestK_json=$(cd "$repoK" && bun run "$installed_core" tasks-digest --records .northstar/lifecycle/v1/tasks --generation g01)
+tasks_digestK=$(json_field "$tasks_digestK_json" "r.tasks_digest")
+mkdir -p "$repoK/.northstar/lifecycle/v1/generations"
+cat > "$repoK/.northstar/lifecycle/v1/generations/g01.closure.json" <<EOF
+{
+  "schema_version": "northstar.lifecycle.generation-closure.v1",
+  "generation": "g01",
+  "disposition": "closed",
+  "reason": "fixture historical rollover boundary",
+  "tasks_digest": "$tasks_digestK",
+  "closed_at": "2026-09-12T22:00:00.000Z"
+}
+EOF
+git -C "$repoK" add -A
+git -C "$repoK" commit -qm "close historical g01"
+mcK=$(git -C "$repoK" rev-parse main)
+fhK=$(git -C "$repoK" rev-parse feature)
+
+# Standalone first: capture the canonical receipt bytes, then restore the
+# pre-catch-up tree so the hook route must reproduce them exactly.
+standalone_receipt=$(cd "$repoK" && bun run "$installed_core" compact --records .northstar/lifecycle/v1/tasks --generation g01 --out .northstar/lifecycle/v1/generations/g01.json)
+[ "$(json_field "$standalone_receipt" "r.status")" = "applied" ]
+receiptK=$(cat "$repoK/.northstar/lifecycle/v1/generations/g01.json")
+[ ! -e "$repoK/.northstar/lifecycle/v1/tasks/g01.001.json" ]
+rm "$repoK/.northstar/lifecycle/v1/generations/g01.json"
+git -C "$repoK" checkout -q -- .northstar/lifecycle/v1/tasks/g01.001.json
+[ -z "$(git -C "$repoK" status --porcelain)" ]
+
+catchup_delivery=$(printf '{"prUrl": "https://github.com/example/repo/pull/51", "prNumber": 51, "head": "%s", "review": "approved at head", "mergeCommit": "%s", "integrationCommit": "%s", "summary": "effigy qa passed"}' "$fhK" "$MC" "$mcK")
+write_event "$scratch/closeout-catchup.json" "evt-closeout-catchup-0001" "task.closeout" "lifecycle-state" "$mcK" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$catchup_delivery"
+catchup_out=$(run_hook "$scratch/closeout-catchup.json" "evt-closeout-catchup-0001")
+expect_outcome "$catchup_out" ok "closeout catch-up"
+catchup_changed=$(json_field "$catchup_out" "r.changedPaths.join(',')")
+for expected in \
+  ".northstar/lifecycle/v1/generations/g01.json" \
+  ".northstar/lifecycle/v1/tasks/g01.001.json" \
+  ".northstar/lifecycle/v1/tasks/g03.006.json" \
+  "docs/handoffs/handoff-006.md" \
+  "docs/README.md" \
+  "docs/roadmaps/README.md" \
+  "docs/roadmaps/g03/README.md"; do
+  case ",$catchup_changed," in
+    *",$expected,"*) ;;
+    *) echo "catch-up closeout did not report $expected: $catchup_changed" >&2; exit 1 ;;
+  esac
+done
+[ "$(json_field "$catchup_out" "r.metadata.generations_compacted.join(',')")" = "g01" ]
+[ "$(json_field "$catchup_out" "r.metadata.fragments_consumed")" = "1" ]
+[ ! -e "$repoK/.northstar/lifecycle/v1/tasks/g01.001.json" ]
+[ -f "$repoK/.northstar/lifecycle/v1/generations/g01.json" ]
+[ "$(cat "$repoK/.northstar/lifecycle/v1/generations/g01.json")" = "$receiptK" ]
+[ ! -e "$repoK/.northstar/lifecycle/v1/tasks/g03.007.json" ]
+grep -q "| g03.006 | complete | none |" "$repoK/docs/roadmaps/g03/README.md"
+if grep -q "g01.001" "$repoK/docs/roadmaps/g03/README.md"; then
+  echo "catch-up leaked a closed-generation entry into the active projection" >&2
+  exit 1
+fi
+[ -z "$(git -C "$repoK" diff --cached)" ]
+echo "closeout catch-up consumes historical fragments in one result: OK"
 
 echo "# no repository runtime remains in any live surface"
 [ ! -e "$repo_root/.paseo/hooks" ]

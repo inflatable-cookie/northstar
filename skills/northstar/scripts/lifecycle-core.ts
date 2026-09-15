@@ -317,6 +317,10 @@ export function validateGenerationClosure(closure: unknown): void {
   validateAgainstSchemaFile(closure, schemaPath("generation-closure.schema.json"));
 }
 
+export function validateGenerationReceipt(receipt: unknown): void {
+  validateAgainstSchemaFile(receipt, schemaPath("generation-receipt.schema.json"));
+}
+
 // ---------------------------------------------------------------------------
 // Identity, record shape, and digests
 // ---------------------------------------------------------------------------
@@ -1159,7 +1163,7 @@ export function applyEnvelope(options: ApplyOptions): ApplyResult {
   const ctx: ReduceContext = {
     dependencies: (() => {
       const statuses: Record<string, string> = {};
-      for (const record of listRecords(repoRoot)) statuses[String(record.task_id)] = String(record.status);
+      for (const record of listStateRecords(repoRoot)) statuses[String(record.task_id)] = String(record.status);
       return statuses;
     })(),
     verifyCommit: (gitId: string) => spawnSync("git", ["rev-parse", "--verify", gitId + "^{commit}"], { cwd: repoRoot }).status === 0,
@@ -1270,6 +1274,25 @@ export function verifyRepo(repoRoot: string, target?: string): Record<string, un
     } catch (err) {
       problems.push((err as Error).message);
     }
+  }
+  // A compacted closed generation is a first-class live artifact: a malformed
+  // receipt or one whose closure provenance no longer holds is drift exactly
+  // like a malformed task record.
+  try {
+    for (const { generation, receipt } of listGenerationReceipts(repoRoot)) {
+      try {
+        const closure = readGenerationClosure(repoRoot, generation);
+        if (closure === null) {
+          problems.push("generation " + generation + " has a receipt but no closure record");
+          continue;
+        }
+        verifyReceiptProvenance(receipt, generation, closure);
+      } catch (err) {
+        problems.push((err as Error).message);
+      }
+    }
+  } catch (err) {
+    problems.push((err as Error).message);
   }
   if (target && fs.existsSync(target)) {
     try {
@@ -1504,7 +1527,7 @@ export function auditCurrentnessText(
 // targets, read from disk. Missing record task files are reported; missing
 // declared targets stay owned by render/verify.
 export function auditCurrentness(repoRoot: string): { status: string; violations: CurrentnessViolation[] } {
-  const records = listRecords(repoRoot);
+  const records = listStateRecords(repoRoot);
   const config = readProjectionConfig(repoRoot);
   check(config !== null || records.length === 0, "projection-config",
     TARGETS_CONFIG_REL + " is missing; lifecycle records exist but no active generation is declared");
@@ -1572,6 +1595,362 @@ export function compactGeneration(records: Record<string, unknown>[], generation
     closure_digest: digestOf(closure),
     tasks,
   };
+}
+
+// ---------------------------------------------------------------------------
+// Closed-generation receipt publication and fragment consumption
+// ---------------------------------------------------------------------------
+
+// One planned compaction: the canonical receipt bytes to publish and the exact
+// fragments that receipt covers. The plan is read-only; it refuses missing,
+// open, stale, conflicting, or malformed authority before a single byte is
+// written or deleted.
+export interface GenerationCompactionPlan {
+  generation: string;
+  receiptPath: string;
+  receiptRelative: string;
+  receipt: Record<string, unknown>;
+  receiptBytes: string;
+  receiptChanged: boolean;
+  deletions: Array<{ absolute: string; relative: string }>;
+}
+
+export interface ClosedGenerationOutcome {
+  status: "applied" | "unchanged";
+  generation: string;
+  receipt_created: boolean;
+  deleted: string[];
+  changed_paths: string[];
+}
+
+export interface ClosedGenerationCatchUpResult {
+  status: "applied" | "unchanged";
+  generations: string[];
+  receipt_created: string[];
+  deleted: string[];
+  changed_paths: string[];
+}
+
+export function generationReceiptPath(repoRoot: string, generation: string): string {
+  check(typeof generation === "string" && GENERATION_RE.test(generation), "identity", "invalid generation: " + String(generation));
+  return path.join(lifecycleRoot(repoRoot), "generations", generation + ".json");
+}
+
+function fragmentGenerationOf(name: string): string | null {
+  const match = /^(g[0-9]{2})\.[0-9]{3}\.json$/.exec(name);
+  return match === null ? null : match[1]!;
+}
+
+function fragmentSummary(record: Record<string, unknown>): Record<string, unknown> {
+  return {
+    task_id: String(record.task_id),
+    revision: Number(record.revision),
+    digest: String(record.digest),
+    status: String(record.status),
+    merge_commit: ((record.evidence as Record<string, unknown> | undefined)?.merge as Record<string, unknown> | undefined)?.merge_commit ?? null,
+  };
+}
+
+function readReceiptFile(file: string, relative: string): { receipt: Record<string, unknown>; bytes: string } | null {
+  if (!fs.existsSync(file)) return null;
+  const stats = fs.lstatSync(file);
+  check(!stats.isSymbolicLink(), "receipt", "generation receipt " + relative + " is a symlink; refusing an ambiguous read");
+  check(stats.isFile(), "receipt", "generation receipt " + relative + " is not a regular file");
+  const bytes = fs.readFileSync(file, "utf8");
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(bytes);
+  } catch {
+    return fail("receipt", "generation receipt is not valid JSON: " + relative);
+  }
+  try {
+    validateGenerationReceipt(parsed);
+  } catch (err) {
+    if (err instanceof LifecycleError) return fail("receipt", "generation receipt " + relative + " is malformed: " + err.message);
+    throw err;
+  }
+  return { receipt: parsed as Record<string, unknown>, bytes };
+}
+
+// A receipt is valid only beside the exact closure record it named. Any drift
+// in closure authority invalidates it; a conflicting receipt refuses before
+// deletion rather than trusting a stale tombstone.
+function verifyReceiptProvenance(receipt: Record<string, unknown>, generation: string, closure: Record<string, unknown>): void {
+  check(receipt.generation === generation, "receipt",
+    "generation receipt names " + String(receipt.generation) + ", expected " + generation);
+  check(receipt.source_digest === closure.tasks_digest, "compaction",
+    "closure authority is stale or mismatched: receipt source digest " + String(receipt.source_digest) +
+    " does not cover the current closure tasks digest " + String(closure.tasks_digest));
+  check(receipt.closure_digest === digestOf(closure), "compaction",
+    "closure authority is stale or mismatched: receipt closure digest " + String(receipt.closure_digest) +
+    " does not match the committed closure record");
+}
+
+// Plan one closed generation without mutating anything. Full fragment set and
+// no receipt writes the canonical receipt then deletes exactly those
+// fragments; a valid receipt plus remaining exact fragments deletes only the
+// remainder (the crash-safe catch-up path); a valid receipt with no fragments
+// is already complete.
+export function planGenerationCompaction(options: {
+  repoRoot: string;
+  generation: string;
+  recordsDir: string;
+  receiptPath: string;
+}): GenerationCompactionPlan {
+  const repoRoot = options.repoRoot;
+  const generation = options.generation;
+  check(typeof generation === "string" && GENERATION_RE.test(generation), "identity", "invalid generation: " + String(generation));
+
+  const recordsAbs = options.recordsDir;
+  const recordsRelative = path.relative(repoRoot, recordsAbs).split(path.sep).join("/");
+  assertContained(repoRoot, recordsRelative);
+  assertRealContained(repoRoot, recordsAbs);
+  if (fs.existsSync(recordsAbs)) {
+    check(fs.statSync(recordsAbs).isDirectory(), "containment", "records path is not a directory: " + recordsRelative);
+  }
+
+  const receiptAbs = options.receiptPath;
+  const receiptRelative = path.relative(repoRoot, receiptAbs).split(path.sep).join("/");
+  assertContained(repoRoot, receiptRelative);
+  assertRealContained(repoRoot, fs.existsSync(receiptAbs) ? receiptAbs : path.dirname(receiptAbs));
+
+  const closure = readGenerationClosure(repoRoot, generation);
+  check(closure !== null, "compaction",
+    "generation " + generation + " has no closure record at " + generationClosurePath(repoRoot, generation).replace(repoRoot + path.sep, "") +
+    "; terminal records alone are not closure authority");
+  check(closure!.disposition === "closed", "compaction",
+    "generation " + generation + " closure record is not closed; an open generation is not compactable");
+
+  const fragmentNames = fs.existsSync(recordsAbs)
+    ? fs.readdirSync(recordsAbs)
+      .filter((name) => name.endsWith(".json") && !name.startsWith(".") && fragmentGenerationOf(name) === generation)
+      .sort()
+    : [];
+  const fragments = fragmentNames.map((name) => {
+    const absolute = path.join(recordsAbs, name);
+    const stats = fs.lstatSync(absolute);
+    check(!stats.isSymbolicLink(), "compaction", "fragment " + name + " is a symlink; refusing an ambiguous deletion");
+    check(stats.isFile(), "compaction", "fragment " + name + " is not a regular file; refusing an ambiguous deletion");
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(fs.readFileSync(absolute, "utf8"));
+    } catch {
+      return fail("record-parse", "record is not valid JSON: " + absolute);
+    }
+    check(parsed !== null && typeof parsed === "object" && !Array.isArray(parsed), "record-parse", "record is not an object: " + absolute);
+    const record = parsed as Record<string, unknown>;
+    verifyRecordIntegrity(record);
+    check(String(record.generation) === generation, "compaction", "fragment " + name + " does not belong to generation " + generation);
+    return { absolute, relative: path.relative(repoRoot, absolute).split(path.sep).join("/"), record };
+  });
+  const deletions = fragments.map((fragment) => ({ absolute: fragment.absolute, relative: fragment.relative }));
+
+  const existing = readReceiptFile(receiptAbs, receiptRelative);
+  if (existing !== null) {
+    verifyReceiptProvenance(existing.receipt, generation, closure!);
+    const entries = new Map((existing.receipt.tasks as Record<string, unknown>[]).map((entry) => [String(entry.task_id), entry]));
+    for (const fragment of fragments) {
+      const summary = fragmentSummary(fragment.record);
+      const entry = entries.get(String(summary.task_id));
+      check(entry !== undefined, "receipt",
+        "fragment " + fragment.relative + " is not covered by the existing receipt for " + generation);
+      check(deepEqual(summary, entry), "receipt",
+        "fragment " + fragment.relative + " does not match its receipt entry; refusing an ambiguous deletion");
+    }
+    // An existing receipt is already byte-authoritative: replay must never
+    // rewrite it, so only the remaining covered fragments are consumed.
+    return {
+      generation,
+      receiptPath: receiptAbs,
+      receiptRelative,
+      receipt: existing.receipt,
+      receiptBytes: existing.bytes,
+      receiptChanged: false,
+      deletions,
+    };
+  }
+
+  check(fragments.length > 0, "compaction",
+    "generation " + generation + " has no task fragments and no receipt; refusing to invent a compacted record");
+  const receipt = compactGeneration(fragments.map((fragment) => fragment.record), generation, closure!);
+  validateGenerationReceipt(receipt);
+  return {
+    generation,
+    receiptPath: receiptAbs,
+    receiptRelative,
+    receipt,
+    receiptBytes: canonicalJson(receipt) + "\n",
+    receiptChanged: true,
+    deletions,
+  };
+}
+
+function applyCompactionPlans(plans: GenerationCompactionPlan[]): ClosedGenerationOutcome[] {
+  return plans.map((plan) => {
+    const changedPaths: string[] = [];
+    if (plan.receiptChanged) {
+      // The receipt is durable before any covered fragment disappears; an
+      // interruption between the two leaves a valid receipt plus remaining
+      // exact fragments, which the next replay finishes safely.
+      writeFileAtomic(plan.receiptPath, plan.receiptBytes);
+      changedPaths.push(plan.receiptRelative);
+    }
+    for (const deletion of plan.deletions) {
+      const stats = fs.lstatSync(deletion.absolute);
+      check(!stats.isSymbolicLink() && stats.isFile(), "compaction",
+        "fragment " + deletion.relative + " changed shape before deletion; refusing an ambiguous write");
+      fs.unlinkSync(deletion.absolute);
+      changedPaths.push(deletion.relative);
+    }
+    return {
+      status: changedPaths.length > 0 ? "applied" : "unchanged",
+      generation: plan.generation,
+      receipt_created: plan.receiptChanged,
+      deleted: plan.deletions.map((deletion) => deletion.relative),
+      changed_paths: [...new Set(changedPaths)].sort(),
+    };
+  });
+}
+
+// Every committed closure record with disposition closed, in lexical order.
+// Absence of a closure record is the open disposition, never an error here.
+export function discoverClosedGenerations(repoRoot: string): string[] {
+  const dir = path.join(lifecycleRoot(repoRoot), "generations");
+  if (!fs.existsSync(dir)) return [];
+  const candidates = fs.readdirSync(dir)
+    .filter((name) => /^g[0-9]{2}\.closure\.json$/.test(name))
+    .map((name) => name.slice(0, 3))
+    .sort();
+  return candidates.filter((generation) => {
+    const closure = readGenerationClosure(repoRoot, generation);
+    return closure !== null && closure.disposition === "closed";
+  });
+}
+
+// Consume one explicit closed generation through the canonical lifecycle
+// paths. Refuses when the generation has no closed closure record.
+export function consumeClosedGeneration(options: {
+  repoRoot: string;
+  generation: string;
+  recordsDir?: string;
+  receiptPath?: string;
+  branch?: string;
+}): ClosedGenerationOutcome {
+  const repoRoot = options.repoRoot;
+  const recordsDir = options.recordsDir ?? path.join(lifecycleRoot(repoRoot), "tasks");
+  const receiptPath = options.receiptPath ?? generationReceiptPath(repoRoot, options.generation);
+  if (options.branch !== undefined) assertBranch(repoRoot, options.branch);
+  const plan = planGenerationCompaction({ repoRoot, generation: options.generation, recordsDir, receiptPath });
+  let outcome: ClosedGenerationOutcome | null = null;
+  withLifecycleLock(repoRoot, () => {
+    outcome = applyCompactionPlans([plan])[0]!;
+  });
+  return outcome as unknown as ClosedGenerationOutcome;
+}
+
+// Plan every eligible historical generation in lexical order, read-only. One
+// inconsistent generation refuses the whole invocation before any byte
+// changes; the returned plans are the exact receipts and deletions the locked
+// write pass will apply.
+export function planClosedGenerationCatchUp(options: {
+  repoRoot: string;
+  generations?: string[];
+  recordsDir?: string;
+  receiptsDir?: string;
+  branch?: string;
+}): GenerationCompactionPlan[] {
+  const repoRoot = options.repoRoot;
+  const recordsDir = options.recordsDir ?? path.join(lifecycleRoot(repoRoot), "tasks");
+  const receiptsDir = options.receiptsDir ?? path.join(lifecycleRoot(repoRoot), "generations");
+  const generations = [...new Set(options.generations ?? discoverClosedGenerations(repoRoot))].sort();
+  if (options.branch !== undefined) assertBranch(repoRoot, options.branch);
+  return generations.map((generation) => planGenerationCompaction({
+    repoRoot,
+    generation,
+    recordsDir,
+    receiptPath: path.join(receiptsDir, generation + ".json"),
+  }));
+}
+
+// Apply a read-only catch-up plan under one lifecycle lock in deterministic
+// lexical order and report every receipt creation and exact deletion.
+export function applyClosedGenerationCatchUp(repoRoot: string, plans: GenerationCompactionPlan[]): ClosedGenerationCatchUpResult {
+  let outcomes: ClosedGenerationOutcome[] = [];
+  withLifecycleLock(repoRoot, () => {
+    outcomes = applyCompactionPlans(plans);
+  });
+  const changedPaths = outcomes.flatMap((outcome) => outcome.changed_paths);
+  return {
+    status: changedPaths.length > 0 ? "applied" : "unchanged",
+    generations: outcomes.map((outcome) => outcome.generation),
+    receipt_created: outcomes.filter((outcome) => outcome.receipt_created).map((outcome) => outcome.generation),
+    deleted: outcomes.flatMap((outcome) => outcome.deleted),
+    changed_paths: [...new Set(changedPaths)].sort(),
+  };
+}
+
+// Catch up every eligible historical generation in lexical order. All
+// generations are planned read-only before the locked write pass, so one
+// inconsistent generation refuses the whole invocation before any byte
+// changes, and the returned changed paths are deterministic and exact.
+export function consumeClosedGenerations(options: {
+  repoRoot: string;
+  generations?: string[];
+  recordsDir?: string;
+  receiptsDir?: string;
+  branch?: string;
+}): ClosedGenerationCatchUpResult {
+  return applyClosedGenerationCatchUp(options.repoRoot, planClosedGenerationCatchUp(options));
+}
+
+// Receipt-derived terminal records let dependency resolution, currentness
+// audit, and any other closed-generation state reader see a compacted
+// generation without resurrecting a per-task fragment. Active generations keep
+// using their individual records.
+export function listGenerationReceipts(repoRoot: string): Array<{ generation: string; receipt: Record<string, unknown> }> {
+  const dir = path.join(lifecycleRoot(repoRoot), "generations");
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir)
+    .filter((name) => /^g[0-9]{2}\.json$/.test(name))
+    .sort()
+    .map((name) => {
+      const generation = name.slice(0, 3);
+      const relative = path.relative(repoRoot, path.join(dir, name)).split(path.sep).join("/");
+      const loaded = readReceiptFile(path.join(dir, name), relative);
+      return { generation, receipt: loaded!.receipt };
+    });
+}
+
+// A receipt entry has no task path or stage; the synthetic record carries only
+// the fields a closed-generation reader may lawfully use.
+export function receiptStateRecords(repoRoot: string): Record<string, unknown>[] {
+  const out: Record<string, unknown>[] = [];
+  for (const { generation, receipt } of listGenerationReceipts(repoRoot)) {
+    for (const entry of receipt.tasks as Record<string, unknown>[]) {
+      out.push({
+        task_id: String(entry.task_id),
+        generation,
+        status: String(entry.status),
+        stage: "none",
+        revision: Number(entry.revision),
+        digest: String(entry.digest),
+      });
+    }
+  }
+  return out;
+}
+
+export function listStateRecords(repoRoot: string): Record<string, unknown>[] {
+  const records = listRecords(repoRoot);
+  const seen = new Set(records.map((record) => String(record.task_id)));
+  const merged = [...records];
+  for (const synthetic of receiptStateRecords(repoRoot)) {
+    if (!seen.has(String(synthetic.task_id))) {
+      seen.add(String(synthetic.task_id));
+      merged.push(synthetic);
+    }
+  }
+  return merged;
 }
 
 // ---------------------------------------------------------------------------
@@ -2278,11 +2657,193 @@ async function runOracle(): Promise<number> {
     const compactRun = runCliRaw(["compact", "--records", ".northstar/lifecycle/v1/tasks", "--generation", "g03", "--out", receiptOutRel]);
     check(compactRun.status === 0, "oracle", "authorized compaction failed: " + compactRun.stdout);
     check(String(JSON.parse(fs.readFileSync(path.join(repo, receiptOutRel), "utf8")).source_digest) === tasksDigest, "oracle", "receipt did not record the closure-pinned digest");
+    const compactChanged = [...(JSON.parse(compactRun.stdout).changed_paths as string[])].sort();
+    const fragmentRel = ".northstar/lifecycle/v1/tasks/g03.005.json";
+    check(canonicalJson(compactChanged) === canonicalJson([receiptOutRel, fragmentRel].sort()), "oracle", "compaction did not report the receipt and exact fragment deletion: " + compactChanged.join(","));
+    check(!fs.existsSync(path.join(repo, fragmentRel)), "oracle", "compaction left a covered fragment behind");
+    const receiptBytesAtClose = fs.readFileSync(path.join(repo, receiptOutRel), "utf8");
     const compactReplay = runCliRaw(["compact", "--records", ".northstar/lifecycle/v1/tasks", "--generation", "g03", "--out", receiptOutRel]);
     check(compactReplay.status === 0 && String(JSON.parse(compactReplay.stdout).status) === "unchanged", "oracle", "compaction replay rewrote bytes");
+    check(fs.readFileSync(path.join(repo, receiptOutRel), "utf8") === receiptBytesAtClose, "oracle", "receipt-only replay changed receipt bytes");
     fs.writeFileSync(path.join(repo, closureRel), canonicalJson({ ...oracleClosure, tasks_digest: digestOf("stale-set") }) + "\n");
     cliFailHere("stale closure authority refuses compaction", ["compact", "--records", ".northstar/lifecycle/v1/tasks", "--generation", "g03", "--out", receiptOutRel], "stale or mismatched");
-    ok("compaction consumes exact closure authority and replays without churn");
+    ok("compaction consumes exact closure authority, deletes covered fragments, and replays without churn");
+
+    // Closed-generation catch-up: discovery, exact deletions, interrupted
+    // cleanup, and every refusal shape, against a dedicated Git fixture.
+    const catchupRepo = path.join(tmp, "catchup-repo");
+    fs.mkdirSync(catchupRepo, { recursive: true });
+    const gitIn = (dir: string, args: string[]): string => {
+      const result = spawnSync("git", args, { cwd: dir, encoding: "utf8" });
+      if (result.status !== 0) throw new Error("git " + args.join(" ") + " failed: " + result.stderr);
+      return String(result.stdout).trim();
+    };
+    gitIn(catchupRepo, ["init", "-q", "-b", "main"]);
+    gitIn(catchupRepo, ["config", "user.email", "oracle@example.invalid"]);
+    gitIn(catchupRepo, ["config", "user.name", "Oracle"]);
+    const catchupTasksRel = ".northstar/lifecycle/v1/tasks";
+    const catchupGenerationsRel = ".northstar/lifecycle/v1/generations";
+    const catchupTasks = path.join(catchupRepo, catchupTasksRel);
+    const catchupGenerations = path.join(catchupRepo, catchupGenerationsRel);
+    fs.mkdirSync(catchupTasks, { recursive: true });
+    fs.mkdirSync(catchupGenerations, { recursive: true });
+
+    // A genuine terminal record per task, reduced through the same reducer the
+    // rest of the oracle uses, so integrity verification has real bytes.
+    const terminalRecordFixture = (taskId: string): Record<string, unknown> => {
+      const prefix = "fix-" + taskId.replace(".", "-");
+      const env = (over: Record<string, unknown>) => oracleEnvelope({ task_id: taskId, ...over });
+      let rec = reduce(env({ event_id: prefix + "-plan" }), null, {}).record;
+      rec = reduce(env({ event_id: prefix + "-ready", transition: "ready", expected: { revision: 1, digest: rec.digest } }), rec, {}).record;
+      rec = reduce(env({ event_id: prefix + "-start", transition: "start", expected: { revision: 2, digest: rec.digest } }), rec, {}).record;
+      rec = reduce(env({ event_id: prefix + "-impl", transition: "advance_stage", target_stage: "implementation", expected: { revision: 3, digest: rec.digest } }), rec, {}).record;
+      rec = reduce(env({ event_id: prefix + "-review", transition: "advance_stage", target_stage: "review", expected: { revision: 4, digest: rec.digest }, evidence: { pr: prEntry } }), rec, {}).record;
+      rec = reduce(env({ event_id: prefix + "-merge", transition: "advance_stage", target_stage: "merge", expected: { revision: 5, digest: rec.digest }, evidence: { merge: mergeEntry, review: goodReview } }), rec, {}).record;
+      rec = reduce(env({ event_id: prefix + "-closeout", transition: "advance_stage", target_stage: "closeout", expected: { revision: 6, digest: rec.digest }, evidence: { merge: mergeEntry } }), rec, {}).record;
+      rec = reduce(env({ event_id: prefix + "-complete", transition: "complete", expected: { revision: 7, digest: rec.digest }, evidence: completionEvidence }), rec, { verifyCommit: () => true, isAncestor: chainAncestor }).record;
+      verifyRecordIntegrity(rec);
+      return rec;
+    };
+    const writeFragment = (record: Record<string, unknown>): void => {
+      fs.writeFileSync(path.join(catchupTasks, String(record.task_id) + ".json"), canonicalJson(record) + "\n");
+    };
+    const closureFixture = (generation: string, records: Record<string, unknown>[]): Record<string, unknown> => ({
+      schema_version: GENERATION_CLOSURE_SCHEMA,
+      generation,
+      disposition: "closed",
+      reason: "oracle fixture rollover boundary",
+      tasks_digest: digestOf(terminalTaskSummaries(records, generation)),
+      closed_at: "2026-09-15T16:00:00.000Z",
+    });
+    const writeClosure = (generation: string, records: Record<string, unknown>[]): Record<string, unknown> => {
+      const closure = closureFixture(generation, records);
+      fs.writeFileSync(path.join(catchupGenerations, generation + ".closure.json"), canonicalJson(closure) + "\n");
+      return closure;
+    };
+
+    // Positive path plus deterministic lexical discovery and open untouched.
+    const g01Records = [terminalRecordFixture("g01.001"), terminalRecordFixture("g01.002")];
+    const g02Records = [terminalRecordFixture("g02.001")];
+    const g03OpenRecord = terminalRecordFixture("g03.001");
+    for (const record of [...g01Records, ...g02Records, g03OpenRecord]) writeFragment(record);
+    const g01Closure = writeClosure("g01", g01Records);
+    writeClosure("g02", g02Records);
+    const g03OpenBefore = fs.readFileSync(path.join(catchupTasks, "g03.001.json"), "utf8");
+    check(canonicalJson(discoverClosedGenerations(catchupRepo)) === canonicalJson(["g01", "g02"]), "oracle", "closed-generation discovery is not exact lexical order");
+    const catchUpA = consumeClosedGenerations({ repoRoot: catchupRepo });
+    check(catchUpA.status === "applied" && canonicalJson(catchUpA.generations) === canonicalJson(["g01", "g02"]), "oracle", "catch-up did not consume both closed generations");
+    const expectedCatchUpPaths = [
+      catchupGenerationsRel + "/g01.json",
+      catchupGenerationsRel + "/g02.json",
+      catchupTasksRel + "/g01.001.json",
+      catchupTasksRel + "/g01.002.json",
+      catchupTasksRel + "/g02.001.json",
+    ].sort();
+    check(canonicalJson(catchUpA.changed_paths) === canonicalJson(expectedCatchUpPaths), "oracle", "catch-up changed paths are not exact and deterministic: " + catchUpA.changed_paths.join(","));
+    for (const name of ["g01.001.json", "g01.002.json", "g02.001.json"]) {
+      check(!fs.existsSync(path.join(catchupTasks, name)), "oracle", "catch-up left a covered fragment: " + name);
+    }
+    check(fs.readFileSync(path.join(catchupTasks, "g03.001.json"), "utf8") === g03OpenBefore, "oracle", "an open generation was touched by catch-up");
+    const g01Receipt = JSON.parse(fs.readFileSync(path.join(catchupGenerations, "g01.json"), "utf8"));
+    validateGenerationReceipt(g01Receipt);
+    check(canonicalJson(g01Receipt) === canonicalJson(compactGeneration(g01Records, "g01", g01Closure)), "oracle", "standalone compaction bytes drifted from the catch-up receipt");
+    const g01ReceiptBytes = fs.readFileSync(path.join(catchupGenerations, "g01.json"), "utf8");
+    const stateIds = new Set(receiptStateRecords(catchupRepo).map((record) => String(record.task_id)));
+    check(stateIds.has("g01.001") && stateIds.has("g02.001"), "oracle", "receipt-derived records did not expose compacted terminal tasks");
+    const receiptAudit = auditCurrentnessText(
+      { "docs/roadmaps/g03/README.md": "# g03\n\n## Next Task\n\nContinue with `g01.001` now.\n" },
+      listStateRecords(catchupRepo),
+      ["docs/roadmaps/g03/README.md"],
+    );
+    check(receiptAudit.some((violation) => violation.task === "g01.001" && violation.reason === "stale-frontier"),
+      "oracle", "currentness audit ignored a receipt-derived terminal task: " + canonicalJson(receiptAudit));
+    const catchUpReplay = consumeClosedGenerations({ repoRoot: catchupRepo });
+    check(catchUpReplay.status === "unchanged" && catchUpReplay.changed_paths.length === 0, "oracle", "catch-up replay was not a no-op");
+    check(fs.readFileSync(path.join(catchupGenerations, "g01.json"), "utf8") === g01ReceiptBytes, "oracle", "catch-up replay rewrote a receipt");
+    const digestFromReceipt = spawnSync(process.execPath, ["run", fileURLToPath(import.meta.url), "tasks-digest", "--repo", catchupRepo, "--records", catchupTasksRel, "--generation", "g01"], { encoding: "utf8" });
+    check(digestFromReceipt.status === 0 && String(JSON.parse(digestFromReceipt.stdout).tasks_digest) === g01Closure.tasks_digest, "oracle", "tasks-digest did not read the receipt after pruning: " + digestFromReceipt.stdout);
+    ok("catch-up consumes closed generations in lexical order and leaves open generations untouched");
+
+    // Interrupted cleanup: a valid receipt plus remaining exact fragments
+    // finishes the deletion without rewriting the receipt.
+    const g05Records = [terminalRecordFixture("g05.001"), terminalRecordFixture("g05.002")];
+    for (const record of g05Records) writeFragment(record);
+    writeClosure("g05", g05Records);
+    const g05First = consumeClosedGeneration({ repoRoot: catchupRepo, generation: "g05" });
+    check(g05First.status === "applied" && g05First.deleted.length === 2, "oracle", "first compaction did not consume both g05 fragments");
+    const g05ReceiptBytes = fs.readFileSync(path.join(catchupGenerations, "g05.json"), "utf8");
+    writeFragment(g05Records[1]!);
+    const g05Second = consumeClosedGenerations({ repoRoot: catchupRepo, generations: ["g05"] });
+    check(g05Second.status === "applied" && canonicalJson(g05Second.deleted) === canonicalJson([catchupTasksRel + "/g05.002.json"]), "oracle", "interrupted cleanup did not finish the remaining fragment");
+    check(!fs.existsSync(path.join(catchupTasks, "g05.002.json")), "oracle", "interrupted cleanup left the remaining fragment");
+    check(fs.readFileSync(path.join(catchupGenerations, "g05.json"), "utf8") === g05ReceiptBytes, "oracle", "interrupted cleanup rewrote the receipt");
+    ok("a valid receipt plus remaining exact fragments finishes cleanup safely");
+
+    // Refusals: partial set without a receipt, nonterminal record, malformed
+    // receipt, conflicting provenance, symlink, and path escape.
+    const g06Records = [terminalRecordFixture("g06.001"), terminalRecordFixture("g06.002")];
+    writeFragment(g06Records[0]!);
+    writeClosure("g06", g06Records);
+    expectFail("a partial fragment set without a receipt refuses", () =>
+      consumeClosedGenerations({ repoRoot: catchupRepo, generations: ["g06"] }), "stale or mismatched");
+    check(!fs.existsSync(path.join(catchupGenerations, "g06.json")) && fs.existsSync(path.join(catchupTasks, "g06.001.json")), "oracle", "refused partial set mutated lifecycle state");
+
+    const g07Terminal = terminalRecordFixture("g07.001");
+    writeFragment(g07Terminal);
+    writeFragment(reduce(oracleEnvelope({ task_id: "g07.002", event_id: "fix-g07-002-plan" }), null, {}).record);
+    writeClosure("g07", [g07Terminal]);
+    expectFail("a nonterminal fragment refuses", () =>
+      consumeClosedGenerations({ repoRoot: catchupRepo, generations: ["g07"] }), "is not closed");
+    check(!fs.existsSync(path.join(catchupGenerations, "g07.json")), "oracle", "refused nonterminal set produced a receipt");
+
+    const g08Records = [terminalRecordFixture("g08.001")];
+    writeFragment(g08Records[0]!);
+    writeClosure("g08", g08Records);
+    fs.writeFileSync(path.join(catchupGenerations, "g08.json"), canonicalJson({ schema_version: GENERATION_RECEIPT_SCHEMA, generation: "g08" }) + "\n");
+    expectFail("a malformed receipt refuses", () =>
+      consumeClosedGenerations({ repoRoot: catchupRepo, generations: ["g08"] }), "malformed");
+    check(fs.existsSync(path.join(catchupTasks, "g08.001.json")), "oracle", "refused malformed receipt deleted a fragment");
+
+    const g09Records = [terminalRecordFixture("g09.001")];
+    writeFragment(g09Records[0]!);
+    const g09Closure = writeClosure("g09", g09Records);
+    const g09Receipt = { ...compactGeneration(g09Records, "g09", g09Closure), closure_digest: digestOf({ ...g09Closure, reason: "a different boundary" }) };
+    fs.writeFileSync(path.join(catchupGenerations, "g09.json"), canonicalJson(g09Receipt) + "\n");
+    expectFail("a conflicting receipt refuses against current closure authority", () =>
+      consumeClosedGenerations({ repoRoot: catchupRepo, generations: ["g09"] }), "stale or mismatched");
+    check(fs.existsSync(path.join(catchupTasks, "g09.001.json")), "oracle", "refused conflicting receipt deleted a fragment");
+
+    const g10Records = [terminalRecordFixture("g10.001")];
+    writeFragment(g10Records[0]!);
+    writeClosure("g10", g10Records);
+    const g10Target = path.join(tmp, "outside-fragment.json");
+    fs.writeFileSync(g10Target, canonicalJson(g10Records[0]) + "\n");
+    fs.symlinkSync(g10Target, path.join(catchupTasks, "g10.002.json"));
+    expectFail("a symlinked fragment refuses", () =>
+      consumeClosedGenerations({ repoRoot: catchupRepo, generations: ["g10"] }), "symlink");
+    check(fs.existsSync(path.join(catchupTasks, "g10.002.json")) || fs.lstatSync(path.join(catchupTasks, "g10.002.json")).isSymbolicLink(), "oracle", "refused symlinked fragment was deleted");
+
+    expectFail("an escaping records directory refuses", () => planGenerationCompaction({
+      repoRoot: catchupRepo,
+      generation: "g01",
+      recordsDir: path.join(tmp, "outside-records"),
+      receiptPath: path.join(catchupGenerations, "g01.json"),
+    }), "escapes repository root");
+    ok("partial, nonterminal, malformed, conflicting, symlinked, and escaping inputs refuse before mutation");
+
+    // verify treats receipt provenance as structural state: a valid receipt is
+    // clean, and a receipt without its closure authority is explicit drift.
+    fs.rmSync(path.join(catchupGenerations, "g08.json"));
+    fs.rmSync(path.join(catchupGenerations, "g09.json"));
+    check(verifyRepo(catchupRepo).status === "ok", "oracle", "verify reported drift for valid receipts: " + canonicalJson(verifyRepo(catchupRepo).problems));
+    const g05ClosureFile = path.join(catchupGenerations, "g05.closure.json");
+    const g05ClosureBytes = fs.readFileSync(g05ClosureFile, "utf8");
+    fs.rmSync(g05ClosureFile);
+    const driftReport = verifyRepo(catchupRepo);
+    check(driftReport.status === "drift" && driftReport.problems.some((problem) => problem.includes("no closure record")),
+      "oracle", "verify did not report a receipt without closure authority: " + canonicalJson(driftReport));
+    fs.writeFileSync(g05ClosureFile, g05ClosureBytes);
+    ok("verify validates compact receipts and reports lost closure provenance as drift");
 
     // A closed generation seals its task records against every transition;
     // removing the closure record reopens the generation.
@@ -2467,7 +3028,7 @@ async function runOracle(): Promise<number> {
     check(pluralRendered.includes("| g04 | open | planned |"), "oracle", "parallel render lost the g04 state row");
     check(pluralRendered.indexOf("| g03 | open | planned |") < pluralRendered.indexOf("| g04 | open | planned |"), "oracle", "parallel state rows are not in lexical order");
     check(pluralRendered.includes("| g04.010 | planned | none |"), "oracle", "parallel render lost the g04 entry");
-    check(pluralRendered.indexOf("| g03.005 |") < pluralRendered.indexOf("| g04.010 |"), "oracle", "parallel entries are not grouped by generation and task id");
+    check(pluralRendered.includes("| g03.007 |") && pluralRendered.indexOf("| g03.007 |") < pluralRendered.indexOf("| g04.010 |"), "oracle", "parallel entries are not grouped by generation and task id");
     check(pluralRendered.includes("Human text stays."), "oracle", "parallel render lost human text");
     const verifyRun = runCliRaw(["verify", "--target", "docs/multi-a.md"]);
     check(verifyRun.status === 0, "oracle", "parallel verify reported drift: " + verifyRun.stdout);
@@ -2785,7 +3346,23 @@ async function main(): Promise<void> {
         const records = fs.readdirSync(recordsAbs).filter((name) => name.endsWith(".json")).sort()
           .map((name) => JSON.parse(fs.readFileSync(path.join(recordsAbs, name), "utf8")) as Record<string, unknown>);
         for (const record of records) verifyRecordIntegrity(record);
-        printJson({ generation: flags.generation, tasks_digest: generationTasksDigest(records, flags.generation as string) });
+        const scoped = records.filter((record) => record.generation === flags.generation);
+        // A compacted closed generation has no fragments left; its receipt is
+        // the canonical source of the same digest, so closure authoring and
+        // later audit read one stable value across the pruning boundary.
+        if (scoped.length === 0) {
+          const receiptPath = generationReceiptPath(repoRoot, flags.generation as string);
+          const loaded = readReceiptFile(receiptPath, path.relative(repoRoot, receiptPath).split(path.sep).join("/"));
+          check(loaded !== null, "compaction",
+            "generation " + flags.generation + " has no task fragments and no receipt to derive a tasks digest from");
+          const closure = readGenerationClosure(repoRoot, flags.generation as string);
+          check(closure !== null, "compaction",
+            "generation " + flags.generation + " has a receipt but no closure record to verify it against");
+          verifyReceiptProvenance(loaded!.receipt, flags.generation as string, closure as Record<string, unknown>);
+          printJson({ generation: flags.generation, tasks_digest: loaded!.receipt.source_digest, source: "receipt" });
+          return;
+        }
+        printJson({ generation: flags.generation, tasks_digest: generationTasksDigest(records, flags.generation as string), source: "fragments" });
         return;
       }
       case "compact": {
@@ -2793,29 +3370,31 @@ async function main(): Promise<void> {
         const repoRoot = resolveRepoRoot(flags);
         const recordsDir = containRepoPath(repoRoot, flags.records as string);
         const out = containRepoPath(repoRoot, flags.out as string);
-        const recordsAbs = path.resolve(repoRoot, recordsDir);
-        check(fs.existsSync(recordsAbs) && fs.statSync(recordsAbs).isDirectory(), "containment", "records directory is missing or not a directory: " + recordsDir);
-        assertRealContained(repoRoot, recordsAbs);
-        const records = fs.readdirSync(recordsAbs).filter((name) => name.endsWith(".json")).sort()
-          .map((name) => JSON.parse(fs.readFileSync(path.join(recordsAbs, name), "utf8")) as Record<string, unknown>);
-        for (const record of records) verifyRecordIntegrity(record);
-        const closurePath = generationClosurePath(repoRoot, flags.generation as string);
-        const closure = readGenerationClosure(repoRoot, flags.generation as string);
-        check(closure !== null, "compaction",
-          "generation " + flags.generation + " has no closure record at " + path.relative(repoRoot, closurePath) + "; terminal records alone are not closure authority");
-        const receipt = compactGeneration(records, flags.generation as string, closure as Record<string, unknown>);
-        const outAbs = path.resolve(repoRoot, out);
-        assertRealContained(repoRoot, fs.existsSync(outAbs) ? outAbs : path.dirname(outAbs));
-        const bytes = canonicalJson(receipt) + "\n";
-        const changed = !fs.existsSync(outAbs) || fs.readFileSync(outAbs, "utf8") !== bytes;
-        if (changed) writeFileAtomic(outAbs, bytes);
-        printJson({ status: changed ? "applied" : "unchanged", generation: flags.generation, changed_paths: changed ? [out] : [] });
+        const outcome = consumeClosedGeneration({
+          repoRoot,
+          generation: flags.generation as string,
+          recordsDir: path.resolve(repoRoot, recordsDir),
+          receiptPath: path.resolve(repoRoot, out),
+        });
+        printJson({
+          status: outcome.status,
+          generation: outcome.generation,
+          receipt_created: outcome.receipt_created,
+          deleted: outcome.deleted,
+          changed_paths: outcome.changed_paths,
+        });
+        return;
+      }
+      case "catch-up": {
+        const repoRoot = resolveRepoRoot(flags);
+        const result = consumeClosedGenerations({ repoRoot });
+        printJson(result);
         return;
       }
       default:
         printJson({
           status: "error",
-          message: "usage: lifecycle-core.ts <oracle|schema-check|status|frontier|verify|audit-currentness|apply|render|tasks-digest|compact> [flags]",
+          message: "usage: lifecycle-core.ts <oracle|schema-check|status|frontier|verify|audit-currentness|apply|render|tasks-digest|compact|catch-up> [flags]",
         });
         process.exitCode = 2;
     }

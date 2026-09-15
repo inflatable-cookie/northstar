@@ -48,18 +48,22 @@ import {
   BEGIN_PREFIX,
   ENVELOPE_SCHEMA,
   LifecycleError,
+  applyClosedGenerationCatchUp,
   applyEnvelope,
   canonicalJson,
   containRepoPath,
   digestBytes,
   discoverRepoRoot,
+  listStateRecords,
   parseTaskIdentity,
+  planClosedGenerationCatchUp,
   readGenerationClosure,
   readProjectionConfig,
   readRecord,
   reduce,
   validateAgainstSchemaFile,
   verifyRecordIntegrity,
+  type GenerationCompactionPlan,
   type ReduceContext,
 } from "./lifecycle-core.ts";
 import {
@@ -475,12 +479,10 @@ function emit(eventId: string, outcome: "ok" | "blocked" | "failed", summary: st
 // ---------------------------------------------------------------------------
 
 function listRecordsSafe(repoRoot: string): Record<string, unknown>[] {
-  const dir = path.join(repoRoot, RECORD_DIR, "tasks");
-  if (!fs.existsSync(dir)) return [];
-  return fs.readdirSync(dir)
-    .filter((name) => name.endsWith(".json") && !name.startsWith("."))
-    .sort()
-    .map((name) => JSON.parse(fs.readFileSync(path.join(dir, name), "utf8")) as Record<string, unknown>);
+  // Closed-generation state is a valid compact receipt once its fragments are
+  // consumed, so dependency resolution reads both shapes. Active generations
+  // continue to resolve from their individual records.
+  return listStateRecords(repoRoot);
 }
 
 function reduceContext(repoRoot: string): ReduceContext {
@@ -561,6 +563,7 @@ function applyMapped(
   current: Record<string, unknown> | null,
   verb: string,
   consumable: ConsumableHandoff | null = null,
+  catchUpClosedGenerations = false,
 ): void {
   // Read-only runs validate without writing, so the allowedPaths gate for
   // computed writes does not apply; containment still holds.
@@ -579,6 +582,12 @@ function applyMapped(
   // Pure pre-pass: refuse before any byte changes.
   const finalRecord = prePass(envelopes, current, reduceContext(repoRoot));
 
+  // The catch-up is planned read-only before the first write, so a repository
+  // defect in any eligible closed generation refuses the whole closeout with
+  // the checkout untouched, exactly like the envelope pre-pass.
+  let catchUpPlan: GenerationCompactionPlan[] = [];
+  if (catchUpClosedGenerations) catchUpPlan = planClosedGenerationCatchUp({ repoRoot });
+
   const changedPaths: string[] = [];
   let replayed = true;
   for (const envelope of envelopes) {
@@ -589,6 +598,18 @@ function applyMapped(
   // The deletion runs only after the terminal record and projections are on
   // disk; a refusal anywhere above left the checkout untouched.
   consumeHandoff(consumable, changedPaths);
+  // Closeout also catches up every eligible historical closed generation in
+  // the same integration write. The catch-up was planned read-only before the
+  // first write, so an inconsistent generation refused before any byte
+  // changed; its exact receipt and deletion paths join this result.
+  let catchUpGenerations: string[] = [];
+  let catchUpDeletions = 0;
+  if (catchUpClosedGenerations) {
+    const catchUp = applyClosedGenerationCatchUp(repoRoot, catchUpPlan);
+    changedPaths.push(...catchUp.changed_paths);
+    catchUpGenerations = catchUp.receipt_created;
+    catchUpDeletions = catchUp.deleted.length;
+  }
   const uniqueChanged = [...new Set(changedPaths)].sort();
   for (const changedPath of uniqueChanged) {
     if (!pathIsAllowed(changedPath, binding.allowedPaths)) refuse("computed change " + changedPath + " is outside the manifest allowedPaths");
@@ -597,7 +618,8 @@ function applyMapped(
   emit(String(event.eventId), "ok",
     (replayed ? "replayed without changes: " : "applied: ") + identity.taskId + " " + verb +
     " at revision " + String(finalRecord.revision) + " (" + String(finalRecord.portable_digest).slice(0, 19) + ")" +
-    (consumable !== null ? "; consumed handoff " + consumable.relativePath : ""),
+    (consumable !== null ? "; consumed handoff " + consumable.relativePath : "") +
+    (catchUpGenerations.length > 0 ? "; compacted " + catchUpGenerations.join(", ") : ""),
     {
       task_id: identity.taskId,
       revision: Number(finalRecord.revision),
@@ -605,6 +627,8 @@ function applyMapped(
       portable_digest: String(finalRecord.portable_digest),
       replayed,
       handoff_consumed: consumable !== null,
+      generations_compacted: catchUpGenerations,
+      fragments_consumed: catchUpDeletions,
     },
     uniqueChanged, suffix);
 }
@@ -812,7 +836,7 @@ function handleCloseout(repoRoot: string, event: Record<string, any>, binding: M
     ? prepareHandoffConsumption(repoRoot, event, binding, false)
     : null;
   guardConsumableBacklinks(repoRoot, consumable);
-  applyMapped(repoRoot, event, binding, identity, envelopes, current, "terminal record", consumable);
+  applyMapped(repoRoot, event, binding, identity, envelopes, current, "terminal record", consumable, true);
 }
 
 // ---------------------------------------------------------------------------
