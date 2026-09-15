@@ -11,8 +11,8 @@ Mode: sequential
 - Mechanical task state and delivery evidence are projected in the generated
   lifecycle blocks under `docs/README.md`, `docs/roadmaps/README.md`, and
   `g03/README.md`; this index stays strategic.
-- Current approved lane: `g03.018`; consume closed-generation lifecycle task
-  fragments into verified compact receipts.
+- Current approved lane: `g03.019`; accept Queue's strict prospective-merge
+  pre-merge event and unblock retained Bovine g03.029.
 
 ## Generation log
 
@@ -37,5 +37,5 @@ it in the same rollover change.
 
 ## Next task
 
-`g03.018` is the only approved lane. After hook-owned closeout, return to
-Chatterbox. No successor is automatic.
+`g03.019` is the only approved lane. After merge, installed-skill refresh and
+the retained Bovine retry, return to Chatterbox. No successor is automatic.
