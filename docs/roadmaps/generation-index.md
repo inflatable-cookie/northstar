@@ -1,7 +1,7 @@
 # Roadmap Generation Index
 
 Status: active
-Updated: 2026-09-14
+Updated: 2026-09-15
 Mode: sequential
 
 ## Active generation
@@ -11,8 +11,8 @@ Mode: sequential
 - Mechanical task state and delivery evidence are projected in the generated
   lifecycle blocks under `docs/README.md`, `docs/roadmaps/README.md`, and
   `g03/README.md`; this index stays strategic.
-- Current approved lane: `g03.016`; economical persistent Chatterbox, bounded
-  frontier Oracle, and one Coordinator delivery role.
+- Current approved lane: `g03.017`; reject transient handoff backlinks at the
+  reviewed PR head before merge. It waits on Queue g01.020.
 
 ## Generation log
 
@@ -37,6 +37,6 @@ it in the same rollover change.
 
 ## Next task
 
-`g03.016` is the only approved lane. After its hook-owned closeout, return to
-Chatterbox for local profile configuration or a bounded pilot; no successor is
-automatic.
+`g03.017` is the only approved lane. It waits on Queue task
+`a1571254-17e5-414c-9bc0-d80146c6288c`; after hook-owned closeout, return to
+Chatterbox. No successor is automatic.
