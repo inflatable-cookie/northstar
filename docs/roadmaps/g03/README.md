@@ -21,7 +21,8 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 | Reduce repeated protocol enumerations and retire genuinely redundant modes without merging distinct behavior blindly. | complete as `g03.016` | contract 001, section 07, skill architecture | observe economical Chatterbox use |
 | Reject transient worker-handoff backlinks at the accepted PR head before merge. | complete as `g03.017`; terminal record published at `c156c10` | contract 001, lifecycle reference; Queue Spec 007 | no further backlink-timing lane |
 | Consume closed-generation lifecycle task fragments into one verified receipt. | complete as `g03.018`; terminal record published at `c74cbdd` | contract 001, lifecycle maintenance, lifecycle reference | observe natural catch-up |
-| Accept Queue prospective-merge pre-merge events without weakening prior event contracts. | ready as urgent `g03.019`; gates retained Bovine g03.029 | contract 001, lifecycle reference; Queue Spec 015 | add strict v3/v4 compatibility and unblock Bovine |
+| Accept Queue prospective-merge pre-merge events without weakening prior event contracts. | complete as `g03.019` | contract 001, lifecycle reference; Queue Spec 015 | compatibility proven through Bovine |
+| Make prospective-merge checks the portable Queue default and migrate existing consumers safely. | ready as `g03.020`; operator authorized portfolio rollout | contract 001, lifecycle reference; Queue Spec 015 | update producer surfaces and add a fail-closed migration command |
 | Keep unresolved operator feedback visible without pinning old generations open. | watch | contract 001 | bounded watchlist below |
 
 Task mechanical state — status, stage, revision, delivery digests — is the
@@ -31,10 +32,10 @@ are not a per-task status mirror.
 
 ## Current lane
 
-One lane executes at a time. `g03.019` is the approved urgent compatibility
-lane. Dispatch authorization is its committed handoff plus its task dispatch
-manifest; no concurrent Northstar sibling and no automatic successor are
-authorized. Queue repository work remains separately owned.
+One lane executes at a time. `g03.020` is the approved producer lane. Dispatch
+authorization is its committed handoff plus its task dispatch manifest; no
+concurrent Northstar sibling is authorized. Consumer repositories remain
+separate follow-on Queue tasks after producer acceptance and installed parity.
 
 ## Bounded watchlist
 
@@ -69,6 +70,7 @@ authorized. Queue repository work remains separately owned.
 - `017-reject-transient-handoff-backlinks-before-merge.md`
 - `018-consume-closed-generation-lifecycle-fragments.md`
 - `019-accept-prospective-merge-queue-events.md`
+- `020-prospective-merge-portable-default.md`
 
 Mechanical status lives in the lifecycle records: adopted tasks (`g03.006`
 onward) project it in the generated block below, earlier tasks keep their
@@ -76,9 +78,9 @@ completion in the runway above and in Git history.
 
 ## Next task
 
-`g03.019` is the sole approved Northstar lane. It restores compatibility with
-Queue's accepted prospective-merge event before the retained Bovine g03.029
-task can continue. No sibling or automatic successor is approved.
+`g03.020` is the sole approved Northstar lane. It makes the accepted v4
+prospective-merge contract the producer default and supplies the bounded
+migration surface for the authorized consumer rollout.
 <!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:282dd2b86c5ac5dda5e363adea5fe939b5462cbb5523487599c6333a90997415 -->
 | Generation | Disposition | Runway state |
 | --- | --- | --- |

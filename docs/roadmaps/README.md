@@ -26,10 +26,10 @@ generation remains expanded.
 
 ## Next task
 
-An open lane runs until the closeout hook publishes its terminal record into
-the generated block below; no successor is automatic. After a lane closes,
-return to Chatterbox for direction. The bounded watchlist is not execution
-authority.
+[g03.020 — Make prospective merge the portable default](./g03/020-prospective-merge-portable-default.md)
+is the sole approved lane. It promotes the accepted v4 contract into
+Northstar's dogfood and copy-ready surfaces and adds the fail-closed migration
+command needed for the authorized consumer rollout.
 <!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:282dd2b86c5ac5dda5e363adea5fe939b5462cbb5523487599c6333a90997415 -->
 | Generation | Disposition | Runway state |
 | --- | --- | --- |
