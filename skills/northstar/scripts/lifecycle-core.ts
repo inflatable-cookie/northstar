@@ -1035,7 +1035,7 @@ export function listRecords(repoRoot: string): Record<string, unknown>[] {
     .map((name) => JSON.parse(fs.readFileSync(path.join(dir, name), "utf8")) as Record<string, unknown>);
 }
 
-function writeFileAtomic(finalPath: string, data: string): void {
+export function writeFileAtomic(finalPath: string, data: string): void {
   const dir = path.dirname(finalPath);
   fs.mkdirSync(dir, { recursive: true });
   const tmp = path.join(dir, ".tmp-" + process.pid + "-" + randomUUID() + ".json");

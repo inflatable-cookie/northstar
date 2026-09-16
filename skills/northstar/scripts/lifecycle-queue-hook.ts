@@ -70,17 +70,16 @@ import {
   BacklinkError,
   guardHandoffBacklinks,
 } from "./lifecycle-backlink.ts";
+import {
+  ManifestError,
+  loadControlManifest,
+  type LoadedControlManifest,
+} from "./lifecycle-manifest.ts";
 
 const RESULT_SCHEMA = "paseo.queue.hook-result.v1";
 const EVENT_SCHEMA = "paseo.queue.event.v1";
 const EVENT_SCHEMA_V2 = "paseo.queue.event.v2";
 const EVENT_SCHEMA_V3 = "paseo.queue.event.v3";
-const CONTROL_SCHEMAS: Record<string, string> = {
-  "paseo.queue.control.v1": "queue-control.schema.json",
-  "paseo.queue.control.v2": "queue-control-v2.schema.json",
-  "paseo.queue.control.v3": "queue-control-v3.schema.json",
-  "paseo.queue.control.v4": "queue-control-v4.schema.json",
-};
 const EVENT_SCHEMAS: Record<string, string> = {
   [EVENT_SCHEMA]: "queue-event.schema.json",
   [EVENT_SCHEMA_V2]: "queue-event-v2.schema.json",
@@ -91,7 +90,6 @@ const GIT_ID_RE = /^[0-9a-f]{40}$|^[0-9a-f]{64}$/;
 const CANDIDATE_ID_RE = /^[0-9a-f]{40}$/;
 const TASK_PATH_RE = /^docs\/roadmaps\/g([0-9]{2})\/([0-9]{3})-[a-z0-9]+(?:-[a-z0-9]+)*\.md$/;
 const TASK_LABEL_RE = /g[0-9]{2}\.[0-9]{3}/g;
-const MANIFEST_MAX_BYTES = 64 * 1024;
 const METADATA_MAX_BYTES = 32 * 1024;
 const SUBJECT_BUDGET = 90; // manifest maxBytes 100 minus the "lifecycle " prefix
 const RECORD_DIR = ".northstar/lifecycle/v1";
@@ -170,71 +168,24 @@ function normalizeRepoRelative(value: string, what: string): string {
 }
 
 function loadBinding(repoRoot: string, event: Record<string, any>): ManifestBinding {
-  const manifestPath = path.join(repoRoot, ".paseo", "queue.json");
-  if (!fs.existsSync(manifestPath)) refuse("control manifest .paseo/queue.json is missing from the integration worktree");
-  const bytes = fs.readFileSync(manifestPath);
-  if (bytes.length > MANIFEST_MAX_BYTES) refuse("control manifest exceeds the 64 KiB cap");
-  let manifest: Record<string, any>;
+  // The shared import-safe loader is the only manifest parser: the hook and
+  // the migration command must agree on the accepted frozen shape, including
+  // the binding cross-rules the JSON schema cannot express.
+  let loaded: LoadedControlManifest;
   try {
-    manifest = JSON.parse(bytes.toString("utf8"));
-  } catch {
-    refuse("control manifest is not valid JSON");
-  }
-  // The manifest schema name selects the frozen contract mirror. v1 keeps its
-  // repository-executable grammar for existing consumers; v2 adds the closed
-  // program union with trusted-runner programs; v3 adds one closed target so a
-  // hook can run at the reviewed head before merge; v4 extends that closed
-  // target set with prospective_merge so a hook can run in the Queue-owned
-  // candidate checkout before merge. The program itself stays
-  // opaque here: Queue resolves and executes it, and no program transport
-  // detail enters lifecycle state.
-  const schemaName = String(manifest.schema ?? "");
-  const schemaFile = CONTROL_SCHEMAS[schemaName] ?? null;
-  if (schemaFile === null) refuse("control manifest declares unsupported schema " + JSON.stringify(schemaName));
-  try {
-    validateAgainstSchemaFile(manifest, path.join(SCHEMA_DIR, schemaFile));
+    loaded = loadControlManifest(repoRoot);
   } catch (err) {
-    if (err instanceof LifecycleError) refuse("control manifest is not a valid " + schemaName + " document: " + err.message);
+    if (err instanceof ManifestError) refuse(err.message);
     throw err;
   }
-  const hooks = manifest.hooks as Record<string, any>[];
-  const ids = new Set(hooks.map((hook) => hook.id));
-  if (ids.size !== hooks.length) refuse("control manifest has duplicate hook ids");
-  for (const hook of hooks) {
-    const events = hook.events as string[];
-    const reviewedHead = events.includes("task.pre_merge");
-    if (hook.mode === "read_only" && (hook.allowedPaths as string[]).length > 0) refuse("read_only hook " + hook.id + " may not declare allowed paths");
-    if (hook.mode === "read_only" && hook.commitSubject !== null && hook.commitSubject !== undefined) refuse("read_only hook " + hook.id + " may not declare a commit subject");
-    if (hook.mode === "integration_write" && (hook.commitSubject === null || hook.commitSubject === undefined)) refuse("integration_write hook " + hook.id + " requires a commit subject");
-    if (events.includes("task.pre_dispatch") && hook.mode !== "read_only") refuse("task.pre_dispatch accepts only read_only hooks");
-    if ("target" in hook) {
-      if (reviewedHead && hook.target !== "reviewed_head" && hook.target !== "prospective_merge") refuse("task.pre_merge requires target reviewed_head or prospective_merge on hook " + hook.id);
-      if (!reviewedHead && hook.target !== "integration_base") refuse("only task.pre_merge may target the reviewed head on hook " + hook.id);
-      if (hook.target === "prospective_merge" && schemaName !== "paseo.queue.control.v4") refuse("target prospective_merge requires control schema paseo.queue.control.v4 on hook " + hook.id);
-    }
-    if (reviewedHead) {
-      if (events.length !== 1) refuse("task.pre_merge must be the only event on hook " + hook.id);
-      if (hook.mode !== "read_only") refuse("task.pre_merge accepts only read_only hooks");
-      if (hook.delivery !== "required") refuse("task.pre_merge requires required delivery");
-    }
-    for (const allowed of hook.allowedPaths as string[]) {
-      const normalized = allowed.endsWith("/")
-        ? normalizeRepoRelative(allowed.slice(0, -1), "allowed path") + "/"
-        : normalizeRepoRelative(allowed, "allowed path");
-      if (normalized === ".git" || normalized.startsWith(".git/") || normalized === ".paseo" || normalized === ".paseo/hooks" || normalized.startsWith(".paseo/hooks/") || normalized === ".paseo/queue.json") {
-        refuse("reserved path may not be declared in allowedPaths: " + allowed);
-      }
-    }
-  }
-  const binding = hooks.find((hook) => hook.id === event.hookId);
+  const binding = loaded.hooks.find((hook) => hook.id === event.hookId);
   if (binding === undefined) refuse("hook id " + event.hookId + " is not declared in the control manifest");
-  if (!(binding.events as string[]).includes(event.event)) refuse("hook " + event.hookId + " does not bind event " + event.event);
+  if (!binding.events.includes(event.event)) refuse("hook " + event.hookId + " does not bind event " + event.event);
   return {
     mode: binding.mode,
-    target: ("target" in binding && binding.target ? binding.target : "integration_base") as "integration_base" | "reviewed_head" | "prospective_merge",
-    allowedPaths: (binding.allowedPaths as string[]).map((allowed) =>
-      allowed.endsWith("/") ? normalizeRepoRelative(allowed.slice(0, -1), "allowed path") + "/" : normalizeRepoRelative(allowed, "allowed path")),
-    commitSubject: binding.commitSubject ?? null,
+    target: binding.target,
+    allowedPaths: binding.allowedPaths,
+    commitSubject: binding.commitSubject,
   };
 }
 

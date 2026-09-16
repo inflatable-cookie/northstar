@@ -20,7 +20,7 @@ runner, so a consumer repository never commits or maintains a hook runtime.
   projection-targets.json         # declared surfaces + active generation set
 
 .paseo/
-  queue.json                      # generic Queue control manifest (v3)
+  queue.json                      # generic Queue control manifest (v4)
 ```
 
 Commit the per-task JSON records. Do not hand-edit them and do not let a
@@ -127,22 +127,47 @@ it — so the projected currentness surface always names exactly the active
 generation set.
 
 The manifest binds a read-only `task.pre_dispatch` gate, a required read-only
-`task.pre_merge` gate targeted at `reviewed_head`, and a required
+`task.pre_merge` gate targeted at `prospective_merge`, and a required
 integration-write hook for `task.blocked`, `task.cancelled`, and
-`task.closeout`. The pre-merge gate runs in the retained task workspace at the
-accepted exact PR head after independent review; it proves the pinned
-instruction artifact against that head and refuses when tracked durable
-Markdown still links to the exact submitted handoff, naming the linking path.
-Queue returns that refusal to the retained worker through the ordinary PR
-revision loop. The gate is the same shared resolver closeout uses, so the
-transient-handoff invariant has one parser and one set of bounds. Keep the
-handoff directory (default `docs/handoffs/`) in the
+`task.closeout`. The pre-merge gate runs in Queue's own candidate checkout
+after the candidate is accepted and before merge: it proves the declared
+candidate identity, binds the pinned instruction artifact, and refuses when
+tracked durable Markdown still links to the exact submitted handoff, naming
+the linking path. Queue returns that refusal to the retained worker through the
+ordinary PR revision loop. The gate is the same shared resolver closeout uses,
+so the transient-handoff invariant has one parser and one set of bounds. Keep
+the handoff directory (default `docs/handoffs/`) in the
 integration-write hook's allowed paths: closeout publishes one integration
 commit containing the terminal record, the regenerated projections, and the
 removal of the exact consumed instruction handoff. The hook deletes only the
 exact committed path whose bytes still hash to the pinned blob digest; a
 changed, missing, or ambiguous handoff fails closed. Queue validates the
 result and changed paths, and owns staging, commit, push, and reconciliation.
+
+### Migrating an existing v3 consumer
+
+A consumer already adopted on `paseo.queue.control.v3` with the required
+read-only `task.pre_merge` hook at `reviewed_head` (Queue event
+`paseo.queue.event.v2`) upgrades with one bounded command. It edits only the
+manifest schema and that one pre-merge target; it owns no Git or planning.
+
+```bash
+# dry run is the default: report the exact edit and write nothing
+effigy skill run northstar/lifecycle:migrate-premerge --repo .
+
+# apply it atomically, then commit the single returned path
+effigy skill run northstar/lifecycle:migrate-premerge --repo . -- --write
+```
+
+Run it against the consumer root; the consumer repository is the execution
+target. The command refuses anything that is not exactly one committed,
+conforming v3 manifest — an older schema, a custom or non-Effigy program,
+several or missing `task.pre_merge` bindings, an invalid or ambiguous
+document, a v4 manifest still targeting `reviewed_head`, a symlinked manifest,
+or a manifest with uncommitted changes — before changing any byte. It reports
+machine-readable evidence for both modes, and replay on a conforming v4
+manifest is an `unchanged` no-op. The full result contract lives in
+`skills/northstar/references/lifecycle/README.md`.
 
 Adoption boundary: records begin with the first task dispatched after the
 manifest lands. Earlier closed tasks keep their Git and provider evidence;

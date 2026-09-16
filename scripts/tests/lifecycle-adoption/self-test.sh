@@ -9,10 +9,15 @@
 # 3. Proves raw stdio transport: the frozen argv yields exactly one hook-result
 #    object on stdout, diagnostics stay on stderr, and task exit status passes
 #    through.
-# 4. Proves the shipped v1, v2, and v3 control-manifest grammars: valid
+# 4. Proves the shipped v1, v2, v3, and v4 control-manifest grammars: valid
 #    documents validate, program unions refuse mixing, the v3 target rules
 #    refuse a wrong or missing target, and no host path or fallback executable
 #    can enter a trusted-runner manifest.
+# 4b. Proves the bounded v3-to-v4 Queue manifest migration through the
+#    installed skill route: dry-run writes nothing, write mode changes only
+#    .paseo/queue.json, the result validates against the frozen v4 grammar,
+#    replay is a no-op, and dirty, symlinked, older, custom, and ambiguous
+#    inputs refuse before any byte changes.
 # 5. Runs the hook adapter against real fixture repositories through the real
 #    Effigy route: pre-dispatch gate, the read-only reviewed-head pre-merge gate
 #    (clean pass, durable-backlink refusal, and byte identity with the closeout
@@ -98,11 +103,28 @@ bun -e '
 ' "$hook" "$source_skill/scripts/lifecycle-backlink.ts"
 echo "single shared resolver with no second parser or bounds: OK"
 
-echo "# skill catalog exposes the hook route with skill-anchored scripts"
+echo "# one manifest parser serves the hook and the migration"
+bun -e '
+  const fs = await import("node:fs");
+  const hook = fs.readFileSync(process.argv[1], "utf8");
+  const migration = fs.readFileSync(process.argv[2], "utf8");
+  const shared = fs.readFileSync(process.argv[3], "utf8");
+  const fail = (message) => { console.error(message); process.exit(1); };
+  for (const [name, text] of [["hook", hook], ["migration", migration]]) {
+    if (!text.includes("from \"./lifecycle-manifest.ts\"")) fail(name + " does not import the shared manifest module");
+  }
+  if (!/export function loadControlManifest/.test(shared)) fail("shared manifest module does not export the strict loader");
+  if (!/export function parseControlManifest/.test(shared)) fail("shared manifest module does not export the strict parser");
+  if (/CONTROL_SCHEMAS|MANIFEST_MAX_BYTES|control manifest declares unsupported schema/.test(hook)) fail("hook still carries a second manifest parser or its bounds");
+' "$hook" "$source_skill/scripts/lifecycle-queue-migration.ts" "$source_skill/scripts/lifecycle-manifest.ts"
+echo "one shared manifest parser with no second copy: OK"
+
+echo "# skill catalog exposes the hook and migration routes with skill-anchored scripts"
 catalog=$(effigy skill tasks --path "$source_skill" 2>&1)
 printf '%s\n' "$catalog" | grep -q "northstar/queue:hook"
+printf '%s\n' "$catalog" | grep -q "northstar/lifecycle:migrate-premerge"
 grep -q '"queue:hook" = "bun run {skill}/scripts/lifecycle-queue-hook.ts"' "$source_skill/effigy.toml"
-for task in lifecycle:run lifecycle:oracle language:route; do
+for task in lifecycle:run lifecycle:oracle lifecycle:migrate-premerge language:route; do
   grep -q "\"$task\" = \"bun run {skill}/scripts/" "$source_skill/effigy.toml"
 done
 if grep -qE '"[a-z:]+" = "bun run scripts/' "$source_skill/effigy.toml"; then
@@ -188,23 +210,22 @@ cat > "$scratch/plain-v3-manifest.json" <<'EOF'
 EOF
 schema_check "$source_skill/references/lifecycle/queue-control-v3.schema.json" "$scratch/plain-v3-manifest.json"
 
-# The dogfood and copy-ready starter adopt the reviewed-head event.
 echo "# manifest grammar stays document-system agnostic"
-schema_check "$source_skill/references/lifecycle/queue-control-v3.schema.json" "$dogfood_manifest"
-schema_check "$source_skill/references/lifecycle/queue-control-v3.schema.json" "$starter_manifest"
+schema_check "$source_skill/references/lifecycle/queue-control-v4.schema.json" "$dogfood_manifest"
+schema_check "$source_skill/references/lifecycle/queue-control-v4.schema.json" "$starter_manifest"
 for manifest in "$dogfood_manifest" "$starter_manifest"; do
   bun -e '
     const fs = await import("node:fs");
     const file = process.argv[1];
     const manifest = JSON.parse(fs.readFileSync(file, "utf8"));
     const fail = (message) => { console.error(file + ": " + message); process.exit(1); };
-    if (manifest.schema !== "paseo.queue.control.v3") fail("manifest is not v3");
+    if (manifest.schema !== "paseo.queue.control.v4") fail("manifest is not v4");
     const premerge = manifest.hooks.find((hook) => hook.id === "repository-pre-merge");
     if (!premerge) fail("manifest declares no repository-pre-merge hook");
     if (premerge.events.length !== 1 || premerge.events[0] !== "task.pre_merge") fail("pre-merge hook does not bind exactly task.pre_merge");
     if (premerge.mode !== "read_only") fail("pre-merge hook is not read_only");
     if (premerge.delivery !== "required") fail("pre-merge delivery is not required");
-    if (premerge.target !== "reviewed_head") fail("pre-merge hook does not target the reviewed head");
+    if (premerge.target !== "prospective_merge") fail("pre-merge hook does not target the prospective merge");
     if (premerge.allowedPaths.length !== 0 || premerge.commitSubject !== null) fail("pre-merge hook declares write authority");
     for (const hook of manifest.hooks) {
       if (hook.id === "repository-pre-merge") continue;
@@ -213,20 +234,28 @@ for manifest in "$dogfood_manifest" "$starter_manifest"; do
   ' "$manifest"
 done
 
-# Pre-g01.020 manifests stay byte-shaped and valid: derive the v2 document and
-# a v3 document without the pre-merge binding from the live manifest.
+# Pre-g01.020 manifests stay byte-shaped and valid: derive the v2 document, a
+# v3 document without the pre-merge binding, and the legacy v3 reviewed-head
+# binding from the live v4 manifest.
 bun -e '
   const fs = await import("node:fs");
   const manifest = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
-  manifest.schema = "paseo.queue.control.v2";
-  manifest.hooks = manifest.hooks.filter((hook) => !hook.events.includes("task.pre_merge")).map(({ target, ...rest }) => rest);
-  fs.writeFileSync(process.argv[2], JSON.stringify(manifest, null, 2) + "\n");
-  const legacy = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
-  legacy.hooks = legacy.hooks.filter((hook) => !hook.events.includes("task.pre_merge"));
-  fs.writeFileSync(process.argv[3], JSON.stringify(legacy, null, 2) + "\n");
-' "$dogfood_manifest" "$scratch/derived-v2-manifest.json" "$scratch/derived-v3-no-premerge.json"
+  const v2 = JSON.parse(JSON.stringify(manifest));
+  v2.schema = "paseo.queue.control.v2";
+  v2.hooks = v2.hooks.filter((hook) => !hook.events.includes("task.pre_merge")).map(({ target, ...rest }) => rest);
+  fs.writeFileSync(process.argv[2], JSON.stringify(v2, null, 2) + "\n");
+  const v3 = JSON.parse(JSON.stringify(manifest));
+  v3.schema = "paseo.queue.control.v3";
+  v3.hooks = v3.hooks.filter((hook) => !hook.events.includes("task.pre_merge"));
+  fs.writeFileSync(process.argv[3], JSON.stringify(v3, null, 2) + "\n");
+  const legacy = JSON.parse(JSON.stringify(manifest));
+  legacy.schema = "paseo.queue.control.v3";
+  legacy.hooks.find((hook) => hook.id === "repository-pre-merge").target = "reviewed_head";
+  fs.writeFileSync(process.argv[4], JSON.stringify(legacy, null, 2) + "\n");
+' "$dogfood_manifest" "$scratch/derived-v2-manifest.json" "$scratch/derived-v3-no-premerge.json" "$scratch/derived-v3-premerge.json"
 schema_check "$source_skill/references/lifecycle/queue-control-v2.schema.json" "$scratch/derived-v2-manifest.json"
 schema_check "$source_skill/references/lifecycle/queue-control-v3.schema.json" "$scratch/derived-v3-no-premerge.json"
+schema_check "$source_skill/references/lifecycle/queue-control-v3.schema.json" "$scratch/derived-v3-premerge.json"
 
 # A v2 manifest is closed: the v3 target field has no meaning there.
 expect_schema_reject() { # <schema-file> <instance-json-string> <label>
@@ -934,6 +963,12 @@ echo "# pre-merge gate runs read-only at the exact reviewed head"
 repoPre="$scratch/repo-pre-merge"
 build_fixture "$repoPre"
 git -C "$repoPre" checkout -q feature
+# The reviewed-head gate is the legacy v3 binding: install the derived
+# conforming v3 manifest on the reviewed feature head so the prospective
+# default never masks that path.
+cp "$scratch/derived-v3-premerge.json" "$repoPre/.paseo/queue.json"
+git -C "$repoPre" add -A
+git -C "$repoPre" commit -qm "install the legacy v3 reviewed-head manifest"
 mkdir -p "$repoPre/docs"
 cat > "$repoPre/docs/review-notes.md" <<'EOF'
 # Review notes
@@ -2227,6 +2262,220 @@ if grep -q "g01.001" "$repoK/docs/roadmaps/g03/README.md"; then
 fi
 [ -z "$(git -C "$repoK" diff --cached)" ]
 echo "closeout catch-up consumes historical fragments in one result: OK"
+
+# ---------------------------------------------------------------------------
+# Bounded v3 -> v4 Queue control-manifest migration
+# ---------------------------------------------------------------------------
+echo "# bounded v3-to-v4 Queue manifest migration"
+migration="$source_skill/scripts/lifecycle-queue-migration.ts"
+V4_MIRROR="$source_skill/references/lifecycle/queue-control-v4.schema.json"
+
+build_manifest_consumer() { # <repo> <manifest-source>
+  rm -rf "$1"
+  mkdir -p "$1/.paseo" "$1/docs"
+  git -C "$1" init -q -b main
+  git -C "$1" config user.email fixture@example.invalid
+  git -C "$1" config user.name Fixture
+  cp "$2" "$1/.paseo/queue.json"
+  printf '.effigy/\n' > "$1/.gitignore"
+  printf '# Front door\n\nUntouched human bytes.\n' > "$1/docs/README.md"
+  git -C "$1" add -A
+  git -C "$1" commit -qm "adopt the queue manifest"
+}
+
+tree_snapshot() { # <repo> [relative-path-to-exclude]
+  (cd "$1" && find . -path ./.git -prune -o -type f -print | LC_ALL=C sort | while IFS= read -r file; do
+    relative=${file#./}
+    if [ "$relative" = "${2:-}" ]; then continue; fi
+    printf '%s %s\n' "$relative" "$(sha256sum "$file" | cut -d' ' -f1)"
+  done)
+}
+
+migration_run() { # <repo> [extra args...]
+  local repo=$1; shift
+  set +e
+  MIGRATION_OUT=$(bun run "$migration" --repo "$repo" "$@")
+  MIGRATION_EXIT=$?
+  set -e
+}
+
+expect_migration_error() { # <label> <expected-code> <expected-substring> <repo>
+  migration_run "$4"
+  if [ "$MIGRATION_EXIT" = "0" ]; then
+    echo "$1: migration unexpectedly succeeded: $MIGRATION_OUT" >&2
+    exit 1
+  fi
+  if [ "$(json_field "$MIGRATION_OUT" "r.code")" != "$2" ]; then
+    echo "$1: expected code $2, got $(json_field "$MIGRATION_OUT" "r.code"): $MIGRATION_OUT" >&2
+    exit 1
+  fi
+  if [ "$(json_field "$MIGRATION_OUT" "r.message.includes('$3')")" != "true" ]; then
+    echo "$1: refusal did not name '$3': $MIGRATION_OUT" >&2
+    exit 1
+  fi
+}
+
+# A conforming v3 consumer: the derived legacy manifest is committed and the
+# rest of the tree must stay byte-identical across the migration.
+migrate_repo="$scratch/migrate-consumer"
+build_manifest_consumer "$migrate_repo" "$scratch/derived-v3-premerge.json"
+manifest_before=$(sha256sum "$migrate_repo/.paseo/queue.json" | cut -d' ' -f1)
+other_before=$(tree_snapshot "$migrate_repo" ".paseo/queue.json")
+tree_before=$(tree_snapshot "$migrate_repo")
+
+migration_run "$migrate_repo"
+[ "$MIGRATION_EXIT" = "0" ]
+[ "$(json_field "$MIGRATION_OUT" "r.status")" = "dry_run" ]
+[ "$(json_field "$MIGRATION_OUT" "r.manifest")" = ".paseo/queue.json" ]
+[ "$(json_field "$MIGRATION_OUT" "r.changes.length")" = "2" ]
+[ "$(json_field "$MIGRATION_OUT" "r.schema_before")" = "paseo.queue.control.v3" ]
+[ "$(json_field "$MIGRATION_OUT" "r.schema_after")" = "paseo.queue.control.v4" ]
+[ "$(json_field "$MIGRATION_OUT" "r.pre_merge_target_before")" = "reviewed_head" ]
+[ "$(json_field "$MIGRATION_OUT" "r.pre_merge_target_after")" = "prospective_merge" ]
+[ "$(json_field "$MIGRATION_OUT" "r.changed_paths.length")" = "0" ]
+[ "$(json_field "$MIGRATION_OUT" "r.pending_paths[0]")" = ".paseo/queue.json" ]
+[ "$(json_field "$MIGRATION_OUT" "r.digest_before === r.digest_after")" = "false" ]
+[ "$(sha256sum "$migrate_repo/.paseo/queue.json" | cut -d' ' -f1)" = "$manifest_before" ]
+[ "$(tree_snapshot "$migrate_repo")" = "$tree_before" ]
+[ -z "$(git -C "$migrate_repo" status --porcelain)" ]
+echo "dry run reports the exact one-file/two-value edit and writes nothing: OK"
+
+migration_run "$migrate_repo" --write
+[ "$MIGRATION_EXIT" = "0" ]
+[ "$(json_field "$MIGRATION_OUT" "r.status")" = "applied" ]
+[ "$(json_field "$MIGRATION_OUT" "r.changed_paths.length")" = "1" ]
+[ "$(json_field "$MIGRATION_OUT" "r.changed_paths[0]")" = ".paseo/queue.json" ]
+[ "$(json_field "$MIGRATION_OUT" "r.commit_action.required")" = "true" ]
+[ "$(json_field "$MIGRATION_OUT" "r.digest_after")" = "$(sha256sum "$migrate_repo/.paseo/queue.json" | cut -d' ' -f1 | sed 's/^/sha256:/')" ]
+# Byte isolation: the written manifest is exactly the original with the two
+# literal tokens replaced, and every other file is untouched.
+sed -e 's/"paseo.queue.control.v3"/"paseo.queue.control.v4"/' -e 's/"reviewed_head"/"prospective_merge"/' \
+  "$scratch/derived-v3-premerge.json" > "$scratch/migrated-expected.json"
+cmp "$scratch/migrated-expected.json" "$migrate_repo/.paseo/queue.json"
+[ "$(git -C "$migrate_repo" diff -U0 -- .paseo/queue.json | grep -c '^[+-][^+-]')" = "4" ]
+[ "$(tree_snapshot "$migrate_repo" ".paseo/queue.json")" = "$other_before" ]
+[ "$(git -C "$migrate_repo" status --porcelain)" = " M .paseo/queue.json" ]
+schema_check "$V4_MIRROR" "$migrate_repo/.paseo/queue.json"
+bun -e '
+  const fs = await import("node:fs");
+  const manifest = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+  const fail = (message) => { console.error(message); process.exit(1); };
+  if (manifest.schema !== "paseo.queue.control.v4") fail("migrated manifest is not v4");
+  if (manifest.hooks.find((hook) => hook.id === "repository-pre-merge").target !== "prospective_merge") fail("migrated manifest did not retarget the pre-merge hook");
+' "$migrate_repo/.paseo/queue.json"
+echo "write mode changes only .paseo/queue.json and validates against v4: OK"
+
+git -C "$migrate_repo" add -A
+git -C "$migrate_repo" commit -qm "migrate the queue manifest to v4"
+migrated_manifest=$(sha256sum "$migrate_repo/.paseo/queue.json" | cut -d' ' -f1)
+migration_run "$migrate_repo" --write
+[ "$MIGRATION_EXIT" = "0" ]
+[ "$(json_field "$MIGRATION_OUT" "r.status")" = "unchanged" ]
+[ "$(json_field "$MIGRATION_OUT" "r.changes.length")" = "0" ]
+[ "$(json_field "$MIGRATION_OUT" "r.changed_paths.length")" = "0" ]
+[ "$(json_field "$MIGRATION_OUT" "r.commit_action.required")" = "false" ]
+[ "$(json_field "$MIGRATION_OUT" "r.digest_before === r.digest_after")" = "true" ]
+[ "$(sha256sum "$migrate_repo/.paseo/queue.json" | cut -d' ' -f1)" = "$migrated_manifest" ]
+[ -z "$(git -C "$migrate_repo" status --porcelain)" ]
+echo "replay on a conforming v4 manifest is a no-op: OK"
+
+# Refusals: every divergent shape fails before any byte changes.
+refusal_repo() { # <repo> <manifest-source> <label> <code> <substring> <mutation-js-or-none>
+  build_manifest_consumer "$1" "$2"
+  if [ "$6" != "none" ]; then
+    bun -e '
+      const fs = await import("node:fs");
+      const manifest = JSON.parse(fs.readFileSync(process.argv[1], "utf8"));
+      new Function("manifest", fs.readFileSync(process.argv[3], "utf8"))(manifest);
+      fs.writeFileSync(process.argv[2], JSON.stringify(manifest, null, 2) + "\n");
+    ' "$1/.paseo/queue.json" "$1/.paseo/queue.json" "$6"
+    git -C "$1" add -A
+    git -C "$1" commit -qm "divergent manifest fixture"
+  fi
+  local before
+  before=$(sha256sum "$1/.paseo/queue.json" | cut -d' ' -f1)
+  expect_migration_error "$3" "$4" "$5" "$1"
+  [ "$(sha256sum "$1/.paseo/queue.json" | cut -d' ' -f1)" = "$before" ]
+  [ -z "$(git -C "$1" status --porcelain)" ]
+}
+
+printf 'manifest.schema = "paseo.queue.control.v4";' > "$scratch/mut-v4-reviewed.js"
+printf 'manifest.hooks.find((hook) => hook.id === "repository-pre-merge").program = { kind: "repository", executable: "hooks/x" };' > "$scratch/mut-custom-program.js"
+printf 'manifest.hooks.find((hook) => hook.id === "repository-pre-merge").program.argv = ["skill", "run", "northstar/queue:hook"];' > "$scratch/mut-custom-argv.js"
+printf 'manifest.hooks.push({ id: "second-pre-merge", events: ["task.pre_merge"], mode: "read_only", delivery: "required", target: "prospective_merge", program: { kind: "trusted_runner", runner: "effigy", argv: ["skill", "run", "northstar/queue:hook", "--stdio", "passthrough"] }, timeoutMs: 30000, maxOutputBytes: 65536, allowedPaths: [], commitSubject: null }); manifest.schema = "paseo.queue.control.v4"; manifest.hooks.find((hook) => hook.id === "repository-pre-merge").target = "reviewed_head";' > "$scratch/mut-ambiguous-hooks.js"
+printf 'manifest.hooks.find((hook) => hook.id === "lifecycle-state").commitSubject.prefix = "reviewed_head";' > "$scratch/mut-ambiguous-token.js"
+printf 'manifest.hooks.find((hook) => hook.id === "repository-pre-merge").delivery = "advisory";' > "$scratch/mut-advisory.js"
+
+refusal_repo "$scratch/migrate-v2" "$scratch/derived-v2-manifest.json" "older v2 schema" "manifest-schema" "only paseo.queue.control.v3 migrates" "none"
+refusal_repo "$scratch/migrate-partial" "$scratch/derived-v3-premerge.json" "v4 manifest still at reviewed_head" "manifest-shape" "refusing a partial migration" "$scratch/mut-v4-reviewed.js"
+refusal_repo "$scratch/migrate-program" "$scratch/derived-v3-premerge.json" "custom repository program" "manifest-program" "trusted-runner program shape" "$scratch/mut-custom-program.js"
+refusal_repo "$scratch/migrate-argv" "$scratch/derived-v3-premerge.json" "custom runner argv" "manifest-program" "frozen Queue hook argv" "$scratch/mut-custom-argv.js"
+refusal_repo "$scratch/migrate-ambiguous" "$scratch/derived-v3-premerge.json" "two pre-merge bindings" "manifest-shape" "exactly one task.pre_merge hook" "$scratch/mut-ambiguous-hooks.js"
+refusal_repo "$scratch/migrate-token" "$scratch/derived-v3-premerge.json" "ambiguous reviewed_head token" "manifest-shape" "exactly one \"reviewed_head\" token" "$scratch/mut-ambiguous-token.js"
+refusal_repo "$scratch/migrate-advisory" "$scratch/derived-v3-premerge.json" "advisory pre-merge delivery" "manifest-shape" "requires required delivery" "$scratch/mut-advisory.js"
+
+# Dirty, untracked, invalid, and symlinked manifests fail before any read of
+# the pending edit.
+migrate_dirty="$scratch/migrate-dirty"
+build_manifest_consumer "$migrate_dirty" "$scratch/derived-v3-premerge.json"
+printf '\n' >> "$migrate_dirty/.paseo/queue.json"
+dirty_before=$(sha256sum "$migrate_dirty/.paseo/queue.json" | cut -d' ' -f1)
+expect_migration_error "dirty manifest" "manifest-dirty" "uncommitted changes" "$migrate_dirty"
+[ "$(sha256sum "$migrate_dirty/.paseo/queue.json" | cut -d' ' -f1)" = "$dirty_before" ]
+expect_migration_error "dirty manifest in write mode" "manifest-dirty" "uncommitted changes" "$migrate_dirty"
+git -C "$migrate_dirty" checkout -q -- .paseo/queue.json
+
+migrate_untracked="$scratch/migrate-untracked"
+mkdir -p "$migrate_untracked/.paseo" "$migrate_untracked/docs"
+git -C "$migrate_untracked" init -q -b main
+printf '# Front door\n' > "$migrate_untracked/docs/README.md"
+git -C "$migrate_untracked" add -A
+git -C "$migrate_untracked" commit -qm "empty consumer"
+cp "$scratch/derived-v3-premerge.json" "$migrate_untracked/.paseo/queue.json"
+untracked_before=$(sha256sum "$migrate_untracked/.paseo/queue.json" | cut -d' ' -f1)
+expect_migration_error "untracked manifest" "manifest-untracked" "not committed to Git" "$migrate_untracked"
+[ "$(sha256sum "$migrate_untracked/.paseo/queue.json" | cut -d' ' -f1)" = "$untracked_before" ]
+
+migrate_invalid="$scratch/migrate-invalid"
+build_manifest_consumer "$migrate_invalid" "$scratch/derived-v3-premerge.json"
+printf '{ not json\n' > "$migrate_invalid/.paseo/queue.json"
+git -C "$migrate_invalid" add -A
+git -C "$migrate_invalid" commit -qm "invalid manifest"
+invalid_before=$(sha256sum "$migrate_invalid/.paseo/queue.json" | cut -d' ' -f1)
+expect_migration_error "invalid JSON manifest" "manifest-json" "not valid JSON" "$migrate_invalid"
+[ "$(sha256sum "$migrate_invalid/.paseo/queue.json" | cut -d' ' -f1)" = "$invalid_before" ]
+
+migrate_symlink="$scratch/migrate-symlink"
+build_manifest_consumer "$migrate_symlink" "$scratch/derived-v3-premerge.json"
+mv "$migrate_symlink/.paseo/queue.json" "$migrate_symlink/.paseo/queue.real.json"
+ln -s queue.real.json "$migrate_symlink/.paseo/queue.json"
+git -C "$migrate_symlink" add -A
+git -C "$migrate_symlink" commit -qm "symlinked manifest"
+symlink_before=$(sha256sum "$migrate_symlink/.paseo/queue.real.json" | cut -d' ' -f1)
+expect_migration_error "symlinked manifest" "manifest-symlink" "refusing to migrate through a symlink" "$migrate_symlink"
+[ "$(sha256sum "$migrate_symlink/.paseo/queue.real.json" | cut -d' ' -f1)" = "$symlink_before" ]
+[ -L "$migrate_symlink/.paseo/queue.json" ]
+
+migrate_missing="$scratch/migrate-missing"
+rm -rf "$migrate_missing"
+mkdir -p "$migrate_missing/docs"
+git -C "$migrate_missing" init -q -b main
+printf '# Front door\n' > "$migrate_missing/docs/README.md"
+git -C "$migrate_missing" add -A
+git -C "$migrate_missing" commit -qm "no manifest"
+expect_migration_error "missing manifest" "manifest-missing" "is missing" "$migrate_missing"
+echo "divergent, dirty, untracked, invalid, symlinked, and missing inputs refuse before any write: OK"
+
+# The installed skill carries the same command: the dry run reads the consumer
+# manifest through installed bytes and writes nothing.
+installed_repo="$scratch/migrate-installed"
+build_manifest_consumer "$installed_repo" "$scratch/derived-v3-premerge.json"
+installed_before=$(sha256sum "$installed_repo/.paseo/queue.json" | cut -d' ' -f1)
+installed_out=$(cd "$scratch" && effigy skill run --path "$installed" northstar/lifecycle:migrate-premerge --repo "$installed_repo" 2>&1)
+printf '%s\n' "$installed_out" | grep -q '"status": "dry_run"'
+[ "$(sha256sum "$installed_repo/.paseo/queue.json" | cut -d' ' -f1)" = "$installed_before" ]
+[ -z "$(git -C "$installed_repo" status --porcelain)" ]
+echo "installed skill route resolves the migration and stays read-only in dry run: OK"
 
 echo "# no repository runtime remains in any live surface"
 [ ! -e "$repo_root/.paseo/hooks" ]

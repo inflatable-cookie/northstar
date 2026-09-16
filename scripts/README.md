@@ -207,17 +207,24 @@ effigy check:lifecycle-core
 ```
 
 Schemas and doctrine live under `skills/northstar/references/lifecycle/`.
-`.paseo/queue.json` now declares the live v2 Queue control manifest, which
-binds Queue's trusted runner `effigy` to the `northstar/queue:hook` skill
-route; live status-authority migration belongs to the Queue integration lane.
+`.paseo/queue.json` declares the live v4 Queue control manifest, which binds
+Queue's trusted runner `effigy` to the `northstar/queue:hook` skill route and
+targets the required read-only `task.pre_merge` gate at `prospective_merge`. A
+consumer still on the conforming v3 reviewed-head binding migrates with the
+bounded `northstar/lifecycle:migrate-premerge` command (dry-run by default,
+`--write` to apply); the exact invocation and JSON result contract live in
+`skills/northstar/references/lifecycle/README.md`. Live status-authority
+migration belongs to the Queue integration lane.
 
 ## Effigy-hosted lifecycle hook (`check:lifecycle-adoption`)
 
 `check:lifecycle-adoption` proves the Queue hook route end to end: the skill
 catalog exposes `northstar/queue:hook` with `{skill}`-anchored scripts; raw
-stdio carries exactly one hook result with preserved exit status; the v1 and
-v2 control-manifest grammars accept valid documents and refuse mixed programs,
-host paths, and digests; fixture repositories run the pre-dispatch gate,
+stdio carries exactly one hook result with preserved exit status; the v1-v4
+control-manifest grammars accept valid documents and refuse mixed programs,
+host paths, and digests; the bounded v3-to-v4 Queue manifest migration proves
+dry-run, atomic write, byte isolation, and idempotent replay; fixture
+repositories run the pre-dispatch gate,
 hostile-event refusals, read-only binding, escape and squash refusals,
 bootstrap closeout, idempotent replay, block/cancel mapping, terminal
 equivalence, and closure-gated compaction through the real frozen argv

@@ -251,13 +251,23 @@ Queue integration is live behind the frozen generic contracts: schemas
 repository executable; v2 adds a closed program union whose `trusted_runner`
 variant names only an operator-approved runner ID with literal arguments; v3
 adds one closed `target`, and `task.pre_merge` requires `reviewed_head`; v4
-extends that closed target set with `prospective_merge`, and a v3 event carries
-the closed `mergeCandidate` (40-hex integration base, reviewed head, candidate
-commit, and candidate tree) for that target only. Queue
+extends that closed target set with `prospective_merge`, which is Northstar's
+adopted default and what the dogfood and copy-ready manifests declare, and a v3
+event carries the closed `mergeCandidate` (40-hex integration base, reviewed
+head, candidate commit, and candidate tree) for that target only. The v3
+`reviewed_head` binding stays accepted unchanged for existing consumers; the
+bounded migration command below moves a conforming v3 manifest to v4 without
+touching any other byte. Queue
 stays document-system agnostic — it never learns Northstar paths, task IDs,
 commands, or Markdown.
 
-The installed adapter is [`../../scripts/lifecycle-queue-hook.ts`](../../scripts/lifecycle-queue-hook.ts).
+The installed adapter is
+[`../../scripts/lifecycle-queue-hook.ts`](../../scripts/lifecycle-queue-hook.ts).
+The one manifest parser both the adapter and the migration command use is
+[`../../scripts/lifecycle-manifest.ts`](../../scripts/lifecycle-manifest.ts):
+the schema name selects the frozen contract mirror and the binding cross-rules
+the JSON schema cannot express are enforced exactly once, so the hook and the
+migration can never disagree about the accepted shape.
 It reads one closed event on stdin, reconstructs the exact Northstar task and
 planning identity from the committed handoff and task history, maps the event
 to the same canonical transition envelopes the standalone adapter submits,
@@ -294,7 +304,8 @@ Event mapping:
 - `task.pre_dispatch` (read-only gate): verifies the instruction artifact
   digest and that the planning identity reconstructed from committed task
   history matches any existing record. Never writes.
-- `task.pre_merge` (read-only gate at `target: reviewed_head`): Queue runs it
+- `task.pre_merge` (read-only gate at `target: reviewed_head`, the legacy v3
+  binding that stays accepted): Queue runs it
   in the retained task workspace at the accepted exact PR head, after the
   reviewer verdict and before merge. It binds the pinned instruction artifact
 to that head and runs the shared backlink resolver against the exact submitted
@@ -304,7 +315,8 @@ to that head and runs the shared backlink resolver against the exact submitted
   returns no changed paths and no commit subject. This is the same resolver and
   the same bounds the closeout guard uses, so the routine worker defect is
   corrected before merge rather than after.
-- `task.pre_merge` (read-only gate at `target: prospective_merge`): Queue runs
+- `task.pre_merge` (read-only gate at `target: prospective_merge`, the v4
+  default): Queue runs
   it in its own candidate checkout after accepting the candidate, before merge.
   The v3 event carries the closed `mergeCandidate`; the gate proves the checkout
   HEAD and tree equal the candidate commit and tree, the repository base equals
@@ -372,6 +384,74 @@ publish. Git retains the blob; the record's `evidence.handoff` entry retains
 its identity. `task.blocked` and `task.cancelled` never touch the handoff:
 the task may resume and the instruction stays authoritative.
 
+## Queue control manifest migration
+
+Northstar's dogfood and copy-ready manifests declare
+`paseo.queue.control.v4` with the required read-only `task.pre_merge` hook at
+`prospective_merge`. An existing conforming v3 consumer moves to that shape
+with one bounded installed-skill command. It is a configuration migration, not
+a lifecycle transition: it never stages, commits, pushes, dispatches, or edits
+planning.
+
+```bash
+# dry run (default): report the exact one-file/two-value edit, write nothing
+effigy skill run northstar/lifecycle:migrate-premerge --repo /path/to/consumer
+
+# apply the already-proved edit atomically
+effigy skill run northstar/lifecycle:migrate-premerge --repo /path/to/consumer -- --write
+```
+
+Run it against the consumer root (or pass `--repo`); the consumer repository is
+the execution target. Dry run reports the change set without writing. Write
+mode replaces only `.paseo/queue.json`, validates the result against the frozen
+v4 grammar, re-reads and verifies the written bytes, and returns the changed
+path and required commit action; the consumer's own integration owner commits
+it. Replay on a conforming v4 manifest is an `unchanged` no-op, including
+while that migration commit is still uncommitted.
+
+Accepted input is exactly one committed, conforming v3 manifest: a single
+required read-only `task.pre_merge` hook at `reviewed_head`, every hook using
+the frozen trusted-runner transport (`effigy` with the literal Queue hook
+argv), no reserved path in `allowedPaths`, and the two literal tokens
+(`"paseo.queue.control.v3"` and `"reviewed_head"`) each appearing exactly
+once. Anything else refuses before any byte changes: an older schema, a custom
+or non-Effigy program, several or missing `task.pre_merge` bindings, an invalid
+or ambiguous document, a v4 manifest still targeting `reviewed_head`, a
+symlinked manifest, a manifest not committed to Git, or a manifest with
+uncommitted changes.
+
+The JSON result contract is:
+
+```json
+{
+  "status": "dry_run | applied | unchanged",
+  "command": "lifecycle/migrate-premerge",
+  "manifest": ".paseo/queue.json",
+  "schema_before": "paseo.queue.control.v3",
+  "schema_after": "paseo.queue.control.v4",
+  "pre_merge_hook": "repository-pre-merge",
+  "pre_merge_target_before": "reviewed_head",
+  "pre_merge_target_after": "prospective_merge",
+  "changes": [
+    { "path": ".paseo/queue.json", "field": "schema", "from": "paseo.queue.control.v3", "to": "paseo.queue.control.v4" },
+    { "path": ".paseo/queue.json", "field": "hooks[<hook id>].target", "from": "reviewed_head", "to": "prospective_merge" }
+  ],
+  "changed_paths": [".paseo/queue.json"],
+  "pending_paths": [".paseo/queue.json"],
+  "digest_before": "sha256:...",
+  "digest_after": "sha256:...",
+  "commit_action": { "required": true, "paths": [".paseo/queue.json"] }
+}
+```
+
+`changed_paths` names what write mode actually wrote and stays empty in dry
+run; `pending_paths` names the value awaiting the integration commit.
+`unchanged` carries empty change, changed-path, and pending-path lists,
+`digest_before` equal to `digest_after`, and `commit_action.required: false`.
+A refusal prints `{"status":"error","code":"...","message":"..."}` and
+exits non-zero. The command supplies evidence; it owns no Git or planning
+authority.
+
 ## Commands
 
 From the Northstar source checkout:
@@ -415,7 +495,8 @@ history and retrospective sections stay legal; the adoption self-test holds
 the Silo-shaped negatives and the cutover positives.
 
 From an installed skill, the same command resolves through the skill catalog
-as `northstar/lifecycle:run` or `northstar/lifecycle:oracle`; every
+as `northstar/lifecycle:run` or `northstar/lifecycle:oracle`, and the manifest
+migration resolves as `northstar/lifecycle:migrate-premerge`; every
 skill-owned script is `{skill}`-anchored, so the consumer repository stays the
 runtime target. The Queue hook adapter resolves the same way as
 `northstar/queue:hook` and expects the closed event JSON on raw stdin with
