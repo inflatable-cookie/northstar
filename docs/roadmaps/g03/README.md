@@ -81,7 +81,7 @@ completion in the runway above and in Git history.
 `g03.020` is the sole approved Northstar lane. It makes the accepted v4
 prospective-merge contract the producer default and supplies the bounded
 migration surface for the authorized consumer rollout.
-<!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:282dd2b86c5ac5dda5e363adea5fe939b5462cbb5523487599c6333a90997415 -->
+<!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:c0c57e5803d263d233a97fd875d59b1be02b8a37d33109b9253adebad4d627e4 -->
 | Generation | Disposition | Runway state |
 | --- | --- | --- |
 | g03 | open | planning_required |
@@ -101,4 +101,5 @@ migration surface for the authorized consumer rollout.
 | g03.017 | complete | none | 8 | sha256:4fc88cc4206d2d2427a825759ee29a12540285a0816248e2d3feda85207cf988 |
 | g03.018 | complete | none | 8 | sha256:f2d73b780dd1f0701b02c078dd8a255629f16a647d90d1d7ddea9138c07f58c3 |
 | g03.019 | complete | none | 8 | sha256:76d6a4c9b2956db2e27f351809da4cc0222eeac31ef4d4789468b76ce198bc30 |
+| g03.020 | complete | none | 8 | sha256:da733286412d8cdf4c1e56ba0e48ea434e92539dd6da3f84b642da8ad809e3be |
 <!-- northstar:lifecycle:end -->
