@@ -5,6 +5,16 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
 
 ## Open
 
+- **2026-09-16 — fixture config committed on `main` vanishes after checking out
+  an earlier branch:** the legacy reviewed-head hook fixture committed its v3
+  `.paseo/queue.json` on `main`, then checked out the `feature` branch created
+  before that commit, so the working tree silently carried the v4 manifest
+  again and the gate refused with a confusing prospective-merge message; impact
+  was a misleading fixture failure that looked like adapter behavior;
+  plausible fix is to commit fixture configuration on the branch the test
+  actually runs on, or re-copy it after every checkout; affected surface is
+  `scripts/tests/lifecycle-adoption/self-test.sh`.
+
 - **2026-09-12 — lexical containment breaks on doubled path separators in
   fixtures:** building fixture repositories under `${TMPDIR}` with a trailing
   slash (macOS `/var/folders/.../T/`) handed `applyEnvelope` a repo root

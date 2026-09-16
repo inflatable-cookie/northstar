@@ -10,5 +10,6 @@ alias = "northstar"
 "language:route" = "bun run {skill}/scripts/language-package-lifecycle.ts route {args}"
 "lifecycle:run" = "bun run {skill}/scripts/lifecycle-core.ts {args}"
 "lifecycle:oracle" = "bun run {skill}/scripts/lifecycle-core.ts oracle"
+"lifecycle:migrate-premerge" = "bun run {skill}/scripts/lifecycle-queue-migration.ts {args}"
 "queue:hook" = "bun run {skill}/scripts/lifecycle-queue-hook.ts"
 "paseo:worktree" = [{ rhai = "scripts/paseo-worktree.rhai" }]

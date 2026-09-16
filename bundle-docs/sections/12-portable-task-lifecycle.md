@@ -146,8 +146,8 @@ artifact, executes it without a shell, validates the closed result, and owns
 staging, commit, push, and uncertain-effect reconciliation. It never learns
 Northstar paths, task IDs, commands, or Markdown.
 
-The runtime is the installed skill, not repository bytes. A v2 or v3 manifest
-binds the trusted runner `effigy` with the frozen literal argv
+The runtime is the installed skill, not repository bytes. A v2, v3, or v4
+manifest binds the trusted runner `effigy` with the frozen literal argv
 `["skill", "run", "northstar/queue:hook", "--stdio", "passthrough"]`: Queue
 spawns the approved artifact, Effigy resolves the `northstar/queue:hook` task
 from the consumer repository's project-local skill first and then a unique
@@ -162,18 +162,26 @@ any process runs; no alternative closeout route exists. v1 manifests remain
 valid for repositories that still pin a committed repository executable, and
 no program transport detail enters lifecycle records or projections.
 
-A v3 manifest adds one closed hook `target`. `task.pre_merge` requires
+A v3 manifest adds one closed hook `target`: `task.pre_merge` requires
 `target: reviewed_head`, `mode: read_only`, `delivery: required`, and its own
-hook entry; every other event keeps `target: integration_base`. Queue runs the
-reviewed-head gate in the retained task workspace at the accepted exact PR
-head, after the independent reviewer verdict and before merge. Northstar's
-bounded exact-backlink resolver proves the transient-handoff invariant there:
-a tracked durable Markdown link to the exact submitted handoff refuses, names
-the linking path, and returns to the retained worker through the ordinary PR
-revision loop. The resolver is one import-safe module shared with the closeout
-guard, so the pre-merge gate and the publication guard can never disagree about
-the file, listing, aggregate, or per-file bounds; the pre-merge gate changes no
-bytes and returns no changed paths or commit subject.
+hook entry, and every other event keeps `target: integration_base`. v4 extends
+that closed target set with `prospective_merge` and is the adopted default:
+Northstar's dogfood manifest and the copy-ready starter both declare v4, and a
+v4 `task.pre_merge` hook runs in Queue's own candidate checkout after the
+candidate is accepted and before merge. It proves the declared candidate
+identity (integration base, reviewed head, candidate commit, and candidate
+tree) and then runs Northstar's bounded exact-backlink resolver: a tracked
+durable Markdown link to the exact submitted handoff refuses, names the linking
+path, and returns to the retained worker through the ordinary PR revision loop.
+The resolver is one import-safe module shared with the closeout guard, so the
+pre-merge gate and the publication guard can never disagree about the file,
+listing, aggregate, or per-file bounds; the pre-merge gate changes no bytes and
+returns no changed paths or commit subject. The legacy v3 reviewed-head binding
+stays accepted for existing consumers, and one bounded installed-skill
+migration command (`northstar/lifecycle:migrate-premerge`) moves a conforming
+v3 manifest to v4 by editing only the schema and that single pre-merge target,
+dry-run first, with atomic write and a no-op replay. It refuses any shape that
+would require interpretation and owns no Git or planning.
 
 The hook adapter translates generic events into the same canonical
 transition envelopes the standalone adapter submits, preserves evidence

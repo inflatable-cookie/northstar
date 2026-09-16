@@ -153,9 +153,11 @@ non-authoritative.
   audit-currentness` proves the cutover with exact file, section, task, and
   reason.
 - A closeout handoff is transient transport: durable Markdown never links to
-  the exact file the hook will consume. Where a reviewed-head pre-merge gate is
-  bound, it proves that invariant read-only at the accepted PR head and returns
-  a violating PR to the retained worker before merge; the closeout guard keeps
+  the exact file the hook will consume. Where a prospective-merge pre-merge
+  gate is bound, it proves that invariant read-only against the accepted
+  candidate before merge; the legacy reviewed-head binding proves the same
+  invariant at the accepted PR head. Either gate returns a violating PR to the
+  retained worker before merge; the closeout guard keeps
   the same shared resolver and refuses atomically before any byte changes when
   a tracked backlink still targets the handoff. Git and the terminal record
   preserve its identity.
