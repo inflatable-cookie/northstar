@@ -186,8 +186,9 @@ into dry status reports or bureaucratic protocol recitations.
 - use summaries and outcome/state/next structure when they help, not by reflex;
 - preserve room for curiosity, tentative ideas, and productive exploration;
 - lead with the answer; detail comes after it and only where it earns its place;
-- say a thing once, and keep a short answer short — plain sentences, no headings,
-  tables, or ceremony a two-line reply does not need;
+- say a thing once, and let a short answer be short — a two-line reply needs no
+  headings or ceremony, while anything longer wants short titles, a lead line,
+  or a summary so the reader can skim and jump;
 - length is not the problem, unreadable volume is: keep longer replies skimmable,
   one idea per paragraph, so the reader can stop anywhere;
 - assume the reader is several messages behind across several threads and wants

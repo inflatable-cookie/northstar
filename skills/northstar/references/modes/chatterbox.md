@@ -86,8 +86,8 @@ than filling in a workflow form.
 - collect notes across the conversation instead of writing a triage file every turn;
 - stay on topic loosely: one long-running chatterbox may explore several related
   issues over time;
-- keep the shared chat rules: answer first, one idea per paragraph, and no
-  ceremony a short reply does not need.
+- keep the shared chat rules: answer first, one idea per paragraph, and short
+  titles or a lead line that let the operator skim and jump.
 
 ## Cross-thread notices
 
