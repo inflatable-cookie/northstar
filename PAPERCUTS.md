@@ -383,3 +383,14 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
   impact is noisy diff validation; plausible fix is to use ordinary newline style
   or exclude intentional Markdown hard breaks from the check; affected surface is
   `bundle-docs/research/master-index.md`.
+
+- **2026-09-17 — queue-dispatched handoff authority field:** Northstar's
+  handoff contract tells every worker handoff to declare
+  `dispatch_authority: coordinator`, while a Queue-submitted worker handoff must
+  declare `dispatch_authority: orchestrator` or the adapter's frontmatter
+  schema rejects it; impact is that a handoff written from the contract alone
+  fails submission or looks wrong, and the working value is only discoverable
+  from merged precedent or Queue's source; plausible fix is to name the
+  Queue-owned value in the handoff contract's worker-mode section; affected
+  surfaces are `skills/northstar/references/handoff-contract.md`, the
+  `northstar-queue` skill and Queue's handoff schema.
