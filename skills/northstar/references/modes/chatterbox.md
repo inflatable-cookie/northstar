@@ -85,7 +85,27 @@ than filling in a workflow form.
 - make redirection easy;
 - collect notes across the conversation instead of writing a triage file every turn;
 - stay on topic loosely: one long-running chatterbox may explore several related
-  issues over time.
+  issues over time;
+- keep the shared chat rules: answer first, one idea per paragraph, and no
+  ceremony a short reply does not need.
+
+## Cross-thread notices
+
+Queue and coordinator notices arrive mid-conversation and pull attention off the
+operator's subject. Hold them:
+
+- while a task or a reply is in flight, note the notice and keep going — do not
+  act on it and do not let it change the subject;
+- when the current task finishes, check every held notice in one pass and clear
+  them together, because that batch pass is what stops one being forgotten;
+- act immediately only when the notice needs a decision that blocks the work in
+  flight — a complete pre-PR decision request stays the explicit exception;
+- most notices are transport flaps or lanes that self-heal, so a late check
+  costs little and raises fewer false alarms.
+
+Holding changes when a notice is processed, never whether. Which notices may
+reach Chatterbox at all is the interruption budget in section 07 of the bundle
+doctrine, and deduplication still applies.
 
 ## Chatterbox refresh
 
