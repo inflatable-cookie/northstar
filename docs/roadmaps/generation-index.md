@@ -1,7 +1,7 @@
 # Roadmap Generation Index
 
 Status: active
-Updated: 2026-09-15
+Updated: 2026-09-17
 Mode: sequential
 
 ## Active generation
@@ -11,8 +11,9 @@ Mode: sequential
 - Mechanical task state and delivery evidence are projected in the generated
   lifecycle blocks under `docs/README.md`, `docs/roadmaps/README.md`, and
   `g03/README.md`; this index stays strategic.
-- Current approved lane: `g03.020`; make Queue's accepted prospective-merge
-  contract the portable Northstar default and prepare the consumer rollout.
+- No lane is approved. Every `g03` task is terminal and the generation stays
+  open in `planning_required` until an explicit rollover; the next move is a
+  Chatterbox planning decision.
 
 ## Generation log
 
@@ -37,5 +38,7 @@ it in the same rollover change.
 
 ## Next task
 
-`g03.020` is the only approved lane. After merge and installed-skill parity,
-Chatterbox may dispatch the operator-authorized consumer manifest rollout.
+No lane is approved. `g03` is exhausted and awaiting a rollover or a fresh
+planning lane. The portable prospective-merge default is merged and delivered.
+Operator-authorized consumer manifest migrations continue as separate
+per-project maintenance tasks.
