@@ -74,3 +74,31 @@ now declares `paseo.queue.control.v4` with the pre-merge hook at
 Fifteen repositories remain in the census. They continue in bounded batches
 rather than one cross-repository loop, because each migration is that
 repository's own configuration task.
+
+## Batch 2 (dispatched 2026-09-21)
+
+Same shape as batch 1: one configuration-only maintenance task, one worker
+handoff and one roadmap front-door entry per repository, committed and pushed on
+that repository's own `main` before submission.
+
+| Repository | Task | Queue task |
+| --- | --- | --- |
+| finch | `g05.014` | `e35b80d5` |
+| jetstream | `g06.018` | `01984a3e` |
+| longhorn | `g02.040` | `5de1ef01` |
+| loophole | `g01.057` | `9bca8ce9` |
+| nucleus | `g06.004` | `879638ae` |
+
+The loophole submission returned a transport `handler_error` after the task was
+already created durably; the unchanged handoff re-submission resolved to the
+same task, so no duplicate lane exists.
+
+Ten repositories remain: acowtancy, figmatic, praxis, signal, songsprout,
+soundcheck, soundcheck-library, swallowtail, underlay-reference and zoho-bozo.
+
+## Service transport outage (2026-09-20 19:00 – 23:30)
+
+Queue's service-to-daemon transport dropped silently while its own client
+reported `connected`. `g03.021` and the rest of the queue stopped dispatching
+for four and a half hours; recovery was a plugin reload, not a Paseo restart.
+This is recorded for the rollout's own timeline, not as Northstar work.
