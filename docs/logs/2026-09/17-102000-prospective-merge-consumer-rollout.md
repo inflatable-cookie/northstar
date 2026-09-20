@@ -102,3 +102,17 @@ Queue's service-to-daemon transport dropped silently while its own client
 reported `connected`. `g03.021` and the rest of the queue stopped dispatching
 for four and a half hours; recovery was a plugin reload, not a Paseo restart.
 This is recorded for the rollout's own timeline, not as Northstar work.
+
+## Batch 2 status (2026-09-21 01:15)
+
+- finch `g05.014`: `verifying` at the exact intended head with a published review
+  (PR #9).
+- jetstream `g06.018`: `awaiting_review` (PR #11).
+- nucleus `g06.004`, loophole `g01.057`, longhorn `g02.040`: fenced in
+  `needs_attention` with a `workspace_state` incident. The 23:55 transport drop
+  lost the workspace-creation response and no workspace was created — verified
+  against Paseo workspaces, `~/.paseo/worktrees`, and `git worktree list`. The
+  adapter's recovery path only adopts an existing workspace, so creation cannot
+  be retried from this side; Queue owns the escape.
+
+Batch 3 (ten repositories) is held until the queue sweeps cleanly again.
