@@ -1019,6 +1019,17 @@ function prepareStatusConvergence(repoRoot: string, identity: NorthstarIdentity,
     refuse("status-looking line in " + relativePath + " under section \"" + first.section +
       "\" cannot be attributed to the adapter's Status marker; refusing rather than removing possible human prose");
   }
+  // One generated authority per task file: every per-block check below
+  // validates blocks independently, identical blocks pass them all, the
+  // block-stripped prose comparison erases the difference, the audit strips
+  // both, and the closeout render replaces only the first range — so a
+  // second block would publish a second generated authority. The expected
+  // shape is exactly one complete generated block, or none before the task
+  // file opts in; renderProjectionInto replaces that one range in place.
+  const taskBlocks = generatedBlocks(treeText);
+  if (taskBlocks.length > 1) {
+    refuse("task path " + relativePath + " carries " + taskBlocks.length + " generated lifecycle blocks; a task file publishes one generated authority and an extra block is a second one");
+  }
   if (published) {
     // Replay cleanup may remove a leftover marker only from a task file that
     // is byte-identical to HEAD: the publication's own convergence output is

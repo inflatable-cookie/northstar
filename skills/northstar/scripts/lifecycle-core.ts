@@ -3406,6 +3406,21 @@ async function runOracle(): Promise<number> {
       "oracle", "block insertion into a file without a final newline drifted beyond the lawful separator");
     ok("block-insertion byte drift is exactly the appended separator");
 
+    // 10f. Duplicate generated blocks are the exact repro the closeout
+    // single-authority gate refuses: per-block provenance passes both copies,
+    // the block-stripped prose is identical, and renderProjectionInto
+    // replaces only the first range, leaving the second authority behind.
+    const singleBlockText = renderProjectionInto("# t\n\nHuman prose stays.\n", insertProjection).text;
+    const duplicateText = singleBlockText + generatedBlocks(singleBlockText)[0]! + "\n";
+    check(generatedBlocks(duplicateText).length === 2,
+      "oracle", "duplicate-block text did not yield two block ranges");
+    check(stripGeneratedBlocks(duplicateText) === stripGeneratedBlocks(singleBlockText) + "\n",
+      "oracle", "duplicate blocks changed the block-stripped prose beyond the appended separator");
+    const replacedFirst = renderProjectionInto(duplicateText, insertProjection).text;
+    check(replacedFirst.split(BEGIN_PREFIX).length - 1 === 2 && generatedBlocks(replacedFirst).length === 2,
+      "oracle", "renderProjectionInto no longer replaces only the first range of a duplicated block");
+    ok("duplicate blocks survive per-block checks and first-range replacement");
+
     // 11. Static portability scan of this very source file.
     const ownSource = fs.readFileSync(fileURLToPath(import.meta.url), "utf8");
     const forbidden = forbiddenImportSpecifiers(ownSource);

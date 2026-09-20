@@ -1425,6 +1425,85 @@ grep -q "| g03.006 | blocked | none |" "$repoForge/docs/roadmaps/g03/006-fixture
 [ -z "$(git -C "$repoForge" status --porcelain)" ]
 echo "committed forged block refuses with zero-byte atomicity: OK"
 
+echo "# a committed duplicate generated block refuses closeout"
+# The reviewer's reproduction, proven against the installed bytes: two
+# identical blocks both pass per-block provenance, the block-stripped prose
+# is unchanged, and renderProjectionInto replaces only the first range — so
+# closeout would publish a second generated authority. The single-authority
+# gate refuses before any byte changes or commit intent.
+repoDup="$scratch/repo-converge-duplicate"
+build_fixture "$repoDup" dogfood "$scratch/body-marker.md"
+CURRENT_REPO="$repoDup"
+dup_pc=$(git -C "$repoDup" log -1 --format=%H -- docs/roadmaps/g03/006-fixture-task.md)
+dup_digest=$(git -C "$repoDup" cat-file blob "$dup_pc:docs/roadmaps/g03/006-fixture-task.md" | sha256sum | cut -d' ' -f1 | sed 's/^/sha256:/')
+dup_fh=$(git -C "$repoDup" rev-parse feature)
+bun -e '
+  const { applyEnvelope } = await import(process.argv[1]!);
+  const repo = process.argv[2]!;
+  const occurredAt = "2026-09-12T20:00:00.000Z";
+  const recordFile = repo + "/.northstar/lifecycle/v1/tasks/g03.006.json";
+  const readCurrent = (): Record<string, unknown> | null =>
+    require("node:fs").existsSync(recordFile) ? JSON.parse(require("node:fs").readFileSync(recordFile, "utf8")) : null;
+  let seq = 0;
+  for (const transition of ["plan", "ready", "start"]) {
+    seq += 1;
+    const current = readCurrent();
+    const result = applyEnvelope({
+      repoRoot: repo,
+      envelope: {
+        schema_version: "northstar.lifecycle.transition.v1",
+        event_id: "standalone-dup-prep-006-" + String(seq).padStart(2, "0") + "-" + transition,
+        task_id: "g03.006",
+        task_path: "docs/roadmaps/g03/006-fixture-task.md",
+        generation: "g03",
+        expected: current === null ? { revision: 0, digest: null } : { revision: Number(current.revision), digest: String(current.digest) },
+        transition,
+        event_time: occurredAt,
+        actor: "standalone-integrator",
+        source: { adapter: "standalone" },
+        planning: { commit: process.argv[3]!, task_blob_digest: process.argv[4]! },
+      },
+      branch: "main",
+      targets: ["docs/roadmaps/g03/006-fixture-task.md"],
+    });
+    if (result.status !== "applied") throw new Error("dup prep step failed: " + JSON.stringify(result));
+  }
+' "$installed/scripts/lifecycle-core.ts" "$repoDup" "$dup_pc" "$dup_digest"
+git -C "$repoDup" add -A
+git -C "$repoDup" commit -qm "render the task file projection"
+bun -e '
+  const core = await import(process.argv[1]!);
+  const fs = await import("node:fs");
+  const file = process.argv[2]!;
+  const text = fs.readFileSync(file, "utf8");
+  const blocks = core.generatedBlocks(text);
+  if (blocks.length !== 1) { console.error("prep did not leave exactly one block"); process.exit(1); }
+  const duplicate = text + blocks[0]! + "\n";
+  if (core.generatedBlocks(duplicate).length !== 2) { console.error("duplicate did not yield two blocks"); process.exit(1); }
+  if (core.stripGeneratedBlocks(duplicate) !== core.stripGeneratedBlocks(text) + "\n") { console.error("duplicate changed stripped prose beyond the appended separator"); process.exit(1); }
+  const state = core.generationStateOf([], "g03", null);
+  const replaced = core.renderProjectionInto(duplicate, core.buildProjectionStates([], [state])).text;
+  if (replaced.split(core.BEGIN_PREFIX).length - 1 !== 2) { console.error("render no longer replaces only the first range"); process.exit(1); }
+  fs.writeFileSync(file, duplicate);
+' "$installed/scripts/lifecycle-core.ts" "$repoDup/docs/roadmaps/g03/006-fixture-task.md"
+git -C "$repoDup" add -A
+git -C "$repoDup" commit -qm "commit a duplicate generated block"
+dup_mc=$(git -C "$repoDup" rev-parse main)
+write_event "$scratch/closeout-dup.json" "evt-closeout-dup-0001" "task.closeout" "lifecycle-state" "$dup_mc" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" \
+  "$(git -C "$repoDup" log -1 --format=%H -- docs/handoffs/handoff-006.md)" \
+  "$(git -C "$repoDup" show "main:docs/handoffs/handoff-006.md" | sha256sum | cut -d' ' -f1)" \
+  "$(closeout_delivery "$dup_fh" "$dup_mc")"
+dup_out=$(run_hook "$scratch/closeout-dup.json" "evt-closeout-dup-0001")
+expect_outcome "$dup_out" blocked "committed duplicate block"
+json_field "$dup_out" "r.summary.includes('generated lifecycle blocks')" >/dev/null
+[ "$(json_field "$dup_out" "r.changedPaths.length")" = "0" ]
+[ "$(grep -c "northstar:lifecycle:begin" "$repoDup/docs/roadmaps/g03/006-fixture-task.md")" = "2" ]
+grep -q '"revision":3' "$repoDup/.northstar/lifecycle/v1/tasks/g03.006.json"
+[ -z "$(git -C "$repoDup" status --porcelain)" ]
+echo "committed duplicate block refuses with zero-byte atomicity: OK"
+
 echo "# a red prospective audit blocks closeout; repair leaves two clean closeouts"
 repoRed="$scratch/repo-red-currentness"
 build_fixture "$repoRed"

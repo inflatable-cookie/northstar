@@ -403,7 +403,9 @@ never overwritten by the closeout render. Committed generated blocks carry
 provenance: each block in the task file must be byte-identical to the pinned
 planning blob's own block or exactly the canonical projection of the current
 lifecycle records, so a committed forged or altered block refuses no matter
-how equal the block-stripped prose looks. The committed human-owned bytes
+how equal the block-stripped prose looks — and a task file carries at most
+one generated block, because an extra block is a second generated authority
+and refuses however identical the copies are. The committed human-owned bytes
 must still match the pinned planning identity, and an earlier committed
 lifecycle write that regenerated the task file's generated projection block
 — a blocked mapping or standalone apply that rendered the task file as a
