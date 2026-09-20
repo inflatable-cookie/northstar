@@ -56,3 +56,21 @@ notifications stay off. Each migration is proved by its repository's own task,
 PR and review, not by this log. acowtancy already carries six in-flight lanes,
 so its migration waits on Queue pacing rather than competing for integration
 turns.
+
+## Batch 1 outcome
+
+All five closed out through their own Queue lanes on 2026-09-20. Each repository
+now declares `paseo.queue.control.v4` with the pre-merge hook at
+`prospective_merge`, and each retains its terminal lifecycle record:
+
+| Repository | Task | Terminal record |
+| --- | --- | --- |
+| book | `g01.007` | `3f6861d` |
+| bughunt | `g01.004` | `c618bf7` |
+| monkey | `g14.003` | `07417dc` |
+| northstar-language-packs | `g01.002` | `ec3a9ca` |
+| poodle-lab | `g02.003` | `befae89` |
+
+Fifteen repositories remain in the census. They continue in bounded batches
+rather than one cross-repository loop, because each migration is that
+repository's own configuration task.

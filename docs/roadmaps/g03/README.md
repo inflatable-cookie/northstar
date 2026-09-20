@@ -23,7 +23,7 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 | Consume closed-generation lifecycle task fragments into one verified receipt. | complete as `g03.018`; terminal record published at `c74cbdd` | contract 001, lifecycle maintenance, lifecycle reference | observe natural catch-up |
 | Accept Queue prospective-merge pre-merge events without weakening prior event contracts. | complete as `g03.019` | contract 001, lifecycle reference; Queue Spec 015 | compatibility proven through Bovine |
 | Make prospective-merge checks the portable Queue default and migrate existing consumers safely. | complete as `g03.020`; terminal record published at `f34e1c0` | contract 001, lifecycle reference; Queue Spec 015 | no further Northstar producer lane; per-project consumer migrations continue outside the generation |
-| Converge terminal closeout authority so a required closeout cannot leave a second lifecycle authority. | ready as `g03.021`; operator approved on 2026-09-17 | contract 001, lifecycle reference; Queue Spec 006 | publish the accepted adapter revision Queue's dependency pins |
+| Converge terminal closeout authority so a required closeout cannot leave a second lifecycle authority. | ready as `g03.021`; operator approved on 2026-09-20 | contract 001, lifecycle reference; Queue Spec 006 | publish the accepted adapter revision Queue's dependency pins |
 | Keep unresolved operator feedback visible without pinning old generations open. | watch | contract 001 | bounded watchlist below |
 
 Task mechanical state — status, stage, revision, delivery digests — is the

@@ -1,7 +1,7 @@
 # g03.021 — Converge terminal closeout authority
 
 Owner: repo maintainers
-Created: 2026-09-17
+Created: 2026-09-20
 Governing refs: contract 001, lifecycle reference, Queue Spec 006, Queue Spec 004; `g03.007`, `g03.010`, `g03.012`
 Depends on: none; Queue `g01.019` depends on this lane
 UI classification: none
@@ -21,7 +21,8 @@ through the hook cannot be left with two authorities or a red currentness audit.
   006 at `759cf2d`.
 - [x] The installed audit core already detects the `duplicate-status-header`
   class, and the installed hook never calls it.
-- [x] Tom approved `g03.021` as the next `g03` lane on 2026-09-17.
+- [x] Tom approved `g03.021` as the next `g03` lane and directed dispatch on
+  2026-09-20.
 
 ## Decisions
 
@@ -45,8 +46,8 @@ through the hook cannot be left with two authorities or a red currentness audit.
 
 ## Dispatch manifest
 
-- **State:** ready. The dispatch handoff for this lane is written by the
-  coordinator, not by this card.
+- **State:** ready; Chatterbox dispatches it through Northstar Queue, which owns
+  worker placement, review and merge.
 - **Owned mutable paths:** `skills/northstar/scripts/lifecycle-queue-hook.ts`,
   the marker rule and audit reuse in
   `skills/northstar/scripts/lifecycle-core.ts`,
