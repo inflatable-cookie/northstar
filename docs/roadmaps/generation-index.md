@@ -11,9 +11,8 @@ Mode: sequential
 - Mechanical task state and delivery evidence are projected in the generated
   lifecycle blocks under `docs/README.md`, `docs/roadmaps/README.md`, and
   `g03/README.md`; this index stays strategic.
-- No lane is approved. Every `g03` task is terminal and the generation stays
-  open in `planning_required` until an explicit rollover; the next move is a
-  Chatterbox planning decision.
+- Current approved lane: `g03.021`; converge the task-local lifecycle authority
+  at closeout so a required closeout cannot leave a second authority.
 
 ## Generation log
 
@@ -38,7 +37,7 @@ it in the same rollover change.
 
 ## Next task
 
-No lane is approved. `g03` is exhausted and awaiting a rollover or a fresh
-planning lane. The portable prospective-merge default is merged and delivered.
-Operator-authorized consumer manifest migrations continue as separate
-per-project maintenance tasks.
+`g03.021` is the approved lane. It converges the task-local lifecycle authority
+at closeout and runs the prospective currentness check, which is the adapter
+revision Queue's `g01.019` pins. Operator-authorized consumer manifest
+migrations continue as separate per-project maintenance tasks.
