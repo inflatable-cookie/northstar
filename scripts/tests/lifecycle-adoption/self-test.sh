@@ -945,6 +945,34 @@ if grep -q "Status:" "$repoM/docs/roadmaps/g03/006-fixture-task.md"; then
 fi
 echo "marker replay is byte-stable with no second marker: OK"
 
+echo "# replay cleanup refuses a dirty task file"
+# A leftover marker beside unrelated uncommitted bytes is not a no-diff
+# cleanup: the replay gate requires the task file byte-identical to HEAD
+# before removing anything, so the publication's own convergence output
+# stays the only lawful uncommitted difference.
+git -C "$repoM" add -A
+git -C "$repoM" commit -qm "terminal publication"
+printf 'Status: Ready\nLate uncommitted notes.\n' >> "$repoM/docs/roadmaps/g03/006-fixture-task.md"
+dirty_before=$(git -C "$repoM" status --porcelain)
+write_event "$scratch/closeout-dirty-replay.json" "evt-closeout-dirty-replay-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+dirty_replay=$(run_hook "$scratch/closeout-dirty-replay.json" "evt-closeout-dirty-replay-0001")
+expect_outcome "$dirty_replay" blocked "dirty replay cleanup"
+json_field "$dirty_replay" "r.summary.includes('uncommitted changes outside this publication')" >/dev/null
+[ "$(json_field "$dirty_replay" "r.changedPaths.length")" = "0" ]
+grep -q "Status: Ready" "$repoM/docs/roadmaps/g03/006-fixture-task.md"
+grep -q "Late uncommitted notes." "$repoM/docs/roadmaps/g03/006-fixture-task.md"
+grep -q '"status":"complete"' "$repoM/.northstar/lifecycle/v1/tasks/g03.006.json"
+[ "$(git -C "$repoM" status --porcelain)" = " M docs/roadmaps/g03/006-fixture-task.md" ]
+echo "dirty replay cleanup blocks with the bytes untouched: OK"
+
+git -C "$repoM" checkout -q -- docs/roadmaps/g03/006-fixture-task.md
+clean_replay=$(run_hook "$scratch/closeout-marker.json" "evt-closeout-marker-0001")
+expect_outcome "$clean_replay" ok "replay after dirty repair"
+[ "$(json_field "$clean_replay" "r.changedPaths.length")" = "0" ]
+echo "replay after repair stays a no-diff cleanup: OK"
+
 echo "# closeout after an earlier lifecycle projection write converges cleanly"
 # A lifecycle-managed task can already carry a generated projection block: an
 # earlier lifecycle write that rendered the task file as a projection target
@@ -1324,6 +1352,78 @@ if ! grep -q "| g03.006 | blocked | none |" "$repoHide/docs/roadmaps/g03/006-fix
 fi
 [ "$(git -C "$repoHide" status --porcelain)" = " M docs/roadmaps/g03/006-fixture-task.md" ]
 echo "unreported block-interior edit refuses with the bytes intact: OK"
+
+echo "# a committed forged block refuses closeout"
+# A block committed with no corresponding lifecycle transition is not adapter
+# state: block provenance requires each committed block to equal the pinned
+# planning blob's own block or the canonical projection of the current
+# records, so the forged bytes refuse before any byte changes or commit
+# intent even though the block-stripped prose is untouched.
+repoForge="$scratch/repo-converge-forge"
+build_fixture "$repoForge" dogfood "$scratch/body-marker.md"
+CURRENT_REPO="$repoForge"
+forge_pc=$(git -C "$repoForge" log -1 --format=%H -- docs/roadmaps/g03/006-fixture-task.md)
+forge_digest=$(git -C "$repoForge" cat-file blob "$forge_pc:docs/roadmaps/g03/006-fixture-task.md" | sha256sum | cut -d' ' -f1 | sed 's/^/sha256:/')
+forge_fh=$(git -C "$repoForge" rev-parse feature)
+bun -e '
+  const { applyEnvelope } = await import(process.argv[1]!);
+  const repo = process.argv[2]!;
+  const occurredAt = "2026-09-12T20:00:00.000Z";
+  const recordFile = repo + "/.northstar/lifecycle/v1/tasks/g03.006.json";
+  const readCurrent = (): Record<string, unknown> | null =>
+    require("node:fs").existsSync(recordFile) ? JSON.parse(require("node:fs").readFileSync(recordFile, "utf8")) : null;
+  let seq = 0;
+  for (const transition of ["plan", "ready", "start"]) {
+    seq += 1;
+    const current = readCurrent();
+    const result = applyEnvelope({
+      repoRoot: repo,
+      envelope: {
+        schema_version: "northstar.lifecycle.transition.v1",
+        event_id: "standalone-forge-prep-006-" + String(seq).padStart(2, "0") + "-" + transition,
+        task_id: "g03.006",
+        task_path: "docs/roadmaps/g03/006-fixture-task.md",
+        generation: "g03",
+        expected: current === null ? { revision: 0, digest: null } : { revision: Number(current.revision), digest: String(current.digest) },
+        transition,
+        event_time: occurredAt,
+        actor: "standalone-integrator",
+        source: { adapter: "standalone" },
+        planning: { commit: process.argv[3]!, task_blob_digest: process.argv[4]! },
+      },
+      branch: "main",
+      targets: ["docs/roadmaps/g03/006-fixture-task.md"],
+    });
+    if (result.status !== "applied") throw new Error("forge prep step failed: " + JSON.stringify(result));
+  }
+' "$installed/scripts/lifecycle-core.ts" "$repoForge" "$forge_pc" "$forge_digest"
+git -C "$repoForge" add -A
+git -C "$repoForge" commit -qm "render the task file projection"
+bun -e '
+  const fs = await import("node:fs");
+  const file = process.argv[1]!;
+  const text = fs.readFileSync(file, "utf8");
+  const forged = text.replace("| g03.006 | active | dispatch |", "| g03.006 | blocked | none |");
+  if (forged === text) { console.error("block forgery did not apply"); process.exit(1); }
+  fs.writeFileSync(file, forged);
+' "$repoForge/docs/roadmaps/g03/006-fixture-task.md"
+git -C "$repoForge" add -A
+git -C "$repoForge" commit -qm "commit a forged block edit"
+forge_mc=$(git -C "$repoForge" rev-parse main)
+write_event "$scratch/closeout-forge.json" "evt-closeout-forge-0001" "task.closeout" "lifecycle-state" "$forge_mc" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" \
+  "$(git -C "$repoForge" log -1 --format=%H -- docs/handoffs/handoff-006.md)" \
+  "$(git -C "$repoForge" show "main:docs/handoffs/handoff-006.md" | sha256sum | cut -d' ' -f1)" \
+  "$(closeout_delivery "$forge_fh" "$forge_mc")"
+forge_out=$(run_hook "$scratch/closeout-forge.json" "evt-closeout-forge-0001")
+expect_outcome "$forge_out" blocked "committed forged block"
+json_field "$forge_out" "r.summary.includes('neither its pinned planning blob')" >/dev/null
+[ "$(json_field "$forge_out" "r.changedPaths.length")" = "0" ]
+grep -q '"revision":3' "$repoForge/.northstar/lifecycle/v1/tasks/g03.006.json"
+grep -q "| g03.006 | blocked | none |" "$repoForge/docs/roadmaps/g03/006-fixture-task.md"
+[ -z "$(git -C "$repoForge" status --porcelain)" ]
+echo "committed forged block refuses with zero-byte atomicity: OK"
 
 echo "# a red prospective audit blocks closeout; repair leaves two clean closeouts"
 repoRed="$scratch/repo-red-currentness"

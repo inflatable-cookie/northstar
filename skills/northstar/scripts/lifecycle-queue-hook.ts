@@ -71,6 +71,7 @@ import {
   containRepoPath,
   digestBytes,
   discoverRepoRoot,
+  generatedBlocks,
   generationStateOf,
   listStateRecords,
   parseTaskIdentity,
@@ -79,6 +80,7 @@ import {
   readProjectionConfig,
   readRecord,
   reduce,
+  renderProjectionBlock,
   renderProjectionInto,
   scanStatusMarkers,
   stripGeneratedBlocks,
@@ -940,6 +942,27 @@ interface StatusConvergence {
   removed: number;
 }
 
+// The canonical generated block for the current lifecycle records, or null
+// when the repository declares no projection configuration. Block provenance
+// compares committed task-file blocks against this render, so a block is
+// adapter-owned only when it is the exact deterministic projection of the
+// records the repository actually carries.
+function canonicalProjectionBlock(repoRoot: string): string | null {
+  const config = (() => {
+    try {
+      return readProjectionConfig(repoRoot);
+    } catch (err) {
+      if (err instanceof LifecycleError) refuse(err.message);
+      throw err;
+    }
+  })();
+  if (config === null) return null;
+  const records = listStateRecords(repoRoot);
+  const states = config.active_generations.map((generation) =>
+    generationStateOf(records, generation, readGenerationClosure(repoRoot, generation)));
+  return renderProjectionBlock(buildProjectionStates(records, states));
+}
+
 // Whether the working-tree task file still carries the pinned planning
 // bytes. The caller pins the tree to HEAD first, so committed state is what
 // is compared: over the audit's own generated-block stripping, exactly, with
@@ -997,12 +1020,16 @@ function prepareStatusConvergence(repoRoot: string, identity: NorthstarIdentity,
       "\" cannot be attributed to the adapter's Status marker; refusing rather than removing possible human prose");
   }
   if (published) {
-    // Replay cleanup after an accepted publication: the tree lawfully differs
-    // from the pinned planning bytes by that publication itself, so only the
-    // marker lines still scheduled for removal are checked. Each must exist,
-    // byte for byte and section for section, in the pinned planning blob; a
-    // marker the blob does not own is an unreported mutation.
+    // Replay cleanup may remove a leftover marker only from a task file that
+    // is byte-identical to HEAD: the publication's own convergence output is
+    // the one lawful uncommitted difference, and it carries no marker, so a
+    // leftover marker with any other uncommitted byte beside it is an
+    // unreported mutation, not a no-diff cleanup.
     if (scan.owned.length > 0) {
+      const headText = gitHeadBytes(repoRoot, relativePath);
+      if (headText === null || treeText !== headText) {
+        refuse("task path " + relativePath + " has uncommitted changes outside this publication's convergence; refusing an unreported task-file mutation");
+      }
       const blobText = gitBlob(repoRoot, identity.planningCommit, relativePath).toString("utf8");
       const pinnedScan = scanStatusMarkers(blobText);
       for (const marker of scan.owned) {
@@ -1023,6 +1050,20 @@ function prepareStatusConvergence(repoRoot: string, identity: NorthstarIdentity,
     const headBytes = gitHeadBytes(repoRoot, relativePath);
     if (headBytes === null || headBytes !== treeText) {
       refuse("task path " + relativePath + " has uncommitted changes in the integration checkout; refusing an unreported task-file mutation");
+    }
+    // Every generated block in the committed file must be adapter-owned:
+    // byte-identical to the pinned planning blob's own block, or exactly the
+    // canonical projection of the current lifecycle records. A committed
+    // forged or altered block is not lawful adapter state, however equal the
+    // block-stripped prose looks.
+    if (generatedBlocks(headBytes).length > 0) {
+      const blobBlocks = generatedBlocks(gitBlob(repoRoot, identity.planningCommit, relativePath).toString("utf8"));
+      const canonical = canonicalProjectionBlock(repoRoot);
+      for (const block of generatedBlocks(headBytes)) {
+        if (blobBlocks.includes(block)) continue;
+        if (canonical !== null && block === canonical) continue;
+        refuse("task path " + relativePath + " carries a generated lifecycle block that is neither its pinned planning blob's block nor the canonical projection of the current lifecycle records; refusing an unreported task-file mutation");
+      }
     }
     // The committed human-authored planning bytes must still be exact: a
     // committed lifecycle write that regenerated the generated projection

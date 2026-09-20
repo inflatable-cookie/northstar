@@ -399,14 +399,21 @@ non-regular task path, a task path outside the manifest `allowedPaths`, and
 an integration checkout whose task file differs from HEAD: every lawful
 task-file write is committed before closeout runs, so uncommitted bytes —
 inside the block sentinels or out — refuse as an unreported mutation and are
-never overwritten by the closeout render. The committed human-owned bytes
+never overwritten by the closeout render. Committed generated blocks carry
+provenance: each block in the task file must be byte-identical to the pinned
+planning blob's own block or exactly the canonical projection of the current
+lifecycle records, so a committed forged or altered block refuses no matter
+how equal the block-stripped prose looks. The committed human-owned bytes
 must still match the pinned planning identity, and an earlier committed
 lifecycle write that regenerated the task file's generated projection block
 — a blocked mapping or standalone apply that rendered the task file as a
 target — is the one lawful difference, so that comparison runs over the
 audit's own block stripping. On the replay
-cleanup path each marker line removed must still exist, byte for byte and
-section for section, in that blob. The
+cleanup path a leftover marker is removed only from a task file that is
+byte-identical to HEAD — the publication's own convergence output is the one
+lawful uncommitted difference and carries no marker — and each marker line
+removed must still exist, byte for byte and section for section, in that
+blob. The
 converged task path joins `changedPaths` exactly when its bytes change, so
 Queue publishes the same one-commit transaction as the record, projections,
 and handoff removal.

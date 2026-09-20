@@ -1421,6 +1421,23 @@ export function stripGeneratedBlocks(text: string): string {
   }
 }
 
+// The complete begin-to-end-sentinel byte ranges of a text, collected by the
+// same scanner stripGeneratedBlocks uses. Closeout's provenance check compares
+// these block bytes against the pinned planning blob's blocks or the canonical
+// projection of the current records, so a committed forged or altered block
+// cannot hide behind the stripping.
+export function generatedBlocks(text: string): string[] {
+  const normalized = text.replace(/\r\n/g, "\n");
+  const blocks: string[] = [];
+  let rest = normalized;
+  for (;;) {
+    const range = findProjectionRange(rest);
+    if (range === null) return blocks;
+    blocks.push(rest.slice(range.start, range.end));
+    rest = rest.slice(range.end);
+  }
+}
+
 function enclosingHeading(text: string, index: number): { heading: string; level: number; lineStart: number } | null {
   const before = text.slice(0, index);
   const lines = before.split("\n");
