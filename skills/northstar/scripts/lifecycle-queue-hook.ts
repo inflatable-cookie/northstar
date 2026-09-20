@@ -38,8 +38,9 @@
 // still links to the exact handoff refuses through the same shared resolver,
 // so deletion never
 // strands a backlink. Marker convergence refuses the same way: a symlinked or
-// non-regular task path, a working-tree task file that no longer hashes to the
-// pinned planning blob, an undeclared task path, or a status-looking line the
+// non-regular task path, a working-tree task file whose human-owned bytes no
+// longer match the pinned planning blob outside its generated lifecycle
+// block, an undeclared task path, or a status-looking line the
 // shared core ownership test cannot attribute to the adapter's marker class
 // blocks closeout before any byte changes. Before returning ok, the hook
 // audits the complete prospective projection — every declared target
@@ -79,6 +80,7 @@ import {
   reduce,
   renderProjectionInto,
   scanStatusMarkers,
+  stripGeneratedBlocks,
   validateAgainstSchemaFile,
   verifyRecordIntegrity,
   type CurrentnessViolation,
@@ -897,6 +899,14 @@ interface StatusConvergence {
   removed: number;
 }
 
+// The human-owned task bytes a task-path mutation check compares: the audit's
+// own generated-block stripping, with trailing newlines dropped because a
+// first block insertion appends one. Bytes inside the begin/end sentinels are
+// the projection's own; everything else must match the pinned planning blob.
+function proseIdentity(text: string): string {
+  return stripGeneratedBlocks(text).replace(/\n+$/, "");
+}
+
 // Prepare, read-only, the removal of the superseded adapter-owned `Status:`
 // marker on the exact lifecycle-managed task path, so terminal closeout
 // publishes one lifecycle authority instead of leaving a second one beside
@@ -904,12 +914,14 @@ interface StatusConvergence {
 // regular non-symlink file declared in the manifest allowedPaths before any
 // marker byte changes, and every status-looking line must be attributable to
 // the adapter's marker class through the shared core ownership test. Before
-// an accepted publication the working-tree task file must still hash to the
-// pinned planning blob; on the replay cleanup path each marker line removed
-// must exist, byte for byte and section for section, in the pinned planning
-// blob. Anything else refuses with bounded diagnostics. A task file with no
-// marker plans nothing; a missing task file plans nothing and the currentness
-// audit owns that finding.
+// an accepted publication the working-tree task file must still carry the
+// exact pinned planning bytes outside its generated lifecycle block — an
+// earlier lifecycle write that regenerated the block is the one lawful
+// difference; on the replay cleanup path each marker line removed must
+// exist, byte for byte and section for section, in the pinned planning blob.
+// Anything else refuses with bounded diagnostics. A task file with no marker
+// plans nothing; a missing task file plans nothing and the currentness audit
+// owns that finding.
 function prepareStatusConvergence(repoRoot: string, identity: NorthstarIdentity, binding: ManifestBinding, published: boolean): StatusConvergence | null {
   const relativePath = identity.taskPath;
   const absolutePath = path.join(repoRoot, containRepoPath(repoRoot, relativePath));
@@ -945,11 +957,16 @@ function prepareStatusConvergence(repoRoot: string, identity: NorthstarIdentity,
       }
     }
   } else {
-    // Fresh publication: the tree must still be the exact pinned planning
-    // bytes, whatever the marker scan found.
-    const digest = digestBytes(bytes);
-    if (digest !== identity.planningBlobDigest) {
-      refuse("task path " + relativePath + " changed since its pinned planning blob (" + digest + " != " + identity.planningBlobDigest + "); refusing an unreported task-file mutation");
+    // Fresh publication: the human-authored planning bytes must still be
+    // exact, whatever the marker scan found. A lifecycle write that
+    // regenerated this task file's generated projection block — a blocked
+    // mapping or standalone apply that rendered the task file as a target —
+    // is the one lawful difference, so identity is compared over the audit's
+    // own block stripping; any edit outside the sentinels is an unreported
+    // mutation.
+    const blobText = gitBlob(repoRoot, identity.planningCommit, relativePath).toString("utf8");
+    if (proseIdentity(blobText) !== proseIdentity(treeText)) {
+      refuse("task path " + relativePath + " changed outside its generated lifecycle block since its pinned planning blob; refusing an unreported task-file mutation");
     }
   }
   if (scan.owned.length === 0) return null;

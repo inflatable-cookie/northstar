@@ -1104,7 +1104,21 @@ function assertRecordPathClean(repoRoot: string, file: string): void {
   const tracked = spawnSync("git", ["ls-files", "--error-unmatch", "--", relative], { cwd: repoRoot, encoding: "utf8" });
   if (tracked.status !== 0) return;
   const dirty = spawnSync("git", ["status", "--porcelain", "--untracked-files=no", "--", relative], { cwd: repoRoot, encoding: "utf8" });
-  check(String(dirty.stdout).trim() === "", "dirty", "record path has uncommitted changes: " + relative);
+  if (String(dirty.stdout).trim() === "") return;
+  // The only lawful dirty record state is this publication's own previous
+  // envelope: a queued closeout chain commits once at the end, so envelopes
+  // after the first legitimately see the record dirty. The atomic writer's
+  // output is byte-canonical, so a dirty record whose bytes are exactly
+  // canonical for the record they carry is our own write (or a recoverable
+  // interrupted chain); any other uncommitted bytes are a hand edit and
+  // refuse.
+  let canonical = "";
+  try {
+    canonical = canonicalJson(JSON.parse(fs.readFileSync(file, "utf8"))) + "\n";
+  } catch {
+    canonical = "";
+  }
+  check(fs.readFileSync(file, "utf8") === canonical, "dirty", "record path has uncommitted changes: " + relative);
 }
 
 export interface ApplyOptions {
@@ -1393,10 +1407,14 @@ function underRetrospective(headings: Array<{ heading: string; level: number; st
   return stack.some((h) => RETROSPECTIVE_HEADING_RE.test(h.heading));
 }
 
-// Remove every generated projection block so the audit only sees
-// hand-maintained prose. Unclosed begin sentinels are left in place: a broken
-// block is a projection failure that verify/report already own.
-function stripGeneratedBlocks(text: string): string {
+// Remove every generated projection block so only human-owned bytes remain.
+// Unclosed begin sentinels are left in place: a broken block is a projection
+// failure that verify/report already own. Shared by the currentness audit and
+// by closeout's task-path mutation check, which compares planning identity
+// over exactly these bytes — an earlier lifecycle write that regenerated a
+// task file's generated block is lawful, an edit outside the sentinels is
+// not.
+export function stripGeneratedBlocks(text: string): string {
   const normalized = text.replace(/\r\n/g, "\n");
   let output = "";
   let rest = normalized;
