@@ -996,6 +996,42 @@ git -C "$repoProj" commit -qm "render the task file projection during ready stat
 grep -q "northstar:lifecycle:begin" "$repoProj/docs/roadmaps/g03/006-fixture-task.md"
 grep -q "Status: Ready" "$repoProj/docs/roadmaps/g03/006-fixture-task.md"
 proj_mc=$(git -C "$repoProj" rev-parse main)
+echo "# canonical but independently modified record refuses closeout"
+# The chain-scoped record check tolerates only exact states of this closeout's
+# own envelope chain. A tracked record that a hand rewrote in canonical form
+# with an independently bumped revision is outside the chain and refuses
+# before any byte changes, even though its bytes are canonical JSON.
+bun -e '
+  const fs = await import("node:fs");
+  const core = await import(process.argv[1]!);
+  const file = process.argv[2]!;
+  const record = JSON.parse(fs.readFileSync(file, "utf8"));
+  record.revision = 99;
+  // Recompute the public digests exactly the way the core would, so the
+  // tampered record passes record integrity and only the chain-scoped check
+  // can refuse it.
+  record.portable_digest = core.portableDigest(record);
+  record.digest = core.recordDigest(record);
+  fs.writeFileSync(file, core.canonicalJson(record) + "\n");
+' "$installed/scripts/lifecycle-core.ts" "$repoProj/.northstar/lifecycle/v1/tasks/g03.006.json"
+write_event "$scratch/closeout-proj-tamper.json" "evt-closeout-proj-tamper-0001" "task.closeout" "lifecycle-state" "$proj_mc" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" \
+  "$(git -C "$repoProj" log -1 --format=%H -- docs/handoffs/handoff-006.md)" \
+  "$(git -C "$repoProj" show "main:docs/handoffs/handoff-006.md" | sha256sum | cut -d' ' -f1)" \
+  "$(closeout_delivery "$proj_fh" "$proj_mc")"
+tamper=$(run_hook "$scratch/closeout-proj-tamper.json" "evt-closeout-proj-tamper-0001")
+expect_outcome "$tamper" blocked "canonical independent record modification"
+json_field "$tamper" "r.summary.includes('outside this closeout chain')" >/dev/null
+[ "$(json_field "$tamper" "r.changedPaths.length")" = "0" ]
+grep -q '"revision":99' "$repoProj/.northstar/lifecycle/v1/tasks/g03.006.json"
+[ -e "$repoProj/docs/handoffs/handoff-006.md" ]
+if [ "$(git -C "$repoProj" status --porcelain)" != " M .northstar/lifecycle/v1/tasks/g03.006.json" ]; then
+  echo "canonical record tamper refusal mutated unexpected paths" >&2
+  exit 1
+fi
+git -C "$repoProj" checkout -q -- .northstar/lifecycle/v1/tasks/g03.006.json
+echo "canonical independent record modification refuses atomically: OK"
 write_event "$scratch/closeout-proj.json" "evt-closeout-proj-0001" "task.closeout" "lifecycle-state" "$proj_mc" \
   "q-006" '"Implement g03.006 fixture task"' \
   "docs/handoffs/handoff-006.md" \
@@ -1186,6 +1222,23 @@ json_field "$mut_out" "r.summary.includes('changed outside its generated lifecyc
 [ ! -e "$repoMut/.northstar/lifecycle/v1/tasks/g03.006.json" ]
 [ "$(git -C "$repoMut" status --porcelain)" = " M docs/roadmaps/g03/006-fixture-task.md" ]
 echo "unreported task-file mutation refusal: OK"
+
+echo "# trailing-newline drift outside the block refuses"
+repoTail="$scratch/repo-converge-trailing"
+build_fixture "$repoTail" dogfood "$scratch/body-marker.md"
+CURRENT_REPO="$repoTail"
+read_facts "$(fixture_facts "$repoTail" 006)"
+printf '\n\n' >> "$repoTail/docs/roadmaps/g03/006-fixture-task.md"
+write_event "$scratch/closeout-trailing.json" "evt-closeout-trailing-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+trailing=$(run_hook "$scratch/closeout-trailing.json" "evt-closeout-trailing-0001")
+expect_outcome "$trailing" blocked "trailing-newline drift"
+json_field "$trailing" "r.summary.includes('changed outside its generated lifecycle block')" >/dev/null
+[ ! -e "$repoTail/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+[ -e "$repoTail/docs/handoffs/handoff-006.md" ]
+[ "$(git -C "$repoTail" status --porcelain)" = " M docs/roadmaps/g03/006-fixture-task.md" ]
+echo "trailing-newline drift refusal: OK"
 
 echo "# a red prospective audit blocks closeout; repair leaves two clean closeouts"
 repoRed="$scratch/repo-red-currentness"

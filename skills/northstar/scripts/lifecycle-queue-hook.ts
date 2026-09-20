@@ -59,6 +59,7 @@ import { fileURLToPath } from "node:url";
 import {
   BEGIN_PREFIX,
   ENVELOPE_SCHEMA,
+  END_SENTINEL,
   LifecycleError,
   applyClosedGenerationCatchUp,
   applyEnvelope,
@@ -155,6 +156,13 @@ function gitBlob(repoRoot: string, commit: string, filePath: string): Buffer {
   const result = spawnSync("git", ["cat-file", "blob", commit + ":" + filePath], { cwd: repoRoot });
   if (result.status !== 0) refuse("blob " + filePath + " does not exist at commit " + commit);
   return result.stdout;
+}
+
+// A record path's committed bytes at HEAD, or null when HEAD does not carry
+// the path.
+function gitHeadBytes(repoRoot: string, filePath: string): string | null {
+  const result = spawnSync("git", ["show", "HEAD:" + filePath], { cwd: repoRoot, encoding: "utf8" });
+  return result.status === 0 ? String(result.stdout) : null;
 }
 
 function commitExists(repoRoot: string, id: string): boolean {
@@ -573,6 +581,39 @@ function applyMapped(
   // Pure pre-pass: refuse before any byte changes.
   const finalRecord = prePass(envelopes, current, reduceContext(repoRoot));
 
+  // Chain-scoped record hygiene: a queued publication commits once at the
+  // end, so envelopes after the first legitimately see the record dirty with
+  // their own previous write. The strict per-envelope refusal stays in the
+  // core for every ordinary caller. A record HEAD has never carried is a
+  // prior standalone write being published for the first time; the envelope
+  // CAS binds this chain to those exact bytes. A tracked record with a
+  // different working-tree state, however, is tolerated only when it is an
+  // exact state of THIS envelope chain — our own write, or the recoverable
+  // leftover of an interrupted run of the same chain. Anything else,
+  // including an independently modified canonical record, refuses before any
+  // byte changes.
+  const recordRelative = recordPath;
+  const recordAbsolute = path.join(repoRoot, recordRelative);
+  let diskBytes: string | null = null;
+  if (fs.existsSync(recordAbsolute)) diskBytes = fs.readFileSync(recordAbsolute, "utf8");
+  const committedBytes = gitHeadBytes(repoRoot, recordRelative);
+  if (diskBytes !== committedBytes) {
+    const tracked = spawnSync("git", ["ls-files", "--error-unmatch", "--", recordRelative], { cwd: repoRoot, encoding: "utf8" }).status === 0;
+    if (tracked) {
+      const ctx = reduceContext(repoRoot);
+      const states: string[] = [committedBytes ?? ""];
+      let running: Record<string, unknown> | null = committedBytes === null ? null : JSON.parse(committedBytes);
+      for (const envelope of envelopes) {
+        const chained = { ...envelope, expected: running === null ? { revision: 0, digest: null } : { revision: Number(running.revision), digest: String(running.digest) } };
+        running = reduce(chained, running, ctx).record;
+        states.push(canonicalJson(running) + "\n");
+      }
+      if (diskBytes === null || states.indexOf(diskBytes) <= 0) {
+        refuse("record path " + recordRelative + " has uncommitted changes outside this closeout chain");
+      }
+    }
+  }
+
   // The catch-up is planned read-only before the first write, so a repository
   // defect in any eligible closed generation refuses the whole closeout with
   // the checkout untouched, exactly like the envelope pre-pass.
@@ -596,7 +637,7 @@ function applyMapped(
   const changedPaths: string[] = [];
   let replayed = true;
   for (const envelope of envelopes) {
-    const applied = applyEnvelope({ repoRoot, envelope, branch: String(event.repository.baseBranch), targets, convergeTaskStatus: convergence !== null });
+    const applied = applyEnvelope({ repoRoot, envelope, branch: String(event.repository.baseBranch), targets, convergeTaskStatus: convergence !== null, skipRecordHygiene: true });
     changedPaths.push(...applied.changed_paths);
     if (applied.status === "applied") replayed = false;
   }
@@ -899,12 +940,24 @@ interface StatusConvergence {
   removed: number;
 }
 
-// The human-owned task bytes a task-path mutation check compares: the audit's
-// own generated-block stripping, with trailing newlines dropped because a
-// first block insertion appends one. Bytes inside the begin/end sentinels are
-// the projection's own; everything else must match the pinned planning blob.
-function proseIdentity(text: string): string {
-  return stripGeneratedBlocks(text).replace(/\n+$/, "");
+// Whether the working-tree task file still carries the pinned planning
+// bytes. Compared over the audit's own generated-block stripping, exactly:
+// the one lawful difference is a first generated-block insertion, where the
+// renderer writes `<bytes><block>\n` (adding one newline first when the file
+// lacked a final newline). Stripping the block therefore leaves exactly one
+// trailing newline — two in that no-final-newline case — and any other
+// outside-block byte difference, including any other trailing-newline drift,
+// is an unreported edit.
+function proseIdentityMatches(blobText: string, treeText: string): boolean {
+  const blobProse = stripGeneratedBlocks(blobText);
+  const treeProse = stripGeneratedBlocks(treeText);
+  if (treeProse === blobProse) return true;
+  const tree = treeText.replace(/\r\n/g, "\n");
+  const blockAtEnd = tree.endsWith(END_SENTINEL + "\n") || tree.endsWith(END_SENTINEL);
+  if (!blockAtEnd) return false;
+  const blob = blobText.replace(/\r\n/g, "\n");
+  if (blob.endsWith("\n")) return treeProse === blobProse + "\n";
+  return treeProse === blobProse + "\n\n";
 }
 
 // Prepare, read-only, the removal of the superseded adapter-owned `Status:`
@@ -961,11 +1014,10 @@ function prepareStatusConvergence(repoRoot: string, identity: NorthstarIdentity,
     // exact, whatever the marker scan found. A lifecycle write that
     // regenerated this task file's generated projection block — a blocked
     // mapping or standalone apply that rendered the task file as a target —
-    // is the one lawful difference, so identity is compared over the audit's
-    // own block stripping; any edit outside the sentinels is an unreported
-    // mutation.
+    // is the one lawful difference; any edit outside the sentinels is an
+    // unreported mutation.
     const blobText = gitBlob(repoRoot, identity.planningCommit, relativePath).toString("utf8");
-    if (proseIdentity(blobText) !== proseIdentity(treeText)) {
+    if (!proseIdentityMatches(blobText, treeText)) {
       refuse("task path " + relativePath + " changed outside its generated lifecycle block since its pinned planning blob; refusing an unreported task-file mutation");
     }
   }

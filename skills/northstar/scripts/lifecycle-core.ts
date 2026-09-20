@@ -1104,21 +1104,7 @@ function assertRecordPathClean(repoRoot: string, file: string): void {
   const tracked = spawnSync("git", ["ls-files", "--error-unmatch", "--", relative], { cwd: repoRoot, encoding: "utf8" });
   if (tracked.status !== 0) return;
   const dirty = spawnSync("git", ["status", "--porcelain", "--untracked-files=no", "--", relative], { cwd: repoRoot, encoding: "utf8" });
-  if (String(dirty.stdout).trim() === "") return;
-  // The only lawful dirty record state is this publication's own previous
-  // envelope: a queued closeout chain commits once at the end, so envelopes
-  // after the first legitimately see the record dirty. The atomic writer's
-  // output is byte-canonical, so a dirty record whose bytes are exactly
-  // canonical for the record they carry is our own write (or a recoverable
-  // interrupted chain); any other uncommitted bytes are a hand edit and
-  // refuse.
-  let canonical = "";
-  try {
-    canonical = canonicalJson(JSON.parse(fs.readFileSync(file, "utf8"))) + "\n";
-  } catch {
-    canonical = "";
-  }
-  check(fs.readFileSync(file, "utf8") === canonical, "dirty", "record path has uncommitted changes: " + relative);
+  check(String(dirty.stdout).trim() === "", "dirty", "record path has uncommitted changes: " + relative);
 }
 
 export interface ApplyOptions {
@@ -1137,6 +1123,12 @@ export interface ApplyOptions {
   // the terminal record and the converged task file are one byte transaction.
   // Ambiguous status-looking prose fails closed before any byte changes.
   convergeTaskStatus?: boolean;
+  // Chain-scoped record hygiene: the queued closeout hook asserts the record
+  // state once per chain against the committed record (see the hook's chain
+  // check), so its envelopes after the first legitimately see the record
+  // dirty with their own previous write. Default false keeps the strict
+  // dirty-owned-path refusal for every ordinary caller, standalone or not.
+  skipRecordHygiene?: boolean;
 }
 
 export interface ApplyResult {
@@ -1220,7 +1212,7 @@ export function applyEnvelope(options: ApplyOptions): ApplyResult {
   let result: ApplyResult | null = null;
   withLifecycleLock(repoRoot, () => {
     const current = readRecord(repoRoot, identity.taskId);
-    assertRecordPathClean(repoRoot, file);
+    if (options.skipRecordHygiene !== true) assertRecordPathClean(repoRoot, file);
     const reduced = reduce(envelope, current, ctx);
     if (reduced.replay) {
       result = {
@@ -3382,6 +3374,20 @@ async function runOracle(): Promise<number> {
     check(convergeStatusMarkers(multiMarker).removed === 2,
       "oracle", "convergence removed only one owned marker");
     ok("marker convergence owns the leading header region and refuses ambiguous prose");
+
+    // 10e. The exact byte drift a first generated-block insertion introduces:
+    // the renderer writes `<bytes><block>\n`, adding one newline first when
+    // the file lacked a final newline. This is the only task-file difference
+    // the closeout planning-identity check lawfully accepts.
+    const insertState = generationStateOf([], "g03", null);
+    const insertProjection = buildProjectionStates([], [insertState]);
+    const insertionBase = "# g03.021\n\nStatus: Ready\nOwner: fixture";
+    const insertionWithNl = insertionBase + "\n";
+    check(stripGeneratedBlocks(renderProjectionInto(insertionWithNl, insertProjection).text) === insertionWithNl + "\n",
+      "oracle", "block insertion into a newline-terminated file drifted beyond one appended newline");
+    check(stripGeneratedBlocks(renderProjectionInto(insertionBase, insertProjection).text) === insertionBase + "\n\n",
+      "oracle", "block insertion into a file without a final newline drifted beyond the lawful separator");
+    ok("block-insertion byte drift is exactly the appended separator");
 
     // 11. Static portability scan of this very source file.
     const ownSource = fs.readFileSync(fileURLToPath(import.meta.url), "utf8");
