@@ -26,15 +26,26 @@
 // retained worker through the ordinary PR revision loop. It changes no bytes.
 //
 // The closeout publication is exactly one integration commit: the terminal
-// record, the regenerated declared projections, and the removal of the exact
-// submitted instruction handoff. The handoff is a pinned transport artifact,
+// record, the regenerated declared projections, the removal of the exact
+// submitted instruction handoff, and the convergence of the superseded
+// adapter-owned `Status:` marker on the exact lifecycle-managed task path, so
+// the repository ends with one lifecycle authority instead of two. The handoff
+// is a pinned transport artifact,
 // not permanent evidence: the hook deletes only the exact committed path whose
 // working-tree bytes still hash to the pinned blob digest, after the terminal
 // receipt exists. A changed, missing, symlinked, or otherwise ambiguous
 // handoff fails closed before any byte changes; tracked durable Markdown that
 // still links to the exact handoff refuses through the same shared resolver,
 // so deletion never
-// strands a backlink. Git retains the blob and the record's handoff evidence
+// strands a backlink. Marker convergence refuses the same way: a symlinked or
+// non-regular task path, a working-tree task file that no longer hashes to the
+// pinned planning blob, an undeclared task path, or a status-looking line the
+// shared core ownership test cannot attribute to the adapter's marker class
+// blocks closeout before any byte changes. Before returning ok, the hook
+// audits the complete prospective projection — every declared target
+// regenerated over the final record set plus the converged task file — and a
+// red currentness result blocks closeout with the exact file/section/task/
+// reason findings. Git retains the blob and the record's handoff evidence
 // retains its identity. A repeated event is a no-diff replay.
 //
 // The adapter never stages, commits, or pushes; Queue owns validated
@@ -50,10 +61,15 @@ import {
   LifecycleError,
   applyClosedGenerationCatchUp,
   applyEnvelope,
+  auditCurrentness,
+  auditCurrentnessText,
+  buildProjectionStates,
   canonicalJson,
+  convergeStatusMarkers,
   containRepoPath,
   digestBytes,
   discoverRepoRoot,
+  generationStateOf,
   listStateRecords,
   parseTaskIdentity,
   planClosedGenerationCatchUp,
@@ -61,8 +77,11 @@ import {
   readProjectionConfig,
   readRecord,
   reduce,
+  renderProjectionInto,
+  scanStatusMarkers,
   validateAgainstSchemaFile,
   verifyRecordIntegrity,
+  type CurrentnessViolation,
   type GenerationCompactionPlan,
   type ReduceContext,
 } from "./lifecycle-core.ts";
@@ -522,12 +541,24 @@ function applyMapped(
   verb: string,
   consumable: ConsumableHandoff | null = null,
   catchUpClosedGenerations = false,
+  convergence: StatusConvergence | null = null,
+  prospectiveCurrentness = false,
 ): void {
   // Read-only runs validate without writing, so the allowedPaths gate for
   // computed writes does not apply; containment still holds.
   const targets = projectionTargets(repoRoot, identity, binding, binding.mode === "integration_write");
   if (binding.mode === "read_only") {
     const finalRecord = prePass(envelopes, current, reduceContext(repoRoot));
+    if (prospectiveCurrentness) {
+      const violations = prospectiveViolations(repoRoot, identity, finalRecord, convergence, targets);
+      if (violations.length > 0) {
+        emit(String(event.eventId), "blocked",
+          "read-only closeout validation for " + identity.taskId + ": the prospective projection is not current: " + currentnessDetail(violations),
+          { task_id: identity.taskId, mode: "read_only", currentness_violations: violations },
+          [], null);
+        return;
+      }
+    }
     emit(String(event.eventId), "ok",
       "read-only validation passed for " + identity.taskId + "; no bytes changed",
       { task_id: identity.taskId, mode: "read_only", validated: true, final_revision: Number(finalRecord.revision) },
@@ -546,10 +577,24 @@ function applyMapped(
   let catchUpPlan: GenerationCompactionPlan[] = [];
   if (catchUpClosedGenerations) catchUpPlan = planClosedGenerationCatchUp({ repoRoot });
 
+  // Terminal closeout audits the complete prospective projection before the
+  // first byte changes: a red currentness result refuses with the checkout
+  // untouched instead of publishing a red repository.
+  if (prospectiveCurrentness) {
+    const violations = prospectiveViolations(repoRoot, identity, finalRecord, convergence, targets);
+    if (violations.length > 0) {
+      emit(String(event.eventId), "blocked",
+        "closeout blocked for " + identity.taskId + ": the prospective projection is not current: " + currentnessDetail(violations),
+        { task_id: identity.taskId, currentness_violations: violations },
+        [], null);
+      return;
+    }
+  }
+
   const changedPaths: string[] = [];
   let replayed = true;
   for (const envelope of envelopes) {
-    const applied = applyEnvelope({ repoRoot, envelope, branch: String(event.repository.baseBranch), targets });
+    const applied = applyEnvelope({ repoRoot, envelope, branch: String(event.repository.baseBranch), targets, convergeTaskStatus: convergence !== null });
     changedPaths.push(...applied.changed_paths);
     if (applied.status === "applied") replayed = false;
   }
@@ -572,11 +617,36 @@ function applyMapped(
   for (const changedPath of uniqueChanged) {
     if (!pathIsAllowed(changedPath, binding.allowedPaths)) refuse("computed change " + changedPath + " is outside the manifest allowedPaths");
   }
+
+  // Ground-truth gate: the working tree is now the complete prospective
+  // projection Queue would commit, so the same currentness audit runs over it
+  // before the hook returns ok. A red result here means the pre-write
+  // simulation and the published tree disagree; the closeout is held either
+  // way.
+  if (prospectiveCurrentness) {
+    const finalAudit = (() => {
+      try {
+        return auditCurrentness(repoRoot);
+      } catch (err) {
+        if (err instanceof LifecycleError) refuse(err.message);
+        throw err;
+      }
+    })();
+    if (finalAudit.violations.length > 0) {
+      emit(String(event.eventId), "blocked",
+        "closeout blocked for " + identity.taskId + ": the published tree is not current: " + currentnessDetail(finalAudit.violations),
+        { task_id: identity.taskId, currentness_violations: finalAudit.violations },
+        uniqueChanged, null);
+      return;
+    }
+  }
+
   const suffix = uniqueChanged.length > 0 ? subjectSuffix(identity, verb) : null;
   emit(String(event.eventId), "ok",
     (replayed ? "replayed without changes: " : "applied: ") + identity.taskId + " " + verb +
     " at revision " + String(finalRecord.revision) + " (" + String(finalRecord.portable_digest).slice(0, 19) + ")" +
     (consumable !== null ? "; consumed handoff " + consumable.relativePath : "") +
+    (convergence !== null ? "; converged task status marker" : "") +
     (catchUpGenerations.length > 0 ? "; compacted " + catchUpGenerations.join(", ") : ""),
     {
       task_id: identity.taskId,
@@ -585,6 +655,7 @@ function applyMapped(
       portable_digest: String(finalRecord.portable_digest),
       replayed,
       handoff_consumed: consumable !== null,
+      status_marker_converged: convergence !== null,
       generations_compacted: catchUpGenerations,
       fragments_consumed: catchUpDeletions,
     },
@@ -815,24 +886,190 @@ function guardConsumableBacklinks(repoRoot: string, consumable: ConsumableHandof
   guardHandoffBacklinks(repoRoot, consumable.relativePath);
 }
 
+// ---------------------------------------------------------------------------
+// Terminal status-marker convergence
+// ---------------------------------------------------------------------------
+
+interface StatusConvergence {
+  relativePath: string;
+  absolutePath: string;
+  nextText: string;
+  removed: number;
+}
+
+// Prepare, read-only, the removal of the superseded adapter-owned `Status:`
+// marker on the exact lifecycle-managed task path, so terminal closeout
+// publishes one lifecycle authority instead of leaving a second one beside
+// the generated projection. Refusal beats removal: the task path must be a
+// regular non-symlink file declared in the manifest allowedPaths before any
+// marker byte changes, and every status-looking line must be attributable to
+// the adapter's marker class through the shared core ownership test. Before
+// an accepted publication the working-tree task file must still hash to the
+// pinned planning blob; on the replay cleanup path each marker line removed
+// must exist, byte for byte and section for section, in the pinned planning
+// blob. Anything else refuses with bounded diagnostics. A task file with no
+// marker plans nothing; a missing task file plans nothing and the currentness
+// audit owns that finding.
+function prepareStatusConvergence(repoRoot: string, identity: NorthstarIdentity, binding: ManifestBinding, published: boolean): StatusConvergence | null {
+  const relativePath = identity.taskPath;
+  const absolutePath = path.join(repoRoot, containRepoPath(repoRoot, relativePath));
+  let stats: fs.Stats;
+  try {
+    stats = fs.lstatSync(absolutePath);
+  } catch {
+    return null;
+  }
+  if (stats.isSymbolicLink()) refuse("task path " + relativePath + " is a symlink; refusing an ambiguous marker convergence");
+  if (!stats.isFile()) refuse("task path " + relativePath + " is not a regular file");
+  const bytes = fs.readFileSync(absolutePath);
+  const treeText = bytes.toString("utf8");
+  const scan = scanStatusMarkers(treeText);
+  if (scan.ambiguous.length > 0) {
+    const first = scan.ambiguous[0]!;
+    refuse("status-looking line in " + relativePath + " under section \"" + first.section +
+      "\" cannot be attributed to the adapter's Status marker; refusing rather than removing possible human prose");
+  }
+  if (published) {
+    // Replay cleanup after an accepted publication: the tree lawfully differs
+    // from the pinned planning bytes by that publication itself, so only the
+    // marker lines still scheduled for removal are checked. Each must exist,
+    // byte for byte and section for section, in the pinned planning blob; a
+    // marker the blob does not own is an unreported mutation.
+    if (scan.owned.length > 0) {
+      const blobText = gitBlob(repoRoot, identity.planningCommit, relativePath).toString("utf8");
+      const pinnedScan = scanStatusMarkers(blobText);
+      for (const marker of scan.owned) {
+        if (!pinnedScan.owned.some((pinned) => pinned.line === marker.line && pinned.section === marker.section)) {
+          refuse("task path " + relativePath + " carries a Status marker its pinned planning blob does not own; refusing an unreported task-file mutation");
+        }
+      }
+    }
+  } else {
+    // Fresh publication: the tree must still be the exact pinned planning
+    // bytes, whatever the marker scan found.
+    const digest = digestBytes(bytes);
+    if (digest !== identity.planningBlobDigest) {
+      refuse("task path " + relativePath + " changed since its pinned planning blob (" + digest + " != " + identity.planningBlobDigest + "); refusing an unreported task-file mutation");
+    }
+  }
+  if (scan.owned.length === 0) return null;
+  if (!pathIsAllowed(relativePath, binding.allowedPaths)) {
+    refuse("task path " + relativePath + " carries a superseded Status marker but is not declared in the manifest allowedPaths");
+  }
+  return { relativePath, absolutePath, nextText: convergeStatusMarkers(treeText).text, removed: scan.owned.length };
+}
+
+// Apply a planned convergence as part of the closeout write phase, after the
+// terminal record and projections exist on disk.
+function applyStatusConvergence(convergence: StatusConvergence | null, changedPaths: string[]): void {
+  if (convergence === null) return;
+  fs.writeFileSync(convergence.absolutePath, convergence.nextText);
+  changedPaths.push(convergence.relativePath);
+}
+
+function declaredTargets(repoRoot: string): string[] {
+  try {
+    const config = readProjectionConfig(repoRoot);
+    return config === null ? [] : [...config.targets];
+  } catch (err) {
+    if (err instanceof LifecycleError) refuse(err.message);
+    throw err;
+  }
+}
+
+// The complete prospective projection: every declared target regenerated over
+// the final record set, plus the task file with the planned marker convergence
+// applied. Audited with the same pure structural audit the standalone
+// currentness command runs, so a red result carries the exact
+// file/section/task/reason diagnostics without guessing.
+function prospectiveViolations(
+  repoRoot: string,
+  identity: NorthstarIdentity,
+  finalRecord: Record<string, unknown>,
+  convergence: StatusConvergence | null,
+  targets: string[],
+): CurrentnessViolation[] {
+  const config = (() => {
+    try {
+      return readProjectionConfig(repoRoot);
+    } catch (err) {
+      if (err instanceof LifecycleError) refuse(err.message);
+      throw err;
+    }
+  })();
+  const merged = listStateRecords(repoRoot)
+    .filter((record) => String(record.task_id) !== identity.taskId)
+    .concat([finalRecord]);
+  const wanted = new Set<string>(targets);
+  for (const record of merged) {
+    if (typeof record.task_path === "string" && record.task_path.length > 0) wanted.add(String(record.task_path));
+  }
+  const states = config === null ? [] : config.active_generations.map((generation) =>
+    generationStateOf(merged, generation, readGenerationClosure(repoRoot, generation)));
+  const files: Record<string, string> = {};
+  for (const relative of wanted) {
+    const absolute = path.join(repoRoot, relative);
+    let stats: fs.Stats;
+    try {
+      stats = fs.lstatSync(absolute);
+    } catch {
+      continue;
+    }
+    if (stats.isSymbolicLink() || !stats.isFile()) continue;
+    let text = fs.readFileSync(absolute, "utf8");
+    if (text.length > 1024 * 1024) continue; // the repository audit owns the read-bound refusal
+    if (config !== null && targets.includes(relative)) {
+      text = renderProjectionInto(text, buildProjectionStates(merged, states)).text;
+    }
+    if (relative === identity.taskPath && convergence !== null) text = convergence.nextText;
+    files[relative] = text;
+  }
+  return auditCurrentnessText(files, merged, targets);
+}
+
+function currentnessDetail(violations: CurrentnessViolation[]): string {
+  const details = violations.slice(0, 8).map((v) =>
+    v.file + " [" + v.section + "] task " + (v.task.length > 0 ? v.task : "-") + ": " + v.reason);
+  const suffix = violations.length > 8 ? "; +" + (violations.length - 8) + " more" : "";
+  return details.join("; ") + suffix;
+}
+
 function handleCloseout(repoRoot: string, event: Record<string, any>, binding: ManifestBinding): void {
   const identity = reconstructIdentity(repoRoot, event);
   const current = readRecord(repoRoot, identity.taskId);
   if (current !== null && String(current.status) === "complete") {
     // Explicit idempotent rule: the terminal record exists, so a still-present
     // exact handoff is leftover transport from an earlier publication and its
-    // consumption is a no-diff cleanup. A changed or ambiguous file still
-    // refuses; absence is the normal replay shape.
+    // consumption is a no-diff cleanup. A leftover superseded status marker is
+    // the same class of leftover publication byte. A changed or ambiguous file
+    // still refuses; absence is the normal replay shape.
     const consumable = binding.mode === "integration_write"
       ? prepareHandoffConsumption(repoRoot, event, binding, true)
       : null;
+    const convergence = prepareStatusConvergence(repoRoot, identity, binding, true);
     guardConsumableBacklinks(repoRoot, consumable);
+    // The replay leaves at most those two no-diff cleanups, so the complete
+    // prospective projection is audited before either is consumed; a red
+    // currentness result refuses with the checkout untouched.
+    const violations = prospectiveViolations(repoRoot, identity, current, convergence, declaredTargets(repoRoot));
+    if (violations.length > 0) {
+      emit(String(event.eventId), "blocked",
+        "closeout replay blocked for " + identity.taskId + ": the prospective projection is not current: " + currentnessDetail(violations),
+        { task_id: identity.taskId, replayed: true, currentness_violations: violations },
+        [], null);
+      return;
+    }
     const changedPaths: string[] = [];
     consumeHandoff(consumable, changedPaths);
+    if (binding.mode === "integration_write") applyStatusConvergence(convergence, changedPaths);
     const uniqueChanged = [...new Set(changedPaths)].sort();
+    for (const changedPath of uniqueChanged) {
+      if (!pathIsAllowed(changedPath, binding.allowedPaths)) refuse("computed change " + changedPath + " is outside the manifest allowedPaths");
+    }
     emit(String(event.eventId), "ok",
-      "lifecycle record for " + identity.taskId + " is already complete; no changes",
-      { task_id: identity.taskId, replayed: true, portable_digest: String(current.portable_digest), handoff_consumed: consumable !== null },
+      "lifecycle record for " + identity.taskId + " is already complete" +
+        (uniqueChanged.length > 0 ? "; consumed leftover publication bytes as a no-diff cleanup" : "; no changes"),
+      { task_id: identity.taskId, replayed: true, portable_digest: String(current.portable_digest), handoff_consumed: consumable !== null, status_marker_converged: convergence !== null },
       uniqueChanged, uniqueChanged.length > 0 ? subjectSuffix(identity, "terminal record") : null);
     return;
   }
@@ -848,8 +1085,9 @@ function handleCloseout(repoRoot: string, event: Record<string, any>, binding: M
   const consumable = binding.mode === "integration_write"
     ? prepareHandoffConsumption(repoRoot, event, binding, false)
     : null;
+  const convergence = prepareStatusConvergence(repoRoot, identity, binding, false);
   guardConsumableBacklinks(repoRoot, consumable);
-  applyMapped(repoRoot, event, binding, identity, envelopes, current, "terminal record", consumable, true);
+  applyMapped(repoRoot, event, binding, identity, envelopes, current, "terminal record", consumable, true, convergence, true);
 }
 
 // ---------------------------------------------------------------------------

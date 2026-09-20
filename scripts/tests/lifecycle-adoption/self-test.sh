@@ -94,6 +94,8 @@ bun -e '
   if (!hook.includes("from \"./lifecycle-backlink.ts\"")) fail("hook does not import the shared backlink module");
   if (!hook.includes("guardHandoffBacklinks")) fail("hook does not call the shared guard");
   if (/BACKLINK_SCAN_MAX|MARKDOWN_LINK_RE|REFERENCE_DEF_RE|AUTOLINK_RE/.test(hook)) fail("hook still carries a second backlink parser or its bounds");
+  if (!hook.includes("convergeStatusMarkers")) fail("hook does not converge markers through the shared core rule");
+  if (/\^Status:/.test(hook)) fail("hook carries a second Status marker rule");
   if (!/export function findHandoffBacklinks/.test(shared)) fail("shared module does not export the resolver");
   if (!/export function guardHandoffBacklinks/.test(shared)) fail("shared module does not export the guard");
   const imports = shared.match(/^import .*$/gm) ?? [];
@@ -403,8 +405,11 @@ echo "sequential starter stays singular: OK"
 # Fixture repository: two tasks planned and readied, one committed handoff
 # each, a feature branch merged with a merge commit, front doors committed.
 # ---------------------------------------------------------------------------
-build_fixture() { # <repo-dir> [dogfood|starter]
-  local repo=$1 surface=${2:-dogfood}
+build_fixture() { # <repo-dir> [dogfood|starter] [task-body-file]
+  # The optional task-body file replaces the g03.006 task file before its
+  # ready commit, so a fixture can carry a pre-terminal marker (or an
+  # ambiguous status-looking body) inside the pinned planning blob.
+  local repo=$1 surface=${2:-dogfood} body_file=${3:-}
   local queue_from targets_from
   case "$surface" in
     dogfood)
@@ -429,6 +434,9 @@ build_fixture() { # <repo-dir> [dogfood|starter]
     git -C "$repo" add -A
     git -C "$repo" commit -qm "plan g03.$number"
     printf 'Deployment note: none yet.\n' >> "$repo/docs/roadmaps/g03/$number-fixture-task.md"
+    if [ "$number" = 006 ] && [ -n "$body_file" ]; then
+      cp "$body_file" "$repo/docs/roadmaps/g03/006-fixture-task.md"
+    fi
     git -C "$repo" add -A
     git -C "$repo" commit -qm "ready g03.$number"
 
@@ -885,6 +893,205 @@ EOF
 git -C "$repoA" checkout -q -- docs/README.md
 "${audit_cli[@]}" "$repoA" >/dev/null
 echo "retrospective history stays legal: OK"
+
+echo "# terminal closeout converges the superseded status marker"
+# One human body plus one adapter-owned pre-terminal marker, committed before
+# the handoff so the pinned planning blob carries the marker bytes. Closeout
+# must land the terminal record, projections, handoff deletion and marker
+# convergence in one publication and leave the audit clean.
+repoM="$scratch/repo-marker"
+printf '# Task g03.006\n\nStatus: Ready\nOwner: fixture\nDeployment note: none yet.\n' > "$scratch/body-marker.md"
+build_fixture "$repoM" dogfood "$scratch/body-marker.md"
+CURRENT_REPO="$repoM"
+read_facts "$(fixture_facts "$repoM" 006)"
+write_event "$scratch/closeout-marker.json" "evt-closeout-marker-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+marker_out=$(run_hook "$scratch/closeout-marker.json" "evt-closeout-marker-0001")
+expect_outcome "$marker_out" ok "converging closeout"
+marker_changed=$(json_field "$marker_out" "r.changedPaths.join(',')")
+for expected in \
+  ".northstar/lifecycle/v1/tasks/g03.006.json" \
+  "docs/README.md" \
+  "docs/roadmaps/README.md" \
+  "docs/roadmaps/g03/README.md" \
+  "docs/roadmaps/g03/006-fixture-task.md" \
+  "docs/handoffs/handoff-006.md"; do
+  case ",$marker_changed," in
+    *,"$expected",*) ;;
+    *) echo "converging closeout did not report $expected: $marker_changed" >&2; exit 1 ;;
+  esac
+done
+[ "$(json_field "$marker_out" "r.metadata.status_marker_converged")" = "true" ]
+if grep -q "Status:" "$repoM/docs/roadmaps/g03/006-fixture-task.md"; then
+  echo "converging closeout left the superseded status marker in the task file" >&2
+  exit 1
+fi
+grep -q "Owner: fixture" "$repoM/docs/roadmaps/g03/006-fixture-task.md"
+grep -q "Deployment note: none yet." "$repoM/docs/roadmaps/g03/006-fixture-task.md"
+grep -q "| g03.006 | complete | none |" "$repoM/docs/README.md"
+"${audit_cli[@]}" "$repoM" >/dev/null
+echo "one converged authority, clean audit: OK"
+
+marker_before=$(git -C "$repoM" status --porcelain)
+marker_retry=$(run_hook "$scratch/closeout-marker.json" "evt-closeout-marker-0001")
+expect_outcome "$marker_retry" ok "converging closeout replay"
+[ "$(json_field "$marker_retry" "r.changedPaths.length")" = "0" ]
+[ "$(json_field "$marker_retry" "r.metadata.status_marker_converged")" = "false" ]
+[ "$marker_before" = "$(git -C "$repoM" status --porcelain)" ]
+if grep -q "Status:" "$repoM/docs/roadmaps/g03/006-fixture-task.md"; then
+  echo "replay re-added a status marker" >&2
+  exit 1
+fi
+echo "marker replay is byte-stable with no second marker: OK"
+
+convergence_refusal() { # <name> <task-body-file> <expected-summary-substring>
+  local dir="$scratch/repo-converge-$1"
+  build_fixture "$dir" dogfood "$2"
+  CURRENT_REPO="$dir"
+  read_facts "$(fixture_facts "$dir" 006)"
+  write_event "$scratch/closeout-converge-$1.json" "evt-closeout-converge-$1-0001" "task.closeout" "lifecycle-state" "$MC" \
+    "q-006" '"Implement g03.006 fixture task"' \
+    "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+  local result
+  result=$(run_hook "$scratch/closeout-converge-$1.json" "evt-closeout-converge-$1-0001")
+  expect_outcome "$result" blocked "convergence refusal $1"
+  json_field "$result" "r.summary.includes('$3')" >/dev/null
+  [ ! -e "$dir/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+  [ -e "$dir/docs/handoffs/handoff-006.md" ]
+  if ! cmp -s "$2" "$dir/docs/roadmaps/g03/006-fixture-task.md"; then
+    echo "refused convergence case $1 still mutated the task file" >&2
+    exit 1
+  fi
+  [ -z "$(git -C "$dir" status --porcelain)" ]
+}
+
+echo "# ambiguous status-looking prose refuses before any byte changes"
+printf '%s\n' '# Task g03.006' '' 'Owner: fixture' '' '## Outcome' '' 'Status: Ready' '' 'Human outcome stays.' > "$scratch/body-section-marker.md"
+convergence_refusal section "$scratch/body-section-marker.md" \
+  "refusing rather than removing possible human prose"
+printf '%s\n' '# Task g03.006' '' 'Owner: fixture' '' 'Example:' '' '```md' 'Status: Ready' '```' > "$scratch/body-fenced-marker.md"
+convergence_refusal fenced "$scratch/body-fenced-marker.md" \
+  "refusing rather than removing possible human prose"
+echo "ambiguous status-looking prose refuses atomically: OK"
+
+echo "# symlinked task path refuses marker convergence"
+repoSym="$scratch/repo-converge-symlink"
+build_fixture "$repoSym"
+outside_task="$scratch/outside-task-target.md"
+printf 'External task bytes.\n' > "$outside_task"
+rm "$repoSym/docs/roadmaps/g03/006-fixture-task.md"
+ln -s "$outside_task" "$repoSym/docs/roadmaps/g03/006-fixture-task.md"
+CURRENT_REPO="$repoSym"
+read_facts "$(fixture_facts "$repoSym" 006)"
+write_event "$scratch/closeout-converge-symlink.json" "evt-closeout-converge-symlink-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+sym_out=$(run_hook "$scratch/closeout-converge-symlink.json" "evt-closeout-converge-symlink-0001")
+expect_outcome "$sym_out" blocked "symlinked task path"
+json_field "$sym_out" "r.summary.includes('symlink')" >/dev/null
+[ ! -e "$repoSym/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+[ -L "$repoSym/docs/roadmaps/g03/006-fixture-task.md" ]
+echo "symlinked task path refusal: OK"
+
+echo "# undeclared task path refuses marker convergence"
+repoUnd="$scratch/repo-converge-undeclared"
+printf '# Task g03.006\n\nStatus: Ready\nOwner: fixture\n' > "$scratch/body-undeclared-marker.md"
+build_fixture "$repoUnd" dogfood "$scratch/body-undeclared-marker.md"
+bun -e '
+  const fs = await import("node:fs");
+  const file = process.argv[1];
+  const manifest = JSON.parse(fs.readFileSync(file, "utf8"));
+  for (const hook of manifest.hooks) {
+    if (hook.id === "lifecycle-state") {
+      hook.allowedPaths = [".northstar/lifecycle/", "docs/README.md", "docs/roadmaps/README.md", "docs/roadmaps/g03/README.md", "docs/handoffs/"];
+    }
+  }
+  fs.writeFileSync(file, JSON.stringify(manifest, null, 2) + "\n");
+' "$repoUnd/.paseo/queue.json"
+git -C "$repoUnd" add -A
+git -C "$repoUnd" commit -qm "narrow the declared task-path authority"
+CURRENT_REPO="$repoUnd"
+read_facts "$(fixture_facts "$repoUnd" 006)"
+write_event "$scratch/closeout-converge-undeclared.json" "evt-closeout-converge-undeclared-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+und_out=$(run_hook "$scratch/closeout-converge-undeclared.json" "evt-closeout-converge-undeclared-0001")
+expect_outcome "$und_out" blocked "undeclared task path"
+json_field "$und_out" "r.summary.includes('not declared in the manifest allowedPaths')" >/dev/null
+[ ! -e "$repoUnd/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+if ! grep -q "Status:" "$repoUnd/docs/roadmaps/g03/006-fixture-task.md"; then
+  echo "undeclared-path refusal still converged the marker" >&2
+  exit 1
+fi
+echo "undeclared task path refusal: OK"
+
+echo "# unreported task-file mutation refuses before publication"
+repoMut="$scratch/repo-converge-mutation"
+build_fixture "$repoMut"
+CURRENT_REPO="$repoMut"
+read_facts "$(fixture_facts "$repoMut" 006)"
+printf 'Late unreported edit.\n' >> "$repoMut/docs/roadmaps/g03/006-fixture-task.md"
+write_event "$scratch/closeout-converge-mutation.json" "evt-closeout-converge-mutation-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+mut_out=$(run_hook "$scratch/closeout-converge-mutation.json" "evt-closeout-converge-mutation-0001")
+expect_outcome "$mut_out" blocked "unreported task-file mutation"
+json_field "$mut_out" "r.summary.includes('changed since its pinned planning blob')" >/dev/null
+[ ! -e "$repoMut/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+[ "$(git -C "$repoMut" status --porcelain)" = " M docs/roadmaps/g03/006-fixture-task.md" ]
+echo "unreported task-file mutation refusal: OK"
+
+echo "# a red prospective audit blocks closeout; repair leaves two clean closeouts"
+repoRed="$scratch/repo-red-currentness"
+build_fixture "$repoRed"
+cat >> "$repoRed/docs/README.md" <<'EOF'
+
+## Next Task
+
+Continue with `g03.006` next.
+EOF
+git -C "$repoRed" add -A
+git -C "$repoRed" commit -qm "stale human frontier prose"
+CURRENT_REPO="$repoRed"
+read_facts "$(fixture_facts "$repoRed" 006)"
+write_event "$scratch/closeout-red.json" "evt-closeout-red-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+red_out=$(run_hook "$scratch/closeout-red.json" "evt-closeout-red-0001")
+expect_outcome "$red_out" blocked "red prospective audit"
+json_field "$red_out" "r.summary.includes('stale-frontier')" >/dev/null
+json_field "$red_out" "r.summary.includes('docs/README.md')" >/dev/null
+[ "$(json_field "$red_out" "r.changedPaths.length")" = "0" ]
+[ ! -e "$repoRed/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+[ -e "$repoRed/docs/handoffs/handoff-006.md" ]
+[ -z "$(git -C "$repoRed" status --porcelain)" ]
+echo "red prospective audit blocks with zero bytes changed: OK"
+
+bun -e '
+  const fs = await import("node:fs");
+  const file = process.argv[1];
+  const text = fs.readFileSync(file, "utf8");
+  const repaired = text.replace(/\n## Next Task\n\nContinue with `g03.006` next\.\n/, "\n");
+  if (repaired === text) { console.error("repair did not change the fixture"); process.exit(1); }
+  fs.writeFileSync(file, repaired);
+' "$repoRed/docs/README.md"
+git -C "$repoRed" add -A
+git -C "$repoRed" commit -qm "repair currentness prose"
+# The repair lands on main, so the retry occurrence pins the new integration
+# base; the occurrence identity stays the same because no record was written.
+MC=$(git -C "$repoRed" rev-parse main)
+write_event "$scratch/closeout-red.json" "evt-closeout-red-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+repair_first=$(run_hook "$scratch/closeout-red.json" "evt-closeout-red-0001")
+expect_outcome "$repair_first" ok "closeout after repair"
+[ "$(json_field "$repair_first" "r.metadata.status_marker_converged")" = "false" ]
+repair_second=$(run_hook "$scratch/closeout-red.json" "evt-closeout-red-0001")
+expect_outcome "$repair_second" ok "second closeout after repair"
+[ "$(json_field "$repair_second" "r.changedPaths.length")" = "0" ]
+"${audit_cli[@]}" "$repoRed" >/dev/null
+echo "two sequential closeouts after repair stay clean: OK"
 
 echo "# durable handoff backlinks refuse closeout before any byte changes"
 repoB="$scratch/repo-backlink"

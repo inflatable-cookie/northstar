@@ -1115,9 +1115,14 @@ export interface ApplyOptions {
   // symlink-checked before any mutation, then regenerated inside the record
   // write lock. Exact changed paths are returned; nothing is staged.
   targets?: string[];
-  // Test seam: the atomic writer is injectable so interruption behavior can be
-  // exercised without weakening the production path.
+  // Test seam: the atomic writer is injectable so interruption behavior can
+  // be exercised without weakening the production path.
   writeFile?: (finalPath: string, data: string) => void;
+  // Terminal-closeout marker convergence: remove adapter-owned `Status:`
+  // marker lines from the exact task file inside this same locked write, so
+  // the terminal record and the converged task file are one byte transaction.
+  // Ambiguous status-looking prose fails closed before any byte changes.
+  convergeTaskStatus?: boolean;
 }
 
 export interface ApplyResult {
@@ -1216,8 +1221,39 @@ export function applyEnvelope(options: ApplyOptions): ApplyResult {
       return;
     }
     verifyRecordIntegrity(reduced.record);
+    // Marker convergence runs before the record write so an ambiguous
+    // status-looking line fails closed with zero bytes written.
+    let taskConverged = false;
+    if (options.convergeTaskStatus === true) {
+      const taskAbs = assertContained(repoRoot, identity.taskPath);
+      assertRealContained(repoRoot, taskAbs);
+      let taskStats: fs.Stats | null = null;
+      try {
+        taskStats = fs.lstatSync(taskAbs);
+      } catch {
+        taskStats = null;
+      }
+      check(taskStats === null || !taskStats.isSymbolicLink(), "task-path",
+        "task path " + identity.taskPath + " is a symlink; refusing marker convergence");
+      check(taskStats === null || taskStats.isFile(), "task-path",
+        "task path " + identity.taskPath + " is not a regular file");
+      if (taskStats !== null) {
+        const existing = fs.readFileSync(taskAbs, "utf8");
+        const converged = convergeStatusMarkers(existing);
+        if (converged.ambiguous.length > 0) {
+          fail("ambiguous-status-marker",
+            "task path " + identity.taskPath + " carries a status-looking line in section \"" +
+              converged.ambiguous[0]!.section + "\" that could be human prose; refusing marker convergence");
+        }
+        if (converged.removed > 0) {
+          writeFileAtomic(taskAbs, converged.text);
+          taskConverged = true;
+        }
+      }
+    }
     (options.writeFile ?? writeFileAtomic)(file, canonicalJson(reduced.record) + "\n");
     const changed = [path.relative(repoRoot, file)];
+    if (taskConverged) changed.push(identity.taskPath);
     const records = listRecords(repoRoot);
     let projection: Record<string, unknown> | null = null;
     if (config !== null) {
@@ -1234,14 +1270,15 @@ export function applyEnvelope(options: ApplyOptions): ApplyResult {
       }
     }
     changed.sort();
+    const uniqueChanged = [...new Set(changed)].sort();
     result = {
       status: "applied",
       task_id: identity.taskId,
       revision: Number(reduced.record.revision),
       digest: String(reduced.record.digest),
       portable_digest: String(reduced.record.portable_digest),
-      changed_paths: changed,
-      commit_action: { required: true, paths: changed },
+      changed_paths: uniqueChanged,
+      commit_action: { required: true, paths: uniqueChanged },
     };
   });
   return result as unknown as ApplyResult;
@@ -1325,7 +1362,12 @@ export interface CurrentnessViolation {
 }
 
 const TASK_ID_SCAN_RE = /g[0-9]{2}\.[0-9]{3}(?![0-9])/g;
-const STATUS_HEADER_LINE_RE = /^Status:[ \t]*\S.*$/;
+// The one shared `Status:` marker rule: the exact header-line shape the
+// currentness audit attributes to a lifecycle-managed task path. Detection
+// (audit), removal (terminal-closeout convergence) and the ownership test all
+// test this one regex, so they can never disagree about what counts as a
+// status marker.
+export const STATUS_HEADER_LINE_RE = /^Status:[ \t]*\S.*$/;
 // Headings that claim live currentness: a Next-task pointer, a frontier, or
 // the current lane. History-shaped headings are exempt (see below).
 const CURRENTNESS_HEADING_RE = /^(next\s*task|frontier|current\s+(lane|work|task|state)|ready\s+frontier|active\s+lane)\b/i;
@@ -1548,6 +1590,116 @@ export function auditCurrentness(repoRoot: string): { status: string; violations
   }
   const violations = auditCurrentnessText(files, records, targets);
   return { status: violations.length === 0 ? "ok" : "violations", violations };
+}
+
+// ---------------------------------------------------------------------------
+// Terminal-closeout marker convergence
+// ---------------------------------------------------------------------------
+
+// One `Status:` marker line located in a lifecycle-managed task file.
+// `start`/`end` bound the exact line bytes including the trailing newline in
+// the original text, `line` is the matched line text, and `section` names the
+// enclosing heading (or `header` before any heading) for bounded refusal
+// diagnostics.
+export interface StatusMarkerLocation {
+  start: number;
+  end: number;
+  line: string;
+  section: string;
+}
+
+export interface StatusMarkerScan {
+  owned: StatusMarkerLocation[];
+  ambiguous: StatusMarkerLocation[];
+}
+
+// Locate every `Status:` marker line in one task file, outside generated
+// projection blocks, with one bounded ownership test. A line matching the
+// shared STATUS_HEADER_LINE_RE rule is adapter-owned — mechanically removable
+// at terminal closeout — only when it sits in the file's leading header
+// region before the first level-2..6 heading and outside fenced code. (The
+// rule is line-start anchored, so indented code-block lines never match it
+// and are prose by construction.) Anywhere else the identical line could be
+// human prose, so the location is ambiguous and the caller refuses instead of
+// removing. Bytes inside a generated block are the projection's own and are
+// never scanned.
+export function scanStatusMarkers(text: string): StatusMarkerScan {
+  const owned: StatusMarkerLocation[] = [];
+  const ambiguous: StatusMarkerLocation[] = [];
+  const blocks: Array<{ start: number; end: number }> = [];
+  let rest = text;
+  let consumed = 0;
+  for (;;) {
+    const range = findProjectionRange(rest);
+    if (range === null) break;
+    blocks.push({ start: consumed + range.start, end: consumed + range.end });
+    consumed += range.end;
+    rest = rest.slice(range.end);
+  }
+  const inBlock = (offset: number): boolean =>
+    blocks.some((block) => offset >= block.start && offset < block.end);
+  let cursor = 0;
+  let inFence = false;
+  let fenceRun = "";
+  let inLeadingRegion = true;
+  let lastHeading: string | null = null;
+  while (cursor < text.length) {
+    const newline = text.indexOf("\n", cursor);
+    const lineEnd = newline === -1 ? text.length : newline + 1;
+    const rawLine = text.slice(cursor, newline === -1 ? text.length : newline);
+    const line = rawLine.replace(/\r$/, "");
+    if (!inBlock(cursor)) {
+      const fence = /^ {0,3}(`{3,}|~{3,})/.exec(line);
+      if (fence !== null) {
+        const run = fence[1]!;
+        if (!inFence) {
+          inFence = true;
+          fenceRun = run;
+        } else if (run[0] === fenceRun[0] && run.length >= fenceRun.length) {
+          inFence = false;
+          fenceRun = "";
+        }
+      } else {
+        const heading = /^(#{1,6})\s+(.*?)\s*$/.exec(line);
+        if (heading !== null) {
+          if (heading[1]!.length >= 2) inLeadingRegion = false;
+          lastHeading = heading[2]!.trim();
+        } else if (STATUS_HEADER_LINE_RE.test(line)) {
+          const location: StatusMarkerLocation = {
+            start: cursor,
+            end: lineEnd,
+            line,
+            section: lastHeading === null ? "header" : lastHeading,
+          };
+          if (inLeadingRegion && !inFence) owned.push(location);
+          else ambiguous.push(location);
+        }
+      }
+    }
+    cursor = lineEnd;
+  }
+  return { owned, ambiguous };
+}
+
+export interface StatusMarkerConvergence {
+  text: string;
+  removed: number;
+  ambiguous: StatusMarkerLocation[];
+}
+
+// Remove every adapter-owned `Status:` marker line from one task file and
+// leave every other byte identical. An ambiguous status-looking line never
+// modifies the text: the returned convergence reports it and the caller
+// refuses the closeout instead of removing possible human prose.
+export function convergeStatusMarkers(text: string): StatusMarkerConvergence {
+  const scan = scanStatusMarkers(text);
+  if (scan.ambiguous.length > 0) return { text, removed: 0, ambiguous: scan.ambiguous };
+  let next = text;
+  for (let i = scan.owned.length - 1; i >= 0; i -= 1) {
+    const marker = scan.owned[i]!;
+    next = next.slice(0, marker.start) + next.slice(marker.end);
+  }
+  return { text: next, removed: scan.owned.length, ambiguous: [] };
 }
 
 // The exact terminal task summary set a closure record pins. Closure authoring
@@ -3172,6 +3324,46 @@ async function runOracle(): Promise<number> {
       auditRecords, ["docs/roadmaps/g03/README.md"]);
     check(blockExempt.length === 0, "oracle", "audit flagged generated-block content: " + canonicalJson(blockExempt));
     ok("currentness audit rejects Silo-shaped duplicates and accepts the cutover");
+
+    // 10d. Terminal-closeout marker convergence: one shared rule owns the
+    // marker shape, the bounded ownership test refuses human prose, and
+    // removal leaves every other byte identical.
+    check(STATUS_HEADER_LINE_RE.test("Status: Ready") && STATUS_HEADER_LINE_RE.test("Status:Ready"),
+      "oracle", "marker rule rejected the shared header shape");
+    check(!STATUS_HEADER_LINE_RE.test("status: Ready") && !STATUS_HEADER_LINE_RE.test("Status:"),
+      "oracle", "marker rule matched a non-marker line");
+    const markerBody = "# g03.021 — Task\n\nStatus: Ready after g03.020\nOwner: fixture\n\n## Outcome\n\nHuman outcome stays.\n";
+    const ownedScan = scanStatusMarkers(markerBody);
+    check(ownedScan.owned.length === 1 && ownedScan.owned[0]!.section === "g03.021 — Task" && ownedScan.ambiguous.length === 0,
+      "oracle", "leading pre-terminal marker was not attributed to the adapter");
+    const markerConverged = convergeStatusMarkers(markerBody);
+    check(markerConverged.removed === 1 &&
+      markerConverged.text === "# g03.021 — Task\n\nOwner: fixture\n\n## Outcome\n\nHuman outcome stays.\n",
+      "oracle", "marker convergence changed bytes outside the exact marker line");
+    const topMarker = convergeStatusMarkers("Status: Ready\n\n# t\n\n## Outcome\n");
+    check(topMarker.removed === 1 && topMarker.text === "\n# t\n\n## Outcome\n",
+      "oracle", "marker before the title heading was not owned");
+    const sectionMarker = "# t\n\n## Outcome\n\nStatus: Ready\n";
+    const sectionScan = scanStatusMarkers(sectionMarker);
+    check(sectionScan.owned.length === 0 && sectionScan.ambiguous.length === 1 && sectionScan.ambiguous[0]!.section === "Outcome",
+      "oracle", "status-looking prose under a section heading was treated as adapter-owned");
+    check(convergeStatusMarkers(sectionMarker).text === sectionMarker,
+      "oracle", "an ambiguous marker was modified instead of refused");
+    const fencedMarker = "# t\n\nExample:\n\n```md\nStatus: Ready\n```\n";
+    check(scanStatusMarkers(fencedMarker).ambiguous.length === 1,
+      "oracle", "a status-looking line inside a fenced code block was treated as adapter-owned");
+    const indentedMarker = "# t\n\n    Status: Ready\n";
+    const indentedScan = scanStatusMarkers(indentedMarker);
+    check(indentedScan.owned.length === 0 && indentedScan.ambiguous.length === 0,
+      "oracle", "the line-start-anchored marker rule matched an indented code line");
+    const blockMarker = "# t\n\n" + BEGIN_PREFIX + " schema=northstar.lifecycle.projection.v2 digest=sha256:" + "0".repeat(64) + " -->\nStatus: complete\n" + END_SENTINEL + "\n";
+    const blockScan = scanStatusMarkers(blockMarker);
+    check(blockScan.owned.length === 0 && blockScan.ambiguous.length === 0,
+      "oracle", "marker scan touched generated-block bytes");
+    const multiMarker = "# t\n\nStatus: Ready\nOwner: fixture\nStatus: Ready again\n";
+    check(convergeStatusMarkers(multiMarker).removed === 2,
+      "oracle", "convergence removed only one owned marker");
+    ok("marker convergence owns the leading header region and refuses ambiguous prose");
 
     // 11. Static portability scan of this very source file.
     const ownSource = fs.readFileSync(fileURLToPath(import.meta.url), "utf8");

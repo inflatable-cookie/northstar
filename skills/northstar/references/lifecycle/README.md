@@ -360,7 +360,8 @@ generation rolls over.
 
 Closeout consumes the instruction handoff. The `task.closeout` publication is
 one integration commit: the terminal record, the regenerated declared
-projections, the removal of the exact submitted handoff, and every catch-up
+projections, the convergence of the superseded task-file status marker, the
+removal of the exact submitted handoff, and every catch-up
 compaction the closure records authorize. The hook deletes
 only the exact committed path whose working-tree bytes still hash to the
 pinned blob digest, and only after the terminal receipt exists. The same
@@ -383,6 +384,40 @@ handoff directory in the closeout hook's `allowedPaths` for the cleanup to
 publish. Git retains the blob; the record's `evidence.handoff` entry retains
 its identity. `task.blocked` and `task.cancelled` never touch the handoff:
 the task may resume and the instruction stays authoritative.
+
+Terminal closeout also converges the superseded adapter-owned `Status:`
+marker on the exact lifecycle-managed task path, so the publication leaves one
+lifecycle authority instead of two. One shared exported rule owns the marker
+shape — the exact `Status:` header line the currentness audit attributes to a
+lifecycle-managed task path — and one bounded ownership test decides what
+closeout may remove: a matching line is adapter-owned only in the task file's
+leading header region, before the first section heading and outside fenced
+code and generated blocks. A status-looking line anywhere else could be human
+prose, so closeout refuses with bounded file/section/task/reason diagnostics
+instead of removing it. The same fail-closed discipline covers a symlinked or
+non-regular task path, a task path outside the manifest `allowedPaths`, and a
+working-tree task file that no longer matches its pinned planning identity.
+Before an accepted publication the working-tree task file must hash to the
+pinned planning blob; on the replay cleanup path each marker line removed must
+still exist, byte for byte and section for section, in that blob. The
+converged task path joins `changedPaths` exactly when its bytes change, so
+Queue publishes the same one-commit transaction as the record, projections,
+and handoff removal.
+
+Because the generated projection becomes the sole mechanical currentness, the
+hook audits the complete prospective projection — every declared target
+regenerated over the final record set plus the converged task file — before
+returning `ok`. A red result blocks closeout with the audit's exact
+file/section/task/reason findings and, on the write path, changes no bytes.
+Replay stays byte-stable: the same event against a terminal record is a
+no-diff replay that adds no marker and no changed path, and a leftover marker
+from an interrupted publication is removed by the same idempotent cleanup that
+consumes a leftover handoff. Two sequential closeouts after a currentness
+repair stay clean. The consumer invocation is unchanged: Queue keeps running
+`northstar/queue:hook` with the frozen trusted-runner argv and the closed
+event and result contracts; an adopting Queue pins the accepted adapter
+revision that performs this convergence and prospective audit, and existing
+occurrence retries keep whatever revision they were originally pinned to.
 
 ## Queue control manifest migration
 
