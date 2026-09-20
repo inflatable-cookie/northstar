@@ -395,12 +395,16 @@ leading header region, before the first section heading and outside fenced
 code and generated blocks. A status-looking line anywhere else could be human
 prose, so closeout refuses with bounded file/section/task/reason diagnostics
 instead of removing it. The same fail-closed discipline covers a symlinked or
-non-regular task path, a task path outside the manifest `allowedPaths`, and a
-working-tree task file whose human-owned bytes no longer match the pinned
-planning identity: an earlier lifecycle write that regenerated the task
-file's generated projection block — a blocked mapping or standalone apply
-that rendered the task file as a target — is the one lawful difference, so
-the comparison runs over the audit's own block stripping. On the replay
+non-regular task path, a task path outside the manifest `allowedPaths`, and
+an integration checkout whose task file differs from HEAD: every lawful
+task-file write is committed before closeout runs, so uncommitted bytes —
+inside the block sentinels or out — refuse as an unreported mutation and are
+never overwritten by the closeout render. The committed human-owned bytes
+must still match the pinned planning identity, and an earlier committed
+lifecycle write that regenerated the task file's generated projection block
+— a blocked mapping or standalone apply that rendered the task file as a
+target — is the one lawful difference, so that comparison runs over the
+audit's own block stripping. On the replay
 cleanup path each marker line removed must still exist, byte for byte and
 section for section, in that blob. The
 converged task path joins `changedPaths` exactly when its bytes change, so

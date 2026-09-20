@@ -1218,7 +1218,7 @@ write_event "$scratch/closeout-converge-mutation.json" "evt-closeout-converge-mu
   "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
 mut_out=$(run_hook "$scratch/closeout-converge-mutation.json" "evt-closeout-converge-mutation-0001")
 expect_outcome "$mut_out" blocked "unreported task-file mutation"
-json_field "$mut_out" "r.summary.includes('changed outside its generated lifecycle block')" >/dev/null
+json_field "$mut_out" "r.summary.includes('uncommitted changes in the integration checkout')" >/dev/null
 [ ! -e "$repoMut/.northstar/lifecycle/v1/tasks/g03.006.json" ]
 [ "$(git -C "$repoMut" status --porcelain)" = " M docs/roadmaps/g03/006-fixture-task.md" ]
 echo "unreported task-file mutation refusal: OK"
@@ -1234,11 +1234,96 @@ write_event "$scratch/closeout-trailing.json" "evt-closeout-trailing-0001" "task
   "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
 trailing=$(run_hook "$scratch/closeout-trailing.json" "evt-closeout-trailing-0001")
 expect_outcome "$trailing" blocked "trailing-newline drift"
-json_field "$trailing" "r.summary.includes('changed outside its generated lifecycle block')" >/dev/null
+json_field "$trailing" "r.summary.includes('uncommitted changes in the integration checkout')" >/dev/null
 [ ! -e "$repoTail/.northstar/lifecycle/v1/tasks/g03.006.json" ]
 [ -e "$repoTail/docs/handoffs/handoff-006.md" ]
 [ "$(git -C "$repoTail" status --porcelain)" = " M docs/roadmaps/g03/006-fixture-task.md" ]
 echo "trailing-newline drift refusal: OK"
+
+# The same drift, once committed, is judged against the pinned planning blob:
+# outside-block bytes must match exactly, so the committed blank lines still
+# refuse through the planning-identity gate.
+git -C "$repoTail" add -A
+git -C "$repoTail" commit -qm "append blank lines outside the block"
+trailing_committed=$(run_hook "$scratch/closeout-trailing.json" "evt-closeout-trailing-0001")
+expect_outcome "$trailing_committed" blocked "committed trailing-newline drift"
+json_field "$trailing_committed" "r.summary.includes('changed outside its generated lifecycle block')" >/dev/null
+[ ! -e "$repoTail/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+echo "committed outside-block drift refusal: OK"
+
+echo "# an unreported edit inside a generated block refuses closeout"
+# The planning-identity comparison strips generated blocks, so an unreported
+# mutation hidden between the sentinels must be caught by the checkout
+# discipline: the closeout checkout carries the task file exactly as HEAD
+# committed it, and the closeout render never overwrites unreported bytes.
+repoHide="$scratch/repo-converge-block-edit"
+build_fixture "$repoHide" dogfood "$scratch/body-marker.md"
+CURRENT_REPO="$repoHide"
+hide_pc=$(git -C "$repoHide" log -1 --format=%H -- docs/roadmaps/g03/006-fixture-task.md)
+hide_digest=$(git -C "$repoHide" cat-file blob "$hide_pc:docs/roadmaps/g03/006-fixture-task.md" | sha256sum | cut -d' ' -f1 | sed 's/^/sha256:/')
+hide_fh=$(git -C "$repoHide" rev-parse feature)
+hide_mc=$(git -C "$repoHide" rev-parse main)
+bun -e '
+  const { applyEnvelope } = await import(process.argv[1]!);
+  const repo = process.argv[2]!;
+  const occurredAt = "2026-09-12T20:00:00.000Z";
+  const recordFile = repo + "/.northstar/lifecycle/v1/tasks/g03.006.json";
+  const readCurrent = (): Record<string, unknown> | null =>
+    require("node:fs").existsSync(recordFile) ? JSON.parse(require("node:fs").readFileSync(recordFile, "utf8")) : null;
+  let seq = 0;
+  for (const transition of ["plan", "ready", "start"]) {
+    seq += 1;
+    const current = readCurrent();
+    const result = applyEnvelope({
+      repoRoot: repo,
+      envelope: {
+        schema_version: "northstar.lifecycle.transition.v1",
+        event_id: "standalone-hide-prep-006-" + String(seq).padStart(2, "0") + "-" + transition,
+        task_id: "g03.006",
+        task_path: "docs/roadmaps/g03/006-fixture-task.md",
+        generation: "g03",
+        expected: current === null ? { revision: 0, digest: null } : { revision: Number(current.revision), digest: String(current.digest) },
+        transition,
+        event_time: occurredAt,
+        actor: "standalone-integrator",
+        source: { adapter: "standalone" },
+        planning: { commit: process.argv[3]!, task_blob_digest: process.argv[4]! },
+      },
+      branch: "main",
+      targets: ["docs/roadmaps/g03/006-fixture-task.md"],
+    });
+    if (result.status !== "applied") throw new Error("hide prep step failed: " + JSON.stringify(result));
+  }
+' "$installed/scripts/lifecycle-core.ts" "$repoHide" "$hide_pc" "$hide_digest"
+git -C "$repoHide" add -A
+git -C "$repoHide" commit -qm "render the task file projection"
+hide_mc=$(git -C "$repoHide" rev-parse main)
+bun -e '
+  const fs = await import("node:fs");
+  const file = process.argv[1]!;
+  const text = fs.readFileSync(file, "utf8");
+  const edited = text.replace("| g03.006 | active | dispatch |", "| g03.006 | blocked | none |");
+  if (edited === text) { console.error("block interior tamper did not apply"); process.exit(1); }
+  fs.writeFileSync(file, edited);
+' "$repoHide/docs/roadmaps/g03/006-fixture-task.md"
+write_event "$scratch/closeout-hide.json" "evt-closeout-hide-0001" "task.closeout" "lifecycle-state" "$hide_mc" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" \
+  "$(git -C "$repoHide" log -1 --format=%H -- docs/handoffs/handoff-006.md)" \
+  "$(git -C "$repoHide" show "main:docs/handoffs/handoff-006.md" | sha256sum | cut -d' ' -f1)" \
+  "$(closeout_delivery "$hide_fh" "$hide_mc")"
+hide_out=$(run_hook "$scratch/closeout-hide.json" "evt-closeout-hide-0001")
+expect_outcome "$hide_out" blocked "unreported block-interior edit"
+json_field "$hide_out" "r.summary.includes('uncommitted changes in the integration checkout')" >/dev/null
+[ "$(json_field "$hide_out" "r.changedPaths.length")" = "0" ]
+grep -q '"revision":3' "$repoHide/.northstar/lifecycle/v1/tasks/g03.006.json"
+[ -e "$repoHide/docs/handoffs/handoff-006.md" ]
+if ! grep -q "| g03.006 | blocked | none |" "$repoHide/docs/roadmaps/g03/006-fixture-task.md"; then
+  echo "block-interior tamper was overwritten before refusal" >&2
+  exit 1
+fi
+[ "$(git -C "$repoHide" status --porcelain)" = " M docs/roadmaps/g03/006-fixture-task.md" ]
+echo "unreported block-interior edit refuses with the bytes intact: OK"
 
 echo "# a red prospective audit blocks closeout; repair leaves two clean closeouts"
 repoRed="$scratch/repo-red-currentness"

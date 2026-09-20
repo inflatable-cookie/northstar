@@ -941,23 +941,24 @@ interface StatusConvergence {
 }
 
 // Whether the working-tree task file still carries the pinned planning
-// bytes. Compared over the audit's own generated-block stripping, exactly:
-// the one lawful difference is a first generated-block insertion, where the
+// bytes. The caller pins the tree to HEAD first, so committed state is what
+// is compared: over the audit's own generated-block stripping, exactly, with
+// one lawful difference — a first generated-block insertion, where the
 // renderer writes `<bytes><block>\n` (adding one newline first when the file
 // lacked a final newline). Stripping the block therefore leaves exactly one
 // trailing newline — two in that no-final-newline case — and any other
 // outside-block byte difference, including any other trailing-newline drift,
 // is an unreported edit.
-function proseIdentityMatches(blobText: string, treeText: string): boolean {
+function proseIdentityMatches(blobText: string, committedText: string): boolean {
   const blobProse = stripGeneratedBlocks(blobText);
-  const treeProse = stripGeneratedBlocks(treeText);
-  if (treeProse === blobProse) return true;
-  const tree = treeText.replace(/\r\n/g, "\n");
-  const blockAtEnd = tree.endsWith(END_SENTINEL + "\n") || tree.endsWith(END_SENTINEL);
+  const committedProse = stripGeneratedBlocks(committedText);
+  if (committedProse === blobProse) return true;
+  const committed = committedText.replace(/\r\n/g, "\n");
+  const blockAtEnd = committed.endsWith(END_SENTINEL + "\n") || committed.endsWith(END_SENTINEL);
   if (!blockAtEnd) return false;
   const blob = blobText.replace(/\r\n/g, "\n");
-  if (blob.endsWith("\n")) return treeProse === blobProse + "\n";
-  return treeProse === blobProse + "\n\n";
+  if (blob.endsWith("\n")) return committedProse === blobProse + "\n";
+  return committedProse === blobProse + "\n\n";
 }
 
 // Prepare, read-only, the removal of the superseded adapter-owned `Status:`
@@ -967,14 +968,15 @@ function proseIdentityMatches(blobText: string, treeText: string): boolean {
 // regular non-symlink file declared in the manifest allowedPaths before any
 // marker byte changes, and every status-looking line must be attributable to
 // the adapter's marker class through the shared core ownership test. Before
-// an accepted publication the working-tree task file must still carry the
-// exact pinned planning bytes outside its generated lifecycle block — an
-// earlier lifecycle write that regenerated the block is the one lawful
-// difference; on the replay cleanup path each marker line removed must
-// exist, byte for byte and section for section, in the pinned planning blob.
-// Anything else refuses with bounded diagnostics. A task file with no marker
-// plans nothing; a missing task file plans nothing and the currentness audit
-// owns that finding.
+// an accepted publication the integration checkout must carry the task file
+// exactly as HEAD committed it, and the committed human-owned planning bytes
+// must still match the pinned planning blob over the audit's own block
+// stripping — an earlier lifecycle write that regenerated the block is the
+// one lawful difference; on the replay cleanup path each marker line removed
+// must exist, byte for byte and section for section, in the pinned planning
+// blob. Anything else refuses with bounded diagnostics. A task file with no
+// marker plans nothing; a missing task file plans nothing and the currentness
+// audit owns that finding.
 function prepareStatusConvergence(repoRoot: string, identity: NorthstarIdentity, binding: ManifestBinding, published: boolean): StatusConvergence | null {
   const relativePath = identity.taskPath;
   const absolutePath = path.join(repoRoot, containRepoPath(repoRoot, relativePath));
@@ -1010,14 +1012,24 @@ function prepareStatusConvergence(repoRoot: string, identity: NorthstarIdentity,
       }
     }
   } else {
-    // Fresh publication: the human-authored planning bytes must still be
-    // exact, whatever the marker scan found. A lifecycle write that
-    // regenerated this task file's generated projection block — a blocked
-    // mapping or standalone apply that rendered the task file as a target —
-    // is the one lawful difference; any edit outside the sentinels is an
-    // unreported mutation.
+    // Fresh publication: the integration checkout must carry the task file
+    // exactly as HEAD committed it. Every lawful task-file write — including
+    // a lifecycle write that regenerated the generated projection block — is
+    // committed before closeout runs, so any uncommitted difference here is
+    // an unreported mutation, inside the block sentinels or out. This is what
+    // keeps a hand-edited block interior from passing the block-stripped
+    // identity comparison below and being silently overwritten by the
+    // closeout render.
+    const headBytes = gitHeadBytes(repoRoot, relativePath);
+    if (headBytes === null || headBytes !== treeText) {
+      refuse("task path " + relativePath + " has uncommitted changes in the integration checkout; refusing an unreported task-file mutation");
+    }
+    // The committed human-authored planning bytes must still be exact: a
+    // committed lifecycle write that regenerated the generated projection
+    // block is the one lawful difference from the pinned planning blob; any
+    // committed edit outside the sentinels is an unreported mutation.
     const blobText = gitBlob(repoRoot, identity.planningCommit, relativePath).toString("utf8");
-    if (!proseIdentityMatches(blobText, treeText)) {
+    if (!proseIdentityMatches(blobText, headBytes)) {
       refuse("task path " + relativePath + " changed outside its generated lifecycle block since its pinned planning blob; refusing an unreported task-file mutation");
     }
   }
