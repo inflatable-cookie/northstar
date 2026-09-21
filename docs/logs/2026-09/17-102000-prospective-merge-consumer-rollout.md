@@ -173,3 +173,58 @@ number-collision and status-drift checks.
 
 Dispatch is paced by Queue's own workspace admission budget, so lanes leave
 `queued` in the order workspaces free rather than in submission order.
+
+## Closeout metadata cap, and what it revealed (2026-09-21)
+
+The accepted closeout revision put whole `currentness_violations` objects into
+hook-result metadata while a 32 KiB guard refused anything larger by
+malfunctioning. Six merged bovine lanes were held on that, one per merged lane.
+The hook now bounds the payload by construction — at most eight violations, each
+field truncated to 256 bytes, with `currentness_violation_count` carrying the
+true total and the human detail still in the bounded summary — and the guard
+degrades to a correlation stub instead of failing. Fix landed at `ad83012`;
+installed hook digest is now
+`sha256:3e4b3d40986179aed8fb783cfaa68d0f759f5369ff6ee6fed59c5157dbd757a2`.
+
+The cap removed a reporting trap that mattered more than the size limit: the
+bounded summary shows eight findings plus `+N more`, which reads like a total. It
+is not. Bovine's closeouts were blocked by 772 real findings, not eight.
+
+Verified in production rather than by the self-test: figmatic's closeout now
+returns `blocked` with its actual findings, and bovine's six retries moved from
+the metadata malfunction to the next real blocker.
+
+## Census currentness sweep (2026-09-21)
+
+Standalone audit of every census repository, run from the installed skill:
+
+| Repository | Findings | Composition |
+| --- | --- | --- |
+| bovine-accelerator | 772 | 726 duplicate-status-header, 42 missing-task-file, 4 stale-frontier |
+| acowtancy | 104 | 97 duplicate-status-header, 7 stale-frontier |
+| figmatic | 12 | 10 duplicate-status-header, 2 stale-frontier |
+| swallowtail | 2 | 1 duplicate-status-header, 1 stale-frontier |
+| bughunt | 1 | stale-frontier |
+| monkey | 1 | stale-frontier |
+| poodle-lab | 1 | stale-frontier |
+
+The other thirteen are clean. Because the closeout audit covers every state
+record's task path, a red repository blocks closeout for every lane in it:
+migration lanes in acowtancy, figmatic and swallowtail are already at that wall.
+The repairs Queue Spec 006 anticipates as a separate bounded consumer lane, or a
+deliberate narrowing of the closeout gate's scope, are the two routes; the
+operator decision is open and nothing here preempts it.
+
+## Operational note: running the audit against a consumer
+
+`effigy lifecycle:run ... --repo <consumer>` does not work: `--repo` retargets
+the catalog, and the consumer does not define that task. From the Northstar
+checkout, run the core script directly:
+
+```sh
+bun run <installed-skill>/scripts/lifecycle-core.ts audit-currentness --repo <consumer>
+```
+
+The documented `--repo` form is wrong and is recorded in `PAPERCUTS.md` rather
+than corrected in place, because the lifecycle reference is part of the
+installed interface identity Queue currently pins.

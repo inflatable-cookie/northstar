@@ -394,3 +394,16 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
   Queue-owned value in the handoff contract's worker-mode section; affected
   surfaces are `skills/northstar/references/handoff-contract.md`, the
   `northstar-queue` skill and Queue's handoff schema.
+
+- **2026-09-21 — audit-currentness documented invocation:** the lifecycle
+  reference shows `effigy lifecycle:run audit-currentness --repo <path>`, but
+  `--repo` retargets the Effigy catalog and the consumer does not define
+  `lifecycle:run`, so the documented form fails with "task lifecycle:run is not
+  defined in effective catalogs"; impact is that the portfolio-repair route
+  looks broken and the working invocation is only discoverable by reading the
+  skill layout; plausible fix is to document the direct script form
+  (`bun run <installed-skill>/scripts/lifecycle-core.ts audit-currentness
+  --repo <path>`) or to make the qualified selector resolve the installed
+  catalog; affected surfaces are
+  `skills/northstar/references/lifecycle/README.md` and
+  `bundle-docs/operators/lifecycle-currentness-portfolio-repair.md`.
