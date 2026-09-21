@@ -86,7 +86,7 @@ completion in the runway above and in Git history.
 at closeout and runs the prospective currentness check, so Queue's `g01.019`
 has an adapter revision to pin. Operator-authorized consumer manifest
 migrations continue as separate per-project maintenance tasks.
-<!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:c0c57e5803d263d233a97fd875d59b1be02b8a37d33109b9253adebad4d627e4 -->
+<!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:b0aa807ae56cda0a247a794c9889e4a87aa4e0958b7479f436856146f70c72f4 -->
 | Generation | Disposition | Runway state |
 | --- | --- | --- |
 | g03 | open | planning_required |
@@ -107,4 +107,5 @@ migrations continue as separate per-project maintenance tasks.
 | g03.018 | complete | none | 8 | sha256:f2d73b780dd1f0701b02c078dd8a255629f16a647d90d1d7ddea9138c07f58c3 |
 | g03.019 | complete | none | 8 | sha256:76d6a4c9b2956db2e27f351809da4cc0222eeac31ef4d4789468b76ce198bc30 |
 | g03.020 | complete | none | 8 | sha256:da733286412d8cdf4c1e56ba0e48ea434e92539dd6da3f84b642da8ad809e3be |
+| g03.021 | complete | none | 8 | sha256:ba3422694b358b8e89e0a3ae00f65c9efd7cc84b64d272af8cab477d939feffa |
 <!-- northstar:lifecycle:end -->
