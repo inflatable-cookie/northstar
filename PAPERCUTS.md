@@ -407,3 +407,16 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
   catalog; affected surfaces are
   `skills/northstar/references/lifecycle/README.md` and
   `bundle-docs/operators/lifecycle-currentness-portfolio-repair.md`.
+
+- **2026-09-21 — bulk replacement inside lifecycle records:** a global
+  `cat-fia`→`fia` text replacement in a consumer repository rewrote an immutable
+  lifecycle record's `task_path` without updating its digest, so the record failed
+  `verifyRecordIntegrity` and pointed at a card that no longer existed; impact is
+  that a hygiene sweep silently corrupted byte-authoritative lifecycle state, and
+  the audit reported it as a missing task file rather than as corruption; the
+  correct recovery is restoring the original committed blob rather than
+  rewriting or re-signing the JSON; plausible fix is to state that
+  `.northstar/lifecycle/**` is excluded from bulk edits because record bytes are
+  digest-authoritative and only the lifecycle write path may change them;
+  affected surfaces are the lifecycle reference's record section and any
+  portfolio hygiene batch that rewrites many Markdown or JSON files at once.
