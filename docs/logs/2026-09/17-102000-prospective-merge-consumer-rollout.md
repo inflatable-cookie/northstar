@@ -152,3 +152,24 @@ section, detected from its sibling tasks rather than assumed. Five repositories
 remain: acowtancy, soundcheck, swallowtail, underlay-reference and zoho-bozo.
 New lanes queue on the queue-wide workspace admission budget, so dispatch order
 is Queue's, not the submission order.
+
+## Batch 4 (dispatched 2026-09-21) — census complete
+
+| Repository | Task | Queue task |
+| --- | --- | --- |
+| acowtancy | `g05.175` | `b0c1cb25` |
+| soundcheck | `g04.035` | `44e77b73` |
+| swallowtail | `g06.007` | `0b90c5de` |
+| underlay-reference | `g01.017` | `0fa117da` |
+| zoho-bozo | `g01.003` | `a12415ba` |
+
+All twenty v3 consumers in the census now carry a configuration-only migration
+task and a dispatched Queue lane. Per-repository differences handled on the way:
+zoho-bozo had no `docs/handoffs/` directory, created for the handoff, and no
+`qa:docs` task, so its documentation check ran through `effigy docs`; swallowtail
+indexes roadmap entries from its `## Tasks` list, so its entry lives there rather
+than in a separate maintenance section; its `qa:docs` also enforces roadmap
+number-collision and status-drift checks.
+
+Dispatch is paced by Queue's own workspace admission budget, so lanes leave
+`queued` in the order workspaces free rather than in submission order.
