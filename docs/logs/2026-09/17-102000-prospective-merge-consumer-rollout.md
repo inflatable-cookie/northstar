@@ -136,3 +136,19 @@ loophole, longhorn); nucleus and loophole then waited on the queue-wide
 workspace admission budget rather than on transport, and longhorn dispatched.
 
 Blind retries are not a substitute: the proof is what makes the replay safe.
+
+## Batch 3 (dispatched 2026-09-21)
+
+| Repository | Task | Queue task |
+| --- | --- | --- |
+| figmatic | `g01.044` | `1d195d78` |
+| praxis | `g01.005` | `704ba7df` |
+| signal | `g11.006` | `d5615e27` |
+| songsprout | `g02.009` | `853c9deb` |
+| soundcheck-library | `g01.009` | `2671b38a` |
+
+Each task file uses the repository's own heading convention for its final
+section, detected from its sibling tasks rather than assumed. Five repositories
+remain: acowtancy, soundcheck, swallowtail, underlay-reference and zoho-bozo.
+New lanes queue on the queue-wide workspace admission budget, so dispatch order
+is Queue's, not the submission order.
