@@ -360,7 +360,8 @@ generation rolls over.
 
 Closeout consumes the instruction handoff. The `task.closeout` publication is
 one integration commit: the terminal record, the regenerated declared
-projections, the removal of the exact submitted handoff, and every catch-up
+projections, the convergence of the superseded task-file status marker, the
+removal of the exact submitted handoff, and every catch-up
 compaction the closure records authorize. The hook deletes
 only the exact committed path whose working-tree bytes still hash to the
 pinned blob digest, and only after the terminal receipt exists. The same
@@ -383,6 +384,56 @@ handoff directory in the closeout hook's `allowedPaths` for the cleanup to
 publish. Git retains the blob; the record's `evidence.handoff` entry retains
 its identity. `task.blocked` and `task.cancelled` never touch the handoff:
 the task may resume and the instruction stays authoritative.
+
+Terminal closeout also converges the superseded adapter-owned `Status:`
+marker on the exact lifecycle-managed task path, so the publication leaves one
+lifecycle authority instead of two. One shared exported rule owns the marker
+shape — the exact `Status:` header line the currentness audit attributes to a
+lifecycle-managed task path — and one bounded ownership test decides what
+closeout may remove: a matching line is adapter-owned only in the task file's
+leading header region, before the first section heading and outside fenced
+code and generated blocks. A status-looking line anywhere else could be human
+prose, so closeout refuses with bounded file/section/task/reason diagnostics
+instead of removing it. The same fail-closed discipline covers a symlinked or
+non-regular task path, a task path outside the manifest `allowedPaths`, and
+an integration checkout whose task file differs from HEAD: every lawful
+task-file write is committed before closeout runs, so uncommitted bytes —
+inside the block sentinels or out — refuse as an unreported mutation and are
+never overwritten by the closeout render. Committed generated blocks carry
+provenance: each block in the task file must be byte-identical to the pinned
+planning blob's own block or exactly the canonical projection of the current
+lifecycle records, so a committed forged or altered block refuses no matter
+how equal the block-stripped prose looks — and a task file carries at most
+one generated block, because an extra block is a second generated authority
+and refuses however identical the copies are. The committed human-owned bytes
+must still match the pinned planning identity, and an earlier committed
+lifecycle write that regenerated the task file's generated projection block
+— a blocked mapping or standalone apply that rendered the task file as a
+target — is the one lawful difference, so that comparison runs over the
+audit's own block stripping. On the replay
+cleanup path a leftover marker is removed only from a task file that is
+byte-identical to HEAD — the publication's own convergence output is the one
+lawful uncommitted difference and carries no marker — and each marker line
+removed must still exist, byte for byte and section for section, in that
+blob. The
+converged task path joins `changedPaths` exactly when its bytes change, so
+Queue publishes the same one-commit transaction as the record, projections,
+and handoff removal.
+
+Because the generated projection becomes the sole mechanical currentness, the
+hook audits the complete prospective projection — every declared target
+regenerated over the final record set plus the converged task file — before
+returning `ok`. A red result blocks closeout with the audit's exact
+file/section/task/reason findings and, on the write path, changes no bytes.
+Replay stays byte-stable: the same event against a terminal record is a
+no-diff replay that adds no marker and no changed path, and a leftover marker
+from an interrupted publication is removed by the same idempotent cleanup that
+consumes a leftover handoff. Two sequential closeouts after a currentness
+repair stay clean. The consumer invocation is unchanged: Queue keeps running
+`northstar/queue:hook` with the frozen trusted-runner argv and the closed
+event and result contracts; an adopting Queue pins the accepted adapter
+revision that performs this convergence and prospective audit, and existing
+occurrence retries keep whatever revision they were originally pinned to.
 
 ## Queue control manifest migration
 

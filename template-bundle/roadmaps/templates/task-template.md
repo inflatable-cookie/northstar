@@ -74,7 +74,10 @@ or delivery identities in prose.
 - Lifecycle-adopted repositories keep mechanical status, PR, review, merge,
   and validation identities in the per-task JSON record and its generated
   projection block; the closeout hook publishes them. Add no status line to
-  the task header and no evidence rewrite at closeout.
+  the task header and no evidence rewrite at closeout. A pre-adoption
+  `Status:` line that survives into adoption is converged by the closeout
+  hook inside the terminal publication; an ambiguous status-looking line
+  refuses instead of editing human prose.
 - Standalone or pre-adoption repositories keep a hand-maintained `Status:`
   line in this header and record validation actually run, PR link, reviewed
   exact head, and merge commit here on completion.

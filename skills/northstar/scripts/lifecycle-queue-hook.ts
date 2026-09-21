@@ -26,15 +26,27 @@
 // retained worker through the ordinary PR revision loop. It changes no bytes.
 //
 // The closeout publication is exactly one integration commit: the terminal
-// record, the regenerated declared projections, and the removal of the exact
-// submitted instruction handoff. The handoff is a pinned transport artifact,
+// record, the regenerated declared projections, the removal of the exact
+// submitted instruction handoff, and the convergence of the superseded
+// adapter-owned `Status:` marker on the exact lifecycle-managed task path, so
+// the repository ends with one lifecycle authority instead of two. The handoff
+// is a pinned transport artifact,
 // not permanent evidence: the hook deletes only the exact committed path whose
 // working-tree bytes still hash to the pinned blob digest, after the terminal
 // receipt exists. A changed, missing, symlinked, or otherwise ambiguous
 // handoff fails closed before any byte changes; tracked durable Markdown that
 // still links to the exact handoff refuses through the same shared resolver,
 // so deletion never
-// strands a backlink. Git retains the blob and the record's handoff evidence
+// strands a backlink. Marker convergence refuses the same way: a symlinked or
+// non-regular task path, a working-tree task file whose human-owned bytes no
+// longer match the pinned planning blob outside its generated lifecycle
+// block, an undeclared task path, or a status-looking line the
+// shared core ownership test cannot attribute to the adapter's marker class
+// blocks closeout before any byte changes. Before returning ok, the hook
+// audits the complete prospective projection — every declared target
+// regenerated over the final record set plus the converged task file — and a
+// red currentness result blocks closeout with the exact file/section/task/
+// reason findings. Git retains the blob and the record's handoff evidence
 // retains its identity. A repeated event is a no-diff replay.
 //
 // The adapter never stages, commits, or pushes; Queue owns validated
@@ -47,13 +59,20 @@ import { fileURLToPath } from "node:url";
 import {
   BEGIN_PREFIX,
   ENVELOPE_SCHEMA,
+  END_SENTINEL,
   LifecycleError,
   applyClosedGenerationCatchUp,
   applyEnvelope,
+  auditCurrentness,
+  auditCurrentnessText,
+  buildProjectionStates,
   canonicalJson,
+  convergeStatusMarkers,
   containRepoPath,
   digestBytes,
   discoverRepoRoot,
+  generatedBlocks,
+  generationStateOf,
   listStateRecords,
   parseTaskIdentity,
   planClosedGenerationCatchUp,
@@ -61,8 +80,13 @@ import {
   readProjectionConfig,
   readRecord,
   reduce,
+  renderProjectionBlock,
+  renderProjectionInto,
+  scanStatusMarkers,
+  stripGeneratedBlocks,
   validateAgainstSchemaFile,
   verifyRecordIntegrity,
+  type CurrentnessViolation,
   type GenerationCompactionPlan,
   type ReduceContext,
 } from "./lifecycle-core.ts";
@@ -134,6 +158,13 @@ function gitBlob(repoRoot: string, commit: string, filePath: string): Buffer {
   const result = spawnSync("git", ["cat-file", "blob", commit + ":" + filePath], { cwd: repoRoot });
   if (result.status !== 0) refuse("blob " + filePath + " does not exist at commit " + commit);
   return result.stdout;
+}
+
+// A record path's committed bytes at HEAD, or null when HEAD does not carry
+// the path.
+function gitHeadBytes(repoRoot: string, filePath: string): string | null {
+  const result = spawnSync("git", ["show", "HEAD:" + filePath], { cwd: repoRoot, encoding: "utf8" });
+  return result.status === 0 ? String(result.stdout) : null;
 }
 
 function commitExists(repoRoot: string, id: string): boolean {
@@ -522,12 +553,24 @@ function applyMapped(
   verb: string,
   consumable: ConsumableHandoff | null = null,
   catchUpClosedGenerations = false,
+  convergence: StatusConvergence | null = null,
+  prospectiveCurrentness = false,
 ): void {
   // Read-only runs validate without writing, so the allowedPaths gate for
   // computed writes does not apply; containment still holds.
   const targets = projectionTargets(repoRoot, identity, binding, binding.mode === "integration_write");
   if (binding.mode === "read_only") {
     const finalRecord = prePass(envelopes, current, reduceContext(repoRoot));
+    if (prospectiveCurrentness) {
+      const violations = prospectiveViolations(repoRoot, identity, finalRecord, convergence, targets);
+      if (violations.length > 0) {
+        emit(String(event.eventId), "blocked",
+          "read-only closeout validation for " + identity.taskId + ": the prospective projection is not current: " + currentnessDetail(violations),
+          { task_id: identity.taskId, mode: "read_only", currentness_violations: violations },
+          [], null);
+        return;
+      }
+    }
     emit(String(event.eventId), "ok",
       "read-only validation passed for " + identity.taskId + "; no bytes changed",
       { task_id: identity.taskId, mode: "read_only", validated: true, final_revision: Number(finalRecord.revision) },
@@ -540,16 +583,63 @@ function applyMapped(
   // Pure pre-pass: refuse before any byte changes.
   const finalRecord = prePass(envelopes, current, reduceContext(repoRoot));
 
+  // Chain-scoped record hygiene: a queued publication commits once at the
+  // end, so envelopes after the first legitimately see the record dirty with
+  // their own previous write. The strict per-envelope refusal stays in the
+  // core for every ordinary caller. A record HEAD has never carried is a
+  // prior standalone write being published for the first time; the envelope
+  // CAS binds this chain to those exact bytes. A tracked record with a
+  // different working-tree state, however, is tolerated only when it is an
+  // exact state of THIS envelope chain — our own write, or the recoverable
+  // leftover of an interrupted run of the same chain. Anything else,
+  // including an independently modified canonical record, refuses before any
+  // byte changes.
+  const recordRelative = recordPath;
+  const recordAbsolute = path.join(repoRoot, recordRelative);
+  let diskBytes: string | null = null;
+  if (fs.existsSync(recordAbsolute)) diskBytes = fs.readFileSync(recordAbsolute, "utf8");
+  const committedBytes = gitHeadBytes(repoRoot, recordRelative);
+  if (diskBytes !== committedBytes) {
+    const tracked = spawnSync("git", ["ls-files", "--error-unmatch", "--", recordRelative], { cwd: repoRoot, encoding: "utf8" }).status === 0;
+    if (tracked) {
+      const ctx = reduceContext(repoRoot);
+      const states: string[] = [committedBytes ?? ""];
+      let running: Record<string, unknown> | null = committedBytes === null ? null : JSON.parse(committedBytes);
+      for (const envelope of envelopes) {
+        const chained = { ...envelope, expected: running === null ? { revision: 0, digest: null } : { revision: Number(running.revision), digest: String(running.digest) } };
+        running = reduce(chained, running, ctx).record;
+        states.push(canonicalJson(running) + "\n");
+      }
+      if (diskBytes === null || states.indexOf(diskBytes) <= 0) {
+        refuse("record path " + recordRelative + " has uncommitted changes outside this closeout chain");
+      }
+    }
+  }
+
   // The catch-up is planned read-only before the first write, so a repository
   // defect in any eligible closed generation refuses the whole closeout with
   // the checkout untouched, exactly like the envelope pre-pass.
   let catchUpPlan: GenerationCompactionPlan[] = [];
   if (catchUpClosedGenerations) catchUpPlan = planClosedGenerationCatchUp({ repoRoot });
 
+  // Terminal closeout audits the complete prospective projection before the
+  // first byte changes: a red currentness result refuses with the checkout
+  // untouched instead of publishing a red repository.
+  if (prospectiveCurrentness) {
+    const violations = prospectiveViolations(repoRoot, identity, finalRecord, convergence, targets);
+    if (violations.length > 0) {
+      emit(String(event.eventId), "blocked",
+        "closeout blocked for " + identity.taskId + ": the prospective projection is not current: " + currentnessDetail(violations),
+        { task_id: identity.taskId, currentness_violations: violations },
+        [], null);
+      return;
+    }
+  }
+
   const changedPaths: string[] = [];
   let replayed = true;
   for (const envelope of envelopes) {
-    const applied = applyEnvelope({ repoRoot, envelope, branch: String(event.repository.baseBranch), targets });
+    const applied = applyEnvelope({ repoRoot, envelope, branch: String(event.repository.baseBranch), targets, convergeTaskStatus: convergence !== null, skipRecordHygiene: true });
     changedPaths.push(...applied.changed_paths);
     if (applied.status === "applied") replayed = false;
   }
@@ -572,11 +662,36 @@ function applyMapped(
   for (const changedPath of uniqueChanged) {
     if (!pathIsAllowed(changedPath, binding.allowedPaths)) refuse("computed change " + changedPath + " is outside the manifest allowedPaths");
   }
+
+  // Ground-truth gate: the working tree is now the complete prospective
+  // projection Queue would commit, so the same currentness audit runs over it
+  // before the hook returns ok. A red result here means the pre-write
+  // simulation and the published tree disagree; the closeout is held either
+  // way.
+  if (prospectiveCurrentness) {
+    const finalAudit = (() => {
+      try {
+        return auditCurrentness(repoRoot);
+      } catch (err) {
+        if (err instanceof LifecycleError) refuse(err.message);
+        throw err;
+      }
+    })();
+    if (finalAudit.violations.length > 0) {
+      emit(String(event.eventId), "blocked",
+        "closeout blocked for " + identity.taskId + ": the published tree is not current: " + currentnessDetail(finalAudit.violations),
+        { task_id: identity.taskId, currentness_violations: finalAudit.violations },
+        uniqueChanged, null);
+      return;
+    }
+  }
+
   const suffix = uniqueChanged.length > 0 ? subjectSuffix(identity, verb) : null;
   emit(String(event.eventId), "ok",
     (replayed ? "replayed without changes: " : "applied: ") + identity.taskId + " " + verb +
     " at revision " + String(finalRecord.revision) + " (" + String(finalRecord.portable_digest).slice(0, 19) + ")" +
     (consumable !== null ? "; consumed handoff " + consumable.relativePath : "") +
+    (convergence !== null ? "; converged task status marker" : "") +
     (catchUpGenerations.length > 0 ? "; compacted " + catchUpGenerations.join(", ") : ""),
     {
       task_id: identity.taskId,
@@ -585,6 +700,7 @@ function applyMapped(
       portable_digest: String(finalRecord.portable_digest),
       replayed,
       handoff_consumed: consumable !== null,
+      status_marker_converged: convergence !== null,
       generations_compacted: catchUpGenerations,
       fragments_consumed: catchUpDeletions,
     },
@@ -815,24 +931,278 @@ function guardConsumableBacklinks(repoRoot: string, consumable: ConsumableHandof
   guardHandoffBacklinks(repoRoot, consumable.relativePath);
 }
 
+// ---------------------------------------------------------------------------
+// Terminal status-marker convergence
+// ---------------------------------------------------------------------------
+
+interface StatusConvergence {
+  relativePath: string;
+  absolutePath: string;
+  nextText: string;
+  removed: number;
+}
+
+// The canonical generated block for the current lifecycle records, or null
+// when the repository declares no projection configuration. Block provenance
+// compares committed task-file blocks against this render, so a block is
+// adapter-owned only when it is the exact deterministic projection of the
+// records the repository actually carries.
+function canonicalProjectionBlock(repoRoot: string): string | null {
+  const config = (() => {
+    try {
+      return readProjectionConfig(repoRoot);
+    } catch (err) {
+      if (err instanceof LifecycleError) refuse(err.message);
+      throw err;
+    }
+  })();
+  if (config === null) return null;
+  const records = listStateRecords(repoRoot);
+  const states = config.active_generations.map((generation) =>
+    generationStateOf(records, generation, readGenerationClosure(repoRoot, generation)));
+  return renderProjectionBlock(buildProjectionStates(records, states));
+}
+
+// Whether the working-tree task file still carries the pinned planning
+// bytes. The caller pins the tree to HEAD first, so committed state is what
+// is compared: over the audit's own generated-block stripping, exactly, with
+// one lawful difference — a first generated-block insertion, where the
+// renderer writes `<bytes><block>\n` (adding one newline first when the file
+// lacked a final newline). Stripping the block therefore leaves exactly one
+// trailing newline — two in that no-final-newline case — and any other
+// outside-block byte difference, including any other trailing-newline drift,
+// is an unreported edit.
+function proseIdentityMatches(blobText: string, committedText: string): boolean {
+  const blobProse = stripGeneratedBlocks(blobText);
+  const committedProse = stripGeneratedBlocks(committedText);
+  if (committedProse === blobProse) return true;
+  const committed = committedText.replace(/\r\n/g, "\n");
+  const blockAtEnd = committed.endsWith(END_SENTINEL + "\n") || committed.endsWith(END_SENTINEL);
+  if (!blockAtEnd) return false;
+  const blob = blobText.replace(/\r\n/g, "\n");
+  if (blob.endsWith("\n")) return committedProse === blobProse + "\n";
+  return committedProse === blobProse + "\n\n";
+}
+
+// Prepare, read-only, the removal of the superseded adapter-owned `Status:`
+// marker on the exact lifecycle-managed task path, so terminal closeout
+// publishes one lifecycle authority instead of leaving a second one beside
+// the generated projection. Refusal beats removal: the task path must be a
+// regular non-symlink file declared in the manifest allowedPaths before any
+// marker byte changes, and every status-looking line must be attributable to
+// the adapter's marker class through the shared core ownership test. Before
+// an accepted publication the integration checkout must carry the task file
+// exactly as HEAD committed it, and the committed human-owned planning bytes
+// must still match the pinned planning blob over the audit's own block
+// stripping — an earlier lifecycle write that regenerated the block is the
+// one lawful difference; on the replay cleanup path each marker line removed
+// must exist, byte for byte and section for section, in the pinned planning
+// blob. Anything else refuses with bounded diagnostics. A task file with no
+// marker plans nothing; a missing task file plans nothing and the currentness
+// audit owns that finding.
+function prepareStatusConvergence(repoRoot: string, identity: NorthstarIdentity, binding: ManifestBinding, published: boolean): StatusConvergence | null {
+  const relativePath = identity.taskPath;
+  const absolutePath = path.join(repoRoot, containRepoPath(repoRoot, relativePath));
+  let stats: fs.Stats;
+  try {
+    stats = fs.lstatSync(absolutePath);
+  } catch {
+    return null;
+  }
+  if (stats.isSymbolicLink()) refuse("task path " + relativePath + " is a symlink; refusing an ambiguous marker convergence");
+  if (!stats.isFile()) refuse("task path " + relativePath + " is not a regular file");
+  const bytes = fs.readFileSync(absolutePath);
+  const treeText = bytes.toString("utf8");
+  const scan = scanStatusMarkers(treeText);
+  if (scan.ambiguous.length > 0) {
+    const first = scan.ambiguous[0]!;
+    refuse("status-looking line in " + relativePath + " under section \"" + first.section +
+      "\" cannot be attributed to the adapter's Status marker; refusing rather than removing possible human prose");
+  }
+  // One generated authority per task file: every per-block check below
+  // validates blocks independently, identical blocks pass them all, the
+  // block-stripped prose comparison erases the difference, the audit strips
+  // both, and the closeout render replaces only the first range — so a
+  // second block would publish a second generated authority. The expected
+  // shape is exactly one complete generated block, or none before the task
+  // file opts in; renderProjectionInto replaces that one range in place.
+  const taskBlocks = generatedBlocks(treeText);
+  if (taskBlocks.length > 1) {
+    refuse("task path " + relativePath + " carries " + taskBlocks.length + " generated lifecycle blocks; a task file publishes one generated authority and an extra block is a second one");
+  }
+  if (published) {
+    // Replay cleanup may remove a leftover marker only from a task file that
+    // is byte-identical to HEAD: the publication's own convergence output is
+    // the one lawful uncommitted difference, and it carries no marker, so a
+    // leftover marker with any other uncommitted byte beside it is an
+    // unreported mutation, not a no-diff cleanup.
+    if (scan.owned.length > 0) {
+      const headText = gitHeadBytes(repoRoot, relativePath);
+      if (headText === null || treeText !== headText) {
+        refuse("task path " + relativePath + " has uncommitted changes outside this publication's convergence; refusing an unreported task-file mutation");
+      }
+      const blobText = gitBlob(repoRoot, identity.planningCommit, relativePath).toString("utf8");
+      const pinnedScan = scanStatusMarkers(blobText);
+      for (const marker of scan.owned) {
+        if (!pinnedScan.owned.some((pinned) => pinned.line === marker.line && pinned.section === marker.section)) {
+          refuse("task path " + relativePath + " carries a Status marker its pinned planning blob does not own; refusing an unreported task-file mutation");
+        }
+      }
+    }
+  } else {
+    // Fresh publication: the integration checkout must carry the task file
+    // exactly as HEAD committed it. Every lawful task-file write — including
+    // a lifecycle write that regenerated the generated projection block — is
+    // committed before closeout runs, so any uncommitted difference here is
+    // an unreported mutation, inside the block sentinels or out. This is what
+    // keeps a hand-edited block interior from passing the block-stripped
+    // identity comparison below and being silently overwritten by the
+    // closeout render.
+    const headBytes = gitHeadBytes(repoRoot, relativePath);
+    if (headBytes === null || headBytes !== treeText) {
+      refuse("task path " + relativePath + " has uncommitted changes in the integration checkout; refusing an unreported task-file mutation");
+    }
+    // Every generated block in the committed file must be adapter-owned:
+    // byte-identical to the pinned planning blob's own block, or exactly the
+    // canonical projection of the current lifecycle records. A committed
+    // forged or altered block is not lawful adapter state, however equal the
+    // block-stripped prose looks.
+    if (generatedBlocks(headBytes).length > 0) {
+      const blobBlocks = generatedBlocks(gitBlob(repoRoot, identity.planningCommit, relativePath).toString("utf8"));
+      const canonical = canonicalProjectionBlock(repoRoot);
+      for (const block of generatedBlocks(headBytes)) {
+        if (blobBlocks.includes(block)) continue;
+        if (canonical !== null && block === canonical) continue;
+        refuse("task path " + relativePath + " carries a generated lifecycle block that is neither its pinned planning blob's block nor the canonical projection of the current lifecycle records; refusing an unreported task-file mutation");
+      }
+    }
+    // The committed human-authored planning bytes must still be exact: a
+    // committed lifecycle write that regenerated the generated projection
+    // block is the one lawful difference from the pinned planning blob; any
+    // committed edit outside the sentinels is an unreported mutation.
+    const blobText = gitBlob(repoRoot, identity.planningCommit, relativePath).toString("utf8");
+    if (!proseIdentityMatches(blobText, headBytes)) {
+      refuse("task path " + relativePath + " changed outside its generated lifecycle block since its pinned planning blob; refusing an unreported task-file mutation");
+    }
+  }
+  if (scan.owned.length === 0) return null;
+  if (!pathIsAllowed(relativePath, binding.allowedPaths)) {
+    refuse("task path " + relativePath + " carries a superseded Status marker but is not declared in the manifest allowedPaths");
+  }
+  return { relativePath, absolutePath, nextText: convergeStatusMarkers(treeText).text, removed: scan.owned.length };
+}
+
+// Apply a planned convergence as part of the closeout write phase, after the
+// terminal record and projections exist on disk.
+function applyStatusConvergence(convergence: StatusConvergence | null, changedPaths: string[]): void {
+  if (convergence === null) return;
+  fs.writeFileSync(convergence.absolutePath, convergence.nextText);
+  changedPaths.push(convergence.relativePath);
+}
+
+function declaredTargets(repoRoot: string): string[] {
+  try {
+    const config = readProjectionConfig(repoRoot);
+    return config === null ? [] : [...config.targets];
+  } catch (err) {
+    if (err instanceof LifecycleError) refuse(err.message);
+    throw err;
+  }
+}
+
+// The complete prospective projection: every declared target regenerated over
+// the final record set, plus the task file with the planned marker convergence
+// applied. Audited with the same pure structural audit the standalone
+// currentness command runs, so a red result carries the exact
+// file/section/task/reason diagnostics without guessing.
+function prospectiveViolations(
+  repoRoot: string,
+  identity: NorthstarIdentity,
+  finalRecord: Record<string, unknown>,
+  convergence: StatusConvergence | null,
+  targets: string[],
+): CurrentnessViolation[] {
+  const config = (() => {
+    try {
+      return readProjectionConfig(repoRoot);
+    } catch (err) {
+      if (err instanceof LifecycleError) refuse(err.message);
+      throw err;
+    }
+  })();
+  const merged = listStateRecords(repoRoot)
+    .filter((record) => String(record.task_id) !== identity.taskId)
+    .concat([finalRecord]);
+  const wanted = new Set<string>(targets);
+  for (const record of merged) {
+    if (typeof record.task_path === "string" && record.task_path.length > 0) wanted.add(String(record.task_path));
+  }
+  const states = config === null ? [] : config.active_generations.map((generation) =>
+    generationStateOf(merged, generation, readGenerationClosure(repoRoot, generation)));
+  const files: Record<string, string> = {};
+  for (const relative of wanted) {
+    const absolute = path.join(repoRoot, relative);
+    let stats: fs.Stats;
+    try {
+      stats = fs.lstatSync(absolute);
+    } catch {
+      continue;
+    }
+    if (stats.isSymbolicLink() || !stats.isFile()) continue;
+    let text = fs.readFileSync(absolute, "utf8");
+    if (text.length > 1024 * 1024) continue; // the repository audit owns the read-bound refusal
+    if (config !== null && targets.includes(relative)) {
+      text = renderProjectionInto(text, buildProjectionStates(merged, states)).text;
+    }
+    if (relative === identity.taskPath && convergence !== null) text = convergence.nextText;
+    files[relative] = text;
+  }
+  return auditCurrentnessText(files, merged, targets);
+}
+
+function currentnessDetail(violations: CurrentnessViolation[]): string {
+  const details = violations.slice(0, 8).map((v) =>
+    v.file + " [" + v.section + "] task " + (v.task.length > 0 ? v.task : "-") + ": " + v.reason);
+  const suffix = violations.length > 8 ? "; +" + (violations.length - 8) + " more" : "";
+  return details.join("; ") + suffix;
+}
+
 function handleCloseout(repoRoot: string, event: Record<string, any>, binding: ManifestBinding): void {
   const identity = reconstructIdentity(repoRoot, event);
   const current = readRecord(repoRoot, identity.taskId);
   if (current !== null && String(current.status) === "complete") {
     // Explicit idempotent rule: the terminal record exists, so a still-present
     // exact handoff is leftover transport from an earlier publication and its
-    // consumption is a no-diff cleanup. A changed or ambiguous file still
-    // refuses; absence is the normal replay shape.
+    // consumption is a no-diff cleanup. A leftover superseded status marker is
+    // the same class of leftover publication byte. A changed or ambiguous file
+    // still refuses; absence is the normal replay shape.
     const consumable = binding.mode === "integration_write"
       ? prepareHandoffConsumption(repoRoot, event, binding, true)
       : null;
+    const convergence = prepareStatusConvergence(repoRoot, identity, binding, true);
     guardConsumableBacklinks(repoRoot, consumable);
+    // The replay leaves at most those two no-diff cleanups, so the complete
+    // prospective projection is audited before either is consumed; a red
+    // currentness result refuses with the checkout untouched.
+    const violations = prospectiveViolations(repoRoot, identity, current, convergence, declaredTargets(repoRoot));
+    if (violations.length > 0) {
+      emit(String(event.eventId), "blocked",
+        "closeout replay blocked for " + identity.taskId + ": the prospective projection is not current: " + currentnessDetail(violations),
+        { task_id: identity.taskId, replayed: true, currentness_violations: violations },
+        [], null);
+      return;
+    }
     const changedPaths: string[] = [];
     consumeHandoff(consumable, changedPaths);
+    if (binding.mode === "integration_write") applyStatusConvergence(convergence, changedPaths);
     const uniqueChanged = [...new Set(changedPaths)].sort();
+    for (const changedPath of uniqueChanged) {
+      if (!pathIsAllowed(changedPath, binding.allowedPaths)) refuse("computed change " + changedPath + " is outside the manifest allowedPaths");
+    }
     emit(String(event.eventId), "ok",
-      "lifecycle record for " + identity.taskId + " is already complete; no changes",
-      { task_id: identity.taskId, replayed: true, portable_digest: String(current.portable_digest), handoff_consumed: consumable !== null },
+      "lifecycle record for " + identity.taskId + " is already complete" +
+        (uniqueChanged.length > 0 ? "; consumed leftover publication bytes as a no-diff cleanup" : "; no changes"),
+      { task_id: identity.taskId, replayed: true, portable_digest: String(current.portable_digest), handoff_consumed: consumable !== null, status_marker_converged: convergence !== null },
       uniqueChanged, uniqueChanged.length > 0 ? subjectSuffix(identity, "terminal record") : null);
     return;
   }
@@ -848,8 +1218,9 @@ function handleCloseout(repoRoot: string, event: Record<string, any>, binding: M
   const consumable = binding.mode === "integration_write"
     ? prepareHandoffConsumption(repoRoot, event, binding, false)
     : null;
+  const convergence = prepareStatusConvergence(repoRoot, identity, binding, false);
   guardConsumableBacklinks(repoRoot, consumable);
-  applyMapped(repoRoot, event, binding, identity, envelopes, current, "terminal record", consumable, true);
+  applyMapped(repoRoot, event, binding, identity, envelopes, current, "terminal record", consumable, true, convergence, true);
 }
 
 // ---------------------------------------------------------------------------
