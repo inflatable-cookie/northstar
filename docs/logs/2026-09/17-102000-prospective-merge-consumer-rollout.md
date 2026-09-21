@@ -250,3 +250,29 @@ archived without closure receipts, which is a generation-closure decision in
 that repository rather than a header sweep. bughunt, monkey and poodle-lab hold
 one `stale-frontier` finding each that does not block closeout, so they are
 portfolio hygiene rather than blockers.
+
+## Outcome (2026-09-21)
+
+The rollout is complete. All twenty census repositories now declare
+`paseo.queue.control.v4` with the pre-merge hook at `prospective_merge`,
+verified from each repository's own manifest rather than from prose.
+
+The operator-led incident that followed cleared every stuck closeout: thirteen
+original holds plus workspace cleanup, seventeen workspaces released (37 to 20),
+including the three currentness repairs dispatched here and underlay-reference.
+The three repair lanes met their oracle — acowtancy, figmatic and swallowtail all
+report `audit-currentness` clean — and bovine's own repair (`fe00e8fec`,
+`4ce01bee4`) leaves it clean for currentness and record integrity.
+
+Two closures worth keeping:
+
+- The closeout metadata trap is fixed and installed (`ad83012`): holdings now
+  report their real findings instead of a 32 KiB malfunction, which is what made
+  the difference between "eight violations" and 772 legible.
+- The drifted-record-path class needed no adapter change after all. Restoring the
+  corrupted record bytes from their original committed blob, plus historical
+  pointer cards with provenance for reissued lanes, preserved identity without
+  mutating immutable state or adding a verb.
+
+One hundred and fourteen pending tasks remain held by the operator and are not to
+be released without their instruction; no `retry_hook` work remains here.
