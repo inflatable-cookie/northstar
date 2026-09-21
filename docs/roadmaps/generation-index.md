@@ -1,7 +1,7 @@
 # Roadmap Generation Index
 
 Status: active
-Updated: 2026-09-20
+Updated: 2026-09-21
 Mode: sequential
 
 ## Active generation
@@ -11,8 +11,9 @@ Mode: sequential
 - Mechanical task state and delivery evidence are projected in the generated
   lifecycle blocks under `docs/README.md`, `docs/roadmaps/README.md`, and
   `g03/README.md`; this index stays strategic.
-- Current approved lane: `g03.021`; converge the task-local lifecycle authority
-  at closeout so a required closeout cannot leave a second authority.
+- No lane is approved. Every `g03` task is terminal and the generation stays
+  open in `planning_required` until an explicit rollover; the next move is a
+  Chatterbox planning decision.
 
 ## Generation log
 
@@ -37,7 +38,8 @@ it in the same rollover change.
 
 ## Next task
 
-`g03.021` is the approved lane. It converges the task-local lifecycle authority
-at closeout and runs the prospective currentness check, which is the adapter
-revision Queue's `g01.019` pins. Operator-authorized consumer manifest
-migrations continue as separate per-project maintenance tasks.
+No lane is approved. `g03` is exhausted and awaiting a rollover or a fresh
+planning lane. The accepted closeout-convergence revision is merged and its
+installed interface identity has been handed to Queue for `g01.019`.
+Operator-authorized consumer manifest migrations continue as separate
+per-project maintenance tasks.

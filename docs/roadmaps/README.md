@@ -26,11 +26,10 @@ generation remains expanded.
 
 ## Next task
 
-[g03.021 — Converge terminal closeout authority](./g03/021-converge-terminal-closeout-authority.md)
-is the approved lane: on closeout the adapter converges the superseded
-task-local status marker and refuses a non-current prospective projection.
-Operator-authorized consumer manifest migrations continue as separate
-per-project maintenance tasks; they are not a Northstar lane.
+No lane is approved. The active generation is exhausted, so it stays open in
+`planning_required` until Chatterbox promotes the next lane or an explicit
+rollover closes it. Operator-authorized consumer manifest migrations continue
+as separate per-project maintenance tasks; they are not a Northstar lane.
 <!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:b0aa807ae56cda0a247a794c9889e4a87aa4e0958b7479f436856146f70c72f4 -->
 | Generation | Disposition | Runway state |
 | --- | --- | --- |

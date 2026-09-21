@@ -23,7 +23,7 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 | Consume closed-generation lifecycle task fragments into one verified receipt. | complete as `g03.018`; terminal record published at `c74cbdd` | contract 001, lifecycle maintenance, lifecycle reference | observe natural catch-up |
 | Accept Queue prospective-merge pre-merge events without weakening prior event contracts. | complete as `g03.019` | contract 001, lifecycle reference; Queue Spec 015 | compatibility proven through Bovine |
 | Make prospective-merge checks the portable Queue default and migrate existing consumers safely. | complete as `g03.020`; terminal record published at `f34e1c0` | contract 001, lifecycle reference; Queue Spec 015 | no further Northstar producer lane; per-project consumer migrations continue outside the generation |
-| Converge terminal closeout authority so a required closeout cannot leave a second lifecycle authority. | ready as `g03.021`; operator approved on 2026-09-20 | contract 001, lifecycle reference; Queue Spec 006 | publish the accepted adapter revision Queue's dependency pins |
+| Converge terminal closeout authority so a required closeout cannot leave a second lifecycle authority. | complete as `g03.021`; terminal record published at `846cd3b` | contract 001, lifecycle reference; Queue Spec 006 | no further Northstar lane; Queue `g01.019` pins the accepted revision |
 | Keep unresolved operator feedback visible without pinning old generations open. | watch | contract 001 | bounded watchlist below |
 
 Task mechanical state — status, stage, revision, delivery digests — is the
@@ -33,12 +33,11 @@ are not a per-task status mirror.
 
 ## Current lane
 
-`g03.021` is the approved lane: on closeout the adapter converges the
-superseded task-local `Status:` marker inside the same publication and refuses a
-non-current prospective projection. Dispatch authorization is its committed
-handoff plus its task dispatch manifest; no concurrent Northstar sibling is
-authorized. Consumer repositories remain separate per-project Queue tasks and
-authorize no sibling here.
+No Northstar lane is approved. Every `g03` task is terminal, so the generation
+stays open in `planning_required` until an explicit rollover closes it; the next
+move is a Chatterbox planning decision rather than a resumed lane. Consumer
+repositories remain separate per-project Queue tasks and authorize no sibling
+here.
 
 ## Bounded watchlist
 
@@ -82,9 +81,9 @@ completion in the runway above and in Git history.
 
 ## Next task
 
-`g03.021` is the approved lane. It converges the task-local lifecycle authority
-at closeout and runs the prospective currentness check, so Queue's `g01.019`
-has an adapter revision to pin. Operator-authorized consumer manifest
+No task is ready. `g03` is exhausted and awaits a rollover or a fresh planning
+lane. The accepted closeout-convergence revision is merged and its installed
+interface identity has been handed to Queue for `g01.019`. Consumer manifest
 migrations continue as separate per-project maintenance tasks.
 <!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:b0aa807ae56cda0a247a794c9889e4a87aa4e0958b7479f436856146f70c72f4 -->
 | Generation | Disposition | Runway state |
