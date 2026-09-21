@@ -228,3 +228,25 @@ bun run <installed-skill>/scripts/lifecycle-core.ts audit-currentness --repo <co
 The documented `--repo` form is wrong and is recorded in `PAPERCUTS.md` rather
 than corrected in place, because the lifecycle reference is part of the
 installed interface identity Queue currently pins.
+
+## Currentness repair lanes (dispatched 2026-09-21)
+
+The census sweep predicted that red repositories would block their own migration
+lanes at closeout; acowtancy and figmatic did, and swallowtail was next. Queue
+Spec 006 names the bounded repair for a consumer already left red, and the
+portfolio has used the same lane shape before, so these three are dispatched
+rather than left waiting on the gate-scope question.
+
+| Repository | Task | Queue task | Findings |
+| --- | --- | --- | --- |
+| acowtancy | `g05.176` | `b3a92286` | 97 duplicate-status-header, 7 stale-frontier |
+| figmatic | `g01.045` | `960d13cb` | 10 duplicate-status-header, 2 stale-frontier |
+| swallowtail | `g06.008` | `074a997f` | 1 duplicate-status-header, 1 stale-frontier |
+
+Each card carries the audit's exact inventory, forbids renumbering or semantic
+rewriting, and stops on any finding that needs product direction. Bovine is
+deliberately excluded: 42 of its findings are records orphaned by generations
+archived without closure receipts, which is a generation-closure decision in
+that repository rather than a header sweep. bughunt, monkey and poodle-lab hold
+one `stale-frontier` finding each that does not block closeout, so they are
+portfolio hygiene rather than blockers.
