@@ -3146,6 +3146,64 @@ printf '%s\n' "$installed_out" | grep -q '"status": "dry_run"'
 [ -z "$(git -C "$installed_repo" status --porcelain)" ]
 echo "installed skill route resolves the migration and stays read-only in dry run: OK"
 
+echo "# oversized currentness detail stays bounded and blocks instead of malfunctioning"
+# The audit reports whole section strings. A large repository can put tens of
+# kilobytes into one violation, which previously turned a red closeout into a
+# hook malfunction that no retry could clear. All four emit sites share the
+# bounded metadata helper; this proves the closeout and replay paths.
+repoO="$scratch/repo-oversize"
+build_fixture "$repoO"
+CURRENT_REPO="$repoO"
+read_facts "$(fixture_facts "$repoO" 006)"
+huge=$(printf 'y%.0s' $(seq 1 40000))
+write_oversize_violation() {
+  printf '\n## Next task %s\n\nText names g03.006 once.\n' "$huge" >> "$repoO/docs/roadmaps/g03/README.md"
+  git -C "$repoO" add -A
+  git -C "$repoO" commit -qm "oversized currentness violation"
+}
+write_oversize_violation
+read_facts "$(fixture_facts "$repoO" 006)"
+write_event "$scratch/closeout-oversize.json" "evt-closeout-oversize-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+oversize=$(run_hook "$scratch/closeout-oversize.json" "evt-closeout-oversize-0001")
+expect_outcome "$oversize" blocked "oversized currentness violation"
+json_field "$oversize" "r.summary.includes('not current')" >/dev/null
+[ "$(json_field "$oversize" "r.metadata.currentness_violation_count")" = "1" ]
+[ "$(json_field "$oversize" "r.metadata.currentness_violations.length")" = "1" ]
+[ "$(json_field "$oversize" "r.metadata.currentness_violations[0].section.length")" = "256" ]
+[ "$(json_field "$oversize" "r.metadata.currentness_violations[0].task")" = "g03.006" ]
+[ "$(json_field "$oversize" "r.metadata.currentness_violations[0].reason")" = "stale-frontier" ]
+[ "$(json_field "$oversize" "JSON.stringify(r.metadata).length < 32768")" = "true" ]
+[ "$(printf '%s' "$oversize" | wc -c | tr -d ' ')" -lt 32768 ]
+[ ! -e "$repoO/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+[ -z "$(git -C "$repoO" status --porcelain)" ]
+# Replay path: publish the terminal record with a clean target, then break it again.
+python3 - "$repoO/docs/roadmaps/g03/README.md" <<'PY'
+import sys
+path = sys.argv[1]
+text = open(path).read()
+marker = "\n## Next task yyyy"
+if marker in text:
+    text = text[: text.index(marker)] + "\n"
+open(path, "w").write(text)
+PY
+git -C "$repoO" add -A
+git -C "$repoO" commit -qm "restore clean currentness"
+read_facts "$(fixture_facts "$repoO" 006)"
+write_event "$scratch/closeout-oversize-clean.json" "evt-closeout-oversize-clean-0001" "task.closeout" "lifecycle-state" "$MC" \
+  "q-006" '"Implement g03.006 fixture task"' \
+  "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
+expect_outcome "$(run_hook "$scratch/closeout-oversize-clean.json" "evt-closeout-oversize-clean-0001")" ok "clean bootstrap after oversize refusal"
+write_oversize_violation
+replay=$(run_hook "$scratch/closeout-oversize.json" "evt-closeout-oversize-0001")
+expect_outcome "$replay" blocked "oversized currentness violation on replay"
+[ "$(json_field "$replay" "r.metadata.replayed")" = "true" ]
+[ "$(json_field "$replay" "r.metadata.currentness_violation_count")" = "1" ]
+[ "$(printf '%s' "$replay" | wc -c | tr -d ' ')" -lt 32768 ]
+[ -z "$(git -C "$repoO" status --porcelain)" ]
+echo "oversized currentness metadata stays bounded: OK"
+
 echo "# no repository runtime remains in any live surface"
 [ ! -e "$repo_root/.paseo/hooks" ]
 [ ! -e "$repo_root/template-bundle/lifecycle/hooks" ]

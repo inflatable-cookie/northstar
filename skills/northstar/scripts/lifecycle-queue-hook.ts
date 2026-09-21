@@ -443,6 +443,32 @@ function bounded(text: string, maxBytes: number): string {
   return truncated.length > 0 ? truncated : "hook summary";
 }
 
+// The currentness audit reports whole file, section and task strings, which can
+// be arbitrarily long in a large repository. The summary already carries the
+// bounded human-readable detail, so metadata carries at most a truncated copy
+// plus the true count. Keeping this bounded by construction is what stops a red
+// audit from becoming a hook malfunction that no retry can clear.
+const METADATA_VIOLATION_LIMIT = 8;
+const METADATA_VIOLATION_FIELD_BYTES = 256;
+
+function boundedViolations(violations: CurrentnessViolation[]): Record<string, unknown>[] {
+  return violations.slice(0, METADATA_VIOLATION_LIMIT).map((violation) => ({
+    file: bounded(violation.file, METADATA_VIOLATION_FIELD_BYTES),
+    section: bounded(violation.section, METADATA_VIOLATION_FIELD_BYTES),
+    task: bounded(violation.task, METADATA_VIOLATION_FIELD_BYTES),
+    reason: violation.reason,
+  }));
+}
+
+function currentnessMetadata(violations: CurrentnessViolation[], extra: Record<string, unknown>): Record<string, unknown> {
+  return {
+    ...extra,
+    currentness_violations: boundedViolations(violations),
+    currentness_violation_count: violations.length,
+    currentness_violations_truncated: violations.length > METADATA_VIOLATION_LIMIT,
+  };
+}
+
 function emit(eventId: string, outcome: "ok" | "blocked" | "failed", summary: string, metadata: Record<string, unknown>, changedPaths: string[], commitSubjectSuffix: string | null): void {
   const result = {
     schema: RESULT_SCHEMA,
@@ -459,7 +485,16 @@ function emit(eventId: string, outcome: "ok" | "blocked" | "failed", summary: st
     if (err instanceof LifecycleError) malfunction("hook result failed its own schema: " + err.message);
     throw err;
   }
-  if (Buffer.byteLength(JSON.stringify(result.metadata), "utf8") > METADATA_MAX_BYTES) malfunction("hook metadata exceeds 32 KiB");
+  // Metadata is bounded by construction for the known-unbounded currentness
+  // detail. This guard is the last-resort invariant: an unforeseen oversized
+  // payload degrades to a correlation stub instead of a malfunction the caller
+  // cannot retry past.
+  if (Buffer.byteLength(JSON.stringify(result.metadata), "utf8") > METADATA_MAX_BYTES) {
+    const stub: Record<string, unknown> = { metadata_truncated: true, metadata_limit_bytes: METADATA_MAX_BYTES };
+    const taskId = (metadata as Record<string, unknown>).task_id;
+    if (typeof taskId === "string") stub.task_id = taskId;
+    result.metadata = stub;
+  }
   process.stdout.write(canonicalJson(result) + "\n");
 }
 
@@ -566,7 +601,7 @@ function applyMapped(
       if (violations.length > 0) {
         emit(String(event.eventId), "blocked",
           "read-only closeout validation for " + identity.taskId + ": the prospective projection is not current: " + currentnessDetail(violations),
-          { task_id: identity.taskId, mode: "read_only", currentness_violations: violations },
+          currentnessMetadata(violations, { task_id: identity.taskId, mode: "read_only" }),
           [], null);
         return;
       }
@@ -630,7 +665,7 @@ function applyMapped(
     if (violations.length > 0) {
       emit(String(event.eventId), "blocked",
         "closeout blocked for " + identity.taskId + ": the prospective projection is not current: " + currentnessDetail(violations),
-        { task_id: identity.taskId, currentness_violations: violations },
+        currentnessMetadata(violations, { task_id: identity.taskId }),
         [], null);
       return;
     }
@@ -680,7 +715,7 @@ function applyMapped(
     if (finalAudit.violations.length > 0) {
       emit(String(event.eventId), "blocked",
         "closeout blocked for " + identity.taskId + ": the published tree is not current: " + currentnessDetail(finalAudit.violations),
-        { task_id: identity.taskId, currentness_violations: finalAudit.violations },
+        currentnessMetadata(finalAudit.violations, { task_id: identity.taskId }),
         uniqueChanged, null);
       return;
     }
@@ -1188,7 +1223,7 @@ function handleCloseout(repoRoot: string, event: Record<string, any>, binding: M
     if (violations.length > 0) {
       emit(String(event.eventId), "blocked",
         "closeout replay blocked for " + identity.taskId + ": the prospective projection is not current: " + currentnessDetail(violations),
-        { task_id: identity.taskId, replayed: true, currentness_violations: violations },
+        currentnessMetadata(violations, { task_id: identity.taskId, replayed: true }),
         [], null);
       return;
     }
