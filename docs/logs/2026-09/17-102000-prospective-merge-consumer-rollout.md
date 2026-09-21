@@ -116,3 +116,23 @@ This is recorded for the rollout's own timeline, not as Northstar work.
   be retried from this side; Queue owns the escape.
 
 Batch 3 (ten repositories) is held until the queue sweeps cleanly again.
+
+## Uncertain workspace creation: the supported route
+
+When a transport failure lands mid-dispatch, a task can keep `workspaceIntent:
+true` with no `agentId` and no workspace. The adapter's `recover()` deliberately
+refuses to replay creation, because a dropped response can hide a workspace that
+does exist. The escape is the operator control:
+
+```sh
+node bin/queue-cli.mjs task  # {"taskId":..., "version":..., "action":"retry_validation"}
+```
+
+It proves absence through `findWorkspaces` and only then clears the intent and
+replays the same create. Preconditions: `workspaceIntent: true`, no
+`agentIntent`, no `agentId`, exactly zero workspaces found, queue not paused. The
+three batch-2 lanes met all of them and were replayed on 2026-09-21 (nucleus,
+loophole, longhorn); nucleus and loophole then waited on the queue-wide
+workspace admission budget rather than on transport, and longhorn dispatched.
+
+Blind retries are not a substitute: the proof is what makes the replay safe.
