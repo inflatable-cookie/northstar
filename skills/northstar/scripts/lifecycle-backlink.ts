@@ -148,8 +148,8 @@ export function findHandoffBacklinks(repoRoot: string, handoffRel: string): stri
   // The second Git search keeps those links in the candidate set.
   const tracked = literalBasename
     ? [...new Set([
-      ...trackedMarkdownMatches(repoRoot, ["grep", "-l", "-z", "-F", basename, "--", "*.md"], true),
-      ...trackedMarkdownMatches(repoRoot, ["grep", "-l", "-z", "-E", encodedBasenamePattern(basename), "--", "*.md"], true),
+      ...trackedMarkdownMatches(repoRoot, ["grep", "-l", "-z", "-F", "-e", basename, "--", "*.md"], true),
+      ...trackedMarkdownMatches(repoRoot, ["grep", "-l", "-z", "-E", "-e", encodedBasenamePattern(basename), "--", "*.md"], true),
     ])]
     : trackedMarkdownMatches(repoRoot, ["ls-files", "-z", "--", "*.md"], false);
   if (Buffer.byteLength(tracked.join("\0"), "utf8") > BACKLINK_SCAN_MAX_LISTING_BYTES) {

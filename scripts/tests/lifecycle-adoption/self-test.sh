@@ -1643,6 +1643,18 @@ bun -e '
 ' "$source_skill/scripts/lifecycle-backlink.ts" "$repoEscapedBasename"
 echo "escaped-basename fallback finds encoded backlinks: OK"
 
+printf '# Log\n\nSee [the handoff](handoffs/-notes.md).\n' > "$repoEscapedBasename/docs/dash-link.md"
+printf '# Log\n\nSee [the handoff](handoffs/%%2Dnotes.md).\n' > "$repoEscapedBasename/docs/dash-encoded-link.md"
+git -C "$repoEscapedBasename" add -A
+git -C "$repoEscapedBasename" commit -qm "add dash-leading basename backlinks"
+bun -e '
+  const { findHandoffBacklinks } = await import(process.argv[1]);
+  const hits = findHandoffBacklinks(process.argv[2], "docs/handoffs/-notes.md");
+  const expected = ["docs/dash-encoded-link.md", "docs/dash-link.md"];
+  if (JSON.stringify(hits) !== JSON.stringify(expected)) throw new Error("dash-leading basename prefilter missed backlinks: " + hits);
+' "$source_skill/scripts/lifecycle-backlink.ts" "$repoEscapedBasename"
+echo "dash-leading basename prefilter finds literal and encoded backlinks: OK"
+
 echo "# pre-merge gate runs read-only at the exact reviewed head"
 repoPre="$scratch/repo-pre-merge"
 build_fixture "$repoPre"
