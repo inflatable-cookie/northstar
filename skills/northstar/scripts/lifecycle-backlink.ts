@@ -46,7 +46,7 @@ function malfunction(summary: string): never {
 
 export const BACKLINK_SCAN_MAX_FILES = 25_000;
 export const BACKLINK_SCAN_MAX_LISTING_BYTES = 4 * 1024 * 1024;
-export const BACKLINK_SCAN_MAX_AGGREGATE_BYTES = 64 * 1024 * 1024;
+export const BACKLINK_SCAN_MAX_AGGREGATE_BYTES = 128 * 1024 * 1024;
 export const BACKLINK_SCAN_MAX_BYTES = 4 * 1024 * 1024;
 const MARKDOWN_LINK_RE = /\[[^\]]*\]\(\s*(?:<([^<>\s]+)>|([^\s)]+))(?:\s+[^)]*)?\)/g;
 const AUTOLINK_RE = /<([^<>\s]+)>/g;
