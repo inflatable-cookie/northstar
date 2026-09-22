@@ -86,7 +86,7 @@ No task is ready. `g03` is exhausted and awaits a rollover or a fresh planning
 lane. The accepted closeout-convergence revision is merged and its installed
 interface identity has been handed to Queue for `g01.019`. Consumer manifest
 migrations continue as separate per-project maintenance tasks.
-<!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:b0aa807ae56cda0a247a794c9889e4a87aa4e0958b7479f436856146f70c72f4 -->
+<!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:08c4cc41e357ab04efa57f477da4162fcd321534a298b63d66b24363a825b429 -->
 | Generation | Disposition | Runway state |
 | --- | --- | --- |
 | g03 | open | planning_required |
@@ -108,4 +108,5 @@ migrations continue as separate per-project maintenance tasks.
 | g03.019 | complete | none | 8 | sha256:76d6a4c9b2956db2e27f351809da4cc0222eeac31ef4d4789468b76ce198bc30 |
 | g03.020 | complete | none | 8 | sha256:da733286412d8cdf4c1e56ba0e48ea434e92539dd6da3f84b642da8ad809e3be |
 | g03.021 | complete | none | 8 | sha256:ba3422694b358b8e89e0a3ae00f65c9efd7cc84b64d272af8cab477d939feffa |
+| g03.022 | complete | none | 8 | sha256:0cb64c8b842c52c3574d858925968e4f643985924a38a7fdfe53043e7ef26adf |
 <!-- northstar:lifecycle:end -->
