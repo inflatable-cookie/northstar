@@ -1614,9 +1614,12 @@ link_case exact "handoffs/handoff-006.md" blocked
 link_case rooted "/docs/handoffs/handoff-006.md" blocked
 link_case fragment "handoffs/handoff-006.md#evidence" blocked
 link_case titled 'handoffs/handoff-006.md "Worker handoff"' blocked
+link_case autolink "none" blocked $'See <handoffs/handoff-006.md>.'
 link_case reffull "none" blocked $'See [the handoff][run].\n\n[run]: handoffs/handoff-006.md "dispatch source"'
 link_case refcollapsed "none" blocked $'See [the handoff][].\n\n[the handoff]: handoffs/handoff-006.md'
 link_case refshortcut "none" blocked $'See [dispatch-note] for context.\n\n[dispatch-note]: handoffs/handoff-006.md'
+link_case percentencoded "handoffs/handoff-%30%30%36.md" blocked
+link_case generatedonly "none" ok $'<!-- northstar:lifecycle:begin -->\nSee [the handoff](handoffs/handoff-006.md).\n<!-- northstar:lifecycle:end -->'
 link_case external "https://github.com/example/repo/blob/main/docs/handoffs/handoff-006.md" ok
 link_case mismatch "handoffs/handoff-006-v2.md" ok
 link_case codeexample "none" blocked $'```md\nSee [the handoff](handoffs/handoff-006.md).\n```\n\nQuoted `[the handoff](handoffs/handoff-006.md)` stays inline.'
@@ -1627,6 +1630,18 @@ link_case non1ordered "none" blocked $'Paragraph text.\n3. markers [the handoff]
 echo "conservative code-context refusals are atomic: OK"
 link_case sibling "handoffs/handoff-007.md" ok
 echo "relative, rooted, fragment, titled, reference-style, indented, escaped, list-continuation, non-1-ordered, fenced, inline, external, mismatch, and sibling controls: OK"
+
+repoEscapedBasename="$scratch/repo-escaped-basename"
+build_fixture "$repoEscapedBasename"
+printf '# Log\n\nSee [the handoff](handoffs/hand%%20off.md).\n' > "$repoEscapedBasename/docs/escaped-link.md"
+git -C "$repoEscapedBasename" add -A
+git -C "$repoEscapedBasename" commit -qm "add encoded unusual-basename backlink"
+bun -e '
+  const { findHandoffBacklinks } = await import(process.argv[1]);
+  const hits = findHandoffBacklinks(process.argv[2], "docs/handoffs/hand off.md");
+  if (JSON.stringify(hits) !== JSON.stringify(["docs/escaped-link.md"])) throw new Error("escaped-basename fallback missed its backlink: " + hits);
+' "$source_skill/scripts/lifecycle-backlink.ts" "$repoEscapedBasename"
+echo "escaped-basename fallback finds encoded backlinks: OK"
 
 echo "# pre-merge gate runs read-only at the exact reviewed head"
 repoPre="$scratch/repo-pre-merge"
@@ -2121,22 +2136,16 @@ read_facts "$(fixture_facts "$repoCountOverflow" 006)"
 write_event "$scratch/closeout-count-overflow.json" "evt-closeout-count-overflow-0001" "task.closeout" "lifecycle-state" "$MC" \
   "q-006" '"Implement g03.006 fixture task"' \
   "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
-count_handoff_digest=$(sha256sum "$repoCountOverflow/docs/handoffs/handoff-006.md" | cut -d' ' -f1)
-count_readme_digest=$(sha256sum "$repoCountOverflow/docs/README.md" | cut -d' ' -f1)
 count_out=$(run_hook "$scratch/closeout-count-overflow.json" "evt-closeout-count-overflow-0001")
-expect_outcome "$count_out" blocked "over-count Markdown set"
-json_field "$count_out" "r.summary.includes('25000-file bound')" >/dev/null
-[ ! -e "$repoCountOverflow/.northstar/lifecycle/v1/tasks/g03.006.json" ]
-[ -e "$repoCountOverflow/docs/handoffs/handoff-006.md" ]
-[ "$count_handoff_digest" = "$(sha256sum "$repoCountOverflow/docs/handoffs/handoff-006.md" | cut -d' ' -f1)" ]
-[ "$count_readme_digest" = "$(sha256sum "$repoCountOverflow/docs/README.md" | cut -d' ' -f1)" ]
-[ -z "$(git -C "$repoCountOverflow" status --porcelain)" ]
-echo "over-count Markdown set ($count_files files) refuses atomically: OK"
+expect_outcome "$count_out" ok "over-count Markdown set"
+[ ! -e "$repoCountOverflow/docs/handoffs/handoff-006.md" ]
+[ -f "$repoCountOverflow/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+echo "over-count Markdown set ($count_files files) passes with a bounded hit set: OK"
 
 repoAggregateOverflow="$scratch/repo-aggregate-overflow"
 build_fixture "$repoAggregateOverflow"
 mkdir -p "$repoAggregateOverflow/docs/aggregate-overflow"
-for number in $(seq -w 1 65); do
+for number in $(seq -w 1 129); do
   write_sparse_markdown "$repoAggregateOverflow/docs/aggregate-overflow/file-$number.md" $((1024 * 1024))
 done
 git -C "$repoAggregateOverflow" add -A
@@ -2146,17 +2155,27 @@ read_facts "$(fixture_facts "$repoAggregateOverflow" 006)"
 write_event "$scratch/closeout-aggregate-overflow.json" "evt-closeout-aggregate-overflow-0001" "task.closeout" "lifecycle-state" "$MC" \
   "q-006" '"Implement g03.006 fixture task"' \
   "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
-aggregate_handoff_digest=$(sha256sum "$repoAggregateOverflow/docs/handoffs/handoff-006.md" | cut -d' ' -f1)
-aggregate_readme_digest=$(sha256sum "$repoAggregateOverflow/docs/README.md" | cut -d' ' -f1)
 aggregate_out=$(run_hook "$scratch/closeout-aggregate-overflow.json" "evt-closeout-aggregate-overflow-0001")
-expect_outcome "$aggregate_out" blocked "over-aggregate Markdown set"
-json_field "$aggregate_out" "r.summary.includes('aggregate Markdown size')" >/dev/null
-[ ! -e "$repoAggregateOverflow/.northstar/lifecycle/v1/tasks/g03.006.json" ]
-[ -e "$repoAggregateOverflow/docs/handoffs/handoff-006.md" ]
-[ "$aggregate_handoff_digest" = "$(sha256sum "$repoAggregateOverflow/docs/handoffs/handoff-006.md" | cut -d' ' -f1)" ]
-[ "$aggregate_readme_digest" = "$(sha256sum "$repoAggregateOverflow/docs/README.md" | cut -d' ' -f1)" ]
-[ -z "$(git -C "$repoAggregateOverflow" status --porcelain)" ]
-echo "over-aggregate Markdown set (more than 64 MiB) refuses atomically: OK"
+expect_outcome "$aggregate_out" ok "over-aggregate Markdown set"
+[ ! -e "$repoAggregateOverflow/docs/handoffs/handoff-006.md" ]
+[ -f "$repoAggregateOverflow/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+echo "over-aggregate Markdown set (more than 128 MiB) passes with a bounded hit set: OK"
+
+for file in "$repoAggregateOverflow"/docs/aggregate-overflow/*.md; do
+  printf '\nhandoff-006.md\n' >> "$file"
+done
+git -C "$repoAggregateOverflow" add -A
+git -C "$repoAggregateOverflow" commit -qm "make aggregate corpus a backlink hit set"
+bun -e '
+  const { findHandoffBacklinks, BacklinkError } = await import(process.argv[1]);
+  try {
+    findHandoffBacklinks(process.argv[2], "docs/handoffs/handoff-006.md");
+    throw new Error("oversized hit aggregate passed");
+  } catch (error) {
+    if (!(error instanceof BacklinkError) || error.outcome !== "blocked" || !error.message.includes("aggregate Markdown size")) throw error;
+  }
+' "$source_skill/scripts/lifecycle-backlink.ts" "$repoAggregateOverflow"
+echo "over-aggregate backlink hit set refuses before parsing: OK"
 
 echo "# tracked listing transport bound"
 make_long_path() {
@@ -2208,45 +2227,52 @@ read_facts "$(fixture_facts "$repoOverflowListing" 006)"
 write_event "$scratch/closeout-overflow-listing.json" "evt-closeout-overflow-listing-0001" "task.closeout" "lifecycle-state" "$MC" \
   "q-006" '"Implement g03.006 fixture task"' \
   "docs/handoffs/handoff-006.md" "$IC" "$ID" "$(closeout_delivery "$FH" "$MC")"
-overflow_handoff_digest=$(sha256sum "$repoOverflowListing/docs/handoffs/handoff-006.md" | cut -d' ' -f1)
-overflow_readme_digest=$(sha256sum "$repoOverflowListing/docs/README.md" | cut -d' ' -f1)
 overflow_out=$(run_hook "$scratch/closeout-overflow-listing.json" "evt-closeout-overflow-listing-0001")
-expect_outcome "$overflow_out" failed "over-cap tracked listing"
-json_field "$overflow_out" "r.summary.includes('git ls-files failed')" >/dev/null
-json_field "$overflow_out" "r.summary.includes('ENOBUFS')" >/dev/null
-json_field "$overflow_out" "r.summary.includes('signal SIGTERM')" >/dev/null
-json_field "$overflow_out" "r.summary.includes('status null')" >/dev/null
-[ ! -e "$repoOverflowListing/.northstar/lifecycle/v1/tasks/g03.006.json" ]
-[ -e "$repoOverflowListing/docs/handoffs/handoff-006.md" ]
-[ "$overflow_handoff_digest" = "$(sha256sum "$repoOverflowListing/docs/handoffs/handoff-006.md" | cut -d' ' -f1)" ]
-[ "$overflow_readme_digest" = "$(sha256sum "$repoOverflowListing/docs/README.md" | cut -d' ' -f1)" ]
-[ -z "$(git -C "$repoOverflowListing" status --porcelain)" ]
-echo "over-cap tracked listing ($overflow_bytes bytes) refuses atomically with process evidence: OK"
+expect_outcome "$overflow_out" ok "over-cap tracked listing"
+[ ! -e "$repoOverflowListing/docs/handoffs/handoff-006.md" ]
+[ -f "$repoOverflowListing/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+echo "over-cap tracked listing ($overflow_bytes bytes) passes with a bounded hit set: OK"
 
 fake_git_dir="$scratch/fake-git"
 mkdir -p "$fake_git_dir"
 real_git=$(command -v git)
 cat > "$fake_git_dir/git" <<EOF
 #!/usr/bin/env bash
-if [ "\$1" = "ls-files" ]; then
-  echo "synthetic tracked listing failure" >&2
+if [ "\$1" = "grep" ]; then
+  echo "synthetic backlink prefilter failure" >&2
   exit 73
 fi
 exec "$real_git" "\$@"
 EOF
 chmod +x "$fake_git_dir/git"
-git_failure_out=$(PATH="$fake_git_dir:$PATH" run_hook "$scratch/closeout-overflow-listing.json" "evt-closeout-overflow-listing-0001")
-expect_outcome "$git_failure_out" failed "non-zero tracked listing"
+CURRENT_REPO="$repoLargeLink"
+git_failure_out=$(PATH="$fake_git_dir:$PATH" run_hook "$scratch/closeout-large-link.json" "evt-closeout-large-link-0001")
+expect_outcome "$git_failure_out" failed "non-zero backlink prefilter"
 json_field "$git_failure_out" "r.summary.includes('exit status 73')" >/dev/null
-json_field "$git_failure_out" "r.summary.includes('stderr synthetic tracked listing failure')" >/dev/null
-[ ! -e "$repoOverflowListing/.northstar/lifecycle/v1/tasks/g03.006.json" ]
-[ -e "$repoOverflowListing/docs/handoffs/handoff-006.md" ]
-echo "non-zero tracked listing reports exit and stderr evidence: OK"
+json_field "$git_failure_out" "r.summary.includes('stderr synthetic backlink prefilter failure')" >/dev/null
+echo "non-zero backlink prefilter reports exit and stderr evidence: OK"
+
+cat > "$fake_git_dir/git" <<EOF
+#!/usr/bin/env bash
+if [ "\$1" = "grep" ]; then
+  for number in \$(seq 1 25001); do printf 'docs/hit-%s.md\\0' "\$number"; done
+  exit 0
+fi
+exec "$real_git" "\$@"
+EOF
+chmod +x "$fake_git_dir/git"
+hit_count_out=$(PATH="$fake_git_dir:$PATH" run_hook "$scratch/closeout-large-link.json" "evt-closeout-large-link-0001")
+expect_outcome "$hit_count_out" blocked "over-count backlink hit set"
+[ "$(json_field "$hit_count_out" "r.summary.includes('25000-file bound')")" = "true" ]
+[ ! -e "$repoLargeLink/.northstar/lifecycle/v1/tasks/g03.006.json" ]
+[ -e "$repoLargeLink/docs/handoffs/handoff-006.md" ]
+echo "over-count backlink hit set refuses atomically: OK"
 
 repoOversized="$scratch/repo-oversized"
 build_fixture "$repoOversized"
 mkdir -p "$repoOversized/docs"
 write_markdown_filler "$repoOversized/docs/oversized-ledger.md" $((4 * 1024 * 1024 + 1))
+printf '\nSee handoff-006.md in this oversized hit.\n' >> "$repoOversized/docs/oversized-ledger.md"
 git -C "$repoOversized" add -A
 git -C "$repoOversized" commit -qm "add oversized Markdown ledger"
 CURRENT_REPO="$repoOversized"

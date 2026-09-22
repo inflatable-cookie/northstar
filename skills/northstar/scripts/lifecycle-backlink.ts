@@ -114,18 +114,10 @@ function processEvidence(result: ReturnType<typeof spawnSync>): string {
   return evidence.join("; ");
 }
 
-// Every tracked Markdown file linking to the exact handoff path, sorted. The
-// handoff file itself never counts as a backlink candidate. Bounds fail
-// closed: an unlistable tree, too many files, too much aggregate content, or
-// an oversized file refuses before any byte changes rather than risking a
-// missed backlink.
-export function findHandoffBacklinks(repoRoot: string, handoffRel: string): string[] {
-  const listed = spawnSync("git", ["ls-files", "-z"], {
-    cwd: repoRoot,
-    maxBuffer: BACKLINK_SCAN_MAX_LISTING_BYTES,
-  });
-  if (listed.error || listed.signal !== null || listed.status !== 0) {
-    malfunction("git ls-files failed: " + (processEvidence(listed) || "abnormal process termination"));
+function trackedMarkdownMatches(repoRoot: string, args: string[], noMatchIsOk: boolean): string[] {
+  const listed = spawnSync("git", args, { cwd: repoRoot, maxBuffer: BACKLINK_SCAN_MAX_LISTING_BYTES });
+  if (listed.error || listed.signal !== null || (listed.status !== 0 && !(noMatchIsOk && listed.status === 1))) {
+    malfunction("git " + args[0] + " failed: " + (processEvidence(listed) || "abnormal process termination"));
   }
   const listingBytes = Buffer.isBuffer(listed.stdout)
     ? listed.stdout.byteLength
@@ -133,7 +125,36 @@ export function findHandoffBacklinks(repoRoot: string, handoffRel: string): stri
   if (listingBytes > BACKLINK_SCAN_MAX_LISTING_BYTES) {
     refuse("backlink scan tracked-file listing exceeds its " + BACKLINK_SCAN_MAX_LISTING_BYTES + "-byte bound; refusing the handoff guard");
   }
-  const tracked = String(listed.stdout).split("\0").filter((name) => name.length > 0 && name.endsWith(".md"));
+  return String(listed.stdout).split("\0").filter((name) => name.length > 0 && name.endsWith(".md"));
+}
+
+function encodedBasenamePattern(basename: string): string {
+  return Array.from(basename, (character) => {
+    const literal = character.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const encoded = Buffer.from(character).toString("hex").replace(/[a-f]/g, (hex) => "[" + hex + hex.toUpperCase() + "]");
+    return "(" + literal + "|%" + encoded + ")";
+  }).join("");
+}
+
+// Every tracked Markdown file linking to the exact handoff path, sorted. The
+// handoff file itself never counts as a backlink candidate. A literal basename
+// prefilter keeps normal scans proportional to its hits; unusual basenames use
+// the bounded full scan because their spelling may be escaped in link targets.
+// Bounds fail closed on the candidate set before any byte changes.
+export function findHandoffBacklinks(repoRoot: string, handoffRel: string): string[] {
+  const basename = path.posix.basename(handoffRel);
+  const literalBasename = /^[A-Za-z0-9._-]+$/.test(basename);
+  // resolveLinkTarget decodes percent escapes, including escapes of safe ASCII.
+  // The second Git search keeps those links in the candidate set.
+  const tracked = literalBasename
+    ? [...new Set([
+      ...trackedMarkdownMatches(repoRoot, ["grep", "-l", "-z", "-F", basename, "--", "*.md"], true),
+      ...trackedMarkdownMatches(repoRoot, ["grep", "-l", "-z", "-E", encodedBasenamePattern(basename), "--", "*.md"], true),
+    ])]
+    : trackedMarkdownMatches(repoRoot, ["ls-files", "-z", "--", "*.md"], false);
+  if (Buffer.byteLength(tracked.join("\0"), "utf8") > BACKLINK_SCAN_MAX_LISTING_BYTES) {
+    refuse("backlink scan tracked-file listing exceeds its " + BACKLINK_SCAN_MAX_LISTING_BYTES + "-byte bound; refusing the handoff guard");
+  }
   if (tracked.length > BACKLINK_SCAN_MAX_FILES) {
     refuse("backlink scan exceeds its " + BACKLINK_SCAN_MAX_FILES + "-file bound; refusing the handoff guard");
   }

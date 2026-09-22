@@ -370,12 +370,14 @@ atomically when durable Markdown still links to that exact handoff: the hook
 resolves relative, rooted, and reference-style Markdown links
 (through their definitions), ignores external URLs
 and the handoff itself, and only an exact local target blocks — so deletion
-never strands a backlink. The scan reads the NUL-delimited tracked-file listing
-within a finite 4 MiB transport bound, admits at most 25,000 tracked Markdown
-files and 128 MiB of aggregate Markdown bytes, then reads one file at a time
-within a finite 4 MiB per-file bound. Aggregate sizes are preflighted from
-`lstat` before content is read; larger listings fail with bounded process
-evidence and larger files or aggregates refuse before any byte changes. A changed,
+never strands a backlink. The scan asks Git for tracked Markdown files that
+contain the handoff basename, including percent-encoded spellings, then parses
+only those hits. A handoff basename outside `[A-Za-z0-9._-]` uses the bounded
+full scan because its spelling may be escaped. The candidate listing has a
+finite 4 MiB transport bound, at most 25,000 hits and 128 MiB of aggregate
+candidate bytes, plus a finite 4 MiB per-file bound. Candidate sizes are
+preflighted from `lstat` before content is read; oversized hit sets refuse
+before any byte changes. A changed,
 missing (non-terminal record), symlinked, or otherwise ambiguous handoff
 fails closed before any byte changes; when the record is already terminal, a
 still-present exact handoff is consumed as an idempotent no-diff cleanup and
