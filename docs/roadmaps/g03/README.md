@@ -24,6 +24,7 @@ state, explicit artifact pruning, and closed-generation roll-ups.
 | Accept Queue prospective-merge pre-merge events without weakening prior event contracts. | complete as `g03.019` | contract 001, lifecycle reference; Queue Spec 015 | compatibility proven through Bovine |
 | Make prospective-merge checks the portable Queue default and migrate existing consumers safely. | complete as `g03.020`; terminal record published at `f34e1c0` | contract 001, lifecycle reference; Queue Spec 015 | no further Northstar producer lane; per-project consumer migrations continue outside the generation |
 | Converge terminal closeout authority so a required closeout cannot leave a second lifecycle authority. | complete as `g03.021`; terminal record published at `846cd3b` | contract 001, lifecycle reference; Queue Spec 006 | no further Northstar lane; Queue `g01.019` pins the accepted revision |
+| Scale the handoff backlink guard past corpus-size bounds so large consumers can merge. | ready as `g03.022`; operator approved on 2026-09-22 | contract 001, lifecycle reference | install the accepted adapter and retire the 128 MiB stopgap |
 | Keep unresolved operator feedback visible without pinning old generations open. | watch | contract 001 | bounded watchlist below |
 
 Task mechanical state — status, stage, revision, delivery digests — is the

@@ -11,9 +11,7 @@ Mode: sequential
 - Mechanical task state and delivery evidence are projected in the generated
   lifecycle blocks under `docs/README.md`, `docs/roadmaps/README.md`, and
   `g03/README.md`; this index stays strategic.
-- No lane is approved. Every `g03` task is terminal and the generation stays
-  open in `planning_required` until an explicit rollover; the next move is a
-  Chatterbox planning decision.
+- `g03.022` is approved and ready (backlink guard scaling, 2026-09-22).
 
 ## Generation log
 
