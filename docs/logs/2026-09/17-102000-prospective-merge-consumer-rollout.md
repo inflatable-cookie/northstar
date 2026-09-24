@@ -276,3 +276,26 @@ Two closures worth keeping:
 
 One hundred and fourteen pending tasks remain held by the operator and are not to
 be released without their instruction; no `retry_hook` work remains here.
+
+## Portfolio currentness repair batch (dispatched 2026-09-24)
+
+The 2026-09-21 sweep left six repositories red, and a re-audit on 2026-09-24 still
+found the same twelve findings. `effigy` and `paseo-northstar-queue` had cleared
+without a lane from this thread. Tom approved the batch on 2026-09-24, and each
+repository received the `g06.008` lane shape: the audit's exact inventory in
+Evidence, header removal and task-free frontier replacement only, and a clean
+`audit-currentness` as the oracle. The 114-task hold recorded above had been
+lifted by the time of dispatch.
+
+| Repository | Task | Queue task | Findings |
+| --- | --- | --- | --- |
+| poodle | `g18.040` | `345a792c` | 1 duplicate-status-header, 3 stale-frontier |
+| underlay | `g12.006` | `ea911bcd` | 3 duplicate-status-header, 1 stale-frontier |
+| nightfire | `g01.019` | `dd2f9d3b` | 1 stale-frontier |
+| bughunt | `g01.005` | `d5c54a50` | 1 stale-frontier |
+| monkey | `g14.004` | `b2ff6365` | 1 stale-frontier |
+| poodle-lab | `g02.004` | `5473681d` | 1 stale-frontier |
+
+Underlay's lane sits in `g12`, beside its migration lane, and covers findings in
+both `g12` and `g13`. The triage lead that held this debt is retired; these cards
+are now its authority.
