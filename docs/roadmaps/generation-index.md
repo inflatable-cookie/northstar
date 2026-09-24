@@ -1,7 +1,7 @@
 # Roadmap Generation Index
 
 Status: active
-Updated: 2026-09-21
+Updated: 2026-09-24
 Mode: sequential
 
 ## Active generation
@@ -11,7 +11,6 @@ Mode: sequential
 - Mechanical task state and delivery evidence are projected in the generated
   lifecycle blocks under `docs/README.md`, `docs/roadmaps/README.md`, and
   `g03/README.md`; this index stays strategic.
-- `g03.022` is approved and ready (backlink guard scaling, 2026-09-22).
 
 ## Generation log
 
