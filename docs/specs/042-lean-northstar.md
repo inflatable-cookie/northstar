@@ -80,22 +80,30 @@ What Queue needs to take on, in the order agreed with the Queue Chatterbox on
 1. **A closeout that writes nothing to the repository, plus a permanent
    outcome record.** Queue records the terminal outcome (PR, merge commit,
    review, validation, brief) in a record that retention never deletes. Today
-   Queue deletes finished tasks 14 days after they end, keeping only a
-   tombstone. That is harmless while repositories keep the record; under this
-   design Queue is the only record. Today a repository without a closeout hook
+   `store.purgeOldTasks` deletes finished tasks 14 days after they end, keeping
+   only a tombstone. That is harmless while repositories keep the record; under
+   this design Queue is the only record. The outcome record (4a) is one
+   host-neutral row per terminal task, written in the same transaction as the
+   terminal transition. It holds the task, submission, title, repository,
+   outcome, PR, reviewed head, merge and synced commits, review summary,
+   validation result, brief digest and brief text, and finish time. Today a repository without a closeout hook
    also falls back to `agent` closeout, which is heavier still.
-2. **Briefs stored in Queue.** A brief is submitted as content and pinned by
-   digest in Queue, not committed to the repository and later deleted by a
-   hook.
+2. **Briefs stored in Queue.** A new submission mode (brief content plus
+   digest) sits alongside the committed-handoff path and never replaces it.
 3. **Pre-merge checks as plain repository validation.** The manifest runs the
    repository's own command (for example `effigy qa`) at the prospective merge,
-   not a Northstar adapter. For acowtancy this needs Effigy to validate a given
-   disposable checkout, which it does not yet do.
-4. **Queryable outcomes.** "What landed for X, and in which PR" comes from
-   Queue, so the repository needs no delivery log.
+   not a Northstar adapter. Exit code 0 passes; non-zero refuses with a bounded
+   output excerpt. For acowtancy this needs Effigy to validate a given
+   disposable checkout with prepared dependencies, which it does not yet do, so
+   Queue proves item 3 on a simple repository first.
+4. **The outcome query (4b).** "What landed for X, and in which PR" is answered
+   from the 4a records through an RPC, a CLI command and skill wording, so
+   repositories need no delivery log.
 
-Migrated repositories declare a new manifest version, `paseo.queue.control.v5`;
-repositories on v1–v4 are untouched. Queue Specs 006, 007 and 015 do not
+Migrated repositories declare a new manifest version, `paseo.queue.control.v5`.
+It keeps v4's hook definitions with hooks optional, and adds
+`closeout: "queue" | "hooks"` (default `hooks`, the v4 behaviour) and
+`validation`. Repositories on v1–v4 are untouched. Queue Specs 006, 007 and 015 do not
 conflict: 006 stops applying to migrated repositories, and 007 and 015 carry
 over. The Queue-to-repository contract shrinks to the manifest and the
 repository's validation command. The Northstar hook adapter, lifecycle
@@ -133,7 +141,8 @@ repository's manifest at every event's base commit, not per task. So:
    migrates.
 3. **Acowtancy is the pilot, and it must not break.** Its in-flight tasks keep
    their pinned briefs and finish normally:
-   - switch its manifest to v5 once item 1 exists; the drain means nothing is
+   - switch its manifest to `{ v5, closeout: "queue", hooks: [] }` once item 1
+     exists; the drain means nothing is
      in flight at the switch;
    - release held work or submit new work only after items 2 and 3, because
      today's Northstar pre-dispatch and pre-merge hooks assume committed
@@ -158,3 +167,6 @@ are then replanned in the new shape, or released unchanged if they still fit.
 1. Until item 3 works for acowtancy, new-shape acowtancy work would merge on
    review and GitHub's merge checks, with no prospective pre-merge validation.
    This is the operator's decision.
+2. Effigy needs to validate a given checkout root with prepared dependencies.
+   That is an Effigy decision, needed before item 3 can be accepted on
+   acowtancy.
