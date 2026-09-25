@@ -2,7 +2,7 @@
 
 Status: complete
 Task: `g03.003`
-Governing refs: `docs/contracts/001-working-rules.md`, `docs/roadmaps/g03/003-flatten-execution-tasks.md`
+Governing refs: `docs/contracts/001-working-rules.md`, `docs/roadmaps/archive/g03.md`
 
 ## Outcome
 

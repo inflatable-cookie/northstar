@@ -420,3 +420,14 @@ they hit a solvable hurdle; they do not stop the current task to fix one.
   digest-authoritative and only the lifecycle write path may change them;
   affected surfaces are the lifecycle reference's record section and any
   portfolio hygiene batch that rewrites many Markdown or JSON files at once.
+
+- **2026-09-24 — normal QA gating documentation-only repair lanes:** the
+  consumer currentness repair cards required "normal QA", and two of six lanes
+  (poodle `g18.040`, poodle-lab `g02.004`) stalled on unrelated product tests
+  (a local Vite preview timeout and a sibling-pin mismatch) after the repair
+  itself was proven; impact is three wasted coordinator recoveries per lane and
+  an operator escalation; the working ruling was to gate on the audit,
+  projection verification, docs QA, `git diff --check` and an audited-paths-only
+  diff, recording any normal-QA failure as known and unrelated; plausible fix is
+  to put that acceptance set in the portfolio repair route; affected surface is
+  `bundle-docs/operators/lifecycle-currentness-portfolio-repair.md`.

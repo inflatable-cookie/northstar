@@ -6,8 +6,7 @@ architecture, contracts, and executable roadmaps.
 ## Active planning
 
 - [`041-project-knowledge-currentness.md`](./041-project-knowledge-currentness.md)
-  — discovery only; no execution authority. It explains why consumer knowledge
-  goes stale and which mechanisms would catch it.
+  — evidence and options for `g04`; approved mechanisms become `g04` tasks.
 
 The portable task lifecycle spec (040) is implementation-complete and has been
 removed after promotion. Retirement inventory:

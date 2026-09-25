@@ -1,16 +1,16 @@
 # Roadmap Generation Index
 
 Status: active
-Updated: 2026-09-24
+Updated: 2026-09-25
 Mode: sequential
 
 ## Active generation
 
-- `g03`
-- Runway: `g03/README.md`
+- `g04`
+- Runway: `g04/README.md`
 - Mechanical task state and delivery evidence are projected in the generated
   lifecycle blocks under `docs/README.md`, `docs/roadmaps/README.md`, and
-  `g03/README.md`; this index stays strategic.
+  `g04/README.md`; this index stays strategic.
 
 ## Generation log
 
@@ -18,7 +18,8 @@ Mode: sequential
 | --- | --- | --- | --- |
 | `g01` | closed | Internal Northstar-on-Northstar foundation | [archive/g01.md](archive/g01.md) roll-up |
 | `g02` | closed | External proof and execution hardening | [archive/g02.md](archive/g02.md) roll-up |
-| `g03` | active | Compact default lifecycle and protocol reduction | expanded active generation |
+| `g03` | closed | Compact default lifecycle and protocol reduction | [archive/g03.md](archive/g03.md) roll-up |
+| `g04` | active | Project knowledge currentness | expanded active generation |
 
 ## Rollover rule
 
@@ -35,8 +36,6 @@ it in the same rollover change.
 
 ## Next task
 
-No lane is approved. `g03` is exhausted and awaiting a rollover or a fresh
-planning lane. The accepted closeout-convergence revision is merged and its
-installed interface identity has been handed to Queue for `g01.019`.
-Operator-authorized consumer manifest migrations continue as separate
-per-project maintenance tasks.
+No lane is dispatched. `g04` opened on 2026-09-25 from spec 041; the next move
+is planning `g04.001`, the retired-concept scope check. Consumer repository
+maintenance stays a separate per-project Queue task.

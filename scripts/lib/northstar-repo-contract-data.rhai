@@ -19,7 +19,7 @@ fn required_files() {
         "docs/contracts/README.md",
         "docs/roadmaps/README.md",
         "docs/roadmaps/generation-index.md",
-        "docs/roadmaps/g03/README.md",
+        "docs/roadmaps/g04/README.md",
         "docs/logs/README.md",
         "docs/handoffs/README.md",
         "docs/triage/README.md",

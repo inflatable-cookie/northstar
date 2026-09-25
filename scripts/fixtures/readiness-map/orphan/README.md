@@ -6,7 +6,7 @@ destination: orphan
 owner: repo-maintainers
 status: active
 master_spec: docs/contracts/001-working-rules.md
-roadmap: docs/roadmaps/g03/001-compact-default-lifecycle.md
+roadmap: docs/roadmaps/README.md
 ---
 
 ## Destination

@@ -29,7 +29,7 @@ task contract.
 
 ## Current State
 
-- Canonical task: [`g03.003`](../roadmaps/g03/003-flatten-execution-tasks.md).
+- Canonical task: `g03.003` ([g03 roll-up](../roadmaps/archive/g03.md)).
 - Governing contract: [`001`](../contracts/001-working-rules.md), approved
   flattened execution-task model.
 - The worker/PR loop is complete. PR #42 was accepted at exact head

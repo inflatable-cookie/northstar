@@ -3,8 +3,8 @@
 Status: discovery
 Owner: operator + Northstar Chatterbox
 Created: 2026-09-25
-Execution authority: none. This spec gathers evidence and options; no roadmap
-lane exists until the operator approves one.
+Execution authority: none. Approved mechanisms become `g04` tasks; this spec
+keeps the evidence and the unresolved options.
 
 ## Problem
 
@@ -99,8 +99,8 @@ Ordered by evidence and cost, not by preference.
 3. **Promotion is enforced at the end of a Chatterbox turn.** A turn that
    receives an operator ruling must land it in its owning surface, or close a
    question, before it yields. Doctrine already says this and nothing enforces
-   it. This catches the root of F2. It probably belongs to the Chatterbox
-   adapter or the Queue boundary, not to a Markdown check.
+   it. This catches the root of F2. Where it lives is the open question
+   below.
 4. **Generated front doors.** Front-door frontier and state prose is generated
    from lifecycle records and a small manifest, not written by hand. This
    extends the one mechanism that already works to cover F3.
@@ -128,13 +128,20 @@ Ordered by evidence and cost, not by preference.
 - Retrofitting every consumer before a mechanism has proven itself in one
   repository.
 
+## Operator decisions
+
+- 2026-09-25: mechanism 1 (retired-concept scope check) is the first slice,
+  proven in acowtancy against its 2026-09-25 realignment register.
+- 2026-09-25: this work opens `g04`
+  ([`../roadmaps/g04/README.md`](../roadmaps/g04/README.md)).
+
 ## Open questions for the operator
 
-1. Is mechanism 1 (retired-concept scope check) the right first slice, proven
-   in acowtancy against the 2026-09-25 realignment register?
-2. Should enforced promotion (mechanism 3) live in Northstar doctrine and
-   checks, or in the Queue/Chatterbox runtime?
-3. Does this work open `g04`, or wait for the direction you are preparing?
+1. Where enforced promotion (mechanism 3) lives. Recommendation: Northstar owns
+   the rule, the record shape (a closed question, or a landed ruling that
+   names its owning surface), and a check at Chatterbox handoff and refresh.
+   The Queue/Chatterbox runtime can add a turn-end trigger later, but a rule
+   that exists only in the runtime would not travel with the repository.
 
 ## Promotion path
 

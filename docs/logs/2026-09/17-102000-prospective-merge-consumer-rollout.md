@@ -299,3 +299,10 @@ lifted by the time of dispatch.
 Underlay's lane sits in `g12`, beside its migration lane, and covers findings in
 both `g12` and `g13`. The triage lead that held this debt is retired; these cards
 are now its authority.
+
+On 2026-09-24 the poodle and poodle-lab lanes blocked on unrelated normal-QA
+failures. Tom approved revising their acceptance to the audit, projection
+verification, docs QA, `git diff --check` and an audited-paths-only diff, with
+the failure recorded in the PR. Both workers resumed with that instruction. All
+six lanes closed on 2026-09-24, and every repository audits `ok`.
+

@@ -478,17 +478,18 @@ EOF
   printf '# g03\n\nHuman generation runway stays.\n' > "$repo/docs/roadmaps/g03/README.md"
   cp "$queue_from" "$repo/.paseo/queue.json"
   cp "$targets_from" "$repo/.northstar/lifecycle/v1/projection-targets.json"
-  if [ "$surface" = starter ]; then
-    # Adoption edit: the copied starter declares its own scaffold generation;
-    # this consumer's active generation is g03.
-    bun -e '
-      const fs = await import("node:fs");
-      const file = process.argv[1];
-      const config = JSON.parse(fs.readFileSync(file, "utf8"));
-      config.active_generation = "g03";
-      fs.writeFileSync(file, JSON.stringify(config, null, 2) + "\n");
-    ' "$repo/.northstar/lifecycle/v1/projection-targets.json"
-  fi
+  # Adoption edit: the copied config declares its source's own generation
+  # (the starter scaffold, or Northstar's current one); this fixture
+  # consumer's active generation is g03.
+  bun -e '
+    const fs = await import("node:fs");
+    const file = process.argv[1];
+    const config = JSON.parse(fs.readFileSync(file, "utf8"));
+    config.active_generation = "g03";
+    config.targets = config.targets.map((target) =>
+      target.replace(/^docs\/roadmaps\/g[0-9]{2}\/README\.md$/, "docs/roadmaps/g03/README.md"));
+    fs.writeFileSync(file, JSON.stringify(config, null, 2) + "\n");
+  ' "$repo/.northstar/lifecycle/v1/projection-targets.json"
   git -C "$repo" add -A
   git -C "$repo" commit -qm "install lifecycle hook surfaces"
 
@@ -742,7 +743,7 @@ expect_outcome "$escape" blocked "escaping projection target"
 json_field "$escape" "r.summary.includes('allowedPaths')" >/dev/null
 [ ! -e "$repoA/.northstar/lifecycle/v1/tasks/g03.006.json" ]
 [ -e "$repoA/docs/handoffs/handoff-006.md" ]
-cp "$repo_root/.northstar/lifecycle/v1/projection-targets.json" "$repoA/.northstar/lifecycle/v1/projection-targets.json"
+git -C "$repoA" checkout -q -- .northstar/lifecycle/v1/projection-targets.json
 [ -z "$(git -C "$repoA" status --porcelain)" ]
 echo "projection-target escape refusal: OK"
 
@@ -2513,7 +2514,7 @@ union_case() { # <name> <config-json> <message-fragment>
     echo "$1: refusal missed '$3': $result" >&2
     exit 1
   fi
-  cp "$repo_root/.northstar/lifecycle/v1/projection-targets.json" "$repoU/.northstar/lifecycle/v1/projection-targets.json"
+  git -C "$repoU" checkout -q -- .northstar/lifecycle/v1/projection-targets.json
   [ -z "$(git -C "$repoU" status --porcelain)" ]
 }
 union_case "mixed singular and plural keys" \
