@@ -162,11 +162,15 @@ are resolved individually rather than left pinned. The cut happens once no
 acowtancy task is in flight and Queue's no-write closeout exists. Held tasks
 are then replanned in the new shape, or released unchanged if they still fit.
 
-## Open questions
+## Operator rulings on the acowtancy drain (Tom, 2026-09-25)
 
-1. Until item 3 works for acowtancy, new-shape acowtancy work would merge on
-   review and GitHub's merge checks, with no prospective pre-merge validation.
-   This is the operator's decision.
-2. Effigy needs to validate a given checkout root with prepared dependencies.
-   That is an Effigy decision, needed before item 3 can be accepted on
-   acowtancy.
+- Interim accepted: until item 3 works for acowtancy, new-shape acowtancy work
+  merges on independent review and GitHub's merge checks, with no prospective
+  pre-merge validation.
+- The pre-merge validation command is acowtancy's concern, not Effigy's. The
+  repository defines a command that validates a fresh checkout. Effigy is
+  consulted only if that command needs container-backed checks.
+- Blocked tasks: `g05.227` resumed under an approved local-only review policy;
+  `g05.222` cancelled, to be replanned after the cut; `g05.180` split, merging
+  PR #330 on what is proven, with the live A→B matrix as a follow-up once an
+  isolated macOS VM exists.
