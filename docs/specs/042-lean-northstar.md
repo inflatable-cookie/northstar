@@ -110,6 +110,19 @@ repository's validation command. The Northstar hook adapter, lifecycle
 records, backlink guard and compaction become unnecessary for a repository once
 it migrates.
 
+## Plan items and Queue lanes
+
+Queue Spec 019 (`g01.050`) adds lanes: a durable, global group with a grounded
+aim and an explicit list of participating repositories. A lane never gates
+dispatch, and its aim is context, not authority. A `docs/plan.md` item that is
+being worked maps to a lane, which gives tasks their intent from the same
+source. Briefs (Queue Spec 020, `g01.051`) carry `queue.lane`, and brief mode is
+allowed only for v5 manifests or no manifest.
+
+Vocabulary follows Queue: a **lane** is the group, and a **task** is one unit of
+work. The lean skill and doctrine use those terms; Northstar's older use of
+"lane" for a single task retires with the old surfaces.
+
 ## Skill shape
 
 A core skill of under about 200 lines of guidance that covers orientation,
