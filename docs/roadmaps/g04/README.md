@@ -1,18 +1,21 @@
 # g04
 
-`g04` makes project knowledge stay current as repositories grow: each fact has
-one owning home, and retirements, answers and front-door state cannot silently
-drift from what the repository actually runs.
+`g04` makes Northstar lean: repositories hold knowledge and code, the
+orchestrator holds task state, and project knowledge stays current as
+repositories grow.
 
-Discovery and evidence: [`../../specs/041-project-knowledge-currentness.md`](../../specs/041-project-knowledge-currentness.md).
-Tom opened `g04` on 2026-09-25 and approved the retired-concept scope check as
-the first slice.
+Design: [`../../specs/042-lean-northstar.md`](../../specs/042-lean-northstar.md),
+which absorbs [`../../specs/041-project-knowledge-currentness.md`](../../specs/041-project-knowledge-currentness.md).
+Tom opened `g04` on 2026-09-25. Later that day he asked for a step back, so the
+retired-concept check no longer goes first on its own. It becomes one of spec
+042's knowledge mechanisms.
 
 ## Generation Runway
 
 | Goal | State | Governing refs | Next task |
 | --- | --- | --- | --- |
-| Retirements name the terms, paths and config keys they retire, and a check fails on live references outside history. | approved first slice; card to be planned as `g04.001` | spec 041 mechanism 1; contract 001 | plan `g04.001`, proven in acowtancy against its 2026-09-25 realignment register |
+| Lean Northstar: task state leaves repositories, Queue gains a no-write closeout, and the skill and doctrine shrink. | design draft awaiting operator approval | spec 042 | approve spec 042, then agree the Queue work with the Queue Chatterbox |
+| Retirements name the terms, paths and config keys they retire, and a check fails on live references outside history. | approved mechanism; sequenced inside spec 042 | spec 041 mechanism 1 | follows the spec 042 approval |
 | Open questions are addressable items that an answer closes by pointing at the owning surface. | discovery | spec 041 mechanism 2 | follows `g04.001` evidence |
 | Operator rulings reach their owning surface before a Chatterbox turn yields. | discovery; ownership recommendation is Northstar, awaiting operator confirmation | spec 041 mechanism 3 | follows the ownership ruling |
 | Front-door frontier and state prose is generated, not hand-written. | discovery | spec 041 mechanism 4; lifecycle reference | follows `g04.001` |
@@ -26,8 +29,7 @@ are not a per-task status mirror.
 
 ## Current lane
 
-No lane is dispatched. The next move is planning `g04.001` from spec 041
-mechanism 1.
+No lane is dispatched. The next move is operator approval of spec 042.
 
 ## Bounded watchlist
 

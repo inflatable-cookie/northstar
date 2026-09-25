@@ -5,8 +5,11 @@ architecture, contracts, and executable roadmaps.
 
 ## Active planning
 
+- [`042-lean-northstar.md`](./042-lean-northstar.md) — design draft for a
+  leaner Northstar: task state leaves repositories, piloted on Queue and
+  acowtancy. Awaiting operator approval.
 - [`041-project-knowledge-currentness.md`](./041-project-knowledge-currentness.md)
-  — evidence and options for `g04`; approved mechanisms become `g04` tasks.
+  — evidence and knowledge mechanisms, absorbed into spec 042.
 
 The portable task lifecycle spec (040) is implementation-complete and has been
 removed after promotion. Retirement inventory:

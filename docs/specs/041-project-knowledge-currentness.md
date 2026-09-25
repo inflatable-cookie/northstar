@@ -3,8 +3,9 @@
 Status: discovery
 Owner: operator + Northstar Chatterbox
 Created: 2026-09-25
-Execution authority: none. Approved mechanisms become `g04` tasks; this spec
-keeps the evidence and the unresolved options.
+Execution authority: none. Absorbed into
+[`042-lean-northstar.md`](./042-lean-northstar.md); this spec keeps the
+evidence and the mechanism detail.
 
 ## Problem
 
