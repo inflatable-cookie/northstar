@@ -74,23 +74,31 @@ reimplementation of Queue that can run in several host front ends with BB as
 its first, is not ready yet. So these changes are piloted on Queue and then
 ported to Nucleus core.
 
-What Queue needs to take on:
+What Queue needs to take on, in the order agreed with the Queue Chatterbox on
+2026-09-25:
 
-1. **A closeout that writes nothing to the repository.** Queue records the
-   terminal outcome (PR, merge commit, review, validation) in its own store.
-   Today a repository without a closeout hook falls back to `agent` closeout,
-   which is heavier still.
+1. **A closeout that writes nothing to the repository, plus a permanent
+   outcome record.** Queue records the terminal outcome (PR, merge commit,
+   review, validation, brief) in a record that retention never deletes. Today
+   Queue deletes finished tasks 14 days after they end, keeping only a
+   tombstone. That is harmless while repositories keep the record; under this
+   design Queue is the only record. Today a repository without a closeout hook
+   also falls back to `agent` closeout, which is heavier still.
 2. **Briefs stored in Queue.** A brief is submitted as content and pinned by
    digest in Queue, not committed to the repository and later deleted by a
    hook.
 3. **Pre-merge checks as plain repository validation.** The manifest runs the
    repository's own command (for example `effigy qa`) at the prospective merge,
-   and not a Northstar adapter.
+   not a Northstar adapter. For acowtancy this needs Effigy to validate a given
+   disposable checkout, which it does not yet do.
 4. **Queryable outcomes.** "What landed for X, and in which PR" comes from
    Queue, so the repository needs no delivery log.
 
-The Queue-to-repository contract shrinks to the `.paseo/queue.json` manifest
-and the repository's validation command. The Northstar hook adapter, lifecycle
+Migrated repositories declare a new manifest version, `paseo.queue.control.v5`;
+repositories on v1–v4 are untouched. Queue Specs 006, 007 and 015 do not
+conflict: 006 stops applying to migrated repositories, and 007 and 015 carry
+over. The Queue-to-repository contract shrinks to the manifest and the
+repository's validation command. The Northstar hook adapter, lifecycle
 records, backlink guard and compaction become unnecessary for a repository once
 it migrates.
 
@@ -125,10 +133,11 @@ repository's manifest at every event's base commit, not per task. So:
    migrates.
 3. **Acowtancy is the pilot, and it must not break.** Its in-flight tasks keep
    their pinned briefs and finish normally:
-   - switch its manifest only once Queue's no-write closeout exists, so a task
-     closing after the switch gets a clean Queue-owned closeout rather than
-     `agent` closeout;
-   - submit new work in the new shape only after the switch;
+   - switch its manifest to v5 once item 1 exists; the drain means nothing is
+     in flight at the switch;
+   - release held work or submit new work only after items 2 and 3, because
+     today's Northstar pre-dispatch and pre-merge hooks assume committed
+     handoffs and would refuse it;
    - then make one deliberate cut: move logs, handoffs, lifecycle records and
      roadmap cards out of the live tree (Git keeps them); fold rulings into
      `docs/knowledge/`; and replace the `g05` runway with `docs/plan.md`.
@@ -146,5 +155,6 @@ are then replanned in the new shape, or released unchanged if they still fit.
 
 ## Open questions
 
-1. The Queue work items 1–4 need Queue Chatterbox agreement on scope and
-   order.
+1. Until item 3 works for acowtancy, new-shape acowtancy work would merge on
+   review and GitHub's merge checks, with no prospective pre-merge validation.
+   This is the operator's decision.
