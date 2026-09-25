@@ -1,10 +1,12 @@
 # 042 — Lean Northstar
 
-Status: design draft
+Status: approved design
 Owner: operator + Northstar Chatterbox
 Created: 2026-09-25
-Execution authority: none until the operator approves this design. It
-supersedes `g04`'s original first slice and absorbs spec 041.
+Execution authority: Tom approved this design on 2026-09-25. It governs `g04`,
+supersedes `g04`'s original first slice and absorbs spec 041. Work still
+executes only through approved `g04` lanes and the Queue Chatterbox's own
+planning.
 
 ## Why
 
@@ -61,9 +63,9 @@ roll-ups, and routine delivery logs. A log survives only as a record of an
 incident or a material ruling, and a ruling should be promoted into the
 knowledge doc it changes.
 
-Assumption to confirm: a human reading the repository on GitHub sees intent in
-`docs/plan.md`, and live task status in the Queue/Paseo UI (and later Nucleus
-hosts), not in Git.
+Confirmed by Tom on 2026-09-25: a human reading the repository on GitHub sees
+intent in `docs/plan.md`, and live task status in the Queue/Paseo UI (and later
+Nucleus hosts), not in Git.
 
 ## Orchestration: pilot on Queue, port to Nucleus
 
@@ -135,10 +137,14 @@ repository's manifest at every event's base commit, not per task. So:
    then the bridge is removed.
 6. **Nucleus** takes the proven Queue behaviour as its core contract.
 
+## Acowtancy drain (Tom, 2026-09-25)
+
+Acowtancy's queued tasks are held and its running workers drain. Blocked tasks
+are resolved individually rather than left pinned. The cut happens once no
+acowtancy task is in flight and Queue's no-write closeout exists. Held tasks
+are then replanned in the new shape, or released unchanged if they still fit.
+
 ## Open questions
 
-1. Does the GitHub-visibility assumption above hold?
-2. The Queue work items 1–4 need Queue Chatterbox agreement on scope and
+1. The Queue work items 1–4 need Queue Chatterbox agreement on scope and
    order.
-3. Acowtancy's cut needs a quiet point between lanes. Who calls it: the
-   operator or the Farmyard Chatterbox?

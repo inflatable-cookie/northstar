@@ -14,7 +14,7 @@ retired-concept check no longer goes first on its own. It becomes one of spec
 
 | Goal | State | Governing refs | Next task |
 | --- | --- | --- | --- |
-| Lean Northstar: task state leaves repositories, Queue gains a no-write closeout, and the skill and doctrine shrink. | design draft awaiting operator approval | spec 042 | approve spec 042, then agree the Queue work with the Queue Chatterbox |
+| Lean Northstar: task state leaves repositories, Queue gains a no-write closeout, and the skill and doctrine shrink. | design approved 2026-09-25; acowtancy draining | spec 042 | agree the Queue work with the Queue Chatterbox |
 | Retirements name the terms, paths and config keys they retire, and a check fails on live references outside history. | approved mechanism; sequenced inside spec 042 | spec 041 mechanism 1 | follows the spec 042 approval |
 | Open questions are addressable items that an answer closes by pointing at the owning surface. | discovery | spec 041 mechanism 2 | follows `g04.001` evidence |
 | Operator rulings reach their owning surface before a Chatterbox turn yields. | discovery; ownership recommendation is Northstar, awaiting operator confirmation | spec 041 mechanism 3 | follows the ownership ruling |
@@ -29,7 +29,8 @@ are not a per-task status mirror.
 
 ## Current lane
 
-No lane is dispatched. The next move is operator approval of spec 042.
+No lane is dispatched. Spec 042 is approved; the next move is agreeing Queue's
+four changes with the Queue Chatterbox while acowtancy drains.
 
 ## Bounded watchlist
 

@@ -5,9 +5,9 @@ architecture, contracts, and executable roadmaps.
 
 ## Active planning
 
-- [`042-lean-northstar.md`](./042-lean-northstar.md) — design draft for a
+- [`042-lean-northstar.md`](./042-lean-northstar.md) — approved design for a
   leaner Northstar: task state leaves repositories, piloted on Queue and
-  acowtancy. Awaiting operator approval.
+  acowtancy.
 - [`041-project-knowledge-currentness.md`](./041-project-knowledge-currentness.md)
   — evidence and knowledge mechanisms, absorbed into spec 042.
 

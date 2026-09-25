@@ -36,6 +36,7 @@ it in the same rollover change.
 
 ## Next task
 
-No lane is dispatched. `g04` opened on 2026-09-25; the next move is operator
-approval of spec 042, the lean Northstar design. Consumer repository
+No lane is dispatched. `g04` opened on 2026-09-25; spec 042, the lean
+Northstar design, is approved; the next move is agreeing Queue's changes with
+the Queue Chatterbox. Consumer repository
 maintenance stays a separate per-project Queue task.

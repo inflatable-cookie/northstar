@@ -26,8 +26,8 @@ generation remains expanded.
 
 ## Next task
 
-No lane is dispatched. `g04` opened on 2026-09-25; the next move is operator
-approval of spec 042, the lean Northstar design. Consumer repository maintenance stays a separate
+No lane is dispatched. `g04` opened on 2026-09-25; spec 042 is approved;
+the next move is agreeing Queue's changes with the Queue Chatterbox. Consumer repository maintenance stays a separate
 per-project Queue task, not a Northstar lane.
 <!-- northstar:lifecycle:begin schema=northstar.lifecycle.projection.v2 digest=sha256:7b5d17b0bceb075bdacb18273d08eb1ce6c375375e4838c5adebf975b3b24495 -->
 | Generation | Disposition | Runway state |
