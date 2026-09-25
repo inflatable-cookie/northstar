@@ -5,8 +5,12 @@ architecture, contracts, and executable roadmaps.
 
 ## Active planning
 
-None. The portable task lifecycle spec (040) is implementation-complete and
-has been removed after promotion. Retirement inventory:
+- [`041-project-knowledge-currentness.md`](./041-project-knowledge-currentness.md)
+  — discovery only; no execution authority. It explains why consumer knowledge
+  goes stale and which mechanisms would catch it.
+
+The portable task lifecycle spec (040) is implementation-complete and has been
+removed after promotion. Retirement inventory:
 
 - Exact schemas, reducer, envelope/digest framing, standalone write protocol,
   projection grammar, hook adapter behavior, and the proof matrix →
@@ -23,8 +27,6 @@ has been removed after promotion. Retirement inventory:
   section 12 boundary and contract 001 mechanical-lifecycle rules.
 - Queue-side closeout-prompt retirement note → section 12.
 - Historical delivery sequencing → Git history; complete and non-authoritative.
-
-Northstar keeps no active spec open while the current frontier executes.
 
 Lasting UI-design delivery rules live in
 `docs/architecture/system-architecture.md`, `docs/contracts/001-working-rules.md`,
