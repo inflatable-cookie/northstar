@@ -83,12 +83,23 @@ record of one run of it is process.
    incident or a ruling that isn't captured elsewhere yet, and promote that
    ruling. Git keeps everything removed.
 6. **Orientation.** Rewrite `AGENTS.md` and `docs/README.md` to the template's
-   shape, and update links.
-7. **Checks.** Search QA configuration (`effigy.toml`, CI) and tests for paths
+   shape.
+7. **Links.** Moving a folder changes its depth, so recompute every relative
+   link into and out of moved files. Don't just search and replace. A link
+   into a removed record becomes plain text. An evidence pointer such as
+   `docs/roadmaps/archive/g05.md` becomes "the `g05` roll-up in Git history".
+8. **Leftover process in knowledge.** Remove "Next Task" sections, status
+   narration ("no generation is active") and "open a roadmap card" wording
+   from knowledge files. Product docs that teach the old conventions, such as a
+   guide to writing AGENTS files, get updated too.
+9. **Housekeeping.** Delete closed papercuts and closed or already-promoted
+   triage notes.
+10. **Checks.** Search QA configuration (`effigy.toml`, CI) and tests for paths
    and headings from the old layout, and update or remove those checks in the
    same PR. Say which ones changed in the PR description.
-8. **Verify.** Run the repository's QA and
-   `effigy skill run northstar-lean/retired-concepts`.
+11. **Verify.** Run the repository's QA and
+    `effigy skill run northstar-lean/retired-concepts`. The check will find the
+    stragglers the steps above missed; fix them rather than widening `allow`.
 
 Review the cut like any PR: nothing current lost, no fact with two owners, and
 every link resolving.
