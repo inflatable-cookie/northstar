@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Self-test for retired-concepts.ts against a scratch repository.
+set -euo pipefail
+here=$(cd "$(dirname "$0")" && pwd)
+check="$here/retired-concepts.ts"
+repo=$(mktemp -d)
+trap 'rm -rf "$repo"' EXIT
+git -C "$repo" init -q
+mkdir -p "$repo/docs/knowledge/contracts" "$repo/state" "$repo/old/spine"
+cat > "$repo/docs/knowledge/retired.toml" <<'TOML'
+[[retired]]
+id = "spine-bundles"
+retired = "2026-08-21"
+replacement = "Bovine publishing"
+owner = "docs/knowledge/contracts/content.md"
+terms = ["spine bundle"]
+paths = ["old/spine"]
+config_keys = ["canonical-spine-bundle"]
+allow = ["history/"]
+TOML
+echo "Spine bundles are retired; content comes from Bovine." > "$repo/docs/knowledge/contracts/content.md"
+echo "ok" > "$repo/state/app.toml"
+git -C "$repo" add -A && git -C "$repo" -c user.email=t@t -c user.name=t commit -qm base
+
+expect() { # <want-exit> <label>
+  set +e; out=$(bun run "$check" --repo "$repo" --json); got=$?; set -e
+  [ "$got" = "$1" ] || { echo "FAIL $2: exit $got, want $1"; echo "$out"; exit 1; }
+  echo "ok $2"
+}
+commit() { git -C "$repo" add -A && git -C "$repo" -c user.email=t@t -c user.name=t commit -qm "$1"; }
+
+expect 0 "a clean repository passes; the owner file and the retired list are exempt"
+echo "x" > "$repo/old/spine/data.sql"; commit "path"
+expect 1 "a tracked file under a retired path is a finding"
+git -C "$repo" rm -rq old && commit "rm path"
+echo 'key = "canonical-spine-bundle"' > "$repo/state/app.toml"; commit "key"
+expect 1 "a config key is a finding"
+echo "ok" > "$repo/state/app.toml"; mkdir -p "$repo/history"; echo "the SPINE BUNDLE era" > "$repo/history/log.md"; commit "allowed"
+expect 0 "matches are case-insensitive but allowed paths are exempt"
+echo "rebuild the Spine Bundle" > "$repo/README.md"; commit "term"
+expect 1 "a term in a live file is a finding"
+echo "[[retired]" > "$repo/docs/knowledge/retired.toml"; commit "bad toml"
+expect 2 "invalid TOML is a configuration error"
+echo "retired-concepts self-test: OK"

@@ -79,4 +79,8 @@ allow = ["docs/knowledge/retired.toml"]
 - The retiring change removes or fixes every live reference in the same PR.
   What it can't remove yet becomes a task, not a note.
 - The retired-concepts check fails on any listed term, path or config key found
-  in code, config or live docs outside `allow`. Git history is exempt.
+  in tracked files, matching case-insensitively. The owner file, `retired.toml`
+  and anything under `allow` are exempt, and so is Git history.
+- Run it with `bun run <skill>/scripts/retired-concepts.ts --repo <path>`. While
+  preparing a migration, `--retired <file>` audits against a list that isn't in
+  the repository yet.
