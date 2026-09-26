@@ -97,9 +97,9 @@ function main() {
     else console.log(`retired-concepts: no ${RETIRED_FILE}; nothing to check`);
     return;
   }
-  let parsed: { retired?: Entry[] };
+  let parsed: { retired?: Entry[]; frozen?: string[] };
   try {
-    parsed = Bun.TOML.parse(readFileSync(file, "utf8")) as { retired?: Entry[] };
+    parsed = Bun.TOML.parse(readFileSync(file, "utf8")) as { retired?: Entry[]; frozen?: string[] };
   } catch (error) {
     fail(`${file} is not valid TOML: ${(error as Error).message}`);
   }
@@ -115,7 +115,9 @@ function main() {
   for (const entry of entries) {
     if (!entry.id) fail(`an entry in ${file} has no id`);
     // The retired list and the owning file name the concept on purpose.
-    const allow = [RETIRED_FILE, ...(entry.owner ? [entry.owner] : []), ...(entry.allow ?? [])];
+    // Frozen artefacts (top-level `frozen`) are never rewritten, so they are
+    // exempt from every retirement.
+    const allow = [RETIRED_FILE, ...(entry.owner ? [entry.owner] : []), ...(entry.allow ?? []), ...(parsed.frozen ?? [])];
     const add = (finding: Finding) => {
       const key = `${finding.id}|${finding.file}|${finding.line ?? ""}|${finding.needle}`;
       if (!seen.has(key) && !allowed(finding.file, allow)) {

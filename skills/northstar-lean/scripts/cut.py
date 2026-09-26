@@ -94,10 +94,23 @@ def anchors(path, cache={}):
         cache[path] = out
     return cache[path]
 
+def glob_to_regex(g):
+    body = "(?:.*)".join("[^/]*".join(re.escape(x) for x in part.split("*")) for part in g.split("**"))
+    return "^" + body + ("" if g.endswith("/") else "(/|$)")
+
+def retired_frozen():
+    """Top-level `frozen = [...]` globs from docs/knowledge/retired.toml (Python 3.8 has no TOML parser)."""
+    path = os.path.join(ROOT, "docs/knowledge/retired.toml")
+    if not os.path.exists(path): return []
+    text = open(path, encoding="utf-8").read().split("[[retired]]")[0]
+    m = re.search(r"^frozen\s*=\s*\[(.*?)\]", text, re.S | re.M)
+    return [glob_to_regex(g) for g in re.findall(r'"([^"]+)"', m.group(1))] if m else []
+
 def check_links():
     patterns = list(OPTS["frozen"])
     if OPTS["plan"]:
         with open(OPTS["plan"]) as fh: patterns += json.load(fh).get("frozen", [])
+    patterns += retired_frozen()
     frozen = [re.compile(p) for p in patterns]
     problems = []
     for f in git("ls-files", "--cached", "--others", "--exclude-standard", "*.md").splitlines():

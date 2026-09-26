@@ -171,7 +171,9 @@ record of one run of it is process.
 11. **Verify.** Run the repository's QA, then
     `effigy skill run northstar-lean/retired-concepts` and
     `effigy skill run northstar-lean/cut -- check-links --plan <plan.json>`
-    (the plan supplies the frozen paths), which checks
+    (the plan supplies the frozen paths). Copy the plan's frozen paths into
+    `retired.toml`'s top-level `frozen` list (as globs), so later runs need no
+    plan. It checks
     Markdown links and anchors across the whole repository and not just the
     docs catalog. It is stricter than `effigy docs check links` and also
     catches broken anchors. The checks find the stragglers the steps above

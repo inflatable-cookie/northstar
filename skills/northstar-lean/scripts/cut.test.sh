@@ -48,6 +48,9 @@ mk docs/guides/anchors.md '## vst2_paths
 
 See [paths](#vst2_paths).'
 python3 "$here/cut.py" check-links --repo "$repo" > /dev/null && echo "ok check-links ignores links inside code spans and keeps underscores in anchors" || { echo "FAIL code spans"; exit 1; }
+mk docs/knowledge/retired.toml 'frozen = ["tests/fixtures/"]'
+mk tests/fixtures/corpus.md '[old](../../docs/roadmaps/g01/001-build-it.md)'
+python3 "$here/cut.py" check-links --repo "$repo" > /dev/null && echo "ok check-links skips frozen paths listed in retired.toml" || { echo "FAIL retired.toml frozen"; python3 "$here/cut.py" check-links --repo "$repo"; exit 1; }
 mk docs/guides/bad.md '[x](../knowledge/contracts/api.md#nope) [y](missing.md)'
 set +e; out=$(python3 "$here/cut.py" check-links --repo "$repo"); rc=$?; set -e
 [ "$rc" = 1 ] && echo "$out" | grep -q "missing anchor" && echo "$out" | grep -q "missing missing.md" && echo "ok check-links finds missing files and anchors, including untracked edits" || { echo "FAIL check-links negatives: $out"; exit 1; }

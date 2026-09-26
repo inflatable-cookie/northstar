@@ -8,6 +8,8 @@ trap 'rm -rf "$repo"' EXIT
 git -C "$repo" init -q
 mkdir -p "$repo/docs/knowledge/contracts" "$repo/state" "$repo/old/spine"
 cat > "$repo/docs/knowledge/retired.toml" <<'TOML'
+frozen = ["frozen/"]
+
 [[retired]]
 id = "spine-bundles"
 retired = "2026-08-21"
@@ -44,6 +46,8 @@ mkdir -p "$repo/tools/page-census"; echo "spine bundle row" > "$repo/tools/page-
 expect 0 "a directory glob in allow covers every matching directory"
 mkdir -p "$repo/deep/a/b/calibration"; echo "spine bundle" > "$repo/deep/a/b/calibration/x.md"; commit "deep"
 expect 0 "a ** glob in allow matches across path segments"
+mkdir -p "$repo/frozen"; echo "old spine bundle receipt" > "$repo/frozen/receipt.md"; commit "frozen"
+expect 0 "top-level frozen paths are exempt from every retirement"
 mkdir -p "$repo/old/spine"; echo x > "$repo/old/spine/data.sql"; commit "path again"
 rm -r "$repo/old"
 expect 0 "an unstaged deletion under a retired path is not a finding"

@@ -91,6 +91,10 @@ config_keys = ["canonical-spine-bundle"]  # literal text, not a dotted TOML path
   without one names a single file. The same goes for `allow`, where `*` matches
   within one path segment (`scripts/*-census/`) and `**` across segments
   (`syllabus/**/calibration/`).
+- A top-level `frozen = [...]` list, above the `[[retired]]` entries and using
+  the same glob rules, names immutable artefacts once for the whole repository.
+  The retired-concepts check exempts them from every retirement, and
+  `check-links` skips them.
 - Fix live references rather than widening `allow`. The exception is immutable
   artefacts, which can't change without a new release: released suites and
   generated mirrors, vendored copies, fixtures, digested receipts, and applied

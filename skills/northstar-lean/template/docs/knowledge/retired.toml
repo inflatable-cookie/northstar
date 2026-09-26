@@ -2,6 +2,11 @@
 # term, path or config key found outside `allow`
 # (`effigy skill run northstar-lean/retired-concepts`).
 #
+# frozen: immutable artefacts (released suites, vendored mirrors, fixtures,
+# receipts, applied migrations), exempt from every retirement and skipped by
+# check-links.
+frozen = []
+
 # paths and allow: an entry is an exact file, or a directory when it ends in
 # "/". `*` matches within one path segment and `**` across segments. Keep
 # terms multi-word and specific.
