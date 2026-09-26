@@ -51,12 +51,14 @@ The conditions where the worker should stop rather than guess.
 With operator approval, submit from the Queue plugin root:
 
 ```sh
-node bin/northstar-submit.mjs --brief /path/to/brief.md
+node bin/northstar-submit.mjs --brief --repo /absolute/repository /absolute/path/brief.md --dry-run
 ```
 
-The file can live anywhere and is not committed. Queue records the pushed
-integration head as the planning commit. Use `--dry-run` first, then check the
-operation until it reports a task. To change a brief before merge, use Queue's
+Drop `--dry-run` to submit. The file can live anywhere and is not committed.
+Queue requires only `title`, `queue_approval` and optional `queue:` routing, and
+a non-empty body; the sections above are Northstar's convention, not Queue's.
+Queue records the pushed integration head as the planning commit. Check the operation until it reports a
+task. To change a brief before merge, use Queue's
 `amend_brief` control; don't resubmit.
 
 Brief mode requires the repository's Queue manifest to be v5, or absent.
