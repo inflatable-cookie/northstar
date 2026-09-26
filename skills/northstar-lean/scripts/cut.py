@@ -87,7 +87,8 @@ def anchors(path, cache={}):
         text = read_text(path) or ""
         seen, out = {}, set()
         for h in re.findall(r"^#{1,6}\s+(.+?)\s*#*\s*$", text, re.M):
-            base = slug(re.sub(r"`|\*|_|\[|\]\([^)]*\)", "", h)); n = seen.get(base, 0)
+            # GitHub keeps underscores in anchors, so only markup is stripped.
+            base = slug(re.sub(r"`|\*|\[|\]\([^)]*\)", "", h)); n = seen.get(base, 0)
             out.add(base if n == 0 else f"{base}-{n}"); seen[base] = n + 1
         out |= set(re.findall(r'<a\s+(?:name|id)="([^"]+)"', text))
         cache[path] = out
