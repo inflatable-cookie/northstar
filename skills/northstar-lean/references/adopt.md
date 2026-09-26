@@ -52,7 +52,10 @@ The migration is one deliberate cut, done when nothing is in flight.
 Sort every docs folder before cutting:
 
 - **Knowledge:** current truth the project runs on (vision, architecture,
-  contracts, domain rules). Moves into `docs/knowledge/`.
+  contracts, domain rules). Moves into `docs/knowledge/` whole. Lean means no
+  process records, not shorter knowledge: keep detailed design detailed, and
+  cut only process narration, duplication and what is no longer true. Merge
+  documents only where they overlap.
 - **Product documentation:** guides, usage docs, API references and patterns
   written for the project's users or consumers. Stays where it is, and the
   knowledge index links to it. It is the product, not process.

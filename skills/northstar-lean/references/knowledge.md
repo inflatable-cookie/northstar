@@ -25,6 +25,8 @@ map: every topic has exactly one owning file.
 - Each fact lives in one file. Other files link to it rather than restating it.
 - Write the current truth, not how it came to be. Git holds the history. Add a
   dated line only when the date matters to the rule.
+- Detail is not bloat. A complex system keeps its detailed design documents;
+  what goes is status, process and history.
 - When work changes what is true, the PR that changes the code also changes the
   owning file.
 - If two files disagree, the owner in the index wins; fix the other one.
