@@ -12,6 +12,7 @@ queue_approval: "Tom approved on 2026-09-26 in the planning thread."
 queue:
   lane: mock-exams
   capability: general
+  notifyOriginOnCloseout: true
 ---
 
 ## Outcome
@@ -60,8 +61,11 @@ a non-empty body; the sections above are Northstar's convention, not Queue's.
 Queue records the pushed integration head as the planning commit. The submit
 returns an operation ID: poll it with
 `node bin/queue-cli.mjs operation-status payload.json`, where the payload is
-`{"operationId": "..."}`, until it reports a task ID. To hear when the task
-finishes, subscribe with `node bin/northstar-subscribe.mjs <task-id> subscribe`.
+`{"operationId": "..."}`, until it reports a task ID. `notifyOriginOnCloseout: true`
+tells the submitting planner thread when the task closes, and
+`completionNotificationAgentIds: [<agent ids>]` notifies other threads. Use
+`node bin/northstar-subscribe.mjs <task-id> subscribe` only to change that
+after submission. `node bin/queue-cli.mjs --help` lists the other calls.
 To change a brief before merge, use Queue's `amend_brief` control; don't
 resubmit.
 
