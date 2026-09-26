@@ -61,7 +61,20 @@ record of one run of it is process.
    it goes into `docs/knowledge/contracts/release.md`. Answered questions go
    into `questions.md` as pointers; unanswered ones stay open there.
 3. **Retirements.** Record known retired concepts in `retired.toml`, and fix
-   the live references the check finds.
+   the live references the check finds. Always retire the old process itself,
+   so it can't creep back:
+
+   ```toml
+   [[retired]]
+   id = "northstar-process-records"
+   retired = "<cut date>"
+   replacement = "Knowledge in docs/knowledge/, intent in docs/plan.md; tasks, briefs, status and outcomes live in Queue."
+   owner = "docs/knowledge/README.md"
+   terms = ["roadmap card", "generation index", "lifecycle record", "northstar:lifecycle", "chatterbox handoff"]
+   paths = [".northstar/lifecycle/", "docs/roadmaps/", "docs/handoffs/", "docs/logs/"]
+   config_keys = ["northstar/queue:hook", "paseo.queue.control.v4"]
+   allow = ["CHANGELOG.md"]
+   ```
 4. **Plan.** Replace roadmaps, generations, runways and workstream tables with
    a short `docs/plan.md`. Held tasks become plan items, and are rebriefed or
    released after the cut.
