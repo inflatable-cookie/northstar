@@ -2,7 +2,8 @@
 
 ## A new repository
 
-1. Copy the `template/` starter into the repository root.
+1. Copy the contents of this skill's `template/` directory into the repository
+   root, including the hidden `.paseo/`.
 2. Fill in `AGENTS.md` and `docs/knowledge/vision.md`. Leave the other files
    short until there is something true to say.
 3. If the repository uses Queue, keep `.paseo/queue.json` at v5 with
