@@ -61,7 +61,9 @@ def git(*args):
 
 TEXT_SKIP = re.compile(r"\.(png|jpe?g|gif|webp|ico|pdf|pptx|docx|xlsx|zip|gz|tar|woff2?|ttf|otf|mp4|mp3|wav|sqlite|db|oci|bin|wasm|icns|lock)$", re.I)
 LINK = re.compile(r"(!?\[)((?:[^\[\]]|\[[^\]]*\])*)\]\(\s*(<[^>]+>|[^)\s]+)(\s+\"[^\"]*\")?\s*\)")
-REFDEF = re.compile(r"^(\s*\[[^\]]+\]:\s*)(\S+)(.*)$", re.M)
+# CommonMark: at most three spaces of indent. The target must look like a link,
+# so a list continuation such as "[0.05, 0.95]: the ..." isn't mistaken for one.
+REFDEF = re.compile(r"^( {0,3}\[[^\]]+\]:[ \t]*)((?:<[^>]+>)|(?:[^\s]*[/.#][^\s]*))(.*)$", re.M)
 CODE_REL = re.compile(r"`((?:\.\.?/)+[^`\s]+)`")
 EXTERNAL = re.compile(r"^[a-zA-Z][\w+.-]*:")
 
@@ -196,7 +198,7 @@ def apply():
             os.makedirs(os.path.join(ROOT, os.path.dirname(n)), exist_ok=True)
             git("mv", o, n)
         for i in range(0, len(removed_files), 500):
-            if removed_files[i:i + 500]: git("rm", "-q", "-r", "--", *removed_files[i:i + 500])
+            if removed_files[i:i + 500]: git("rm", "-q", "-r", "-f", "--", *removed_files[i:i + 500])
 
     report = {"rewritten": 0, "to_removed": 0, "fix_by_hand": [], "missing": []}
     moved_prefixes = sorted({o.rstrip("/") for o, _ in moves} | {r.rstrip("/") for r in removed}, key=len, reverse=True)

@@ -58,7 +58,10 @@ Sort every docs folder before cutting:
   documents only where they overlap.
 - **Product documentation:** guides, usage docs, API references and patterns
   written for the project's users or consumers. Stays where it is, and the
-  knowledge index links to it. It is the product, not process.
+  knowledge index links to it. It is the product, not process. That includes
+  public API contracts a product already publishes (for example at
+  `docs/contracts/`): they stay put, and `docs/knowledge/contracts/` holds the
+  project's internal rules. The knowledge index names both.
 - **Evidence:** research and audits that still support a current decision.
   Keep the part that matters as a short section in the owning knowledge file,
   and let the rest go to Git history. When a large corpus is cited line by line
@@ -68,7 +71,9 @@ Sort every docs folder before cutting:
 - **Executable evidence:** models, proof harnesses and their checker logs or
   receipts (for example a TLA+ model under `docs/research/`). Move them next to
   the code or harness they prove, mark their receipts frozen, and list those in
-  `allow`.
+  `allow`. An existing evidence folder that scripts own and whose receipts
+  embed their own paths can stay where it is (for example `docs/evidence/`);
+  freeze it rather than regenerating it.
 - **Process:** roadmaps, cards, handoffs, lifecycle records, routine logs and
   completed sweep runs. Removed. This means Northstar's process records only.
   Evidence logs that the product itself owns and cites (for example
@@ -155,10 +160,17 @@ record of one run of it is process.
    nothing but boilerplate unparsed. Then delete every `PAPERCUTS.md` and
    update any instruction that tells agents to write to it.
 10. **Checks.** Search QA configuration (`effigy.toml`, CI), tests, scripts,
-    receipts, repo-local skills (for example `.cursor/skills/`, `.agents/`) and
-    agent instruction files for paths, headings, selector names and old-loop
+    receipts, repo-local skills (for example `.cursor/skills/`, `.agents/`),
+    agent instruction files, and release/CI scope or admission policies that
+    require or admit process paths (for example a release gate that demands a
+    `docs/logs/` record), for paths, headings, selector names and old-loop
     habits (Next Task, card numbering, generation rules) from the old layout.
-    Rewrite skills that encode the old loop; don't just repoint them. A gate
+    Rewrite skills that encode the old loop; don't just repoint them. The cut
+    tool can't see paths built from segments (`path.join(root, "docs",
+    "architecture")`), so search for those too. Evidence gates that pin source
+    trees byte for byte (receipts over a runtime folder) break when the cut
+    rewrites comments or links inside them: freeze those trees in the cut plan,
+    or schedule an evidence repin. A gate
     that reads task status from process files (for example to detect stale
     rows) must be redesigned, because status now lives in Queue: make it
     refuse task IDs, or anchor it to plan lane keys.

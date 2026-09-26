@@ -74,8 +74,10 @@ Small, recurring friction worth fixing later is filed in Queue, not in the
 repository. From the Queue plugin root (`~/Dev/projects/paseo-northstar-queue`),
 run `node bin/queue-cli.mjs papercut.add payload.json`, where the payload holds
 `repository: {origin, path}`, `title`, `happened` and `impact`, plus optional
-`area` and `fix`. Record it and carry on with the task. The planner promotes a
-papercut to a task, or closes it as completed or deprecated.
+`area` and `fix`. (`papercut.list` takes `repository` as the origin string,
+`"owner/name"`.) Record it and carry on with the task. The planner promotes a
+papercut to a task once a brief exists, and cites papercut IDs against a plan
+item until then. It closes papercuts as completed or deprecated.
 
 ## Ask the operator when
 

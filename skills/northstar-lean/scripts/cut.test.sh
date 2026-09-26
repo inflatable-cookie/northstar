@@ -44,6 +44,8 @@ check plan.json '"docs/contracts/"' "the plan file itself is not rewritten"
 git -C "$repo" rm -rqf releases plan.json
 if python3 "$here/cut.py" check-links --repo "$repo" > /dev/null; then echo "ok check-links clean after cut"; else python3 "$here/cut.py" check-links --repo "$repo"; echo "FAIL check-links"; exit 1; fi
 mk docs/guides/spans.md 'Cite like `[[1]](https://example.com)` or `[x](nowhere.md)`.'
+mk docs/guides/listcont.md '- Ranges
+   [0.05, 0.95]: the useful band.'
 mk docs/guides/anchors.md '## vst2_paths
 
 See [paths](#vst2_paths).'

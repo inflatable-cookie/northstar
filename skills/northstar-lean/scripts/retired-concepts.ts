@@ -125,8 +125,12 @@ function main() {
         findings.push(finding);
       }
     };
-    for (const term of entry.terms ?? []) for (const hit of grep(repo, term)) add({ id: entry.id, kind: "term", needle: term, ...hit });
-    for (const key of entry.config_keys ?? []) for (const hit of grep(repo, key)) add({ id: entry.id, kind: "config_key", needle: key, ...hit });
+    // A permalink pinned to a commit (…/blob/<sha>/…) is a Git-history pointer.
+    const permalink = (text: string, needle: string) =>
+      new RegExp("/blob/[0-9a-f]{7,40}/[^\\s)]*" + needle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i").test(text);
+    const add2 = (f: Finding) => { if (!(f.text && permalink(f.text, f.needle.replace(/\/$/, "")))) add(f); };
+    for (const term of entry.terms ?? []) for (const hit of grep(repo, term)) add2({ id: entry.id, kind: "term", needle: term, ...hit });
+    for (const key of entry.config_keys ?? []) for (const hit of grep(repo, key)) add2({ id: entry.id, kind: "config_key", needle: key, ...hit });
     for (const path of entry.paths ?? []) {
       // A trailing slash names a directory, so text matches keep the slash and
       // `src/media/` does not match `src/media-locator.ts`. Without one, the
@@ -134,7 +138,7 @@ function main() {
       const prefix = path.replace(/\/$/, "");
       const isDir = path.endsWith("/");
       for (const t of tracked) if (t === prefix || (isDir && t.startsWith(prefix + "/"))) add({ id: entry.id, kind: "tracked_path", needle: path, file: t });
-      for (const hit of grep(repo, path)) add({ id: entry.id, kind: "path", needle: path, ...hit });
+      for (const hit of grep(repo, path)) add2({ id: entry.id, kind: "path", needle: path, ...hit });
     }
   }
 
