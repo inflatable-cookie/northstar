@@ -132,6 +132,26 @@ UI design delivery and language quality packages, become optional modules. The
 contract, bundle doctrine and template all shrink to match, each saying a rule
 once.
 
+## Draft and cut inventory
+
+The draft lives on branch `lean-northstar`: the lean skill at
+`skills/northstar-lean/` (a 99-line `SKILL.md` plus five references) and the
+copy-ready starter at `template/`, about 500 lines in all. It replaces the
+current surfaces only at the cut, so the live skill that Queue pins is
+untouched until then.
+
+| Surface today | At the cut |
+| --- | --- |
+| `skills/northstar/SKILL.md`, `references/router.md`, the 19 `references/modes/`, `handoff-contract.md`, `lifecycle-maintenance.md`, `setup/` | Replaced by `skills/northstar-lean/`, which moves to `skills/northstar/` |
+| `skills/northstar/commands/*` except `come-again` | Removed; their jobs are in the lean skill or retired |
+| `scripts/lifecycle-*.ts`, `references/lifecycle/`, the `queue:hook` Effigy task, `scripts/tests/lifecycle-adoption/` | Kept as the migration bridge until the last v1–v4 manifest migrates, then removed |
+| `ui/`, `references/ui/`, `references/packages/`, language-package scripts, `check-agent-instructions.rhai` | Kept as optional modules, reshaped later |
+| `scripts/paseo-worktree.rhai` | Removed; Queue owns worktrees |
+| `bundle-docs/` (11,600 lines) | Removed; lasting guidance lives in the skill's references |
+| `template-bundle/` | Replaced by `template/` |
+| Repository checks for the old bundle (bundle, command skills, model routing, posture advisory, readiness map, repo contract, UI protocol) | Removed; replaced by the retired-concepts check and a small check of the new shape |
+| Northstar's own `docs/` (contract 001, roadmaps, logs, handoffs, lifecycle records) | Migrated by the same cut as any consumer |
+
 ## Knowledge mechanisms (from spec 041)
 
 In order: retired concepts that name what they retire, with a check across
