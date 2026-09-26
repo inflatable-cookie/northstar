@@ -27,6 +27,9 @@ Updated: 2026-09-26
 - Keep **Now** to a handful of items, each with the outcome, why it matters,
   dependencies, and any open question IDs.
 - **Not now** records deliberate deferrals, so nobody re-proposes them.
+- A standing item that is never finished, such as keeping versions current,
+  sits under **Now**, marked "(standing)". Its rules live in a contract, not in
+  the plan.
 - Remove an item once its outcome is true. Queue keeps the record of what
   landed, so the plan doesn't need a "done" section.
 - Never write task status here: no "in review", "merged" or PR numbers.

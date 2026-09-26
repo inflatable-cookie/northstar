@@ -75,7 +75,11 @@ record of one run of it is process.
    cut, so add "sweep removed records for rulings" to the plan instead. Do the same for
    procedures that live in cards or logs. The release procedure is required:
    it goes into `docs/knowledge/contracts/release.md`. Answered questions go
-   into `questions.md` as pointers; unanswered ones stay open there.
+   into `questions.md` as pointers; unanswered ones stay open there. Rules that
+   cite a task (for example "a gap must name its open card") can't simply be
+   deleted. Re-anchor them to a plan item's lane key (`plan:<key>`, matching
+   "(lane `<key>`)" in `docs/plan.md`) or to a `questions.md` ID. Lane keys are
+   stable identifiers that other files can cite.
 3. **Retirements.** Record known retired concepts in `retired.toml`, and fix
    the live references the check finds. Always retire the old process itself,
    so it can't creep back:
@@ -126,14 +130,21 @@ record of one run of it is process.
    papercuts tooling reads it (package-level copies such as
    `apps/<app>/PAPERCUTS.md` are fine). Fold any stray copy, such as
    `docs/PAPERCUTS.md`, into the root file and delete it.
-10. **Checks.** Search QA configuration (`effigy.toml`, CI), tests, scripts
-    and receipts for paths, headings and selector names from the old layout.
+10. **Checks.** Search QA configuration (`effigy.toml`, CI), tests, scripts,
+    receipts, repo-local skills (for example `.cursor/skills/`, `.agents/`) and
+    agent instruction files for paths, headings, selector names and old-loop
+    habits (Next Task, card numbering, generation rules) from the old layout.
+    Rewrite skills that encode the old loop; don't just repoint them.
     Code reads docs too: `include_str!`, census scripts, adoption receipts that
     embed log paths. Update or remove those checks in the same PR, and say
-    which ones changed in the PR description.
+    which ones changed in the PR description. Don't wire the retired-concepts
+    check into repository QA: it needs the Northstar skill installed, so it is
+    run through `effigy skill`. If a pre-push hook refuses several
+    docs-touching commits, squash the cut into one commit.
 11. **Verify.** Run the repository's QA, then
     `effigy skill run northstar-lean/retired-concepts` and
-    `effigy skill run northstar-lean/cut -- check-links`, which checks
+    `effigy skill run northstar-lean/cut -- check-links --plan <plan.json>`
+    (the plan supplies the frozen paths), which checks
     Markdown links and anchors across the whole repository and not just the
     docs catalog. It is stricter than `effigy docs check links` and also
     catches broken anchors. The checks find the stragglers the steps above

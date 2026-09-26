@@ -8,6 +8,7 @@ Every topic has exactly one owning file. Link to it; don't restate it.
 | System shape | [architecture.md](architecture.md) |
 | Durable rules and interfaces | [contracts/](contracts/README.md) |
 | How we release | [contracts/release.md](contracts/release.md) |
+| Runbooks, optional (add `operations/` when the project has them) | `operations/` |
 | Domain concepts and vocabulary | [domain/](domain/README.md) |
 | Retired concepts | [retired.toml](retired.toml) |
 | Open questions | [questions.md](questions.md) |
