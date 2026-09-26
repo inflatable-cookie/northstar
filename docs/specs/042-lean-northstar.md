@@ -160,7 +160,7 @@ repositories that have none.
 | `skills/northstar/commands/*` except `come-again` | Removed; their jobs are in the lean skill or retired |
 | `scripts/lifecycle-*.ts`, `references/lifecycle/`, the `queue:hook` Effigy task, `scripts/tests/lifecycle-adoption/` | Kept as the migration bridge until the last v1–v4 manifest migrates, then removed |
 | `ui/`, `references/ui/`, `references/packages/`, language-package scripts, `check-agent-instructions.rhai` | Kept as optional modules, reshaped later |
-| `scripts/paseo-worktree.rhai` | Removed; Queue owns worktrees |
+| `scripts/paseo-worktree.rhai` and the `paseo:worktree` Effigy task | Kept in the swapped skill under the same selector. At least 17 repositories' `paseo.json` setup runs `paseo:worktree prepare` and `link` from the installed `northstar` skill for every Paseo worktree, including Queue's worker worktrees |
 | `bundle-docs/` (11,600 lines) | Removed; lasting guidance lives in the skill's references |
 | `template-bundle/` | Replaced by the skill's `template/` |
 | Repository checks for the old bundle (bundle, command skills, model routing, posture advisory, readiness map, repo contract, UI protocol) | Removed; replaced by the retired-concepts check and a small check of the new shape |
