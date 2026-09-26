@@ -19,17 +19,24 @@
 
 ## Migrating from the older Northstar shape
 
-The migration is one deliberate cut, done when nothing is in flight.
+The migration is one deliberate cut. Draining first is simplest; cutting with
+tasks in flight is safe if their handoffs stay.
 
 ### Before the cut
 
-1. **Drain.** Hold queued tasks, let running workers finish, and resolve
-   blocked ones individually. If one task will run for hours, you don't need to
-   wait: Queue chooses closeout from the manifest at the task's merge commit, so
-   a task that merges after the cutover gets Queue closeout. Its PR must not
-   touch the files the cutover removes (task cards, handoffs), or it will
-   conflict; send its worker a revision instruction if it does. While old v4
-   closeouts keep landing on `main`, rebase the cutover branch before merging.
+1. **Drain, or keep in-flight handoffs.** Either hold queued tasks, let
+   running workers finish and resolve blocked ones individually, or cut with
+   tasks still in flight. Queue chooses closeout from the manifest at the
+   task's merge commit, so a task that merges after the cutover gets Queue
+   closeout. Queue also re-reads a handoff-mode task's committed handoff at
+   dispatch, at dispatch-base rebinding and at worker readiness (after the
+   worker merges `main`). A handoff deleted while its task is queued or working
+   leaves that task in needs_attention with no retry route. So keep the handoff
+   file of every task still in flight, list it in `allow`, and delete both the
+   file and its `allow` entry as the task closes.
+   A worker's PR must not touch the files the cutover removes either; send it a
+   revision instruction if it does. While old v4 closeouts keep landing on
+   `main`, rebase the cutover branch before merging.
 2. **Drop the manifest.** Delete `.paseo/queue.json`, and with it the old
    Northstar lifecycle, pre-dispatch and pre-merge hooks. Queue gives a
    repository without a manifest Queue closeout by default. Commit this before
@@ -74,7 +81,10 @@ Sort every docs folder before cutting:
   Evidence logs that the product itself owns and cites (for example
   `system/logs/` read by manifests or skills) stay; freeze them and list them in
   `allow`. So do scripts that read another repository's historical records at a
-  pinned commit.
+  pinned commit. A repository that implements the old protocol for others (Queue
+  itself, which serves v1–v4 manifests, handoff paths and lifecycle records)
+  lists its implementation paths in `allow`: there they are product, not
+  process.
 
 A reusable checklist, such as a security sweep procedure, is knowledge. A
 record of one run of it is process.
@@ -123,7 +133,8 @@ record of one run of it is process.
    a short `docs/plan.md`. Held tasks become plan items, and are rebriefed or
    released after the cut.
 5. **Remove process records:** `.northstar/lifecycle/`, `docs/roadmaps/`,
-   `docs/handoffs/`, and routine `docs/logs/`. Keep a log only if it records an
+   `docs/handoffs/` (except handoffs of tasks still in flight; see step 1),
+   and routine `docs/logs/`. Keep a log only if it records an
    incident or a ruling that isn't captured elsewhere yet, and promote that
    ruling. Git keeps everything removed.
 6. **Orientation.** Rewrite `AGENTS.md` and `docs/README.md` to the template's
@@ -131,7 +142,7 @@ record of one run of it is process.
 7. **Moves and links.** Use the skill's cut tool rather than moving files by
    hand: write the moves, removals and frozen paths into a small JSON plan
    (the format is at the top of `scripts/cut.py`), then run
-   `effigy skill run northstar-lean/cut -- apply <plan.json> --dry-run`, then
+   `effigy skill run northstar/cut -- apply <plan.json> --dry-run`, then
    again without `--dry-run`. It moves and removes with Git, and recomputes
    every reference from each file's old location: Markdown links, backticked
    paths, and repo-root or `../` paths in code and config (for example
@@ -177,8 +188,8 @@ record of one run of it is process.
     run through `effigy skill`. If a pre-push hook refuses several
     docs-touching commits, squash the cut into one commit.
 11. **Verify.** Run the repository's QA, then
-    `effigy skill run northstar-lean/retired-concepts` and
-    `effigy skill run northstar-lean/check-links -- --plan <plan.json>`
+    `effigy skill run northstar/retired-concepts` and
+    `effigy skill run northstar/check-links -- --plan <plan.json>`
     (the plan supplies the frozen paths). Copy the plan's frozen paths into
     `retired.toml`'s top-level `frozen` list (as globs), so later runs need no
     plan. It checks

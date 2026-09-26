@@ -16,7 +16,7 @@ same planning. Nothing about the handover is written into the repository.
 
 1. **Start the successor** in the same workspace, with the same provider and
    model settings and the `Chatterbox=true` label. Tell it which skill to load,
-   for example `northstar-lean`.
+   for example `northstar`.
 2. **Brief it in its first prompt.** There is no handoff file. Keep the brief
    short:
    - the current state;

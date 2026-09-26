@@ -34,7 +34,7 @@ Tasks, briefs and status live in Queue, never in this repository.
 ## Papercuts
 
 File small, recurring friction in Queue with `papercut.add` (see the
-`northstar-lean` skill). There is no `PAPERCUTS.md`.
+`northstar` skill). There is no `PAPERCUTS.md`.
 
 ## Validate
 

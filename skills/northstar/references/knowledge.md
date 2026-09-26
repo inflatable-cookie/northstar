@@ -94,7 +94,7 @@ config_keys = ["canonical-spine-bundle"]  # literal text, not a dotted TOML path
 - A top-level `frozen = [...]` list, above the `[[retired]]` entries and using
   the same glob rules, names immutable artefacts once for the whole repository.
   The retired-concepts check exempts them from every retirement, and
-  `check-links` (`effigy skill run northstar-lean/check-links`) skips them.
+  `check-links` (`effigy skill run northstar/check-links`) skips them.
 - Fix live references rather than widening `allow`. The exception is immutable
   artefacts, which can't change without a new release: released suites and
   generated mirrors, vendored copies, fixtures, digested receipts, and applied
@@ -103,7 +103,7 @@ config_keys = ["canonical-spine-bundle"]  # literal text, not a dotted TOML path
 - For a retired process or convention, `owner` is the file that describes what
   replaced it, often `AGENTS.md`.
 - Run it from the repository root with
-  `effigy skill run northstar-lean/retired-concepts`. Add `-- --json` for
+  `effigy skill run northstar/retired-concepts`. Add `-- --json` for
   machine output, or `-- --retired <file>` to audit against a list that isn't
   in the repository yet, while preparing a migration. The check lives in the
   skill; repositories don't copy it.

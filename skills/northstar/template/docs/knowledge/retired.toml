@@ -1,6 +1,6 @@
 # Concepts that no longer exist. The retired-concepts check fails on any listed
 # term, path or config key found outside `allow`
-# (`effigy skill run northstar-lean/retired-concepts`).
+# (`effigy skill run northstar/retired-concepts`).
 #
 # frozen: immutable artefacts (released suites, vendored mirrors, fixtures,
 # receipts, applied migrations), exempt from every retirement and skipped by

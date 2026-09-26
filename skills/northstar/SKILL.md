@@ -1,262 +1,133 @@
 ---
 name: northstar
-description: Northstar planning, PR review, and code QA.
+description: Keep a project's knowledge current and its work well-aimed. Use for planning, writing a task brief, reviewing a PR, recording an operator ruling, retiring a concept, or orienting in a Northstar repository.
 ---
 
 # Northstar
 
-Single entry for the Northstar planning and docs system. **Do not** load every
-mode up front.
+Northstar keeps a repository's knowledge current and its plan legible, so any
+agent can pick up work without reconstructing intent from conversation.
 
-## First step (required)
+The repository holds **knowledge and code**. The orchestrator (the Paseo Queue
+plugin today, Nucleus later) holds **process**: tasks, briefs, status, review,
+closeout and outcomes. Never write process state into the repository.
 
-Open [`references/router.md`](./references/router.md), classify intent, then
-follow exactly one route: open **one** [`references/modes/`](./references/modes/)
-file and follow it, or — for a supported language quality workflow — follow the
-router's generic language section into the installed-package route at
-`references/packages/installed-package-route.md`.
+## Repository shape
 
-| Mode | When |
+| Surface | Holds |
 | --- | --- |
-| Language quality workflow | User explicitly requests a supported language quality audit, no-slop pass, or audit-and-fix action; or requests ordinary supported-language work and the repository already carries a registered activation |
-| Handoff | User explicitly asks for a continuation brief / fresh thread |
-| Project refresh | User asks for `northstar refresh` or `northstar project refresh` to bring an existing project up to date |
-| Architecture refocus | User asks for `northstar architecture refocus` or a bounded codebase architecture improvement review |
-| Reframe | User asks for `northstar reframe` or a clearer restatement in project language |
-| Planning readiness review | User asks for `northstar planning readiness review` on an existing project |
-| Atlas | User asks for `northstar atlas` or discovery-first long-horizon direction |
-| Agent instruction review | User asks for a `northstar AGENTS file review`, or to review/optimize `AGENTS.md`/`CLAUDE.md` |
-| Pre-execution discovery | Readiness mapping, intent rounds, project language, decision prototypes, questionnaires, or reframe |
-| PR review | User asks a thread to review an existing PR |
-| UI design delivery | A UI-classified implementation or review lane has an approved brief; run the `northstar-ui` skill's Build or Review route |
-| Coordinator | User wants a Northstar lane coordinated — manifest-defined frontier dispatch, review-child lease in worker workspace, and gated merge — or a committed coordinator-continuation handoff; canonical planning and promotion belong to chatterbox |
-| Docs cleanup | User wants `/docs` files and folders inspected and reworked to fit Northstar |
-| Chatterbox | User wants primary planning authority, problem exploration, canonical promotion, triage reconciliation, coordinator direction, or a `chatterbox refresh`; or uses `northstar chatterbox` / `/northstar-chatterbox` |
-| Normalize docs | Bootstrap, migrate, or keep docs spine healthy over time |
-| Research | Evidence → architecture/contracts |
-| Recovery | Drifted or changed planning state |
-| Planning | Default: plan, promote, compile roadmaps (sub-modes in router) |
+| `AGENTS.md` | Orientation: what this is, the doc map, guardrails, the validation command |
+| `docs/README.md` | What is true now, in a page, with links by topic |
+| `docs/knowledge/` | Current truth, one owner per fact: vision, architecture, contracts, domain |
+| `docs/knowledge/retired.toml` | Concepts that no longer exist, and what replaced them |
+| `docs/knowledge/questions.md` | Open questions, and where each answer now lives |
+| `docs/knowledge/contracts/release.md` | How this project releases, step by step. Every project has one |
+| `docs/plan.md` | What matters next and why |
+| `docs/triage/` | Unresolved leads; never authority |
 
-Runtime authority comes from the target repo's `AGENTS.md` and local contracts.
-When the target is the Northstar source repo, also read
-`bundle-docs/protocol-kernel.md`. Its absence is normal in consumer repos and
-is not a contract gap by itself.
+There are no task cards, roadmaps, generations, handoff files, lifecycle
+records, delivery logs or `PAPERCUTS.md`. Git history and the orchestrator's outcome records
+are the history.
 
-Worker mode is explicit, not a default startup step. It is active only when an
-coordinator dispatches a thread with a handoff whose frontmatter declares
-`handoff_mode: worker-pr-loop`, `worker_mode: implementation`, and
-`dispatch_authority: coordinator`. Tell the operator that handoff's **absolute
-path**; that path is the only dispatch artifact. A repository-relative path is
-valid only after the current root is already the owning repository. Normal
-planning, review, discovery, readiness, and coordinator threads do not run a
-worktree probe or inspect `.agents.local.env` merely because worker support
-exists. Once worker mode is activated, follow the router's lightweight
-four-command worktree fast path, verify the committed handoff in the selected
-`HEAD` before mutating anything, then verify any sibling worktree links the
-tracked handoff lists in the worktree container directory. A launcher lifecycle
-creates them before project setup; only the manual fallback worker creates an
-absent link after preflight.
+## Orient
 
-A frontier second opinion is optional advisory intake, not a Northstar mode or
-role. Chatterbox may recommend one for a material unresolved question but must
-not create or request it without explicit operator approval for that
-consultation. Use the host's ordinary advisor or committee mechanism. The
-result returns to Chatterbox, which retains planning authority.
+Read `AGENTS.md`, then `docs/README.md`, then only the knowledge files your task
+touches. Before planning against a concept, check `retired.toml`. Before asking
+the operator something, check `questions.md` and the owning knowledge file.
+Asking a settled question again costs more than looking it up.
 
-A fresh coordinator continuation is distinct from both. Its handoff declares
-`handoff_mode: coordinator-continuation`,
-`coordinator_mode: economical-coordination`, and
-`dispatch_authority: coordinator`. The successor enters normal coordinator
-mode from that absolute path and does not run worker or advisor
-preflight. The source yields the transferred lane after pushed dispatch.
+## How work moves
 
-A Chatterbox refresh is another explicit continuation. Its handoff declares
-`handoff_mode: chatterbox-continuation`,
-`chatterbox_mode: conversational-planning`, and
-`dispatch_authority: chatterbox`. With Paseo, the successor is a child tab in
-the source's exact current workspace. The source transfers every preflighted
-unfinished Queue attention route to it, verifies the exact result, then yields;
-neither thread nor workspace is archived or detached.
+1. **Plan.** Intent goes into `docs/plan.md` as a short prioritised list. A
+   plan item being worked can own a Queue lane; the lane's aim restates the
+   item and grants no authority. See [plan](references/plan.md).
+2. **Brief.** Each task gets a brief held by Queue, not committed: outcome,
+   context links, constraints, acceptance, and when to stop. See
+   [brief](references/brief.md).
+3. **Dispatch.** Submit the brief with the operator's approval. Queue runs the
+   worker, review, merge and closeout, and keeps the outcome.
+4. **Review.** An independent reviewer checks the exact head against the brief.
+   See [review](references/review.md).
+5. **Keep knowledge current.** When work changes what is true, the same PR
+   updates the owning knowledge file. See [knowledge](references/knowledge.md).
 
-Whenever a Northstar mode creates a Paseo child from a selected profile,
-materialize the complete profile into the launch: provider/model plus `modeId`,
-`thinkingOptionId`, and `featureValues` mapped to the agent settings. Preserve
-the operator-configured full-accept/full-access permission mode; never omit or
-downgrade it to the provider default or an ask-for-permission mode. This applies
-to every spawned worker, reviewer, chatterbox, frontier advisor, research child,
-mechanical projection worker, and successor coordinator. Full accept removes
-routine tool prompts; it does not expand the child's Northstar authority.
+## Rules that matter
 
-## Outcomes by mode
+- **One home per fact.** Link to the owner; don't restate it. A copy is a
+  future contradiction.
+- **Rulings land before you hand off.** An operator answer given in
+  conversation goes into its owning knowledge file, or closes a question in
+  `questions.md`, before the thread ends or hands over.
+- **Retirements name what they retire.** Retiring a concept adds an entry to
+  `retired.toml` that lists the terms, paths and config keys it covers, and the
+  same change removes or fixes the live references.
+- **No status mirrors.** Never write "done", "merged" or "in review" into the
+  repository. Queue owns status.
+- **Write for the next reader.** Keep only what someone will need later.
+  Short, plain, and with the reasoning that makes a decision understandable.
+- **Break things honestly.** When a change breaks callers or contracts, say so
+  and update them together. No shims that hide a decision.
 
-- **Planning:** coherent architecture/contracts/roadmaps; no invented system
-  behavior; ready tasks only when rubric satisfied.
-- **Language quality workflow:** selected generically from explicit intent or
-  an exact registered activation marker. Run the installed skill's
-  `northstar/language:route` task; it resolves or securely acquires the pinned
-  package into durable operator state and returns the declared entrypoint:
-  package- and overlay-resolved scope, deterministic
-  finding-first records, authority-bounded repair, dirty-state preservation,
-  and repository-owned tool evidence. Acquisition failure stops only that
-  workflow, naming the identity and local install route. Ordinary coding never
-  activates an audit.
-- **Planning readiness review:** read-only verdict on whether an existing
-  project's planning is incomplete, drifted, materially ambiguous, or coherent,
-  with one routed next step.
-- **Project refresh:** all-facets Northstar audit with bounded documentation
-  repair, including compaction of already-closed generations when repair is
-  authorized, and one routed next step; no worker/worktree startup.
-- **Architecture refocus:** bounded, evidence-led architecture improvement
-  candidates with explicit promotion routes; no production-code edits.
-- **Consumer evidence:** live consumer dogfooding is operator-owned outside
-  Northstar's execution loop; Northstar consumes feedback supplied in the
-  conversation and does not select, dispatch, or manage consumer runs.
-- **Reframe:** a concise, read-only restatement of the current request that
-  preserves uncertainty and authority; it does not create a plan or decision.
-- **Atlas:** discovery-first, operator-guided, plan-only long-horizon planning
-  that connects vision, architecture, contracts, generation runway, and
-  strategic horizons; it does not invent the project's direction or authorize
-  execution.
-- **Pre-execution discovery:** frontier-based intent rounds and bounded
-  project-language, prototype, and questionnaire routes; no execution authority.
-- **PR review:** independent review of an existing PR with the verdict and every
-  required change posted on the provider review surface before chat summary.
-  For a UI-classified PR, load the `northstar-ui` Review route and run the exact
-  head; material workflow, hierarchy, state, accessibility, responsive, or
-  presentation failures block even when tests pass.
-- **UI design delivery:** a UI-classified implementation lane runs the
-  `northstar-ui` Build route against its approved brief and attaches exact-head
-  rendered evidence; a UI review runs the Review route. Northstar owns the
-  protocol, not a house aesthetic or a renderer.
-- **Docs cleanup:** inventory and classify docs drift, including expanded
-  closed generations; mutate only when bounded repair is authorized.
-- **Research:** promoted decisions in architecture/contracts, not stranded memos.
-- **Recovery:** trustworthy planning surfaces and canonical refs restored.
-- **Normalize:** compact lifecycle spine installed/maintained; already-closed
-  generations compacted without waiting for another rollover; Effigy-first QA.
-- **Coordinator:** mechanical delivery management as the default job —
-  parallel-first dispatch of the whole approved ready frontier without a global
-  thread budget, lane-local provider/profile routing, diversified economical
-  routing (adequate pool, cheapest adequate tier, recent-use rotation) with
-  frontier workers only when both escalation axes hold, Paseo worker parentage
-  preserved across dedicated worktree workspace placement (scoped
-  cross-workspace child creation, finish notifications enabled, no detached
-  root launches, same-agent revision resume), independent review children in the
-  worker's exact existing workspace (explicit retained `workspaceId`, no review
-  workspace creation, returned-placement verification) with serial clean
-  exact-head lease, distinct underlying provider/model identity, and same-agent
-  re-review through the retained reviewer `agentId`, continuous coordinator action chain
-  across merge, post-merge reconciliation, closeout, frontier recomputation,
-  and next-ready dispatch without operator `continue`, prompt yield on children
-  with `notifyOnFinish: true` and no child-wait Chatterbox noise, exactly one
-  administrative notice to Chatterbox on an empty runway, pre-PR worker
-  decision requests routed to Chatterbox for a cited ruling or operator
-  conversation before same-worker resume, bounded authenticated
-  native write fallback on connector refusal after an unchanged merge gate,
-  self-contained operator escalation relay, optional fresh-coordinator
-  continuation through a pushed seven-section handoff and a separate local
-  workspace with `Coordinator=true`, one pushed worker handoff under
-  `docs/handoffs/` per launched lane, and accepted-review plus check-gated merge
-  without a second operator prompt.
-- **Handoff:** a human-friendly seven-section file under `docs/handoffs/`, with
-  an absolute path returned to the operator; not a substitute for log/roadmap
-  closeout.
-- **Chatterbox:** primary planning authority, warm operator intake
-  conversation, problem exploration, mutable triage capture on shared checkout,
-  in-place correction and promotion-time pruning, direct canonical planning promotion on the
-  integration branch after operator confirmation, and provenance-labelled
-  direction to the coordinator (`operator-confirmed direction`, `Chatterbox
-  ruling`, `Chatterbox recommendation`, `administrative notice`); no
-  worker supervision, review, or merge authority. A current explicit operator
-  instruction may authorize one local, reversible, low-risk direct change under
-  Chatterbox mode's complete gate; material implementation still dispatches.
-  `chatterbox refresh` writes a pushed continuation handoff, creates a successor
-  child tab in the same Paseo workspace, transfers unfinished Queue attention,
-  and yields without disposing of the source.
+## Papercuts
 
-## Conversation style
+Small, recurring friction worth fixing later is filed in Queue, not in the
+repository. From the Queue plugin root (`~/Dev/projects/paseo-northstar-queue`),
+run `node bin/queue-cli.mjs papercut.add payload.json`, where the payload holds
+`repository: {origin, path}`, `title`, `happened` and `impact`, plus optional
+`area` and `fix`. (`papercut.list` takes `repository` as the origin string,
+`"owner/name"`.) Record it and carry on with the task. The planner promotes a
+papercut to a task once a brief exists, and cites papercut IDs against a plan
+item until then. It closes papercuts as completed or deprecated.
 
-Use a natural, human conversational tone across all Northstar threads. Keep useful
-recommendations, trade-offs, and next steps, but do not turn ordinary replies
-into dry status reports or bureaucratic protocol recitations.
+## Ask the operator when
 
-- be clear, warm, and easy to respond to;
-- keep the connective language that makes reasoning understandable;
-- stay concise and high-signal without becoming telegraphic;
-- use summaries and outcome/state/next structure when they help, not by reflex;
-- preserve room for curiosity, tentative ideas, and productive exploration;
-- lead with the answer; detail comes after it and only where it earns its place;
-- say a thing once, and let a short answer be short — a two-line reply needs no
-  headings or ceremony, while anything longer wants short titles, a lead line,
-  or a summary so the reader can skim and jump;
-- length is not the problem, unreadable volume is: keep longer replies skimmable,
-  one idea per paragraph, so the reader can stop anywhere;
-- assume the reader is several messages behind across several threads and wants
-  to reply in seconds, not study the message.
+- the plan doesn't settle what to do next;
+- a choice is breaking, irreversible, security-sensitive, or changes product
+  direction;
+- validation fails in a way that changes the plan.
 
-Coordinator threads have a stronger version of this rule: stay a clear, human
-coordination partner. Explain runway state, trade-offs, and next dispatches
-without protocol recitation, and make redirection easy. Material product
-exploration does not happen in this thread: route it to a chatterbox and keep
-the coordination and authority boundaries firm without making the conversation
-feel like a workflow form.
+Otherwise act. Asking again for authority that is already settled is a cost.
 
-When Chatterbox, a frontier advisor, refresh, or cleanup surfaces a useful
-observation, idea, plan, or question that will not be resolved immediately,
-capture it in `docs/triage/`. Update the same note as the issue changes. The
-mechanical coordinator does not scan or reconcile triage.
+## Roles
 
+- **Planner** (a Chatterbox thread): owns `docs/plan.md`, knowledge upkeep,
+  briefs and dispatch approval requests. It commits its own small changes
+  (plan items, questions, triage notes, a ruling landing in a knowledge file,
+  link fixes) straight to `main`: run the repository's docs checks, check the
+  exit code, then push. Don't open a PR for a plan edit before a dispatch. A
+  branch and a self-merged PR are for larger or riskier changes: restructuring
+  knowledge, a migration cut, or anything touching code, QA configuration or
+  scripts. For those, "passes" means an exit code of 0 that was actually
+  checked. When parallel workers saturate the machine, local QA can fail for
+  unrelated reasons, so use a CI run on the branch as the gate (dispatch it if
+  CI doesn't run on PRs). The operator doesn't review planner changes; anything
+  that needs independent review goes through Queue as a brief.
+- **Worker:** implements one brief in the worktree Queue gives it, runs the
+  repository's validation, opens one PR, and reports through Queue.
+- **Reviewer:** checks the exact head independently and reports findings.
 
-## Papercuts loop (required during execution)
+Coordination (recovery, review routing, merge, closeout) is Queue's job, not a
+thread's. A planner hands over to a fresh successor using
+[handover](references/handover.md); there are no handoff files.
 
-- Locate the root of the repository that owns the work and read
-  `PAPERCUTS.md` if it exists.
-- When a small, solvable execution hurdle appears, append a terse entry to that
-  file before continuing. If it is missing, create it without asking the
-  operator.
-- Capture the friction, impact, plausible fix, and affected surface. Do not
-  stop the current task, wait for permission, or fix the papercut unless that
-  fix is already in scope.
-- Do not log ordinary one-off failures, external blockers, sensitive data, or
-  duplicate open entries. Papercuts are observations for later triage, not an
-  automatic triage note or roadmap commitment.
+## Adopting or migrating a repository
 
-The starter file is available at `assets/templates/PAPERCUTS.md`. Seed it on
-adopt/upgrade before exact-SHA / clean-tree release prep; do not add it during
-tag closeout after a green pinned SHA.
+Use [adopt](references/adopt.md) and the starter in
+[template/](template/README.md). A repository on the older Northstar shape
+migrates in one deliberate cut, and drops its Queue manifest.
 
-## Refactoring posture
+## Optional modules
 
-When work touches code or automation: no pre-1.0 compat shims; ask the operator
-on breaking changes; from v1.0 preserve expected stable behavior. Follow the
-target repo's `docs/contracts/001-working-rules.md` when present. In the
-Northstar source repo, expanded doctrine lives at
-`bundle-docs/sections/07-delivery-framework-and-autonomy.md`.
+UI design delivery and language quality packages are separate modules. Load one
+only when the repository has opted in.
 
-## Assets
-
-- Setup/templates: [`assets/templates/`](./assets/templates/)
-- Optional Paseo project adapter: [`references/setup/paseo-project.md`](./references/setup/paseo-project.md)
-- Claude Code bridge: `assets/templates/CLAUDE.md.template` must reference
-  `@AGENTS.md`; add Claude-only guidance there only when it cannot live in the
-  shared contract.
-- Papercuts starter: `assets/templates/PAPERCUTS.md`
-- Handoff template: [`assets/templates/northstar-handoff.md.template`](./assets/templates/northstar-handoff.md.template)
-- Coordinator worker handoff extension: [`assets/templates/northstar-coordinator-run.md.template`](./assets/templates/northstar-coordinator-run.md.template)
-- Handoff directory: `docs/handoffs/`
-- Triage directory: `docs/triage/`
-- Handoff contract: [`references/handoff-contract.md`](./references/handoff-contract.md)
-- UI skill: [`ui/SKILL.md`](./ui/SKILL.md) (Build and Review routes under
-  `references/ui/`)
-
-## Do not
-
-- Impose a house aesthetic or override consumer design authority through the
-  `northstar-ui` skill; it executes an approved brief and reviews the running
-  result.
-- Skip the router.
-- Use handoff mode for compaction-only or ordinary `continue`.
-- Start roadmap execution to discover missing contracts.
-- Mirror Effigy tasks into `package.json` scripts.
-- Alias `tasks.health` to `qa` (doctor orientation must stay cheap; full
-  validation is `effigy qa` — see `references/setup/repo-contract.md`).
+- **UI:** the nested [northstar-ui](ui/SKILL.md) skill builds and reviews UI
+  work against an approved design brief. Its routes are
+  [build](references/ui/build.md) and [review](references/ui/review.md).
+- **Language packages:** for an explicit Rust or TypeScript/Svelte quality
+  audit, follow the
+  [installed-package route](references/packages/installed-package-route.md). It
+  runs the skill's `language:route` task. Never start an audit from
+  ordinary coding.
+- **Worktrees:** `paseo:worktree` prepares and links sibling checkouts for
+  Paseo worktrees; projects call it from `paseo.json` setup and teardown.
