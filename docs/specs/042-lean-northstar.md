@@ -100,6 +100,14 @@ What Queue needs to take on, in the order agreed with the Queue Chatterbox on
    from the 4a records through an RPC, a CLI command and skill wording, so
    repositories need no delivery log.
 
+**No Queue files in repositories** (Tom, 2026-09-26). A repository with no
+`.paseo/queue.json` gets Queue closeout and brief mode by default, and project
+settings such as the pre-merge validation command live in Queue's own store,
+set through the CLI. So item 3 is a per-project validation command held by
+Queue, not a manifest field. Manifests remain only for repositories still on
+v1–v4. Migrated repositories delete theirs once Queue ships the default; until
+then they keep the v5 manifest below.
+
 Migrated repositories declare a new manifest version, `paseo.queue.control.v5`.
 It keeps v4's hook definitions with hooks optional, and adds
 `closeout: "queue" | "hooks"` (default `hooks`, the v4 behaviour) and
@@ -123,6 +131,46 @@ Vocabulary follows Queue: a **lane** is the group, and a **task** is one unit of
 work. The lean skill and doctrine use those terms; Northstar's older use of
 "lane" for a single task retires with the old surfaces.
 
+## Papercuts move to Queue (Tom, 2026-09-26)
+
+Papercuts are process, so they leave repositories too. Queue gets a dedicated,
+host-neutral papercuts table. Each entry records the repository, an optional
+area or path, a title, what happened, the impact, a plausible fix, who filed
+it, and when. An entry is open, or promoted to a task (linked by task ID), or
+closed as completed or deprecated; closed entries drop off the working list.
+Queue ports into Nucleus core with the rest.
+
+Order:
+1. Queue builds the table, its CLI and RPC, and an import command that reads a
+   repository's `PAPERCUTS.md`, including package-level copies.
+2. Each repository's entries are imported and verified. Then its
+   `PAPERCUTS.md` files are deleted, and `AGENTS.md` says how to file a
+   papercut through Queue.
+3. The lean skill drops `PAPERCUTS.md` from the template and `adopt.md`.
+4. Effigy removes its papercuts machinery: the `effigy-papercuts` crate, the
+   `effigy papercuts` command, contract 036, guide 078 and the starter file.
+   This is a breaking change in its changelog.
+5. Nucleus ports the table.
+
+A known trade-off: an agent without Queue access, such as a cloud session,
+can't file a papercut directly. It reports friction to its planner instead.
+
+## Planning moves to Queue (Tom, 2026-09-26; relayed from Nucleus)
+
+Planning follows papercuts out of repositories, organised by lane (Nucleus
+contract 002, "Planning records"; the Queue Chatterbox pilots it):
+
+- triage leads become Queue records;
+- each lane gets a versioned working document for its aim;
+- a project's plan becomes its ordering of lanes, replacing `docs/plan.md`;
+- papercuts, triage leads, drafts and tasks attach to lanes, many-to-many;
+- promoting a papercut or triage lead to a task is one action;
+- one pipeline board, with lane swimlanes, per project and across all projects.
+
+Repositories then keep only knowledge and code. Once Queue ships it,
+`docs/plan.md` and `docs/triage/` are imported, deleted and retired the way
+`PAPERCUTS.md` was, and the skill's plan and triage guidance moves to Queue.
+
 ## Skill shape
 
 A core skill of under about 200 lines of guidance that covers orientation,
@@ -131,6 +179,32 @@ planning into `docs/plan.md`, writing a brief, review, and knowledge upkeep
 UI design delivery and language quality packages, become optional modules. The
 contract, bundle doctrine and template all shrink to match, each saying a rule
 once.
+
+## Draft and cut inventory
+
+The draft lives on branch `lean-northstar` at `skills/northstar-lean/`: a
+100-line `SKILL.md`, five references, the retired-concepts check, and the
+copy-ready starter under `template/`. Since 2026-09-26 it is installed
+alongside the current skill as `northstar-lean`, so trial repositories can use
+it while the `northstar` skill that Queue pins stays untouched. It replaces the
+current surfaces only at the cut.
+
+Rollout (Tom, 2026-09-26): trial on nightfire, then underlay, then acowtancy.
+A repository with a live Chatterbox migrates through that Chatterbox after a
+direct refresh onto `northstar-lean`. The Northstar Chatterbox migrates
+repositories that have none.
+
+| Surface today | At the cut |
+| --- | --- |
+| `skills/northstar/SKILL.md`, `references/router.md`, the 19 `references/modes/`, `handoff-contract.md`, `lifecycle-maintenance.md`, `setup/` | Replaced by `skills/northstar-lean/`, which moves to `skills/northstar/` |
+| `skills/northstar/commands/*` except `come-again` | Removed; their jobs are in the lean skill or retired |
+| `scripts/lifecycle-*.ts`, `references/lifecycle/`, the `queue:hook` Effigy task, `scripts/tests/lifecycle-adoption/` | Kept as the migration bridge until the last v1–v4 manifest migrates, then removed |
+| `ui/`, `references/ui/`, `references/packages/`, language-package scripts, `check-agent-instructions.rhai` | Kept as optional modules, reshaped later |
+| `scripts/paseo-worktree.rhai` and the `paseo:worktree` Effigy task | Kept in the swapped skill under the same selector. At least 17 repositories' `paseo.json` setup runs `paseo:worktree prepare` and `link` from the installed `northstar` skill for every Paseo worktree, including Queue's worker worktrees |
+| `bundle-docs/` (11,600 lines) | Removed; lasting guidance lives in the skill's references |
+| `template-bundle/` | Replaced by the skill's `template/` |
+| Repository checks for the old bundle (bundle, command skills, model routing, posture advisory, readiness map, repo contract, UI protocol) | Removed; replaced by the retired-concepts check and a small check of the new shape |
+| Northstar's own `docs/` (contract 001, roadmaps, logs, handoffs, lifecycle records) | Migrated by the same cut as any consumer |
 
 ## Knowledge mechanisms (from spec 041)
 
