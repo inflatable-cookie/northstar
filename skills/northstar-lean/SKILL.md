@@ -90,8 +90,8 @@ thread's.
 
 ## Adopting or migrating a repository
 
-Use [adopt](references/adopt.md) and the starter in [template/](template/README.md).
-A repository on the older Northstar shape
+Use [adopt](references/adopt.md) and the starter in
+[template/](template/README.md). A repository on the older Northstar shape
 migrates in one deliberate cut, after its Queue manifest moves to v5.
 
 ## Optional modules
