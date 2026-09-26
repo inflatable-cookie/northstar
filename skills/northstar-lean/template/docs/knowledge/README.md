@@ -5,7 +5,7 @@ Every topic has exactly one owning file. Link to it; don't restate it.
 | Topic | Owner |
 | --- | --- |
 | Vision and non-goals | [vision.md](vision.md) |
-| System shape | [architecture.md](architecture.md) |
+| System shape (a single file, or an `architecture/` folder once it outgrows a page) | [architecture.md](architecture.md) |
 | Durable rules and interfaces | [contracts/](contracts/README.md) |
 | How we release | [contracts/release.md](contracts/release.md) |
 | Runbooks, optional (add `operations/` when the project has them) | `operations/` |

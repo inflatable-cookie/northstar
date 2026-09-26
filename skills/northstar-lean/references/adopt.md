@@ -8,7 +8,11 @@
    template folders and index rows with nothing true to say yet, such as
    `domain/`.
 2. Fill in `AGENTS.md` and `docs/knowledge/vision.md`. Leave the other files
-   short until there is something true to say.
+   short until there is something true to say. The template is a minimum, not
+   a maximum: keep hard-won project lessons in `AGENTS.md`. Split
+   `architecture.md` into an `architecture/` folder once it outgrows a page.
+   Language quality profiles stay wherever their optional module expects
+   them.
 3. Write `docs/knowledge/contracts/release.md`, even if the answer is "not
    released yet". Every project documents how it releases.
 4. If the repository uses Queue, keep `.paseo/queue.json` at v5 with
@@ -129,12 +133,17 @@ record of one run of it is process.
    every reference from each file's old location: Markdown links, backticked
    paths, and repo-root or `../` paths in code and config (for example
    `include_str!`). Links into removed records become plain text or Git-history
-   pointers. Mark immutable artefacts as frozen: released suites, vendored
+   pointers. Write any history pointer you add by hand in the same style,
+   `` `name.md` (Git history) ``, without the removed path: the
+   retired-concepts check flags removed paths. Mark immutable artefacts as
+   frozen: released suites, vendored
    mirrors, fixtures, digested receipts and applied migrations are never
    rewritten.
 8. **Leftover process in knowledge.** Remove "Next Task" sections, status
    narration ("no generation is active") and "open a roadmap card" wording
-   from knowledge files. Product docs that teach the old conventions, such as a
+   from knowledge files. Rewrite working-rules or delivery-grammar contracts
+   that encode the old loop (roadmap delivery grammar, "a bare continue runs
+   the next roadmap task") around `docs/plan.md` and Queue. Product docs that teach the old conventions, such as a
    guide to writing AGENTS files, get updated too.
 9. **Housekeeping.** Delete closed papercuts and closed or already-promoted
    triage notes. `PAPERCUTS.md` lives at the repository root, where Effigy's
@@ -145,7 +154,10 @@ record of one run of it is process.
     receipts, repo-local skills (for example `.cursor/skills/`, `.agents/`) and
     agent instruction files for paths, headings, selector names and old-loop
     habits (Next Task, card numbering, generation rules) from the old layout.
-    Rewrite skills that encode the old loop; don't just repoint them.
+    Rewrite skills that encode the old loop; don't just repoint them. A gate
+    that reads task status from process files (for example to detect stale
+    rows) must be redesigned, because status now lives in Queue: make it
+    refuse task IDs, or anchor it to plan lane keys.
     Code reads docs too: `include_str!`, census scripts, adoption receipts that
     embed log paths. Update or remove those checks in the same PR, and say
     which ones changed in the PR description. Don't wire the retired-concepts
@@ -164,6 +176,10 @@ record of one run of it is process.
     plan, so list those in `allow` as well. When you work in a worktree, confirm
     which tree each check actually ran against: container-routed tasks may
     mount the main checkout instead.
+
+Land it when the repository's QA passes, and CI where it exists. If CI only
+runs on manual dispatch, run it on the branch
+(`gh workflow run ci.yml --ref <branch>`).
 
 Review the cut like any PR: nothing current lost, no fact with two owners, and
 every link resolving.
