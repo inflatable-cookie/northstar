@@ -87,7 +87,8 @@ Otherwise act. Asking again for authority that is already settled is a cost.
 - **Reviewer:** checks the exact head independently and reports findings.
 
 Coordination (recovery, review routing, merge, closeout) is Queue's job, not a
-thread's.
+thread's. A planner hands over to a fresh successor using
+[handover](references/handover.md); there are no handoff files.
 
 ## Adopting or migrating a repository
 
