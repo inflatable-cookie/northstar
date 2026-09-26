@@ -131,6 +131,30 @@ Vocabulary follows Queue: a **lane** is the group, and a **task** is one unit of
 work. The lean skill and doctrine use those terms; Northstar's older use of
 "lane" for a single task retires with the old surfaces.
 
+## Papercuts move to Queue (Tom, 2026-09-26)
+
+Papercuts are process, so they leave repositories too. Queue gets a dedicated,
+host-neutral papercuts table. Each entry records the repository, an optional
+area or path, a title, what happened, the impact, a plausible fix, who filed
+it, and when. An entry is open, or promoted to a task (linked by task ID), or
+closed as completed or deprecated; closed entries drop off the working list.
+Queue ports into Nucleus core with the rest.
+
+Order:
+1. Queue builds the table, its CLI and RPC, and an import command that reads a
+   repository's `PAPERCUTS.md`, including package-level copies.
+2. Each repository's entries are imported and verified. Then its
+   `PAPERCUTS.md` files are deleted, and `AGENTS.md` says how to file a
+   papercut through Queue.
+3. The lean skill drops `PAPERCUTS.md` from the template and `adopt.md`.
+4. Effigy removes its papercuts machinery: the `effigy-papercuts` crate, the
+   `effigy papercuts` command, contract 036, guide 078 and the starter file.
+   This is a breaking change in its changelog.
+5. Nucleus ports the table.
+
+A known trade-off: an agent without Queue access, such as a cloud session,
+can't file a papercut directly. It reports friction to its planner instead.
+
 ## Skill shape
 
 A core skill of under about 200 lines of guidance that covers orientation,
