@@ -92,6 +92,10 @@ Otherwise act. Asking again for authority that is already settled is a cost.
   briefs and dispatch approval requests. It makes its own changes (plan,
   knowledge, triage, questions) on a branch to isolate them, and merges that PR
   itself once validation passes; the operator doesn't review planner PRs.
+  "Passes" means an exit code of 0 that was actually checked, never a red run.
+  When the machine is saturated by parallel workers, local QA can fail for
+  reasons unrelated to the change, so use a CI run on the branch as the gate
+  (dispatch it if CI doesn't run on PRs).
   Anything that needs independent review goes through Queue as a brief.
 - **Worker:** implements one brief in the worktree Queue gives it, runs the
   repository's validation, opens one PR, and reports through Queue.
