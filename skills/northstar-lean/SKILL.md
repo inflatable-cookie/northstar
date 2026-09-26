@@ -91,14 +91,17 @@ Otherwise act. Asking again for authority that is already settled is a cost.
 ## Roles
 
 - **Planner** (a Chatterbox thread): owns `docs/plan.md`, knowledge upkeep,
-  briefs and dispatch approval requests. It makes its own changes (plan,
-  knowledge, triage, questions) on a branch to isolate them, and merges that PR
-  itself once validation passes; the operator doesn't review planner PRs.
-  "Passes" means an exit code of 0 that was actually checked, never a red run.
-  When the machine is saturated by parallel workers, local QA can fail for
-  reasons unrelated to the change, so use a CI run on the branch as the gate
-  (dispatch it if CI doesn't run on PRs).
-  Anything that needs independent review goes through Queue as a brief.
+  briefs and dispatch approval requests. It commits its own small changes
+  (plan items, questions, triage notes, a ruling landing in a knowledge file,
+  link fixes) straight to `main`: run the repository's docs checks, check the
+  exit code, then push. Don't open a PR for a plan edit before a dispatch. A
+  branch and a self-merged PR are for larger or riskier changes: restructuring
+  knowledge, a migration cut, or anything touching code, QA configuration or
+  scripts. For those, "passes" means an exit code of 0 that was actually
+  checked. When parallel workers saturate the machine, local QA can fail for
+  unrelated reasons, so use a CI run on the branch as the gate (dispatch it if
+  CI doesn't run on PRs). The operator doesn't review planner changes; anything
+  that needs independent review goes through Queue as a brief.
 - **Worker:** implements one brief in the worktree Queue gives it, runs the
   repository's validation, opens one PR, and reports through Queue.
 - **Reviewer:** checks the exact head independently and reports findings.
