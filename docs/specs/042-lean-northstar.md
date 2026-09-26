@@ -134,11 +134,17 @@ once.
 
 ## Draft and cut inventory
 
-The draft lives on branch `lean-northstar`: the lean skill at
-`skills/northstar-lean/` (a 99-line `SKILL.md` plus five references) and the
-copy-ready starter at `template/`, about 500 lines in all. It replaces the
-current surfaces only at the cut, so the live skill that Queue pins is
-untouched until then.
+The draft lives on branch `lean-northstar` at `skills/northstar-lean/`: a
+100-line `SKILL.md`, five references, the retired-concepts check, and the
+copy-ready starter under `template/`. Since 2026-09-26 it is installed
+alongside the current skill as `northstar-lean`, so trial repositories can use
+it while the `northstar` skill that Queue pins stays untouched. It replaces the
+current surfaces only at the cut.
+
+Rollout (Tom, 2026-09-26): trial on nightfire, then underlay, then acowtancy.
+A repository with a live Chatterbox migrates through that Chatterbox after a
+direct refresh onto `northstar-lean`. The Northstar Chatterbox migrates
+repositories that have none.
 
 | Surface today | At the cut |
 | --- | --- |
@@ -148,7 +154,7 @@ untouched until then.
 | `ui/`, `references/ui/`, `references/packages/`, language-package scripts, `check-agent-instructions.rhai` | Kept as optional modules, reshaped later |
 | `scripts/paseo-worktree.rhai` | Removed; Queue owns worktrees |
 | `bundle-docs/` (11,600 lines) | Removed; lasting guidance lives in the skill's references |
-| `template-bundle/` | Replaced by `template/` |
+| `template-bundle/` | Replaced by the skill's `template/` |
 | Repository checks for the old bundle (bundle, command skills, model routing, posture advisory, readiness map, repo contract, UI protocol) | Removed; replaced by the retired-concepts check and a small check of the new shape |
 | Northstar's own `docs/` (contract 001, roadmaps, logs, handoffs, lifecycle records) | Migrated by the same cut as any consumer |
 
