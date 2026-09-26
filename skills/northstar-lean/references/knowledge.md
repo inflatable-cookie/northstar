@@ -72,8 +72,7 @@ replacement = "Content comes from Bovine publishing; seed bundles carry initial 
 owner = "docs/knowledge/contracts/legacy-coexistence.md"
 terms = ["spine seed bundle", "canonical spine bundle"]
 paths = ["state/legacy/dist/seed-bundles/spine"]
-config_keys = ["state.local.canonical-spine-bundle"]
-allow = ["docs/knowledge/retired.toml"]
+config_keys = ["canonical-spine-bundle"]  # literal text, not a dotted TOML path
 ```
 
 - The retiring change removes or fixes every live reference in the same PR.
