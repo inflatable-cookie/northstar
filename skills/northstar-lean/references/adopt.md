@@ -22,8 +22,15 @@ The migration is one deliberate cut, done when nothing is in flight.
 ### Before the cut
 
 1. **Drain.** Hold queued tasks, let running workers finish, and resolve
-   blocked ones individually. No task in the repository may be active.
-2. **Switch the manifest.** Set `.paseo/queue.json` to
+   blocked ones individually. If one task will run for hours, you don't need to
+   wait: Queue chooses closeout from the manifest at the task's merge commit, so
+   a task that merges after the cutover gets Queue closeout. Its PR must not
+   touch the files the cutover removes (task cards, handoffs), or it will
+   conflict; send its worker a revision instruction if it does. While old v4
+   closeouts keep landing on `main`, rebase the cutover branch before merging.
+2. **Switch the manifest**, and commit it before running the cut tool, because
+   `apply` stages its moves and removals and the next commit would sweep them
+   in. Set `.paseo/queue.json` to
    `{ "schema": "paseo.queue.control.v5", "closeout": "queue", "hooks": [] }`.
    The old Northstar lifecycle, pre-dispatch and pre-merge hooks go with it. A
    repository with no manifest needs nothing here: don't add one. It moves to
@@ -56,7 +63,11 @@ Sort every docs folder before cutting:
   the code or harness they prove, mark their receipts frozen, and list those in
   `allow`.
 - **Process:** roadmaps, cards, handoffs, lifecycle records, routine logs and
-  completed sweep runs. Removed.
+  completed sweep runs. Removed. This means Northstar's process records only.
+  Evidence logs that the product itself owns and cites (for example
+  `system/logs/` read by manifests or skills) stay; freeze them and list them in
+  `allow`. So do scripts that read another repository's historical records at a
+  pinned commit.
 
 A reusable checklist, such as a security sweep procedure, is knowledge. A
 record of one run of it is process.

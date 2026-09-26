@@ -16,7 +16,7 @@ owner = "docs/knowledge/contracts/content.md"
 terms = ["spine bundle"]
 paths = ["old/spine/"]
 config_keys = ["canonical-spine-bundle"]
-allow = ["history/", "tools/*-census/"]
+allow = ["history/", "tools/*-census/", "deep/**/calibration/"]
 TOML
 echo "Spine bundles are retired; content comes from Bovine." > "$repo/docs/knowledge/contracts/content.md"
 echo "ok" > "$repo/state/app.toml"
@@ -42,6 +42,8 @@ echo "ok" > "$repo/state/app.toml"; mkdir -p "$repo/history"; echo "the SPINE BU
 expect 0 "matches are case-insensitive but allowed paths are exempt"
 mkdir -p "$repo/tools/page-census"; echo "spine bundle row" > "$repo/tools/page-census/data.md"; commit "glob"
 expect 0 "a directory glob in allow covers every matching directory"
+mkdir -p "$repo/deep/a/b/calibration"; echo "spine bundle" > "$repo/deep/a/b/calibration/x.md"; commit "deep"
+expect 0 "a ** glob in allow matches across path segments"
 mkdir -p "$repo/old/spine"; echo x > "$repo/old/spine/data.sql"; commit "path again"
 rm -r "$repo/old"
 expect 0 "an unstaged deletion under a retired path is not a finding"

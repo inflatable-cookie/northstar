@@ -58,12 +58,16 @@ function git(repo: string, args: string[]) {
 }
 
 // An `allow` entry matches an exact file or, with a trailing slash, everything
-// under a directory. `*` matches within one path segment, so
-// `scripts/*-census/` covers every census directory.
+// under a directory. `*` matches within one path segment
+// (`scripts/*-census/`), and `**` matches across segments
+// (`syllabus/**/calibration/`).
 function allowed(file: string, allow: string[]): boolean {
   return allow.some((pattern) => {
     const dir = pattern.endsWith("/");
-    const body = pattern.split("*").map((p) => p.replace(/[.+?^${}()|[\]\\]/g, "\\$&")).join("[^/]*");
+    const body = pattern
+      .split("**")
+      .map((part) => part.split("*").map((p) => p.replace(/[.+?^${}()|[\]\\]/g, "\\$&")).join("[^/]*"))
+      .join(".*");
     return new RegExp("^" + body + (dir ? "" : "(/|$)")).test(file);
   });
 }
