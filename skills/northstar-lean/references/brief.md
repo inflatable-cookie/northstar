@@ -46,6 +46,9 @@ The conditions where the worker should stop rather than guess.
 - Name what the worker must update in `docs/knowledge/` if the work changes
   what is true.
 - One brief per independently reviewable PR.
+- Queue numbers each task per repository (`repo#N`) and returns the number at
+  submission. Quote it to the operator, and start the PR title with the bare
+  number (`304: Title`). On GitHub, `#304` would link an unrelated PR.
 - Make acceptance about behaviour, not text. A grep-based check can push a
   worker into rewording files it shouldn't touch: answered questions in
   `questions.md` keep their original wording.
