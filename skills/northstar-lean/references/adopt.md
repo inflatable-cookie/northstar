@@ -26,6 +26,24 @@ The migration is one deliberate cut, done when nothing is in flight.
    (it installs its own dependencies and exits 0 on pass). Add it as the
    manifest's `validation` once Queue supports plain pre-merge validation.
 
+### What moves and what stays
+
+Sort every docs folder before cutting:
+
+- **Knowledge:** current truth the project runs on (vision, architecture,
+  contracts, domain rules). Moves into `docs/knowledge/`.
+- **Product documentation:** guides, usage docs, API references and patterns
+  written for the project's users or consumers. Stays where it is, and the
+  knowledge index links to it. It is the product, not process.
+- **Evidence:** research and audits that still support a current decision.
+  Keep the part that matters as a short section in the owning knowledge file,
+  and let the rest go to Git history.
+- **Process:** roadmaps, cards, handoffs, lifecycle records, routine logs and
+  completed sweep runs. Removed.
+
+A reusable checklist, such as a security sweep procedure, is knowledge. A
+record of one run of it is process.
+
 ### The cut, in one PR
 
 1. **Knowledge.** Move current contracts, architecture, vision and domain docs
