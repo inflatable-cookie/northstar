@@ -1,9 +1,8 @@
 # Release
 
 Northstar has no tagged releases yet. It ships by installing `skills/northstar/`
-from `main` onto the operator's machine, where every project resolves it: Queue
-through the v1–v4 hook bridge, and projects through `paseo.json` worktree setup
-(`paseo:worktree`). A broken install breaks worker worktrees across the
+from `main` onto the operator's machine, where every project resolves it
+through `paseo.json` worktree setup (`paseo:worktree`). A broken install breaks worker worktrees across the
 portfolio, so install only from a `main` that passed `effigy qa`.
 
 `VERSION` stays at `0.1.0` and `CHANGELOG.md` records notable changes under

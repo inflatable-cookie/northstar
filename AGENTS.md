@@ -20,7 +20,7 @@ Tasks, briefs and status live in Queue, never in this repository.
 ## Commands
 
 - `effigy qa` — full validation: skill self-tests, language-package checks,
-  the hook-bridge tests, retired concepts and links.
+  retired concepts and links.
 - `effigy check:skill-install ~/.agents/skills/northstar` — installed copy
   matches source.
 - `effigy skill run --path skills/northstar <task>` — run a skill task from

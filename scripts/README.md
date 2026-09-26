@@ -9,7 +9,6 @@ Repository-owned checks for the skill's source. Run them through `effigy qa`.
   `NORTHSTAR_LANGUAGE_PACKS_ROOT`). `check:language-consumer-reruns` replays
   audits against live sibling consumers and is not part of `qa`; it fails while
   Jetstream has no TypeScript quality marker.
-- `tests/lifecycle-core/` — the v1–v4 hook bridge. Removed with the bridge.
 
 The skill's own tests (`retired-concepts`, `cut`, `paseo:worktree`) live beside
 their scripts in `skills/northstar/scripts/`.

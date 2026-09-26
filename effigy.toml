@@ -17,8 +17,5 @@ alias = "northstar"
 # Reruns against live sibling consumers (jetstream, convergence); not part of qa.
 "check:language-consumer-reruns" = "python3 scripts/tests/language-package-routes/validate_consumer_reruns.py"
 "language:route" = "bun run skills/northstar/scripts/language-package-lifecycle.ts route {args}"
-# Hook bridge for v1–v4 manifests. Remove with the bridge.
-"lifecycle:run" = "bun run skills/northstar/scripts/lifecycle-core.ts {args}"
-"check:lifecycle-core" = "scripts/tests/lifecycle-core/self-test.sh"
 "qa:docs" = [{ task = "check:retired-concepts" }, { task = "check:links" }]
-qa = [{ task = "test:retired-concepts" }, { task = "test:cut" }, { task = "test:paseo-worktree" }, { task = "check:language-packages" }, { task = "check:language-package-routes" }, { task = "check:lifecycle-core" }, { task = "qa:docs" }]
+qa = [{ task = "test:retired-concepts" }, { task = "test:cut" }, { task = "test:paseo-worktree" }, { task = "check:language-packages" }, { task = "check:language-package-routes" }, { task = "qa:docs" }]
