@@ -1,6 +1,7 @@
 #!/usr/bin/env bun
 // Retired-concepts check: fails when a concept listed in
-// docs/knowledge/retired.toml still appears in tracked files.
+// docs/knowledge/retired.toml still appears in the working tree (tracked or
+// new files; ignored files and unstaged deletions don't count).
 //
 // Usage: bun run retired-concepts.ts [--repo <path>] [--retired <file>] [--json]
 // --retired audits against a list outside the repository, for example while
@@ -68,7 +69,9 @@ function allowed(file: string, allow: string[]): boolean {
 }
 
 function grep(repo: string, needle: string): { file: string; line: number; text: string }[] {
-  const result = git(repo, ["grep", "-n", "-I", "-i", "-F", "--no-color", "-e", needle, "--", "."]);
+  // --untracked also searches new files; files deleted but not yet staged are
+  // absent from the working tree, so they can't match.
+  const result = git(repo, ["grep", "--untracked", "-n", "-I", "-i", "-F", "--no-color", "-e", needle, "--", "."]);
   if (result.status === 1) return [];
   if (result.status !== 0) fail(`git grep failed for ${JSON.stringify(needle)}: ${result.stderr.trim()}`);
   return result.stdout
@@ -97,7 +100,11 @@ function main() {
     fail(`${file} is not valid TOML: ${(error as Error).message}`);
   }
   const entries = parsed.retired ?? [];
-  const tracked = git(repo, ["ls-files", "-z"]).stdout.split("\0").filter(Boolean);
+  // The working tree as it is: tracked and new files that exist on disk, so the
+  // check gives the same answer before and after a migration is staged.
+  const tracked = git(repo, ["ls-files", "-z", "--cached", "--others", "--exclude-standard"])
+    .stdout.split("\0")
+    .filter((f) => f && existsSync(join(repo, f)));
   const findings: Finding[] = [];
   const seen = new Set<string>();
 
