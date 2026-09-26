@@ -6,3 +6,4 @@ alias = "northstar-lean"
 
 [tasks]
 "retired-concepts" = "bun run {skill}/scripts/retired-concepts.ts {args}"
+"cut" = "python3 {skill}/scripts/cut.py {args}"

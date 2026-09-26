@@ -56,7 +56,11 @@ record of one run of it is process.
    duplicates as you go; where two files disagree, ask the operator and record
    the ruling.
 2. **Rulings and procedures.** Fold decision registers, and the decisions
-   buried in task cards, into their owning knowledge files. Do the same for
+   buried in task cards, into their owning knowledge files. At scale: a
+   register row whose authority names an owning file has already landed there;
+   a row with no owner gets folded by hand; rows about process or dispatch go
+   to Git. Rulings buried in hundreds of logs can't all be swept during the
+   cut, so add "sweep removed records for rulings" to the plan instead. Do the same for
    procedures that live in cards or logs. The release procedure is required:
    it goes into `docs/knowledge/contracts/release.md`. Answered questions go
    into `questions.md` as pointers; unanswered ones stay open there.
@@ -70,7 +74,7 @@ record of one run of it is process.
    retired = "<cut date>"
    replacement = "Knowledge in docs/knowledge/, intent in docs/plan.md; tasks, briefs, status and outcomes live in Queue."
    owner = "docs/knowledge/README.md"
-   terms = ["roadmap card", "generation index", "lifecycle record", "northstar:lifecycle", "chatterbox handoff"]
+   terms = ["roadmap card", "generation index", "northstar:lifecycle", "chatterbox handoff"]
    paths = [".northstar/lifecycle/", "docs/roadmaps/", "docs/handoffs/", "docs/logs/"]
    config_keys = ["northstar/queue:hook", "paseo.queue.control.v4"]
    allow = ["CHANGELOG.md"]
@@ -84,22 +88,36 @@ record of one run of it is process.
    ruling. Git keeps everything removed.
 6. **Orientation.** Rewrite `AGENTS.md` and `docs/README.md` to the template's
    shape.
-7. **Links.** Moving a folder changes its depth, so recompute every relative
-   link into and out of moved files. Don't just search and replace. A link
-   into a removed record becomes plain text. An evidence pointer such as
-   `docs/roadmaps/archive/g05.md` becomes "the `g05` roll-up in Git history".
+7. **Moves and links.** Use the skill's cut tool rather than moving files by
+   hand: write the moves, removals and frozen paths into a small JSON plan
+   (the format is at the top of `scripts/cut.py`), then run
+   `effigy skill run northstar-lean/cut -- apply <plan.json> --dry-run`, then
+   again without `--dry-run`. It moves and removes with Git, and recomputes
+   every reference from each file's old location: Markdown links, backticked
+   paths, and repo-root or `../` paths in code and config (for example
+   `include_str!`). Links into removed records become plain text or Git-history
+   pointers. Mark immutable artefacts as frozen: released suites, vendored
+   mirrors, fixtures, digested receipts and applied migrations are never
+   rewritten.
 8. **Leftover process in knowledge.** Remove "Next Task" sections, status
    narration ("no generation is active") and "open a roadmap card" wording
    from knowledge files. Product docs that teach the old conventions, such as a
    guide to writing AGENTS files, get updated too.
 9. **Housekeeping.** Delete closed papercuts and closed or already-promoted
    triage notes.
-10. **Checks.** Search QA configuration (`effigy.toml`, CI) and tests for paths
-   and headings from the old layout, and update or remove those checks in the
-   same PR. Say which ones changed in the PR description.
-11. **Verify.** Run the repository's QA and
-    `effigy skill run northstar-lean/retired-concepts`. The check will find the
-    stragglers the steps above missed; fix them rather than widening `allow`.
+10. **Checks.** Search QA configuration (`effigy.toml`, CI), tests, scripts
+    and receipts for paths, headings and selector names from the old layout.
+    Code reads docs too: `include_str!`, census scripts, adoption receipts that
+    embed log paths. Update or remove those checks in the same PR, and say
+    which ones changed in the PR description.
+11. **Verify.** Run the repository's QA, then
+    `effigy skill run northstar-lean/retired-concepts` and
+    `effigy skill run northstar-lean/cut -- check-links`, which checks
+    Markdown links and anchors across the whole repository and not just the
+    docs catalog. The checks find the stragglers the steps above missed; fix
+    them rather than widening `allow`. When you work in a worktree, confirm
+    which tree each check actually ran against: container-routed tasks may
+    mount the main checkout instead.
 
 Review the cut like any PR: nothing current lost, no fact with two owners, and
 every link resolving.

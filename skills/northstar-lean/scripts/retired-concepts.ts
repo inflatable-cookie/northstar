@@ -56,12 +56,14 @@ function git(repo: string, args: string[]) {
   return spawnSync("git", args, { cwd: repo, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
 }
 
-// A glob in `allow` matches a path prefix or a `*` wildcard within a path.
+// An `allow` entry matches an exact file or, with a trailing slash, everything
+// under a directory. `*` matches within one path segment, so
+// `scripts/*-census/` covers every census directory.
 function allowed(file: string, allow: string[]): boolean {
   return allow.some((pattern) => {
-    if (!pattern.includes("*")) return file === pattern || file.startsWith(pattern.replace(/\/?$/, "/"));
-    const re = new RegExp("^" + pattern.split("*").map((p) => p.replace(/[.+?^${}()|[\]\\]/g, "\\$&")).join("[^/]*") + "$");
-    return re.test(file);
+    const dir = pattern.endsWith("/");
+    const body = pattern.split("*").map((p) => p.replace(/[.+?^${}()|[\]\\]/g, "\\$&")).join("[^/]*");
+    return new RegExp("^" + body + (dir ? "" : "(/|$)")).test(file);
   });
 }
 

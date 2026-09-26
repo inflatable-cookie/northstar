@@ -16,7 +16,7 @@ owner = "docs/knowledge/contracts/content.md"
 terms = ["spine bundle"]
 paths = ["old/spine/"]
 config_keys = ["canonical-spine-bundle"]
-allow = ["history/"]
+allow = ["history/", "tools/*-census/"]
 TOML
 echo "Spine bundles are retired; content comes from Bovine." > "$repo/docs/knowledge/contracts/content.md"
 echo "ok" > "$repo/state/app.toml"
@@ -40,6 +40,8 @@ echo 'key = "canonical-spine-bundle"' > "$repo/state/app.toml"; commit "key"
 expect 1 "a config key is a finding"
 echo "ok" > "$repo/state/app.toml"; mkdir -p "$repo/history"; echo "the SPINE BUNDLE era" > "$repo/history/log.md"; commit "allowed"
 expect 0 "matches are case-insensitive but allowed paths are exempt"
+mkdir -p "$repo/tools/page-census"; echo "spine bundle row" > "$repo/tools/page-census/data.md"; commit "glob"
+expect 0 "a directory glob in allow covers every matching directory"
 echo "rebuild the Spine Bundle" > "$repo/README.md"; commit "term"
 expect 1 "a term in a live file is a finding"
 echo "[[retired]" > "$repo/docs/knowledge/retired.toml"; commit "bad toml"

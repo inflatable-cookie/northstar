@@ -81,7 +81,13 @@ config_keys = ["canonical-spine-bundle"]  # literal text, not a dotted TOML path
   in tracked files, matching case-insensitively. The owner file, `retired.toml`
   and anything under `allow` are exempt, and so is Git history.
 - A path ending in `/` names a directory and covers everything under it; a path
-  without one names a single file.
+  without one names a single file. The same goes for `allow`, where `*` matches
+  within one path segment (`scripts/*-census/`).
+- Fix live references rather than widening `allow`. The exception is immutable
+  artefacts, which can't change without a new release: released suites and
+  generated mirrors, vendored copies, fixtures, digested receipts, and applied
+  database migrations, whose checksums break if even a comment changes. List
+  those in `allow` permanently.
 - For a retired process or convention, `owner` is the file that describes what
   replaced it, often `AGENTS.md`.
 - Run it from the repository root with
