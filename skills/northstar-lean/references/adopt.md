@@ -3,8 +3,9 @@
 ## A new repository
 
 1. Copy the contents of this skill's `template/` directory into the repository
-   root. Leave out `.paseo/` once Queue's no-manifest default (`g01.053`) is
-   live; until then, include it if the repository will get Queue work. Omit
+   root. The repository carries no Queue files: Queue gives a repository
+   without `.paseo/queue.json` Queue closeout by default, and per-repository
+   overrides live in Queue's project settings (`project.set`). Omit
    template folders and index rows with nothing true to say yet, such as
    `domain/`.
 2. Fill in `AGENTS.md` and `docs/knowledge/vision.md`. Leave the other files
@@ -15,9 +16,6 @@
    them.
 3. Write `docs/knowledge/contracts/release.md`, even if the answer is "not
    released yet". Every project documents how it releases.
-4. If the repository uses Queue, keep `.paseo/queue.json` at v5 with
-   `closeout: "queue"`. Leave out `validation` until Queue supports plain
-   pre-merge validation; see below.
 
 ## Migrating from the older Northstar shape
 
@@ -32,20 +30,17 @@ The migration is one deliberate cut, done when nothing is in flight.
    touch the files the cutover removes (task cards, handoffs), or it will
    conflict; send its worker a revision instruction if it does. While old v4
    closeouts keep landing on `main`, rebase the cutover branch before merging.
-2. **Switch the manifest**, and commit it before running the cut tool, because
-   `apply` stages its moves and removals and the next commit would sweep them
-   in. Set `.paseo/queue.json` to
-   `{ "schema": "paseo.queue.control.v5", "closeout": "queue", "hooks": [] }`.
-   The old Northstar lifecycle, pre-dispatch and pre-merge hooks go with it. A
-   repository with no manifest needs nothing here: don't add one. It moves to
-   Queue closeout automatically when Queue's no-manifest default (`g01.053`)
-   ships, and until then it should get no Queue work.
-3. **Validation command.** Queue does not run plain pre-merge validation yet
-   (spec 042 item 3), so the manifest has no `validation` field for now. Work
-   out which command will be used: it must validate a fresh disposable checkout,
-   install its own dependencies, and exit 0 on pass. A command that needs a
-   clean pushed head or a prepared workspace doesn't qualify yet; file that
-   as a papercut in Queue.
+2. **Drop the manifest.** Delete `.paseo/queue.json`, and with it the old
+   Northstar lifecycle, pre-dispatch and pre-merge hooks. Queue gives a
+   repository without a manifest Queue closeout by default. Commit this before
+   running the cut tool, because `apply` stages its moves and removals and the
+   next commit would sweep them in.
+3. **Validation command.** Pre-merge validation is a per-project Queue
+   setting, not a repository file (spec 042 item 3). Work out which command it
+   will be: one that validates a fresh disposable checkout, installs its own
+   dependencies and exits 0 on pass. Set it with `project.set` once Queue
+   supports it. A command that needs a clean pushed head or a prepared
+   workspace doesn't qualify yet; file that as a papercut in Queue.
 
 ### What moves and what stays
 

@@ -111,7 +111,7 @@ thread's. A planner hands over to a fresh successor using
 
 Use [adopt](references/adopt.md) and the starter in
 [template/](template/README.md). A repository on the older Northstar shape
-migrates in one deliberate cut, after its Queue manifest moves to v5.
+migrates in one deliberate cut, and drops its Queue manifest.
 
 ## Optional modules
 
