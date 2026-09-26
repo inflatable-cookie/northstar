@@ -100,6 +100,14 @@ What Queue needs to take on, in the order agreed with the Queue Chatterbox on
    from the 4a records through an RPC, a CLI command and skill wording, so
    repositories need no delivery log.
 
+**No Queue files in repositories** (Tom, 2026-09-26). A repository with no
+`.paseo/queue.json` gets Queue closeout and brief mode by default, and project
+settings such as the pre-merge validation command live in Queue's own store,
+set through the CLI. So item 3 is a per-project validation command held by
+Queue, not a manifest field. Manifests remain only for repositories still on
+v1–v4. Migrated repositories delete theirs once Queue ships the default; until
+then they keep the v5 manifest below.
+
 Migrated repositories declare a new manifest version, `paseo.queue.control.v5`.
 It keeps v4's hook definitions with hooks optional, and adds
 `closeout: "queue" | "hooks"` (default `hooks`, the v4 behaviour) and
