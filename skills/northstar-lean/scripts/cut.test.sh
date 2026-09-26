@@ -48,7 +48,13 @@ mk docs/guides/anchors.md '## vst2_paths
 
 See [paths](#vst2_paths).'
 python3 "$here/cut.py" check-links --repo "$repo" > /dev/null && echo "ok check-links ignores links inside code spans and keeps underscores in anchors" || { echo "FAIL code spans"; exit 1; }
-mk docs/knowledge/retired.toml 'frozen = ["tests/fixtures/"]'
+mk docs/knowledge/retired.toml '# [[retired]]
+# id = "<slug>"
+
+frozen = ["tests/fixtures/"]
+
+[[retired]]
+id = "x"'
 mk tests/fixtures/corpus.md '[old](../../docs/roadmaps/g01/001-build-it.md)'
 python3 "$here/cut.py" check-links --repo "$repo" > /dev/null && echo "ok check-links skips frozen paths listed in retired.toml" || { echo "FAIL retired.toml frozen"; python3 "$here/cut.py" check-links --repo "$repo"; exit 1; }
 mk docs/guides/bad.md '[x](../knowledge/contracts/api.md#nope) [y](missing.md)'

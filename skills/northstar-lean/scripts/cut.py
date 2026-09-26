@@ -102,7 +102,10 @@ def retired_frozen():
     """Top-level `frozen = [...]` globs from docs/knowledge/retired.toml (Python 3.8 has no TOML parser)."""
     path = os.path.join(ROOT, "docs/knowledge/retired.toml")
     if not os.path.exists(path): return []
-    text = open(path, encoding="utf-8").read().split("[[retired]]")[0]
+    # Ignore comments (the template's header shows a commented [[retired]]
+    # example), then read the top-level table before the first real entry.
+    lines = [l for l in open(path, encoding="utf-8").read().splitlines() if not l.lstrip().startswith("#")]
+    text = "\n".join(lines).split("[[retired]]")[0]
     m = re.search(r"^frozen\s*=\s*\[(.*?)\]", text, re.S | re.M)
     return [glob_to_regex(g) for g in re.findall(r'"([^"]+)"', m.group(1))] if m else []
 
