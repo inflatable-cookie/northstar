@@ -1,14 +1,10 @@
 # Plan
 
-Updated: 2026-09-26
+Updated: 2026-09-27
 
 ## Now
 
-1. **Finish the lean rollout** (lane `lean-northstar`). The skill swap,
-   Northstar's own cut and the hook-bridge removal have landed. Remaining:
-   drop the `northstar-lean` install once the Chatterbox repositories have
-   renamed their references.
-2. **Move planning to Queue** (lane `lean-northstar`). When Queue ships
+1. **Move planning to Queue** (lane `lean-northstar`). When Queue ships
    planning records (Nucleus contract 002), import each repository's
    `docs/plan.md` and `docs/triage/`, delete them, retire them, and rewrite the
    skill's plan and triage guidance, as was done for papercuts.
