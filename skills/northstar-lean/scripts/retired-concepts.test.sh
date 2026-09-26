@@ -14,7 +14,7 @@ retired = "2026-08-21"
 replacement = "Bovine publishing"
 owner = "docs/knowledge/contracts/content.md"
 terms = ["spine bundle"]
-paths = ["old/spine"]
+paths = ["old/spine/"]
 config_keys = ["canonical-spine-bundle"]
 allow = ["history/"]
 TOML
@@ -33,6 +33,9 @@ expect 0 "a clean repository passes; the owner file and the retired list are exe
 echo "x" > "$repo/old/spine/data.sql"; commit "path"
 expect 1 "a tracked file under a retired path is a finding"
 git -C "$repo" rm -rq old && commit "rm path"
+echo "import './old/spine-locator'" > "$repo/state/loader.ts"; commit "sibling"
+expect 0 "a directory path does not match a sibling file that shares its prefix"
+git -C "$repo" rm -q state/loader.ts && commit "rm sibling"
 echo 'key = "canonical-spine-bundle"' > "$repo/state/app.toml"; commit "key"
 expect 1 "a config key is a finding"
 echo "ok" > "$repo/state/app.toml"; mkdir -p "$repo/history"; echo "the SPINE BUNDLE era" > "$repo/history/log.md"; commit "allowed"

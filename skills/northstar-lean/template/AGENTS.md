@@ -14,6 +14,14 @@ become.>
 
 Tasks, briefs and status live in Queue, never in this repository.
 
+## Commands
+
+- `<command>` — <what it does>
+
+## Product rules
+
+- <Rules about the product itself that every change must respect.>
+
 ## Guardrails
 
 - <Things an agent must not do without asking: releases, migrations,

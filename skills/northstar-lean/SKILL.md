@@ -21,6 +21,7 @@ closeout and outcomes. Never write process state into the repository.
 | `docs/knowledge/` | Current truth, one owner per fact: vision, architecture, contracts, domain |
 | `docs/knowledge/retired.toml` | Concepts that no longer exist, and what replaced them |
 | `docs/knowledge/questions.md` | Open questions, and where each answer now lives |
+| `docs/knowledge/contracts/release.md` | How this project releases, step by step. Every project has one |
 | `docs/plan.md` | What matters next and why |
 | `docs/triage/` | Unresolved leads; never authority |
 | `PAPERCUTS.md` | Small recurring friction |

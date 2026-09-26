@@ -113,9 +113,13 @@ function main() {
     for (const term of entry.terms ?? []) for (const hit of grep(repo, term)) add({ id: entry.id, kind: "term", needle: term, ...hit });
     for (const key of entry.config_keys ?? []) for (const hit of grep(repo, key)) add({ id: entry.id, kind: "config_key", needle: key, ...hit });
     for (const path of entry.paths ?? []) {
+      // A trailing slash names a directory, so text matches keep the slash and
+      // `src/media/` does not match `src/media-locator.ts`. Without one, the
+      // path names a file and matches exactly.
       const prefix = path.replace(/\/$/, "");
-      for (const t of tracked) if (t === prefix || t.startsWith(prefix + "/")) add({ id: entry.id, kind: "tracked_path", needle: path, file: t });
-      for (const hit of grep(repo, prefix)) add({ id: entry.id, kind: "path", needle: path, ...hit });
+      const isDir = path.endsWith("/");
+      for (const t of tracked) if (t === prefix || (isDir && t.startsWith(prefix + "/"))) add({ id: entry.id, kind: "tracked_path", needle: path, file: t });
+      for (const hit of grep(repo, path)) add({ id: entry.id, kind: "path", needle: path, ...hit });
     }
   }
 

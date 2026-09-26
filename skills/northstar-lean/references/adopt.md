@@ -6,9 +6,11 @@
    root, including the hidden `.paseo/`.
 2. Fill in `AGENTS.md` and `docs/knowledge/vision.md`. Leave the other files
    short until there is something true to say.
-3. If the repository uses Queue, keep `.paseo/queue.json` at v5 with
-   `closeout: "queue"`, and add `validation` once the repository has a command
-   that validates a fresh checkout.
+3. Write `docs/knowledge/contracts/release.md`, even if the answer is "not
+   released yet". Every project documents how it releases.
+4. If the repository uses Queue, keep `.paseo/queue.json` at v5 with
+   `closeout: "queue"`. Leave out `validation` until Queue supports plain
+   pre-merge validation; see below.
 
 ## Migrating from the older Northstar shape
 
@@ -22,9 +24,12 @@ The migration is one deliberate cut, done when nothing is in flight.
    `{ "schema": "paseo.queue.control.v5", "closeout": "queue", "hooks": [] }`
    once Queue supports it. The old Northstar lifecycle, pre-dispatch and
    pre-merge hooks go with it.
-3. **Validation command.** Define a command that validates a fresh checkout
-   (it installs its own dependencies and exits 0 on pass). Add it as the
-   manifest's `validation` once Queue supports plain pre-merge validation.
+3. **Validation command.** Queue does not run plain pre-merge validation yet
+   (spec 042 item 3), so the manifest has no `validation` field for now. Work
+   out which command will be used: it must validate a fresh disposable checkout,
+   install its own dependencies, and exit 0 on pass. A command that needs a
+   clean pushed head or a prepared workspace doesn't qualify yet; note that in
+   `PAPERCUTS.md`.
 
 ### What moves and what stays
 
@@ -50,9 +55,11 @@ record of one run of it is process.
    into `docs/knowledge/`, and write its index with one owner per topic. Merge
    duplicates as you go; where two files disagree, ask the operator and record
    the ruling.
-2. **Rulings.** Fold decision registers, and the decisions buried in task
-   cards, into their owning knowledge files. Answered questions go into
-   `questions.md` as pointers; unanswered ones stay open there.
+2. **Rulings and procedures.** Fold decision registers, and the decisions
+   buried in task cards, into their owning knowledge files. Do the same for
+   procedures that live in cards or logs. The release procedure is required:
+   it goes into `docs/knowledge/contracts/release.md`. Answered questions go
+   into `questions.md` as pointers; unanswered ones stay open there.
 3. **Retirements.** Record known retired concepts in `retired.toml`, and fix
    the live references the check finds.
 4. **Plan.** Replace roadmaps, generations, runways and workstream tables with
@@ -64,6 +71,11 @@ record of one run of it is process.
    ruling. Git keeps everything removed.
 6. **Orientation.** Rewrite `AGENTS.md` and `docs/README.md` to the template's
    shape, and update links.
+7. **Checks.** Search QA configuration (`effigy.toml`, CI) and tests for paths
+   and headings from the old layout, and update or remove those checks in the
+   same PR. Say which ones changed in the PR description.
+8. **Verify.** Run the repository's QA and
+   `effigy skill run northstar-lean/retired-concepts`.
 
 Review the cut like any PR: nothing current lost, no fact with two owners, and
 every link resolving.

@@ -80,6 +80,12 @@ config_keys = ["canonical-spine-bundle"]  # literal text, not a dotted TOML path
 - The retired-concepts check fails on any listed term, path or config key found
   in tracked files, matching case-insensitively. The owner file, `retired.toml`
   and anything under `allow` are exempt, and so is Git history.
-- Run it with `bun run <skill>/scripts/retired-concepts.ts --repo <path>`. While
-  preparing a migration, `--retired <file>` audits against a list that isn't in
-  the repository yet.
+- A path ending in `/` names a directory and covers everything under it; a path
+  without one names a single file.
+- For a retired process or convention, `owner` is the file that describes what
+  replaced it, often `AGENTS.md`.
+- Run it from the repository root with
+  `effigy skill run northstar-lean/retired-concepts`. Add `-- --json` for
+  machine output, or `-- --retired <file>` to audit against a list that isn't
+  in the repository yet, while preparing a migration. The check lives in the
+  skill; repositories don't copy it.
