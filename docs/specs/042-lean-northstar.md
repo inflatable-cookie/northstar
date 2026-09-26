@@ -155,6 +155,22 @@ Order:
 A known trade-off: an agent without Queue access, such as a cloud session,
 can't file a papercut directly. It reports friction to its planner instead.
 
+## Planning moves to Queue (Tom, 2026-09-26; relayed from Nucleus)
+
+Planning follows papercuts out of repositories, organised by lane (Nucleus
+contract 002, "Planning records"; the Queue Chatterbox pilots it):
+
+- triage leads become Queue records;
+- each lane gets a versioned working document for its aim;
+- a project's plan becomes its ordering of lanes, replacing `docs/plan.md`;
+- papercuts, triage leads, drafts and tasks attach to lanes, many-to-many;
+- promoting a papercut or triage lead to a task is one action;
+- one pipeline board, with lane swimlanes, per project and across all projects.
+
+Repositories then keep only knowledge and code. Once Queue ships it,
+`docs/plan.md` and `docs/triage/` are imported, deleted and retired the way
+`PAPERCUTS.md` was, and the skill's plan and triage guidance moves to Queue.
+
 ## Skill shape
 
 A core skill of under about 200 lines of guidance that covers orientation,
