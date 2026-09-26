@@ -17,8 +17,8 @@ machinery existed for that reason; removing the state removed the machinery.
 A repository carries no Queue files. Without a `.paseo/queue.json`, Queue uses
 its own closeout (which writes nothing to the repository) and accepts briefs
 stored in Queue. Per-repository settings go through Queue's CLI
-(`repository.set`). Queue still reads v1–v4 manifests for repositories that
-haven't migrated.
+(`repository.set`). The v1–v4 manifests and the hook bridge that served them
+are retired; every Northstar repository is on the lean shape.
 
 Vocabulary follows Queue: a **lane** is a durable group of work with an aim and
 a set of repositories; a **task** is one unit of work. A `docs/plan.md` item
@@ -66,9 +66,6 @@ and executable proofs, stay frozen and are listed in `retired.toml`.
   - Language quality packages: `references/packages/`, the
     `language:route` task and its lifecycle script. Their contract is
     [contracts/language-quality-pack.md](contracts/language-quality-pack.md).
-- Migration bridge: `lifecycle-*.ts`, `references/lifecycle/` and the
-  `queue:hook` and `lifecycle:*` tasks serve repositories still on v1–v4
-  manifests. They are removed once the last of those migrates.
 
 The installed copy lives at `~/.agents/skills/northstar`; harness skill folders
 (Claude, pi) symlink to it. See [contracts/release.md](contracts/release.md).

@@ -22,20 +22,16 @@ owner = "docs/knowledge/architecture.md"
 terms = ["roadmap card", "generation index", "northstar:lifecycle", "chatterbox handoff"]
 paths = [".northstar/lifecycle/", "docs/roadmaps/", "docs/handoffs/", "docs/logs/", "docs/specs/"]
 config_keys = ["northstar/queue:hook", "paseo.queue.control.v4"]
-# The hook bridge implements the old protocol for unmigrated repositories.
 allow = [
   "CHANGELOG.md",
   "docs/knowledge/retired.toml",
   "skills/northstar/references/adopt.md",
-  "skills/northstar/references/lifecycle/",
-  "skills/northstar/scripts/lifecycle-*.ts",
   "skills/northstar/scripts/cut.py",
   "skills/northstar/scripts/cut.test.sh",
   "skills/northstar/scripts/retired-concepts.ts",
   "skills/northstar/scripts/retired-concepts.test.sh",
   "skills/northstar/template/docs/knowledge/retired.toml",
   "skills/northstar/effigy.toml",
-  "scripts/tests/lifecycle-core/",
 ]
 
 [[retired]]

@@ -204,9 +204,11 @@ record of one run of it is process.
 
 The planner lands the cut as its own PR and merges it itself when the
 repository's QA passes, and CI where it exists. The operator doesn't review
-planner PRs. If CI only
-runs on manual dispatch, run it on the branch
-(`gh workflow run ci.yml --ref <branch>`).
+planner PRs. If CI only runs on manual dispatch, run it on the branch
+(`gh workflow run ci.yml --ref <branch>`). Without CI, the local board is the
+gate. Under heavy machine load, rerun each failing or hung test file alone and
+run the same files on `main`. A failure that also appears on `main`, or passes
+alone, is load, not the cut.
 
 Review the cut like any PR: nothing current lost, no fact with two owners, and
 every link resolving.

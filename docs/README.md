@@ -5,9 +5,7 @@ and its plan legible; Queue holds tasks, briefs, status, outcomes and
 papercuts. Thirty-plus portfolio repositories run the lean shape, and this
 repository is the reference example.
 
-What still runs for older repositories: the v1–v4 hook bridge inside the
-skill, until Queue's own cutover merges. The UI and language-package modules
-work but haven't been reshaped yet.
+The UI and language-package modules work but haven't been reshaped yet.
 
 ## By topic
 
