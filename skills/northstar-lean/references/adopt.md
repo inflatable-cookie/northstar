@@ -44,8 +44,8 @@ The migration is one deliberate cut, done when nothing is in flight.
    (spec 042 item 3), so the manifest has no `validation` field for now. Work
    out which command will be used: it must validate a fresh disposable checkout,
    install its own dependencies, and exit 0 on pass. A command that needs a
-   clean pushed head or a prepared workspace doesn't qualify yet; note that in
-   `PAPERCUTS.md`.
+   clean pushed head or a prepared workspace doesn't qualify yet; file that
+   as a papercut in Queue.
 
 ### What moves and what stays
 
@@ -148,11 +148,12 @@ record of one run of it is process.
    that encode the old loop (roadmap delivery grammar, "a bare continue runs
    the next roadmap task") around `docs/plan.md` and Queue. Product docs that teach the old conventions, such as a
    guide to writing AGENTS files, get updated too.
-9. **Housekeeping.** Delete closed papercuts and closed or already-promoted
-   triage notes. `PAPERCUTS.md` lives at the repository root, where Effigy's
-   papercuts tooling reads it (package-level copies such as
-   `apps/<app>/PAPERCUTS.md` are fine). Fold any stray copy, such as
-   `docs/PAPERCUTS.md`, into the root file and delete it.
+9. **Housekeeping.** Delete closed or already-promoted triage notes. Import
+   the repository's papercuts into Queue with `papercut.import` (use
+   `root: true` to include package copies such as `apps/<app>/PAPERCUTS.md`,
+   and do a dry run first). Check the report: every open entry imported,
+   nothing but boilerplate unparsed. Then delete every `PAPERCUTS.md` and
+   update any instruction that tells agents to write to it.
 10. **Checks.** Search QA configuration (`effigy.toml`, CI), tests, scripts,
     receipts, repo-local skills (for example `.cursor/skills/`, `.agents/`) and
     agent instruction files for paths, headings, selector names and old-loop

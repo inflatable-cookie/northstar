@@ -31,6 +31,11 @@ Tasks, briefs and status live in Queue, never in this repository.
 - An operator ruling given in conversation goes into its owning file before
   the thread ends.
 
+## Papercuts
+
+File small, recurring friction in Queue with `papercut.add` (see the
+`northstar-lean` skill). There is no `PAPERCUTS.md`.
+
 ## Validate
 
 `<validation command>` before opening a PR.
