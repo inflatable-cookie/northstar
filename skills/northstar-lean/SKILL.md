@@ -81,7 +81,10 @@ Otherwise act. Asking again for authority that is already settled is a cost.
 ## Roles
 
 - **Planner** (a Chatterbox thread): owns `docs/plan.md`, knowledge upkeep,
-  briefs and dispatch approval requests. Does not implement or merge.
+  briefs and dispatch approval requests. It makes its own changes (plan,
+  knowledge, triage, questions) on a branch to isolate them, and merges that PR
+  itself once validation passes; the operator doesn't review planner PRs.
+  Anything that needs independent review goes through Queue as a brief.
 - **Worker:** implements one brief in the worktree Queue gives it, runs the
   repository's validation, opens one PR, and reports through Queue.
 - **Reviewer:** checks the exact head independently and reports findings.

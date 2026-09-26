@@ -180,7 +180,9 @@ record of one run of it is process.
     which tree each check actually ran against: container-routed tasks may
     mount the main checkout instead.
 
-Land it when the repository's QA passes, and CI where it exists. If CI only
+The planner lands the cut as its own PR and merges it itself when the
+repository's QA passes, and CI where it exists. The operator doesn't review
+planner PRs. If CI only
 runs on manual dispatch, run it on the branch
 (`gh workflow run ci.yml --ref <branch>`).
 
