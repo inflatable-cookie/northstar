@@ -147,9 +147,12 @@ def apply():
     exists_old = lambda p: p in old_files or p.rstrip("/") in old_dirs
 
     def map_path(p):
-        for r in removed:
-            if p == r.rstrip("/") or (r.endswith("/") and p.startswith(r)): return ("removed", p)
+        # The most specific rule wins, whether it is a move or a removal, so a
+        # file moved out of a removed directory is moved, not deleted.
         best = None
+        for r in removed:
+            if p == r.rstrip("/") or (r.endswith("/") and p.startswith(r)):
+                if best is None or len(r) > best[0]: best = (len(r), "removed", p)
         for old, new in moves:
             if old.endswith("/"):
                 if p == old.rstrip("/"): cand = new.rstrip("/")
@@ -157,8 +160,9 @@ def apply():
                 else: continue
             elif p == old: cand = new
             else: continue
-            if best is None or len(old) > best[0]: best = (len(old), cand)
-        return ("moved", best[1]) if best else ("same", p)
+            if best is None or len(old) > best[0] or (len(old) == best[0] and best[1] == "removed"):
+                best = (len(old), "moved", cand)
+        return (best[1], best[2]) if best else ("same", p)
 
     moved = {f: n for f in sorted(old_files) for k, n in [map_path(f)] if k == "moved" and n != f}
     removed_files = [f for f in old_files if map_path(f)[0] == "removed"]

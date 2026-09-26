@@ -14,6 +14,8 @@ mk docs/architecture/overview.md '# Overview
 
 Rules live in [api](../contracts/api.md).'
 mk docs/roadmaps/g01/001-build-it.md '# g01.001'
+mk docs/vision/001-vision.md '# Vision'
+mk docs/vision/old-notes.md '# Old'
 mk docs/guides/use.md '# Use
 
 Read [the API contract](../contracts/api.md) and [docs/roadmaps/g01/001-build-it.md](../roadmaps/g01/001-build-it.md).'
@@ -21,8 +23,8 @@ mk tools/check.toml 'contract = "docs/contracts/api.md"'
 mk src/lib.rs 'const DOC: &str = include_str!("../docs/contracts/api.md");'
 mk releases/v1/manifest.md 'Pinned: [api](../../docs/contracts/api.md)'
 cat > "$repo/plan.json" <<'JSON'
-{"moves": [["docs/contracts/", "docs/knowledge/contracts/"], ["docs/architecture/", "docs/knowledge/architecture/"]],
- "removed": ["docs/roadmaps/"], "frozen": ["^releases/"]}
+{"moves": [["docs/contracts/", "docs/knowledge/contracts/"], ["docs/architecture/", "docs/knowledge/architecture/"], ["docs/vision/001-vision.md", "docs/knowledge/vision.md"]],
+ "removed": ["docs/roadmaps/", "docs/vision/"], "frozen": ["^releases/"]}
 JSON
 git -C "$repo" add -A && git -C "$repo" -c user.email=t@t -c user.name=t commit -qm base
 python3 "$here/cut.py" apply "$repo/plan.json" --repo "$repo" > /dev/null
@@ -37,6 +39,7 @@ check tools/check.toml 'docs/knowledge/contracts/api.md' "root-relative string i
 check src/lib.rs '"../docs/knowledge/contracts/api.md"' "../-relative string in code"
 check releases/v1/manifest.md '../../docs/contracts/api.md' "frozen file untouched"
 [ ! -e "$repo/docs/roadmaps" ] && echo "ok removed directory is gone"
+if [ -f "$repo/docs/knowledge/vision.md" ] && [ ! -e "$repo/docs/vision" ]; then echo "ok a file moved out of a removed directory is moved; the rest is removed"; else echo "FAIL move out of removed directory"; exit 1; fi
 check plan.json '"docs/contracts/"' "the plan file itself is not rewritten"
 git -C "$repo" rm -rqf releases plan.json
 if python3 "$here/cut.py" check-links --repo "$repo" > /dev/null; then echo "ok check-links clean after cut"; else python3 "$here/cut.py" check-links --repo "$repo"; echo "FAIL check-links"; exit 1; fi
