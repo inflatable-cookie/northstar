@@ -5,7 +5,7 @@ Markdown links repo-wide.
 
 Usage:
   cut.py apply <plan.json> [--repo <path>] [--dry-run]
-  cut.py check-links [--repo <path>] [--frozen <regex>]...
+  cut.py check-links [--repo <path>] [--plan <plan.json>] [--frozen <regex>]...
 
 The plan is JSON:
   {
@@ -34,7 +34,7 @@ def die(msg):
 
 def parse_args(argv):
     if not argv or argv[0] not in ("apply", "check-links"):
-        die("usage: cut.py apply <plan.json> [--repo <path>] [--dry-run] | cut.py check-links [--repo <path>] [--frozen <regex>]...")
+        die("usage: cut.py apply <plan.json> [--repo <path>] [--dry-run] | cut.py check-links [--repo <path>] [--plan <plan.json>] [--frozen <regex>]...")
     mode, rest = argv[0], argv[1:]
     opts = {"mode": mode, "repo": os.getcwd(), "dry": False, "plan": None, "frozen": []}
     i = 0
@@ -43,6 +43,7 @@ def parse_args(argv):
         if a == "--repo": i += 1; opts["repo"] = rest[i]
         elif a == "--dry-run": opts["dry"] = True
         elif a == "--frozen": i += 1; opts["frozen"].append(rest[i])
+        elif a == "--plan" and mode == "check-links": i += 1; opts["plan"] = rest[i]
         elif mode == "apply" and opts["plan"] is None: opts["plan"] = a
         else: die(f"unexpected argument {a}")
         i += 1
@@ -93,13 +94,17 @@ def anchors(path, cache={}):
     return cache[path]
 
 def check_links():
-    frozen = [re.compile(p) for p in OPTS["frozen"]]
+    patterns = list(OPTS["frozen"])
+    if OPTS["plan"]:
+        with open(OPTS["plan"]) as fh: patterns += json.load(fh).get("frozen", [])
+    frozen = [re.compile(p) for p in patterns]
     problems = []
     for f in git("ls-files", "--cached", "--others", "--exclude-standard", "*.md").splitlines():
         if any(p.search(f) for p in frozen): continue
         text = read_text(os.path.join(ROOT, f))
         if text is None: continue
         text = re.sub(r"```.*?```", "", text, flags=re.S)
+        text = re.sub(r"`[^`\n]*`", "", text)  # links shown inside code spans aren't links
         for m in list(LINK.finditer(text)) + list(REFDEF.finditer(text)):
             target = m.group(3) if m.re is LINK else m.group(2)
             if EXTERNAL.match(target) or target.startswith("/"): continue
@@ -264,8 +269,13 @@ def apply():
     print(json.dumps({"dry_run": OPTS["dry"], "moved": len(moved), "removed": len(removed_files),
                       "rewritten_links": report["rewritten"], "links_to_removed": report["to_removed"]}, indent=1))
     if report["fix_by_hand"]:
-        print("References to removed paths outside Markdown links (fix by hand):")
-        for r in sorted(set(report["fix_by_hand"])): print("  " + r)
+        by_file = {}
+        for r in sorted(set(report["fix_by_hand"])):
+            f, _, ref = r.partition(": "); by_file.setdefault(f, []).append(ref)
+        print(f"References to removed paths outside Markdown links, in {len(by_file)} file(s) (fix by hand, or mark the file frozen):")
+        for f, refs in sorted(by_file.items(), key=lambda kv: -len(kv[1])):
+            sample = ", ".join(refs[:3]) + (f", … {len(refs) - 3} more" if len(refs) > 3 else "")
+            print(f"  {f} ({len(refs)}): {sample}")
     if report["missing"]:
         print(f"Links that were already broken before the cut: {len(report['missing'])}")
         for r in report["missing"][:200]: print("  " + r)

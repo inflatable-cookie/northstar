@@ -47,7 +47,10 @@ Sort every docs folder before cutting:
   knowledge index links to it. It is the product, not process.
 - **Evidence:** research and audits that still support a current decision.
   Keep the part that matters as a short section in the owning knowledge file,
-  and let the rest go to Git history.
+  and let the rest go to Git history. When a large corpus is cited line by line
+  from current knowledge (for example an evidence ledger quoting `#L48`),
+  folding it would break those citations. Keep it in place as retained, frozen
+  evidence, and list it in `allow`.
 - **Executable evidence:** models, proof harnesses and their checker logs or
   receipts (for example a TLA+ model under `docs/research/`). Move them next to
   the code or harness they prove, mark their receipts frozen, and list those in
@@ -78,7 +81,10 @@ record of one run of it is process.
    so it can't creep back:
 
    Keep retired terms multi-word and specific to the old process. A bare word
-   like "generation" collides with ordinary domain vocabulary.
+   like "generation" collides with ordinary domain vocabulary. Retire the
+   process paths you removed, not the knowledge paths you moved: generic paths
+   such as `docs/contracts/` also appear in quoted paths from other
+   repositories.
 
    ```toml
    [[retired]]

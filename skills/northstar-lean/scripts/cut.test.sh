@@ -40,6 +40,8 @@ check releases/v1/manifest.md '../../docs/contracts/api.md' "frozen file untouch
 check plan.json '"docs/contracts/"' "the plan file itself is not rewritten"
 git -C "$repo" rm -rqf releases plan.json
 if python3 "$here/cut.py" check-links --repo "$repo" > /dev/null; then echo "ok check-links clean after cut"; else python3 "$here/cut.py" check-links --repo "$repo"; echo "FAIL check-links"; exit 1; fi
+mk docs/guides/spans.md 'Cite like `[[1]](https://example.com)` or `[x](nowhere.md)`.'
+python3 "$here/cut.py" check-links --repo "$repo" > /dev/null && echo "ok check-links ignores links inside code spans" || { echo "FAIL code spans"; exit 1; }
 mk docs/guides/bad.md '[x](../knowledge/contracts/api.md#nope) [y](missing.md)'
 set +e; out=$(python3 "$here/cut.py" check-links --repo "$repo"); rc=$?; set -e
 [ "$rc" = 1 ] && echo "$out" | grep -q "missing anchor" && echo "$out" | grep -q "missing missing.md" && echo "ok check-links finds missing files and anchors, including untracked edits" || { echo "FAIL check-links negatives: $out"; exit 1; }
