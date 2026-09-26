@@ -5,7 +5,7 @@
 1. Copy the contents of this skill's `template/` directory into the repository
    root. The repository carries no Queue files: Queue gives a repository
    without `.paseo/queue.json` Queue closeout by default, and per-repository
-   overrides live in Queue's project settings (`project.set`). Omit
+   overrides live in Queue's repository settings (`repository.set`). Omit
    template folders and index rows with nothing true to say yet, such as
    `domain/`.
 2. Fill in `AGENTS.md` and `docs/knowledge/vision.md`. Leave the other files
@@ -35,10 +35,10 @@ The migration is one deliberate cut, done when nothing is in flight.
    repository without a manifest Queue closeout by default. Commit this before
    running the cut tool, because `apply` stages its moves and removals and the
    next commit would sweep them in.
-3. **Validation command.** Pre-merge validation is a per-project Queue
+3. **Validation command.** Pre-merge validation is a per-repository Queue
    setting, not a repository file (spec 042 item 3). Work out which command it
    will be: one that validates a fresh disposable checkout, installs its own
-   dependencies and exits 0 on pass. Set it with `project.set` once Queue
+   dependencies and exits 0 on pass. Set it with `repository.set` once Queue
    supports it. A command that needs a clean pushed head or a prepared
    workspace doesn't qualify yet; file that as a papercut in Queue.
 
