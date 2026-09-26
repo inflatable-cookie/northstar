@@ -94,7 +94,7 @@ config_keys = ["canonical-spine-bundle"]  # literal text, not a dotted TOML path
 - A top-level `frozen = [...]` list, above the `[[retired]]` entries and using
   the same glob rules, names immutable artefacts once for the whole repository.
   The retired-concepts check exempts them from every retirement, and
-  `check-links` skips them.
+  `check-links` (`effigy skill run northstar-lean/check-links`) skips them.
 - Fix live references rather than widening `allow`. The exception is immutable
   artefacts, which can't change without a new release: released suites and
   generated mirrors, vendored copies, fixtures, digested receipts, and applied

@@ -163,14 +163,15 @@ record of one run of it is process.
     rows) must be redesigned, because status now lives in Queue: make it
     refuse task IDs, or anchor it to plan lane keys.
     Code reads docs too: `include_str!`, census scripts, adoption receipts that
-    embed log paths. Update or remove those checks in the same PR, and say
+    embed log paths, and tests that use a doc file as a fixture target (for
+    example a symlink test pointing at `PAPERCUTS.md`). Update or remove those checks in the same PR, and say
     which ones changed in the PR description. Don't wire the retired-concepts
     check into repository QA: it needs the Northstar skill installed, so it is
     run through `effigy skill`. If a pre-push hook refuses several
     docs-touching commits, squash the cut into one commit.
 11. **Verify.** Run the repository's QA, then
     `effigy skill run northstar-lean/retired-concepts` and
-    `effigy skill run northstar-lean/cut -- check-links --plan <plan.json>`
+    `effigy skill run northstar-lean/check-links -- --plan <plan.json>`
     (the plan supplies the frozen paths). Copy the plan's frozen paths into
     `retired.toml`'s top-level `frozen` list (as globs), so later runs need no
     plan. It checks
