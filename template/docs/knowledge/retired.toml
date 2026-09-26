@@ -1,0 +1,13 @@
+# Concepts that no longer exist. The retired-concepts check fails on any listed
+# term, path or config key found outside `allow`. See the Northstar skill's
+# references/knowledge.md.
+#
+# [[retired]]
+# id = "<slug>"
+# retired = "<YYYY-MM-DD>"
+# replacement = "<what replaced it>"
+# owner = "docs/knowledge/<owning file>"
+# terms = ["<phrase>"]
+# paths = ["<path>"]
+# config_keys = ["<key>"]
+# allow = ["docs/knowledge/retired.toml"]
