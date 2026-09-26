@@ -1,79 +1,60 @@
 # Northstar
 
-Northstar is a reusable documentation and execution system for agent-led
-projects. It gives direction, architecture, durable rules, planned work, and
-evidence distinct homes so an agent can act without reconstructing intent from
-conversation history. This repository is the source of that system.
+Northstar is a small skill and a repository shape that keep a project's
+knowledge current and its work well-aimed. This repository is the skill's
+source and the reference example of the shape. It must never grow back into
+process doctrine: task state belongs in Queue, not in Git.
 
-## What must stay true
+## Where things live
 
-- Keep `template-bundle/` copy-ready. It is starter material for another
-  project, not a showcase for Northstar-specific examples.
-- Keep `bundle-docs/` about reusable doctrine. Northstar's own implementation
-  decisions belong under `docs/`.
-- Preserve one authority chain: vision and research inform architecture and
-  contracts; roadmaps sequence approved work; logs prove what happened; triage
-  only holds unresolved leads.
-- Prefer direct, legible systems over compatibility theatre. Before 1.0, update
-  callers and remove superseded surfaces together. After 1.0, preserve stable
-  user-visible contracts by default.
-- Write for a human collaborator. Be short and blunt, but keep the connective
-  reasoning that makes a decision understandable. The full house style is in
-  `docs/policy/internal-writing-style.md`.
+- Current state: `docs/README.md`
+- Knowledge (one owner per fact): `docs/knowledge/README.md`
+- Retired concepts, which must not come back: `docs/knowledge/retired.toml`
+- Open questions: `docs/knowledge/questions.md`
+- What's next: `docs/plan.md`
+- Unresolved leads: `docs/triage/`
+- The skill: `skills/northstar/SKILL.md`; its starter: `skills/northstar/template/`
 
-## How work moves here
+Tasks, briefs and status live in Queue, never in this repository.
 
-In this repo, normal-mode agents work in the current checkout and follow the
-task's canonical docs. Worker mode exists only when an
-orchestrator-dispatched handoff says so; never infer it from a worktree, branch
-name, or harness.
+## Commands
 
-Work in meaningful batches. Start from the governing contract, spec, or ready
-card and leave the planning and evidence chain coherent when the batch ends.
-Unresolved notes in `docs/triage/` are leads to promote or remove, never
-execution authority.
+- `effigy qa` — full validation: skill self-tests, language-package checks,
+  the hook-bridge tests, retired concepts and links.
+- `effigy check:skill-install ~/.agents/skills/northstar` — installed copy
+  matches source.
+- `effigy skill run --path skills/northstar <task>` — run a skill task from
+  source (`retired-concepts`, `cut`, `check-links`, `paseo:worktree`).
 
-## Sharp edges
+## Product rules
 
-- Do not edit `.github/workflows/` or run release mutations without an explicit
-  operator request. These operations can affect published or shared state.
-- If a refactor breaks callers, contracts, or documented behavior, stop with a
-  short impact summary and options. Do not hide the decision behind a shim or
-  silent fallback.
-- Do not let a current task, log, or conversational note become a second source
-  of truth. Promote durable meaning to its canonical home.
+- Keep `skills/northstar/template/` copy-ready: starter material for another
+  project, with no Northstar-specific examples.
+- Say a rule once, in the skill. Doctrine a capable agent follows by default is
+  removed, not restated.
+- The `paseo:worktree` selector and the installed path
+  `~/.agents/skills/northstar` are relied on by other repositories'
+  `paseo.json`. Don't rename either.
+- Before 1.0, update callers and remove superseded surfaces together; no shims.
+  If a change breaks callers or documented behaviour, stop with a short impact
+  summary and options.
+- Write in the house style:
+  `docs/knowledge/contracts/internal-writing-style.md`.
 
-## Finding your way
+## Guardrails
 
-Start with `effigy tasks`. Use `effigy doctor` only when routing or environment
-state is unclear; it is orientation, not the validation board. Prefer
-`effigy <task>` and `effigy graph` over raw package-manager commands, and use
-`--repo <PATH>` only when operating on another repository. Do not add
-`package.json` scripts that merely re-export Effigy tasks.
+- Don't edit `.github/workflows/` or sync the installed skill without an
+  explicit operator request; both affect every project on the machine.
+- When a change alters what is true, update the owning knowledge file in the
+  same PR.
+- An operator ruling given in conversation goes into its owning file before
+  the thread ends.
 
-The main front doors are:
+## Papercuts
 
-- `docs/README.md` for Northstar's live project state;
-- `bundle-docs/protocol-kernel.md` for the reusable system and authority map;
-- `template-bundle/README.md` for copy-ready adoption surfaces;
-- `skills/northstar/SKILL.md` for routed agent workflows;
-- `docs/contracts/001-working-rules.md` for delivery and closeout;
-- `docs/contracts/003-agent-instruction-surface.md` for AGENTS design.
+File small, recurring friction in Queue with `papercut.add` (see the
+`northstar` skill). There is no `PAPERCUTS.md`.
 
-Read the owning surface when the task enters it. Its detail outranks this map.
+## Validate
 
-## What complete means
-
-Run `effigy qa` for normal validation and `effigy qa:docs` when documentation
-changes. `effigy check:agent-instructions` is an advisory evidence pass, not a
-prose-quality score. `effigy check:posture-advisory` is the optional docs-drift
-check described in `scripts/README.md`.
-
-If you hit a small, recurring, solvable hurdle, record it in `PAPERCUTS.md`
-under the working-rules contract and continue the scoped task. Do not turn the
-observation into unplanned work.
-
-Stop and ask when canonical planning does not settle the next direction, when a
-breaking choice needs operator intent, or when validation fails in a way that
-changes the plan. A bare `continue` stays inside the current bounded lane; it is
-not permission to invent the next one.
+`effigy qa` before opening a PR.

@@ -4,6 +4,19 @@ All notable changes to Northstar are documented here.
 
 ## [Unreleased]
 
+### Changed
+- Northstar is lean (2026-09-26). The `northstar` skill is now the lean skill:
+  planning, briefs, review and knowledge upkeep, with a copy-ready
+  `template/`, the retired-concepts check and the `cut` migration tool. Task
+  state, briefs, closeout and papercuts live in Queue.
+- Northstar's own docs follow the lean shape: `docs/knowledge/`,
+  `docs/plan.md`, `docs/triage/`.
+
+### Removed
+- `bundle-docs/`, `template-bundle/`, the router and modes, the command
+  skills, the working-rules contract, roadmaps, logs, handoffs, lifecycle
+  records, `PAPERCUTS.md`, and the checks that served them. Git keeps them.
+
 ### Added
 - Added the initial `skills/northstar-effigy/` scaffold so agents can apply the
   Northstar + Effigy repo contract from a reusable source of truth.
