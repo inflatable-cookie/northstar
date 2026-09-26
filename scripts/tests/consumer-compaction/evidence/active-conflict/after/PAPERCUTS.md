@@ -1,3 +1,0 @@
-# Papercuts
-
-No open papercuts.

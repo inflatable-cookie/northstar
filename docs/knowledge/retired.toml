@@ -1,0 +1,63 @@
+# Concepts that no longer exist. The retired-concepts check fails on any listed
+# term, path or config key found outside `allow`
+# (`effigy check:retired-concepts`).
+#
+# frozen: immutable artefacts (released suites, vendored mirrors, fixtures,
+# receipts, applied migrations), exempt from every retirement and skipped by
+# check-links.
+frozen = [
+  "skills/northstar/assets/fixtures/**",
+  ".agents/skills/effigy/",
+]
+
+# paths and allow: an entry is an exact file, or a directory when it ends in
+# "/". `*` matches within one path segment and `**` across segments. Keep
+# terms multi-word and specific.
+
+[[retired]]
+id = "northstar-process-records"
+retired = "2026-09-26"
+replacement = "Knowledge in docs/knowledge/, intent in docs/plan.md; tasks, briefs, status and outcomes live in Queue."
+owner = "docs/knowledge/architecture.md"
+terms = ["roadmap card", "generation index", "northstar:lifecycle", "chatterbox handoff"]
+paths = [".northstar/lifecycle/", "docs/roadmaps/", "docs/handoffs/", "docs/logs/", "docs/specs/"]
+config_keys = ["northstar/queue:hook", "paseo.queue.control.v4"]
+# The hook bridge implements the old protocol for unmigrated repositories.
+allow = [
+  "CHANGELOG.md",
+  "docs/knowledge/retired.toml",
+  "skills/northstar/references/adopt.md",
+  "skills/northstar/references/lifecycle/",
+  "skills/northstar/scripts/lifecycle-*.ts",
+  "skills/northstar/scripts/cut.py",
+  "skills/northstar/scripts/cut.test.sh",
+  "skills/northstar/scripts/retired-concepts.ts",
+  "skills/northstar/scripts/retired-concepts.test.sh",
+  "skills/northstar/template/docs/knowledge/retired.toml",
+  "skills/northstar/effigy.toml",
+  "scripts/tests/lifecycle-core/",
+]
+
+[[retired]]
+id = "northstar-bundle"
+retired = "2026-09-26"
+replacement = "The northstar skill: SKILL.md and references/ for guidance, template/ for the starter."
+owner = "docs/knowledge/architecture.md"
+terms = ["protocol kernel", "working-rules contract", "Northstar router"]
+paths = ["bundle-docs/", "template-bundle/", "skills/northstar/references/modes/", "skills/northstar/references/router.md", "skills/northstar/commands/", "skills/northstar-lean/"]
+allow = ["CHANGELOG.md", "docs/knowledge/retired.toml"]
+
+[[retired]]
+id = "papercuts-file"
+retired = "2026-09-26"
+replacement = "Papercuts live in Queue (papercut.add)."
+owner = "docs/knowledge/architecture.md"
+paths = ["PAPERCUTS.md"]
+allow = [
+  "CHANGELOG.md",
+  "AGENTS.md",
+  "docs/knowledge/retired.toml",
+  "skills/northstar/SKILL.md",
+  "skills/northstar/references/adopt.md",
+  "skills/northstar/template/AGENTS.md",
+]

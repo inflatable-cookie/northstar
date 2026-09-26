@@ -1,0 +1,87 @@
+# Architecture
+
+Northstar is one installable skill plus the repository shape it maintains. The
+skill's source is `skills/northstar/` in this repository.
+
+## The split
+
+| Home | Holds |
+| --- | --- |
+| Repository | Knowledge (`docs/knowledge/`), intent (`docs/plan.md`), unresolved leads (`docs/triage/`), code |
+| Orchestrator (Queue, later Nucleus) | Tasks, briefs, status, review, closeout, permanent outcome records, papercuts, lanes, per-repository settings such as the pre-merge validation command |
+
+Task state lives in the orchestrator because, stored in Git, it needs digests,
+hooks, guards, audits and compaction to stay honest. Most of Northstar's old
+machinery existed for that reason; removing the state removed the machinery.
+
+A repository carries no Queue files. Without a `.paseo/queue.json`, Queue uses
+its own closeout (which writes nothing to the repository) and accepts briefs
+stored in Queue. Per-repository settings go through Queue's CLI
+(`repository.set`). Queue still reads v1–v4 manifests for repositories that
+haven't migrated.
+
+Vocabulary follows Queue: a **lane** is a durable group of work with an aim and
+a set of repositories; a **task** is one unit of work. A `docs/plan.md` item
+that is being worked maps to a lane.
+
+Planning is moving to Queue too (Nucleus contract 002): triage leads, lane
+working documents and a project's lane ordering. When it ships, `docs/plan.md`
+and `docs/triage/` leave repositories the way `PAPERCUTS.md` did.
+
+## Repository shape
+
+| Surface | Purpose |
+| --- | --- |
+| `AGENTS.md` | Orientation in one screen: what the project is, where things live, guardrails, the validation command. `CLAUDE.md` contains only `@AGENTS.md`. |
+| `docs/README.md` | Current state in a page, linking knowledge by topic. |
+| `docs/knowledge/` | Current truth, one owner per fact: vision, architecture, contracts (including `release.md`), domain. |
+| `docs/knowledge/retired.toml` | Retired terms, paths and config keys, with their replacement and owner. A check fails on live references. |
+| `docs/knowledge/questions.md` | Addressable open questions; an answer closes one by pointing at its owning file. |
+| `docs/plan.md` | What matters next and why. No status mirror. |
+| `docs/triage/` | Unresolved leads. Never authority. |
+
+Product documentation for a project's users stays where it is and is linked
+from the knowledge index. Evidence that current knowledge cites line by line,
+and executable proofs, stay frozen and are listed in `retired.toml`.
+
+## The skill
+
+`skills/northstar/`:
+
+- `SKILL.md`: roles (planner, reviewer, worker), the knowledge rules, and
+  pointers to references.
+- `references/`: `plan`, `brief`, `review`, `knowledge`, `adopt`, `handover`.
+- `template/`: the copy-ready starter for a new or migrating repository.
+- `scripts/`, run through the skill's Effigy catalog (alias `northstar`):
+  - `retired-concepts`: checks code, config and docs against `retired.toml`,
+    including untracked files.
+  - `cut`: applies a migration plan (moves, removals, link rewrites) and
+    `check-links` verifies links and anchors afterwards.
+  - `paseo:worktree`: prepares and links sibling checkouts for Paseo
+    worktrees. Projects call it from `paseo.json` setup and teardown through
+    the installed skill, so its selector must not change.
+- Optional modules, loaded only when a repository opts in:
+  - UI design delivery: the nested `northstar-ui` skill (`ui/`,
+    `references/ui/`).
+  - Language quality packages: `references/packages/`, the
+    `language:route` task and its lifecycle script. Their contract is
+    [contracts/language-quality-pack.md](contracts/language-quality-pack.md).
+- Migration bridge: `lifecycle-*.ts`, `references/lifecycle/` and the
+  `queue:hook` and `lifecycle:*` tasks serve repositories still on v1–v4
+  manifests. They are removed once the last of those migrates.
+
+The installed copy lives at `~/.agents/skills/northstar`; harness skill folders
+(Claude, pi) symlink to it. See [contracts/release.md](contracts/release.md).
+
+## Knowledge mechanisms
+
+The part of Northstar that still earns tooling, in order:
+
+1. Retired concepts that name what they retire, checked across code, config
+   and docs (built).
+2. Addressable open questions that an answer closes (built as
+   `questions.md`).
+3. Rulings that land in their owning file before a Chatterbox thread ends
+   (skill guidance).
+4. Later, possibly in Nucleus: a knowledge manifest with typed links and
+   suspect-link detection.

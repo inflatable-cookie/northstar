@@ -1,2 +1,0 @@
-# Frozen evidence preserves subject bytes, including intentional dirty whitespace.
-bundle-docs/research/prototypes/rust-quality/trial-results/** whitespace=-trailing-space

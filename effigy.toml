@@ -1,38 +1,24 @@
 [manifest]
-minimum_effigy_version = "0.8.4"
+minimum_effigy_version = "0.13.0"
 
 [catalog]
 alias = "northstar"
 
-[bootstrap]
-setup = ["health"]
-
 [tasks]
-"check:bundle" = [{ rhai = "scripts/check-northstar-bundle.rhai" }]
-"check:repo-contract" = [{ rhai = "scripts/check-northstar-repo-contract.rhai" }]
-"check:repo-contract-wiring" = [{ rhai = "scripts/check-northstar-repo-contract-wiring.rhai" }]
-"check:posture-advisory" = [{ rhai = "scripts/check-northstar-posture-advisory.rhai" }]
 "check:skill-install" = [{ rhai = "scripts/check-northstar-skill-install.rhai" }]
-"check:readiness-map" = [{ rhai = "scripts/check-northstar-readiness-map.rhai" }]
-"check:agent-instructions" = [{ rhai = "skills/northstar/scripts/check-agent-instructions.rhai" }]
-"check:language-packages" = [{ rhai = "skills/northstar/scripts/check-language-packages.rhai" }]
-"check:language-package-routes" = "scripts/tests/language-package-routes/self-test.sh"
-"language:route" = "bun run skills/northstar/scripts/language-package-lifecycle.ts route {args}"
-"lifecycle:run" = "bun run skills/northstar/scripts/lifecycle-core.ts {args}"
-"check:lifecycle-core" = "scripts/tests/lifecycle-core/self-test.sh"
-"check:lifecycle-adoption" = "scripts/tests/lifecycle-adoption/self-test.sh"
-"check:chatterbox-git" = "scripts/tests/chatterbox-git-isolation/self-test.sh"
+"check:retired-concepts" = "bun run skills/northstar/scripts/retired-concepts.ts {args}"
+"check:links" = "python3 skills/northstar/scripts/cut.py check-links {args}"
+"test:retired-concepts" = "bash skills/northstar/scripts/retired-concepts.test.sh"
+"test:cut" = "bash skills/northstar/scripts/cut.test.sh"
 "paseo:worktree" = [{ rhai = "skills/northstar/scripts/paseo-worktree.rhai" }]
 "test:paseo-worktree" = [{ task = "paseo:worktree self-test" }]
-"check:command-skills" = [{ rhai = "scripts/check-northstar-command-skills.rhai" }]
-"check:model-routing" = [{ rhai = "scripts/check-northstar-model-routing.rhai" }]
-"check:ui-protocol" = [{ rhai = "scripts/check-northstar-ui-protocol.rhai" }]
-"test:ui-protocol" = [{ rhai = "scripts/test-northstar-ui-protocol.rhai" }]
-"test:readiness-map" = [{ rhai = "scripts/test-northstar-readiness-map.rhai" }]
-"test:repo-contract" = [{ rhai = "scripts/test-northstar-repo-contract.rhai" }]
-"check:native-starter" = "scripts/tests/native-starter/self-test.sh"
-"check:consumer-compaction" = "scripts/tests/consumer-compaction/self-test.sh"
-"qa:docs" = [{ task = "check:repo-contract-wiring" }, { task = "check:repo-contract" }, { task = "test:repo-contract" }, { task = "check:native-starter" }, { task = "check:readiness-map" }, { task = "test:readiness-map" }, { task = "check:command-skills" }, { task = "check:model-routing" }, { task = "check:ui-protocol" }, { task = "test:ui-protocol" }, { task = "check:language-packages" }]
-health = [{ task = "check:bundle" }]
-validate = [{ task = "check:repo-contract-wiring" }, { task = "check:bundle" }, { task = "check:language-packages" }, { task = "check:language-package-routes" }, { task = "check:lifecycle-core" }, { task = "check:lifecycle-adoption" }, { task = "test:paseo-worktree" }, { task = "check:consumer-compaction" }]
-qa = [{ task = "validate" }, { task = "qa:docs" }]
+"check:language-packages" = [{ rhai = "skills/northstar/scripts/check-language-packages.rhai" }]
+"check:language-package-routes" = "scripts/tests/language-package-routes/self-test.sh"
+# Reruns against live sibling consumers (jetstream, convergence); not part of qa.
+"check:language-consumer-reruns" = "python3 scripts/tests/language-package-routes/validate_consumer_reruns.py"
+"language:route" = "bun run skills/northstar/scripts/language-package-lifecycle.ts route {args}"
+# Hook bridge for v1–v4 manifests. Remove with the bridge.
+"lifecycle:run" = "bun run skills/northstar/scripts/lifecycle-core.ts {args}"
+"check:lifecycle-core" = "scripts/tests/lifecycle-core/self-test.sh"
+"qa:docs" = [{ task = "check:retired-concepts" }, { task = "check:links" }]
+qa = [{ task = "test:retired-concepts" }, { task = "test:cut" }, { task = "test:paseo-worktree" }, { task = "check:language-packages" }, { task = "check:language-package-routes" }, { task = "check:lifecycle-core" }, { task = "qa:docs" }]

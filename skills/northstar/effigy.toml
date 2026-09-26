@@ -1,15 +1,18 @@
 [manifest]
-minimum_effigy_version = "0.8.4"
+minimum_effigy_version = "0.13.0"
 
 [catalog]
 alias = "northstar"
 
 [tasks]
-"check:agent-instructions" = [{ rhai = "scripts/check-agent-instructions.rhai" }]
+"retired-concepts" = "bun run {skill}/scripts/retired-concepts.ts {args}"
+"cut" = "python3 {skill}/scripts/cut.py {args}"
+"check-links" = "python3 {skill}/scripts/cut.py check-links {args}"
+"paseo:worktree" = [{ rhai = "scripts/paseo-worktree.rhai" }]
 "check:language-packages" = [{ rhai = "scripts/check-language-packages.rhai" }]
 "language:route" = "bun run {skill}/scripts/language-package-lifecycle.ts route {args}"
+# Hook bridge for repositories still on v1–v4 manifests. Remove once Queue's own cutover merges.
 "lifecycle:run" = "bun run {skill}/scripts/lifecycle-core.ts {args}"
 "lifecycle:oracle" = "bun run {skill}/scripts/lifecycle-core.ts oracle"
 "lifecycle:migrate-premerge" = "bun run {skill}/scripts/lifecycle-queue-migration.ts {args}"
 "queue:hook" = "bun run {skill}/scripts/lifecycle-queue-hook.ts"
-"paseo:worktree" = [{ rhai = "scripts/paseo-worktree.rhai" }]
