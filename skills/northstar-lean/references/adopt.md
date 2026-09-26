@@ -3,7 +3,10 @@
 ## A new repository
 
 1. Copy the contents of this skill's `template/` directory into the repository
-   root, including the hidden `.paseo/`.
+   root. Leave out `.paseo/` once Queue's no-manifest default (`g01.053`) is
+   live; until then, include it if the repository will get Queue work. Omit
+   template folders and index rows with nothing true to say yet, such as
+   `domain/`.
 2. Fill in `AGENTS.md` and `docs/knowledge/vision.md`. Leave the other files
    short until there is something true to say.
 3. Write `docs/knowledge/contracts/release.md`, even if the answer is "not
@@ -21,9 +24,11 @@ The migration is one deliberate cut, done when nothing is in flight.
 1. **Drain.** Hold queued tasks, let running workers finish, and resolve
    blocked ones individually. No task in the repository may be active.
 2. **Switch the manifest.** Set `.paseo/queue.json` to
-   `{ "schema": "paseo.queue.control.v5", "closeout": "queue", "hooks": [] }`
-   once Queue supports it. The old Northstar lifecycle, pre-dispatch and
-   pre-merge hooks go with it.
+   `{ "schema": "paseo.queue.control.v5", "closeout": "queue", "hooks": [] }`.
+   The old Northstar lifecycle, pre-dispatch and pre-merge hooks go with it. A
+   repository with no manifest needs nothing here: don't add one. It moves to
+   Queue closeout automatically when Queue's no-manifest default (`g01.053`)
+   ships, and until then it should get no Queue work.
 3. **Validation command.** Queue does not run plain pre-merge validation yet
    (spec 042 item 3), so the manifest has no `validation` field for now. Work
    out which command will be used: it must validate a fresh disposable checkout,
@@ -43,6 +48,10 @@ Sort every docs folder before cutting:
 - **Evidence:** research and audits that still support a current decision.
   Keep the part that matters as a short section in the owning knowledge file,
   and let the rest go to Git history.
+- **Executable evidence:** models, proof harnesses and their checker logs or
+  receipts (for example a TLA+ model under `docs/research/`). Move them next to
+  the code or harness they prove, mark their receipts frozen, and list those in
+  `allow`.
 - **Process:** roadmaps, cards, handoffs, lifecycle records, routine logs and
   completed sweep runs. Removed.
 
@@ -67,6 +76,9 @@ record of one run of it is process.
 3. **Retirements.** Record known retired concepts in `retired.toml`, and fix
    the live references the check finds. Always retire the old process itself,
    so it can't creep back:
+
+   Keep retired terms multi-word and specific to the old process. A bare word
+   like "generation" collides with ordinary domain vocabulary.
 
    ```toml
    [[retired]]
@@ -104,7 +116,10 @@ record of one run of it is process.
    from knowledge files. Product docs that teach the old conventions, such as a
    guide to writing AGENTS files, get updated too.
 9. **Housekeeping.** Delete closed papercuts and closed or already-promoted
-   triage notes.
+   triage notes. `PAPERCUTS.md` lives at the repository root, where Effigy's
+   papercuts tooling reads it (package-level copies such as
+   `apps/<app>/PAPERCUTS.md` are fine). Fold any stray copy, such as
+   `docs/PAPERCUTS.md`, into the root file and delete it.
 10. **Checks.** Search QA configuration (`effigy.toml`, CI), tests, scripts
     and receipts for paths, headings and selector names from the old layout.
     Code reads docs too: `include_str!`, census scripts, adoption receipts that
@@ -114,8 +129,11 @@ record of one run of it is process.
     `effigy skill run northstar-lean/retired-concepts` and
     `effigy skill run northstar-lean/cut -- check-links`, which checks
     Markdown links and anchors across the whole repository and not just the
-    docs catalog. The checks find the stragglers the steps above missed; fix
-    them rather than widening `allow`. When you work in a worktree, confirm
+    docs catalog. It is stricter than `effigy docs check links` and also
+    catches broken anchors. The checks find the stragglers the steps above
+    missed; fix them rather than widening `allow`. The one exception is frozen
+    artefacts from your cut plan: the retired-concepts check doesn't read that
+    plan, so list those in `allow` as well. When you work in a worktree, confirm
     which tree each check actually ran against: container-routed tasks may
     mount the main checkout instead.
 

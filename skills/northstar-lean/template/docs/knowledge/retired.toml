@@ -1,6 +1,9 @@
 # Concepts that no longer exist. The retired-concepts check fails on any listed
-# term, path or config key found outside `allow`. See the Northstar skill's
-# references/knowledge.md.
+# term, path or config key found outside `allow`
+# (`effigy skill run northstar-lean/retired-concepts`).
+#
+# paths and allow: an entry is an exact file, or a directory when it ends in
+# "/". `*` matches within one path segment. Keep terms multi-word and specific.
 #
 # [[retired]]
 # id = "<slug>"

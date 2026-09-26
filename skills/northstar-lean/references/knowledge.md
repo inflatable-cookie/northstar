@@ -57,6 +57,9 @@ Answer: no. A fixed timer; see [assessment contract](contracts/assessment.md#moc
   of restating the question.
 - An answered question keeps only its pointer. Delete it once no plan or brief
   references it.
+- When an answer settles most of a question but leaves a narrower case open,
+  mark the original answered and open a new, narrower question for the rest,
+  rather than keeping the broad one open or asking again.
 - Before asking the operator, search here and in the owning file.
 
 ## Retired concepts
