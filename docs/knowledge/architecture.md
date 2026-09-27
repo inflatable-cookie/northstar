@@ -7,10 +7,10 @@ skill's source is `skills/northstar/` in this repository.
 
 | Home | Holds |
 | --- | --- |
-| Repository | Knowledge (`docs/knowledge/`), intent (`docs/plan.md`), unresolved leads (`docs/triage/`), code |
-| Orchestrator (Queue, later Nucleus) | Tasks, briefs, status, review, closeout, permanent outcome records, papercuts, lanes, per-repository settings such as the pre-merge validation command |
+| Repository | Knowledge (`docs/knowledge/`) and code |
+| Orchestrator (Queue, later Nucleus) | The plan (lanes, lane documents, each project's lane order), leads, papercuts, brief drafts, tasks, status, review, closeout, permanent outcome records, per-repository settings such as the pre-merge validation command |
 
-Task state lives in the orchestrator because, stored in Git, it needs digests,
+Task and planning state live in the orchestrator because, stored in Git, it needs digests,
 hooks, guards, audits and compaction to stay honest. Most of Northstar's old
 machinery existed for that reason; removing the state removed the machinery.
 
@@ -20,13 +20,12 @@ stored in Queue. Per-repository settings go through Queue's CLI
 (`repository.set`). The v1–v4 manifests and the hook bridge that served them
 are retired; every Northstar repository is on the lean shape.
 
-Vocabulary follows Queue: a **lane** is a durable group of work with an aim and
-a set of repositories; a **task** is one unit of work. A `docs/plan.md` item
-that is being worked maps to a lane.
-
-Planning is moving to Queue too (Nucleus contract 002): triage leads, lane
-working documents and a project's lane ordering. When it ships, `docs/plan.md`
-and `docs/triage/` leave repositories the way `PAPERCUTS.md` did.
+Vocabulary follows Queue: a **lane** is a durable group of work with an aim, a
+working document and a set of repositories; a **task** is one unit of work; a
+**lead** is an unresolved idea or observation; a **draft** is a brief before
+approval. A project's plan is its ordering of lanes (Queue Spec 026, Nucleus
+contract 002). Planning left repositories on 2026-09-27, the way papercuts did
+the day before.
 
 ## Repository shape
 
@@ -37,8 +36,6 @@ and `docs/triage/` leave repositories the way `PAPERCUTS.md` did.
 | `docs/knowledge/` | Current truth, one owner per fact: vision, architecture, contracts (including `release.md`), domain. |
 | `docs/knowledge/retired.toml` | Retired terms, paths and config keys, with their replacement and owner. A check fails on live references. |
 | `docs/knowledge/questions.md` | Addressable open questions; an answer closes one by pointing at its owning file. |
-| `docs/plan.md` | What matters next and why. No status mirror. |
-| `docs/triage/` | Unresolved leads. Never authority. |
 
 Product documentation for a project's users stays where it is and is linked
 from the knowledge index. Evidence that current knowledge cites line by line,

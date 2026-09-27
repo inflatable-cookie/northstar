@@ -9,8 +9,9 @@ Northstar keeps a repository's knowledge current and its plan legible, so any
 agent can pick up work without reconstructing intent from conversation.
 
 The repository holds **knowledge and code**. The orchestrator (the Paseo Queue
-plugin today, Nucleus later) holds **process**: tasks, briefs, status, review,
-closeout and outcomes. Never write process state into the repository.
+plugin today, Nucleus later) holds **process and planning**: the plan (lanes,
+their documents and their order), leads, papercuts, brief drafts, tasks,
+status, review, closeout and outcomes. Never write either into the repository.
 
 ## Repository shape
 
@@ -22,30 +23,28 @@ closeout and outcomes. Never write process state into the repository.
 | `docs/knowledge/retired.toml` | Concepts that no longer exist, and what replaced them |
 | `docs/knowledge/questions.md` | Open questions, and where each answer now lives |
 | `docs/knowledge/contracts/release.md` | How this project releases, step by step. Every project has one |
-| `docs/plan.md` | What matters next and why |
-| `docs/triage/` | Unresolved leads; never authority |
 
-There are no task cards, roadmaps, generations, handoff files, lifecycle
-records, delivery logs or `PAPERCUTS.md`. Git history and the orchestrator's outcome records
+There is no `docs/plan.md`, `docs/triage/`, task card, roadmap, generation,
+handoff file, lifecycle record, delivery log or `PAPERCUTS.md`. Git history and the orchestrator's outcome records
 are the history.
 
 ## Orient
 
 Read `AGENTS.md`, then `docs/README.md`, then only the knowledge files your task
-touches. Before planning against a concept, check `retired.toml`. Before asking
+touches. For what's next, read the project's Queue plan (`plan.get`) and the
+lane documents it lists. Before planning against a concept, check `retired.toml`. Before asking
 the operator something, check `questions.md` and the owning knowledge file.
 Asking a settled question again costs more than looking it up.
 
 ## How work moves
 
-1. **Plan.** Intent goes into `docs/plan.md` as a short prioritised list. A
-   plan item being worked can own a Queue lane; the lane's aim restates the
-   item and grants no authority. See [plan](references/plan.md).
-2. **Brief.** Each task gets a brief held by Queue, not committed: outcome,
-   context links, constraints, acceptance, and when to stop. See
-   [brief](references/brief.md).
-3. **Dispatch.** Submit the brief with the operator's approval. Queue runs the
-   worker, review, merge and closeout, and keeps the outcome.
+1. **Plan.** Each outcome the project pursues is a Queue lane with a working
+   document; the project's plan orders the lanes. Unplanned ideas and
+   deferrals are leads. See [plan](references/plan.md).
+2. **Brief.** Each task starts as a Queue draft: outcome, context links,
+   constraints, acceptance, and when to stop. See [brief](references/brief.md).
+3. **Dispatch.** With the operator's approval, approve and promote the draft.
+   Queue runs the worker, review, merge and closeout, and keeps the outcome.
 4. **Review.** An independent reviewer checks the exact head against the brief.
    See [review](references/review.md).
 5. **Keep knowledge current.** When work changes what is true, the same PR
@@ -68,16 +67,21 @@ Asking a settled question again costs more than looking it up.
 - **Break things honestly.** When a change breaks callers or contracts, say so
   and update them together. No shims that hide a decision.
 
-## Papercuts
+## Papercuts and leads
 
-Small, recurring friction worth fixing later is filed in Queue, not in the
-repository. From the Queue plugin root (`~/Dev/projects/paseo-northstar-queue`),
+Small, recurring friction worth fixing later is a papercut, filed in Queue, not
+in the repository. From the Queue plugin root (`~/Dev/projects/paseo-northstar-queue`),
 run `node bin/queue-cli.mjs papercut.add payload.json`, where the payload holds
 `repository: {origin, path}`, `title`, `happened` and `impact`, plus optional
 `area` and `fix`. (`papercut.list` takes `repository` as the origin string,
 `"owner/name"`.) Record it and carry on with the task. The planner promotes a
-papercut to a task once a brief exists, and cites papercut IDs against a plan
-item until then. It closes papercuts as completed or deprecated.
+papercut with `papercut.promote-task` (see [brief](references/brief.md)),
+attaches it to a lane with `papercut.set-lanes`, or closes it as completed or
+deprecated.
+
+An observation, idea or question that is bigger than friction and not yet
+planned is a lead: `lead.add` (see [plan](references/plan.md)). Never write
+either into a file.
 
 ## Ask the operator when
 
@@ -90,11 +94,12 @@ Otherwise act. Asking again for authority that is already settled is a cost.
 
 ## Roles
 
-- **Planner** (a Chatterbox thread): owns `docs/plan.md`, knowledge upkeep,
-  briefs and dispatch approval requests. It commits its own small changes
-  (plan items, questions, triage notes, a ruling landing in a knowledge file,
-  link fixes) straight to `main`: run the repository's docs checks, check the
-  exit code, then push. Don't open a PR for a plan edit before a dispatch. A
+- **Planner** (a Chatterbox thread): owns the project's Queue plan, lane
+  documents, leads, knowledge upkeep, brief drafts and dispatch approval
+  requests. It commits its own small repository changes (questions, a ruling
+  landing in a knowledge file, link fixes) straight to `main`: run the
+  repository's docs checks, check the exit code, then push. Don't open a PR for
+  a small knowledge edit before a dispatch. A
   branch and a self-merged PR are for larger or riskier changes: restructuring
   knowledge, a migration cut, or anything touching code, QA configuration or
   scripts. For those, "passes" means an exit code of 0 that was actually

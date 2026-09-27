@@ -1,16 +1,17 @@
 # Brief
 
-A brief tells one worker what to achieve. Queue stores it and pins it by
-digest. It is never committed to the repository.
+A brief tells one worker what to achieve. It is a Queue draft from its first
+version, visible on the board's Drafts column before approval. It is never a
+file in the repository or a loose file on disk.
 
 ## Template
 
 ```markdown
 ---
 title: Farmyard mock drafts, review and resume
-queue_approval: "Tom approved on 2026-09-26 in the planning thread."
 queue:
   lane: mock-exams
+  laneDocuments: [mock-exams]
   capability: general
   notifyOriginOnCloseout: true
 ---
@@ -38,42 +39,52 @@ command.
 The conditions where the worker should stop rather than guess.
 ```
 
+`queue.laneDocuments` pins the lane document's current version into the
+worker's prompt; add it when the worker needs the lane's wider intent. Queue
+needs only `title` and a non-empty body; the sections are Northstar's
+convention.
+
 ## Writing a good brief
 
 - Aim at the outcome. A capable worker picks the steps.
 - Keep it short. If it needs pages of context, that context belongs in
-  `docs/knowledge/`, and the brief links to it.
+  `docs/knowledge/` or the lane document, and the brief links to it.
 - Name what the worker must update in `docs/knowledge/` if the work changes
   what is true.
-- One brief per independently reviewable PR.
-- Queue numbers each task per repository (`repo#N`) and returns the number at
-  submission. Quote it to the operator, and start the PR title with the bare
-  number (`304: Title`). On GitHub, `#304` would link an unrelated PR.
+- One brief per independently reviewable PR, in one repository. Cross-repository
+  work is several linked tasks (`queue.dependsOn`).
+- Queue numbers each task per repository (`repo#N`). Quote it to the operator,
+  and start the PR title with the bare number (`304: Title`). On GitHub, `#304`
+  would link an unrelated PR.
 - Make acceptance about behaviour, not text. A grep-based check can push a
   worker into rewording files it shouldn't touch: answered questions in
   `questions.md` keep their original wording.
 
-## Submitting
+## Draft, approve, promote
 
-With operator approval, submit from the Queue plugin root:
+From the Queue plugin root, with `node bin/queue-cli.mjs METHOD payload.json`:
 
-```sh
-node bin/northstar-submit.mjs --brief --repo /absolute/repository /absolute/path/brief.md --dry-run
-```
+1. **Create:** `draft.create` with `repoPath`, `baseBranch`, the complete
+   Markdown `text`, `author` (your agent ID) and `originAgentId`. Queue checks
+   each version at the pushed head and shows the result on the board.
+2. **Revise:** `draft.edit` with `id`, the current `version`, the complete new
+   `text` and `author`. Any edit clears approval.
+3. **Approve:** only after the operator has authorized this brief.
+   `draft.approve` takes the latest `id`, `version` and `digest` (from
+   `draft.get`), `approver` (your agent ID), `relayed: true` and a `note`
+   naming the authorization ("Tom approved in the planning thread on
+   2026-09-27"). The operator can also approve on the board.
+4. **Promote:** `draft.promote` with `id` returns an operation. Poll
+   `operation-status` with `{"operationId": "..."}` until it settles; its
+   `taskId` is the task. A refused promotion creates nothing: repair the
+   condition and promote the same draft again.
 
-Drop `--dry-run` to submit. The file can live anywhere and is not committed.
-Queue requires only `title`, `queue_approval` and optional `queue:` routing, and
-a non-empty body; the sections above are Northstar's convention, not Queue's.
-Queue records the pushed integration head as the planning commit. The submit
-returns an operation ID: poll it with
-`node bin/queue-cli.mjs operation-status payload.json`, where the payload is
-`{"operationId": "..."}`, until it succeeds; the task ID is in
-`result.taskId`. `notifyOriginOnCloseout: true`
-tells the submitting planner thread when the task closes, and
-`completionNotificationAgentIds: [<agent ids>]` notifies other threads. Use
-`node bin/northstar-subscribe.mjs <task-id> subscribe` only to change that
-after submission. `node bin/queue-cli.mjs --help` lists the other calls.
-To change a brief before merge, use Queue's `amend_brief` control; don't
-resubmit.
+A lead or papercut can skip steps 1–4: `lead.promote-task` or
+`papercut.promote-task` with `id`, `agent` and an authorization `note` creates
+the draft, approval and task in one action. With `shape: true` it stops at a
+draft for editing.
 
-Brief mode requires the repository's Queue manifest to be v5, or absent.
+`notifyOriginOnCloseout: true` tells the submitting planner thread when the
+task closes; `completionNotificationAgentIds` notifies other threads. To change
+a brief after promotion and before merge, use Queue's `amend_brief` control;
+don't create a second draft.
