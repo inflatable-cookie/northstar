@@ -11,11 +11,11 @@ process doctrine: task state belongs in Queue, not in Git.
 - Knowledge (one owner per fact): `docs/knowledge/README.md`
 - Retired concepts, which must not come back: `docs/knowledge/retired.toml`
 - Open questions: `docs/knowledge/questions.md`
-- What's next: `docs/plan.md`
-- Unresolved leads: `docs/triage/`
 - The skill: `skills/northstar/SKILL.md`; its starter: `skills/northstar/template/`
 
-Tasks, briefs and status live in Queue, never in this repository.
+The plan (lanes, their documents and their order), leads, papercuts, brief
+drafts, tasks and status live in Queue, never in this repository. Read what's
+next with `plan.get` for `inflatable-cookie/northstar`.
 
 ## Commands
 
@@ -50,10 +50,11 @@ Tasks, briefs and status live in Queue, never in this repository.
 - An operator ruling given in conversation goes into its owning file before
   the thread ends.
 
-## Papercuts
+## Papercuts and leads
 
-File small, recurring friction in Queue with `papercut.add` (see the
-`northstar` skill). There is no `PAPERCUTS.md`.
+File small, recurring friction in Queue with `papercut.add`, and unplanned
+ideas or observations with `lead.add` (see the `northstar` skill). There is no
+`PAPERCUTS.md` or `docs/triage/`.
 
 ## Validate
 

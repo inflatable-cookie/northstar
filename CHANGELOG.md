@@ -12,6 +12,11 @@ All notable changes to Northstar are documented here.
 - Northstar's own docs follow the lean shape: `docs/knowledge/`,
   `docs/plan.md`, `docs/triage/`.
 
+- The plan, triage leads and brief drafts live in Queue (2026-09-27). The
+  skill's `plan` and `brief` references use lanes, lane documents, `plan.set`,
+  leads and drafts; the template drops `docs/plan.md` and `docs/triage/`, and
+  `adopt.md` has the move for already-lean repositories.
+
 ### Removed
 - `bundle-docs/`, `template-bundle/`, the router and modes, the command
   skills, the working-rules contract, roadmaps, logs, handoffs, lifecycle

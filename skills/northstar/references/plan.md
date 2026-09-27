@@ -1,52 +1,64 @@
 # Plan
 
-`docs/plan.md` says what matters next and why. It is intent, not status.
+The plan says what matters next and why. It lives in Queue, not in the
+repository: a project's plan is its ordering of lanes, and each lane's intent
+is in its lane document. It is intent, not status.
 
-## Shape
-
-```markdown
-# Plan
-
-Updated: 2026-09-26
-
-## Now
-
-1. **Mock exam journey** (lane `mock-exams`) — learners can sit a timed mock end
-   to end before December. Depends on Farmyard drafts and resume. Open: Q-014.
-2. **Private desktop updates** (lane `desktop-updates`) — ...
-
-## Next
-
-- ...
-
-## Not now
-
-- Spreadsheet marking — waits on the Marking Hub design.
-```
-
-- Keep **Now** to a handful of items, each with the outcome, why it matters,
-  dependencies, and any open question IDs.
-- **Not now** records deliberate deferrals, so nobody re-proposes them.
-- A standing item that is never finished, such as keeping versions current,
-  sits under **Now**, marked "(standing)". Its rules live in a contract, not in
-  the plan.
-- Remove an item once its outcome is true. Queue keeps the record of what
-  landed, so the plan doesn't need a "done" section.
-- Never write task status here: no "in review", "merged" or PR numbers.
+Queue calls run from the plugin root (`~/Dev/projects/paseo-northstar-queue`)
+as `node bin/queue-cli.mjs METHOD payload.json`.
 
 ## Lanes
 
-A plan item being worked can own a Queue lane:
+A lane is one thing the project is trying to achieve. It may span
+repositories.
 
-- the lane key appears next to the item;
-- the lane's aim restates the item's outcome and why, and grants no authority;
-- a lane may span repositories, while each repository keeps its own plan;
-- tasks attach through `queue.lane` in their brief.
+- Create or update it with `lane.upsert`: `key`, `title`, a short `aim`
+  (outcome and why; prompts carry it, and it grants no authority), and the full
+  `repositories` list (`{origin: "owner/name", path}`).
+- Write its working document with `lane.document.edit`: `key`, the latest
+  `version` you read (`0` for the first), `text` and `author`. A stale save is
+  refused; reload with `lane.document.get` and reapply.
+- The document stays high level: the outcome, why it matters, dependencies,
+  open question IDs from `questions.md`, completion states and caveats, and
+  what is deliberately out of scope. Tasks hold the detail. Keep it under
+  128 KB, because briefs can carry it.
+- Never write task status into it: no "in review", "merged" or PR numbers.
+  Queue keeps what landed.
+- When the outcome is true, or the lane is dropped, set `lane.status` to
+  `done` or `abandoned` with a note. It leaves the plan by itself.
 
-When the item leaves the plan, close its lane (`done` or `abandoned`, with a
-note).
+A standing lane that is never finished, such as keeping versions current, stays
+open. Its rules live in a contract, not in the lane document.
+
+## Order
+
+`plan.get` (`repository` as an origin or path, or `project`) reads the plan.
+`plan.set` saves it: the latest `version`, `entries: [{lane, note?, horizon?}]`
+in priority order, and `author`. `horizon` is `now` or `later`. Keep `now` to a
+handful of lanes. A lane that newly lists the project's repository joins the
+end by itself, so reorder after creating one.
+
+## Leads
+
+A lead is an unresolved observation, idea or question that isn't planned yet.
+Leads are never authority.
+
+- File with `lead.add`: `repositories` (a list of `{origin, path}`), `title`,
+  optional `body`, `lanes` and `author`. Update with `lead.edit` (the current `version`); list with
+  `lead.list` (by `repository`, `lane` or `state`, open by default).
+- A deliberate deferral ("not now: spreadsheet marking, waiting on the Marking
+  Hub design") is an open lead, so nobody re-proposes it without seeing why
+  it waits.
+- Resolve every lead:
+  - `lead.promote-task` turns it into a task, with `shape: true` to stop at a
+    draft brief (see [brief](brief.md));
+  - `lead.promote` with kind `question` or `knowledge` records that it became a
+    `questions.md` entry or a knowledge change, once that change is on `main`;
+  - `lead.drop` with a reason.
+
+Papercuts are similar records for small friction; see `SKILL.md`.
 
 ## Changing the plan
 
-The planner changes the plan with the operator. A worker never edits
-`docs/plan.md` except to fix a link its own change broke.
+The planner changes lanes, documents and order with the operator. A worker never
+edits the plan.

@@ -14,4 +14,4 @@ that matter right now. Link to knowledge by topic; don't restate it.>
 
 ## What's next
 
-See [plan.md](plan.md).
+The project's plan is in Queue: its lanes, their documents and their order.

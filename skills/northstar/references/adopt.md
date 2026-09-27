@@ -16,6 +16,9 @@
    them.
 3. Write `docs/knowledge/contracts/release.md`, even if the answer is "not
    released yet". Every project documents how it releases.
+4. Set up planning in Queue: a lane per outcome the project is pursuing, each
+   with a lane document, then the order with `plan.set`. See
+   [plan](plan.md).
 
 ## Migrating from the older Northstar shape
 
@@ -105,9 +108,9 @@ record of one run of it is process.
    it goes into `docs/knowledge/contracts/release.md`. Answered questions go
    into `questions.md` as pointers; unanswered ones stay open there. Rules that
    cite a task (for example "a gap must name its open card") can't simply be
-   deleted. Re-anchor them to a plan item's lane key (`plan:<key>`, matching
-   "(lane `<key>`)" in `docs/plan.md`) or to a `questions.md` ID. Lane keys are
-   stable identifiers that other files can cite.
+   deleted. Re-anchor them to a Queue lane key (`lane:<key>`) or to a
+   `questions.md` ID. Lane keys are stable identifiers that other files can
+   cite.
 3. **Retirements.** Record known retired concepts in `retired.toml`, and fix
    the live references the check finds. Always retire the old process itself,
    so it can't creep back:
@@ -122,16 +125,25 @@ record of one run of it is process.
    [[retired]]
    id = "northstar-process-records"
    retired = "<cut date>"
-   replacement = "Knowledge in docs/knowledge/, intent in docs/plan.md; tasks, briefs, status and outcomes live in Queue."
+   replacement = "Knowledge in docs/knowledge/; the plan, leads, papercuts, briefs, tasks, status and outcomes live in Queue."
    owner = "docs/knowledge/README.md"
    terms = ["roadmap card", "generation index", "northstar:lifecycle", "chatterbox handoff"]
    paths = [".northstar/lifecycle/", "docs/roadmaps/", "docs/handoffs/", "docs/logs/"]
    config_keys = ["northstar/queue:hook", "paseo.queue.control.v4"]
    allow = ["CHANGELOG.md"]
+
+   [[retired]]
+   id = "repository-planning-files"
+   retired = "<cut date>"
+   replacement = "The plan is Queue lanes, lane documents and plan order; leads are Queue records (lead.add)."
+   owner = "docs/knowledge/README.md"
+   paths = ["docs/plan.md", "docs/triage/"]
+   allow = ["CHANGELOG.md"]
    ```
 4. **Plan.** Replace roadmaps, generations, runways and workstream tables with
-   a short `docs/plan.md`. Held tasks become plan items, and are rebriefed or
-   released after the cut.
+   Queue lanes, lane documents and a project plan (see [plan](plan.md)).
+   Mapping prose to lanes is judgment, so do it by hand. Held tasks either join
+   a lane or become leads, and are rebriefed or released after the cut.
 5. **Remove process records:** `.northstar/lifecycle/`, `docs/roadmaps/`,
    `docs/handoffs/` (except handoffs of tasks still in flight; see step 1),
    and routine `docs/logs/`. Keep a log only if it records an
@@ -157,9 +169,11 @@ record of one run of it is process.
    narration ("no generation is active") and "open a roadmap card" wording
    from knowledge files. Rewrite working-rules or delivery-grammar contracts
    that encode the old loop (roadmap delivery grammar, "a bare continue runs
-   the next roadmap task") around `docs/plan.md` and Queue. Product docs that teach the old conventions, such as a
+   the next roadmap task") around Queue's plan and briefs. Product docs that teach the old conventions, such as a
    guide to writing AGENTS files, get updated too.
-9. **Housekeeping.** Delete closed or already-promoted triage notes. Import
+9. **Housekeeping.** Delete closed or already-promoted triage notes, and
+   import the rest with `lead.import` (`repository: {origin, path}`, `path` to
+   the absolute `docs/triage` directory, `dryRun: true` first); then delete `docs/triage/`. Import
    the repository's papercuts into Queue with `papercut.import` (use
    `root: true` to include package copies such as `apps/<app>/PAPERCUTS.md`,
    and do a dry run first). Check the report: every open entry imported,
@@ -215,5 +229,34 @@ every link resolving.
 
 ### After the cut
 
-Submit new work as briefs. Release held tasks only once they are rebriefed, or
+Submit new work as brief drafts (see [brief](brief.md)). Release held tasks only once they are rebriefed, or
 confirmed to fit the new shape.
+
+## Moving an already-lean repository's plan and triage into Queue
+
+Repositories that migrated before planning moved to Queue still carry
+`docs/plan.md` and `docs/triage/`. Move them in one small change on `main`:
+
+1. **Lanes.** For each plan item under Now or Next, find or create its lane
+   (`lane.upsert`; keep an existing lane's title, aim and full repository
+   list). Write the item's intent into the lane document
+   (`lane.document.edit`): outcome, why, dependencies, question IDs, caveats.
+   Merge it into an existing document rather than overwriting.
+2. **Order.** `plan.get`, then `plan.set` with the lanes in plan order, Now as
+   horizon `now` and Next as `later`, with the one-line note from the item.
+   Keep other lanes already in the plan.
+3. **Deferrals.** Each Not now item becomes an open lead (`lead.add`) whose body
+   says why it waits.
+4. **Leads.** Delete triage notes that are closed or already promoted. Import
+   the rest with `lead.import` (`repository: {origin, path}`, `path` to the
+   absolute `docs/triage` directory, `dryRun: true` first), and check that the
+   report shows every note imported; the directory `README.md` is reported as
+   unparsed, which is expected.
+5. **Remove and retire.** Delete `docs/plan.md` and `docs/triage/`. Add the
+   `repository-planning-files` entry from step 3 of the migration above to
+   `retired.toml`. Then fix the live references it finds: `AGENTS.md` and
+   `docs/README.md` (use the template's wording), rules anchored to
+   `docs/plan.md` items (re-anchor them to `lane:<key>`), and any check or
+   script that reads either path.
+6. **Verify.** Run the repository's docs checks, then `retired-concepts` and
+   `check-links`, and check the exit codes. Commit straight to `main`.
