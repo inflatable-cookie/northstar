@@ -68,7 +68,9 @@ line; see `SKILL.md`):
 
 1. **Write:** `lead.add` with `repositories` (a list of `{origin, path}`),
    `title`, the complete brief Markdown as `body`, `lanes` and `author` (your
-   agent ID). A body with brief frontmatter makes it a brief-bearing lead:
+   agent ID). Queue checks the brief as coming from the creation `author`, and
+   a later edit can't change it: with a display name the check fails with
+   "Agent not found", and the only fix is `lead.drop` and a new `lead.add`. A body with brief frontmatter makes it a brief-bearing lead:
    Queue checks each version at the pushed head. The result gives its `version`,
    `digest` and `check`. A lead that already holds the idea gets the brief
    through `lead.edit` instead.
