@@ -31,12 +31,14 @@ same planning. Nothing about the handover is written into the repository.
    with `PASEO_AGENT_ID` set to this thread:
 
    ```sh
-   node bin/northstar-transfer-origin.mjs preflight > /tmp/origin-transfer.json
-   node bin/northstar-transfer-origin.mjs transfer <successor-agent-id> < /tmp/origin-transfer.json
+   node bin/northstar-transfer-origin.mjs preflight \
+     | node bin/northstar-transfer-origin.mjs transfer <successor-agent-id>
    ```
 
    The transfer reads the preflight plan on stdin; there is no `--plan` flag.
-   Check that the result names the successor and the same task set. An empty
+   Pipe it rather than saving it to a shared file, which another thread could
+   overwrite in between. Check that the result names the successor and the
+   task set you expect. An empty
    plan is normal when nothing is routed to this thread.
 4. **Tell the successor** `Ownership transfer complete`, as a background
    message.
