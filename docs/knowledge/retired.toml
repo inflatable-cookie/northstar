@@ -66,9 +66,7 @@ owner = "docs/knowledge/architecture.md"
 paths = ["docs/plan.md", "docs/triage/"]
 allow = [
   "CHANGELOG.md",
-  "AGENTS.md",
   "docs/knowledge/retired.toml",
   "skills/northstar/SKILL.md",
   "skills/northstar/references/adopt.md",
-  "skills/northstar/template/AGENTS.md",
 ]

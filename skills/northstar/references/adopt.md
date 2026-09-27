@@ -252,11 +252,22 @@ Repositories that migrated before planning moved to Queue still carry
    absolute `docs/triage` directory, `dryRun: true` first), and check that the
    report shows every note imported; the directory `README.md` is reported as
    unparsed, which is expected.
-5. **Remove and retire.** Delete `docs/plan.md` and `docs/triage/`. Add the
-   `repository-planning-files` entry from step 3 of the migration above to
-   `retired.toml`. Then fix the live references it finds: `AGENTS.md` and
-   `docs/README.md` (use the template's wording), rules anchored to
-   `docs/plan.md` items (re-anchor them to `lane:<key>`), and any check or
-   script that reads either path.
+5. **Remove and retire.** Remove both paths with the cut tool, not by hand, so
+   links into them become plain text: a cut plan with
+   `"removed": ["docs/plan.md", "docs/triage/"]` and the `frozen` list from
+   `retired.toml`, dry run first. The tool never rewrites frozen evidence, so a
+   frozen file that links into either path keeps a dead link: exclude frozen
+   paths from the repository's own link check, as `check-links` already does. Add
+   the `repository-planning-files` entry from step 3 of the migration above to
+   `retired.toml`. Then fix the live references it finds:
+   - `AGENTS.md` and `docs/README.md`: use the template's wording, which
+     describes the change without naming the retired paths;
+   - rules anchored to `docs/plan.md` items: re-anchor them to `lane:<key>`.
+     An offline check can validate only the key's form, not that the lane is
+     still open, so name the lane in the rule's text and let review catch a
+     closed one;
+   - docs checks, scripts and required-file lists that expect either path.
+   Product code or tests that use a file named `plan.md` for their own
+   purposes are not planning files; list them in `allow`.
 6. **Verify.** Run the repository's docs checks, then `retired-concepts` and
    `check-links`, and check the exit codes. Commit straight to `main`.

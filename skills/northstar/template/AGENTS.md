@@ -34,8 +34,8 @@ next with `plan.get` (see the `northstar` skill).
 ## Papercuts and leads
 
 File small, recurring friction in Queue with `papercut.add`, and unplanned
-ideas or observations with `lead.add` (see the `northstar` skill). There is no
-`PAPERCUTS.md` or `docs/triage/`.
+ideas or observations with `lead.add` (see the `northstar` skill). The
+repository holds no papercut file or triage folder.
 
 ## Validate
 
