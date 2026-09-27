@@ -5,7 +5,9 @@ repository: a project's plan is its ordering of lanes, and each lane's intent
 is in its lane document. It is intent, not status.
 
 Queue calls run from the plugin root (`~/Dev/projects/paseo-northstar-queue`)
-as `node bin/queue-cli.mjs METHOD payload.json`.
+with the payload on stdin: `node bin/queue-cli.mjs METHOD - <<'JSON'`, the
+JSON, then a closing `JSON` line (see `SKILL.md`). A shared payload file can be
+overwritten between a read and a write such as `plan.get` and `plan.set`.
 
 ## Lanes
 

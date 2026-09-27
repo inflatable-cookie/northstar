@@ -72,10 +72,23 @@ function allowed(file: string, allow: string[]): boolean {
   });
 }
 
+// A needle with no whitespace that contains "/" or "." names a path. It matches
+// case-sensitively and only at a path boundary, so `PAPERCUTS.md` doesn't match
+// `024-papercuts.md` and `docs/plan.md` doesn't match `old-docs/plan.md`.
+const isPathLike = (needle: string) => !/\s/.test(needle) && /[/.]/.test(needle);
+
+function atPathBoundary(text: string, needle: string): boolean {
+  for (let i = text.indexOf(needle); i !== -1; i = text.indexOf(needle, i + 1)) {
+    if (i === 0 || !/[A-Za-z0-9_.-]/.test(text[i - 1])) return true;
+  }
+  return false;
+}
+
 function grep(repo: string, needle: string): { file: string; line: number; text: string }[] {
   // --untracked also searches new files; files deleted but not yet staged are
   // absent from the working tree, so they can't match.
-  const result = git(repo, ["grep", "--untracked", "-n", "-I", "-i", "-F", "--no-color", "-e", needle, "--", "."]);
+  const pathLike = isPathLike(needle);
+  const result = git(repo, ["grep", "--untracked", "-n", "-I", ...(pathLike ? [] : ["-i"]), "-F", "--no-color", "-e", needle, "--", "."]);
   if (result.status === 1) return [];
   if (result.status !== 0) fail(`git grep failed for ${JSON.stringify(needle)}: ${result.stderr.trim()}`);
   return result.stdout
@@ -84,8 +97,10 @@ function grep(repo: string, needle: string): { file: string; line: number; text:
     .map((row) => {
       const first = row.indexOf(":");
       const second = row.indexOf(":", first + 1);
-      return { file: row.slice(0, first), line: Number(row.slice(first + 1, second)), text: row.slice(second + 1).trim().slice(0, 200) };
-    });
+      return { file: row.slice(0, first), line: Number(row.slice(first + 1, second)), full: row.slice(second + 1) };
+    })
+    .filter((hit) => !pathLike || atPathBoundary(hit.full, needle))
+    .map(({ file, line, full }) => ({ file, line, text: full.trim().slice(0, 200) }));
 }
 
 function main() {

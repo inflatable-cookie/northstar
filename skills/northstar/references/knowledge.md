@@ -84,7 +84,9 @@ config_keys = ["canonical-spine-bundle"]  # literal text, not a dotted TOML path
   What it can't remove yet becomes a task, not a note.
 - The retired-concepts check fails on any listed term, path or config key found
   in the working tree as it is (tracked and new files; ignored files and
-  unstaged deletions don't count), matching case-insensitively. Staging first
+  unstaged deletions don't count). Terms match case-insensitively. Anything
+  path-like (no spaces, containing `/` or `.`) matches case-sensitively and
+  only at a path boundary, so `NOTES.md` doesn't match `024-notes.md`. Staging first
   makes no difference. The owner file, `retired.toml`
   and anything under `allow` are exempt, and so is Git history.
 - A path ending in `/` names a directory and covers everything under it; a path

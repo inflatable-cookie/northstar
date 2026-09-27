@@ -50,6 +50,8 @@ replacement = "Papercuts live in Queue (papercut.add)."
 owner = "docs/knowledge/architecture.md"
 paths = ["PAPERCUTS.md"]
 allow = [
+  "skills/northstar/scripts/retired-concepts.ts",
+  "skills/northstar/scripts/retired-concepts.test.sh",
   "CHANGELOG.md",
   "AGENTS.md",
   "docs/knowledge/retired.toml",
@@ -65,6 +67,8 @@ replacement = "The plan is Queue lanes, lane documents and plan order; leads are
 owner = "docs/knowledge/architecture.md"
 paths = ["docs/plan.md", "docs/triage/"]
 allow = [
+  "skills/northstar/scripts/retired-concepts.ts",
+  "skills/northstar/scripts/retired-concepts.test.sh",
   "CHANGELOG.md",
   "docs/knowledge/retired.toml",
   "skills/northstar/SKILL.md",

@@ -70,9 +70,18 @@ Asking a settled question again costs more than looking it up.
 ## Papercuts and leads
 
 Small, recurring friction worth fixing later is a papercut, filed in Queue, not
-in the repository. From the Queue plugin root (`~/Dev/projects/paseo-northstar-queue`),
-run `node bin/queue-cli.mjs papercut.add payload.json`, where the payload holds
-`repository: {origin, path}`, `title`, `happened` and `impact`, plus optional
+in the repository. Queue calls run from the plugin root
+(`~/Dev/projects/paseo-northstar-queue`) with the payload on stdin. Don't use a
+shared payload file: another thread can overwrite it between two calls.
+
+```sh
+node bin/queue-cli.mjs papercut.add - <<'JSON'
+{"repository": {"origin": "owner/name", "path": "/abs/checkout"},
+ "title": "...", "happened": "...", "impact": "..."}
+JSON
+```
+
+A papercut needs `repository`, `title`, `happened` and `impact`, plus optional
 `area` and `fix`. (`papercut.list` takes `repository` as the origin string,
 `"owner/name"`.) Record it and carry on with the task. The planner promotes a
 papercut with `papercut.promote-task` (see [brief](references/brief.md)),

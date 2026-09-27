@@ -62,7 +62,9 @@ convention.
 
 ## Draft, approve, promote
 
-From the Queue plugin root, with `node bin/queue-cli.mjs METHOD payload.json`:
+From the Queue plugin root, with the payload on stdin
+(`node bin/queue-cli.mjs METHOD - <<'JSON'`, the JSON, then a closing `JSON`
+line; see `SKILL.md`):
 
 1. **Create:** `draft.create` with `repoPath`, `baseBranch`, the complete
    Markdown `text`, `author` (your agent ID) and `originAgentId`. Queue checks

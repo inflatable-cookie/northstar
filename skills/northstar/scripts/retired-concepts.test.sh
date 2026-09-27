@@ -19,6 +19,12 @@ terms = ["spine bundle"]
 paths = ["old/spine/"]
 config_keys = ["canonical-spine-bundle"]
 allow = ["history/", "tools/*-census/", "deep/**/calibration/"]
+
+[[retired]]
+id = "papercuts-file"
+retired = "2026-09-26"
+replacement = "Queue papercuts"
+paths = ["PAPERCUTS.md"]
 TOML
 echo "Spine bundles are retired; content comes from Bovine." > "$repo/docs/knowledge/contracts/content.md"
 echo "ok" > "$repo/state/app.toml"
@@ -58,6 +64,11 @@ rm "$repo/new.md"
 echo "see https://github.com/o/r/blob/0123abc/old/spine/data.sql for history" > "$repo/HISTORY.md"; commit "permalink"
 expect 0 "a GitHub permalink pinned to a commit is a history pointer, not a live reference"
 git -C "$repo" rm -q HISTORY.md && commit "rm permalink"
+echo "see [papercuts](specs/024-papercuts.md) and old-PAPERCUTS.md" > "$repo/notes.md"; commit "path boundary"
+expect 0 "a path matches case-sensitively and only at a path boundary"
+echo "write it to PAPERCUTS.md, or apps/x/PAPERCUTS.md" > "$repo/notes.md"; commit "path hit"
+expect 1 "a path at a boundary is a finding"
+git -C "$repo" rm -q notes.md && commit "rm notes"
 echo "rebuild the Spine Bundle" > "$repo/README.md"; commit "term"
 expect 1 "a term in a live file is a finding"
 echo "[[retired]" > "$repo/docs/knowledge/retired.toml"; commit "bad toml"
