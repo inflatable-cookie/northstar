@@ -52,8 +52,8 @@ Leads are never authority.
   Hub design") is an open lead, so nobody re-proposes it without seeing why
   it waits.
 - Resolve every lead:
-  - `lead.promote-task` turns it into a task, with `shape: true` to stop at a
-    draft brief (see [brief](brief.md));
+  - write the brief into it and promote it with `lead.promote-task` (see
+    [brief](brief.md));
   - `lead.promote` with kind `question` or `knowledge` records that it became a
     `questions.md` entry or a knowledge change, once that change is on `main`;
   - `lead.drop` with a reason.

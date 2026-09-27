@@ -17,6 +17,9 @@ All notable changes to Northstar are documented here.
   leads and drafts; the template drops `docs/plan.md` and `docs/triage/`, and
   `adopt.md` has the move for already-lean repositories.
 
+- A brief lives in a Queue lead (2026-09-27): `lead.add`, `lead.approve`,
+  `lead.promote-task`. Queue removed the separate `draft.*` calls.
+
 ### Removed
 - `bundle-docs/`, `template-bundle/`, the router and modes, the command
   skills, the working-rules contract, roadmaps, logs, handoffs, lifecycle

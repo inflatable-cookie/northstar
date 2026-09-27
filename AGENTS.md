@@ -13,8 +13,8 @@ process doctrine: task state belongs in Queue, not in Git.
 - Open questions: `docs/knowledge/questions.md`
 - The skill: `skills/northstar/SKILL.md`; its starter: `skills/northstar/template/`
 
-The plan (lanes, their documents and their order), leads, papercuts, brief
-drafts, tasks and status live in Queue, never in this repository. Read what's
+The plan (lanes, their documents and their order), leads, briefs, papercuts,
+tasks and status live in Queue, never in this repository. Read what's
 next with `plan.get` for `inflatable-cookie/northstar`.
 
 ## Commands

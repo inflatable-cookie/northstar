@@ -1,8 +1,8 @@
 # Brief
 
-A brief tells one worker what to achieve. It is a Queue draft from its first
-version, visible on the board's Drafts column before approval. It is never a
-file in the repository or a loose file on disk.
+A brief tells one worker what to achieve. It lives in Queue as the body of a
+lead from its first version, so it is visible on the board before approval. It
+is never a file in the repository or a loose file on disk.
 
 ## Template
 
@@ -60,33 +60,36 @@ convention.
   worker into rewording files it shouldn't touch: answered questions in
   `questions.md` keep their original wording.
 
-## Draft, approve, promote
+## Lead, approve, promote
 
 From the Queue plugin root, with the payload on stdin
 (`node bin/queue-cli.mjs METHOD - <<'JSON'`, the JSON, then a closing `JSON`
 line; see `SKILL.md`):
 
-1. **Create:** `draft.create` with `repoPath`, `baseBranch`, the complete
-   Markdown `text`, `author` (your agent ID) and `originAgentId`. Queue checks
-   each version at the pushed head and shows the result on the board.
-2. **Revise:** `draft.edit` with `id`, the current `version`, the complete new
-   `text` and `author`. Any edit clears approval.
+1. **Write:** `lead.add` with `repositories` (a list of `{origin, path}`),
+   `title`, the complete brief Markdown as `body`, `lanes` and `author` (your
+   agent ID). A body with brief frontmatter makes it a brief-bearing lead:
+   Queue checks each version at the pushed head. The result gives its `version`,
+   `digest` and `check`. A lead that already holds the idea gets the brief
+   through `lead.edit` instead.
+2. **Revise:** `lead.edit` with `id`, the current `version`, the complete new
+   `body` and `author`. Any edit clears approval. A version that fails its
+   check can't be approved; `lead.get` shows versions, digests and checks.
 3. **Approve:** only after the operator has authorized this brief.
-   `draft.approve` takes the latest `id`, `version` and `digest` (from
-   `draft.get`), `approver` (your agent ID), `relayed: true` and a `note`
-   naming the authorization ("Tom approved in the planning thread on
-   2026-09-27"). The operator can also approve on the board.
-4. **Promote:** `draft.promote` with `id` returns an operation. Poll
-   `operation-status` with `{"operationId": "..."}` until it settles; its
-   `taskId` is the task. A refused promotion creates nothing: repair the
-   condition and promote the same draft again.
+   `lead.approve` takes the latest `id`, `version` and `digest`, `approver`
+   (your agent ID), `relayed: true` and a `note` naming the authorization
+   ("Tom approved in the planning thread on 2026-09-27"). The operator can
+   also approve on the board. A brief that should wait simply stays an open
+   lead.
+4. **Promote:** `lead.promote-task` with `id`, `agent` and the authorization
+   `note` (plus `repository` when the lead lists several) re-checks and returns
+   the `taskId`. A refused promotion admits nothing and keeps the approval:
+   repair the condition and promote again.
 
-A lead or papercut can skip steps 1–4: `lead.promote-task` or
-`papercut.promote-task` with `id`, `agent` and an authorization `note` creates
-the draft, approval and task in one action. With `shape: true` it stops at a
-draft for editing.
+A papercut promotes directly: `papercut.promote-task` with `id`, `agent` and an
+authorization `note` turns its text into the brief.
 
 `notifyOriginOnCloseout: true` tells the submitting planner thread when the
 task closes; `completionNotificationAgentIds` notifies other threads. To change
 a brief after promotion and before merge, use Queue's `amend_brief` control;
-don't create a second draft.
+don't create a second lead.

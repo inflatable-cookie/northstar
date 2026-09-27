@@ -229,7 +229,7 @@ every link resolving.
 
 ### After the cut
 
-Submit new work as brief drafts (see [brief](brief.md)). Release held tasks only once they are rebriefed, or
+Submit new work as briefs in Queue leads (see [brief](brief.md)). Release held tasks only once they are rebriefed, or
 confirmed to fit the new shape.
 
 ## Moving an already-lean repository's plan and triage into Queue

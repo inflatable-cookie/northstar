@@ -10,7 +10,7 @@ agent can pick up work without reconstructing intent from conversation.
 
 The repository holds **knowledge and code**. The orchestrator (the Paseo Queue
 plugin today, Nucleus later) holds **process and planning**: the plan (lanes,
-their documents and their order), leads, papercuts, brief drafts, tasks,
+their documents and their order), leads (including briefs), papercuts, tasks,
 status, review, closeout and outcomes. Never write either into the repository.
 
 ## Repository shape
@@ -41,10 +41,11 @@ Asking a settled question again costs more than looking it up.
 1. **Plan.** Each outcome the project pursues is a Queue lane with a working
    document; the project's plan orders the lanes. Unplanned ideas and
    deferrals are leads. See [plan](references/plan.md).
-2. **Brief.** Each task starts as a Queue draft: outcome, context links,
-   constraints, acceptance, and when to stop. See [brief](references/brief.md).
-3. **Dispatch.** With the operator's approval, approve and promote the draft.
-   Queue runs the worker, review, merge and closeout, and keeps the outcome.
+2. **Brief.** Each task starts as a brief in a Queue lead: outcome, context
+   links, constraints, acceptance, and when to stop. See
+   [brief](references/brief.md).
+3. **Dispatch.** With the operator's approval, approve the lead and promote it
+   to a task. Queue runs the worker, review, merge and closeout, and keeps the outcome.
 4. **Review.** An independent reviewer checks the exact head against the brief.
    See [review](references/review.md).
 5. **Keep knowledge current.** When work changes what is true, the same PR
@@ -104,7 +105,7 @@ Otherwise act. Asking again for authority that is already settled is a cost.
 ## Roles
 
 - **Planner** (a Chatterbox thread): owns the project's Queue plan, lane
-  documents, leads, knowledge upkeep, brief drafts and dispatch approval
+  documents, leads, knowledge upkeep, briefs and dispatch approval
   requests. It commits its own small repository changes (questions, a ruling
   landing in a knowledge file, link fixes) straight to `main`: run the
   repository's docs checks, check the exit code, then push. Don't open a PR for

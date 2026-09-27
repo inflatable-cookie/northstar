@@ -74,3 +74,11 @@ allow = [
   "skills/northstar/SKILL.md",
   "skills/northstar/references/adopt.md",
 ]
+
+[[retired]]
+id = "brief-drafts"
+retired = "2026-09-27"
+replacement = "A brief is the body of a Queue lead: lead.add, lead.approve, lead.promote-task (Queue 64b3c91)."
+owner = "skills/northstar/references/brief.md"
+terms = ["draft.create", "draft.edit", "draft.approve", "draft.promote", "brief draft", "shape: true"]
+allow = ["CHANGELOG.md", "docs/knowledge/retired.toml"]

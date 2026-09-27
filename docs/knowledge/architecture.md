@@ -8,7 +8,7 @@ skill's source is `skills/northstar/` in this repository.
 | Home | Holds |
 | --- | --- |
 | Repository | Knowledge (`docs/knowledge/`) and code |
-| Orchestrator (Queue, later Nucleus) | The plan (lanes, lane documents, each project's lane order), leads, papercuts, brief drafts, tasks, status, review, closeout, permanent outcome records, per-repository settings such as the pre-merge validation command |
+| Orchestrator (Queue, later Nucleus) | The plan (lanes, lane documents, each project's lane order), leads (including briefs), papercuts, tasks, status, review, closeout, permanent outcome records, per-repository settings such as the pre-merge validation command |
 
 Task and planning state live in the orchestrator because, stored in Git, it needs digests,
 hooks, guards, audits and compaction to stay honest. Most of Northstar's old
@@ -22,8 +22,8 @@ are retired; every Northstar repository is on the lean shape.
 
 Vocabulary follows Queue: a **lane** is a durable group of work with an aim, a
 working document and a set of repositories; a **task** is one unit of work; a
-**lead** is an unresolved idea or observation; a **draft** is a brief before
-approval. A project's plan is its ordering of lanes (Queue Spec 026, Nucleus
+**lead** is an unresolved idea or observation, or a brief waiting for approval
+and promotion to a task. A project's plan is its ordering of lanes (Queue Spec 026, Nucleus
 contract 002). Planning left repositories on 2026-09-27, the way papercuts did
 the day before.
 
