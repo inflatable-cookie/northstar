@@ -70,10 +70,13 @@ invalid and fail at registry parse, before any host invocation.
 
 ## Installed-skill runtime adapter
 
-The installed Northstar skill exposes the complete operator route:
+The installed Northstar skill exposes the complete operator route. Run it from
+the consumer repository through `effigy skill run`, which resolves the installed
+skill's path; `effigy --repo <installed-skill> northstar/language:route` does
+not, and fails to find the lifecycle script:
 
 ```text
-effigy --repo <installed-northstar-skill> northstar/language:route \
+effigy skill run northstar/language:route -- \
   --consumer <target-repository-or-owning-scope> \
   --language <language> \
   --workflow <workflow> \
