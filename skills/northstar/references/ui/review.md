@@ -6,6 +6,8 @@ run the interface, the review is incomplete.
 
 ## Setup
 
+0. Check the brief's classification. A class None task has no rendered surface
+   to exercise: use the standard review (`../review.md`) instead of this route.
 1. Resolve the PR and the exact head SHA. Work only against that head; a moved
    head invalidates the verdict.
 2. Confirm the worktree is clean and do not edit tracked files, commit, push, or

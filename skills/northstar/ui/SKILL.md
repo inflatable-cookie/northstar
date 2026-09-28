@@ -15,6 +15,15 @@ design brief. It gives you two routes and no house aesthetic.
   states, viewports, and input paths, and publish actionable experience findings
   beside code findings.
 
+## When the routes apply
+
+Use them only for a task that ships a rendered interface a reviewer can run:
+an app screen, or a component with a preview surface such as a story or
+playground. A repository or task with no rendered surface is class None in
+`references/ui/brief-contract.md`. It needs no UI brief, and its review is the
+standard one (`references/review.md`) against the repository's own validation.
+Don't stop for a missing rendered surface when none is meant to exist.
+
 Load exactly one route from the main `northstar` package (a flattened
 `northstar-ui` install still resolves these paths there):
 

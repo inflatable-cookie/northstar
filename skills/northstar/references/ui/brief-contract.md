@@ -10,6 +10,7 @@ Classify by decision risk and user impact, not file count:
 
 | Class | Meaning | Required depth |
 | --- | --- | --- |
+| None | The task ships no rendered surface a reviewer can run: a library, API, CLI or engine change, or a component package with no preview surface | No UI brief; the standard review applies, with the repository's own validation as the oracle |
 | Refinement | Local correction inside an established workflow and pattern | Compact brief; prototype normally unnecessary |
 | Workflow change | New or altered actions, navigation, forms, state transitions, or information hierarchy | Full brief with current and target workflows; material choices settled before readiness |
 | Substantial redesign | New or materially replaced user experience | Full brief plus operator-approved concept, comp, or interactive prototype before readiness |
