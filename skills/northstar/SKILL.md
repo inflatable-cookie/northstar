@@ -67,6 +67,9 @@ Asking a settled question again costs more than looking it up.
   Short, plain, and with the reasoning that makes a decision understandable.
 - **Break things honestly.** When a change breaks callers or contracts, say so
   and update them together. No shims that hide a decision.
+- **Don't hold work for machine load.** A test that fails only under load is a
+  defect: file it and fix it, rather than waiting for a quiet machine (Tom,
+  2026-09-28).
 
 ## Papercuts and leads
 
