@@ -71,6 +71,23 @@ Asking a settled question again costs more than looking it up.
   defect: file it and fix it, rather than waiting for a quiet machine (Tom,
   2026-09-28).
 
+## Shell commands
+
+Agent shells here are usually zsh on macOS. These mistakes keep recurring:
+
+- Single-quote literal patterns. Backticks and `$(...)` inside double quotes
+  run as commands: ``rg 'use `foo`' docs``, not ``rg "use `foo`" docs``.
+- Keep lists of paths in arrays. zsh doesn't split a string variable, so a
+  space-separated list arrives as one argument:
+  `files=(a.md b.md); for f in "${files[@]}"; do …; done`.
+- Don't name variables after zsh specials such as `status`, `path` or `home`.
+  Assigning `status` fails, and a `path` loop variable breaks command lookup.
+  Use names like `exit_code` and `rel_path`.
+- Brace a variable before a colon: `git show "${rev}:tools/x.md"`. zsh reads
+  `$rev:t…` as a modifier, and `"$rev:tools/x.md"` becomes `HEADools/x.md`.
+- macOS has BSD `sed` and `grep`: no `\b`, `sed -i` needs `''`, and GNU address
+  forms fail. Use `rg`, `awk` or a short script to extract text.
+
 ## Papercuts and leads
 
 Small, recurring friction worth fixing later is a papercut, filed in Queue, not
