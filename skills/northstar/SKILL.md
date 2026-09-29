@@ -91,6 +91,10 @@ Agent shells here are usually zsh on macOS. These mistakes keep recurring:
   Other tasks' worktrees share the machine, so `pkill -f effigy` kills every
   Effigy run on it. Kill only what you started, by the PID from `$!` or the
   process group you created.
+- Run validation through the repository's Effigy selectors, not raw `cargo`,
+  `bun` or `vitest`. A narrow selector is fine. Effigy admits heavy runs
+  host-wide, and raw tools skip that, making contention worse for every
+  worktree.
 - Record a background job's exit code, for example
   `cmd > run.log 2>&1; echo "exit=$?" >> run.log`. A process that has gone may
   have finished green, so don't read "gone" as a failure.
