@@ -87,6 +87,13 @@ Agent shells here are usually zsh on macOS. These mistakes keep recurring:
   `$rev:t…` as a modifier, and `"$rev:tools/x.md"` becomes `HEADools/x.md`.
 - macOS has BSD `sed` and `grep`: no `\b`, `sed -i` needs `''`, and GNU address
   forms fail. Use `rg`, `awk` or a short script to extract text.
+- Never kill by pattern: no `pkill -f`, `killall`, or `pgrep … | xargs kill`.
+  Other tasks' worktrees share the machine, so `pkill -f effigy` kills every
+  Effigy run on it. Kill only what you started, by the PID from `$!` or the
+  process group you created.
+- Record a background job's exit code, for example
+  `cmd > run.log 2>&1; echo "exit=$?" >> run.log`. A process that has gone may
+  have finished green, so don't read "gone" as a failure.
 
 ## Papercuts and leads
 
