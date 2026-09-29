@@ -67,6 +67,10 @@ Asking a settled question again costs more than looking it up.
   Short, plain, and with the reasoning that makes a decision understandable.
 - **Break things honestly.** When a change breaks callers or contracts, say so
   and update them together. No shims that hide a decision.
+- **Targeted checks per task, full QA at milestones** (Tom, 2026-09-30). A
+  task runs only the checks that prove its change. The whole suite runs on
+  `main` at release points or after a major chunk of work, run by the
+  planner. Full QA per task was eating the machine.
 - **Don't hold work for machine load.** A test that fails only under load is a
   defect: file it and fix it, rather than waiting for a quiet machine (Tom,
   2026-09-28).
@@ -165,13 +169,17 @@ live ask, not the record.
   branch and a self-merged PR are for larger or riskier changes: restructuring
   knowledge, a migration cut, or anything touching code, QA configuration or
   scripts. For those, "passes" means an exit code of 0 that was actually
-  checked. When parallel workers saturate the machine, local QA can fail for
-  unrelated reasons, so use a CI run on the branch as the gate (dispatch it if
-  CI doesn't run on PRs). The operator doesn't review planner changes; anything
+  checked. The planner also runs the repository's full QA on `main` at release
+  points and after a major chunk of work, and briefs a fix for what it finds.
+  The operator doesn't review planner changes; anything
   that needs independent review goes through Queue as a brief.
-- **Worker:** implements one brief in the worktree Queue gives it, runs the
-  repository's validation, opens one PR, and reports through Queue.
-- **Reviewer:** checks the exact head independently and reports findings.
+- **Worker:** implements one brief in the worktree Queue gives it, runs
+  targeted checks (the tests for the code it changed, a compile of what it
+  touched, and docs checks if docs changed) once, opens one PR, reports
+  through Queue, and gets out of the way. No whole suites, no repeat passes.
+- **Reviewer:** checks the exact head independently: reads the diff, runs the
+  same targeted checks, exercises the behaviour, and reports findings. No
+  suites.
 
 Coordination (recovery, review routing, merge, closeout) is Queue's job, not a
 thread's. A planner hands over to a fresh successor using

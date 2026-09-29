@@ -45,12 +45,11 @@ tasks in flight is safe if their handoffs stay.
    repository without a manifest Queue closeout by default. Commit this before
    running the cut tool, because `apply` stages its moves and removals and the
    next commit would sweep them in.
-3. **Validation command.** Pre-merge validation is a per-repository Queue
-   setting, not a repository file (spec 042 item 3). Work out which command it
-   will be: one that validates a fresh disposable checkout, installs its own
-   dependencies and exits 0 on pass. Set it with `repository.set` once Queue
-   supports it. A command that needs a clean pushed head or a prepared
-   workspace doesn't qualify yet; file that as a papercut in Queue.
+3. **No per-task validation command.** Queue can run a repository command
+   before every merge (`repository.set` `validation`), but leave it unset:
+   full QA per task costs more machine time than it saves (Tom, 2026-09-30).
+   Tasks run targeted checks, and the planner runs full QA on `main` at
+   milestones.
 
 ### What moves and what stays
 

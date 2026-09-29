@@ -31,8 +31,8 @@ bound the work.
 
 ## Acceptance
 
-How a reviewer will know it is done: behaviour, tests, and the validation
-command.
+How a reviewer will know it is done: behaviour, and the targeted checks that
+prove it (named tests or selectors). Full QA isn't part of a task.
 
 ## Stop and report if
 

@@ -39,4 +39,7 @@ repository holds no papercut file or triage folder.
 
 ## Validate
 
-`<validation command>` before opening a PR.
+Before a PR: targeted checks only, meaning the tests for the code you changed
+(`<narrow selector>`), a compile of what you touched, and `<docs check>` if docs
+changed. Run them once. Full `<qa command>` runs on `main` at release points
+and after a major chunk of work.

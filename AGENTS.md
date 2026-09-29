@@ -58,4 +58,5 @@ repository holds no papercut file or triage folder.
 
 ## Validate
 
-`effigy qa` before opening a PR.
+Before a PR, run targeted checks: `effigy qa:docs` for docs, and the self-test
+of any skill script you changed. Full `effigy qa` runs at release points.
