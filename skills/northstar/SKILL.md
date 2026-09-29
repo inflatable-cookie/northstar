@@ -122,6 +122,27 @@ either into a file.
 
 Otherwise act. Asking again for authority that is already settled is a cost.
 
+When a turn ends needing the operator's ruling, record it as a Queue decision
+as well as asking in chat, so it shows on the board and the answer comes back
+to you:
+
+```sh
+node bin/queue-cli.mjs decision.add - <<'JSON'
+{"question": "...", "askedBy": "<your agent ID>", "options": ["A", "B"],
+ "recommendation": "A, because ...", "context": "...",
+ "project": {"origin": "owner/name", "path": "/abs/checkout"}}
+JSON
+```
+
+Link the tasks, leads or papercuts it concerns (`tasks`, `leads`,
+`papercuts`: ID arrays). When the question is overtaken, `decision.withdraw`
+it (`id`, `version`, `reason`, `withdrawnBy`). If it changes shape,
+`decision.supersede` it rather than adding a second one. A ruling given in
+chat is recorded with `decision.answer`, quoting the operator word for word
+and naming them in the `note`. Either way, the ruling still lands in its
+owning knowledge file or closes its `questions.md` entry: a decision is the
+live ask, not the record.
+
 ## Roles
 
 - **Planner** (a Chatterbox thread): owns the project's Queue plan, lane
