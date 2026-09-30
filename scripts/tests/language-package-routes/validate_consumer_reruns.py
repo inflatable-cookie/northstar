@@ -135,21 +135,25 @@ def task(package_root, selector, consumer, *args):
 
 def validate_registry(registry):
     expected = {
-        "@northstar/typescript-quality": ("typescript", "explicit_audit_repair"),
-        "@northstar/rust-quality": ("rust", "explicit_audit_repair"),
+        "@northstar/typescript-quality": (
+            "typescript", "explicit_audit_repair", "0.2.1",
+            "b245fdc463cbfb4d95acb9c690c191bcd41f7a65"),
+        "@northstar/rust-quality": (
+            "rust", "explicit_audit_repair", "0.2.0",
+            "4a6df3c7b4f6ba8622d3c937bfe1fea53a76500f"),
     }
     entries = {entry["package_id"]: entry for entry in registry["packages"]}
     ok(registry.get("registry_version") == "1.5.0" and
        set(entries) == set(expected),
        "official registry contains the expected discovery entries")
-    for package_id, (language, workflow) in expected.items():
+    for package_id, (language, workflow, version, commit) in expected.items():
         entry = entries.get(package_id, {})
         discovery = entry.get("discovery", {})
-        ok(entry.get("version") == "0.2.0" and
-           entry.get("commit") == "4a6df3c7b4f6ba8622d3c937bfe1fea53a76500f" and
+        ok(entry.get("version") == version and
+           entry.get("commit") == commit and
            discovery.get("languages") == [language] and
            workflow in discovery.get("workflows", []),
-           f"registry pins {package_id}@0.2.0 at the merged package commit")
+           f"registry pins {package_id}@{version} at the merged package commit")
     return entries
 
 
@@ -157,18 +161,18 @@ def rerun_typescript(consumer, package):
     marker = "northstar:typescript-quality"
     selected = select_by_marker(marker, os.path.join(ROOT, "selected-typescript.json"))
     ok(selected.get("package_id") == "@northstar/typescript-quality" and
-       selected.get("version") == "0.2.0" and
+       selected.get("version") == "0.2.1" and
        selected.get("tree_digest") == package["tree_digest"],
-       "fixture TypeScript marker selects the exact 0.2.0 pin",
+       "fixture TypeScript marker selects the exact 0.2.1 pin",
        json.dumps(selected))
 
     ts_root = route_package(consumer, "typescript", "explicit_audit_repair")
     ok(ts_root.get("status") in ("activated", "routed") and
        ts_root.get("package_id") == package["package_id"] and
-       ts_root.get("version") == "0.2.0" and
+       ts_root.get("version") == "0.2.1" and
        ts_root.get("tree_digest") == package["tree_digest"] and
        ts_root.get("manifest_digest") == package["manifest_digest"],
-       "TypeScript package routes from its official 0.2.0 pin",
+       "TypeScript package routes from its official 0.2.1 pin",
        json.dumps(ts_root))
     package_root = ts_root["installed_path"]
     profile_files = {path: digest for path, digest in policy_snapshot(consumer).items()

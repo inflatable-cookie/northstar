@@ -1685,9 +1685,9 @@ fn run_card_122_selection_proofs(northstar_skill_root, official_registry_path) {
 
     // Accepted explicit intent selects the exact accepted entry.
     expect_selection_case("typescript-audit", surface_path, official_registry_path,
-        ["--language", "typescript", "--workflow", "explicit_audit_repair"], true, "selected @northstar/typescript-quality@0.2.0");
+        ["--language", "typescript", "--workflow", "explicit_audit_repair"], true, "selected @northstar/typescript-quality@0.2.1");
     expect_selection_case("typescript-svelte-overlay-audit", surface_path, official_registry_path,
-        ["--language", "typescript", "--workflow", "explicit_audit_repair", "--overlay", "svelte"], true, "selected @northstar/typescript-quality@0.2.0");
+        ["--language", "typescript", "--workflow", "explicit_audit_repair", "--overlay", "svelte"], true, "selected @northstar/typescript-quality@0.2.1");
     expect_selection_case("rust-audit", surface_path, official_registry_path,
         ["--language", "rust", "--workflow", "explicit_audit_repair"], true, "selected @northstar/rust-quality@0.2.0");
     expect_selection_case("rust-everyday-authoring", surface_path, official_registry_path,
@@ -1695,7 +1695,7 @@ fn run_card_122_selection_proofs(northstar_skill_root, official_registry_path) {
 
     // Existing activation markers select their registered entries.
     expect_selection_case("typescript-activation-marker", surface_path, official_registry_path,
-        ["--marker", "northstar:typescript-quality"], true, "selected @northstar/typescript-quality@0.2.0");
+        ["--marker", "northstar:typescript-quality"], true, "selected @northstar/typescript-quality@0.2.1");
     expect_selection_case("rust-activation-marker", surface_path, official_registry_path,
         ["--marker", "northstar:rust-quality"], true, "selected @northstar/rust-quality@0.2.0");
 
@@ -1735,9 +1735,9 @@ fn run_card_122_selection_proofs(northstar_skill_root, official_registry_path) {
     // is ever repinned to a different identity.
     expect_selection_identity("typescript-audit-identity", surface_path, official_registry_path,
         ["--language", "typescript", "--workflow", "explicit_audit_repair", "--overlay", "svelte"],
-        "typescript-quality", "4a6df3c7b4f6ba8622d3c937bfe1fea53a76500f",
-        "sha256:b992a0ff9a2f62772ab72176641b361c692e309c65343f19a0926ba5d6db747c",
-        "sha256:66f0ceafebb5f4447da413b4ef4f01fa1f5747615cecbc089e5f3b1139018a41");
+        "typescript-quality", "b245fdc463cbfb4d95acb9c690c191bcd41f7a65",
+        "sha256:46f664bfbd31fcbdb055dda3b34ac17ad6eb02f14f31ae69244ff317387928a9",
+        "sha256:6b8695019e88a6020e5a4244079ebf4ddf92406448c61345d856ac5b71618a06");
     expect_selection_identity("rust-marker-identity", surface_path, official_registry_path,
         ["--marker", "northstar:rust-quality"],
         "rust-quality", "4a6df3c7b4f6ba8622d3c937bfe1fea53a76500f",
@@ -1797,13 +1797,13 @@ require(fs::is_file(official_registry_path), "missing official-registry.json");
 let registry = json::read_file(official_registry_path);
 validate_registry_instance(registry, registry_schema, "official-registry.json");
 
-// Task 020: the official registry carries the accepted 0.2.0 TypeScript and
-// Rust package identities from the merged language-packs task. Registry
+// Task 021: the official registry carries the accepted 0.2.1 TypeScript and
+// 0.2.0 Rust package identities. Registry
 // discovery metadata remains registry-owned. Schema conformance
 // above proves shape; these assertions pin the accepted values themselves
 // so identity or discovery drift fails the checker rather than silently
-// re-pinning. Both packages were repinned at the 0.2.0 merge commit
-// (language-packs PR 10, commit 4a6df3c).
+// re-pinning. TypeScript is pinned at its 0.2.1 merge commit; Rust remains at
+// its 0.2.0 merge commit.
 require(registry["registry_version"] == "1.5.0",
     "official-registry.json must record registry_version 1.5.0 for the card-122 discovery binding");
 let registry_packages = registry["packages"];
@@ -1812,17 +1812,17 @@ require(registry_packages.len() == 2,
 let canary = registry_packages[0];
 let canary_expectations = #{
     "package_id": "@northstar/typescript-quality",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "repository": "https://github.com/inflatable-cookie/northstar-language-packs",
     "subpath": "packages/typescript",
-    "commit": "4a6df3c7b4f6ba8622d3c937bfe1fea53a76500f",
-    "tree_digest": "sha256:b992a0ff9a2f62772ab72176641b361c692e309c65343f19a0926ba5d6db747c",
-    "manifest_digest": "sha256:66f0ceafebb5f4447da413b4ef4f01fa1f5747615cecbc089e5f3b1139018a41",
+    "commit": "b245fdc463cbfb4d95acb9c690c191bcd41f7a65",
+    "tree_digest": "sha256:46f664bfbd31fcbdb055dda3b34ac17ad6eb02f14f31ae69244ff317387928a9",
+    "manifest_digest": "sha256:6b8695019e88a6020e5a4244079ebf4ddf92406448c61345d856ac5b71618a06",
     "compatible_core_range": ">=0.2.0 <1.0.0",
 };
 for key in canary_expectations.keys() {
     require(canary.contains(key) && canary[key] == canary_expectations[key],
-        "official-registry.json canary entry field '" + key + "' drifted from the accepted 0.2.0 identity");
+        "official-registry.json canary entry field '" + key + "' drifted from the accepted 0.2.1 identity");
 }
 let rust_pin = registry_packages[1];
 let rust_expectations = #{

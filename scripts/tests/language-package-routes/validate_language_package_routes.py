@@ -2,8 +2,8 @@
 """Task 020 two-package installed-route and core-only containment oracle.
 
 The root payload no longer embeds any language implementation. This oracle
-replays both accepted registry pins (@northstar/typescript-quality and
-@northstar/rust-quality 0.2.0 at 4a6df3c) against the read-only
+replays both accepted registry pins (@northstar/typescript-quality 0.2.1 at
+b245fdc and @northstar/rust-quality 0.2.0 at 4a6df3c) against the read-only
 package-source sibling: it materializes both pinned package trees, reproduces
 all four spec-034 digests with an independent implementation, proves that a
 package-less core stops each language workflow visibly with the manual install
@@ -33,11 +33,11 @@ SIBLING = os.environ.get(
 TS = {
     "label": "TypeScript",
     "package_id": "@northstar/typescript-quality",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "subpath": "packages/typescript",
-    "commit": "4a6df3c7b4f6ba8622d3c937bfe1fea53a76500f",
-    "tree": "sha256:b992a0ff9a2f62772ab72176641b361c692e309c65343f19a0926ba5d6db747c",
-    "manifest": "sha256:66f0ceafebb5f4447da413b4ef4f01fa1f5747615cecbc089e5f3b1139018a41",
+    "commit": "b245fdc463cbfb4d95acb9c690c191bcd41f7a65",
+    "tree": "sha256:46f664bfbd31fcbdb055dda3b34ac17ad6eb02f14f31ae69244ff317387928a9",
+    "manifest": "sha256:6b8695019e88a6020e5a4244079ebf4ddf92406448c61345d856ac5b71618a06",
     "language": "typescript",
     "workflow": "explicit_audit_repair",
     "foreign_markers": ("rust-quality", "cargo"),
