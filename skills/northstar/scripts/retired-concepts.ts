@@ -10,7 +10,7 @@
 
 import { spawnSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
-import { join, resolve } from "node:path";
+import { join, resolve, posix } from "node:path";
 
 const RETIRED_FILE = "docs/knowledge/retired.toml";
 
@@ -103,6 +103,52 @@ function grep(repo: string, needle: string): { file: string; line: number; text:
     .map(({ file, line, full }) => ({ file, line, text: full.trim().slice(0, 200) }));
 }
 
+// A file inside a retired path's parent directory can name it relatively:
+// `plan.md` in docs/AGENTS.md, or `../plan.md` in docs/knowledge/x.md, both mean
+// docs/plan.md. Search Markdown under each ancestor directory for the path's
+// tail and keep only occurrences that resolve to the retired path. Markdown only:
+// config files resolve paths from wherever their command runs, not from the
+// file's directory. A history pointer written as `name.md` (Git history) is
+// allowed, as adopt.md recommends.
+function relativeHits(repo: string, retiredPath: string): { file: string; line: number; text: string }[] {
+  const isDir = retiredPath.endsWith("/");
+  const target = retiredPath.replace(/\/$/, "");
+  const parts = target.split("/");
+  const hits: { file: string; line: number; text: string }[] = [];
+  for (let i = 1; i < parts.length; i++) {
+    const dir = parts.slice(0, i).join("/");
+    const tail = parts.slice(i).join("/") + (isDir ? "/" : "");
+    const result = git(repo, ["grep", "--untracked", "-n", "-I", "-F", "--no-color", "-e", tail, "--", `:(glob)${dir}/**/*.md`]);
+    if (result.status === 1) continue;
+    if (result.status !== 0) fail(`git grep failed for ${JSON.stringify(tail)}: ${result.stderr.trim()}`);
+    for (const row of result.stdout.split("\n").filter(Boolean)) {
+      const first = row.indexOf(":");
+      const second = row.indexOf(":", first + 1);
+      const file = row.slice(0, first);
+      const text = row.slice(second + 1);
+      for (let at = text.indexOf(tail); at !== -1; at = text.indexOf(tail, at + 1)) {
+        let start = at;
+        while (text.slice(start - 3, start) === "../") start -= 3;
+        if (text.slice(start - 2, start) === "./") start -= 2;
+        // Preceded by a path segment means another path (or the root form,
+        // which the ordinary search already reports).
+        if (start > 0 && /[A-Za-z0-9_.\/-]/.test(text[start - 1])) continue;
+        // The pointer marker follows the whole path, which for a directory
+        // retirement runs past the tail (`roadmaps/g02/x.md` (Git history)).
+        const end = at + tail.length + (text.slice(at + tail.length).match(/^[^\s`)\]]*/)?.[0].length ?? 0);
+        const after = text.slice(end);
+        if (/^`? \((in )?Git history\)/.test(after)) continue;
+        const resolved = posix.normalize(posix.join(posix.dirname(file), text.slice(start, at + tail.length))).replace(/\/$/, "");
+        if (resolved === target) {
+          hits.push({ file, line: Number(row.slice(first + 1, second)), text: text.trim().slice(0, 200) });
+          break;
+        }
+      }
+    }
+  }
+  return hits;
+}
+
 function main() {
   const { repo, json, retired } = parseArgs(process.argv.slice(2));
   if (git(repo, ["rev-parse", "--is-inside-work-tree"]).status !== 0) fail(`${repo} is not a Git checkout`);
@@ -154,6 +200,7 @@ function main() {
       const isDir = path.endsWith("/");
       for (const t of tracked) if (t === prefix || (isDir && t.startsWith(prefix + "/"))) add({ id: entry.id, kind: "tracked_path", needle: path, file: t });
       for (const hit of grep(repo, path)) add2({ id: entry.id, kind: "path", needle: path, ...hit });
+      for (const hit of relativeHits(repo, path)) add2({ id: entry.id, kind: "path", needle: path, ...hit });
     }
   }
 
