@@ -12,8 +12,8 @@ run the interface, the review is incomplete.
    head invalidates the verdict.
 2. Confirm the worktree is clean and do not edit tracked files, commit, push, or
    change branches.
-3. Read the approved brief from the canonical task or spec and the handoff's
-   `UI Design Brief`. Treat the brief as acceptance authority.
+3. Read the approved `## UI design brief` section of the task's Queue brief and
+   what it links. Treat the brief as acceptance authority.
 4. Detect whether the consumer has an adequate run-inspect-capture loop. If the
    required rendered path cannot actually be exercised, stop and report the
    blocker rather than approving from the diff.

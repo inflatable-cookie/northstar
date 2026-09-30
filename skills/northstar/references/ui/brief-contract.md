@@ -1,8 +1,9 @@
 # UI design brief contract
 
-Agent-facing field list for the `northstar-ui` skill. The canonical task or
-governing spec owns the brief. The worker handoff carries a self-contained
-execution copy under `## Important Context` as `### UI Design Brief`.
+Agent-facing field list for the `northstar-ui` skill. The UI design brief is a
+`## UI design brief` section of the task's Queue brief (see the main skill's
+`references/brief.md`). Durable design decisions it relies on live in the
+repository's knowledge or the lane document, and the brief links them.
 
 ## Classification
 
@@ -15,7 +16,7 @@ Classify by decision risk and user impact, not file count:
 | Workflow change | New or altered actions, navigation, forms, state transitions, or information hierarchy | Full brief with current and target workflows; material choices settled before readiness |
 | Substantial redesign | New or materially replaced user experience | Full brief plus operator-approved concept, comp, or interactive prototype before readiness |
 
-Plan at the highest class a lane contains.
+Plan at the highest class a task contains.
 
 ## Full brief fields
 

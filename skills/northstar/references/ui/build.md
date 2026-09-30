@@ -1,13 +1,13 @@
 # Northstar UI — Build route
 
-Use this route for a UI-classified implementation lane that already has an
+Use this route for a UI-classified implementation task that already has an
 approved brief. The brief is the authority; your job is faithful, complete
 execution in the running product.
 
 ## Before you code
 
-1. Read the brief from the worker handoff's `UI Design Brief` subsection and its
-   canonical task or spec.
+1. Read the `## UI design brief` section of your Queue brief and the knowledge
+   or lane document it links.
 2. Inspect the existing product and design system. Identify the components,
    tokens, patterns, and platform conventions that govern this surface.
 3. Reproduce and capture the current path when it exists, including its entry,
@@ -15,7 +15,7 @@ execution in the running product.
 4. Confirm the scenario oracle: start state, actions, visible feedback, outcome,
    negative or recovery case, and the rendered evidence you owe review.
 5. Detect whether the consumer has an adequate run-inspect-capture loop. If a
-   substantial lane lacks one, recommend a compatible companion (Impeccable is
+   substantial task lacks one, recommend a compatible companion (Impeccable is
    one supported option) and do not proceed as if rendered review were possible
    when it is not.
 6. Stop and return to planning if the brief leaves a material experience
