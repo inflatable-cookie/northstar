@@ -371,6 +371,15 @@ production payload across three isolated subjects and blind reviewers. Exact
 cohort validates everyday authoring, package-manager portability, or the
 deferred toolchain and testing rules.
 
+## Consumer files
+
+A consumer repository keeps its language-quality files with its other internal
+rules, in `docs/knowledge/contracts/`: `<language>-quality-profile.json`,
+`<language>-quality-deviations.json` (a profile's `deviations_file` names it by
+that path), and the `language-quality-activation.json` marker. Packages,
+templates and the lifecycle route read and write only that directory (settles
+Q-002, 2026-10-01: 25 of 26 lean consumers already keep their profiles there).
+
 ## Profile resolution
 
 The consumer repository owns its selected profile. The initial Rust pack and
