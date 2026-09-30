@@ -1,0 +1,7 @@
+{
+  "name": "northstar-language-rerun-fixture",
+  "private": true,
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}

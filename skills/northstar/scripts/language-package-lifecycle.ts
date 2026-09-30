@@ -1025,7 +1025,7 @@ function parseRegistryDoc(raw: unknown, context: string): RegistryDoc {
 // ---- consumer activation ----
 
 function consumerActivationValid(consumerDir: string, packageId: string, version: string, activationMarker?: string): { valid: boolean; scope: string | null } {
-  const marker = path.join(consumerDir, "docs/contracts/language-quality-activation.json");
+  const marker = path.join(consumerDir, "docs/knowledge/contracts/language-quality-activation.json");
   if (fs.existsSync(marker)) {
     const raw: unknown = JSON.parse(fs.readFileSync(marker, "utf8"));
     if (isRecord(raw) && raw.package_id === packageId && raw.version === version) {
@@ -1687,7 +1687,7 @@ function offlineAdapter(): () => string {
 
 function consumerDir(extraFiles: Record<string, string> = {}): string {
   const dir = fs.mkdtempSync(path.join(process.env.TMPDIR ?? "/tmp", "northstar-consumer-"));
-  fs.mkdirSync(path.join(dir, "docs/contracts"), { recursive: true });
+  fs.mkdirSync(path.join(dir, "docs/knowledge/contracts"), { recursive: true });
   writeText(path.join(dir, "README.md"), "# consumer\n");
   for (const [rel, content] of Object.entries(extraFiles)) {
     writeText(path.join(dir, rel), content);
@@ -2019,7 +2019,7 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
     const stateRoot = path.join(out, "state");
     mkdirP(stateRoot);
     const consumer = consumerDir({
-      "docs/contracts/language-quality-config.json": JSON.stringify({ package_id: "@northstar/language-fixture", version: "0.1.0", trusted: true, selected: true }),
+      "docs/knowledge/contracts/language-quality-config.json": JSON.stringify({ package_id: "@northstar/language-fixture", version: "0.1.0", trusted: true, selected: true }),
     });
     const consumerBefore = snapshotHashes(consumer);
     const trustDoc = fixtureTrustDoc(fixtureRoot, [], []);
@@ -2304,7 +2304,7 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
 
     // Restricted consumer scope: pin scope vs activation marker scope.
     const scopeConsumer = consumerDir({
-      "docs/contracts/language-quality-activation.json": JSON.stringify({ package_id: "@northstar/language-fixture", version: "0.1.0", scope: "team-a" }),
+      "docs/knowledge/contracts/language-quality-activation.json": JSON.stringify({ package_id: "@northstar/language-fixture", version: "0.1.0", scope: "team-a" }),
     });
     const scopedPin = fixtureTrustDoc(fixtureRoot, [], []);
     scopedPin.allowlist[0].consumer_scope = "team-b";
@@ -3169,7 +3169,7 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
 
     const markerDir = (scope: string): string => {
       const dir = consumerDir({
-        "docs/contracts/language-quality-activation.json": JSON.stringify({ package_id: "@northstar/language-fixture", version: "0.1.0", scope }),
+        "docs/knowledge/contracts/language-quality-activation.json": JSON.stringify({ package_id: "@northstar/language-fixture", version: "0.1.0", scope }),
       });
       return dir;
     };

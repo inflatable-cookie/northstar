@@ -14,8 +14,8 @@ alias = "northstar"
 "test:paseo-worktree" = [{ task = "paseo:worktree self-test" }]
 "check:language-packages" = [{ rhai = "skills/northstar/scripts/check-language-packages.rhai" }]
 "check:language-package-routes" = "scripts/tests/language-package-routes/self-test.sh"
-# Reruns against live sibling consumers (jetstream, convergence); not part of qa.
+# Self-contained consumer fixture reruns; included in qa.
 "check:language-consumer-reruns" = "python3 scripts/tests/language-package-routes/validate_consumer_reruns.py"
 "language:route" = "bun run skills/northstar/scripts/language-package-lifecycle.ts route {args}"
 "qa:docs" = [{ task = "check:retired-concepts" }, { task = "check:links" }]
-qa = [{ task = "test:retired-concepts" }, { task = "test:cut" }, { task = "test:paseo-worktree" }, { task = "check:language-packages" }, { task = "check:language-package-routes" }, { task = "qa:docs" }]
+qa = [{ task = "test:retired-concepts" }, { task = "test:cut" }, { task = "test:paseo-worktree" }, { task = "check:language-packages" }, { task = "check:language-package-routes" }, { task = "check:language-consumer-reruns" }, { task = "qa:docs" }]

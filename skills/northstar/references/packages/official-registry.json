@@ -10,12 +10,12 @@
         "workflows": ["explicit_audit_repair"],
         "activation_marker": "northstar:typescript-quality"
       },
-      "version": "0.1.0",
+      "version": "0.2.0",
       "repository": "https://github.com/inflatable-cookie/northstar-language-packs",
       "subpath": "packages/typescript",
-      "commit": "c9ef2a2e3b70dc68de670767048f26b01b08f929",
-      "tree_digest": "sha256:259cccdbacd7e2e293389efaf72cab005d0c275bd7cb600c99f30bfbfe071843",
-      "manifest_digest": "sha256:e5e32f2baeda2e901b8c327436adf0bfd5955a9de080887660684ad4583185ca",
+      "commit": "4a6df3c7b4f6ba8622d3c937bfe1fea53a76500f",
+      "tree_digest": "sha256:b992a0ff9a2f62772ab72176641b361c692e309c65343f19a0926ba5d6db747c",
+      "manifest_digest": "sha256:66f0ceafebb5f4447da413b4ef4f01fa1f5747615cecbc089e5f3b1139018a41",
       "compatible_core_range": ">=0.2.0 <1.0.0"
     },
     {
@@ -26,12 +26,12 @@
         "workflows": ["everyday_authoring", "explicit_audit_repair"],
         "activation_marker": "northstar:rust-quality"
       },
-      "version": "0.1.0",
+      "version": "0.2.0",
       "repository": "https://github.com/inflatable-cookie/northstar-language-packs",
       "subpath": "packages/rust",
-      "commit": "56b2e1107b80f369807cff88e1b0253df035c700",
-      "tree_digest": "sha256:e5cf9c5da4a30c0f5164f2ea0c5e9d87d544c0c32f09f3c139a386c56154dba0",
-      "manifest_digest": "sha256:dd71d04efd67cc7805f417a79666dd920ea1811ee252d941108dfbeca8aab612",
+      "commit": "4a6df3c7b4f6ba8622d3c937bfe1fea53a76500f",
+      "tree_digest": "sha256:59f05e9be6868fb77b7a47e093120648ea68edb8d970f1c0838c62fc506ddf21",
+      "manifest_digest": "sha256:8773ceb2be1aeb170d568b2fee3eebdf50b8b399e213b0a3e505262b39606ecd",
       "compatible_core_range": ">=0.2.0 <1.0.0"
     }
   ]
