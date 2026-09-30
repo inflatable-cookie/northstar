@@ -26,6 +26,13 @@ next with `plan.get` for `inflatable-cookie/northstar`.
 - `effigy skill run --path skills/northstar <task>` — run a skill task from
   source (`retired-concepts`, `cut`, `check-links`, `paseo:worktree`).
 
+General Effigy guidance comes from the maintained
+[Effigy skill](https://github.com/inflatable-cookie/effigy/tree/main/skills/effigy),
+installed in a supported global skill root. These are Northstar's selectors
+and guardrails. If the skill is missing from your agent's catalogue, install
+it under `~/.agents/skills/effigy` and start a fresh agent. Install the Effigy
+executable separately, using the Effigy project's README.
+
 ## Product rules
 
 - Keep `skills/northstar/template/` copy-ready: starter material for another
