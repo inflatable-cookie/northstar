@@ -7,7 +7,6 @@
 # check-links.
 frozen = [
   "skills/northstar/assets/fixtures/**",
-  ".agents/skills/effigy/",
 ]
 
 # paths and allow: an entry is an exact file, or a directory when it ends in
