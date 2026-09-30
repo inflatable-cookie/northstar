@@ -20,6 +20,10 @@ All notable changes to Northstar are documented here.
 - A brief lives in a Queue lead (2026-09-27): `lead.add`, `lead.approve`,
   `lead.promote-task`. Queue removed the separate `draft.*` calls.
 
+- Atlas returns as `references/atlas.md` (2026-09-30): discovery-first
+  long-horizon direction with the operator, landing in knowledge and Queue
+  lanes. It asks before it proposes.
+
 ### Removed
 - `bundle-docs/`, `template-bundle/`, the router and modes, the command
   skills, the working-rules contract, roadmaps, logs, handoffs, lifecycle

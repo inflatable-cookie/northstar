@@ -47,7 +47,8 @@ and executable proofs, stay frozen and are listed in `retired.toml`.
 
 - `SKILL.md`: roles (planner, reviewer, worker), the knowledge rules, and
   pointers to references.
-- `references/`: `plan`, `brief`, `review`, `knowledge`, `adopt`, `handover`.
+- `references/`: `atlas`, `plan`, `brief`, `review`, `knowledge`, `adopt`,
+  `handover`.
 - `template/`: the copy-ready starter for a new or migrating repository.
 - `scripts/`, run through the skill's Effigy catalog (alias `northstar`):
   - `retired-concepts`: checks code, config and docs against `retired.toml`,

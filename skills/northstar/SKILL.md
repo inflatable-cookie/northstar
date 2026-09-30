@@ -1,6 +1,6 @@
 ---
 name: northstar
-description: Keep a project's knowledge current and its work well-aimed. Use for planning, writing a task brief, reviewing a PR, recording an operator ruling, retiring a concept, or orienting in a Northstar repository.
+description: Keep a project's knowledge current and its work well-aimed. Use for shaping long-horizon direction with the operator (Atlas), planning, writing a task brief, reviewing a PR, recording an operator ruling, retiring a concept, or orienting in a Northstar repository.
 ---
 
 # Northstar
@@ -38,6 +38,8 @@ Asking a settled question again costs more than looking it up.
 
 ## How work moves
 
+0. **Direction.** When the plan runs out of settled direction, shape it with
+   the operator first. See [atlas](references/atlas.md).
 1. **Plan.** Each outcome the project pursues is a Queue lane with a working
    document; the project's plan orders the lanes. Unplanned ideas and
    deferrals are leads. See [plan](references/plan.md).
