@@ -378,7 +378,7 @@ rules, in `docs/knowledge/contracts/`: `<language>-quality-profile.json`,
 `<language>-quality-deviations.json` (a profile's `deviations_file` names it by
 that path), and the `language-quality-activation.json` marker. Packages,
 templates and the lifecycle route read and write only that directory (settles
-Q-002, 2026-10-01: 25 of 26 lean consumers already keep their profiles there).
+Q-002, 2026-09-30: 25 of 26 lean consumers already keep their profiles there).
 
 ## Profile resolution
 

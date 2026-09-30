@@ -10,6 +10,6 @@ Needed for: the first tagged release (see [contracts/release.md](contracts/relea
 
 ## Q-002 — Where do language-package consumer files live in the lean shape?
 
-Status: answered 2026-10-01
+Status: answered 2026-09-30
 Answer: `docs/knowledge/contracts/`. See "Consumer files" in
 [contracts/language-quality-pack.md](contracts/language-quality-pack.md).
