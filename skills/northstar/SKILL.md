@@ -170,7 +170,9 @@ live ask, not the record.
   knowledge, a migration cut, or anything touching code, QA configuration or
   scripts. For those, "passes" means an exit code of 0 that was actually
   checked. The planner also runs the repository's full QA on `main` at release
-  points and after a major chunk of work, and briefs a fix for what it finds.
+  points and after a major chunk of work, through Queue rather than locally:
+  `project.qa.run` with `{"repository": "owner/name", "baseBranch": "main"}`,
+  then `project.qa.get` for the result. It briefs a fix for what it finds.
   The operator doesn't review planner changes; anything
   that needs independent review goes through Queue as a brief.
 - **Worker:** implements one brief in the worktree Queue gives it, runs
