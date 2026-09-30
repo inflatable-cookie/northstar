@@ -10,12 +10,12 @@
         "workflows": ["explicit_audit_repair"],
         "activation_marker": "northstar:typescript-quality"
       },
-      "version": "0.2.0",
+      "version": "0.2.1",
       "repository": "https://github.com/inflatable-cookie/northstar-language-packs",
       "subpath": "packages/typescript",
-      "commit": "4a6df3c7b4f6ba8622d3c937bfe1fea53a76500f",
-      "tree_digest": "sha256:b992a0ff9a2f62772ab72176641b361c692e309c65343f19a0926ba5d6db747c",
-      "manifest_digest": "sha256:66f0ceafebb5f4447da413b4ef4f01fa1f5747615cecbc089e5f3b1139018a41",
+      "commit": "b245fdc463cbfb4d95acb9c690c191bcd41f7a65",
+      "tree_digest": "sha256:46f664bfbd31fcbdb055dda3b34ac17ad6eb02f14f31ae69244ff317387928a9",
+      "manifest_digest": "sha256:6b8695019e88a6020e5a4244079ebf4ddf92406448c61345d856ac5b71618a06",
       "compatible_core_range": ">=0.2.0 <1.0.0"
     },
     {
