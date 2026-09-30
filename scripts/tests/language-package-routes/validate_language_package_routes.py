@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Card 120 two-package installed-route and core-only containment oracle.
+"""Task 020 two-package installed-route and core-only containment oracle.
 
 The root payload no longer embeds any language implementation. This oracle
-replays both accepted registry pins (@northstar/typescript-quality 0.1.0 at
-c9ef2a2, @northstar/rust-quality 0.1.0 at 56b2e11) against the read-only
+replays both accepted registry pins (@northstar/typescript-quality and
+@northstar/rust-quality 0.2.0 at 4a6df3c) against the read-only
 package-source sibling: it materializes both pinned package trees, reproduces
 all four spec-034 digests with an independent implementation, proves that a
 package-less core stops each language workflow visibly with the manual install
@@ -33,11 +33,11 @@ SIBLING = os.environ.get(
 TS = {
     "label": "TypeScript",
     "package_id": "@northstar/typescript-quality",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "subpath": "packages/typescript",
-    "commit": "c9ef2a2e3b70dc68de670767048f26b01b08f929",
-    "tree": "sha256:259cccdbacd7e2e293389efaf72cab005d0c275bd7cb600c99f30bfbfe071843",
-    "manifest": "sha256:e5e32f2baeda2e901b8c327436adf0bfd5955a9de080887660684ad4583185ca",
+    "commit": "4a6df3c7b4f6ba8622d3c937bfe1fea53a76500f",
+    "tree": "sha256:b992a0ff9a2f62772ab72176641b361c692e309c65343f19a0926ba5d6db747c",
+    "manifest": "sha256:66f0ceafebb5f4447da413b4ef4f01fa1f5747615cecbc089e5f3b1139018a41",
     "language": "typescript",
     "workflow": "explicit_audit_repair",
     "foreign_markers": ("rust-quality", "cargo"),
@@ -45,11 +45,11 @@ TS = {
 RUST = {
     "label": "Rust",
     "package_id": "@northstar/rust-quality",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "subpath": "packages/rust",
-    "commit": "56b2e1107b80f369807cff88e1b0253df035c700",
-    "tree": "sha256:e5cf9c5da4a30c0f5164f2ea0c5e9d87d544c0c32f09f3c139a386c56154dba0",
-    "manifest": "sha256:dd71d04efd67cc7805f417a79666dd920ea1811ee252d941108dfbeca8aab612",
+    "commit": "4a6df3c7b4f6ba8622d3c937bfe1fea53a76500f",
+    "tree": "sha256:59f05e9be6868fb77b7a47e093120648ea68edb8d970f1c0838c62fc506ddf21",
+    "manifest": "sha256:8773ceb2be1aeb170d568b2fee3eebdf50b8b399e213b0a3e505262b39606ecd",
     "language": "rust",
     "workflow": "explicit_audit_repair",
     "foreign_markers": ("typescript-quality", "svelte"),

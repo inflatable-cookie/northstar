@@ -1,0 +1,38 @@
+{
+  "schema_version": "1.0.0",
+  "language": "typescript",
+  "workflow": "explicit_audit_repair",
+  "profile": "strict",
+  "packages": [
+    {
+      "root": ".",
+      "manifest": "package.json",
+      "ownership": "independent_root",
+      "typescript_evidence": {
+        "status": "supported",
+        "sources": ["package.json", "src/unit.ts"]
+      },
+      "overlays": ["base"],
+      "version_evidence": {
+        "svelte": {"status": "absent", "version": null, "source": null},
+        "sveltekit": {"status": "absent", "version": null, "source": null}
+      }
+    }
+  ],
+  "unregistered_candidates": [],
+  "evidence_selectors": {
+    "compiler": [],
+    "framework": [],
+    "lint": [],
+    "test": []
+  },
+  "exclusions": {
+    "generated": [],
+    "vendored": [],
+    "fixtures": [],
+    "documentation": [],
+    "build_output": []
+  },
+  "deviations_file": "docs/knowledge/contracts/typescript-quality-deviations.json",
+  "when_unresolved": "stop"
+}
