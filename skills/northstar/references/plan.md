@@ -34,11 +34,21 @@ open. Its rules live in a contract, not in the lane document.
 
 ## Order
 
-`plan.get` (`repository` as an origin or path, or `project`) reads the plan.
-`plan.set` saves it: the latest `version`, `entries: [{lane, note?, horizon?}]`
-in priority order, and `author`. `horizon` is `now` or `later`. Keep `now` to a
-handful of lanes. A lane that newly lists the project's repository joins the
-end by itself, so reorder after creating one.
+The plan is the project's roadmap: each lane is one step. `plan.get`
+(`repository` as an origin or path, or `project`) reads it, including a `done`
+list of closed lanes. `plan.set` saves it: the latest `version`,
+`entries: [{lane, note?, horizon?, doneWhen?}]` in priority order, and
+`author`.
+
+- `horizon` is `now` (being worked), `next` (queued up behind it) or `later`.
+  Keep `now` to a handful of lanes.
+- `doneWhen` is one line saying when the step is finished, for example
+  "consumer profiles read from docs/knowledge/contracts in every repository".
+  Set it for every `now` and `next` lane, so anyone can tell whether the step
+  is complete.
+- Keep the plan current. When a lane closes, or work changes order, save the
+  plan again. A lane that newly lists the project's repository joins the end by
+  itself, so reorder after creating one.
 
 ## Leads
 
