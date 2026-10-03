@@ -40,7 +40,21 @@ same planning. Nothing about the handover is written into the repository.
    overwrite in between. Check that the result names the successor and the
    task set you expect. An empty
    plan is normal when nothing is routed to this thread.
-4. **Tell the successor** `Ownership transfer complete`, as a background
+4. **Name the projects it owns.** Queue sends a project's prompts only to its
+   owner thread. List the projects this thread owns (`projects` shows each
+   owner) in the brief, so the successor can claim them (below).
+5. **Tell the successor** `Ownership transfer complete`, as a background
    message.
-5. **Yield.** Don't archive or rename this thread; it stays as history. From
+6. **Yield.** Don't archive or rename this thread; it stays as history. From
    now on the successor owns planning, and this thread doesn't act.
+
+## Claiming projects
+
+Any new Chatterbox, whether a refresh successor, a fresh thread, or one spun off
+to take over a project, claims each project it's responsible for as its first
+action: `project.claim` with `{"project": "<key>", "note": "Chatterbox refresh
+from <old thread>"}` (or a note saying why it owns it), run from the Queue
+plugin root with `PASEO_AGENT_ID` set to this thread, which becomes the owner.
+A claim always succeeds; a previous live owner gets one notice and its pending
+prompts are superseded. Check that the project detail names
+this thread as owner. A project nobody has claimed stays dormant and silent.

@@ -52,8 +52,8 @@ list of closed lanes. `plan.set` saves it: the latest `version`,
 
 ## When Queue asks
 
-The agent that last saved a plan owns it, and Queue sends it two kinds of
-prompt. Answer each one; an unanswered prompt goes to the operator after a day.
+Each project has one owner thread (see [handover](handover.md) for claiming
+and passing it on), and Queue sends that thread two kinds of prompt. Answer each one; an unanswered prompt goes to the operator after a day.
 
 - **A lane has drained:** it has no unfinished task, no open lead, and nothing
   changed for two hours. Close it if its `doneWhen` is met
