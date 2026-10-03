@@ -50,6 +50,25 @@ list of closed lanes. `plan.set` saves it: the latest `version`,
   plan again. A lane that newly lists the project's repository joins the end by
   itself, so reorder after creating one.
 
+## When Queue asks
+
+The agent that last saved a plan owns it, and Queue sends it two kinds of
+prompt. Answer each one; an unanswered prompt goes to the operator after a day.
+
+- **A lane has drained:** it has no unfinished task, no open lead, and nothing
+  changed for two hours. Close it if its `doneWhen` is met
+  (`lane.status` `done`), brief more work toward it, or keep it with
+  `lane.keep` (`key`, `reason`, `author`) when it legitimately waits: name the
+  question, prerequisite or standing reason. A keep lasts until the lane next
+  drains.
+- **The board has drained:** the project has no unfinished task. Brief toward
+  the top `now` step, move the first `next` step to `now`, or close a finished
+  step. With no `now` or `next` step, save a plan that says what to aim at.
+
+A step that waits on the operator's answer can't be briefed, and keeping it
+only postpones the prompt. Record the question as a decision (see `SKILL.md`)
+so the operator sees it.
+
 ## Leads
 
 A lead is an unresolved observation, idea or question that isn't planned yet.
