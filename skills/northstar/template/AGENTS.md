@@ -39,7 +39,8 @@ repository holds no papercut file or triage folder.
 
 ## Validate
 
-Before a PR: targeted checks only, meaning the tests for the code you changed
-(`<narrow selector>`), a compile of what you touched, and `<docs check>` if docs
-changed. Run them once. Full `<qa command>` runs on `main` at release points
+Before a PR, run once, through Effigy, every check covering what you changed:
+the tests and QA groups for it (`<narrow selector>`), a compile of what you
+touched, `<docs check>` if docs changed, and any proof the brief names or the
+change alters. Skip only the full `<qa command>` and repeat passes. Full `<qa command>` runs on `main` at release points
 and after a major chunk of work.

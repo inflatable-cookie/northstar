@@ -70,9 +70,14 @@ Asking a settled question again costs more than looking it up.
 - **Break things honestly.** When a change breaks callers or contracts, say so
   and update them together. No shims that hide a decision.
 - **Targeted checks per task, full QA at milestones** (Tom, 2026-09-30). A
-  task runs only the checks that prove its change. The whole suite runs on
-  `main` at release points or after a major chunk of work, run by the
-  planner. Full QA per task was eating the machine.
+  task runs, once and through Effigy selectors, every check that covers what
+  it changed: the tests and QA groups for the code it touched, a compile of
+  it, docs checks if docs changed, and any proof or check its brief names or
+  its change alters. What it skips is the repository's full `effigy qa` (or
+  `ci`) and repeat passes. The repository's `AGENTS.md` "Validate" section is
+  the authority on which selectors count. Full QA runs on `main` at release
+  points or after a major chunk of work, run by the planner; it was eating
+  the machine per task.
 - **Don't hold work for machine load.** A test that fails only under load is a
   defect: file it and fix it, rather than waiting for a quiet machine (Tom,
   2026-09-28).
@@ -177,13 +182,13 @@ live ask, not the record.
   then `project.qa.get` for the result. It briefs a fix for what it finds.
   The operator doesn't review planner changes; anything
   that needs independent review goes through Queue as a brief.
-- **Worker:** implements one brief in the worktree Queue gives it, runs
-  targeted checks (the tests for the code it changed, a compile of what it
-  touched, and docs checks if docs changed) once, opens one PR, reports
-  through Queue, and gets out of the way. No whole suites, no repeat passes.
+- **Worker:** implements one brief in the worktree Queue gives it, runs the
+  targeted checks for its change once (see the rule above), opens one PR,
+  reports through Queue, and gets out of the way. Skipping a check that
+  covers the change isn't economy; it's an unverified PR.
 - **Reviewer:** checks the exact head independently: reads the diff, runs the
-  same targeted checks, exercises the behaviour, and reports findings. No
-  suites.
+  same targeted checks, exercises the behaviour, and reports findings. It
+  doesn't run the full `effigy qa`.
 
 Coordination (recovery, review routing, merge, closeout) is Queue's job, not a
 thread's. A planner hands over to a fresh successor using

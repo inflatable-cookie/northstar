@@ -8,8 +8,10 @@ possible. It checks the exact PR head against the brief.
 1. **Outcome.** Does the change deliver what the brief says, and nothing
    unrelated?
 2. **Correctness.** Look for bugs, missed callers, broken contracts and unsafe
-   changes. Run the targeted checks for what changed and exercise the
-   behaviour; don't run whole suites. Full QA runs at milestones, on `main`.
+   changes. Run the targeted checks for what changed (every test,
+   QA group and named proof covering it, through Effigy) and exercise the
+   behaviour. Don't run the full `effigy qa`; that runs at milestones, on
+   `main`.
 3. **Knowledge.** If the change alters what is true, is the owning file in
    `docs/knowledge/` updated in the same PR? Did it restate a fact that belongs
    elsewhere? Does it reintroduce anything in `retired.toml`?
