@@ -78,6 +78,14 @@ Asking a settled question again costs more than looking it up.
   the authority on which selectors count. Full QA runs on `main` at release
   points or after a major chunk of work, run by the planner; it was eating
   the machine per task.
+- **Compile-only tasks, opt-in for heavy repositories** (Tom, 2026-10-09). A
+  repository where per-task test runs make parallel tasks fight for the
+  machine (large Rust workspaces, for example) can opt in: its tasks run a
+  compile of what they touched, docs checks, and any proof the brief names,
+  and no tests. Opt in in two places that must agree: the repository's
+  `AGENTS.md` "Validate" section, and its Queue `validationPolicy`
+  (`repository.set`), which is what worker and reviewer prompts read. The
+  planner then owns reconciliation; see [plan](references/plan.md).
 - **Don't hold work for machine load.** A test that fails only under load is a
   defect: file it and fix it, rather than waiting for a quiet machine (Tom,
   2026-09-28).

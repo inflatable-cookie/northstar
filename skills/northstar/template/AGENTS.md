@@ -44,3 +44,7 @@ the tests and QA groups for it (`<narrow selector>`), a compile of what you
 touched, `<docs check>` if docs changed, and any proof the brief names or the
 change alters. Skip only the full `<qa command>` and repeat passes. Full `<qa command>` runs on `main` at release points
 and after a major chunk of work.
+<!-- Heavy repository? Opt into compile-only tasks instead (see the northstar
+skill): tasks compile what they touched, run docs checks and named proofs,
+and skip tests; milestone QA reconciles on a cadence. Set the same rule in
+the repository's Queue validationPolicy. -->

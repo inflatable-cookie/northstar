@@ -69,6 +69,26 @@ A step that waits on the operator's answer can't be briefed, and keeping it
 only postpones the prompt. Record the question as a decision (see `SKILL.md`)
 so the operator sees it.
 
+## Reconciling compile-only repositories
+
+A repository that opted into compile-only tasks (see `SKILL.md`) trades
+per-task tests for milestone QA, so its planner runs that QA on a cadence rather
+than only at releases:
+
+- Run `project.qa.run` on `main` after each batch of merges, and at least once
+  a day while work is landing. Read the result with `project.qa.get`.
+- When it fails, find the merge that introduced each failure. `outcome-search`
+  for the repository since the last green run lists what landed; rerun the
+  failing selector at the candidate commits if it isn't obvious.
+- Brief one fix per failure, linking the task that introduced it, and dispatch
+  it ahead of new feature work in that repository. Keep feature work flowing
+  in other repositories.
+- Record the green run in the lane document when a lane's work is reconciled,
+  so `doneWhen` can rely on it.
+
+If milestone QA stays red for more than a day, raise it with the operator as a
+decision: the repository may need a tighter cadence or to opt back out.
+
 ## Leads
 
 A lead is an unresolved observation, idea or question that isn't planned yet.
