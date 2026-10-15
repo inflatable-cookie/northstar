@@ -53,7 +53,9 @@ list of closed lanes. `plan.set` saves it: the latest `version`,
 ## When Queue asks
 
 Each project has one owner thread (see [handover](handover.md) for claiming
-and passing it on), and Queue sends that thread two kinds of prompt. Answer each one; an unanswered prompt goes to the operator after a day.
+and passing it on), and Queue sends that thread two kinds of prompt. Answer
+each one. An unanswered drained-lane prompt goes to the operator after a day;
+a drained-board prompt never escalates (Tom, 2026-10-15).
 
 - **A lane has drained:** it has no unfinished task, no open lead, and nothing
   changed for two hours. Close it if its `doneWhen` is met
@@ -63,7 +65,12 @@ and passing it on), and Queue sends that thread two kinds of prompt. Answer each
   drains.
 - **The board has drained:** the project has no unfinished task. Brief toward
   the top `now` step, move the first `next` step to `now`, or close a finished
-  step. With no `now` or `next` step, save a plan that says what to aim at.
+  step. With no `now` or `next` step, save a plan that says what to aim at,
+  or, when the project is waiting on demand rather than out of ideas, mark it
+  idle on purpose: `plan.set` with `idle: "<reason>"` and no `now` or `next`
+  lanes, for example "waiting for real Cream gaps before more Figmatic work".
+  The mark lasts until work finishes after it or the plan is saved again
+  without `idle`, and the Planning tab shows the reason.
 
 A step that waits on the operator's answer can't be briefed, and keeping it
 only postpones the prompt. Record the question as a decision (see `SKILL.md`)
