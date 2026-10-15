@@ -65,6 +65,10 @@ and executable proofs, stay frozen and are listed in `retired.toml`.
     `language:route` task and its lifecycle script. Their contract is
     [contracts/language-quality-pack.md](contracts/language-quality-pack.md).
 
+- `workflows/`: Nucleus workflow charts (XState-subset JSON, Nucleus contract
+  004), resolved from the installed skill and pinned by digest per task. First
+  chart: `docs-with-review` (Tom, 2026-10-15).
+
 The installed copy lives at `~/.agents/skills/northstar`; harness skill folders
 (Claude, pi) symlink to it. See [contracts/release.md](contracts/release.md).
 

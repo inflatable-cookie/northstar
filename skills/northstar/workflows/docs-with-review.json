@@ -1,0 +1,24 @@
+{
+  "id": "docs-with-review",
+  "version": "1",
+  "description": "Docs task: worker edits, independent review, validation, merge, closeout.",
+  "initial": "work",
+  "context": { "revisions": 3 },
+  "states": {
+    "work":        { "entry": "dispatch", "on": { "worker.done": "review" } },
+    "review":      { "entry": "review", "on": {
+                       "review.approved": "check",
+                       "review.changes": { "target": "revise", "actions": "spend:revisions" } } },
+    "revise":      { "entry": "revise", "on": { "worker.done": "review" } },
+    "check":       { "entry": "validate:head", "on": {
+                       "validation.passed": "integrate",
+                       "validation.failed": { "target": "revise", "actions": "spend:revisions" } } },
+    "integrate":   { "entry": "acquire", "on": { "integration.acquired": "check-merge" } },
+    "check-merge": { "entry": "validate:merge", "on": {
+                       "validation.passed": "merge", "validation.failed": "revise" } },
+    "merge":       { "entry": "merge", "on": { "merge.done": "sync" } },
+    "sync":        { "entry": "sync", "on": { "sync.done": "close" } },
+    "close":       { "entry": "closeout", "on": { "closeout.done": "done" } },
+    "done":        { "type": "final" }
+  }
+}
