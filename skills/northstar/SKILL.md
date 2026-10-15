@@ -221,9 +221,10 @@ only when the repository has opted in.
   [installed-package route](references/packages/installed-package-route.md). It
   runs the skill's `language:route` task. Never start an audit from
   ordinary coding.
-- **Workflows:** `workflows/` holds Nucleus workflow charts; a repository opts
-  in with `.northstar/workflow.json` = `{"provider":"northstar","workflow":"<name>"}`.
-  Nucleus pins each chart's digest per task, so later edits never affect
-  running tasks (Nucleus contract 004).
+- **Workflows:** `workflows/` holds Nucleus workflow charts:
+  `coding-delivery` (Nucleus's default) and `docs-with-review`. A repository
+  picks one with a Nucleus repository setting, `workflow: "northstar/<name>"`;
+  there is no file in the repository. Nucleus pins each chart's digest per
+  task, so later edits never affect running tasks (Nucleus contract 004).
 - **Worktrees:** `paseo:worktree` prepares and links sibling checkouts for
   Paseo worktrees; projects call it from `paseo.json` setup and teardown.

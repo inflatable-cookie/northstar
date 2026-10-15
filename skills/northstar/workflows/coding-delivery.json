@@ -1,0 +1,25 @@
+{
+  "id": "coding-delivery",
+  "version": "1",
+  "description": "Coding task: worker builds, independent review, reviewed-head and merge-candidate validation, merge, sync, closeout. Failed validation or a merge conflict goes back to the worker with the output as findings.",
+  "initial": "work",
+  "context": { "revisions": 3 },
+  "states": {
+    "work":        { "entry": "dispatch", "on": { "worker.done": "review" } },
+    "review":      { "entry": "review", "on": {
+                       "review.approved": "check",
+                       "review.changes": { "target": "revise", "actions": "spend:revisions" } } },
+    "revise":      { "entry": "revise", "on": { "worker.done": "review" } },
+    "check":       { "entry": "validate:head", "on": {
+                       "validation.passed": "integrate",
+                       "validation.failed": { "target": "revise", "actions": "spend:revisions" } } },
+    "integrate":   { "entry": "acquire", "on": { "integration.acquired": "check-merge" } },
+    "check-merge": { "entry": "validate:merge", "on": {
+                       "validation.passed": "merge",
+                       "validation.failed": { "target": "revise", "actions": "spend:revisions" } } },
+    "merge":       { "entry": "merge", "on": { "merge.done": "sync" } },
+    "sync":        { "entry": "sync", "on": { "sync.done": "close" } },
+    "close":       { "entry": "closeout", "on": { "closeout.done": "done" } },
+    "done":        { "type": "final" }
+  }
+}
