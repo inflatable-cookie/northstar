@@ -12,7 +12,7 @@ title: Farmyard mock drafts, review and resume
 queue:
   lane: mock-exams
   laneDocuments: [mock-exams]
-  capability: general
+  scope: general
   notifyOriginOnCloseout: true
 ---
 
@@ -47,6 +47,12 @@ convention.
 ## Writing a good brief
 
 - Aim at the outcome. A capable worker picks the steps.
+- Leave model choice to Queue. Set `complexity` (`very_low` to `very_high`)
+  and request a profile (`profileRequests`) only when the work needs it, with
+  a reason the operator can judge. A request above the usage level, or for a
+  by-request profile, opens a decision for the operator, and the role runs on
+  automatic selection meanwhile; nothing waits for the answer. Only the
+  operator answers those decisions; never answer or withdraw them for them.
 - Keep it short. If it needs pages of context, that context belongs in
   `docs/knowledge/` or the lane document, and the brief links to it.
 - Name what the worker must update in `docs/knowledge/` if the work changes
