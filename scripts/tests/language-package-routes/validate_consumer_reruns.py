@@ -136,14 +136,14 @@ def task(package_root, selector, consumer, *args):
 def validate_registry(registry):
     expected = {
         "@northstar/typescript-quality": (
-            "typescript", "explicit_audit_repair", "0.2.1",
-            "b245fdc463cbfb4d95acb9c690c191bcd41f7a65"),
+            "typescript", "explicit_audit_repair", "0.2.2",
+            "4cdc876b2d0f8c75358a4429c46377f66146b787"),
         "@northstar/rust-quality": (
             "rust", "explicit_audit_repair", "0.2.3",
-            "40d818a4b195f7723dc33798689a2ab005b07785"),
+            "4cdc876b2d0f8c75358a4429c46377f66146b787"),
     }
     entries = {entry["package_id"]: entry for entry in registry["packages"]}
-    ok(registry.get("registry_version") == "1.7.0" and
+    ok(registry.get("registry_version") == "1.8.0" and
        set(entries) == set(expected),
        "official registry contains the expected discovery entries")
     for package_id, (language, workflow, version, commit) in expected.items():
@@ -161,18 +161,18 @@ def rerun_typescript(consumer, package):
     marker = "northstar:typescript-quality"
     selected = select_by_marker(marker, os.path.join(ROOT, "selected-typescript.json"))
     ok(selected.get("package_id") == "@northstar/typescript-quality" and
-       selected.get("version") == "0.2.1" and
+       selected.get("version") == "0.2.2" and
        selected.get("tree_digest") == package["tree_digest"],
-       "fixture TypeScript marker selects the exact 0.2.1 pin",
+       "fixture TypeScript marker selects the exact 0.2.2 pin",
        json.dumps(selected))
 
     ts_root = route_package(consumer, "typescript", "explicit_audit_repair")
     ok(ts_root.get("status") in ("activated", "routed") and
        ts_root.get("package_id") == package["package_id"] and
-       ts_root.get("version") == "0.2.1" and
+       ts_root.get("version") == "0.2.2" and
        ts_root.get("tree_digest") == package["tree_digest"] and
        ts_root.get("manifest_digest") == package["manifest_digest"],
-       "TypeScript package routes from its official 0.2.1 pin",
+       "TypeScript package routes from its official 0.2.2 pin",
        json.dumps(ts_root))
     package_root = ts_root["installed_path"]
     profile_files = {path: digest for path, digest in policy_snapshot(consumer).items()
@@ -272,7 +272,7 @@ def rerun_rust(consumer, package):
                 "RUSTFLAGS": "--cap-lints=allow"}
     tools = rust_root.get("tools") or []
     ok(len(tools) == 1 and
-       tools[0].get("id") == "northstar-rust-quality" and
+       tools[0].get("id") == "rust-quality" and
        os.path.isabs(tools[0].get("path", "")) and
        os.access(tools[0].get("path", ""), os.X_OK) and
        not tools[0].get("path", "").startswith(package_root + os.sep),

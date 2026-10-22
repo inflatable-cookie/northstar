@@ -2,8 +2,8 @@
 """Task 020 two-package installed-route and core-only containment oracle.
 
 The root payload no longer embeds any language implementation. This oracle
-replays both accepted registry pins (@northstar/typescript-quality 0.2.1 at
-b245fdc and @northstar/rust-quality 0.2.3 at 40d818a) against the read-only
+replays both accepted registry pins (@northstar/typescript-quality 0.2.2 and
+@northstar/rust-quality 0.2.3, both at 4cdc876) against the read-only
 package-source sibling: it materializes both pinned package trees, reproduces
 all four spec-034 digests with an independent implementation, proves that a
 package-less core stops each language workflow visibly with the manual install
@@ -33,11 +33,11 @@ SIBLING = os.environ.get(
 TS = {
     "label": "TypeScript",
     "package_id": "@northstar/typescript-quality",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "subpath": "packages/typescript",
-    "commit": "b245fdc463cbfb4d95acb9c690c191bcd41f7a65",
-    "tree": "sha256:46f664bfbd31fcbdb055dda3b34ac17ad6eb02f14f31ae69244ff317387928a9",
-    "manifest": "sha256:6b8695019e88a6020e5a4244079ebf4ddf92406448c61345d856ac5b71618a06",
+    "commit": "4cdc876b2d0f8c75358a4429c46377f66146b787",
+    "tree": "sha256:06725f4ca633e660db18cabed65ceb76e61f43708271446697bf48a0b83e80f3",
+    "manifest": "sha256:e776287f93fe9ef2e74817dafd980b15c0c90846baf7cbb5bfa06e6d53e8abc1",
     "language": "typescript",
     "workflow": "explicit_audit_repair",
     "foreign_markers": ("rust-quality", "cargo"),
@@ -47,9 +47,9 @@ RUST = {
     "package_id": "@northstar/rust-quality",
     "version": "0.2.3",
     "subpath": "packages/rust",
-    "commit": "40d818a4b195f7723dc33798689a2ab005b07785",
-    "tree": "sha256:90affb6d75c1981aba72cafe71a44ca22e65470d5203060560d24f0de77e87fd",
-    "manifest": "sha256:557364ace400f8e8f41beb183a8fb69c02155b137dfa60642fa6de1bddd5f673",
+    "commit": "4cdc876b2d0f8c75358a4429c46377f66146b787",
+    "tree": "sha256:67261b22f5cb766e83606f87425e793b385dd952baf1fae1f6348b257270ab39",
+    "manifest": "sha256:4c88e2213937a8ec1c9025c10c1187173e25476b3d8b02cc5d7a18da31350334",
     "language": "rust",
     "workflow": "explicit_audit_repair",
     "foreign_markers": ("typescript-quality", "svelte"),
@@ -232,8 +232,8 @@ def main():
     with open(REGISTRY) as handle:
         registry_doc = json.load(handle)
     entries = {entry["package_id"]: entry for entry in registry_doc["packages"]}
-    ok(registry_doc.get("registry_version") == "1.7.0",
-       "shipped registry is the generic-discovery revision 1.7.0",
+    ok(registry_doc.get("registry_version") == "1.8.0",
+       "shipped registry is the rust-0.2.3 and typescript-0.2.2 revision 1.8.0",
        registry_doc.get("registry_version"))
     for package in PACKAGES:
         entry = entries.get(package["package_id"], {})
@@ -368,7 +368,7 @@ def main():
         rust_tools = public_results[RUST["package_id"]].get("tools") or []
         rust_installed = public_results[RUST["package_id"]].get("installed_path", "")
         ok(len(rust_tools) == 1 and
-           rust_tools[0].get("id") == "northstar-rust-quality" and
+           rust_tools[0].get("id") == "rust-quality" and
            os.path.isabs(rust_tools[0].get("path", "")) and
            os.path.isfile(rust_tools[0]["path"]) and
            os.access(rust_tools[0]["path"], os.X_OK) and
