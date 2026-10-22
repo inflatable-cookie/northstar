@@ -121,7 +121,9 @@ fixed argv, and the output path under `{root}`. Argv may reference only
 lifecycle runs the recipe in the operator cache during acquisition, outside the
 immutable install, and never writes into an installed tree. The installation
 receipt records the absolute binary path and digest, every route returns those
-paths, and an intact cache is reused rather than rebuilt. A missing,
+paths, and a verified published build is reused rather than rebuilt. Tool
+publish is additive: a concurrent acquisition or a replaced cache entry never
+deletes or replaces a build whose path a returned receipt names. A missing,
 non-executable, or digest-drifted binary makes the pack unusable; it is never a
 reason to build by hand inside the install.
 

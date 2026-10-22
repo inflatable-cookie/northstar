@@ -1046,8 +1046,34 @@ function toolRecipeDigest(manifest: Manifest, treeDigest: string): string {
   return "sha256:" + sha256Hex(Buffer.from(JSON.stringify(recipe)));
 }
 
-function toolCacheRoot(stateRoot: string, manifest: Manifest, treeDigest: string): string {
+function toolCacheParent(stateRoot: string, manifest: Manifest, treeDigest: string): string {
   return path.join(stateRoot, "tools", manifest.package_id + "@" + manifest.version + "-" + toolRecipeDigest(manifest, treeDigest).slice(7));
+}
+
+// Multiple builds may publish under one recipe parent (concurrent acquisitions,
+// or a cache left by a crashed build). Every publish is additive and immutable
+// once written: a published build is never deleted or replaced, because a
+// receipt may already name its binary. Reuse accepts any verified build.
+function findPublishedTool(cacheParent: string, manifest: Manifest, treeDigest: string): ToolBuildRecord | null {
+  if (!fs.existsSync(cacheParent) || !fs.statSync(cacheParent).isDirectory()) {
+    return null;
+  }
+  const names = fs.readdirSync(cacheParent).sort();
+  for (const name of names) {
+    const candidate = path.join(cacheParent, name);
+    try {
+      if (!fs.statSync(candidate).isDirectory()) {
+        continue;
+      }
+    } catch {
+      continue;
+    }
+    const record = cachedToolRecord(candidate, manifest, treeDigest);
+    if (record !== null) {
+      return record;
+    }
+  }
+  return null;
 }
 
 function expandToolArg(arg: string, values: Record<string, string>): string {
@@ -1121,15 +1147,15 @@ function buildDeclaredTools(opts: {
   const sourceDir = path.join(packageRoot, tool.source_path);
   check(fs.existsSync(sourceDir) && fs.statSync(sourceDir).isDirectory(),
     "declared tool source path is missing from the verified payload: " + tool.source_path);
-  const finalRoot = toolCacheRoot(stateRoot, manifest, treeDigest);
-  const cached = cachedToolRecord(finalRoot, manifest, treeDigest);
+  const cacheParent = toolCacheParent(stateRoot, manifest, treeDigest);
+  const cached = findPublishedTool(cacheParent, manifest, treeDigest);
   if (cached !== null) {
     return [cached];
   }
   const resolvedCommand = findCommand(tool.build.command);
   check(resolvedCommand !== null, "required tool build command not available on this host: " + tool.build.command);
   fs.mkdirSync(path.join(stateRoot, "tools"), { recursive: true, mode: 0o700 });
-  fs.mkdirSync(path.dirname(finalRoot), { recursive: true, mode: 0o700 });
+  fs.mkdirSync(cacheParent, { recursive: true, mode: 0o700 });
   const buildParent = fs.mkdtempSync(path.join(stateRoot, "tools", ".build-"));
   try {
     const buildRoot = path.join(buildParent, "build");
@@ -1147,7 +1173,7 @@ function buildDeclaredTools(opts: {
     };
     const argv = tool.build.argv.map((arg) => expandToolArg(arg, values));
     notice("build " + manifest.package_id + "@" + manifest.version + " tool=" + tool.id +
-      " target=" + finalRoot + " workflow=package_acquisition");
+      " target=" + cacheParent + " workflow=package_acquisition");
     const result = spawnSync(resolvedCommand, argv, { cwd: buildRoot, encoding: "utf8" });
     check(result.error === undefined, "tool build launch failed: " + String(result.error));
     check(result.status === 0,
@@ -1156,7 +1182,10 @@ function buildDeclaredTools(opts: {
       (String(result.stdout ?? "") + String(result.stderr ?? "")).trim().slice(-600));
     const binaryPath = path.join(outputRoot, tool.build.output);
     const digest = toolBinaryDigest(binaryPath, "tool build");
-    const publishedPath = path.join(finalRoot, "root", tool.build.output);
+    // Unique publish target: a concurrent build can never collide with, delete,
+    // or replace a build whose path a returned receipt already names.
+    const publishedRoot = path.join(cacheParent, "build-" + randomUUID());
+    const publishedPath = path.join(publishedRoot, "root", tool.build.output);
     const builtAt = new Date().toISOString();
     const marker = {
       schema_version: "1.0.0",
@@ -1171,18 +1200,9 @@ function buildDeclaredTools(opts: {
       built_at: builtAt,
     };
     fs.writeFileSync(path.join(buildRoot, "tool-build.json"), JSON.stringify(marker));
-    if (fs.existsSync(finalRoot)) {
-      fs.rmSync(finalRoot, { recursive: true, force: true });
-    }
-    try {
-      fs.renameSync(buildRoot, finalRoot);
-    } catch (err) {
-      // A concurrent build may have published the identical cache first: reuse
-      // it only when its record verifies, otherwise fail without pretending.
-      const raced = cachedToolRecord(finalRoot, manifest, treeDigest);
-      check(raced !== null, "cannot publish tool cache: " + String(err));
-      return [raced];
-    }
+    // Publish atomically under a fresh name. Never remove an existing build:
+    // another acquisition may already have returned its binary in a receipt.
+    fs.renameSync(buildRoot, publishedRoot);
     return [{ id: tool.id, path: publishedPath, sha256: digest, built_at: builtAt }];
   } finally {
     fs.rmSync(buildParent, { recursive: true, force: true });
@@ -4221,6 +4241,32 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
       "local route did not return the recorded tool path");
     check(fs.statSync(cacheMarker).ino === markerInode, "local route rebuilt an intact tool cache");
 
+    // A later build never deletes or replaces an already-published binary,
+    // because a returned receipt may already name it. Force a lookup miss on
+    // the first build and publish a second one.
+    const firstMarkerDir = path.dirname(path.dirname(path.dirname(record.path)));
+    const firstMarkerPath = path.join(firstMarkerDir, "tool-build.json");
+    const originalMarkerText = fs.readFileSync(firstMarkerPath, "utf8");
+    const damagedMarker = JSON.parse(originalMarkerText) as Record<string, unknown>;
+    damagedMarker.tree_digest = "sha256:" + "0".repeat(64);
+    fs.writeFileSync(firstMarkerPath, JSON.stringify(damagedMarker));
+    const installedManifest = parseManifest(JSON.parse(fs.readFileSync(
+      path.join(acquire.installDir as string, "northstar-package.json"), "utf8")), "oracle installed manifest");
+    const republished = buildDeclaredTools({
+      stateRoot,
+      packageRoot: acquire.installDir as string,
+      manifest: installedManifest,
+      treeDigest: toolPin.tree_digest,
+    });
+    check(republished[0].path !== record.path, "a later build reused a cache entry it should not have");
+    check(fs.existsSync(record.path) && "sha256:" + sha256Hex(fileBytes(record.path)) === record.sha256,
+      "a later build changed or removed an already-published tool binary");
+    check(fs.existsSync(republished[0].path) && "sha256:" + sha256Hex(fileBytes(republished[0].path)) === republished[0].sha256,
+      "the newly published tool binary is missing or drifted");
+    check(path.dirname(path.dirname(path.dirname(republished[0].path))) !== firstMarkerDir,
+      "two publishes shared one cache directory");
+    fs.writeFileSync(firstMarkerPath, originalMarkerText);
+
     // The declared tool build is scoped: a failing build stops acquisition for
     // explicit audit and leaves no receipt or lifecycle selection behind.
     const brokenState = path.join(out, "broken-state");
@@ -4345,7 +4391,7 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
       pyEveryday.notice.includes("no compatible installed package"),
       "the python host did not degrade an opted-in everyday resolve: " + pyEveryday.notice);
 
-    console.log("oracle-19 declared-tool-build-and-everyday-opt-in: PASS (declared tool builds into the operator cache with an explicit target directory, installed tree keeps its pinned identity, the receipt and every route return the absolute binary, intact cache is reused, a failed build stops audit acquisition without receipt or selection, everyday authoring is unavailable without the repository setting and degrades with the Validate fallback while explicit audit fails closed)");
+    console.log("oracle-19 declared-tool-build-and-everyday-opt-in: PASS (declared tool builds into the operator cache with an explicit target directory, installed tree keeps its pinned identity, the receipt and every route return the absolute binary, intact cache is reused, a failed build stops audit acquisition without receipt or selection, everyday authoring is unavailable without the repository setting and degrades with the Validate fallback while explicit audit fails closed, and a later build publishes additively without deleting or replacing an already-receipted binary)");
   }
 
   console.log("card-117 oracle: PASS (8 review rows + transitions + restrictions + provenance + concurrency + self-check + identity-binding/store negatives)");

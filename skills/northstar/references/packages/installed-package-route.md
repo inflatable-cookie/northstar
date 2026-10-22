@@ -89,18 +89,22 @@ publishes the result under the operator state root:
 
 ```text
 <state-root>/tools/<package-id>@<version>-<recipe-digest>/
-  tool-build.json   identity, recipe digest, binary path, binary digest
-  source/           throwaway build copy
-  target/           explicit target directory
-  root/             declared output prefix
+  build-<unique>/
+    tool-build.json  identity, recipe digest, binary path, binary digest
+    source/          throwaway build copy
+    target/          explicit target directory
+    root/            declared output prefix
 ```
 
 Nothing is written inside the installed tree; the installed package keeps its
-pinned tree digest. The binary is addressed by absolute path and digest, and
-an intact cache is reused, never rebuilt. A missing, non-executable, or
-digest-drifted binary makes the pack unusable: explicit audit stops, and
-everyday authoring degrades (below). A failed build stops acquisition before
-the receipt and lifecycle selection are written.
+pinned tree digest. The binary is addressed by absolute path and digest, and a
+verified published build is reused, never rebuilt. Publishing is additive: a
+concurrent acquisition, or a build after an unusable cache entry, writes a new
+`build-<unique>` directory and never deletes or replaces a build whose path a
+returned receipt already names. A missing, non-executable, or digest-drifted
+binary makes the pack unusable: explicit audit stops, and everyday authoring
+degrades (below). A failed build stops acquisition before the receipt and
+lifecycle selection are written.
 
 ## Everyday authoring opt-in and degradation
 
