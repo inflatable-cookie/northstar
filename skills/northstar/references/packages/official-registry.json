@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "registry_version": "1.5.0",
+  "registry_version": "1.6.0",
   "packages": [
     {
       "package_id": "@northstar/typescript-quality",
@@ -26,12 +26,12 @@
         "workflows": ["everyday_authoring", "explicit_audit_repair"],
         "activation_marker": "northstar:rust-quality"
       },
-      "version": "0.2.0",
+      "version": "0.2.1",
       "repository": "https://github.com/inflatable-cookie/northstar-language-packs",
       "subpath": "packages/rust",
-      "commit": "4a6df3c7b4f6ba8622d3c937bfe1fea53a76500f",
-      "tree_digest": "sha256:59f05e9be6868fb77b7a47e093120648ea68edb8d970f1c0838c62fc506ddf21",
-      "manifest_digest": "sha256:8773ceb2be1aeb170d568b2fee3eebdf50b8b399e213b0a3e505262b39606ecd",
+      "commit": "6f30b60d90ad7bac30a12e795457dd5caf612ee0",
+      "tree_digest": "sha256:e1cb534cf71f651baa6399317db34ae3c1e1aac26aab3b37985798385b6836d8",
+      "manifest_digest": "sha256:4b7f9730bbe64867dd2c22126e844be351717207e85e5aa2784afc140f687df3",
       "compatible_core_range": ">=0.2.0 <1.0.0"
     }
   ]

@@ -1689,15 +1689,15 @@ fn run_card_122_selection_proofs(northstar_skill_root, official_registry_path) {
     expect_selection_case("typescript-svelte-overlay-audit", surface_path, official_registry_path,
         ["--language", "typescript", "--workflow", "explicit_audit_repair", "--overlay", "svelte"], true, "selected @northstar/typescript-quality@0.2.1");
     expect_selection_case("rust-audit", surface_path, official_registry_path,
-        ["--language", "rust", "--workflow", "explicit_audit_repair"], true, "selected @northstar/rust-quality@0.2.0");
+        ["--language", "rust", "--workflow", "explicit_audit_repair"], true, "selected @northstar/rust-quality@0.2.1");
     expect_selection_case("rust-everyday-authoring", surface_path, official_registry_path,
-        ["--language", "rust", "--workflow", "everyday_authoring"], true, "selected @northstar/rust-quality@0.2.0");
+        ["--language", "rust", "--workflow", "everyday_authoring"], true, "selected @northstar/rust-quality@0.2.1");
 
     // Existing activation markers select their registered entries.
     expect_selection_case("typescript-activation-marker", surface_path, official_registry_path,
         ["--marker", "northstar:typescript-quality"], true, "selected @northstar/typescript-quality@0.2.1");
     expect_selection_case("rust-activation-marker", surface_path, official_registry_path,
-        ["--marker", "northstar:rust-quality"], true, "selected @northstar/rust-quality@0.2.0");
+        ["--marker", "northstar:rust-quality"], true, "selected @northstar/rust-quality@0.2.1");
 
     // Unsupported work stays unavailable; no substitution across packages.
     expect_selection_case("typescript-everyday-unavailable", surface_path, official_registry_path,
@@ -1740,9 +1740,9 @@ fn run_card_122_selection_proofs(northstar_skill_root, official_registry_path) {
         "sha256:6b8695019e88a6020e5a4244079ebf4ddf92406448c61345d856ac5b71618a06");
     expect_selection_identity("rust-marker-identity", surface_path, official_registry_path,
         ["--marker", "northstar:rust-quality"],
-        "rust-quality", "4a6df3c7b4f6ba8622d3c937bfe1fea53a76500f",
-        "sha256:59f05e9be6868fb77b7a47e093120648ea68edb8d970f1c0838c62fc506ddf21",
-        "sha256:8773ceb2be1aeb170d568b2fee3eebdf50b8b399e213b0a3e505262b39606ecd");
+        "rust-quality", "6f30b60d90ad7bac30a12e795457dd5caf612ee0",
+        "sha256:e1cb534cf71f651baa6399317db34ae3c1e1aac26aab3b37985798385b6836d8",
+        "sha256:4b7f9730bbe64867dd2c22126e844be351717207e85e5aa2784afc140f687df3");
 
     // The same procedure is generic over policy-free fixtures: two entries,
     // neither named in selection code, select exactly by discovery data.
@@ -1797,15 +1797,15 @@ require(fs::is_file(official_registry_path), "missing official-registry.json");
 let registry = json::read_file(official_registry_path);
 validate_registry_instance(registry, registry_schema, "official-registry.json");
 
-// Task 021: the official registry carries the accepted 0.2.1 TypeScript and
-// 0.2.0 Rust package identities. Registry
+// Task 022: the official registry carries the accepted 0.2.1 TypeScript and
+// 0.2.1 Rust package identities. Registry
 // discovery metadata remains registry-owned. Schema conformance
 // above proves shape; these assertions pin the accepted values themselves
 // so identity or discovery drift fails the checker rather than silently
-// re-pinning. TypeScript is pinned at its 0.2.1 merge commit; Rust remains at
-// its 0.2.0 merge commit.
-require(registry["registry_version"] == "1.5.0",
-    "official-registry.json must record registry_version 1.5.0 for the card-122 discovery binding");
+// re-pinning. TypeScript is pinned at its 0.2.1 merge commit; Rust is pinned
+// at its 0.2.1 merge commit, where its tool builds outside the installed tree.
+require(registry["registry_version"] == "1.6.0",
+    "official-registry.json must record registry_version 1.6.0 for the card-122 discovery binding");
 let registry_packages = registry["packages"];
 require(registry_packages.len() == 2,
     "official-registry.json must contain exactly the accepted TypeScript and Rust entries, found " + registry_packages.len());
@@ -1827,17 +1827,17 @@ for key in canary_expectations.keys() {
 let rust_pin = registry_packages[1];
 let rust_expectations = #{
     "package_id": "@northstar/rust-quality",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "repository": "https://github.com/inflatable-cookie/northstar-language-packs",
     "subpath": "packages/rust",
-    "commit": "4a6df3c7b4f6ba8622d3c937bfe1fea53a76500f",
-    "tree_digest": "sha256:59f05e9be6868fb77b7a47e093120648ea68edb8d970f1c0838c62fc506ddf21",
-    "manifest_digest": "sha256:8773ceb2be1aeb170d568b2fee3eebdf50b8b399e213b0a3e505262b39606ecd",
+    "commit": "6f30b60d90ad7bac30a12e795457dd5caf612ee0",
+    "tree_digest": "sha256:e1cb534cf71f651baa6399317db34ae3c1e1aac26aab3b37985798385b6836d8",
+    "manifest_digest": "sha256:4b7f9730bbe64867dd2c22126e844be351717207e85e5aa2784afc140f687df3",
     "compatible_core_range": ">=0.2.0 <1.0.0",
 };
 for key in rust_expectations.keys() {
     require(rust_pin.contains(key) && rust_pin[key] == rust_expectations[key],
-        "official-registry.json Rust entry field '" + key + "' drifted from the accepted 0.2.0 identity");
+        "official-registry.json Rust entry field '" + key + "' drifted from the accepted 0.2.1 identity");
 }
 // Card 122: registry-owned discovery metadata is part of the accepted pin.
 // It is data for generic selection, not trust: it must agree with the pinned
@@ -1876,7 +1876,7 @@ for entry in registry_packages {
         }
     }
 }
-log("card-122 registry discovery binding: OK (registry_version 1.5.0, both accepted entries carry discovery, registry stays exactly selectable)");
+log("card-122 registry discovery binding: OK (registry_version 1.6.0, both accepted entries carry discovery, registry stays exactly selectable)");
 let fixture_root = path::join(northstar_skill_root, "assets/fixtures/language-packages/policy-free-fixture");
 validate_policy_free_fixture_deep(fixture_root, manifest_schema);
 
