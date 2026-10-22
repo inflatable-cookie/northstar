@@ -3,7 +3,7 @@
 
 The root payload no longer embeds any language implementation. This oracle
 replays both accepted registry pins (@northstar/typescript-quality 0.2.1 at
-b245fdc and @northstar/rust-quality 0.2.1 at 6f30b60) against the read-only
+b245fdc and @northstar/rust-quality 0.2.2 at 069d695) against the read-only
 package-source sibling: it materializes both pinned package trees, reproduces
 all four spec-034 digests with an independent implementation, proves that a
 package-less core stops each language workflow visibly with the manual install
@@ -45,11 +45,11 @@ TS = {
 RUST = {
     "label": "Rust",
     "package_id": "@northstar/rust-quality",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "subpath": "packages/rust",
-    "commit": "6f30b60d90ad7bac30a12e795457dd5caf612ee0",
-    "tree": "sha256:e1cb534cf71f651baa6399317db34ae3c1e1aac26aab3b37985798385b6836d8",
-    "manifest": "sha256:4b7f9730bbe64867dd2c22126e844be351717207e85e5aa2784afc140f687df3",
+    "commit": "069d6957f1e3c70f432a4e971fb54d5ebbe78a0b",
+    "tree": "sha256:b1abdb5092b55931b5cea69d72482d85ac02ce791ca943a125eefb42203c436b",
+    "manifest": "sha256:5d074a0310eef7d241c61a82f2dc746413e3c55326d9e9327ea7095ada26ded6",
     "language": "rust",
     "workflow": "explicit_audit_repair",
     "foreign_markers": ("typescript-quality", "svelte"),
@@ -232,8 +232,8 @@ def main():
     with open(REGISTRY) as handle:
         registry_doc = json.load(handle)
     entries = {entry["package_id"]: entry for entry in registry_doc["packages"]}
-    ok(registry_doc.get("registry_version") == "1.6.0",
-       "shipped registry is the generic-discovery revision 1.6.0",
+    ok(registry_doc.get("registry_version") == "1.7.0",
+       "shipped registry is the generic-discovery revision 1.7.0",
        registry_doc.get("registry_version"))
     for package in PACKAGES:
         entry = entries.get(package["package_id"], {})

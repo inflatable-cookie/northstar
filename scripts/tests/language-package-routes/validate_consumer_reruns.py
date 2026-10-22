@@ -139,11 +139,11 @@ def validate_registry(registry):
             "typescript", "explicit_audit_repair", "0.2.1",
             "b245fdc463cbfb4d95acb9c690c191bcd41f7a65"),
         "@northstar/rust-quality": (
-            "rust", "explicit_audit_repair", "0.2.1",
-            "6f30b60d90ad7bac30a12e795457dd5caf612ee0"),
+            "rust", "explicit_audit_repair", "0.2.2",
+            "069d6957f1e3c70f432a4e971fb54d5ebbe78a0b"),
     }
     entries = {entry["package_id"]: entry for entry in registry["packages"]}
-    ok(registry.get("registry_version") == "1.6.0" and
+    ok(registry.get("registry_version") == "1.7.0" and
        set(entries) == set(expected),
        "official registry contains the expected discovery entries")
     for package_id, (language, workflow, version, commit) in expected.items():
@@ -251,19 +251,19 @@ def rerun_rust(consumer, package):
     marker = "northstar:rust-quality"
     selected = select_by_marker(marker, os.path.join(ROOT, "selected-rust.json"))
     ok(selected.get("package_id") == "@northstar/rust-quality" and
-       selected.get("version") == "0.2.1" and
+       selected.get("version") == "0.2.2" and
        selected.get("tree_digest") == package["tree_digest"],
-       "fixture Rust marker selects the exact 0.2.1 pin", json.dumps(selected))
+       "fixture Rust marker selects the exact 0.2.2 pin", json.dumps(selected))
 
     before_policy = policy_snapshot(consumer)
     before_paths = tree_listing(consumer)
     rust_root = route_package(consumer, "rust", "explicit_audit_repair")
     ok(rust_root.get("status") in ("activated", "routed") and
        rust_root.get("package_id") == package["package_id"] and
-       rust_root.get("version") == "0.2.1" and
+       rust_root.get("version") == "0.2.2" and
        rust_root.get("tree_digest") == package["tree_digest"] and
        rust_root.get("manifest_digest") == package["manifest_digest"],
-       "Rust package routes from its official 0.2.1 pin", json.dumps(rust_root))
+       "Rust package routes from its official 0.2.2 pin", json.dumps(rust_root))
     package_root = rust_root["installed_path"]
     task(package_root, "rust-quality:setup", consumer, "apply", consumer, ".")
 
