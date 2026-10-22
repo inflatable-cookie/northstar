@@ -1798,7 +1798,7 @@ require(fs::is_file(official_registry_path), "missing official-registry.json");
 let registry = json::read_file(official_registry_path);
 validate_registry_instance(registry, registry_schema, "official-registry.json");
 
-// Task 022: the official registry carries the accepted 0.2.1 TypeScript and
+// Task 024: the official registry carries the accepted 0.2.1 TypeScript and
 // 0.2.3 Rust package identities. Registry
 // discovery metadata remains registry-owned. Schema conformance
 // above proves shape; these assertions pin the accepted values themselves
