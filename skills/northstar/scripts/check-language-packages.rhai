@@ -1686,9 +1686,9 @@ fn run_card_122_selection_proofs(northstar_skill_root, official_registry_path) {
 
     // Accepted explicit intent selects the exact accepted entry.
     expect_selection_case("typescript-audit", surface_path, official_registry_path,
-        ["--language", "typescript", "--workflow", "explicit_audit_repair"], true, "selected @northstar/typescript-quality@0.2.1");
+        ["--language", "typescript", "--workflow", "explicit_audit_repair"], true, "selected @northstar/typescript-quality@0.2.2");
     expect_selection_case("typescript-svelte-overlay-audit", surface_path, official_registry_path,
-        ["--language", "typescript", "--workflow", "explicit_audit_repair", "--overlay", "svelte"], true, "selected @northstar/typescript-quality@0.2.1");
+        ["--language", "typescript", "--workflow", "explicit_audit_repair", "--overlay", "svelte"], true, "selected @northstar/typescript-quality@0.2.2");
     expect_selection_case("rust-audit", surface_path, official_registry_path,
         ["--language", "rust", "--workflow", "explicit_audit_repair"], true, "selected @northstar/rust-quality@0.2.3");
     expect_selection_case("rust-everyday-authoring", surface_path, official_registry_path,
@@ -1696,7 +1696,7 @@ fn run_card_122_selection_proofs(northstar_skill_root, official_registry_path) {
 
     // Existing activation markers select their registered entries.
     expect_selection_case("typescript-activation-marker", surface_path, official_registry_path,
-        ["--marker", "northstar:typescript-quality"], true, "selected @northstar/typescript-quality@0.2.1");
+        ["--marker", "northstar:typescript-quality"], true, "selected @northstar/typescript-quality@0.2.2");
     expect_selection_case("rust-activation-marker", surface_path, official_registry_path,
         ["--marker", "northstar:rust-quality"], true, "selected @northstar/rust-quality@0.2.3");
 
@@ -1736,14 +1736,14 @@ fn run_card_122_selection_proofs(northstar_skill_root, official_registry_path) {
     // is ever repinned to a different identity.
     expect_selection_identity("typescript-audit-identity", surface_path, official_registry_path,
         ["--language", "typescript", "--workflow", "explicit_audit_repair", "--overlay", "svelte"],
-        "typescript-quality", "b245fdc463cbfb4d95acb9c690c191bcd41f7a65",
-        "sha256:46f664bfbd31fcbdb055dda3b34ac17ad6eb02f14f31ae69244ff317387928a9",
-        "sha256:6b8695019e88a6020e5a4244079ebf4ddf92406448c61345d856ac5b71618a06");
+        "typescript-quality", "4cdc876b2d0f8c75358a4429c46377f66146b787",
+        "sha256:06725f4ca633e660db18cabed65ceb76e61f43708271446697bf48a0b83e80f3",
+        "sha256:e776287f93fe9ef2e74817dafd980b15c0c90846baf7cbb5bfa06e6d53e8abc1");
     expect_selection_identity("rust-marker-identity", surface_path, official_registry_path,
         ["--marker", "northstar:rust-quality"],
-        "rust-quality", "40d818a4b195f7723dc33798689a2ab005b07785",
-        "sha256:90affb6d75c1981aba72cafe71a44ca22e65470d5203060560d24f0de77e87fd",
-        "sha256:557364ace400f8e8f41beb183a8fb69c02155b137dfa60642fa6de1bddd5f673");
+        "rust-quality", "4cdc876b2d0f8c75358a4429c46377f66146b787",
+        "sha256:67261b22f5cb766e83606f87425e793b385dd952baf1fae1f6348b257270ab39",
+        "sha256:4c88e2213937a8ec1c9025c10c1187173e25476b3d8b02cc5d7a18da31350334");
 
     // The same procedure is generic over policy-free fixtures: two entries,
     // neither named in selection code, select exactly by discovery data.
@@ -1798,33 +1798,34 @@ require(fs::is_file(official_registry_path), "missing official-registry.json");
 let registry = json::read_file(official_registry_path);
 validate_registry_instance(registry, registry_schema, "official-registry.json");
 
-// Task 024: the official registry carries the accepted 0.2.1 TypeScript and
-// 0.2.3 Rust package identities. Registry
+// Task 025: the official registry carries the accepted 0.2.2 TypeScript and
+// 0.2.3 Rust package identities, both at northstar-language-packs 4cdc876.
+// Registry
 // discovery metadata remains registry-owned. Schema conformance
 // above proves shape; these assertions pin the accepted values themselves
 // so identity or discovery drift fails the checker rather than silently
-// re-pinning. TypeScript is pinned at its 0.2.1 merge commit; Rust is pinned
-// at its 0.2.3 commit, where the lifecycle builds its declared tool outside
-// the installed tree.
-require(registry["registry_version"] == "1.7.0",
-    "official-registry.json must record registry_version 1.7.0 for the card-122 discovery binding");
+// re-pinning. TypeScript's 0.2.2 fixes the installed-route proof for Effigy's
+// argument handling; Rust's 0.2.3 lets the lifecycle build its declared tool
+// outside the installed tree.
+require(registry["registry_version"] == "1.8.0",
+    "official-registry.json must record registry_version 1.8.0 for the card-122 discovery binding");
 let registry_packages = registry["packages"];
 require(registry_packages.len() == 2,
     "official-registry.json must contain exactly the accepted TypeScript and Rust entries, found " + registry_packages.len());
 let canary = registry_packages[0];
 let canary_expectations = #{
     "package_id": "@northstar/typescript-quality",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "repository": "https://github.com/inflatable-cookie/northstar-language-packs",
     "subpath": "packages/typescript",
-    "commit": "b245fdc463cbfb4d95acb9c690c191bcd41f7a65",
-    "tree_digest": "sha256:46f664bfbd31fcbdb055dda3b34ac17ad6eb02f14f31ae69244ff317387928a9",
-    "manifest_digest": "sha256:6b8695019e88a6020e5a4244079ebf4ddf92406448c61345d856ac5b71618a06",
+    "commit": "4cdc876b2d0f8c75358a4429c46377f66146b787",
+    "tree_digest": "sha256:06725f4ca633e660db18cabed65ceb76e61f43708271446697bf48a0b83e80f3",
+    "manifest_digest": "sha256:e776287f93fe9ef2e74817dafd980b15c0c90846baf7cbb5bfa06e6d53e8abc1",
     "compatible_core_range": ">=0.2.0 <1.0.0",
 };
 for key in canary_expectations.keys() {
     require(canary.contains(key) && canary[key] == canary_expectations[key],
-        "official-registry.json canary entry field '" + key + "' drifted from the accepted 0.2.1 identity");
+        "official-registry.json canary entry field '" + key + "' drifted from the accepted 0.2.2 identity");
 }
 let rust_pin = registry_packages[1];
 let rust_expectations = #{
@@ -1832,9 +1833,9 @@ let rust_expectations = #{
     "version": "0.2.3",
     "repository": "https://github.com/inflatable-cookie/northstar-language-packs",
     "subpath": "packages/rust",
-    "commit": "40d818a4b195f7723dc33798689a2ab005b07785",
-    "tree_digest": "sha256:90affb6d75c1981aba72cafe71a44ca22e65470d5203060560d24f0de77e87fd",
-    "manifest_digest": "sha256:557364ace400f8e8f41beb183a8fb69c02155b137dfa60642fa6de1bddd5f673",
+    "commit": "4cdc876b2d0f8c75358a4429c46377f66146b787",
+    "tree_digest": "sha256:67261b22f5cb766e83606f87425e793b385dd952baf1fae1f6348b257270ab39",
+    "manifest_digest": "sha256:4c88e2213937a8ec1c9025c10c1187173e25476b3d8b02cc5d7a18da31350334",
     "compatible_core_range": ">=0.2.0 <1.0.0",
 };
 for key in rust_expectations.keys() {
@@ -1878,7 +1879,7 @@ for entry in registry_packages {
         }
     }
 }
-log("card-122 registry discovery binding: OK (registry_version 1.7.0, both accepted entries carry discovery, registry stays exactly selectable)");
+log("card-122 registry discovery binding: OK (registry_version 1.8.0, both accepted entries carry discovery, registry stays exactly selectable)");
 let fixture_root = path::join(northstar_skill_root, "assets/fixtures/language-packages/policy-free-fixture");
 validate_policy_free_fixture_deep(fixture_root, manifest_schema);
 
