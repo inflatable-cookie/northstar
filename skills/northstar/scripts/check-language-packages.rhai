@@ -1622,6 +1622,7 @@ fn run_card_117_oracle(northstar_skill_root, manifest_schema) {
         "oracle-16 registry-selection-intent: PASS",
         "oracle-17 registry-selection-marker: PASS",
         "oracle-18 registry-discovery-agreement: PASS",
+        "oracle-19 declared-tool-build-and-everyday-opt-in: PASS",
         "card-122 oracle: PASS",
     ] {
         require(output.contains(marker), "card-117 oracle missing marker: " + marker);
@@ -1689,15 +1690,15 @@ fn run_card_122_selection_proofs(northstar_skill_root, official_registry_path) {
     expect_selection_case("typescript-svelte-overlay-audit", surface_path, official_registry_path,
         ["--language", "typescript", "--workflow", "explicit_audit_repair", "--overlay", "svelte"], true, "selected @northstar/typescript-quality@0.2.1");
     expect_selection_case("rust-audit", surface_path, official_registry_path,
-        ["--language", "rust", "--workflow", "explicit_audit_repair"], true, "selected @northstar/rust-quality@0.2.2");
+        ["--language", "rust", "--workflow", "explicit_audit_repair"], true, "selected @northstar/rust-quality@0.2.3");
     expect_selection_case("rust-everyday-authoring", surface_path, official_registry_path,
-        ["--language", "rust", "--workflow", "everyday_authoring"], true, "selected @northstar/rust-quality@0.2.2");
+        ["--language", "rust", "--workflow", "everyday_authoring"], true, "selected @northstar/rust-quality@0.2.3");
 
     // Existing activation markers select their registered entries.
     expect_selection_case("typescript-activation-marker", surface_path, official_registry_path,
         ["--marker", "northstar:typescript-quality"], true, "selected @northstar/typescript-quality@0.2.1");
     expect_selection_case("rust-activation-marker", surface_path, official_registry_path,
-        ["--marker", "northstar:rust-quality"], true, "selected @northstar/rust-quality@0.2.2");
+        ["--marker", "northstar:rust-quality"], true, "selected @northstar/rust-quality@0.2.3");
 
     // Unsupported work stays unavailable; no substitution across packages.
     expect_selection_case("typescript-everyday-unavailable", surface_path, official_registry_path,
@@ -1740,9 +1741,9 @@ fn run_card_122_selection_proofs(northstar_skill_root, official_registry_path) {
         "sha256:6b8695019e88a6020e5a4244079ebf4ddf92406448c61345d856ac5b71618a06");
     expect_selection_identity("rust-marker-identity", surface_path, official_registry_path,
         ["--marker", "northstar:rust-quality"],
-        "rust-quality", "069d6957f1e3c70f432a4e971fb54d5ebbe78a0b",
-        "sha256:b1abdb5092b55931b5cea69d72482d85ac02ce791ca943a125eefb42203c436b",
-        "sha256:5d074a0310eef7d241c61a82f2dc746413e3c55326d9e9327ea7095ada26ded6");
+        "rust-quality", "40d818a4b195f7723dc33798689a2ab005b07785",
+        "sha256:90affb6d75c1981aba72cafe71a44ca22e65470d5203060560d24f0de77e87fd",
+        "sha256:557364ace400f8e8f41beb183a8fb69c02155b137dfa60642fa6de1bddd5f673");
 
     // The same procedure is generic over policy-free fixtures: two entries,
     // neither named in selection code, select exactly by discovery data.
@@ -1797,13 +1798,14 @@ require(fs::is_file(official_registry_path), "missing official-registry.json");
 let registry = json::read_file(official_registry_path);
 validate_registry_instance(registry, registry_schema, "official-registry.json");
 
-// Task 023: the official registry carries the accepted 0.2.1 TypeScript and
-// 0.2.2 Rust package identities. Registry
+// Task 024: the official registry carries the accepted 0.2.1 TypeScript and
+// 0.2.3 Rust package identities. Registry
 // discovery metadata remains registry-owned. Schema conformance
 // above proves shape; these assertions pin the accepted values themselves
 // so identity or discovery drift fails the checker rather than silently
 // re-pinning. TypeScript is pinned at its 0.2.1 merge commit; Rust is pinned
-// at its 0.2.2 merge commit, where the installed-route proof runs in a Queue worker.
+// at its 0.2.3 commit, where the lifecycle builds its declared tool outside
+// the installed tree.
 require(registry["registry_version"] == "1.7.0",
     "official-registry.json must record registry_version 1.7.0 for the card-122 discovery binding");
 let registry_packages = registry["packages"];
@@ -1827,17 +1829,17 @@ for key in canary_expectations.keys() {
 let rust_pin = registry_packages[1];
 let rust_expectations = #{
     "package_id": "@northstar/rust-quality",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "repository": "https://github.com/inflatable-cookie/northstar-language-packs",
     "subpath": "packages/rust",
-    "commit": "069d6957f1e3c70f432a4e971fb54d5ebbe78a0b",
-    "tree_digest": "sha256:b1abdb5092b55931b5cea69d72482d85ac02ce791ca943a125eefb42203c436b",
-    "manifest_digest": "sha256:5d074a0310eef7d241c61a82f2dc746413e3c55326d9e9327ea7095ada26ded6",
+    "commit": "40d818a4b195f7723dc33798689a2ab005b07785",
+    "tree_digest": "sha256:90affb6d75c1981aba72cafe71a44ca22e65470d5203060560d24f0de77e87fd",
+    "manifest_digest": "sha256:557364ace400f8e8f41beb183a8fb69c02155b137dfa60642fa6de1bddd5f673",
     "compatible_core_range": ">=0.2.0 <1.0.0",
 };
 for key in rust_expectations.keys() {
     require(rust_pin.contains(key) && rust_pin[key] == rust_expectations[key],
-        "official-registry.json Rust entry field '" + key + "' drifted from the accepted 0.2.2 identity");
+        "official-registry.json Rust entry field '" + key + "' drifted from the accepted 0.2.3 identity");
 }
 // Card 122: registry-owned discovery metadata is part of the accepted pin.
 // It is data for generic selection, not trust: it must agree with the pinned

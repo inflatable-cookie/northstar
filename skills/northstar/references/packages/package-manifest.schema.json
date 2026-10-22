@@ -160,6 +160,53 @@
       },
       "additionalProperties": false
     },
+    "tool": {
+      "type": "object",
+      "description": "Optional buildable tool: the lifecycle builds it into the operator cache outside the immutable install, with the declared explicit target directory, and records the binary in the installation receipt.",
+      "required": [
+        "id",
+        "source_path",
+        "build"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+        },
+        "source_path": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_-][a-zA-Z0-9_.-]*(/[a-zA-Z0-9_-][a-zA-Z0-9_.-]*)*$"
+        },
+        "build": {
+          "type": "object",
+          "required": [
+            "command",
+            "argv",
+            "output"
+          ],
+          "properties": {
+            "command": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9_.-]*$"
+            },
+            "argv": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "output": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9_-][a-zA-Z0-9_.-]*(/[a-zA-Z0-9_-][a-zA-Z0-9_.-]*)*$"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
     "evidence_providers": {
       "type": "array",
       "items": {

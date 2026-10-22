@@ -139,8 +139,8 @@ def validate_registry(registry):
             "typescript", "explicit_audit_repair", "0.2.1",
             "b245fdc463cbfb4d95acb9c690c191bcd41f7a65"),
         "@northstar/rust-quality": (
-            "rust", "explicit_audit_repair", "0.2.2",
-            "069d6957f1e3c70f432a4e971fb54d5ebbe78a0b"),
+            "rust", "explicit_audit_repair", "0.2.3",
+            "40d818a4b195f7723dc33798689a2ab005b07785"),
     }
     entries = {entry["package_id"]: entry for entry in registry["packages"]}
     ok(registry.get("registry_version") == "1.7.0" and
@@ -251,30 +251,34 @@ def rerun_rust(consumer, package):
     marker = "northstar:rust-quality"
     selected = select_by_marker(marker, os.path.join(ROOT, "selected-rust.json"))
     ok(selected.get("package_id") == "@northstar/rust-quality" and
-       selected.get("version") == "0.2.2" and
+       selected.get("version") == "0.2.3" and
        selected.get("tree_digest") == package["tree_digest"],
-       "fixture Rust marker selects the exact 0.2.2 pin", json.dumps(selected))
+       "fixture Rust marker selects the exact 0.2.3 pin", json.dumps(selected))
 
     before_policy = policy_snapshot(consumer)
     before_paths = tree_listing(consumer)
     rust_root = route_package(consumer, "rust", "explicit_audit_repair")
     ok(rust_root.get("status") in ("activated", "routed") and
        rust_root.get("package_id") == package["package_id"] and
-       rust_root.get("version") == "0.2.2" and
+       rust_root.get("version") == "0.2.3" and
        rust_root.get("tree_digest") == package["tree_digest"] and
        rust_root.get("manifest_digest") == package["manifest_digest"],
-       "Rust package routes from its official 0.2.2 pin", json.dumps(rust_root))
+       "Rust package routes from its official 0.2.3 pin", json.dumps(rust_root))
     package_root = rust_root["installed_path"]
     task(package_root, "rust-quality:setup", consumer, "apply", consumer, ".")
 
     rust_env = {**os.environ, "CARGO_NET_OFFLINE": "true",
                 "CARGO_TARGET_DIR": os.path.join(ROOT, "cargo-target"),
                 "RUSTFLAGS": "--cap-lints=allow"}
-    probe_root = os.path.join(ROOT, "rust-probe")
-    run(["cargo", "install", "--locked", "--offline", "--path",
-         os.path.join(package_root, "tools", "rust-quality"),
-         "--root", probe_root], env=rust_env)
-    probe = os.path.join(probe_root, "bin", "northstar-rust-quality")
+    tools = rust_root.get("tools") or []
+    ok(len(tools) == 1 and
+       tools[0].get("id") == "northstar-rust-quality" and
+       os.path.isabs(tools[0].get("path", "")) and
+       os.access(tools[0].get("path", ""), os.X_OK) and
+       not tools[0].get("path", "").startswith(package_root + os.sep),
+       "official Rust route returns its lifecycle-built tool outside the install",
+       json.dumps(tools))
+    probe = tools[0]["path"] if tools else os.path.join(ROOT, "missing-tool")
 
     anchor = "src/lib.rs"
     anchor_path = os.path.join(consumer, anchor)

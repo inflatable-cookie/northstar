@@ -40,6 +40,9 @@ const PORTABLE_PATH = /^[a-zA-Z0-9_-][a-zA-Z0-9_.-]*(?:\/[a-zA-Z0-9_-][a-zA-Z0-9
 const SEMVER = /^[0-9]+\.[0-9]+\.[0-9]+$/;
 const PACKAGE_ID = /^@[a-z0-9-]+\/[a-z0-9-]+$/;
 const REQUEST_ID = /^[A-Za-z0-9._:-]{8,128}$/;
+const TOOL_ID = /^[a-z0-9][a-z0-9-]{0,63}$/;
+const TOOL_COMMAND = /^[a-z0-9][a-z0-9_.-]*$/;
+const TOOL_PLACEHOLDERS = ["{source}", "{target_dir}", "{root}"] as const;
 
 const FIXTURE_MANIFEST_DIGEST = "sha256:b9cdf39bbf2ae4fc2aeee656d2c8dc655c0faa951fbeec255eb887f210a683f9";
 const FIXTURE_TREE_DIGEST = "sha256:b8e76dfdc87d84904ada0620425c0a94200532d11207e3d1339626fb2df85aa3";
@@ -54,6 +57,22 @@ interface SelfCheckInvocation {
   command?: string;
 }
 
+interface ToolBuildDeclaration {
+  id: string;
+  source_path: string;
+  build: { command: string; argv: string[]; output: string };
+}
+
+// A built tool is cache, not package payload: the path is absolute, the digest
+// binds the exact bytes, and the install receipt records both so a route can
+// return the binary without building anything by hand.
+interface ToolBuildRecord {
+  id: string;
+  path: string;
+  sha256: string;
+  built_at: string;
+}
+
 interface Manifest {
   schema_version: string;
   package_id: string;
@@ -66,6 +85,7 @@ interface Manifest {
   entrypoints: Record<string, string>;
   runtime_capabilities: { required_commands: string[]; optional_effigy_selectors: string[] };
   self_check: { entrypoint: string; invocation: SelfCheckInvocation; validated_profile_versions: string[]; validated_schema_versions: string[] };
+  tool?: ToolBuildDeclaration;
   evidence_providers: string[];
 }
 
@@ -127,6 +147,7 @@ interface Receipt {
   content_identity: { package_tree_digest: string; manifest_digest: string };
   compatibility: { compatible_core_range: string; installed_core_version: string };
   installation: { installed_path: string; installed_at: string; acquisition_adapter: string; activation_status: string };
+  tools?: ToolBuildRecord[];
 }
 
 interface RegistryDoc {
@@ -175,6 +196,7 @@ interface AcquireOutcome {
   treeDigest?: string;
   manifestDigest?: string;
   installDir?: string;
+  tools?: ToolBuildRecord[];
 }
 
 interface AcquireOptions {
@@ -954,8 +976,11 @@ function parseManifest(raw: unknown, context: string): Manifest {
     check(isSafePackageRelativePath(entrypoints[key]), context + " entrypoint[" + key + "] violates containment");
   }
   const capabilities = asRecord(doc.runtime_capabilities ?? {}, context + ".runtime_capabilities");
-  asStringArray(capabilities.required_commands, context + ".runtime_capabilities.required_commands");
+  const requiredCommands = asStringArray(capabilities.required_commands, context + ".runtime_capabilities.required_commands");
   asStringArray(capabilities.optional_effigy_selectors, context + ".runtime_capabilities.optional_effigy_selectors");
+  if (doc.tool !== undefined) {
+    parseToolDeclaration(doc.tool, context + ".tool", requiredCommands);
+  }
   const selfCheck = asRecord(doc.self_check ?? {}, context + ".self_check");
   check(isSafePackageRelativePath(selfCheck.entrypoint), context + " self_check.entrypoint violates containment");
   const invocationRaw = asRecord(selfCheck.invocation ?? {}, context + ".self_check.invocation");
@@ -970,6 +995,245 @@ function parseManifest(raw: unknown, context: string): Manifest {
     check(!(forbidden in doc), context + " self-claims trust or official status (trust must be core-owned)");
   }
   return raw as Manifest;
+}
+
+function parseToolDeclaration(raw: unknown, context: string, requiredCommands: string[]): void {
+  const tool = asRecord(raw, context);
+  requireClosedObject(tool, ["id", "source_path", "build"], context);
+  const id = asString(tool.id, context + ".id");
+  check(TOOL_ID.test(id), context + ".id is invalid: " + id);
+  check(isSafePackageRelativePath(tool.source_path), context + ".source_path violates containment");
+  const build = asRecord(tool.build, context + ".build");
+  requireClosedObject(build, ["command", "argv", "output"], context + ".build");
+  const command = asString(build.command, context + ".build.command");
+  check(TOOL_COMMAND.test(command), context + ".build.command must be a bare command name: " + command);
+  check(requiredCommands.includes(command),
+    context + ".build.command is not declared in runtime_capabilities.required_commands: " + command);
+  check(Array.isArray(build.argv) && build.argv.length > 0, context + ".build.argv must be a non-empty array");
+  let targetDir = 0;
+  let outputRoot = 0;
+  for (const rawArg of build.argv as unknown[]) {
+    const arg = asString(rawArg, context + ".build.argv entry");
+    let residual = arg;
+    for (const token of TOOL_PLACEHOLDERS) {
+      const uses = residual.split(token).length - 1;
+      if (token === "{target_dir}") {
+        targetDir += uses;
+      }
+      if (token === "{root}") {
+        outputRoot += uses;
+      }
+      residual = residual.split(token).join("");
+    }
+    check(!residual.includes("{") && !residual.includes("}"),
+      context + ".build.argv contains an unknown placeholder: " + arg);
+  }
+  check(targetDir > 0, context + ".build.argv must name an explicit {target_dir} outside the install");
+  check(outputRoot > 0, context + ".build.argv must name an explicit {root} for the built output");
+  check(isSafePackageRelativePath(build.output), context + ".build.output violates containment");
+}
+
+// ---- declared tool build and cache (outside the immutable install) ----
+
+function toolRecipeDigest(manifest: Manifest, treeDigest: string): string {
+  check(manifest.tool !== undefined, "tool recipe requested for a package that declares no tool");
+  const recipe = {
+    package_id: manifest.package_id,
+    version: manifest.version,
+    tree_digest: treeDigest,
+    tool: manifest.tool,
+  };
+  return "sha256:" + sha256Hex(Buffer.from(JSON.stringify(recipe)));
+}
+
+function toolCacheParent(stateRoot: string, manifest: Manifest, treeDigest: string): string {
+  return path.join(stateRoot, "tools", manifest.package_id + "@" + manifest.version + "-" + toolRecipeDigest(manifest, treeDigest).slice(7));
+}
+
+// Multiple builds may publish under one recipe parent (concurrent acquisitions,
+// or a cache left by a crashed build). Every publish is additive and immutable
+// once written: a published build is never deleted or replaced, because a
+// receipt may already name its binary. Reuse accepts any verified build.
+function findPublishedTool(cacheParent: string, manifest: Manifest, treeDigest: string): ToolBuildRecord | null {
+  if (!fs.existsSync(cacheParent) || !fs.statSync(cacheParent).isDirectory()) {
+    return null;
+  }
+  const names = fs.readdirSync(cacheParent).sort();
+  for (const name of names) {
+    const candidate = path.join(cacheParent, name);
+    try {
+      if (!fs.statSync(candidate).isDirectory()) {
+        continue;
+      }
+    } catch {
+      continue;
+    }
+    const record = cachedToolRecord(candidate, manifest, treeDigest);
+    if (record !== null) {
+      return record;
+    }
+  }
+  return null;
+}
+
+function expandToolArg(arg: string, values: Record<string, string>): string {
+  let expanded = arg;
+  for (const [token, value] of Object.entries(values)) {
+    expanded = expanded.split(token).join(value);
+  }
+  return expanded;
+}
+
+function toolBinaryDigest(binaryPath: string, context: string): string {
+  let st: fs.Stats;
+  try {
+    st = fs.lstatSync(binaryPath);
+  } catch {
+    throw new Error(context + " declared tool output is missing: " + binaryPath);
+  }
+  check(st.isFile() && !st.isSymbolicLink(), context + " declared tool output is not a regular file: " + binaryPath);
+  check((st.mode & 0o111) !== 0, context + " declared tool output is not executable: " + binaryPath);
+  return "sha256:" + sha256Hex(fileBytes(binaryPath));
+}
+
+function cachedToolRecord(cacheRoot: string, manifest: Manifest, treeDigest: string): ToolBuildRecord | null {
+  const markerPath = path.join(cacheRoot, "tool-build.json");
+  if (!fs.existsSync(markerPath)) {
+    return null;
+  }
+  let marker: Record<string, unknown>;
+  try {
+    marker = asRecord(JSON.parse(fs.readFileSync(markerPath, "utf8")), "tool build marker");
+  } catch {
+    return null;
+  }
+  const tool = manifest.tool as ToolBuildDeclaration;
+  if (marker.package_id !== manifest.package_id ||
+      marker.version !== manifest.version ||
+      marker.tree_digest !== treeDigest ||
+      marker.recipe_digest !== toolRecipeDigest(manifest, treeDigest) ||
+      marker.tool_id !== tool.id ||
+      marker.output !== tool.build.output ||
+      !isString(marker.path) ||
+      !isString(marker.sha256) ||
+      !isString(marker.built_at)) {
+    return null;
+  }
+  const binaryPath = marker.path;
+  if (!path.isAbsolute(binaryPath) || !fs.existsSync(binaryPath)) {
+    return null;
+  }
+  try {
+    if (toolBinaryDigest(binaryPath, "cached tool") !== marker.sha256) {
+      return null;
+    }
+  } catch {
+    return null;
+  }
+  return { id: tool.id, path: binaryPath, sha256: marker.sha256, built_at: marker.built_at };
+}
+
+function buildDeclaredTools(opts: {
+  stateRoot: string;
+  packageRoot: string;
+  manifest: Manifest;
+  treeDigest: string;
+}): ToolBuildRecord[] {
+  const { stateRoot, packageRoot, manifest, treeDigest } = opts;
+  if (manifest.tool === undefined) {
+    return [];
+  }
+  const tool = manifest.tool;
+  const sourceDir = path.join(packageRoot, tool.source_path);
+  check(fs.existsSync(sourceDir) && fs.statSync(sourceDir).isDirectory(),
+    "declared tool source path is missing from the verified payload: " + tool.source_path);
+  const cacheParent = toolCacheParent(stateRoot, manifest, treeDigest);
+  const cached = findPublishedTool(cacheParent, manifest, treeDigest);
+  if (cached !== null) {
+    return [cached];
+  }
+  const resolvedCommand = findCommand(tool.build.command);
+  check(resolvedCommand !== null, "required tool build command not available on this host: " + tool.build.command);
+  fs.mkdirSync(path.join(stateRoot, "tools"), { recursive: true, mode: 0o700 });
+  fs.mkdirSync(cacheParent, { recursive: true, mode: 0o700 });
+  const buildParent = fs.mkdtempSync(path.join(stateRoot, "tools", ".build-"));
+  try {
+    const buildRoot = path.join(buildParent, "build");
+    fs.mkdirSync(buildRoot);
+    const sourceCopy = path.join(buildRoot, "source");
+    const targetDir = path.join(buildRoot, "target");
+    const outputRoot = path.join(buildRoot, "root");
+    copyTree(packageRoot, sourceCopy);
+    fs.mkdirSync(targetDir, { recursive: true });
+    fs.mkdirSync(outputRoot, { recursive: true });
+    const values: Record<string, string> = {
+      "{source}": path.join(sourceCopy, tool.source_path),
+      "{target_dir}": targetDir,
+      "{root}": outputRoot,
+    };
+    const argv = tool.build.argv.map((arg) => expandToolArg(arg, values));
+    notice("build " + manifest.package_id + "@" + manifest.version + " tool=" + tool.id +
+      " target=" + cacheParent + " workflow=package_acquisition");
+    const result = spawnSync(resolvedCommand, argv, { cwd: buildRoot, encoding: "utf8" });
+    check(result.error === undefined, "tool build launch failed: " + String(result.error));
+    check(result.status === 0,
+      "tool build failed for " + manifest.package_id + "@" + manifest.version +
+      " (exit " + String(result.status) + "): " +
+      (String(result.stdout ?? "") + String(result.stderr ?? "")).trim().slice(-600));
+    const binaryPath = path.join(outputRoot, tool.build.output);
+    const digest = toolBinaryDigest(binaryPath, "tool build");
+    // Unique publish target: a concurrent build can never collide with, delete,
+    // or replace a build whose path a returned receipt already names.
+    const publishedRoot = path.join(cacheParent, "build-" + randomUUID());
+    const publishedPath = path.join(publishedRoot, "root", tool.build.output);
+    const builtAt = new Date().toISOString();
+    const marker = {
+      schema_version: "1.0.0",
+      package_id: manifest.package_id,
+      version: manifest.version,
+      tree_digest: treeDigest,
+      recipe_digest: toolRecipeDigest(manifest, treeDigest),
+      tool_id: tool.id,
+      output: tool.build.output,
+      path: publishedPath,
+      sha256: digest,
+      built_at: builtAt,
+    };
+    fs.writeFileSync(path.join(buildRoot, "tool-build.json"), JSON.stringify(marker));
+    // Publish atomically under a fresh name. Never remove an existing build:
+    // another acquisition may already have returned its binary in a receipt.
+    fs.renameSync(buildRoot, publishedRoot);
+    return [{ id: tool.id, path: publishedPath, sha256: digest, built_at: builtAt }];
+  } finally {
+    fs.rmSync(buildParent, { recursive: true, force: true });
+  }
+}
+
+function verifyReceiptTools(receipt: Receipt, manifest: Manifest): ToolBuildRecord[] | null {
+  if (manifest.tool === undefined) {
+    return [];
+  }
+  const tool = manifest.tool;
+  const recorded = receipt.tools;
+  if (!Array.isArray(recorded) || recorded.length !== 1) {
+    return null;
+  }
+  const entry = recorded[0];
+  if (entry.id !== tool.id || !isString(entry.path) || !path.isAbsolute(entry.path) ||
+      !isString(entry.sha256) || !isString(entry.built_at)) {
+    return null;
+  }
+  if (!fs.existsSync(entry.path)) {
+    return null;
+  }
+  try {
+    if (toolBinaryDigest(entry.path, "receipt tool") !== entry.sha256) {
+      return null;
+    }
+  } catch {
+    return null;
+  }
+  return [{ id: entry.id, path: entry.path, sha256: entry.sha256, built_at: entry.built_at }];
 }
 
 const DISCOVERY_TOKEN = /^[a-z0-9][a-z0-9_-]*$/;
@@ -1046,6 +1310,52 @@ function consumerActivationValid(consumerDir: string, packageId: string, version
   return { valid: false, scope: null };
 }
 
+// ---- everyday authoring opt-in (repository setting, off by default) ----
+//
+// The repository owns this one setting, next to the language-quality profile
+// and deviations it already owns. Absent, false, or malformed means off: a
+// repository that never opted in gets no everyday-authoring route. The
+// explicit audit route never reads this setting.
+
+const CONSUMER_ACTIVATION_DOC = "docs/knowledge/contracts/language-quality-activation.json";
+
+function consumerEverydayAuthoring(consumerDir: string): { enabled: boolean; detail: string } {
+  const docPath = path.join(consumerDir, CONSUMER_ACTIVATION_DOC);
+  if (!fs.existsSync(docPath)) {
+    return { enabled: false, detail: "no " + CONSUMER_ACTIVATION_DOC + " in this repository" };
+  }
+  let raw: unknown;
+  try {
+    raw = JSON.parse(fs.readFileSync(docPath, "utf8"));
+  } catch {
+    return { enabled: false, detail: CONSUMER_ACTIVATION_DOC + " is not valid JSON" };
+  }
+  if (!isRecord(raw)) {
+    return { enabled: false, detail: CONSUMER_ACTIVATION_DOC + " is not an object" };
+  }
+  const value = raw.everyday_authoring;
+  if (value === true) {
+    return { enabled: true, detail: "enabled by " + CONSUMER_ACTIVATION_DOC };
+  }
+  if (value === undefined) {
+    return { enabled: false, detail: "everyday_authoring is absent from " + CONSUMER_ACTIVATION_DOC };
+  }
+  if (value === false) {
+    return { enabled: false, detail: "everyday_authoring is false in " + CONSUMER_ACTIVATION_DOC };
+  }
+  return { enabled: false, detail: "everyday_authoring must be the boolean true in " + CONSUMER_ACTIVATION_DOC };
+}
+
+function everydayUnavailableNotice(consumerDir: string, detail: string): string {
+  return "everyday authoring is opt-in and not enabled for " + consumerDir + " (" + detail +
+    "); no package route was attempted and ordinary work is unaffected";
+}
+
+function everydayDegradedNotice(reason: string): string {
+  return "everyday authoring degraded: " + reason +
+    "; continue with this repository's normal Validate checks and keep the workflow unavailable until the package routes again";
+}
+
 // ---- acquisition ----
 
 function copyTree(srcRoot: string, dstRoot: string): void {
@@ -1077,7 +1387,7 @@ function registryEntryDigest(entry: RegistryEntry): string {
   return "sha256:" + sha256Hex(Buffer.from(JSON.stringify(sorted)));
 }
 
-function buildReceipt(pin: Pin, installDir: string, packageId: string, version: string, coreVersion: string): Receipt {
+function buildReceipt(pin: Pin, installDir: string, packageId: string, version: string, coreVersion: string, tools: ToolBuildRecord[]): Receipt {
   const entry = pin.entry;
   const trustClass: Record<string, unknown> = pin.source === "official"
     ? {
@@ -1124,6 +1434,7 @@ function buildReceipt(pin: Pin, installDir: string, packageId: string, version: 
       acquisition_adapter: "fixture-staging",
       activation_status: "installed",
     },
+    ...(tools.length > 0 ? { tools } : {}),
   };
 }
 
@@ -1157,6 +1468,10 @@ function acquireAndActivate(opts: AcquireOptions): AcquireOutcome {
     }
     const identity = installed.reference.tree_digest;
     enforceRouteRestrictions(trustDoc, registry, packageId, version, identity, installed.reference.manifest_digest, workflow, consumerScope);
+    const tools = verifyReceiptTools(installed.receipt, installed.manifest);
+    check(tools !== null,
+      "installed receipt has no verified tool record for the tool declared by " + packageId + "@" + version +
+      "; re-acquire the package before routing");
     const routeNotice = "routed " + packageId + " " + workflow + " local-only identity=" + identity;
     notice(routeNotice);
     return {
@@ -1166,6 +1481,7 @@ function acquireAndActivate(opts: AcquireOptions): AcquireOutcome {
       manifestDigest: installed.reference.manifest_digest,
       receiptDigest: installed.reference.receipt_digest,
       installDir: installed.reference.installed_path,
+      tools,
     };
   }
 
@@ -1253,7 +1569,18 @@ function acquireAndActivate(opts: AcquireOptions): AcquireOutcome {
     copyTree(stagedRoot, installDir);
   }
 
-  const receipt = buildReceipt(pin, installDir, packageId, version, coreVersion);
+  // A declared tool is built into the operator cache, never into the
+  // immutable install. The build reads a throwaway copy of the verified
+  // payload and names its own target directory, so the installed tree keeps
+  // the exact pinned identity; the receipt records the binary path.
+  const tools = buildDeclaredTools({
+    stateRoot,
+    packageRoot: installDir,
+    manifest: stagedManifest,
+    treeDigest: pin.entry.tree_digest,
+  });
+
+  const receipt = buildReceipt(pin, installDir, packageId, version, coreVersion, tools);
   const receiptDigest = writeImmutableReceipt(stateRoot, receipt);
 
   const current = readStateDoc(stateRoot);
@@ -1290,6 +1617,7 @@ function acquireAndActivate(opts: AcquireOptions): AcquireOutcome {
     treeDigest: pin.entry.tree_digest,
     manifestDigest: pin.entry.manifest_digest,
     installDir,
+    tools,
   };
 }
 
@@ -1358,12 +1686,13 @@ interface HostResult {
   protocol_version: string;
   request_id: string;
   operation: "resolve" | "acquire_activate" | "rollback";
-  status: "routed" | "activated" | "rolled_back" | "stopped";
+  status: "routed" | "activated" | "rolled_back" | "stopped" | "degraded" | "unavailable";
   notice: string;
   tree_digest?: string;
   manifest_digest?: string;
   installed_path?: string;
   receipt_digest?: string;
+  tools?: ToolBuildRecord[];
 }
 
 type HostCapability = "catalogue" | "identity" | "atomic" | "process" | "acquisition";
@@ -1406,7 +1735,8 @@ function parseHostResult(raw: unknown, context: string): HostResult {
   const operation = asString(doc.operation, context + ".operation");
   check(operation === "resolve" || operation === "acquire_activate" || operation === "rollback", context + " has invalid operation");
   const status = asString(doc.status, context + ".status");
-  check(status === "routed" || status === "activated" || status === "rolled_back" || status === "stopped", context + " has invalid status");
+  check(status === "routed" || status === "activated" || status === "rolled_back" || status === "stopped" ||
+    status === "degraded" || status === "unavailable", context + " has invalid status");
   asString(doc.notice, context + ".notice");
   return raw as HostResult;
 }
@@ -1435,17 +1765,40 @@ function hostStopped(request: HostRequest, message: string): HostResult {
   return hostResult(request, { operation: request.operation, status: "stopped", notice: message });
 }
 
+// Every unsuccessful terminal host result for an opted-in everyday request is
+// reported as degraded with the repository's Validate fallback. Explicit audit
+// keeps the closed `stopped` result. This covers result branches, not just
+// thrown errors.
+function hostTerminal(request: HostRequest, message: string): HostResult {
+  if (request.workflow === "everyday_authoring") {
+    const n = everydayDegradedNotice(message);
+    notice(n);
+    return hostResult(request, { operation: request.operation, status: "degraded", notice: n });
+  }
+  return hostStopped(request, message);
+}
+
 function executeHostRequest(request: HostRequest, registryPath: string | null, capabilities: Set<HostCapability>): HostResult {
   const needed = OP_CAPABILITIES[request.operation];
   for (const capability of needed) {
     if (!capabilities.has(capability)) {
       const n = "host capability missing: " + capability + " for operation " + request.operation + " (" + request.package_id + "@" + request.version + " " + request.workflow + ")";
-      return hostStopped(request, n);
+      return hostTerminal(request, n);
     }
   }
   try {
     const trustDoc = hostTrustDoc(request.state_root);
     const registry = hostRegistry(registryPath);
+    // Everyday authoring is a repository choice, off by default. A repository
+    // that has not opted in gets no route at all, and ordinary work continues.
+    if (request.workflow === "everyday_authoring") {
+      const setting = consumerEverydayAuthoring(request.consumer_dir);
+      if (!setting.enabled) {
+        const n = everydayUnavailableNotice(request.consumer_dir, setting.detail);
+        notice(n);
+        return hostResult(request, { operation: request.operation, status: "unavailable", notice: n });
+      }
+    }
     // The request's consumer scope binds trust restrictions at the host
     // boundary; it cannot be silently ignored.
     const requestScope = request.consumer_scope ?? null;
@@ -1453,7 +1806,7 @@ function executeHostRequest(request: HostRequest, registryPath: string | null, c
       const resolved = resolveInstalledPackage(request.state_root, trustDoc, request.package_id, request.version, request.language, request.workflow, request.core_version);
       if (resolved === null) {
         const n = "no compatible installed package for " + request.package_id + "@" + request.version + " (" + request.workflow + ")";
-        return hostStopped(request, n);
+        return hostTerminal(request, n);
       }
       // Registry-owned discovery must agree with the verified installed
       // manifest before routing. A registry entry claiming languages,
@@ -1466,9 +1819,13 @@ function executeHostRequest(request: HostRequest, registryPath: string | null, c
       if (selectedEntry !== null && !discoveryAgrees(selectedEntry, resolved.manifest)) {
         const n = "registry discovery metadata disagrees with the verified installed manifest for " +
           request.package_id + "@" + request.version + " (metadata drift); the route stops before execution";
-        return hostStopped(request, n);
+        return hostTerminal(request, n);
       }
       enforceRouteRestrictions(trustDoc, registry, request.package_id, request.version, resolved.reference.tree_digest, resolved.reference.manifest_digest, request.workflow, requestScope);
+      const tools = verifyReceiptTools(resolved.receipt, resolved.manifest);
+      check(tools !== null,
+        "installed receipt has no verified tool record for the tool declared by " + request.package_id + "@" + request.version +
+        "; re-acquire the package before routing");
       const n = "routed " + request.package_id + " " + request.workflow + " local-only identity=" + resolved.reference.tree_digest;
       notice(n);
       return hostResult(request, {
@@ -1479,6 +1836,7 @@ function executeHostRequest(request: HostRequest, registryPath: string | null, c
         manifest_digest: resolved.reference.manifest_digest,
         installed_path: resolved.reference.installed_path,
         receipt_digest: resolved.reference.receipt_digest,
+        tools,
       });
     }
     if (request.operation === "acquire_activate") {
@@ -1505,9 +1863,10 @@ function executeHostRequest(request: HostRequest, registryPath: string | null, c
           manifest_digest: outcome.manifestDigest,
           installed_path: outcome.installDir,
           receipt_digest: outcome.receiptDigest,
+          tools: outcome.tools ?? [],
         });
       }
-      return hostStopped(request, outcome.notice);
+      return hostTerminal(request, outcome.notice);
     }
     const noticeText = rollbackSelected(request.state_root, trustDoc, request.target_receipt_digest as string, request.core_version);
     const after = readStateDoc(request.state_root) as LifecycleDoc;
@@ -1522,7 +1881,13 @@ function executeHostRequest(request: HostRequest, registryPath: string | null, c
       receipt_digest: request.target_receipt_digest,
     });
   } catch (err) {
-    const n = "workflow " + request.workflow + " for " + request.package_id + "@" + request.version + " stopped: " + (err as Error).message + "; manual or local-path installation route required";
+    const detail = (err as Error).message;
+    if (request.workflow === "everyday_authoring") {
+      const n = everydayDegradedNotice(detail);
+      notice(n);
+      return hostResult(request, { operation: request.operation, status: "degraded", notice: n });
+    }
+    const n = "workflow " + request.workflow + " for " + request.package_id + "@" + request.version + " stopped: " + detail + "; manual or local-path installation route required";
     return hostStopped(request, n);
   }
 }
@@ -3792,6 +4157,243 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
   }
 
 
+  // ---- oracle 19: declared tools build outside the install; everyday degrades ----
+  {
+    const out = path.join(outRoot, "r19-tools");
+    mkdirP(out);
+    const toolScript = "mkdir -p \"{target_dir}\" \"{root}/bin\" && " +
+      "printf '#!/bin/sh\\necho fixture-tool\\n' > \"{root}/bin/fixture-tool\" && " +
+      "chmod 755 \"{root}/bin/fixture-tool\"";
+    const toolVariant = buildVariantPackage(fixtureRoot, "0.4.0", (manifest) => {
+      manifest.runtime_capabilities.required_commands.push("sh");
+      manifest.available_workflows = ["everyday_authoring", "explicit_audit_repair"];
+      manifest.entrypoints.everyday_authoring = "references/modes/fixture-audit.md";
+      manifest.tool = {
+        id: "fixture-tool",
+        source_path: "scripts",
+        build: { command: "sh", argv: ["-c", toolScript], output: "bin/fixture-tool" },
+      };
+    });
+    const brokenVariant = buildVariantPackage(fixtureRoot, "0.4.1", (manifest) => {
+      manifest.runtime_capabilities.required_commands.push("sh");
+      manifest.tool = {
+        id: "fixture-tool",
+        source_path: "scripts",
+        build: { command: "sh", argv: ["-c", "mkdir -p \"{target_dir}\" \"{root}\" && exit 9"], output: "bin/missing-tool" },
+      };
+    });
+    // A declaration without an explicit target directory cannot name where a
+    // build writes, so the manifest is rejected before anything runs.
+    let missingTargetRejected = false;
+    try {
+      const rawManifest = JSON.parse(fs.readFileSync(path.join(toolVariant, "northstar-package.json"), "utf8"));
+      rawManifest.tool.build.argv = ["-c", "mkdir -p \"{root}\"", "--source", "{source}"];
+      parseManifest(rawManifest, "tool-without-target");
+    } catch (err) {
+      missingTargetRejected = String((err as Error).message).includes("explicit {target_dir}");
+    }
+    check(missingTargetRejected, "a tool declaration without an explicit target directory was accepted");
+
+    const stateRoot = path.join(out, "state");
+    mkdirP(stateRoot);
+    const toolPin = variantPin("@northstar/language-fixture", "0.4.0", toolVariant);
+    const trustDoc = fixtureTrustDoc(fixtureRoot, [toolPin], []);
+    fs.writeFileSync(path.join(stateRoot, "operator-trust.json"), JSON.stringify(trustDoc));
+    const consumer = consumerDir();
+    const acquire = acquireAndActivate({
+      stateRoot, consumerDir: consumer, trustDoc, registry: emptyRegistry(),
+      packageId: "@northstar/language-fixture", version: "0.4.0",
+      language: "fixture-lang", workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION, adapter: fixtureAdapter(toolVariant), intent: "workflow_request",
+    });
+    check(acquire.status === "activated", "tool package did not activate: " + acquire.notice);
+    const record = (acquire.tools ?? [])[0];
+    check(record !== undefined && path.isAbsolute(record.path) && fs.existsSync(record.path),
+      "activated package did not return an absolute built tool path");
+    check((fs.statSync(record.path).mode & 0o111) !== 0, "built tool is not executable");
+    check(!record.path.startsWith((acquire.installDir as string) + path.sep),
+      "built tool was written inside the immutable install");
+    check(canonicalTreeDigest(acquire.installDir as string, "tool install") === toolPin.tree_digest,
+      "tool build changed the installed package tree");
+    check(!fs.existsSync(path.join(acquire.installDir as string, "target")) &&
+      !fs.existsSync(path.join(acquire.installDir as string, "tools")),
+      "tool build left build output inside the installed package");
+    const toolRun = spawnSync(record.path, [], { encoding: "utf8" });
+    check(toolRun.status === 0 && String(toolRun.stdout).includes("fixture-tool"),
+      "built tool could not run: " + String(toolRun.stdout) + String(toolRun.stderr));
+    const receipt = loadReceipt(stateRoot, acquire.receiptDigest as string);
+    check(receipt !== null && receipt.tools !== undefined && receipt.tools[0].path === record.path &&
+      receipt.tools[0].sha256 === record.sha256,
+      "installation receipt does not record the built tool binary");
+
+    // Cache reuse: a second acquisition of the same identity routes from local
+    // state and must not rebuild the tool.
+    const cacheMarker = path.join(path.dirname(path.dirname(path.dirname(record.path))), "tool-build.json");
+    check(fs.existsSync(cacheMarker), "tool build marker missing from the operator cache");
+    const markerInode = fs.statSync(cacheMarker).ino;
+    const routed = acquireAndActivate({
+      stateRoot, consumerDir: consumer, trustDoc, registry: emptyRegistry(),
+      packageId: "@northstar/language-fixture", version: "0.4.0",
+      language: "fixture-lang", workflow: "explicit_audit_repair",
+      coreVersion: CORE_VERSION, adapter: fixtureAdapter(toolVariant), intent: "workflow_request",
+    });
+    check(routed.status === "routed" && (routed.tools ?? [])[0]?.path === record.path,
+      "local route did not return the recorded tool path");
+    check(fs.statSync(cacheMarker).ino === markerInode, "local route rebuilt an intact tool cache");
+
+    // A later build never deletes or replaces an already-published binary,
+    // because a returned receipt may already name it. Force a lookup miss on
+    // the first build and publish a second one.
+    const firstMarkerDir = path.dirname(path.dirname(path.dirname(record.path)));
+    const firstMarkerPath = path.join(firstMarkerDir, "tool-build.json");
+    const originalMarkerText = fs.readFileSync(firstMarkerPath, "utf8");
+    const damagedMarker = JSON.parse(originalMarkerText) as Record<string, unknown>;
+    damagedMarker.tree_digest = "sha256:" + "0".repeat(64);
+    fs.writeFileSync(firstMarkerPath, JSON.stringify(damagedMarker));
+    const installedManifest = parseManifest(JSON.parse(fs.readFileSync(
+      path.join(acquire.installDir as string, "northstar-package.json"), "utf8")), "oracle installed manifest");
+    const republished = buildDeclaredTools({
+      stateRoot,
+      packageRoot: acquire.installDir as string,
+      manifest: installedManifest,
+      treeDigest: toolPin.tree_digest,
+    });
+    check(republished[0].path !== record.path, "a later build reused a cache entry it should not have");
+    check(fs.existsSync(record.path) && "sha256:" + sha256Hex(fileBytes(record.path)) === record.sha256,
+      "a later build changed or removed an already-published tool binary");
+    check(fs.existsSync(republished[0].path) && "sha256:" + sha256Hex(fileBytes(republished[0].path)) === republished[0].sha256,
+      "the newly published tool binary is missing or drifted");
+    check(path.dirname(path.dirname(path.dirname(republished[0].path))) !== firstMarkerDir,
+      "two publishes shared one cache directory");
+    fs.writeFileSync(firstMarkerPath, originalMarkerText);
+
+    // The declared tool build is scoped: a failing build stops acquisition for
+    // explicit audit and leaves no receipt or lifecycle selection behind.
+    const brokenState = path.join(out, "broken-state");
+    mkdirP(brokenState);
+    const brokenPin = variantPin("@northstar/language-fixture", "0.4.1", brokenVariant);
+    const brokenTrust = fixtureTrustDoc(fixtureRoot, [brokenPin], []);
+    fs.writeFileSync(path.join(brokenState, "operator-trust.json"), JSON.stringify(brokenTrust));
+    let buildStopped = false;
+    try {
+      acquireAndActivate({
+        stateRoot: brokenState, consumerDir: consumerDir(), trustDoc: brokenTrust, registry: emptyRegistry(),
+        packageId: "@northstar/language-fixture", version: "0.4.1",
+        language: "fixture-lang", workflow: "explicit_audit_repair",
+        coreVersion: CORE_VERSION, adapter: fixtureAdapter(brokenVariant), intent: "workflow_request",
+      });
+    } catch (err) {
+      buildStopped = String((err as Error).message).includes("tool build failed");
+    }
+    check(buildStopped, "a failing declared tool build did not stop explicit acquisition");
+    check(!fs.existsSync(path.join(brokenState, "lifecycle-state.json")) &&
+      !fs.existsSync(path.join(brokenState, "receipts")),
+      "a failing tool build wrote receipt or lifecycle state");
+
+    // Everyday authoring is opt-in: without the repository setting there is no
+    // route, and with it a failing pack degrades instead of failing the task.
+    // Explicit audit keeps failing closed.
+    const hostDir = path.join(out, "host-protocol");
+    mkdirP(path.join(hostDir, "requests"));
+    mkdirP(path.join(hostDir, "results"));
+    const hostRequestBase = {
+      protocol_version: "1.0.0",
+      intent: "workflow_request",
+      package_id: "@northstar/language-fixture",
+      version: "0.4.0",
+      language: "fixture-lang",
+      core_version: CORE_VERSION,
+      state_root: stateRoot,
+    };
+    const writeHostResult = (name: string, request: Record<string, unknown>, registryPath: string | null = null): HostResult => {
+      fs.writeFileSync(path.join(hostDir, "requests", name + ".json"), JSON.stringify(request));
+      const res = executeHostRequest(request as unknown as HostRequest, registryPath, FULL_HOST_CAPABILITIES);
+      fs.writeFileSync(path.join(hostDir, "results", name + ".json"), JSON.stringify(res));
+      return res;
+    };
+    const auditResolve = writeHostResult("tool-audit-resolve", {
+      ...hostRequestBase, request_id: "req-oracle19-tool-audit", operation: "resolve",
+      workflow: "explicit_audit_repair", consumer_dir: consumer,
+    });
+    check(auditResolve.status === "routed" && (auditResolve.tools ?? [])[0]?.path === record.path,
+      "host route did not return the recorded tool path: " + auditResolve.notice);
+    const noSetting = writeHostResult("everyday-unavailable", {
+      ...hostRequestBase, request_id: "req-oracle19-everyday-off", operation: "resolve",
+      workflow: "everyday_authoring", consumer_dir: consumer,
+    });
+    check(noSetting.status === "unavailable" && noSetting.notice.includes("opt-in") &&
+      noSetting.notice.includes("ordinary work is unaffected") && noSetting.tools === undefined,
+      "everyday route without the repository setting was not unavailable: " + noSetting.notice);
+    writeText(path.join(consumer, CONSUMER_ACTIVATION_DOC), JSON.stringify({
+      package_id: "@northstar/language-fixture",
+      version: "0.4.0",
+      everyday_authoring: true,
+    }));
+    const missingState = path.join(out, "missing-state");
+    mkdirP(missingState);
+    const degraded = writeHostResult("everyday-degraded", {
+      ...hostRequestBase, request_id: "req-oracle19-everyday-degraded", operation: "acquire_activate",
+      workflow: "everyday_authoring", consumer_dir: consumer, version: "0.9.9", state_root: missingState,
+    });
+    check(degraded.status === "degraded" && degraded.notice.includes("Validate") &&
+      degraded.notice.includes("everyday authoring degraded"),
+      "an opted-in everyday route did not degrade: " + degraded.notice);
+    const auditStopped = writeHostResult("audit-stopped", {
+      ...hostRequestBase, request_id: "req-oracle19-audit-stopped", operation: "acquire_activate",
+      workflow: "explicit_audit_repair", consumer_dir: consumer, version: "0.9.9", state_root: missingState,
+    });
+    check(auditStopped.status === "stopped" && auditStopped.notice.includes("manual or local-path installation route required"),
+      "explicit audit did not fail closed when the pack could not resolve: " + auditStopped.notice);
+
+    // Terminal host-result branches (not thrown errors) also degrade for an
+    // opted-in everyday route: no installed package, and metadata drift.
+    const everydayMissing = writeHostResult("everyday-missing-degraded", {
+      ...hostRequestBase, request_id: "req-oracle19-everyday-missing", operation: "resolve",
+      workflow: "everyday_authoring", consumer_dir: consumer, state_root: missingState,
+    });
+    check(everydayMissing.status === "degraded" && everydayMissing.notice.includes("Validate") &&
+      everydayMissing.notice.includes("no compatible installed package"),
+      "an opted-in everyday resolve with no installed package did not degrade: " + everydayMissing.notice);
+    const driftRegistryPath = path.join(out, "drift-registry.json");
+    fs.writeFileSync(driftRegistryPath, JSON.stringify({
+      schema_version: "1.0.0",
+      registry_version: "1.0.0",
+      packages: [{
+        package_id: "@northstar/language-fixture",
+        version: "0.4.0",
+        tree_digest: toolPin.tree_digest,
+        manifest_digest: toolPin.manifest_digest,
+        compatible_core_range: ">=0.2.0 <1.0.0",
+        discovery: { languages: ["fixture-lang"], overlays: ["drifted"], workflows: ["everyday_authoring", "explicit_audit_repair"], activation_marker: "fixture:drifted" },
+      }],
+    }));
+    const everydayDrift = writeHostResult("everyday-drift-degraded", {
+      ...hostRequestBase, request_id: "req-oracle19-everyday-drift", operation: "resolve",
+      workflow: "everyday_authoring", consumer_dir: consumer,
+    }, driftRegistryPath);
+    check(everydayDrift.status === "degraded" && everydayDrift.notice.includes("Validate") &&
+      everydayDrift.notice.includes("metadata drift"),
+      "an opted-in everyday resolve over metadata drift did not degrade: " + everydayDrift.notice);
+    const auditDrift = writeHostResult("audit-drift-stopped", {
+      ...hostRequestBase, request_id: "req-oracle19-audit-drift", operation: "resolve",
+      workflow: "explicit_audit_repair", consumer_dir: consumer,
+    }, driftRegistryPath);
+    check(auditDrift.status === "stopped" && auditDrift.notice.includes("metadata drift"),
+      "explicit audit did not stay closed over metadata drift: " + auditDrift.notice);
+
+    // The resolve-only python adapter degrades the same terminal branch.
+    const pyHost = path.join(path.dirname(process.argv[1]), "language-package-host.py");
+    const pyEverydayRes = path.join(hostDir, "results", "python-everyday-missing-degraded.json");
+    const pyEverydayRun = spawnSync("python3", [pyHost, path.join(hostDir, "requests", "everyday-missing-degraded.json"), pyEverydayRes], { encoding: "utf8" });
+    check(pyEverydayRun.status === 0, "python host failed on everyday missing package: " + String(pyEverydayRun.stderr));
+    const pyEveryday = JSON.parse(fs.readFileSync(pyEverydayRes, "utf8")) as HostResult;
+    check(pyEveryday.status === "degraded" && pyEveryday.notice.includes("Validate") &&
+      pyEveryday.notice.includes("no compatible installed package"),
+      "the python host did not degrade an opted-in everyday resolve: " + pyEveryday.notice);
+
+    console.log("oracle-19 declared-tool-build-and-everyday-opt-in: PASS (declared tool builds into the operator cache with an explicit target directory, installed tree keeps its pinned identity, the receipt and every route return the absolute binary, intact cache is reused, a failed build stops audit acquisition without receipt or selection, everyday authoring is unavailable without the repository setting and degrades with the Validate fallback while explicit audit fails closed, and a later build publishes additively without deleting or replacing an already-receipted binary)");
+  }
+
   console.log("card-117 oracle: PASS (8 review rows + transitions + restrictions + provenance + concurrency + self-check + identity-binding/store negatives)");
   console.log("card-118 oracle: PASS (official registry pin route: visible acquisition stop, route intent, installed offline route, drift stop, rollback recovery, registry-version provenance)");
   console.log("card-122 oracle: PASS (generic registry-owned selection: explicit intent and exact activation markers select one data-driven entry; unsupported work, ambiguity, drift, and detection fail closed before acquisition)");
@@ -3831,8 +4433,6 @@ function runPublicRoute(args: string[]): void {
   const flags = parseRouteFlags(args);
   const scriptRoot = path.resolve(path.dirname(process.argv[1]), "..");
   const registryPath = path.resolve(flags["--registry"] ?? path.join(scriptRoot, "references/packages/official-registry.json"));
-  check(fs.existsSync(registryPath), "official registry missing: " + registryPath);
-  const registry = parseRegistryDoc(JSON.parse(fs.readFileSync(registryPath, "utf8")), "route registry");
 
   const consumerFlag = flags["--consumer"];
   check(consumerFlag !== undefined, "route requires --consumer <directory>");
@@ -3845,6 +4445,47 @@ function runPublicRoute(args: string[]): void {
   check(workflow !== undefined, "route requires --workflow <workflow>");
   const marker = flags["--marker"];
   const requestedLanguage = flags["--language"];
+  const overlayFlag = flags["--overlay"];
+  const stateRoot = path.resolve(flags["--state-root"] ?? defaultOperatorStateRoot());
+  const emit = (result: Record<string, unknown>): void => {
+    const output = JSON.stringify(result, null, 2) + "\n";
+    if (flags["--json"] !== undefined) {
+      fs.writeFileSync(path.resolve(flags["--json"]), output);
+    }
+    process.stdout.write(output);
+  };
+  const unavailableBase = {
+    language: requestedLanguage ?? null,
+    workflow,
+    overlay: overlayFlag ?? null,
+    state_root: stateRoot,
+    package_id: null,
+    version: null,
+    installed_path: null,
+    entrypoint_path: null,
+    tools: [] as ToolBuildRecord[],
+  };
+
+  // Everyday authoring is a repository choice, off by default: without the
+  // setting there is no route at all, and ordinary work is untouched.
+  if (workflow === "everyday_authoring") {
+    const setting = consumerEverydayAuthoring(consumerDir);
+    if (!setting.enabled) {
+      emit({
+        ...unavailableBase,
+        status: "unavailable",
+        notice: everydayUnavailableNotice(consumerDir, setting.detail),
+      });
+      return;
+    }
+  }
+
+  try {
+  // Registry resolution is inside the everyday fallback boundary: a missing or
+  // malformed registry degrades an opted-in everyday route instead of failing
+  // it, while explicit audit keeps failing closed.
+  check(fs.existsSync(registryPath), "official registry missing: " + registryPath);
+  const registry = parseRegistryDoc(JSON.parse(fs.readFileSync(registryPath, "utf8")), "route registry");
   let query: SelectionQuery;
   if (marker !== undefined) {
     query = { kind: "marker", marker };
@@ -3865,7 +4506,6 @@ function runPublicRoute(args: string[]): void {
     check(entry.discovery.overlays.includes(overlay), "selected package does not declare overlay " + overlay);
   }
 
-  const stateRoot = path.resolve(flags["--state-root"] ?? defaultOperatorStateRoot());
   fs.mkdirSync(stateRoot, { recursive: true, mode: 0o700 });
   fs.chmodSync(stateRoot, 0o700);
   const trustDoc = hostTrustDoc(stateRoot);
@@ -3910,13 +4550,23 @@ function runPublicRoute(args: string[]): void {
     tree_digest: outcome.treeDigest,
     manifest_digest: outcome.manifestDigest,
     receipt_digest: outcome.receiptDigest,
+    tools: outcome.tools ?? [],
     notice: outcome.notice,
   };
-  const output = JSON.stringify(result, null, 2) + "\n";
-  if (flags["--json"] !== undefined) {
-    fs.writeFileSync(path.resolve(flags["--json"]), output);
+  emit(result);
+  } catch (err) {
+    if (workflow !== "everyday_authoring") {
+      throw err;
+    }
+    // An opted-in repository whose pack cannot resolve keeps working: report
+    // the exact failure and point at the repository's own validation instead
+    // of failing the task. Explicit audit still fails closed above.
+    emit({
+      ...unavailableBase,
+      status: "degraded",
+      notice: everydayDegradedNotice((err as Error).message),
+    });
   }
-  process.stdout.write(output);
 }
 
 async function main(): Promise<void> {

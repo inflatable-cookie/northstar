@@ -25,6 +25,7 @@ PORTABLE_PATH = re.compile(r"^[a-zA-Z0-9_-][a-zA-Z0-9_.-]*(?:/[a-zA-Z0-9_-][a-zA
 SEMVER = re.compile(r"^[0-9]+\.[0-9]+\.[0-9]+$")
 PACKAGE_ID = re.compile(r"^@[a-z0-9-]+/[a-z0-9-]+$")
 DIGEST = re.compile(r"^sha256:[0-9a-f]{64}$")
+CONSUMER_ACTIVATION_DOC = "docs/knowledge/contracts/language-quality-activation.json"
 
 OP_CAPABILITIES = {
     "resolve": ["catalogue", "identity"],
@@ -256,6 +257,58 @@ def host_stopped(request, operation, message):
     return host_result(request, {"operation": operation, "status": "stopped", "notice": message})
 
 
+def host_terminal(request, operation, message):
+    """Terminal pack failure: degrade opted-in everyday work, stop everything else."""
+    if request.get("workflow") == "everyday_authoring":
+        message = ("everyday authoring degraded: " + message +
+                   "; continue with this repository's normal Validate checks and keep the workflow unavailable until the package routes again")
+        notice(message)
+        return host_result(request, {"operation": operation, "status": "degraded", "notice": message})
+    return host_stopped(request, operation, message)
+
+
+def consumer_everyday_authoring(consumer_dir):
+    doc_path = os.path.join(consumer_dir, CONSUMER_ACTIVATION_DOC)
+    if not os.path.isfile(doc_path):
+        return False, "no " + CONSUMER_ACTIVATION_DOC + " in this repository"
+    try:
+        with open(doc_path, "r", encoding="utf-8") as handle:
+            raw = json.load(handle)
+    except Exception:
+        return False, CONSUMER_ACTIVATION_DOC + " is not valid JSON"
+    if not isinstance(raw, dict):
+        return False, CONSUMER_ACTIVATION_DOC + " is not an object"
+    value = raw.get("everyday_authoring")
+    if value is True:
+        return True, "enabled by " + CONSUMER_ACTIVATION_DOC
+    if value is False:
+        return False, "everyday_authoring is false in " + CONSUMER_ACTIVATION_DOC
+    if value is None:
+        return False, "everyday_authoring is absent from " + CONSUMER_ACTIVATION_DOC
+    return False, "everyday_authoring must be the boolean true in " + CONSUMER_ACTIVATION_DOC
+
+
+def verified_tools(receipt, manifest):
+    declared = manifest.get("tool")
+    if declared is None:
+        return []
+    recorded = receipt.get("tools")
+    if not isinstance(recorded, list) or len(recorded) != 1:
+        raise RuntimeError("installed receipt has no verified tool record for the declared tool")
+    entry = recorded[0]
+    path = entry.get("path")
+    if entry.get("id") != declared.get("id") or not isinstance(path, str) or not os.path.isabs(path):
+        raise RuntimeError("installed receipt tool record does not match the declared tool")
+    if not os.path.isfile(path):
+        raise RuntimeError("recorded tool binary is missing: " + path)
+    if not os.stat(path).st_mode & 0o111:
+        raise RuntimeError("recorded tool binary is not executable: " + path)
+    digest = "sha256:" + sha256_hex(file_bytes(path))
+    if digest != entry.get("sha256"):
+        raise RuntimeError("recorded tool binary drifted from its receipt digest: " + path)
+    return [entry]
+
+
 def execute_host_request(request, denied):
     """Execute one host request.
 
@@ -271,20 +324,28 @@ def execute_host_request(request, denied):
     supported_ops = {"resolve"}
     if operation not in supported_ops:
         message = "host capability missing: operation " + str(operation) + " is not implemented by this host adapter"
-        return host_stopped(request, operation, message)
+        return host_terminal(request, operation, message)
     missing = [cap for cap in OP_CAPABILITIES.get(operation, []) if cap in denied]
     if missing:
         message = "host capability missing: " + missing[0] + " for operation " + operation
-        return host_stopped(request, operation, message)
+        return host_terminal(request, operation, message)
     try:
+        if request["workflow"] == "everyday_authoring":
+            enabled, detail = consumer_everyday_authoring(request["consumer_dir"])
+            if not enabled:
+                message = ("everyday authoring is opt-in and not enabled for " + request["consumer_dir"] +
+                           " (" + detail + "); no package route was attempted and ordinary work is unaffected")
+                notice(message)
+                return host_result(request, {"operation": operation, "status": "unavailable", "notice": message})
         state_root = request["state_root"]
         trust_doc = host_trust_doc(state_root)
         resolved = resolve_installed(state_root, trust_doc, request["package_id"], request["version"],
                                      request["language"], request["workflow"], request["core_version"])
         if resolved is None:
             message = "no compatible installed package for " + request["package_id"] + "@" + request["version"] + " (" + request["workflow"] + ")"
-            return host_stopped(request, operation, message)
-        reference, _manifest, _receipt = resolved
+            return host_terminal(request, operation, message)
+        reference, manifest, receipt = resolved
+        tools = verified_tools(receipt, manifest)
         # The request's consumer scope binds trust restrictions; a scope
         # restriction on the matching pin that disagrees stops the route.
         request_scope = request.get("consumer_scope")
@@ -294,10 +355,10 @@ def execute_host_request(request, denied):
                     and entry.get("manifest_digest") == reference.get("manifest_digest")):
                 if "workflows" in entry and request["workflow"] not in entry["workflows"]:
                     message = "allowlist pin restricts workflows to " + str(entry["workflows"]) + "; requested " + request["workflow"]
-                    return host_stopped(request, operation, message)
+                    return host_terminal(request, operation, message)
                 if "consumer_scope" in entry and entry["consumer_scope"] != "" and entry["consumer_scope"] != request_scope:
                     message = "allowlist pin restricts consumer scope to '" + entry["consumer_scope"] + "'; request scope is '" + str(request_scope) + "'"
-                    return host_stopped(request, operation, message)
+                    return host_terminal(request, operation, message)
         message = "routed " + request["package_id"] + " " + request["workflow"] + " local-only identity=" + reference["tree_digest"]
         notice(message)
         return host_result(request, {
@@ -308,8 +369,14 @@ def execute_host_request(request, denied):
             "manifest_digest": reference["manifest_digest"],
             "installed_path": reference["installed_path"],
             "receipt_digest": reference["receipt_digest"],
+            "tools": tools,
         })
     except Exception as err:  # noqa: BLE001 - protocol stops scoped on any host failure
+        if request.get("workflow") == "everyday_authoring":
+            message = ("everyday authoring degraded: " + str(err) +
+                       "; continue with this repository's normal Validate checks and keep the workflow unavailable until the package routes again")
+            notice(message)
+            return host_result(request, {"operation": operation, "status": "degraded", "notice": message})
         message = "workflow " + request.get("workflow", "?") + " for " + request.get("package_id", "?") + " stopped: " + str(err)
         return host_stopped(request, operation, message)
 

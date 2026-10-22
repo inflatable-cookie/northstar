@@ -3,7 +3,7 @@
 
 The root payload no longer embeds any language implementation. This oracle
 replays both accepted registry pins (@northstar/typescript-quality 0.2.1 at
-b245fdc and @northstar/rust-quality 0.2.2 at 069d695) against the read-only
+b245fdc and @northstar/rust-quality 0.2.3 at 40d818a) against the read-only
 package-source sibling: it materializes both pinned package trees, reproduces
 all four spec-034 digests with an independent implementation, proves that a
 package-less core stops each language workflow visibly with the manual install
@@ -45,11 +45,11 @@ TS = {
 RUST = {
     "label": "Rust",
     "package_id": "@northstar/rust-quality",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "subpath": "packages/rust",
-    "commit": "069d6957f1e3c70f432a4e971fb54d5ebbe78a0b",
-    "tree": "sha256:b1abdb5092b55931b5cea69d72482d85ac02ce791ca943a125eefb42203c436b",
-    "manifest": "sha256:5d074a0310eef7d241c61a82f2dc746413e3c55326d9e9327ea7095ada26ded6",
+    "commit": "40d818a4b195f7723dc33798689a2ab005b07785",
+    "tree": "sha256:90affb6d75c1981aba72cafe71a44ca22e65470d5203060560d24f0de77e87fd",
+    "manifest": "sha256:557364ace400f8e8f41beb183a8fb69c02155b137dfa60642fa6de1bddd5f673",
     "language": "rust",
     "workflow": "explicit_audit_repair",
     "foreign_markers": ("typescript-quality", "svelte"),
@@ -365,11 +365,35 @@ def main():
         ok(public_results[TS["package_id"]].get("installed_path") !=
            public_results[RUST["package_id"]].get("installed_path"),
            "public route keeps official packages independently addressed")
+        rust_tools = public_results[RUST["package_id"]].get("tools") or []
+        rust_installed = public_results[RUST["package_id"]].get("installed_path", "")
+        ok(len(rust_tools) == 1 and
+           rust_tools[0].get("id") == "northstar-rust-quality" and
+           os.path.isabs(rust_tools[0].get("path", "")) and
+           os.path.isfile(rust_tools[0]["path"]) and
+           os.access(rust_tools[0]["path"], os.X_OK) and
+           not rust_tools[0]["path"].startswith(rust_installed + os.sep),
+           "official Rust route returns its lifecycle-built absolute tool path",
+           json.dumps(rust_tools))
+        ok(spec034_tree_digest(rust_installed) == RUST["tree"],
+           "Rust install keeps its pinned tree digest after the tool build")
+        with open(os.path.join(public_state, "receipts",
+                               public_results[RUST["package_id"]]["receipt_digest"] + ".json")) as handle:
+            rust_receipt = json.load(handle)
+        ok(rust_receipt.get("tools") and rust_receipt["tools"][0]["path"] == rust_tools[0]["path"],
+           "Rust installation receipt records the built tool", json.dumps(rust_receipt.get("tools")))
 
         marker_consumer = os.path.join(ROOT, "marker-consumer")
-        os.makedirs(marker_consumer)
+        os.makedirs(os.path.join(marker_consumer, "docs/knowledge/contracts"))
         with open(os.path.join(marker_consumer, "AGENTS.md"), "w") as handle:
             handle.write("<!-- northstar:rust-quality:start -->\n<!-- northstar:rust-quality:end -->\n")
+        with open(os.path.join(marker_consumer, "docs/knowledge/contracts",
+                               "language-quality-activation.json"), "w") as handle:
+            json.dump({
+                "package_id": RUST["package_id"],
+                "version": RUST["version"],
+                "everyday_authoring": True,
+            }, handle)
         marker_result_path = os.path.join(ROOT, "public-marker.json")
         marker_run = run([
             "effigy", "skill", "run", "--path", os.path.join(REPO, "skills", "northstar"),
@@ -388,6 +412,117 @@ def main():
            marker_result.get("workflow") == "everyday_authoring",
            "public route honors an exact AGENTS activation marker from durable state",
            marker_run.stdout + marker_run.stderr)
+
+        # ---- everyday authoring is opt-in; a missing pack degrades, never blocks ----
+        unopted = os.path.join(ROOT, "unopted-consumer")
+        os.makedirs(unopted)
+        unopted_path = os.path.join(ROOT, "unopted.json")
+        unopted_run = run([
+            "effigy", "skill", "run", "--path", os.path.join(REPO, "skills", "northstar"),
+            "northstar/language:route", "--repo", os.path.join(REPO, "skills", "northstar"),
+            "--",
+            "--registry", public_registry_path,
+            "--consumer", unopted,
+            "--state-root", public_state,
+            "--language", "rust",
+            "--workflow", "everyday_authoring",
+            "--json", unopted_path,
+        ], check=False)
+        unopted_result = json.load(open(unopted_path)) if os.path.exists(unopted_path) else {}
+        ok(unopted_run.returncode == 0 and unopted_result.get("status") == "unavailable" and
+           "opt-in" in unopted_result.get("notice", "") and
+           unopted_result.get("tools") == [],
+           "everyday authoring without the repository setting is unavailable and exits clean",
+           unopted_run.stdout + unopted_run.stderr)
+
+        # A repository that opted in keeps working when the pack cannot resolve:
+        # everyday reports the failure and points at its own validation while the
+        # explicit audit route still fails closed.
+        no_rust_registry = json.loads(json.dumps(public_registry))
+        no_rust_registry["packages"] = [entry for entry in no_rust_registry["packages"]
+                                        if entry["package_id"] != RUST["package_id"]]
+        no_rust_path = os.path.join(ROOT, "no-rust-registry.json")
+        with open(no_rust_path, "w") as handle:
+            json.dump(no_rust_registry, handle)
+        degraded_state = os.path.join(ROOT, "degraded-state")
+        degraded_path = os.path.join(ROOT, "degraded.json")
+        degraded_run = run([
+            "effigy", "skill", "run", "--path", os.path.join(REPO, "skills", "northstar"),
+            "northstar/language:route", "--repo", os.path.join(REPO, "skills", "northstar"),
+            "--",
+            "--registry", no_rust_path,
+            "--consumer", marker_consumer,
+            "--state-root", degraded_state,
+            "--language", "rust",
+            "--workflow", "everyday_authoring",
+            "--json", degraded_path,
+        ], check=False)
+        degraded_result = json.load(open(degraded_path)) if os.path.exists(degraded_path) else {}
+        ok(degraded_run.returncode == 0 and degraded_result.get("status") == "degraded" and
+           "Validate" in degraded_result.get("notice", "") and
+           "installed_path" in degraded_result and degraded_result["installed_path"] is None,
+           "an opted-in everyday route degrades to repository validation when the pack cannot resolve",
+           degraded_run.stdout + degraded_run.stderr)
+        audit_path = os.path.join(ROOT, "degraded-audit.json")
+        audit_run = run([
+            "effigy", "skill", "run", "--path", os.path.join(REPO, "skills", "northstar"),
+            "northstar/language:route", "--repo", os.path.join(REPO, "skills", "northstar"),
+            "--",
+            "--registry", no_rust_path,
+            "--consumer", marker_consumer,
+            "--state-root", degraded_state,
+            "--language", "rust",
+            "--workflow", "explicit_audit_repair",
+            "--json", audit_path,
+        ], check=False)
+        ok(audit_run.returncode != 0 and not os.path.exists(audit_path),
+           "explicit audit still fails closed when the pack cannot resolve",
+           audit_run.stdout + audit_run.stderr)
+
+        # Registry resolution failures stay inside the everyday fallback:
+        # missing and malformed registry files degrade an opted-in consumer,
+        # while explicit audit and an unopted consumer keep their behaviour.
+        malformed_registry = os.path.join(ROOT, "malformed-registry.json")
+        with open(malformed_registry, "w") as handle:
+            handle.write("{not json")
+
+        def route_with_registry(name, consumer_dir, registry_path, workflow):
+            output = os.path.join(ROOT, name + ".json")
+            result = run([
+                "effigy", "skill", "run", "--path", os.path.join(REPO, "skills", "northstar"),
+                "northstar/language:route", "--repo", os.path.join(REPO, "skills", "northstar"),
+                "--",
+                "--registry", registry_path,
+                "--consumer", consumer_dir,
+                "--state-root", os.path.join(ROOT, name + "-state"),
+                "--language", "rust",
+                "--workflow", workflow,
+                "--json", output,
+            ], check=False)
+            parsed = json.load(open(output)) if os.path.exists(output) else {}
+            return result, parsed
+
+        missing_registry = os.path.join(ROOT, "no-such-registry.json")
+        for name, registry_path in (
+                ("degraded-missing-registry", missing_registry),
+                ("degraded-malformed-registry", malformed_registry)):
+            result, parsed = route_with_registry(name, marker_consumer, registry_path,
+                                                 "everyday_authoring")
+            ok(result.returncode == 0 and parsed.get("status") == "degraded" and
+               "Validate" in parsed.get("notice", ""),
+               f"everyday route degrades on {name.split('-', 1)[1]}",
+               result.stdout + result.stderr)
+        result, parsed = route_with_registry("audit-malformed-registry", marker_consumer,
+                                             malformed_registry, "explicit_audit_repair")
+        ok(result.returncode != 0 and not parsed,
+           "explicit audit fails closed on a malformed registry",
+           result.stdout + result.stderr)
+        result, parsed = route_with_registry("unopted-missing-registry", unopted,
+                                             missing_registry, "everyday_authoring")
+        ok(result.returncode == 0 and parsed.get("status") == "unavailable" and
+           "opt-in" in parsed.get("notice", ""),
+           "an unopted everyday route is unavailable even when the registry is missing",
+           result.stdout + result.stderr)
         with open(os.path.join(public_state, "lifecycle-state.json")) as handle:
             public_lifecycle = json.load(handle)
         ok(len(public_lifecycle.get("packages", [])) == 2 and

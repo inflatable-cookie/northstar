@@ -2,7 +2,7 @@
 
 Status: active
 Owner: repo maintainers
-Updated: 2026-09-02
+Updated: 2026-10-22
 Affects: Northstar package discovery and installation, language-quality
 catalogues, scoped authoring skills, explicit audit skills or commands, Effigy
 selectors, consumer quality profiles, findings, deviations, and completion
@@ -75,16 +75,19 @@ existing valid consumer activation authorizes installation of a missing
 compatible official package. Core emits a visible notice naming package,
 version, source, target, and workflow, then continues without a confirmation
 pause. Failure stops only that language workflow and reports a manual or local
-installation route; other Northstar workflows remain usable.
+installation route; other Northstar workflows remain usable. An opted-in
+everyday-authoring request is the one exception: its failure is reported as
+degraded, with the repository's normal validation as the fallback, so ordinary
+work continues.
 
 The installed Northstar skill supplies the default operator adapter. Its
 `language:route` task uses an explicit state-root override when provided,
 otherwise a task-specific environment override, then the XDG data directory,
 then the operator's `.local/share` data directory. It acquires official Git
 sources at the exact registry commit, verifies the isolated package subpath,
-runs self-check, persists receipt and selection, and returns the verified
-workflow entrypoint. The consumer repository never holds package lifecycle
-state.
+runs self-check, builds any declared tool into that state root, persists
+receipt and selection, and returns the verified workflow entrypoint and built
+tool paths. The consumer repository never holds package lifecycle state.
 
 Core's official registry binds an approved package ID and version to an exact
 repository and subpath, immutable commit and tree digest, manifest digest, and
@@ -109,6 +112,20 @@ verified package-relative entrypoint with one argument, the package root.
 cases. Hosts do not infer a runner from capability-list order, interpolate a
 shell command, or add arguments. Launch failure or non-zero exit fails the
 candidate before receipt selection.
+
+A manifest may also declare one buildable `tool`: a package-relative source
+path, a bare command that must appear in `runtime_capabilities.required_commands`,
+fixed argv, and the output path under `{root}`. Argv may reference only
+`{source}` (a throwaway copy of the verified payload), `{target_dir}`, and
+`{root}`; an explicit target directory and output root are mandatory. The
+lifecycle runs the recipe in the operator cache during acquisition, outside the
+immutable install, and never writes into an installed tree. The installation
+receipt records the absolute binary path and digest, every route returns those
+paths, and a verified published build is reused rather than rebuilt. Tool
+publish is additive: a concurrent acquisition or a replaced cache entry never
+deletes or replaces a build whose path a returned receipt names. A missing,
+non-executable, or digest-drifted binary makes the pack unusable; it is never a
+reason to build by hand inside the install.
 
 V1 content digests are required `sha256:<64 lowercase hex>` values. Manifest
 identity hashes the exact manifest bytes. Tree identity hashes the canonical
@@ -380,6 +397,12 @@ that path), and the `language-quality-activation.json` marker. Packages,
 templates and the lifecycle route read and write only that directory (settles
 Q-002, 2026-09-30: 25 of 26 lean consumers already keep their profiles there).
 
+The activation marker owns the repository's single everyday-authoring setting:
+`"everyday_authoring": true`. The marker may keep `package_id`, `version`, and
+`scope` for marker routing. An absent, false, or non-boolean value means the
+repository has not opted in: it gets no everyday-authoring route and no profile
+boilerplate in its briefs.
+
 ## Profile resolution
 
 The consumer repository owns its selected profile. The initial Rust pack and
@@ -443,6 +466,18 @@ audit. Only repository scope may claim full package, target, feature, API, and
 risk-boundary coverage.
 
 ## Everyday authoring
+
+Everyday authoring is a repository choice, off by default. The repository sets
+`everyday_authoring: true` in its activation marker (see "Consumer files").
+Without that exact value the workflow has no route: the lifecycle attempts no
+acquisition, returns `unavailable`, and ordinary work is unaffected. The
+explicit audit workflow is available to every repository and never reads the
+setting.
+
+For an opted-in repository, a pack that cannot be resolved, installed, or used
+returns `degraded`: the result names the failure and points at the repository's
+normal Validate checks instead of failing the task. Explicit audit keeps failing
+closed and returns `stopped` for the same failure.
 
 Everyday authoring uses a compact path-scoped projection. It re-enters at task
 start and again at coherent task closeout. Detailed rule references load only

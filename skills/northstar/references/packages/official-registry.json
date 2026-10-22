@@ -5,9 +5,17 @@
     {
       "package_id": "@northstar/typescript-quality",
       "discovery": {
-        "languages": ["typescript"],
-        "overlays": ["base", "svelte", "sveltekit"],
-        "workflows": ["explicit_audit_repair"],
+        "languages": [
+          "typescript"
+        ],
+        "overlays": [
+          "base",
+          "svelte",
+          "sveltekit"
+        ],
+        "workflows": [
+          "explicit_audit_repair"
+        ],
         "activation_marker": "northstar:typescript-quality"
       },
       "version": "0.2.1",
@@ -21,17 +29,22 @@
     {
       "package_id": "@northstar/rust-quality",
       "discovery": {
-        "languages": ["rust"],
+        "languages": [
+          "rust"
+        ],
         "overlays": [],
-        "workflows": ["everyday_authoring", "explicit_audit_repair"],
+        "workflows": [
+          "everyday_authoring",
+          "explicit_audit_repair"
+        ],
         "activation_marker": "northstar:rust-quality"
       },
-      "version": "0.2.2",
+      "version": "0.2.3",
       "repository": "https://github.com/inflatable-cookie/northstar-language-packs",
       "subpath": "packages/rust",
-      "commit": "069d6957f1e3c70f432a4e971fb54d5ebbe78a0b",
-      "tree_digest": "sha256:b1abdb5092b55931b5cea69d72482d85ac02ce791ca943a125eefb42203c436b",
-      "manifest_digest": "sha256:5d074a0310eef7d241c61a82f2dc746413e3c55326d9e9327ea7095ada26ded6",
+      "commit": "40d818a4b195f7723dc33798689a2ab005b07785",
+      "tree_digest": "sha256:90affb6d75c1981aba72cafe71a44ca22e65470d5203060560d24f0de77e87fd",
+      "manifest_digest": "sha256:557364ace400f8e8f41beb183a8fb69c02155b137dfa60642fa6de1bddd5f673",
       "compatible_core_range": ">=0.2.0 <1.0.0"
     }
   ]

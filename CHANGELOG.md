@@ -5,6 +5,11 @@ All notable changes to Northstar are documented here.
 ## [Unreleased]
 
 ### Changed
+- The lifecycle builds a package's declared tool into the operator cache,
+  outside the immutable install, and every route and installation receipt
+  returns its absolute path (2026-10-22). Everyday authoring is opt-in per
+  repository and degrades to the repository's normal Validate checks when the
+  pack cannot resolve; explicit audit still fails closed.
 - Northstar is lean (2026-09-26). The `northstar` skill is now the lean skill:
   planning, briefs, review and knowledge upkeep, with a copy-ready
   `template/`, the retired-concepts check and the `cut` migration tool. Task
