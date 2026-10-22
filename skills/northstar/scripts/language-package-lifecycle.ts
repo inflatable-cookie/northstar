@@ -1745,12 +1745,25 @@ function hostStopped(request: HostRequest, message: string): HostResult {
   return hostResult(request, { operation: request.operation, status: "stopped", notice: message });
 }
 
+// Every unsuccessful terminal host result for an opted-in everyday request is
+// reported as degraded with the repository's Validate fallback. Explicit audit
+// keeps the closed `stopped` result. This covers result branches, not just
+// thrown errors.
+function hostTerminal(request: HostRequest, message: string): HostResult {
+  if (request.workflow === "everyday_authoring") {
+    const n = everydayDegradedNotice(message);
+    notice(n);
+    return hostResult(request, { operation: request.operation, status: "degraded", notice: n });
+  }
+  return hostStopped(request, message);
+}
+
 function executeHostRequest(request: HostRequest, registryPath: string | null, capabilities: Set<HostCapability>): HostResult {
   const needed = OP_CAPABILITIES[request.operation];
   for (const capability of needed) {
     if (!capabilities.has(capability)) {
       const n = "host capability missing: " + capability + " for operation " + request.operation + " (" + request.package_id + "@" + request.version + " " + request.workflow + ")";
-      return hostStopped(request, n);
+      return hostTerminal(request, n);
     }
   }
   try {
@@ -1773,7 +1786,7 @@ function executeHostRequest(request: HostRequest, registryPath: string | null, c
       const resolved = resolveInstalledPackage(request.state_root, trustDoc, request.package_id, request.version, request.language, request.workflow, request.core_version);
       if (resolved === null) {
         const n = "no compatible installed package for " + request.package_id + "@" + request.version + " (" + request.workflow + ")";
-        return hostStopped(request, n);
+        return hostTerminal(request, n);
       }
       // Registry-owned discovery must agree with the verified installed
       // manifest before routing. A registry entry claiming languages,
@@ -1786,7 +1799,7 @@ function executeHostRequest(request: HostRequest, registryPath: string | null, c
       if (selectedEntry !== null && !discoveryAgrees(selectedEntry, resolved.manifest)) {
         const n = "registry discovery metadata disagrees with the verified installed manifest for " +
           request.package_id + "@" + request.version + " (metadata drift); the route stops before execution";
-        return hostStopped(request, n);
+        return hostTerminal(request, n);
       }
       enforceRouteRestrictions(trustDoc, registry, request.package_id, request.version, resolved.reference.tree_digest, resolved.reference.manifest_digest, request.workflow, requestScope);
       const tools = verifyReceiptTools(resolved.receipt, resolved.manifest);
@@ -1833,7 +1846,7 @@ function executeHostRequest(request: HostRequest, registryPath: string | null, c
           tools: outcome.tools ?? [],
         });
       }
-      return hostStopped(request, outcome.notice);
+      return hostTerminal(request, outcome.notice);
     }
     const noticeText = rollbackSelected(request.state_root, trustDoc, request.target_receipt_digest as string, request.core_version);
     const after = readStateDoc(request.state_root) as LifecycleDoc;
@@ -4133,6 +4146,8 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
       "chmod 755 \"{root}/bin/fixture-tool\"";
     const toolVariant = buildVariantPackage(fixtureRoot, "0.4.0", (manifest) => {
       manifest.runtime_capabilities.required_commands.push("sh");
+      manifest.available_workflows = ["everyday_authoring", "explicit_audit_repair"];
+      manifest.entrypoints.everyday_authoring = "references/modes/fixture-audit.md";
       manifest.tool = {
         id: "fixture-tool",
         source_path: "scripts",
@@ -4244,9 +4259,9 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
       core_version: CORE_VERSION,
       state_root: stateRoot,
     };
-    const writeHostResult = (name: string, request: Record<string, unknown>): HostResult => {
+    const writeHostResult = (name: string, request: Record<string, unknown>, registryPath: string | null = null): HostResult => {
       fs.writeFileSync(path.join(hostDir, "requests", name + ".json"), JSON.stringify(request));
-      const res = executeHostRequest(request as unknown as HostRequest, null, FULL_HOST_CAPABILITIES);
+      const res = executeHostRequest(request as unknown as HostRequest, registryPath, FULL_HOST_CAPABILITIES);
       fs.writeFileSync(path.join(hostDir, "results", name + ".json"), JSON.stringify(res));
       return res;
     };
@@ -4283,6 +4298,52 @@ async function runOracle(fixtureRoot: string, outRoot: string): Promise<void> {
     });
     check(auditStopped.status === "stopped" && auditStopped.notice.includes("manual or local-path installation route required"),
       "explicit audit did not fail closed when the pack could not resolve: " + auditStopped.notice);
+
+    // Terminal host-result branches (not thrown errors) also degrade for an
+    // opted-in everyday route: no installed package, and metadata drift.
+    const everydayMissing = writeHostResult("everyday-missing-degraded", {
+      ...hostRequestBase, request_id: "req-oracle19-everyday-missing", operation: "resolve",
+      workflow: "everyday_authoring", consumer_dir: consumer, state_root: missingState,
+    });
+    check(everydayMissing.status === "degraded" && everydayMissing.notice.includes("Validate") &&
+      everydayMissing.notice.includes("no compatible installed package"),
+      "an opted-in everyday resolve with no installed package did not degrade: " + everydayMissing.notice);
+    const driftRegistryPath = path.join(out, "drift-registry.json");
+    fs.writeFileSync(driftRegistryPath, JSON.stringify({
+      schema_version: "1.0.0",
+      registry_version: "1.0.0",
+      packages: [{
+        package_id: "@northstar/language-fixture",
+        version: "0.4.0",
+        tree_digest: toolPin.tree_digest,
+        manifest_digest: toolPin.manifest_digest,
+        compatible_core_range: ">=0.2.0 <1.0.0",
+        discovery: { languages: ["fixture-lang"], overlays: ["drifted"], workflows: ["everyday_authoring", "explicit_audit_repair"], activation_marker: "fixture:drifted" },
+      }],
+    }));
+    const everydayDrift = writeHostResult("everyday-drift-degraded", {
+      ...hostRequestBase, request_id: "req-oracle19-everyday-drift", operation: "resolve",
+      workflow: "everyday_authoring", consumer_dir: consumer,
+    }, driftRegistryPath);
+    check(everydayDrift.status === "degraded" && everydayDrift.notice.includes("Validate") &&
+      everydayDrift.notice.includes("metadata drift"),
+      "an opted-in everyday resolve over metadata drift did not degrade: " + everydayDrift.notice);
+    const auditDrift = writeHostResult("audit-drift-stopped", {
+      ...hostRequestBase, request_id: "req-oracle19-audit-drift", operation: "resolve",
+      workflow: "explicit_audit_repair", consumer_dir: consumer,
+    }, driftRegistryPath);
+    check(auditDrift.status === "stopped" && auditDrift.notice.includes("metadata drift"),
+      "explicit audit did not stay closed over metadata drift: " + auditDrift.notice);
+
+    // The resolve-only python adapter degrades the same terminal branch.
+    const pyHost = path.join(path.dirname(process.argv[1]), "language-package-host.py");
+    const pyEverydayRes = path.join(hostDir, "results", "python-everyday-missing-degraded.json");
+    const pyEverydayRun = spawnSync("python3", [pyHost, path.join(hostDir, "requests", "everyday-missing-degraded.json"), pyEverydayRes], { encoding: "utf8" });
+    check(pyEverydayRun.status === 0, "python host failed on everyday missing package: " + String(pyEverydayRun.stderr));
+    const pyEveryday = JSON.parse(fs.readFileSync(pyEverydayRes, "utf8")) as HostResult;
+    check(pyEveryday.status === "degraded" && pyEveryday.notice.includes("Validate") &&
+      pyEveryday.notice.includes("no compatible installed package"),
+      "the python host did not degrade an opted-in everyday resolve: " + pyEveryday.notice);
 
     console.log("oracle-19 declared-tool-build-and-everyday-opt-in: PASS (declared tool builds into the operator cache with an explicit target directory, installed tree keeps its pinned identity, the receipt and every route return the absolute binary, intact cache is reused, a failed build stops audit acquisition without receipt or selection, everyday authoring is unavailable without the repository setting and degrades with the Validate fallback while explicit audit fails closed)");
   }
@@ -4326,8 +4387,6 @@ function runPublicRoute(args: string[]): void {
   const flags = parseRouteFlags(args);
   const scriptRoot = path.resolve(path.dirname(process.argv[1]), "..");
   const registryPath = path.resolve(flags["--registry"] ?? path.join(scriptRoot, "references/packages/official-registry.json"));
-  check(fs.existsSync(registryPath), "official registry missing: " + registryPath);
-  const registry = parseRegistryDoc(JSON.parse(fs.readFileSync(registryPath, "utf8")), "route registry");
 
   const consumerFlag = flags["--consumer"];
   check(consumerFlag !== undefined, "route requires --consumer <directory>");
@@ -4376,6 +4435,11 @@ function runPublicRoute(args: string[]): void {
   }
 
   try {
+  // Registry resolution is inside the everyday fallback boundary: a missing or
+  // malformed registry degrades an opted-in everyday route instead of failing
+  // it, while explicit audit keeps failing closed.
+  check(fs.existsSync(registryPath), "official registry missing: " + registryPath);
+  const registry = parseRegistryDoc(JSON.parse(fs.readFileSync(registryPath, "utf8")), "route registry");
   let query: SelectionQuery;
   if (marker !== undefined) {
     query = { kind: "marker", marker };

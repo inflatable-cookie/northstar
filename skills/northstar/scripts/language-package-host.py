@@ -257,6 +257,16 @@ def host_stopped(request, operation, message):
     return host_result(request, {"operation": operation, "status": "stopped", "notice": message})
 
 
+def host_terminal(request, operation, message):
+    """Terminal pack failure: degrade opted-in everyday work, stop everything else."""
+    if request.get("workflow") == "everyday_authoring":
+        message = ("everyday authoring degraded: " + message +
+                   "; continue with this repository's normal Validate checks and keep the workflow unavailable until the package routes again")
+        notice(message)
+        return host_result(request, {"operation": operation, "status": "degraded", "notice": message})
+    return host_stopped(request, operation, message)
+
+
 def consumer_everyday_authoring(consumer_dir):
     doc_path = os.path.join(consumer_dir, CONSUMER_ACTIVATION_DOC)
     if not os.path.isfile(doc_path):
@@ -314,11 +324,11 @@ def execute_host_request(request, denied):
     supported_ops = {"resolve"}
     if operation not in supported_ops:
         message = "host capability missing: operation " + str(operation) + " is not implemented by this host adapter"
-        return host_stopped(request, operation, message)
+        return host_terminal(request, operation, message)
     missing = [cap for cap in OP_CAPABILITIES.get(operation, []) if cap in denied]
     if missing:
         message = "host capability missing: " + missing[0] + " for operation " + operation
-        return host_stopped(request, operation, message)
+        return host_terminal(request, operation, message)
     try:
         if request["workflow"] == "everyday_authoring":
             enabled, detail = consumer_everyday_authoring(request["consumer_dir"])
@@ -333,7 +343,7 @@ def execute_host_request(request, denied):
                                      request["language"], request["workflow"], request["core_version"])
         if resolved is None:
             message = "no compatible installed package for " + request["package_id"] + "@" + request["version"] + " (" + request["workflow"] + ")"
-            return host_stopped(request, operation, message)
+            return host_terminal(request, operation, message)
         reference, manifest, receipt = resolved
         tools = verified_tools(receipt, manifest)
         # The request's consumer scope binds trust restrictions; a scope
@@ -345,10 +355,10 @@ def execute_host_request(request, denied):
                     and entry.get("manifest_digest") == reference.get("manifest_digest")):
                 if "workflows" in entry and request["workflow"] not in entry["workflows"]:
                     message = "allowlist pin restricts workflows to " + str(entry["workflows"]) + "; requested " + request["workflow"]
-                    return host_stopped(request, operation, message)
+                    return host_terminal(request, operation, message)
                 if "consumer_scope" in entry and entry["consumer_scope"] != "" and entry["consumer_scope"] != request_scope:
                     message = "allowlist pin restricts consumer scope to '" + entry["consumer_scope"] + "'; request scope is '" + str(request_scope) + "'"
-                    return host_stopped(request, operation, message)
+                    return host_terminal(request, operation, message)
         message = "routed " + request["package_id"] + " " + request["workflow"] + " local-only identity=" + reference["tree_digest"]
         notice(message)
         return host_result(request, {
