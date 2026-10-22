@@ -13,6 +13,7 @@ queue:
   lane: mock-exams
   laneDocuments: [mock-exams]
   scope: general
+  complexity: medium
   notifyOriginOnCloseout: true
 ---
 
@@ -47,12 +48,15 @@ convention.
 ## Writing a good brief
 
 - Aim at the outcome. A capable worker picks the steps.
-- Leave model choice to Queue. Set `complexity` (`very_low` to `very_high`)
-  and request a profile (`profileRequests`) only when the work needs it, with
-  a reason the operator can judge. A request above the usage level, or for a
-  by-request profile, opens a decision for the operator, and the role runs on
-  automatic selection meanwhile; nothing waits for the answer. Only the
-  operator answers those decisions; never answer or withdraw them for them.
+- Leave model choice to Queue. Every brief needs `complexity` (`very_low` to
+  `very_high`): how capable a model the work needs, not its size. Use `medium`
+  for ordinary work, `high` for subtle or cross-cutting changes, and
+  `very_high` only when the strongest model is needed. Request a profile
+  (`profileRequests`) only when the work needs it, with a reason the operator
+  can judge. A request above the usage level, or for a by-request profile,
+  opens a decision for the operator, and the role runs on automatic selection
+  meanwhile; nothing waits for the answer. Only the operator answers those
+  decisions; never answer or withdraw them for them.
 - Keep it short. If it needs pages of context, that context belongs in
   `docs/knowledge/` or the lane document, and the brief links to it.
 - Name what the worker must update in `docs/knowledge/` if the work changes
@@ -94,8 +98,8 @@ line; see `SKILL.md`):
    the `taskId`. A refused promotion admits nothing and keeps the approval:
    repair the condition and promote again.
 
-A papercut promotes directly: `papercut.promote-task` with `id`, `agent` and an
-authorization `note` turns its text into the brief.
+A papercut promotes directly: `papercut.promote-task` with `id`, `agent`,
+`complexity` and an authorization `note` turns its text into the brief.
 
 `notifyOriginOnCloseout: true` tells the submitting planner thread when the
 task closes; `completionNotificationAgentIds` notifies other threads. To change
