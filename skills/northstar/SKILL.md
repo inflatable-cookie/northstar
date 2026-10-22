@@ -220,7 +220,10 @@ only when the repository has opted in.
   audit, follow the
   [installed-package route](references/packages/installed-package-route.md). It
   runs the skill's `language:route` task. Never start an audit from
-  ordinary coding.
+  ordinary coding. Everyday authoring is opt-in per repository
+  (`everyday_authoring: true` in the language-quality activation marker); a
+  missing or unusable pack degrades that route to the repository's own
+  validation instead of blocking ordinary work.
 - **Workflows:** `workflows/` holds Nucleus workflow charts:
   `coding-delivery` (Nucleus's default) and `docs-with-review`. A repository
   picks one with a Nucleus repository setting, `workflow: "northstar/<name>"`;

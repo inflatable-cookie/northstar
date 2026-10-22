@@ -1622,6 +1622,7 @@ fn run_card_117_oracle(northstar_skill_root, manifest_schema) {
         "oracle-16 registry-selection-intent: PASS",
         "oracle-17 registry-selection-marker: PASS",
         "oracle-18 registry-discovery-agreement: PASS",
+        "oracle-19 declared-tool-build-and-everyday-opt-in: PASS",
         "card-122 oracle: PASS",
     ] {
         require(output.contains(marker), "card-117 oracle missing marker: " + marker);

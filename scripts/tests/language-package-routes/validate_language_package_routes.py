@@ -367,9 +367,16 @@ def main():
            "public route keeps official packages independently addressed")
 
         marker_consumer = os.path.join(ROOT, "marker-consumer")
-        os.makedirs(marker_consumer)
+        os.makedirs(os.path.join(marker_consumer, "docs/knowledge/contracts"))
         with open(os.path.join(marker_consumer, "AGENTS.md"), "w") as handle:
             handle.write("<!-- northstar:rust-quality:start -->\n<!-- northstar:rust-quality:end -->\n")
+        with open(os.path.join(marker_consumer, "docs/knowledge/contracts",
+                               "language-quality-activation.json"), "w") as handle:
+            json.dump({
+                "package_id": RUST["package_id"],
+                "version": RUST["version"],
+                "everyday_authoring": True,
+            }, handle)
         marker_result_path = os.path.join(ROOT, "public-marker.json")
         marker_run = run([
             "effigy", "skill", "run", "--path", os.path.join(REPO, "skills", "northstar"),
@@ -388,6 +395,72 @@ def main():
            marker_result.get("workflow") == "everyday_authoring",
            "public route honors an exact AGENTS activation marker from durable state",
            marker_run.stdout + marker_run.stderr)
+
+        # ---- everyday authoring is opt-in; a missing pack degrades, never blocks ----
+        unopted = os.path.join(ROOT, "unopted-consumer")
+        os.makedirs(unopted)
+        unopted_path = os.path.join(ROOT, "unopted.json")
+        unopted_run = run([
+            "effigy", "skill", "run", "--path", os.path.join(REPO, "skills", "northstar"),
+            "northstar/language:route", "--repo", os.path.join(REPO, "skills", "northstar"),
+            "--",
+            "--registry", public_registry_path,
+            "--consumer", unopted,
+            "--state-root", public_state,
+            "--language", "rust",
+            "--workflow", "everyday_authoring",
+            "--json", unopted_path,
+        ], check=False)
+        unopted_result = json.load(open(unopted_path)) if os.path.exists(unopted_path) else {}
+        ok(unopted_run.returncode == 0 and unopted_result.get("status") == "unavailable" and
+           "opt-in" in unopted_result.get("notice", "") and
+           unopted_result.get("tools") == [],
+           "everyday authoring without the repository setting is unavailable and exits clean",
+           unopted_run.stdout + unopted_run.stderr)
+
+        # A repository that opted in keeps working when the pack cannot resolve:
+        # everyday reports the failure and points at its own validation while the
+        # explicit audit route still fails closed.
+        no_rust_registry = json.loads(json.dumps(public_registry))
+        no_rust_registry["packages"] = [entry for entry in no_rust_registry["packages"]
+                                        if entry["package_id"] != RUST["package_id"]]
+        no_rust_path = os.path.join(ROOT, "no-rust-registry.json")
+        with open(no_rust_path, "w") as handle:
+            json.dump(no_rust_registry, handle)
+        degraded_state = os.path.join(ROOT, "degraded-state")
+        degraded_path = os.path.join(ROOT, "degraded.json")
+        degraded_run = run([
+            "effigy", "skill", "run", "--path", os.path.join(REPO, "skills", "northstar"),
+            "northstar/language:route", "--repo", os.path.join(REPO, "skills", "northstar"),
+            "--",
+            "--registry", no_rust_path,
+            "--consumer", marker_consumer,
+            "--state-root", degraded_state,
+            "--language", "rust",
+            "--workflow", "everyday_authoring",
+            "--json", degraded_path,
+        ], check=False)
+        degraded_result = json.load(open(degraded_path)) if os.path.exists(degraded_path) else {}
+        ok(degraded_run.returncode == 0 and degraded_result.get("status") == "degraded" and
+           "Validate" in degraded_result.get("notice", "") and
+           "installed_path" in degraded_result and degraded_result["installed_path"] is None,
+           "an opted-in everyday route degrades to repository validation when the pack cannot resolve",
+           degraded_run.stdout + degraded_run.stderr)
+        audit_path = os.path.join(ROOT, "degraded-audit.json")
+        audit_run = run([
+            "effigy", "skill", "run", "--path", os.path.join(REPO, "skills", "northstar"),
+            "northstar/language:route", "--repo", os.path.join(REPO, "skills", "northstar"),
+            "--",
+            "--registry", no_rust_path,
+            "--consumer", marker_consumer,
+            "--state-root", degraded_state,
+            "--language", "rust",
+            "--workflow", "explicit_audit_repair",
+            "--json", audit_path,
+        ], check=False)
+        ok(audit_run.returncode != 0 and not os.path.exists(audit_path),
+           "explicit audit still fails closed when the pack cannot resolve",
+           audit_run.stdout + audit_run.stderr)
         with open(os.path.join(public_state, "lifecycle-state.json")) as handle:
             public_lifecycle = json.load(handle)
         ok(len(public_lifecycle.get("packages", [])) == 2 and
