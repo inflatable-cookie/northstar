@@ -66,15 +66,26 @@ convention.
 - Queue numbers each task per repository (`repo#N`). Quote it to the operator,
   and start the PR title with the bare number (`304: Title`). On GitHub, `#304`
   would link an unrelated PR.
-- In a Rust repository not yet on Oxide (except Nucleus), the next approved
-  task's brief also runs `oxide init` and switches the Effigy build, check and
-  test entry points to Oxide, under the switching rules in Oxide's
-  `docs/knowledge/contracts/workflow.md`. Keep routes that need Cargo itself
-  (a private `CARGO_TARGET_DIR`, containers, CI, metadata, deny or publish
-  tools) and `:cargo` escapes until Effigy v0.15 is formally released. This
-  is standing approval, so don't ask the operator per repository (Tom,
-  2026-10-22, decision 3b041cf4); the task still gets its normal checks and
-  review.
+- In a Rust repository not yet fully on Oxide (except Nucleus), the next
+  approved task's brief also runs `oxide init` and moves every entry point
+  that doesn't genuinely need Cargo to Oxide, under the rules in Oxide's
+  `docs/knowledge/contracts/workflow.md`. This is standing approval, so don't
+  ask the operator per repository (Tom, 2026-10-22, decisions 3b041cf4 and
+  89797220); the task still gets its normal checks and review.
+  - Build, check and test, plus metadata, locate-project, fetch, update,
+    install, package, publish, tree, fmt, deny and audit, become `oxide` with
+    the same arguments. Changing the entry point authorizes no actual publish,
+    install, release or secret use.
+  - Tests that find sibling binaries through `current_exe` move to
+    `env!("CARGO_BIN_EXE_<name>")` first. `cargo +<toolchain>` becomes
+    `RUSTUP_TOOLCHAIN=<toolchain> oxide` or a `rust-toolchain` file, keeping
+    the pin. Host tools that run Cargo (Tauri and similar) go through
+    `oxide exec --` only with a scoped proof.
+  - Don't switch yet: one-shot builds with a private `CARGO_TARGET_DIR` or a
+    temporary workspace wait for Oxide's one-use workspace support (decision
+    4b74c0b7). `:cargo` escapes stay until Effigy v0.15 is formally released.
+  - Never switch: container and VM guest builds, CI, Tarpaulin with its own
+    target, and tests whose subject is Cargo itself.
 - Make acceptance about behaviour, not text. A grep-based check can push a
   worker into rewording files it shouldn't touch: answered questions in
   `questions.md` keep their original wording.
