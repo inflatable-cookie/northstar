@@ -66,6 +66,15 @@ convention.
 - Queue numbers each task per repository (`repo#N`). Quote it to the operator,
   and start the PR title with the bare number (`304: Title`). On GitHub, `#304`
   would link an unrelated PR.
+- In a Rust repository not yet on Oxide (except Nucleus), the next approved
+  task's brief also runs `oxide init` and switches the Effigy build, check and
+  test entry points to Oxide, under the switching rules in Oxide's
+  `docs/knowledge/contracts/workflow.md`. Keep routes that need Cargo itself
+  (a private `CARGO_TARGET_DIR`, containers, CI, metadata, deny or publish
+  tools) and `:cargo` escapes until Effigy v0.15 is formally released. This
+  is standing approval, so don't ask the operator per repository (Tom,
+  2026-10-22, decision 3b041cf4); the task still gets its normal checks and
+  review.
 - Make acceptance about behaviour, not text. A grep-based check can push a
   worker into rewording files it shouldn't touch: answered questions in
   `questions.md` keep their original wording.
