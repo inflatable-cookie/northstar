@@ -9,11 +9,19 @@ Rust evidence collection and repair, policy preservation, and runtime-only
 outputs.
 
 The Rust consumer driver runs its Cargo-calling steps under `oxide exec` in the
-throwaway consumer copy: Oxide takes the lease on that workspace, intermediates
-build in the held slot, and the copy's own `target/` stays the final target.
-The proof does not read Cargo's target layout, so it needs no private build
-directory and no named proof exception; the offline fixture's Cargo arguments,
-evidence format and repair oracle are unchanged.
+throwaway consumer copy. `oxide exec` replaces an inherited `CARGO_TARGET_DIR`
+with `<workspace>/target` before the tool starts, so the driver selects the
+fixture's private final target inside the command after `--`: an `env`
+override in the tool's own child environment. The outer environment carries a
+decoy `CARGO_TARGET_DIR` that must stay unused, and the copy's `target/` stays
+a real empty directory, which holds Oxide in permanent-drive mode instead of
+converting it to an owned outputs link. A finite harness proves the inherited
+outer target never selects the build, the fixture's build outputs land in the
+explicit private target, a failed command keeps its status without relocating
+them, and pre-existing content in that directory survives. The private target
+lives in this check's own throwaway root and is removed with it, so no scratch
+mount is required. The offline fixture's Cargo arguments, evidence format and
+repair oracle are unchanged.
 """
 
 import hashlib
@@ -33,6 +41,10 @@ SURFACE = os.path.join(REPO, "skills/northstar/scripts/language-package-lifecycl
 REGISTRY = os.path.join(REPO, "skills/northstar/references/packages/official-registry.json")
 
 ROOT = None
+PRIVATE_TARGET = None
+DECOY_TARGET = None
+DECOY_ENTRIES = []
+PRE_EXISTING_DIGEST = ""
 failures = 0
 
 
@@ -85,9 +97,14 @@ def tree_listing(consumer):
     return paths
 
 
-def copy_fixture(name):
+def copy_fixture(name, empty_target=False):
     destination = os.path.join(ROOT, name)
     shutil.copytree(FIXTURE, destination, symlinks=False)
+    if empty_target:
+        # A real empty `target` is Oxide's documented opt-out: it keeps the path
+        # in permanent-drive mode instead of converting it to an owned outputs
+        # link, so nothing this check builds can outlive its throwaway root.
+        os.makedirs(os.path.join(destination, "target"))
     run(["git", "init", "-q"], cwd=destination)
     run(["git", "config", "user.name", "Northstar rerun fixture"], cwd=destination)
     run(["git", "config", "user.email", "rerun-fixture@northstar.invalid"],
@@ -138,13 +155,126 @@ def route_package(consumer, language, workflow):
 def oxide_exec(consumer, argv, env):
     """Run a Cargo-calling tool under `oxide exec` in the fixture workspace.
 
-    Everything after `--` reaches the tool unchanged, so the driver keeps its
-    own arguments and evidence requests; Oxide owns the lease, the slot and the
-    consumer copy's final `target/`.
+    Everything after `--` reaches the command unchanged, so the driver keeps its
+    own arguments and evidence requests; Oxide owns the lease and the slot, and
+    the fixture's target is chosen inside the command (see
+    `private_target_command`).
     """
     manifest = os.path.join(consumer, "Cargo.toml")
     return run(["oxide", "exec", "--manifest-path", manifest, "--", *argv],
-               env=env)
+               cwd=consumer, env=env)
+
+
+def oxide_env(base_env):
+    """The outer environment `oxide exec` receives, with the decoy target in it.
+
+    `oxide exec` drops this value before the command starts; the check proves
+    that nothing written for the fixture can land in it.
+    """
+    return {**base_env, "CARGO_TARGET_DIR": DECOY_TARGET}
+
+
+def private_target_command(argv):
+    """Select the fixture's private final target inside the oxide child command.
+
+    `oxide exec` replaces an inherited `CARGO_TARGET_DIR` with
+    `<workspace>/target`, so the override has to be set where the tool starts.
+    `env` is a real program after `--`, not a shell string, and it hands the tool
+    its arguments unchanged. The tool's own Cargo children inherit the value.
+    """
+    return ["env", f"CARGO_TARGET_DIR={PRIVATE_TARGET}", *argv]
+
+
+def directory_entries(path):
+    return sorted(os.listdir(path)) if os.path.isdir(path) else None
+
+
+def private_target_entries():
+    entries = []
+    for dirpath, _dirnames, filenames in os.walk(PRIVATE_TARGET):
+        for name in filenames:
+            entries.append(os.path.relpath(os.path.join(dirpath, name),
+                                            PRIVATE_TARGET))
+    return sorted(entries)
+
+
+def private_target_finals(entries):
+    """The fixture's own build outputs, wherever the profile layout puts them."""
+    return [path for path in entries
+            if "northstar_rerun_fixture" in os.path.basename(path) and
+            (path.endswith(".rlib") or not os.path.splitext(path)[1])]
+
+
+def assert_private_final_target(consumer, label, finals=False):
+    """The explicit private target is used and no other target takes anything."""
+    entries = private_target_entries()
+    ok(any(path.startswith("debug" + os.sep) for path in entries),
+       f"{label}: Cargo's layout appeared in the explicit private target",
+       f"{PRIVATE_TARGET}: {entries[:8]}")
+    if finals:
+        ok(bool(private_target_finals(entries)),
+           f"{label}: the fixture's build outputs are inside the private target",
+           f"{PRIVATE_TARGET}: {entries[:8]}")
+    workspace_target = os.path.join(consumer, "target")
+    listed = directory_entries(workspace_target)
+    ok(listed == [] and not os.path.islink(workspace_target),
+       f"{label}: the copy's own target stayed a real empty directory",
+       f"{workspace_target}: {listed}")
+    ok(directory_entries(DECOY_TARGET) == DECOY_ENTRIES,
+       f"{label}: the inherited outer CARGO_TARGET_DIR was not used",
+       str(directory_entries(DECOY_TARGET)))
+    ok(file_digest(os.path.join(PRIVATE_TARGET, "pre-existing.txt")) ==
+       PRE_EXISTING_DIGEST,
+       f"{label}: pre-existing content in the private target was preserved")
+
+
+def prepare_private_target():
+    """Create the private final target and the decoy the outer env inherits."""
+    global PRIVATE_TARGET, DECOY_TARGET, DECOY_ENTRIES, PRE_EXISTING_DIGEST
+    PRIVATE_TARGET = os.path.join(ROOT, "rust-final-target")
+    DECOY_TARGET = os.path.join(ROOT, "outer-target-decoy")
+    os.makedirs(PRIVATE_TARGET)
+    os.makedirs(DECOY_TARGET)
+    preserved = os.path.join(PRIVATE_TARGET, "pre-existing.txt")
+    with open(preserved, "w") as handle:
+        handle.write("written before the fixture ran\n")
+    with open(os.path.join(DECOY_TARGET, "sentinel.txt"), "w") as handle:
+        handle.write("inherited CARGO_TARGET_DIR\n")
+    PRE_EXISTING_DIGEST = file_digest(preserved)
+    DECOY_ENTRIES = directory_entries(DECOY_TARGET)
+
+
+def prove_private_target_selection(consumer):
+    """Finite proof of the outer and child target environment distinction."""
+    manifest = os.path.join(consumer, "Cargo.toml")
+    env = oxide_env(os.environ)
+    workspace_target = os.path.join(consumer, "target")
+    child_env = oxide_exec(consumer, ["env"], env).stdout
+    inherited = dict(line.split("=", 1) for line in child_env.splitlines()
+                     if "=" in line).get("CARGO_TARGET_DIR", "")
+    ok(os.path.realpath(inherited) == os.path.realpath(workspace_target),
+       "oxide exec replaced the inherited CARGO_TARGET_DIR with the workspace target",
+       f"{inherited} != {workspace_target}")
+    ok(os.path.commonpath([PRIVATE_TARGET, consumer]) != consumer,
+       "the fixture's private target sits outside the consumer workspace",
+       PRIVATE_TARGET)
+
+    run(["oxide", "exec", "--manifest-path", manifest, "--",
+         *private_target_command(
+             ["cargo", "build", "--offline", "-p", "northstar-rerun-fixture"])],
+        cwd=consumer, env=env)
+    assert_private_final_target(consumer, "private target build", finals=True)
+
+    failed = subprocess.run(
+        ["oxide", "exec", "--manifest-path", manifest, "--",
+         *private_target_command(
+             ["cargo", "test", "--offline", "-p", "northstar-rerun-fixture",
+              "--", "--northstar-fixture-unknown-option"])],
+        cwd=consumer, env=env, capture_output=True, text=True)
+    ok(failed.returncode != 0,
+       "the failed fixture command returned a non-zero exit status",
+       (failed.stdout + failed.stderr)[-400:])
+    assert_private_final_target(consumer, "failed fixture command", finals=True)
 
 
 def oxide_route_proved(result, label):
@@ -319,9 +449,10 @@ def rerun_rust(consumer, package):
     audit_id = "fixture-rust-rerun"
     discovery = os.path.join(inputs_root, "discovery.json")
     oxide_route_proved(
-        oxide_exec(consumer, [probe, "inspect", "--repo", consumer,
-                              "--scope", "worktree", "--output", discovery],
-                   rust_env),
+        oxide_exec(consumer, private_target_command(
+            [probe, "inspect", "--repo", consumer,
+             "--scope", "worktree", "--output", discovery]),
+                   oxide_env(rust_env)),
         "Rust inspect")
     plan_input = os.path.join(inputs_root, "plan-input.json")
     with open(plan_input, "w") as handle:
@@ -415,14 +546,12 @@ def rerun_rust(consumer, package):
             }],
         }, handle)
     oxide_route_proved(
-        oxide_exec(consumer, [probe, "collect", "--repo", consumer,
-                              "--audit", audit_id, "--input", collect_input],
-                   rust_env),
+        oxide_exec(consumer, private_target_command(
+            [probe, "collect", "--repo", consumer,
+             "--audit", audit_id, "--input", collect_input]),
+                   oxide_env(rust_env)),
         "Rust collect")
-    final_target = os.path.join(consumer, "target")
-    ok(os.path.isdir(final_target) or os.path.islink(final_target),
-       "Rust Cargo finals stayed in the throwaway consumer's own target",
-       final_target)
+    assert_private_final_target(consumer, "Rust collect")
 
     with open(anchor_path, "wb") as handle:
         handle.write(original)
@@ -480,9 +609,10 @@ def main():
     entries = validate_registry(registry)
     ROOT = tempfile.mkdtemp(prefix="language-consumer-reruns-")
     try:
+        prepare_private_target()
         consumers = {
             "typescript": copy_fixture("typescript-consumer"),
-            "rust": copy_fixture("rust-consumer"),
+            "rust": copy_fixture("rust-consumer", empty_target=True),
         }
         for language, consumer in consumers.items():
             marker = f"northstar:{language}-quality"
@@ -495,6 +625,7 @@ def main():
         rerun_typescript(consumers["typescript"],
                          entries["@northstar/typescript-quality"])
         rerun_rust(consumers["rust"], entries["@northstar/rust-quality"])
+        prove_private_target_selection(consumers["rust"])
         print(f"consumer reruns oracle: {'PASS' if failures == 0 else 'FAIL'} "
               f"({failures} failures)")
         return 0 if failures == 0 else 1
