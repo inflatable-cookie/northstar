@@ -88,8 +88,14 @@ convention.
     Python or TypeScript script, anything choosing `--target-dir` or
     `CARGO_TARGET_DIR` — runs under `oxide exec --` with its command intact.
     Its final targets and its evidence keep their meaning; intermediates use
-    the held slot. Change the route, never the product or fixture semantics
-    it drives.
+    the held slot. `oxide exec` replaces an inherited `CARGO_TARGET_DIR` with
+    `<workspace>/target` before the tool starts, so a private final target is
+    chosen by the command after `--`: `--target-dir` on the inner Cargo
+    command, or that command's own child environment, as in
+    `env CARGO_TARGET_DIR=<dir> <tool>`. A target set on `oxide exec`'s own
+    environment never reaches the tool. A driver or fixture whose target is
+    throwaway keeps it inside the temp root it removes. Change the route,
+    never the product or fixture semantics it drives.
   - A proof whose subject is Cargo's own target layout, or that must build
     with no shared intermediate state, is a named proof exception: it still
     runs under `oxide exec`, sets its own build directory under
