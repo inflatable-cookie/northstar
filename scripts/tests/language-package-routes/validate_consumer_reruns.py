@@ -7,6 +7,13 @@ route; no sibling checkout supplies a consumer or package tree. The check
 proves exact marker selection, lean policy paths, TypeScript audit recording,
 Rust evidence collection and repair, policy preservation, and runtime-only
 outputs.
+
+The Rust consumer driver runs its Cargo-calling steps under `oxide exec` in the
+throwaway consumer copy: Oxide takes the lease on that workspace, intermediates
+build in the held slot, and the copy's own `target/` stays the final target.
+The proof does not read Cargo's target layout, so it needs no private build
+directory and no named proof exception; the offline fixture's Cargo arguments,
+evidence format and repair oracle are unchanged.
 """
 
 import hashlib
@@ -126,6 +133,27 @@ def route_package(consumer, language, workflow):
          "--state-root", state_root, "--json", output_path])
     with open(output_path) as handle:
         return json.load(handle)
+
+
+def oxide_exec(consumer, argv, env):
+    """Run a Cargo-calling tool under `oxide exec` in the fixture workspace.
+
+    Everything after `--` reaches the tool unchanged, so the driver keeps its
+    own arguments and evidence requests; Oxide owns the lease, the slot and the
+    consumer copy's final `target/`.
+    """
+    manifest = os.path.join(consumer, "Cargo.toml")
+    return run(["oxide", "exec", "--manifest-path", manifest, "--", *argv],
+               env=env)
+
+
+def oxide_route_proved(result, label):
+    """Confirm the tool really ran inside an Oxide lease, not beside it."""
+    summary = [line for line in result.stderr.splitlines()
+               if line.startswith("oxide:") and "strategy" in line]
+    ok(bool(summary), f"{label} ran under an oxide lease", result.stderr[-400:])
+    for line in summary:
+        print(f"OXIDE {label}: {line.strip()}")
 
 
 def task(package_root, selector, consumer, *args):
@@ -268,7 +296,6 @@ def rerun_rust(consumer, package):
     task(package_root, "rust-quality:setup", consumer, "apply", consumer, ".")
 
     rust_env = {**os.environ, "CARGO_NET_OFFLINE": "true",
-                "CARGO_TARGET_DIR": os.path.join(ROOT, "cargo-target"),
                 "RUSTFLAGS": "--cap-lints=allow"}
     tools = rust_root.get("tools") or []
     ok(len(tools) == 1 and
@@ -291,8 +318,11 @@ def rerun_rust(consumer, package):
     os.makedirs(inputs_root)
     audit_id = "fixture-rust-rerun"
     discovery = os.path.join(inputs_root, "discovery.json")
-    run([probe, "inspect", "--repo", consumer, "--scope", "worktree",
-         "--output", discovery], env=rust_env)
+    oxide_route_proved(
+        oxide_exec(consumer, [probe, "inspect", "--repo", consumer,
+                              "--scope", "worktree", "--output", discovery],
+                   rust_env),
+        "Rust inspect")
     plan_input = os.path.join(inputs_root, "plan-input.json")
     with open(plan_input, "w") as handle:
         json.dump({"audit_id": audit_id,
@@ -384,8 +414,15 @@ def rerun_rust(consumer, package):
                               "args": cargo_args, "format": "cargo_json"},
             }],
         }, handle)
-    run([probe, "collect", "--repo", consumer, "--audit", audit_id,
-         "--input", collect_input], env=rust_env)
+    oxide_route_proved(
+        oxide_exec(consumer, [probe, "collect", "--repo", consumer,
+                              "--audit", audit_id, "--input", collect_input],
+                   rust_env),
+        "Rust collect")
+    final_target = os.path.join(consumer, "target")
+    ok(os.path.isdir(final_target) or os.path.islink(final_target),
+       "Rust Cargo finals stayed in the throwaway consumer's own target",
+       final_target)
 
     with open(anchor_path, "wb") as handle:
         handle.write(original)
@@ -416,7 +453,8 @@ def rerun_rust(consumer, package):
        "Rust policy, profile, and activation files stayed byte-identical",
        str(drifted))
     new_paths = tree_listing(consumer) - before_paths
-    stray = sorted(path for path in new_paths if not path.startswith(".effigy/"))
+    stray = sorted(path for path in new_paths
+                   if not path.startswith((".effigy/", ".oxide-outputs/")))
     ok(not stray, "Rust rerun wrote no files outside runtime state", str(stray[:8]))
     ledger_result = os.path.join(consumer, ".git", "northstar", "rust-quality",
                                  "audits", audit_id, "result.json")
@@ -428,7 +466,7 @@ def rerun_rust(consumer, package):
 
 def main():
     global ROOT
-    required = ("bun", "effigy", "cargo", "git", "python3")
+    required = ("bun", "effigy", "oxide", "cargo", "git", "python3")
     missing = [name for name in required if shutil.which(name) is None]
     ok(not missing, "required tools present", f"missing {missing}")
     if missing:

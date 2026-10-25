@@ -9,7 +9,9 @@ Repository-owned checks for the skill's source. Run them through `effigy qa`.
   `NORTHSTAR_LANGUAGE_PACKS_ROOT`). `check:language-consumer-reruns` replays
   Rust and TypeScript audits against the self-contained fixture in
   `scripts/fixtures/language-package-reruns/`; it reads no sibling consumer
-  repository and runs as part of `qa`.
+  repository and runs as part of `qa`. Its Rust Cargo steps run under
+  `oxide exec` against the throwaway consumer copy, so the fixture keeps its
+  offline Cargo arguments and evidence format while Oxide holds the slot.
 
 The skill's own tests (`retired-concepts`, `cut`, `paseo:worktree`) live beside
 their scripts in `skills/northstar/scripts/`.
