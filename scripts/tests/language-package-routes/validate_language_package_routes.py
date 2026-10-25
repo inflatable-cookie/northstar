@@ -220,7 +220,10 @@ def main():
     if missing:
         return 1
 
-    ok(os.path.isdir(os.path.join(SIBLING, ".git")), "package-source sibling resolved", SIBLING)
+    sibling_is_git = (os.path.isdir(SIBLING) and
+                      run(["git", "-C", SIBLING, "rev-parse", "--git-dir"],
+                          check=False).returncode == 0)
+    ok(sibling_is_git, "package-source sibling resolved", SIBLING)
     for package in PACKAGES:
         commit = package["commit"] + "^{commit}"
         if run(["git", "-C", SIBLING, "cat-file", "-e", commit],

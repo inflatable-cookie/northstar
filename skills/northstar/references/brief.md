@@ -66,26 +66,42 @@ convention.
 - Queue numbers each task per repository (`repo#N`). Quote it to the operator,
   and start the PR title with the bare number (`304: Title`). On GitHub, `#304`
   would link an unrelated PR.
-- In a Rust repository not yet fully on Oxide (except Nucleus), the next
-  approved task's brief also runs `oxide init` and moves every entry point
-  that doesn't genuinely need Cargo to Oxide, under the rules in Oxide's
-  `docs/knowledge/contracts/workflow.md`. This is standing approval, so don't
-  ask the operator per repository (Tom, 2026-10-22, decisions 3b041cf4 and
-  89797220); the task still gets its normal checks and review.
-  - Build, check and test, plus metadata, locate-project, fetch, update,
-    install, package, publish, tree, fmt, deny and audit, become `oxide` with
-    the same arguments. Changing the entry point authorizes no actual publish,
-    install, release or secret use.
-  - Tests that find sibling binaries through `current_exe` move to
-    `env!("CARGO_BIN_EXE_<name>")` first. `cargo +<toolchain>` becomes
-    `RUSTUP_TOOLCHAIN=<toolchain> oxide` or a `rust-toolchain` file, keeping
-    the pin. Host tools that run Cargo (Tauri and similar) go through
-    `oxide exec --` only with a scoped proof.
-  - Don't switch yet: one-shot builds with a private `CARGO_TARGET_DIR` or a
-    temporary workspace wait for Oxide's one-use workspace support (decision
-    4b74c0b7). `:cargo` escapes stay until Effigy v0.15 is formally released.
-  - Never switch: container and VM guest builds, CI, Tarpaulin with its own
-    target, and tests whose subject is Cargo itself.
+- Every Rust project moves fully to Oxide, with no per-selector `:cargo`
+  escapes (Tom, 2026-10-25, recorded in Oxide's
+  `docs/knowledge/contracts/workflow.md`, "Switching an existing project").
+  A brief in a repository still on plain Cargo also runs `oxide init` at its
+  existing package or workspace, adopting that workspace rather than adding a
+  root crate. This is standing approval, so don't ask the operator per
+  repository (Tom, 2026-10-22, decisions 3b041cf4 and 89797220); the task
+  still gets its normal checks and review.
+  - Build, check, clippy, test, nextest and format routes call `oxide` with
+    the same arguments, as do metadata, locate-project, fetch, update,
+    install, package, publish, tree, fmt, deny and audit. Changing an entry
+    point authorizes no actual publish, install, release or secret use.
+  - Keep toolchain pins: `cargo +<toolchain>` becomes
+    `RUSTUP_TOOLCHAIN=<toolchain> oxide` or a `rust-toolchain` file. Tests
+    that find sibling binaries through `current_exe` use
+    `env!("CARGO_BIN_EXE_<name>")` first, or read
+    `$CARGO_TARGET_DIR/<profile>`, because oxide runs test executables from
+    the slot and uplifts final binaries to `target/`.
+  - A tool or driver that runs Cargo itself — a Tauri or packaging CLI, a
+    Python or TypeScript script, anything choosing `--target-dir` or
+    `CARGO_TARGET_DIR` — runs under `oxide exec --` with its command intact.
+    Its final targets and its evidence keep their meaning; intermediates use
+    the held slot. Change the route, never the product or fixture semantics
+    it drives.
+  - A proof whose subject is Cargo's own target layout, or that must build
+    with no shared intermediate state, is a named proof exception: it still
+    runs under `oxide exec`, sets its own build directory under
+    `/Volumes/Builds/scratch/<project>/` or the proof's
+    `OXIDE_TASK_SCRATCH_ROOT` (never `/var/folders`, `~` or a drive root),
+    removes only that directory afterwards, and is listed by proof name with
+    its preserved intent in the project's guidance.
+  - Stays on Cargo: CI and release workflows, container and VM guest builds,
+    product code that runs Cargo as part of its own behaviour, and test
+    fixtures.
+  - The only escape is explicit: `EFFIGY_OXIDE_ESCAPE=cargo`, or running
+    Cargo by hand while Oxide is broken. Nothing falls back silently.
 - Make acceptance about behaviour, not text. A grep-based check can push a
   worker into rewording files it shouldn't touch: answered questions in
   `questions.md` keep their original wording.

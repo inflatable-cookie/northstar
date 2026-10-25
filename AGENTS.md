@@ -67,3 +67,18 @@ repository holds no papercut file or triage folder.
 
 Before a PR, run targeted checks: `effigy qa:docs` for docs, and the self-test
 of any skill script you changed. Full `effigy qa` runs at release points.
+
+<!-- oxide:begin -->
+<!-- oxide:workspaces: scripts/fixtures/language-package-reruns -->
+## Rust commands: use `oxide`
+
+Covers Cargo workspaces `scripts/fixtures/language-package-reruns`, relative to this file's folder.
+
+- Write `oxide` wherever you would write `cargo`: `oxide check`, `oxide test`, `oxide run -- <args>`, `oxide add <crate>`.
+- Profiles: `quick` (default), `--profile debug` for a debugger, `--release`. Oxide places build output, so it refuses `--target-dir`.
+- A tool that runs Cargo itself (Tauri CLI, npm or bun scripts): `oxide exec -- <command>`.
+- A `waiting for …` line means another build holds a slot; let it wait. `oxide status` shows the pool, slots and waits.
+- Use `oxide clean`, not `cargo clean`.
+
+Managed by `oxide init`; edits between these markers are replaced.
+<!-- oxide:end -->
