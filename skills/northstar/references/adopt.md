@@ -173,11 +173,12 @@ record of one run of it is process.
 9. **Housekeeping.** Delete closed or already-promoted triage notes, and
    import the rest with `lead.import` (`repository: {origin, path}`, `path` to
    the absolute `docs/triage` directory, `dryRun: true` first); then delete `docs/triage/`. Import
-   the repository's papercuts into Queue with `papercut.import` (use
-   `root: true` to include package copies such as `apps/<app>/PAPERCUTS.md`,
-   and do a dry run first). Check the report: every open entry imported,
-   nothing but boilerplate unparsed. Then delete every `PAPERCUTS.md` and
-   update any instruction that tells agents to write to it.
+   the repository's live papercuts with `papercut.add`, one item at a time,
+   after checking Queue for an existing record. Include package copies such
+   as `apps/<app>/PAPERCUTS.md`; preserve each item's repository, what happened,
+   impact and any suggested fix. Reconcile every open entry to its Queue
+   record before deleting any `PAPERCUTS.md`, then update instructions that
+   tell agents to write to it.
 10. **Checks.** Search QA configuration (`effigy.toml`, CI), tests, scripts,
     receipts, repo-local skills (for example `.cursor/skills/`, `.agents/`),
     agent instruction files, and release/CI scope or admission policies that
