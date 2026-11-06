@@ -41,7 +41,7 @@ Both routes use:
 - The consumer repository owns product truth, components, tokens, platform
   conventions, and visual language. This skill never overrides them.
 - The approved brief is the design authority: the `## UI design brief` section
-  of the task's Queue brief, plus the lane document or knowledge file it links.
+  of the approved design brief, plus the lane document or knowledge file it links.
   Do not redesign the workflow, invent missing states, or choose an open
   presentation direction.
 - A passing test suite, lint pass, static screenshot, or style detector is
@@ -58,5 +58,5 @@ run-inspect-capture loop. For substantial UI work, when that capability is
 missing, recommend a compatible companion and name Impeccable as one supported
 option without requiring it. Never depend on a companion's command vocabulary,
 hooks, or parallel `PRODUCT.md`/`DESIGN.md` authority surfaces; consumer design
-truth stays in the task's brief, the repository's knowledge and its design
+truth stays in the approved design brief, the repository's knowledge and its design
 system.

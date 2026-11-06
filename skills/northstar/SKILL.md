@@ -1,233 +1,69 @@
 ---
 name: northstar
-description: Keep a project's knowledge current and its work well-aimed. Use for shaping long-horizon direction with the operator (Atlas), planning, writing a task brief, reviewing a PR, recording an operator ruling, retiring a concept, or orienting in a Northstar repository.
+description: Keep a project's knowledge current and well organized. Use for establishing documentation structure, maintaining knowledge ownership, adopting the starter, or retiring concepts.
 ---
 
 # Northstar
 
-Northstar keeps a repository's knowledge current and its plan legible, so any
-agent can pick up work without reconstructing intent from conversation.
-
-The repository holds **knowledge and code**. The orchestrator (the Paseo Queue
-plugin today, Nucleus later) holds **process and planning**: the plan (lanes,
-their documents and their order), leads (including briefs), papercuts, tasks,
-status, review, closeout and outcomes. Never write either into the repository.
+Northstar provides a lightweight structure for a project's current knowledge.
+It helps readers find what is true, where each fact belongs, and which ideas
+or rules have been retired.
 
 ## Repository shape
 
 | Surface | Holds |
 | --- | --- |
-| `AGENTS.md` | Orientation: what this is, the doc map, guardrails, the validation command |
-| `docs/README.md` | What is true now, in a page, with links by topic |
-| `docs/knowledge/` | Current truth, one owner per fact: vision, architecture, contracts, domain |
-| `docs/knowledge/retired.toml` | Concepts that no longer exist, and what replaced them |
-| `docs/knowledge/questions.md` | Open questions, and where each answer now lives |
-| `docs/knowledge/contracts/release.md` | How this project releases, step by step. Every project has one |
+| `AGENTS.md` | Project orientation, documentation map, guardrails and validation command |
+| `docs/README.md` | A short account of current state, with links by topic |
+| `docs/knowledge/` | Current truth, with one owning file per fact |
+| `docs/knowledge/retired.toml` | Concepts that no longer apply and their replacements |
+| `docs/knowledge/questions.md` | Open questions and pointers to their answers |
+| `docs/knowledge/contracts/release.md` | How the project releases, if applicable |
 
-There is no `docs/plan.md`, `docs/triage/`, task card, roadmap, generation,
-handoff file, lifecycle record, delivery log or `PAPERCUTS.md`. Git history and the orchestrator's outcome records
-are the history.
+The exact structure belongs to each project. Add sections and folders when
+they contain useful current information; omit empty ones. Keep project task
+tracking in whichever system that project uses.
 
-## Orient
+## Use the knowledge
 
-Read `AGENTS.md`, then `docs/README.md`, then only the knowledge files your task
-touches. For what's next, read the project's Queue plan (`plan.get`) and the
-lane documents it lists. Before planning against a concept, check `retired.toml`. Before asking
-the operator something, check `questions.md` and the owning knowledge file.
-Asking a settled question again costs more than looking it up.
+Read `AGENTS.md`, then `docs/README.md`, then the knowledge files relevant to
+the work. Check `retired.toml` before relying on an older concept. Check
+`questions.md` and the owning knowledge file before raising a question already
+addressed by the project.
 
-## How work moves
+## Keep knowledge current
 
-0. **Direction.** When the plan runs out of settled direction, shape it with
-   the operator first. See [atlas](references/atlas.md).
-1. **Plan.** Each outcome the project pursues is a Queue lane with a working
-   document; the project's plan orders the lanes. Unplanned ideas and
-   deferrals are leads. See [plan](references/plan.md).
-2. **Brief.** Each task starts as a brief in a Queue lead: outcome, context
-   links, constraints, acceptance, and when to stop. See
-   [brief](references/brief.md).
-3. **Dispatch.** With the operator's approval, approve the lead and promote it
-   to a task. Queue runs the worker, review, merge and closeout, and keeps the outcome.
-4. **Review.** An independent reviewer checks the exact head against the brief.
-   See [review](references/review.md).
-5. **Keep knowledge current.** When work changes what is true, the same PR
-   updates the owning knowledge file. See [knowledge](references/knowledge.md).
+- Give each fact one owning file. Link to it instead of copying it elsewhere.
+- Write what is true now; Git history records how it changed.
+- Keep detailed design where it helps people understand a complex system.
+- When work changes a durable fact, update its owner alongside the change.
+- Record an open question when its answer is still unknown and matters to the
+  project. Close it with a link to the file that records the answer.
+- When retiring a concept, add an entry to `retired.toml` and remove or update
+  live references in the same change.
+- Keep the starter in `template/` generic and ready to copy into another
+  project.
 
-## Rules that matter
+## Write clearly
 
-- **One home per fact.** Link to the owner; don't restate it. A copy is a
-  future contradiction.
-- **Rulings land before you hand off.** An operator answer given in
-  conversation goes into its owning knowledge file, or closes a question in
-  `questions.md`, before the thread ends or hands over.
-- **Retirements name what they retire.** Retiring a concept adds an entry to
-  `retired.toml` that lists the terms, paths and config keys it covers, and the
-  same change removes or fixes the live references.
-- **No status mirrors.** Never write "done", "merged" or "in review" into the
-  repository. Queue owns status.
-- **Write for the next reader.** Keep only what someone will need later.
-  Short, plain, and with the reasoning that makes a decision understandable.
-- **Break things honestly.** When a change breaks callers or contracts, say so
-  and update them together. No shims that hide a decision.
-- **Targeted checks per task, full QA at milestones** (Tom, 2026-09-30). A
-  task runs, once and through Effigy selectors, every check that covers what
-  it changed: the tests and QA groups for the code it touched, a compile of
-  it, docs checks if docs changed, and any proof or check its brief names or
-  its change alters. What it skips is the repository's full `effigy qa` (or
-  `ci`) and repeat passes. The repository's `AGENTS.md` "Validate" section is
-  the authority on which selectors count. Full QA runs on `main` at release
-  points or after a major chunk of work, run by the planner; it was eating
-  the machine per task.
-- **Compile-only tasks, opt-in for heavy repositories** (Tom, 2026-10-09). A
-  repository where per-task test runs make parallel tasks fight for the
-  machine (large Rust workspaces, for example) can opt in: its tasks run a
-  compile of what they touched, docs checks, and any proof the brief names,
-  and no tests. Opt in in two places that must agree: the repository's
-  `AGENTS.md` "Validate" section, and its Queue `validationPolicy`
-  (`repository.set`), which is what worker and reviewer prompts read. The
-  planner then owns reconciliation; see [plan](references/plan.md).
-- **Don't hold work for machine load.** A test that fails only under load is a
-  defect: file it and fix it, rather than waiting for a quiet machine (Tom,
-  2026-09-28).
+Keep orientation short and link to detailed knowledge. Prefer plain language,
+use the project's established terms, and include the reason behind a durable
+rule when it will help future readers.
 
-## Shell commands
+## Adopt the structure
 
-Agent shells here are usually zsh on macOS. These mistakes keep recurring:
-
-- Single-quote literal patterns. Backticks and `$(...)` inside double quotes
-  run as commands: ``rg 'use `foo`' docs``, not ``rg "use `foo`" docs``.
-- Keep lists of paths in arrays. zsh doesn't split a string variable, so a
-  space-separated list arrives as one argument:
-  `files=(a.md b.md); for f in "${files[@]}"; do …; done`.
-- Don't name variables after zsh specials such as `status`, `path` or `home`.
-  Assigning `status` fails, and a `path` loop variable breaks command lookup.
-  Use names like `exit_code` and `rel_path`.
-- Brace a variable before a colon: `git show "${rev}:tools/x.md"`. zsh reads
-  `$rev:t…` as a modifier, and `"$rev:tools/x.md"` becomes `HEADools/x.md`.
-- macOS has BSD `sed` and `grep`: no `\b`, `sed -i` needs `''`, and GNU address
-  forms fail. Use `rg`, `awk` or a short script to extract text.
-- Never kill by pattern: no `pkill -f`, `killall`, or `pgrep … | xargs kill`.
-  Other tasks' worktrees share the machine, so `pkill -f effigy` kills every
-  Effigy run on it. Kill only what you started, by the PID from `$!` or the
-  process group you created.
-- Run validation through the repository's Effigy selectors, not raw `cargo`,
-  `bun` or `vitest`. A narrow selector is fine. Effigy admits heavy runs
-  host-wide, and raw tools skip that, making contention worse for every
-  worktree.
-- Record a background job's exit code, for example
-  `cmd > run.log 2>&1; echo "exit=$?" >> run.log`. A process that has gone may
-  have finished green, so don't read "gone" as a failure.
-
-## Papercuts and leads
-
-Small, recurring friction worth fixing later is a papercut, filed in Queue, not
-in the repository. Queue calls run from the plugin root
-(`~/Dev/projects/paseo-northstar-queue`) with the payload on stdin. Don't use a
-shared payload file: another thread can overwrite it between two calls.
-
-```sh
-node bin/queue-cli.mjs papercut.add - <<'JSON'
-{"repository": {"origin": "owner/name", "path": "/abs/checkout"},
- "title": "...", "happened": "...", "impact": "..."}
-JSON
-```
-
-A papercut needs `repository`, `title`, `happened` and `impact`, plus optional
-`area` and `fix`. (`papercut.list` takes `repository` as the origin string,
-`"owner/name"`.) Record it and carry on with the task. The planner promotes a
-papercut with `papercut.promote-task` (see [brief](references/brief.md)),
-attaches it to a lane with `papercut.set-lanes`, or closes it as completed or
-deprecated.
-
-An observation, idea or question that is bigger than friction and not yet
-planned is a lead: `lead.add` (see [plan](references/plan.md)). Never write
-either into a file.
-
-## Ask the operator when
-
-- the plan doesn't settle what to do next;
-- a choice is breaking, irreversible, security-sensitive, or changes product
-  direction;
-- validation fails in a way that changes the plan.
-
-Otherwise act. Asking again for authority that is already settled is a cost.
-
-When a turn ends needing the operator's ruling, record it as a Queue decision
-as well as asking in chat, so it shows on the board and the answer comes back
-to you:
-
-```sh
-node bin/queue-cli.mjs decision.add - <<'JSON'
-{"question": "...", "askedBy": "<your agent ID>", "options": ["A", "B"],
- "recommendation": "A, because ...", "context": "...",
- "project": {"origin": "owner/name", "path": "/abs/checkout"}}
-JSON
-```
-
-Link the tasks, leads or papercuts it concerns (`tasks`, `leads`,
-`papercuts`: ID arrays). When the question is overtaken, `decision.withdraw`
-it (`id`, `version`, `reason`, `withdrawnBy`). If it changes shape,
-`decision.supersede` it rather than adding a second one. A ruling given in
-chat is recorded with `decision.answer`, quoting the operator word for word
-and naming them in the `note`. Either way, the ruling still lands in its
-owning knowledge file or closes its `questions.md` entry: a decision is the
-live ask, not the record.
-
-## Roles
-
-- **Planner** (a Chatterbox thread): owns the project's Queue plan, lane
-  documents, leads, knowledge upkeep, briefs and dispatch approval
-  requests. It commits its own small repository changes (questions, a ruling
-  landing in a knowledge file, link fixes) straight to `main`: run the
-  repository's docs checks, check the exit code, then push. Don't open a PR for
-  a small knowledge edit before a dispatch. A
-  branch and a self-merged PR are for larger or riskier changes: restructuring
-  knowledge, a migration cut, or anything touching code, QA configuration or
-  scripts. For those, "passes" means an exit code of 0 that was actually
-  checked. The planner also runs the repository's full QA on `main` at release
-  points and after a major chunk of work, through Queue rather than locally:
-  `project.qa.run` with `{"repository": "owner/name", "baseBranch": "main"}`,
-  then `project.qa.get` for the result. It briefs a fix for what it finds.
-  The operator doesn't review planner changes; anything
-  that needs independent review goes through Queue as a brief.
-- **Worker:** implements one brief in the worktree Queue gives it, runs the
-  targeted checks for its change once (see the rule above), opens one PR,
-  reports through Queue, and gets out of the way. Skipping a check that
-  covers the change isn't economy; it's an unverified PR.
-- **Reviewer:** checks the exact head independently: reads the diff, runs the
-  same targeted checks, exercises the behaviour, and reports findings. It
-  doesn't run the full `effigy qa`.
-
-Coordination (recovery, review routing, merge, closeout) is Queue's job, not a
-thread's. A planner hands over to a fresh successor using
-[handover](references/handover.md); there are no handoff files.
-
-## Adopting or migrating a repository
-
-Use [adopt](references/adopt.md) and the starter in
-[template/](template/README.md). A repository on the older Northstar shape
-migrates in one deliberate cut, and drops its Queue manifest.
+Use [adopt](references/adopt.md) and the copy-ready starter in
+[template/](template/README.md). The starter is a starting point, not a fixed
+schema; adapt it to the project's needs.
 
 ## Optional modules
 
-UI design delivery and language quality packages are separate modules. Load one
-only when the repository has opted in.
+UI design delivery and language quality packages are separate modules. Load
+one only when the repository has opted in.
 
-- **UI:** the nested [northstar-ui](ui/SKILL.md) skill builds and reviews UI
-  work against an approved design brief. Its routes are
-  [build](references/ui/build.md) and [review](references/ui/review.md).
+- **UI:** the nested [northstar-ui](ui/SKILL.md) skill guides UI implementation
+  and review against a project's approved design guidance.
 - **Language packages:** for an explicit Rust or TypeScript/Svelte quality
-  audit, follow the
-  [installed-package route](references/packages/installed-package-route.md). It
-  runs the skill's `language:route` task. Never start an audit from
-  ordinary coding. Everyday authoring is opt-in per repository
-  (`everyday_authoring: true` in the language-quality activation marker); a
-  missing or unusable pack degrades that route to the repository's own
-  validation instead of blocking ordinary work.
-- **Workflows:** `workflows/` holds Nucleus workflow charts:
-  `coding-delivery` (Nucleus's default) and `docs-with-review`. A repository
-  picks one with a Nucleus repository setting, `workflow: "northstar/<name>"`;
-  there is no file in the repository. Nucleus pins each chart's digest per
-  task, so later edits never affect running tasks (Nucleus contract 004).
-- **Worktrees:** `paseo:worktree` prepares and links sibling checkouts for
-  Paseo worktrees; projects call it from `paseo.json` setup and teardown.
+  audit, follow the [installed-package route](references/packages/installed-package-route.md).
+  Everyday authoring is opt-in per repository; a missing or unusable pack
+  falls back to the repository's own validation.

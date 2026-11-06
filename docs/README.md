@@ -1,11 +1,12 @@
 # Northstar — current state
 
-Northstar is lean. The `northstar` skill keeps a repository's knowledge current
-and its plan legible; Queue holds the plan, leads, papercuts, briefs, tasks,
-status and outcomes. Thirty-plus portfolio repositories run the lean shape, and this
-repository is the reference example.
+Northstar is a small skill and a documentation structure for keeping project
+knowledge current. It helps a project give each fact a clear home, keep useful
+detail, and make retired concepts easy to recognize.
 
-The UI and language-package modules follow the lean shape too: consumer language-quality files live in `docs/knowledge/contracts/`, and the packages are pinned at Rust 0.2.3 and TypeScript 0.2.2.
+The UI and language-package modules are optional. Their contracts live in
+`docs/knowledge/contracts/`, and language packages are pinned at Rust 0.2.3
+and TypeScript 0.2.2.
 
 ## By topic
 
@@ -13,7 +14,3 @@ The UI and language-package modules follow the lean shape too: consumer language
 - Architecture: [knowledge/architecture.md](knowledge/architecture.md)
 - Contracts: [knowledge/contracts/](knowledge/contracts/README.md)
 - The skill: [../skills/northstar/SKILL.md](../skills/northstar/SKILL.md)
-
-## What's next
-
-Northstar's plan is in Queue: `plan.get` for `inflatable-cookie/northstar`.

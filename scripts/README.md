@@ -23,5 +23,5 @@ Repository-owned checks for the skill's source. Run them through `effigy qa`.
   check's own throwaway root, removed with it, so this proof needs no scratch
   mount.
 
-The skill's own tests (`retired-concepts`, `cut`, `paseo:worktree`) live beside
+The skill's own tests (`retired-concepts`, `cut`) live beside
 their scripts in `skills/northstar/scripts/`.

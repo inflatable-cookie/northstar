@@ -81,3 +81,12 @@ replacement = "A brief is the body of a Queue lead: lead.add, lead.approve, lead
 owner = "skills/northstar/references/brief.md"
 terms = ["draft.create", "draft.edit", "draft.approve", "draft.promote", "brief draft", "shape: true"]
 allow = ["CHANGELOG.md", "docs/knowledge/retired.toml"]
+
+[[retired]]
+id = "northstar-task-system-guidance"
+retired = "2026-11-06"
+replacement = "Northstar documents knowledge structure; each project documents its own task and delivery system."
+owner = "docs/knowledge/architecture.md"
+terms = ["Queue planning guidance", "Nucleus workflow charts", "Paseo sibling worktree helper", "papercut.add", "lead.add", "decision.add", "plan.get"]
+paths = ["skills/northstar/references/plan.md", "skills/northstar/references/brief.md", "skills/northstar/references/handover.md", "skills/northstar/references/atlas.md", "skills/northstar/scripts/paseo-worktree.rhai", "skills/northstar/workflows/"]
+allow = ["CHANGELOG.md"]

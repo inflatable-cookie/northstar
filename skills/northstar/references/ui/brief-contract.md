@@ -1,9 +1,9 @@
 # UI design brief contract
 
 Agent-facing field list for the `northstar-ui` skill. The UI design brief is a
-`## UI design brief` section of the task's Queue brief (see the main skill's
-`references/brief.md`). Durable design decisions it relies on live in the
-repository's knowledge or the lane document, and the brief links them.
+`## UI design brief` section of the approved project brief. Durable design
+decisions it relies on live in the repository's knowledge or other linked
+project documentation.
 
 ## Classification
 
@@ -56,6 +56,6 @@ For a refinement only:
 - A substantial redesign is not ready without operator-selected concept
   evidence at a stable project path with recorded identity.
 - Rejected variants are non-authoritative.
-- A planning-only design delegate may gather requirements, map workflows, and
+- A discovery-only design delegate may gather requirements, map workflows, and
   propose materially different concepts, but cannot implement production code
   or grant readiness; the operator selects the direction.

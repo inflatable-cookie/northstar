@@ -155,9 +155,9 @@ def describe_removed(p):
     return f"`{os.path.basename(p)}` (Git history)"
 
 def apply():
-    with open(OPTS["plan"]) as fh: plan = json.load(fh)
-    moves, removed = plan.get("moves", []), plan.get("removed", [])
-    frozen = [re.compile(p) for p in plan.get("frozen", [])]
+    with open(OPTS["plan"]) as fh: migration = json.load(fh)
+    moves, removed = migration.get("moves", []), migration.get("removed", [])
+    frozen = [re.compile(pattern) for pattern in migration.get("frozen", [])]
     old_files = set(git("ls-files").splitlines())
     old_dirs = {d for f in old_files for d in [os.path.dirname(f)] if d}
     for d in list(old_dirs):

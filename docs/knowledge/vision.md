@@ -1,45 +1,30 @@
 # Vision
 
-Northstar lets operators run software projects with agents that act on current
-knowledge and aimed work, without reconstructing intent from conversation
-history or babysitting threads.
+Northstar helps project teams and agents work from current, well-organized
+knowledge without reconstructing intent from conversation history.
 
 ## What it is
 
-A small skill and a repository shape. The repository holds knowledge and code.
-The orchestrator (the Paseo Queue plugin today, Nucleus later) holds process:
-tasks, briefs, status, review, closeout, outcomes and papercuts. Northstar's
-job is to keep a project's knowledge current and its plan legible, so any agent
-can pick up work cold.
+A small skill and a flexible repository structure for project knowledge. Each
+fact has one owner, useful detail stays available, and retired concepts are
+recorded so they are not mistaken for current truth.
 
 ## Outcomes
 
-- Agents plan against what is true now, not against retired concepts or
-  settled questions they re-ask.
-- Operator rulings reach their owning file before the thread that heard them
-  ends.
-- A brief is enough for a capable worker; nobody restates guardrails in
-  conversation.
-- Completion rests on merged code and validation, not narrative.
-- Adopting Northstar doesn't require language-specific quality tooling a
-  project doesn't use.
+- Readers can find the current facts relevant to their work.
+- Durable rules and operator rulings reach the files that own them.
+- The starter works in another project without Northstar-specific examples.
+- Adopting the structure does not require optional language-quality tooling.
 
 ## Constraints
 
-- The skill stays small. Doctrine a capable agent already follows by default
-  is removed, not restated.
-- General-purpose across operators, repositories and harnesses. One operator's
-  convenience can inform evidence but never becomes a reusable assumption.
-- Human-readable and copy-ready: the starter in `skills/northstar/template/`
-  works in another project unchanged.
-- Northstar runs on its own shape.
+- Keep the skill focused on documentation structure and maintenance.
+- Make it useful across operators, repositories and harnesses.
+- Keep the starter human-readable and ready to copy.
+- Keep automation small and tied to a clear knowledge-maintenance need.
 
 ## Non-goals
 
-- Recording work for its own sake. A record exists because someone will need
-  it later, not because a step happened.
-- Task state in Git: status mirrors, handoffs, lifecycle records, delivery
-  logs.
-- A separate skill for every narrow flow. Specialised flows are optional
-  modules.
+- Recording work merely to show that a step happened.
+- Storing task status, handoffs or delivery logs in the knowledge base.
 - Replacing human judgment with automation.
