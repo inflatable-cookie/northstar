@@ -6,8 +6,8 @@ execution in the running product.
 
 ## Before you code
 
-1. Read the `## UI design brief` section of your Queue brief and the knowledge
-   or lane document it links.
+1. Read the `## UI design brief` section of approved brief and the knowledge
+   or linked project knowledge it links.
 2. Inspect the existing product and design system. Identify the components,
    tokens, patterns, and platform conventions that govern this surface.
 3. Reproduce and capture the current path when it exists, including its entry,

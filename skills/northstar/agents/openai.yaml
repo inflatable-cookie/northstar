@@ -1,4 +1,4 @@
 interface:
   display_name: "Northstar"
-  short_description: "Keep project knowledge current and work well-aimed."
-  default_prompt: "Use $northstar. Read SKILL.md, find your role (planner, reviewer or worker), and load only the reference that task needs: plan, brief, review, knowledge, adopt or handover. The repository holds knowledge and code; Queue holds tasks, briefs, status, outcomes and papercuts. Load the UI or language-package module only when the repository has opted in."
+  short_description: "Keep project knowledge current and well organized."
+  default_prompt: "Use $northstar to orient yourself in a project's documentation, maintain its knowledge structure, adopt the starter, or retire outdated concepts."

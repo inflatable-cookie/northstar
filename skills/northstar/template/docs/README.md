@@ -11,7 +11,3 @@ that matter right now. Link to knowledge by topic; don't restate it.>
 - Architecture: [knowledge/architecture.md](knowledge/architecture.md)
 - Contracts: [knowledge/contracts/](knowledge/contracts/README.md)
 - Domain: [knowledge/domain/](knowledge/domain/README.md)
-
-## What's next
-
-The project's plan is in Queue: its lanes, their documents and their order.

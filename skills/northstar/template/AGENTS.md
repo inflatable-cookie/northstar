@@ -6,13 +6,9 @@ become.>
 ## Where things live
 
 - Current state: `docs/README.md`
-- Knowledge (one owner per fact): `docs/knowledge/README.md`
-- Retired concepts, which must not come back: `docs/knowledge/retired.toml`
+- Knowledge index: `docs/knowledge/README.md`
+- Retired concepts: `docs/knowledge/retired.toml`
 - Open questions: `docs/knowledge/questions.md`
-
-The plan (lanes, their documents and their order), leads, briefs, papercuts,
-tasks and status live in Queue, never in this repository. Read what's
-next with `plan.get` (see the `northstar` skill).
 
 ## Commands
 
@@ -27,24 +23,12 @@ next with `plan.get` (see the `northstar` skill).
 - <Things an agent must not do without asking: releases, migrations,
   credentials, shared infrastructure.>
 - When a change alters what is true, update the owning knowledge file in the
-  same PR.
-- An operator ruling given in conversation goes into its owning file before
-  the thread ends.
-
-## Papercuts and leads
-
-File small, recurring friction in Queue with `papercut.add`, and unplanned
-ideas or observations with `lead.add` (see the `northstar` skill). The
-repository holds no papercut file or triage folder.
+  same change.
+- Record operator rulings in the file that owns the affected knowledge.
 
 ## Validate
 
-Before a PR, run once, through Effigy, every check covering what you changed:
-the tests and QA groups for it (`<narrow selector>`), a compile of what you
-touched, `<docs check>` if docs changed, and any proof the brief names or the
-change alters. Skip only the full `<qa command>` and repeat passes. Full `<qa command>` runs on `main` at release points
-and after a major chunk of work.
-<!-- Heavy repository? Opt into compile-only tasks instead (see the northstar
-skill): tasks compile what they touched, run docs checks and named proofs,
-and skip tests; milestone QA reconciles on a cadence. Set the same rule in
-the repository's Queue validationPolicy. -->
+Before a change is ready, run the checks that cover what changed: tests or
+checks for touched code and documentation checks when documentation changed.
+List the project's selectors here. Run larger suite checks at the project's
+milestones.
