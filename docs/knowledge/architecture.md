@@ -25,8 +25,9 @@ workflow; the documentation structure does not prescribe one.
 - `SKILL.md`: knowledge structure and maintenance guidance.
 - `references/`: adoption, review, knowledge and optional module guidance.
 - `template/`: a generic starter for another repository.
-- `scripts/`: retired-concept and link checks, plus migration tooling, run
-  through the skill's Effigy catalog (`northstar`).
+- `scripts/`: retired-concept and link checks, changelog fragment folding
+  and checks, plus migration tooling, run through the skill's Effigy catalog
+  (`northstar`).
 - `ui/`: an optional skill for UI implementation and review.
 - `references/packages/` and language scripts: optional language-quality
   package support, described by

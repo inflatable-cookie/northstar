@@ -8,5 +8,6 @@ alias = "northstar"
 "retired-concepts" = "bun run {skill}/scripts/retired-concepts.ts {args}"
 "cut" = "python3 {skill}/scripts/cut.py {args}"
 "check-links" = "python3 {skill}/scripts/cut.py check-links {args}"
+"changelog" = "python3 {skill}/scripts/changelog.py {args}"
 "check:language-packages" = [{ rhai = "scripts/check-language-packages.rhai" }]
 "language:route" = "bun run {skill}/scripts/language-package-lifecycle.ts route {args}"

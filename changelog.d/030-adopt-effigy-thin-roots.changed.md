@@ -1,0 +1,1 @@
+Extend `northstar-effigy` so it now treats thin workspace roots plus nested docs-authority repos as a first-class adoption mode instead of assuming every consuming project should carry one root-level docs/changelog/release surface.

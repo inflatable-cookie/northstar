@@ -1,0 +1,1 @@
+The plan, triage leads and brief drafts live in Queue (2026-09-27). The skill's `plan` and `brief` references use lanes, lane documents, `plan.set`, leads and drafts; the template drops `docs/plan.md` and `docs/triage/`, and `adopt.md` has the move for already-lean repositories.

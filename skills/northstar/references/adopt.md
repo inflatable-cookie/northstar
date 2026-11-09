@@ -36,3 +36,23 @@ Make the change in a deliberate pass:
 
 Preserve detailed system design and evidence that current decisions rely on.
 Git history is the home for obsolete facts and completed work narratives.
+
+## Record unreleased changes as fragments
+
+A repository that keeps a `CHANGELOG.md` records unreleased changes as
+fragments: one small file under `changelog.d/` per change, named
+`<task-or-pr-reference>-<short-slug>.<type>.md` so parallel branches never
+collide. The type is one of `added`, `changed`, `fixed`, `removed`,
+`security`; the body is one entry of a line or two. Add a fragment with the
+change and leave `[Unreleased]` empty; never edit the section directly.
+
+To adopt, move the current `[Unreleased]` entries into fragments once and
+leave the section empty. Run the script's `check` alongside the docs checks:
+it refuses a malformed fragment with the file and reason, and fails when
+`[Unreleased]` is edited directly.
+
+When a release is cut, fold the fragments in through the repository's task
+runner: `changelog.py fold --version <x.y.z> [--date YYYY-MM-DD]` inserts a
+`## [version] - date` heading in a stable order (by type, then name), deletes
+the folded fragments, and refuses malformed ones. The skill catalog exposes
+it as `changelog`.
