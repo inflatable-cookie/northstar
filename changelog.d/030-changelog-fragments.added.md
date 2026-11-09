@@ -1,0 +1,1 @@
+Added changelog fragments as a canonical feature: each change drops one `<reference>.<type>.md` file in `changelog.d/`, `check:changelog` guards the format and keeps `[Unreleased]` empty, and `effigy changelog:fold` folds the fragments into `CHANGELOG.md` when a release is cut.

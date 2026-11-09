@@ -1,0 +1,1 @@
+Tightened the `northstar-effigy` source-of-truth docs so native Effigy mode is now the default target, compatibility mode is clearly a fallback, and the boundary between skill-owned scaffolding and Effigy-owned validation/runtime surfaces is described consistently across the bundle.

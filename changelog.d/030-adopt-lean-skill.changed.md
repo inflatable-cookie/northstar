@@ -1,0 +1,1 @@
+Northstar is lean (2026-09-26). The `northstar` skill is now the lean skill: planning, briefs, review and knowledge upkeep, with a copy-ready `template/`, the retired-concepts check and the `cut` migration tool. Task state, briefs, closeout and papercuts live in Queue.

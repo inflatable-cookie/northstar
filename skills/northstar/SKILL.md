@@ -18,6 +18,7 @@ or rules have been retired.
 | `docs/knowledge/` | Current truth, with one owning file per fact |
 | `docs/knowledge/retired.toml` | Concepts that no longer apply and their replacements |
 | `docs/knowledge/questions.md` | Open questions and pointers to their answers |
+| `changelog.d/` | Unreleased changes as fragments, one file per change, folded into `CHANGELOG.md` when a release is cut |
 | `docs/knowledge/contracts/release.md` | How the project releases, if applicable |
 
 The exact structure belongs to each project. Add sections and folders when

@@ -23,6 +23,7 @@ paths = [".northstar/lifecycle/", "docs/roadmaps/", "docs/handoffs/", "docs/logs
 config_keys = ["northstar/queue:hook", "paseo.queue.control.v4"]
 allow = [
   "CHANGELOG.md",
+  "changelog.d/",
   "docs/knowledge/retired.toml",
   "skills/northstar/references/adopt.md",
   "skills/northstar/scripts/cut.py",
@@ -40,7 +41,7 @@ replacement = "The northstar skill: SKILL.md and references/ for guidance, templ
 owner = "docs/knowledge/architecture.md"
 terms = ["protocol kernel", "working-rules contract", "Northstar router"]
 paths = ["bundle-docs/", "template-bundle/", "skills/northstar/references/modes/", "skills/northstar/references/router.md", "skills/northstar/commands/", "skills/northstar-lean/"]
-allow = ["CHANGELOG.md", "docs/knowledge/retired.toml"]
+allow = ["CHANGELOG.md", "changelog.d/", "docs/knowledge/retired.toml"]
 
 [[retired]]
 id = "papercuts-file"
@@ -52,6 +53,7 @@ allow = [
   "skills/northstar/scripts/retired-concepts.ts",
   "skills/northstar/scripts/retired-concepts.test.sh",
   "CHANGELOG.md",
+  "changelog.d/",
   "AGENTS.md",
   "docs/knowledge/retired.toml",
   "skills/northstar/SKILL.md",
@@ -69,6 +71,7 @@ allow = [
   "skills/northstar/scripts/retired-concepts.ts",
   "skills/northstar/scripts/retired-concepts.test.sh",
   "CHANGELOG.md",
+  "changelog.d/",
   "docs/knowledge/retired.toml",
   "skills/northstar/SKILL.md",
   "skills/northstar/references/adopt.md",
@@ -80,7 +83,7 @@ retired = "2026-09-27"
 replacement = "A brief is the body of a Queue lead: lead.add, lead.approve, lead.promote-task (Queue 64b3c91)."
 owner = "skills/northstar/references/brief.md"
 terms = ["draft.create", "draft.edit", "draft.approve", "draft.promote", "brief draft", "shape: true"]
-allow = ["CHANGELOG.md", "docs/knowledge/retired.toml"]
+allow = ["CHANGELOG.md", "changelog.d/", "docs/knowledge/retired.toml"]
 
 [[retired]]
 id = "northstar-task-system-guidance"
@@ -89,4 +92,4 @@ replacement = "Northstar documents knowledge structure; each project documents i
 owner = "docs/knowledge/architecture.md"
 terms = ["Queue planning guidance", "Nucleus workflow charts", "Paseo sibling worktree helper", "papercut.add", "lead.add", "decision.add", "plan.get"]
 paths = ["skills/northstar/references/plan.md", "skills/northstar/references/brief.md", "skills/northstar/references/handover.md", "skills/northstar/references/atlas.md", "skills/northstar/scripts/paseo-worktree.rhai", "skills/northstar/workflows/"]
-allow = ["CHANGELOG.md"]
+allow = ["CHANGELOG.md", "changelog.d/"]

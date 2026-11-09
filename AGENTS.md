@@ -11,6 +11,8 @@ task system, not in Git.
 - Knowledge index: `docs/knowledge/README.md`
 - Retired concepts: `docs/knowledge/retired.toml`
 - Open questions: `docs/knowledge/questions.md`
+- Unreleased changes: `changelog.d/`, folded into `CHANGELOG.md` when a
+  release is cut
 - The skill and copy-ready starter: `skills/northstar/`
 
 ## Commands
@@ -20,7 +22,7 @@ task system, not in Git.
 - `effigy check:skill-install ~/.agents/skills/northstar` — installed copy
   matches source.
 - `effigy skill run --path skills/northstar <task>` — run a skill task from
-  source (`retired-concepts`, `cut`, `check-links`).
+  source (`retired-concepts`, `cut`, `check-links`, `changelog`).
 
 General Effigy guidance comes from the maintained Effigy skill. These are
 Northstar's selectors and guardrails. Install Effigy separately, using its
