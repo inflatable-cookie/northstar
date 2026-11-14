@@ -9,7 +9,8 @@
 // Exit: 0 clean, 1 findings, 2 usage or configuration error.
 
 import { spawnSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join, resolve, posix } from "node:path";
 
 const RETIRED_FILE = "docs/knowledge/retired.toml";
@@ -54,7 +55,7 @@ function parseArgs(argv: string[]) {
 }
 
 function git(repo: string, args: string[]) {
-  return spawnSync("git", args, { cwd: repo, encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+  return spawnSync("git", args, { cwd: repo, encoding: "utf8", maxBuffer: 256 * 1024 * 1024 });
 }
 
 // An `allow` entry matches an exact file or, with a trailing slash, everything
@@ -84,23 +85,49 @@ function atPathBoundary(text: string, needle: string): boolean {
   return false;
 }
 
-function grep(repo: string, needle: string): { file: string; line: number; text: string }[] {
-  // --untracked also searches new files; files deleted but not yet staged are
-  // absent from the working tree, so they can't match.
-  const pathLike = isPathLike(needle);
-  const result = git(repo, ["grep", "--untracked", "-n", "-I", ...(pathLike ? [] : ["-i"]), "-F", "--no-color", "-e", needle, "--", "."]);
-  if (result.status === 1) return [];
-  if (result.status !== 0) fail(`git grep failed for ${JSON.stringify(needle)}: ${result.stderr.trim()}`);
-  return result.stdout
-    .split("\n")
-    .filter(Boolean)
-    .map((row) => {
-      const first = row.indexOf(":");
-      const second = row.indexOf(":", first + 1);
-      return { file: row.slice(0, first), line: Number(row.slice(first + 1, second)), full: row.slice(second + 1) };
-    })
-    .filter((hit) => !pathLike || atPathBoundary(hit.full, needle))
-    .map(({ file, line, full }) => ({ file, line, text: full.trim().slice(0, 200) }));
+type Hit = { file: string; line: number; text: string };
+
+// One search for every needle at once. `git grep -f` takes all the needles as
+// patterns and returns each matching line once; the needles that a line
+// contains are then worked out in memory. A search per needle meant hundreds of
+// full-tree passes. Matching is unchanged: ordinary terms ignore case; a needle
+// that names a path matches case-sensitively and only at a path boundary.
+// --untracked also searches new files; files deleted but not yet staged are
+// absent from the working tree, so they can't match.
+function grepAll(repo: string, needles: string[]): Map<string, Hit[]> {
+  const index = new Map<string, Hit[]>(needles.map((needle) => [needle, []]));
+  const groups = [
+    { ignoreCase: true, list: needles.filter((needle) => !isPathLike(needle)) },
+    { ignoreCase: false, list: needles.filter(isPathLike) },
+  ];
+  const dir = mkdtempSync(join(tmpdir(), "retired-concepts-"));
+  try {
+    for (const { ignoreCase, list } of groups) {
+      if (list.length === 0) continue;
+      const patterns = join(dir, ignoreCase ? "terms.txt" : "paths.txt");
+      writeFileSync(patterns, list.join("\n") + "\n");
+      const result = git(repo, ["grep", "--untracked", "-n", "-I", ...(ignoreCase ? ["-i"] : []), "-F", "--no-color", "-f", patterns, "--", "."]);
+      if (result.status === 1) continue;
+      if (result.status !== 0) fail(`git grep failed: ${result.stderr.trim()}`);
+      const lowered = ignoreCase ? list.map((needle) => needle.toLowerCase()) : list;
+      for (const row of result.stdout.split("\n").filter(Boolean)) {
+        const first = row.indexOf(":");
+        const second = row.indexOf(":", first + 1);
+        const file = row.slice(0, first);
+        const line = Number(row.slice(first + 1, second));
+        const full = row.slice(second + 1);
+        const haystack = ignoreCase ? full.toLowerCase() : full;
+        list.forEach((needle, i) => {
+          if (!haystack.includes(lowered[i])) return;
+          if (!ignoreCase && !atPathBoundary(full, needle)) return;
+          index.get(needle)!.push({ file, line, text: full.trim().slice(0, 200) });
+        });
+      }
+    }
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+  return index;
 }
 
 // A file inside a retired path's parent directory can name it relatively:
@@ -110,43 +137,66 @@ function grep(repo: string, needle: string): { file: string; line: number; text:
 // config files resolve paths from wherever their command runs, not from the
 // file's directory. A history pointer written as `name.md` (Git history) is
 // allowed, as adopt.md recommends.
-function relativeHits(repo: string, retiredPath: string): { file: string; line: number; text: string }[] {
-  const isDir = retiredPath.endsWith("/");
-  const target = retiredPath.replace(/\/$/, "");
-  const parts = target.split("/");
-  const hits: { file: string; line: number; text: string }[] = [];
-  for (let i = 1; i < parts.length; i++) {
-    const dir = parts.slice(0, i).join("/");
-    const tail = parts.slice(i).join("/") + (isDir ? "/" : "");
-    const result = git(repo, ["grep", "--untracked", "-n", "-I", "-F", "--no-color", "-e", tail, "--", `:(glob)${dir}/**/*.md`]);
-    if (result.status === 1) continue;
-    if (result.status !== 0) fail(`git grep failed for ${JSON.stringify(tail)}: ${result.stderr.trim()}`);
-    for (const row of result.stdout.split("\n").filter(Boolean)) {
+// One Markdown search for every retired path's tails; each hit is then checked
+// against the directories it must sit under.
+function relativeAll(repo: string, retiredPaths: string[]): Map<string, Hit[]> {
+  type Combo = { path: string; level: number; dir: string; tail: string; target: string; isDir: boolean };
+  const combos: Combo[] = [];
+  for (const retiredPath of new Set(retiredPaths)) {
+    const isDir = retiredPath.endsWith("/");
+    const target = retiredPath.replace(/\/$/, "");
+    const parts = target.split("/");
+    for (let level = 1; level < parts.length; level++) {
+      combos.push({ path: retiredPath, level, dir: parts.slice(0, level).join("/"), tail: parts.slice(level).join("/") + (isDir ? "/" : ""), target, isDir });
+    }
+  }
+  const byPath = new Map<string, Hit[]>();
+  if (combos.length === 0) return byPath;
+  const found = new Map<Combo, Hit[]>(combos.map((combo) => [combo, []]));
+  const tails = [...new Set(combos.map((combo) => combo.tail))];
+  const dir = mkdtempSync(join(tmpdir(), "retired-concepts-"));
+  try {
+    const patterns = join(dir, "tails.txt");
+    writeFileSync(patterns, tails.join("\n") + "\n");
+    const result = git(repo, ["grep", "--untracked", "-n", "-I", "-F", "--no-color", "-f", patterns, "--", ":(glob)**/*.md"]);
+    if (result.status !== 0 && result.status !== 1) fail(`git grep failed: ${result.stderr.trim()}`);
+    for (const row of result.status === 1 ? [] : result.stdout.split("\n").filter(Boolean)) {
       const first = row.indexOf(":");
       const second = row.indexOf(":", first + 1);
       const file = row.slice(0, first);
       const text = row.slice(second + 1);
-      for (let at = text.indexOf(tail); at !== -1; at = text.indexOf(tail, at + 1)) {
-        let start = at;
-        while (text.slice(start - 3, start) === "../") start -= 3;
-        if (text.slice(start - 2, start) === "./") start -= 2;
-        // Preceded by a path segment means another path (or the root form,
-        // which the ordinary search already reports).
-        if (start > 0 && /[A-Za-z0-9_.\/-]/.test(text[start - 1])) continue;
-        // The pointer marker follows the whole path, which for a directory
-        // retirement runs past the tail (`roadmaps/g02/x.md` (Git history)).
-        const end = at + tail.length + (text.slice(at + tail.length).match(/^[^\s`)\]]*/)?.[0].length ?? 0);
-        const after = text.slice(end);
-        if (/^`? \((in )?Git history\)/.test(after)) continue;
-        const resolved = posix.normalize(posix.join(posix.dirname(file), text.slice(start, at + tail.length))).replace(/\/$/, "");
-        if (resolved === target) {
-          hits.push({ file, line: Number(row.slice(first + 1, second)), text: text.trim().slice(0, 200) });
-          break;
+      for (const combo of combos) {
+        if (!file.startsWith(combo.dir + "/") || !text.includes(combo.tail)) continue;
+        if (relativePointer(file, text, combo.tail, combo.target)) {
+          found.get(combo)!.push({ file, line: Number(row.slice(first + 1, second)), text: text.trim().slice(0, 200) });
         }
       }
     }
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
   }
-  return hits;
+  for (const combo of combos) byPath.set(combo.path, [...(byPath.get(combo.path) ?? []), ...found.get(combo)!]);
+  return byPath;
+}
+
+// Does `text`, in `file`, name the retired `target` relatively through `tail`?
+function relativePointer(file: string, text: string, tail: string, target: string): boolean {
+  for (let at = text.indexOf(tail); at !== -1; at = text.indexOf(tail, at + 1)) {
+    let start = at;
+    while (text.slice(start - 3, start) === "../") start -= 3;
+    if (text.slice(start - 2, start) === "./") start -= 2;
+    // Preceded by a path segment means another path (or the root form,
+    // which the ordinary search already reports).
+    if (start > 0 && /[A-Za-z0-9_.\/-]/.test(text[start - 1])) continue;
+    // The pointer marker follows the whole path, which for a directory
+    // retirement runs past the tail (`roadmaps/g02/x.md` (Git history)).
+    const end = at + tail.length + (text.slice(at + tail.length).match(/^[^\s`)\]]*/)?.[0].length ?? 0);
+    const after = text.slice(end);
+    if (/^`? \((in )?Git history\)/.test(after)) continue;
+    const resolved = posix.normalize(posix.join(posix.dirname(file), text.slice(start, at + tail.length))).replace(/\/$/, "");
+    if (resolved === target) return true;
+  }
+  return false;
 }
 
 function main() {
@@ -172,6 +222,14 @@ function main() {
     .filter((f) => f && existsSync(join(repo, f)));
   const findings: Finding[] = [];
   const seen = new Set<string>();
+  const needles = new Set<string>();
+  const retiredPaths: string[] = [];
+  for (const entry of entries) {
+    for (const needle of [...(entry.terms ?? []), ...(entry.config_keys ?? []), ...(entry.paths ?? [])]) needles.add(needle);
+    retiredPaths.push(...(entry.paths ?? []));
+  }
+  const hits = grepAll(repo, [...needles]);
+  const relative = relativeAll(repo, retiredPaths);
 
   for (const entry of entries) {
     if (!entry.id) fail(`an entry in ${file} has no id`);
@@ -190,8 +248,8 @@ function main() {
     const permalink = (text: string, needle: string) =>
       new RegExp("/blob/[0-9a-f]{7,40}/[^\\s)]*" + needle.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i").test(text);
     const add2 = (f: Finding) => { if (!(f.text && permalink(f.text, f.needle.replace(/\/$/, "")))) add(f); };
-    for (const term of entry.terms ?? []) for (const hit of grep(repo, term)) add2({ id: entry.id, kind: "term", needle: term, ...hit });
-    for (const key of entry.config_keys ?? []) for (const hit of grep(repo, key)) add2({ id: entry.id, kind: "config_key", needle: key, ...hit });
+    for (const term of entry.terms ?? []) for (const hit of hits.get(term) ?? []) add2({ id: entry.id, kind: "term", needle: term, ...hit });
+    for (const key of entry.config_keys ?? []) for (const hit of hits.get(key) ?? []) add2({ id: entry.id, kind: "config_key", needle: key, ...hit });
     for (const path of entry.paths ?? []) {
       // A trailing slash names a directory, so text matches keep the slash and
       // `src/media/` does not match `src/media-locator.ts`. Without one, the
@@ -199,8 +257,8 @@ function main() {
       const prefix = path.replace(/\/$/, "");
       const isDir = path.endsWith("/");
       for (const t of tracked) if (t === prefix || (isDir && t.startsWith(prefix + "/"))) add({ id: entry.id, kind: "tracked_path", needle: path, file: t });
-      for (const hit of grep(repo, path)) add2({ id: entry.id, kind: "path", needle: path, ...hit });
-      for (const hit of relativeHits(repo, path)) add2({ id: entry.id, kind: "path", needle: path, ...hit });
+      for (const hit of hits.get(path) ?? []) add2({ id: entry.id, kind: "path", needle: path, ...hit });
+      for (const hit of relative.get(path) ?? []) add2({ id: entry.id, kind: "path", needle: path, ...hit });
     }
   }
 
