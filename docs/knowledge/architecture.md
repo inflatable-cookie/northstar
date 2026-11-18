@@ -28,6 +28,9 @@ workflow; the documentation structure does not prescribe one.
   and checks, plus migration tooling. Dependency-free Python 3.8+; the skill's
   Effigy catalog (`northstar`) wraps them for projects that use Effigy.
 
+`skills/fleet-sweep/` makes one change across many repositories, one PR
+each.
+
 `skills/atlas/` is a standalone skill for long-horizon direction with the
 operator. It records into the knowledge files and leaves planning to the
 project's own system.

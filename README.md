@@ -10,6 +10,8 @@ conversation.
   knowledge structure and upkeep.
 - [`skills/atlas/`](skills/atlas/SKILL.md): long-horizon direction with the
   operator.
+- [`skills/fleet-sweep/`](skills/fleet-sweep/SKILL.md): one change across many
+  repositories.
 - [`skills/northstar/template/`](skills/northstar/template/README.md): the
   copy-ready starter for a project.
 - [`skills/northstar/references/adopt.md`](skills/northstar/references/adopt.md):
@@ -22,6 +24,7 @@ conversation.
 ```bash
 rsync -a --delete skills/northstar/ ~/.agents/skills/northstar/
 rsync -a --delete skills/atlas/ ~/.agents/skills/atlas/
+rsync -a --delete skills/fleet-sweep/ ~/.agents/skills/fleet-sweep/
 ```
 
 Point your harness's skill folder at those copies. The scripts need Python
