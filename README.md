@@ -8,6 +8,8 @@ conversation.
 
 - [`skills/northstar/`](skills/northstar/SKILL.md): the installable skill for
   knowledge structure and upkeep.
+- [`skills/atlas/`](skills/atlas/SKILL.md): long-horizon direction with the
+  operator.
 - [`skills/northstar/template/`](skills/northstar/template/README.md): the
   copy-ready starter for a project.
 - [`skills/northstar/references/adopt.md`](skills/northstar/references/adopt.md):
@@ -19,10 +21,11 @@ conversation.
 
 ```bash
 rsync -a --delete skills/northstar/ ~/.agents/skills/northstar/
+rsync -a --delete skills/atlas/ ~/.agents/skills/atlas/
 ```
 
-Point your harness's skill folder at that copy. Skill tasks run through Effigy
-as `effigy skill run northstar/<task>`.
+Point your harness's skill folder at those copies. The scripts need Python
+3.8+ and Git.
 
 ## License
 

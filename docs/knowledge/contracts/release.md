@@ -1,7 +1,7 @@
 # Release
 
-Northstar has no tagged releases yet. It ships by installing
-`skills/northstar/` from `main` onto the operator's machine. `VERSION` stays
+Northstar has no tagged releases yet. It ships by installing each skill under
+`skills/` from `main` onto the operator's machine. `VERSION` stays
 at `0.1.0` and unreleased changes wait as fragments in `changelog.d/` until
 the first tagged release. Tagging needs the operator's decision on versioning.
 
@@ -22,17 +22,17 @@ user-visible contracts are preserved by default.
 2. Cut the changelog when a version ships:
    `effigy changelog:fold --version <x.y.z> --date <YYYY-MM-DD>`, then commit
    `CHANGELOG.md` together with the removed fragments.
-3. Sync the installed copy:
-   `rsync -a --delete skills/northstar/ ~/.agents/skills/northstar/`.
-   Other harness skill locations may link to it.
+3. Sync the installed copies:
+   `rsync -a --delete skills/<skill>/ ~/.agents/skills/<skill>/` for each
+   skill. Other harness skill locations may link to them.
 
 ## Verify
 
-- `effigy check:skill-install ~/.agents/skills/northstar` reports exact parity.
+- `effigy check:skill-install` reports exact parity for every skill.
 - `effigy skill run northstar/retired-concepts` succeeds from a consumer
   repository.
 - `effigy check:changelog` passes on a fresh checkout.
 
 ## Roll back
 
-Check out the previous `main` commit's `skills/northstar/` and sync it again.
+Check out the previous `main` commit's `skills/` and sync again.

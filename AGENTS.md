@@ -1,9 +1,9 @@
 # Northstar
 
-Northstar is a small skill and a repository shape for keeping project
-knowledge current and easy to use. It must stay focused on documentation
-structure and knowledge maintenance. Task state belongs in each project's own
-task system, not in Git.
+Northstar is becoming an opt-in stack of skills: the knowledge-structure skill
+and starter, Atlas, and the optional UI module. Direction is in
+`docs/knowledge/vision.md`. Task state belongs in each project's own task
+system, not in Git.
 
 ## Where things live
 
@@ -14,19 +14,16 @@ task system, not in Git.
 - Unreleased changes: `changelog.d/`, folded into `CHANGELOG.md` when a
   release is cut
 - The skill and copy-ready starter: `skills/northstar/`
+- The Atlas skill: `skills/atlas/`
 
 ## Commands
 
 - `effigy qa` — full validation: skill self-tests, retired concepts, links and
   changelog fragments.
-- `effigy check:skill-install ~/.agents/skills/northstar` — installed copy
-  matches source.
-- `effigy skill run --path skills/northstar <task>` — run a skill task from
-  source (`retired-concepts`, `cut`, `check-links`, `changelog`).
+- `effigy check:skill-install` — installed skills match source.
 
-General Effigy guidance comes from the maintained Effigy skill. These are
-Northstar's selectors and guardrails. Install Effigy separately, using its
-project documentation.
+Effigy wraps the scripts here; each also runs directly with `python3`. Skill
+scripts must stay dependency-free Python 3.8+ so adopters need nothing else.
 
 ## Product rules
 

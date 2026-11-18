@@ -57,6 +57,17 @@ Use [adopt](references/adopt.md) and the copy-ready starter in
 [template/](template/README.md). The starter is a starting point, not a fixed
 schema; adapt it to the project's needs.
 
+## Scripts
+
+Python 3.8+ and Git, no other dependencies. Run them from the repository root.
+
+- `scripts/retired-concepts.py` — live references to retired concepts.
+- `scripts/cut.py check-links` — broken Markdown links and anchors.
+- `scripts/changelog.py check|fold` — changelog fragments.
+
+`effigy.toml` wraps the same scripts for projects that use Effigy
+(`effigy skill run northstar/<task>`).
+
 ## Optional modules
 
 - **UI:** the nested [northstar-ui](ui/SKILL.md) skill guides UI implementation

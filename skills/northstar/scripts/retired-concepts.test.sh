@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Self-test for retired-concepts.ts against a scratch repository.
+# Self-test for retired-concepts.py against a scratch repository.
 set -euo pipefail
 here=$(cd "$(dirname "$0")" && pwd)
-check="$here/retired-concepts.ts"
+check="$here/retired-concepts.py"
 repo=$(mktemp -d)
 trap 'rm -rf "$repo"' EXIT
 git -C "$repo" init -q
@@ -37,7 +37,7 @@ echo "ok" > "$repo/state/app.toml"
 git -C "$repo" add -A && git -C "$repo" -c user.email=t@t -c user.name=t commit -qm base
 
 expect() { # <want-exit> <label>
-  set +e; out=$(bun run "$check" --repo "$repo" --json); got=$?; set -e
+  set +e; out=$(python3 "$check" --repo "$repo" --json); got=$?; set -e
   [ "$got" = "$1" ] || { echo "FAIL $2: exit $got, want $1"; echo "$out"; exit 1; }
   echo "ok $2"
 }

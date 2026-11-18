@@ -26,11 +26,15 @@ workflow; the documentation structure does not prescribe one.
 - `references/`: adoption, review, knowledge and optional module guidance.
 - `template/`: a generic starter for another repository.
 - `scripts/`: retired-concept and link checks, changelog fragment folding
-  and checks, plus migration tooling, run through the skill's Effigy catalog
-  (`northstar`).
+  and checks, plus migration tooling. Dependency-free Python 3.8+; the skill's
+  Effigy catalog (`northstar`) wraps them for projects that use Effigy.
 - `ui/`: an optional skill for UI implementation and review.
 
-The installed copy lives at `~/.agents/skills/northstar`. Harness skill
+`skills/atlas/` is a standalone skill for long-horizon direction with the
+operator. It records into the knowledge files and leaves planning to the
+project's own system.
+
+Installed copies live under `~/.agents/skills/`. Harness skill
 folders may link to it. See [contracts/release.md](contracts/release.md).
 
 ## Knowledge mechanisms
