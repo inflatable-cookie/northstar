@@ -13,10 +13,5 @@ alias = "northstar"
 "test:cut" = "bash skills/northstar/scripts/cut.test.sh"
 "test:changelog" = "bash skills/northstar/scripts/changelog.test.sh"
 "changelog:fold" = "python3 skills/northstar/scripts/changelog.py fold {args}"
-"check:language-packages" = [{ rhai = "skills/northstar/scripts/check-language-packages.rhai" }]
-"check:language-package-routes" = "scripts/tests/language-package-routes/self-test.sh"
-# Self-contained consumer fixture reruns; included in qa.
-"check:language-consumer-reruns" = "python3 scripts/tests/language-package-routes/validate_consumer_reruns.py"
-"language:route" = "bun run skills/northstar/scripts/language-package-lifecycle.ts route {args}"
 "qa:docs" = [{ task = "check:retired-concepts" }, { task = "check:links" }, { task = "check:changelog" }]
-qa = [{ task = "test:retired-concepts" }, { task = "test:cut" }, { task = "test:changelog" }, { task = "check:language-packages" }, { task = "check:language-package-routes" }, { task = "check:language-consumer-reruns" }, { task = "qa:docs" }]
+qa = [{ task = "test:retired-concepts" }, { task = "test:cut" }, { task = "test:changelog" }, { task = "qa:docs" }]

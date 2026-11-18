@@ -7,9 +7,3 @@ briefs. An answered question keeps only its pointer to where the answer lives.
 
 Status: open
 Needed for: the first tagged release (see [contracts/release.md](contracts/release.md)).
-
-## Q-002 — Where do language-package consumer files live in the lean shape?
-
-Status: answered 2026-09-30
-Answer: `docs/knowledge/contracts/`. See "Consumer files" in
-[contracts/language-quality-pack.md](contracts/language-quality-pack.md).

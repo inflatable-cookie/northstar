@@ -17,8 +17,8 @@ task system, not in Git.
 
 ## Commands
 
-- `effigy qa` — full validation: skill self-tests, language-package checks,
-  retired concepts and links.
+- `effigy qa` — full validation: skill self-tests, retired concepts, links and
+  changelog fragments.
 - `effigy check:skill-install ~/.agents/skills/northstar` — installed copy
   matches source.
 - `effigy skill run --path skills/northstar <task>` — run a skill task from

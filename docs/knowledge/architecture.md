@@ -29,9 +29,6 @@ workflow; the documentation structure does not prescribe one.
   and checks, plus migration tooling, run through the skill's Effigy catalog
   (`northstar`).
 - `ui/`: an optional skill for UI implementation and review.
-- `references/packages/` and language scripts: optional language-quality
-  package support, described by
-  [contracts/language-quality-pack.md](contracts/language-quality-pack.md).
 
 The installed copy lives at `~/.agents/skills/northstar`. Harness skill
 folders may link to it. See [contracts/release.md](contracts/release.md).

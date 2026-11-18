@@ -59,12 +59,6 @@ schema; adapt it to the project's needs.
 
 ## Optional modules
 
-UI design delivery and language quality packages are separate modules. Load
-one only when the repository has opted in.
-
 - **UI:** the nested [northstar-ui](ui/SKILL.md) skill guides UI implementation
-  and review against a project's approved design guidance.
-- **Language packages:** for an explicit Rust or TypeScript/Svelte quality
-  audit, follow the [installed-package route](references/packages/installed-package-route.md).
-  Everyday authoring is opt-in per repository; a missing or unusable pack
-  falls back to the repository's own validation.
+  and review against a project's approved design guidance. Load it only when
+  the repository has opted in.
