@@ -39,8 +39,8 @@ is removed.
 | `atlas` | Rewrite. Long-horizon direction with the operator. It writes to `northstar-docs` files when the repository has opted in, otherwise to the project's planning surface, or asks the operator where to store the result. |
 | `northstar-docs` | Rewrite, opt-in. Today's `skills/northstar/`. Static foundations: the "why" and depth behind a README, which is the pitch and getting-started guide. Rarely changed, easy to update, nothing that goes stale. |
 
-Order: `fleet-sweep` and `hill-climb` first (done; the first sweep removed retired concepts
-across the consuming repositories); then `take-stock` and
+Order: `fleet-sweep` and `hill-climb` first (done; the first sweep removed
+retired concepts across the consuming repositories); then `take-stock` and
 `prune-tests`; then `northstar-docs`, then `atlas`, since the docs skill
 defines the files Atlas writes to.
 
