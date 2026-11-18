@@ -68,6 +68,10 @@ Operator rulings, 2026-11-18:
 - Effigy may fit as a general task runner, but no skill requires it. Skill
   scripts run directly on Python 3.8+ with no dependencies.
 - A release waits until the operator is happy with the stack.
+- The writing style lives only in the harness snippet; no second copy in
+  the repository's contracts.
+- A skill is its `SKILL.md` and what it needs; no harness-specific metadata
+  files such as `agents/openai.yaml`.
 
 ## Non-goals
 
