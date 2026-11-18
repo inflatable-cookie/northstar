@@ -6,8 +6,7 @@ description: Keep a project's knowledge current and well organized. Use for esta
 # Northstar
 
 Northstar provides a lightweight structure for a project's current knowledge.
-It helps readers find what is true, where each fact belongs, and which ideas
-or rules have been retired.
+It helps readers find what is true and where each fact belongs.
 
 ## Repository shape
 
@@ -16,7 +15,6 @@ or rules have been retired.
 | `AGENTS.md` | Project orientation, documentation map, guardrails and validation command |
 | `docs/README.md` | A short account of current state, with links by topic |
 | `docs/knowledge/` | Current truth, with one owning file per fact |
-| `docs/knowledge/retired.toml` | Concepts that no longer apply and their replacements |
 | `changelog.d/` | Unreleased changes as fragments, one file per change, folded into `CHANGELOG.md` when a release is cut |
 | `docs/knowledge/contracts/release.md` | How the project releases, if applicable |
 
@@ -27,9 +25,8 @@ tracking in whichever system that project uses.
 ## Use the knowledge
 
 Read `AGENTS.md`, then `docs/README.md`, then the knowledge files relevant to
-the work. Check `retired.toml` before relying on an older concept. Check
-the owning knowledge file before raising a question the project already
-answers.
+the work. Check the owning knowledge file before raising a question the
+project already answers.
 
 ## Keep knowledge current
 
@@ -37,10 +34,8 @@ answers.
 - Write what is true now; Git history records how it changed.
 - Keep detailed design where it helps people understand a complex system.
 - When work changes a durable fact, update its owner alongside the change.
-- Record an open question when its answer is still unknown and matters to the
-  project. Close it with a link to the file that records the answer.
-- When retiring a concept, add an entry to `retired.toml` and remove or update
-  live references in the same change.
+- When removing a concept, update or remove its live references in the same
+  change.
 - Keep the starter in `template/` generic and ready to copy into another
   project.
 
@@ -60,7 +55,6 @@ schema; adapt it to the project's needs.
 
 Python 3.8+ and Git, no other dependencies. Run them from the repository root.
 
-- `scripts/retired-concepts.py` — live references to retired concepts.
 - `scripts/cut.py check-links` — broken Markdown links and anchors.
 - `scripts/changelog.py check|fold` — changelog fragments.
 

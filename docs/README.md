@@ -2,10 +2,11 @@
 
 Northstar is a small skill and a documentation structure for keeping project
 knowledge current. It helps a project give each fact a clear home, keep useful
-detail, and make retired concepts easy to recognize.
+detail.
 
-Language-quality packages and the UI module were retired on
-2026-11-18; see `knowledge/retired.toml`.
+Language-quality packages, the UI module, retired concepts and `questions.md`
+were removed on 2026-11-18; see the rulings in
+[knowledge/vision.md](knowledge/vision.md).
 
 ## By topic
 

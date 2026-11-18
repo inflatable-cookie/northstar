@@ -6,8 +6,7 @@ conventions.
 1. Does it deliver the requested result without unrelated changes?
 2. Are the current facts accurate and in the right owning file?
 3. Does the index point to each topic's owner without duplicating its content?
-4. Are retired concepts removed from live material and recorded in
-   `retired.toml`?
+4. Are removed concepts gone from live material?
 5. Are links and examples still valid?
 6. Did the change preserve useful detail and avoid adding stale status or
    process narration to the knowledge base?

@@ -8,7 +8,6 @@ system, not in Git.
 
 - Current state: `docs/README.md`
 - Knowledge index: `docs/knowledge/README.md`
-- Retired concepts: `docs/knowledge/retired.toml`
 - Unreleased changes: `changelog.d/`, folded into `CHANGELOG.md` when a
   release is cut
 - The skill and copy-ready starter: `skills/northstar/`
@@ -16,8 +15,8 @@ system, not in Git.
 
 ## Commands
 
-- `effigy qa` — full validation: skill self-tests, retired concepts, links and
-  changelog fragments.
+- `effigy qa` — full validation: skill self-tests, links and changelog
+  fragments.
 - `effigy check:skill-install` — installed skills match source.
 
 Effigy wraps the scripts here; each also runs directly with `python3`. Skill

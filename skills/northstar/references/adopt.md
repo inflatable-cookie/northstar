@@ -25,8 +25,8 @@ Make the change in a deliberate pass:
 2. Move current project truth into `docs/knowledge/`, with one owning file per
    topic. Keep product documentation where its readers expect it and link to
    it from the knowledge index.
-3. Record concepts that no longer apply in `retired.toml`, and update live
-   references in the same change.
+3. Remove concepts that no longer apply, and update live references in the
+   same change.
 4. Remove duplicate summaries, stale status, and process records that have a
    better home in the project's own task or delivery system.
 5. Update the index and run the documentation checks listed by the project.

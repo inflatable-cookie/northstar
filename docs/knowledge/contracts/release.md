@@ -30,7 +30,7 @@ user-visible contracts are preserved by default.
 ## Verify
 
 - `effigy check:skill-install` reports exact parity for every skill.
-- `effigy skill run northstar/retired-concepts` succeeds from a consumer
+- `effigy skill run northstar/check-links` succeeds from a consumer
   repository.
 - `effigy check:changelog` passes on a fresh checkout.
 
