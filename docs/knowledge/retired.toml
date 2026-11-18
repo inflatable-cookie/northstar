@@ -101,3 +101,12 @@ terms = ["northstar:rust-quality", "northstar:typescript-quality", "northstar/la
 paths = ["skills/northstar/references/packages/", "skills/northstar/assets/fixtures/language-packages/", "skills/northstar/scripts/language-package-lifecycle.ts", "skills/northstar/scripts/language-package-host.py", "skills/northstar/scripts/check-language-packages.rhai", "docs/knowledge/contracts/language-quality-pack.md", "docs/knowledge/contracts/language-quality-activation.json", "docs/knowledge/contracts/rust-quality-profile.json", "docs/knowledge/contracts/rust-quality-deviations.json", "docs/knowledge/contracts/typescript-quality-profile.json", "docs/knowledge/contracts/typescript-quality-deviations.json"]
 config_keys = ["check:language-packages", "check:language-package-routes", "check:language-consumer-reruns"]
 allow = ["CHANGELOG.md", "changelog.d/", "docs/knowledge/retired.toml"]
+
+[[retired]]
+id = "northstar-ui"
+retired = "2026-11-18"
+replacement = "A maintained design skill, such as Impeccable."
+owner = "docs/knowledge/vision.md"
+terms = ["northstar-ui"]
+paths = ["skills/northstar/ui/", "skills/northstar/references/ui/"]
+allow = ["CHANGELOG.md", "changelog.d/", "docs/knowledge/retired.toml"]

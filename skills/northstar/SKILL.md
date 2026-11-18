@@ -67,9 +67,3 @@ Python 3.8+ and Git, no other dependencies. Run them from the repository root.
 
 `effigy.toml` wraps the same scripts for projects that use Effigy
 (`effigy skill run northstar/<task>`).
-
-## Optional modules
-
-- **UI:** the nested [northstar-ui](ui/SKILL.md) skill guides UI implementation
-  and review against a project's approved design guidance. Load it only when
-  the repository has opted in.

@@ -31,6 +31,8 @@ operator's workflow and that others can adopt piece by piece (operator ruling,
   dependencies; Effigy catalogs are optional wrappers.
 - Language-quality packages are retired. Maintained language skills, such as
   BeautifulRust for Rust, fill that role.
+- The UI module is retired (2026-11-18). Maintained design skills, such as
+  Impeccable, fill that role.
 
 ## Constraints
 

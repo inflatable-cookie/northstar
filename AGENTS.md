@@ -1,7 +1,7 @@
 # Northstar
 
 Northstar is becoming an opt-in stack of skills: the knowledge-structure skill
-and starter, Atlas, and the optional UI module. Direction is in
+and starter, and Atlas. Direction is in
 `docs/knowledge/vision.md`. Task state belongs in each project's own task
 system, not in Git.
 
