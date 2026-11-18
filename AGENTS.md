@@ -10,13 +10,13 @@ system, not in Git.
 - Knowledge index: `docs/knowledge/README.md`
 - Unreleased changes: `changelog.d/`, folded into `CHANGELOG.md` when a
   release is cut
-- The skill and copy-ready starter: `skills/northstar/`
-- Other skills: `skills/atlas/`, `skills/fleet-sweep/`,
-  `skills/hill-climb/`, `skills/take-stock/`, `skills/prune-tests/`
+- Skills: `skills/<skill>/`; the docs skill and copy-ready starter are
+  `skills/northstar-docs/`
+- Harness snippet: `harness/snippet.md`
 
 ## Commands
 
-- `effigy qa` — full validation: skill self-tests, links and changelog
+- `effigy qa` — full validation: script self-tests, links and changelog
   fragments.
 - `effigy check:skill-install` — installed skills match source.
 
@@ -25,15 +25,14 @@ scripts must stay dependency-free Python 3.8+ so adopters need nothing else.
 
 ## Product rules
 
-- Keep `skills/northstar/template/` copy-ready, with no Northstar-specific
+- Keep `skills/northstar-docs/template/` copy-ready, with no Northstar-specific
   examples.
 - Say a rule once, in the skill. Remove guidance a capable agent follows by
   default instead of repeating it.
 - Before 1.0, update callers and remove superseded surfaces together; no
   shims. If a change breaks callers or documented behaviour, stop with a
   short impact summary and options.
-- Write in the house style:
-  `docs/knowledge/contracts/internal-writing-style.md`.
+- Write in the house style: the writing section of `harness/snippet.md`.
 
 ## Guardrails
 

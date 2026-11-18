@@ -1,38 +1,39 @@
 # Architecture
 
-Northstar consists of an installable skill and a copy-ready documentation
-starter. The skill source is `skills/northstar/` in this repository.
+Northstar is a repository of independent skills plus one harness snippet.
+Each skill is a folder under `skills/` with a `SKILL.md`; none depends on
+another.
 
 ## Repository shape
 
 | Surface | Purpose |
 | --- | --- |
-| `AGENTS.md` | Project orientation, documentation map, guardrails and validation command |
-| `docs/README.md` | Current state in a page, linked to topic owners |
-| `docs/knowledge/` | Current truth, with one owner per topic |
+| `skills/<skill>/` | One installable skill each |
+| `harness/snippet.md` | Opt-in guidance for a harness's global instructions file |
+| `scripts/` | Repository checks, such as installed-copy parity |
+| `docs/knowledge/` | Northstar's own knowledge, in the `northstar-docs` shape |
+| `changelog.d/` | Unreleased changes as fragments |
 
-Product documentation remains where its readers expect it and is linked from
-the knowledge index. Detailed design and evidence that current knowledge
-relies on remain available. The project's task system owns task state and
-workflow; the documentation structure does not prescribe one.
+## The skills
 
-## The skill
+| Skill | Shape |
+| --- | --- |
+| `hill-climb` | `SKILL.md` only |
+| `take-stock` | `SKILL.md` only; read-only |
+| `fleet-sweep` | `SKILL.md` only |
+| `prune-tests` | `SKILL.md` only |
+| `atlas` | `SKILL.md` only |
+| `northstar-docs` | `SKILL.md`, `references/` (adopt, knowledge, review), `template/` (the copy-ready starter) and `scripts/` (`check-links.py`, `changelog.py`, each with a self-test) |
 
-`skills/northstar/` contains:
+Skill scripts are dependency-free Python 3.8+. A skill may carry an
+`effigy.toml` catalog so Effigy users can run its scripts as
+`effigy skill run <skill>/<task>`; nothing requires Effigy.
 
-- `SKILL.md`: knowledge structure and maintenance guidance.
-- `references/`: adoption, review, knowledge and optional module guidance.
-- `template/`: a generic starter for another repository.
-- `scripts/`: the link check, changelog fragment folding and checks, plus
-  migration tooling. Dependency-free Python 3.8+; the skill's
-  Effigy catalog (`northstar`) wraps them for projects that use Effigy.
+`hill-climb` keeps its scorecard in the project's planning surface. `atlas`
+records direction into the knowledge files today; its planned rewrite makes
+`northstar-docs` optional (see [vision.md](vision.md)).
 
-`skills/fleet-sweep/` makes one change across many repositories, one PR
-each.
+## Installed copies
 
-`skills/atlas/` is a standalone skill for long-horizon direction with the
-operator. It records into the knowledge files and leaves planning to the
-project's own system.
-
-Installed copies live under `~/.agents/skills/`. Harness skill
-folders may link to it. See [contracts/release.md](contracts/release.md).
+Installed copies live under `~/.agents/skills/<skill>`, and harness skill
+folders link to them. See [contracts/release.md](contracts/release.md).

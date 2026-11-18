@@ -1,4 +1,0 @@
-interface:
-  display_name: "Northstar"
-  short_description: "Keep project knowledge current and well organized."
-  default_prompt: "Use $northstar to orient yourself in a project's documentation, maintain its knowledge structure, adopt the starter, or retire outdated concepts."
