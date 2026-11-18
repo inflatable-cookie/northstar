@@ -12,6 +12,8 @@ conversation.
   operator.
 - [`skills/fleet-sweep/`](skills/fleet-sweep/SKILL.md): one change across many
   repositories.
+- [`skills/hill-climb/`](skills/hill-climb/SKILL.md): raise quality one
+  level at a time with a rated rubric.
 - [`skills/northstar/template/`](skills/northstar/template/README.md): the
   copy-ready starter for a project.
 - [`skills/northstar/references/adopt.md`](skills/northstar/references/adopt.md):
@@ -25,6 +27,7 @@ conversation.
 rsync -a --delete skills/northstar/ ~/.agents/skills/northstar/
 rsync -a --delete skills/atlas/ ~/.agents/skills/atlas/
 rsync -a --delete skills/fleet-sweep/ ~/.agents/skills/fleet-sweep/
+rsync -a --delete skills/hill-climb/ ~/.agents/skills/hill-climb/
 ```
 
 Point your harness's skill folder at those copies. The scripts need Python

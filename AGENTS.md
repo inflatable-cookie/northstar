@@ -11,7 +11,8 @@ system, not in Git.
 - Unreleased changes: `changelog.d/`, folded into `CHANGELOG.md` when a
   release is cut
 - The skill and copy-ready starter: `skills/northstar/`
-- Other skills: `skills/atlas/`, `skills/fleet-sweep/`
+- Other skills: `skills/atlas/`, `skills/fleet-sweep/`,
+  `skills/hill-climb/`
 
 ## Commands
 

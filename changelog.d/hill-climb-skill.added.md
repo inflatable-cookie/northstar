@@ -1,0 +1,1 @@
+`hill-climb`, a skill for raising quality at least one level per run: a fixed rubric rated out of 10 per part plus integration, unanchored independent reads, verification before acting, correctness-first batches, and the rubric kept afterwards as a standing gate for workers and reviewers.
