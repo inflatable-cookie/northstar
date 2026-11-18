@@ -1,8 +1,7 @@
 # Northstar
 
-Northstar is becoming an opt-in stack of skills: the knowledge-structure skill
-and starter, and Atlas. Direction is in
-`docs/knowledge/vision.md`. Task state belongs in each project's own task
+Northstar is the operator's opt-in stack of agent skills. Direction, the
+skill list and its order are in `docs/knowledge/vision.md`. Task state belongs in each project's own task
 system, not in Git.
 
 ## Where things live
@@ -10,7 +9,6 @@ system, not in Git.
 - Current state: `docs/README.md`
 - Knowledge index: `docs/knowledge/README.md`
 - Retired concepts: `docs/knowledge/retired.toml`
-- Open questions: `docs/knowledge/questions.md`
 - Unreleased changes: `changelog.d/`, folded into `CHANGELOG.md` when a
   release is cut
 - The skill and copy-ready starter: `skills/northstar/`

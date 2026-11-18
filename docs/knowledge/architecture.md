@@ -11,7 +11,6 @@ starter. The skill source is `skills/northstar/` in this repository.
 | `docs/README.md` | Current state in a page, linked to topic owners |
 | `docs/knowledge/` | Current truth, with one owner per topic |
 | `docs/knowledge/retired.toml` | Retired concepts, paths and configuration keys |
-| `docs/knowledge/questions.md` | Open questions and pointers to their answers |
 
 Product documentation remains where its readers expect it and is linked from
 the knowledge index. Detailed design and evidence that current knowledge
@@ -40,5 +39,3 @@ folders may link to it. See [contracts/release.md](contracts/release.md).
 
 1. Retired concepts record what no longer applies and are checked against live
    code, configuration and documentation.
-2. Open questions provide a durable place for unresolved questions that
-   matter to the project, and point to the file that records each answer.

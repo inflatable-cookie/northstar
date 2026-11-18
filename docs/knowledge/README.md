@@ -9,7 +9,6 @@ Every topic has exactly one owning file. Link to it; don't restate it.
 | Durable rules and interfaces | [contracts/](contracts/README.md) |
 | How we release | [contracts/release.md](contracts/release.md) |
 | Retired concepts | [retired.toml](retired.toml) |
-| Open questions | [questions.md](questions.md) |
 
 Product documentation for Northstar's users is the skill itself:
 

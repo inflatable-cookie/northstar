@@ -20,19 +20,16 @@ page.
 
 Make the change in a deliberate pass:
 
-1. Identify current facts, durable rules, domain vocabulary, open questions,
-   useful product documentation, and historical material.
+1. Identify current facts, durable rules, domain vocabulary, useful product
+   documentation, and historical material.
 2. Move current project truth into `docs/knowledge/`, with one owning file per
    topic. Keep product documentation where its readers expect it and link to
    it from the knowledge index.
-3. Put unresolved questions that matter to future work in `questions.md`.
-   Record answers in the owning knowledge file and link to them from the
-   question entry.
-4. Record concepts that no longer apply in `retired.toml`, and update live
+3. Record concepts that no longer apply in `retired.toml`, and update live
    references in the same change.
-5. Remove duplicate summaries, stale status, and process records that have a
+4. Remove duplicate summaries, stale status, and process records that have a
    better home in the project's own task or delivery system.
-6. Update the index and run the documentation checks listed by the project.
+5. Update the index and run the documentation checks listed by the project.
 
 Preserve detailed system design and evidence that current decisions rely on.
 Git history is the home for obsolete facts and completed work narratives.

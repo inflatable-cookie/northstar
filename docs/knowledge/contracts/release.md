@@ -3,7 +3,8 @@
 Northstar has no tagged releases yet. It ships by installing each skill under
 `skills/` from `main` onto the operator's machine. `VERSION` stays
 at `0.1.0` and unreleased changes wait as fragments in `changelog.d/` until
-the first tagged release. Tagging needs the operator's decision on versioning.
+the first tagged release. The first release, and its versioning scheme, wait
+until the operator is happy with the stack.
 
 Northstar records unreleased changes as changelog fragments; the convention
 and adoption steps are the skill's
