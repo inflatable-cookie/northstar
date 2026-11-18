@@ -33,15 +33,15 @@ is removed.
 | Skill | State |
 | --- | --- |
 | `hill-climb` | Shipped. Rate every part of a scope out of 10, plus integration; fix from the lowest level (the baseline, usually 6 or 7) up at least one level per run, more when an agent can reach it; then keep the rubric as a standing gate on every change. |
-| `take-stock` | New. Audit what a repository holds, what's stale, and what depends on it. |
-| `fleet-sweep` | New. One change across many repositories, with rules that keep it on track. |
-| `prune-tests` | New. Keep only tests anchored to intended behaviour, with guardrails: the source of intended behaviour, which duplicate survives, a commit before deleting and a coverage comparison after. |
+| `take-stock` | Shipped. Read-only audit of what a repository holds, what's stale, and what depends on it, ending in a report the operator decides from. |
+| `fleet-sweep` | Shipped. One change across many repositories, with rules that keep it on track. |
+| `prune-tests` | Shipped. Keep only tests anchored to intended behaviour, with guardrails: the source of intended behaviour, which duplicate survives, a commit before deleting and a coverage comparison after. |
 | `atlas` | Rewrite. Long-horizon direction with the operator. It writes to `northstar-docs` files when the repository has opted in, otherwise to the project's planning surface, or asks the operator where to store the result. |
 | `northstar-docs` | Rewrite, opt-in. Today's `skills/northstar/`. Static foundations: the "why" and depth behind a README, which is the pitch and getting-started guide. Rarely changed, easy to update, nothing that goes stale. |
 
-Order: `fleet-sweep` and `hill-climb` first (done; the first sweep removed
-retired concepts across the consuming repositories); then `take-stock` and
-`prune-tests`; then `northstar-docs`, then `atlas`, since the docs skill
+Order: `fleet-sweep`, `hill-climb`, `take-stock` and `prune-tests` first
+(done; the first sweep removed retired concepts across the consuming
+repositories); then `northstar-docs`, then `atlas`, since the docs skill
 defines the files Atlas writes to.
 
 ### Harness snippet

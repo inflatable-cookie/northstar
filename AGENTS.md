@@ -12,7 +12,7 @@ system, not in Git.
   release is cut
 - The skill and copy-ready starter: `skills/northstar/`
 - Other skills: `skills/atlas/`, `skills/fleet-sweep/`,
-  `skills/hill-climb/`
+  `skills/hill-climb/`, `skills/take-stock/`, `skills/prune-tests/`
 
 ## Commands
 

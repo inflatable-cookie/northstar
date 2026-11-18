@@ -12,8 +12,12 @@ conversation.
   operator.
 - [`skills/fleet-sweep/`](skills/fleet-sweep/SKILL.md): one change across many
   repositories.
-- [`skills/hill-climb/`](skills/hill-climb/SKILL.md): raise quality one
-  level at a time with a rated rubric.
+- [`skills/hill-climb/`](skills/hill-climb/SKILL.md): raise quality at
+  least one level per run with a rated rubric.
+- [`skills/take-stock/`](skills/take-stock/SKILL.md): audit what a project
+  holds, what's stale and what depends on it.
+- [`skills/prune-tests/`](skills/prune-tests/SKILL.md): keep only tests
+  anchored to intended behaviour.
 - [`skills/northstar/template/`](skills/northstar/template/README.md): the
   copy-ready starter for a project.
 - [`skills/northstar/references/adopt.md`](skills/northstar/references/adopt.md):
@@ -28,6 +32,8 @@ rsync -a --delete skills/northstar/ ~/.agents/skills/northstar/
 rsync -a --delete skills/atlas/ ~/.agents/skills/atlas/
 rsync -a --delete skills/fleet-sweep/ ~/.agents/skills/fleet-sweep/
 rsync -a --delete skills/hill-climb/ ~/.agents/skills/hill-climb/
+rsync -a --delete skills/take-stock/ ~/.agents/skills/take-stock/
+rsync -a --delete skills/prune-tests/ ~/.agents/skills/prune-tests/
 ```
 
 Point your harness's skill folder at those copies. The scripts need Python
