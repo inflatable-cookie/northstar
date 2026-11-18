@@ -40,8 +40,7 @@ check the index and its likely owner.
 mistake them for current truth. A retirement includes its replacement, owner,
 and any relevant terms, paths or configuration keys.
 
-The repository's retired-concepts check reports matching live references.
-The retiring change should remove or update those references; preserve
-immutable historical evidence only when its contract requires that. See the
-check's help for its exact matching rules and run it through the project's
-Effigy selector.
+`scripts/retired-concepts.py` reports matching live references. The retiring
+change should remove or update those references; preserve immutable historical
+evidence only when its contract requires that. The script's header documents
+its exact matching rules.

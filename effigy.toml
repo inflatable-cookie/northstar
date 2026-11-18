@@ -5,8 +5,8 @@ minimum_effigy_version = "0.13.0"
 alias = "northstar"
 
 [tasks]
-"check:skill-install" = [{ rhai = "scripts/check-northstar-skill-install.rhai" }]
-"check:retired-concepts" = "bun run skills/northstar/scripts/retired-concepts.ts {args}"
+"check:skill-install" = "python3 scripts/check-skill-install.py {args}"
+"check:retired-concepts" = "python3 skills/northstar/scripts/retired-concepts.py {args}"
 "check:links" = "python3 skills/northstar/scripts/cut.py check-links {args}"
 "check:changelog" = "python3 skills/northstar/scripts/changelog.py check {args}"
 "test:retired-concepts" = "bash skills/northstar/scripts/retired-concepts.test.sh"

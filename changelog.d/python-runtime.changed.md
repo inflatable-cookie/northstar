@@ -1,0 +1,1 @@
+The skill's scripts all run on Python 3.8+ with no dependencies: `retired-concepts` moved from Bun to Python, with identical matching and output. The Effigy catalog task names are unchanged, and Effigy is now optional: every script runs directly.

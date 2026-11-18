@@ -18,7 +18,7 @@ replacement = "Knowledge in docs/knowledge/, intent in docs/plan.md; tasks, brie
 owner = "docs/knowledge/architecture.md"
 terms = ["roadmap card", "generation index", "northstar:lifecycle", "chatterbox handoff"]
 paths = [".northstar/lifecycle/", "docs/roadmaps/", "docs/handoffs/", "docs/logs/", "docs/specs/"]
-config_keys = ["northstar/queue:hook", "paseo.queue.control.v4"]
+config_keys = ["northstar/queue:hook"]
 allow = [
   "CHANGELOG.md",
   "changelog.d/",
@@ -26,7 +26,7 @@ allow = [
   "skills/northstar/references/adopt.md",
   "skills/northstar/scripts/cut.py",
   "skills/northstar/scripts/cut.test.sh",
-  "skills/northstar/scripts/retired-concepts.ts",
+  "skills/northstar/scripts/retired-concepts.py",
   "skills/northstar/scripts/retired-concepts.test.sh",
   "skills/northstar/template/docs/knowledge/retired.toml",
   "skills/northstar/effigy.toml",
@@ -48,7 +48,7 @@ replacement = "Papercuts live in Queue (papercut.add)."
 owner = "docs/knowledge/architecture.md"
 paths = ["PAPERCUTS.md"]
 allow = [
-  "skills/northstar/scripts/retired-concepts.ts",
+  "skills/northstar/scripts/retired-concepts.py",
   "skills/northstar/scripts/retired-concepts.test.sh",
   "CHANGELOG.md",
   "changelog.d/",
@@ -66,7 +66,7 @@ replacement = "The plan is Queue lanes, lane documents and plan order; leads are
 owner = "docs/knowledge/architecture.md"
 paths = ["docs/plan.md", "docs/triage/"]
 allow = [
-  "skills/northstar/scripts/retired-concepts.ts",
+  "skills/northstar/scripts/retired-concepts.py",
   "skills/northstar/scripts/retired-concepts.test.sh",
   "CHANGELOG.md",
   "changelog.d/",
@@ -88,8 +88,8 @@ id = "northstar-task-system-guidance"
 retired = "2026-11-06"
 replacement = "Northstar documents knowledge structure; each project documents its own task and delivery system."
 owner = "docs/knowledge/architecture.md"
-terms = ["Queue planning guidance", "Nucleus workflow charts", "Paseo sibling worktree helper", "papercut.add", "lead.add", "decision.add", "plan.get"]
-paths = ["skills/northstar/references/plan.md", "skills/northstar/references/brief.md", "skills/northstar/references/handover.md", "skills/northstar/references/atlas.md", "skills/northstar/scripts/paseo-worktree.rhai", "skills/northstar/workflows/"]
+terms = ["Queue planning guidance", "Nucleus workflow charts", "papercut.add", "lead.add", "decision.add", "plan.get"]
+paths = ["skills/northstar/references/plan.md", "skills/northstar/references/brief.md", "skills/northstar/references/handover.md", "skills/northstar/workflows/"]
 allow = ["CHANGELOG.md", "changelog.d/"]
 
 [[retired]]

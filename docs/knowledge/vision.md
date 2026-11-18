@@ -22,12 +22,13 @@ operator's workflow and that others can adopt piece by piece (operator ruling,
 2026-11-18).
 
 - The documentation structure stays, slimmed to what agents still need.
-- Atlas, the long-horizon direction skill, belongs in Northstar. It is not
-  part of Nucleus.
+- Atlas, the long-horizon direction skill, belongs in Northstar as its own
+  skill (`skills/atlas/`). It is not part of Nucleus.
 - Nucleus is a standalone project, not part of Northstar or the stack.
-- Paseo is a third-party tool and stays out of Northstar and the stack.
+- Third-party agent orchestration tools stay out of Northstar and the stack.
 - Effigy may fit as a general task runner, but no stack skill should
-  require it.
+  require it. Skill scripts run directly on Python 3.8+ with no
+  dependencies; Effigy catalogs are optional wrappers.
 - Language-quality packages are retired. Maintained language skills, such as
   BeautifulRust for Rust, fill that role.
 
