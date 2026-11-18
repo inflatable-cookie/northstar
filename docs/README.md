@@ -4,9 +4,8 @@ Northstar is a small skill and a documentation structure for keeping project
 knowledge current. It helps a project give each fact a clear home, keep useful
 detail, and make retired concepts easy to recognize.
 
-The UI and language-package modules are optional. Their contracts live in
-`docs/knowledge/contracts/`, and language packages are pinned at Rust 0.2.3
-and TypeScript 0.2.2.
+The UI module is optional. Language-quality packages were retired on
+2026-11-18; see `knowledge/retired.toml`.
 
 ## By topic
 

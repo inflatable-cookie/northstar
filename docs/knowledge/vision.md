@@ -14,7 +14,22 @@ recorded so they are not mistaken for current truth.
 - Readers can find the current facts relevant to their work.
 - Durable rules and operator rulings reach the files that own them.
 - The starter works in another project without Northstar-specific examples.
-- Adopting the structure does not require optional language-quality tooling.
+
+## Direction
+
+Northstar becomes an opt-in stack: a small suite of skills that fit the
+operator's workflow and that others can adopt piece by piece (operator ruling,
+2026-11-18).
+
+- The documentation structure stays, slimmed to what agents still need.
+- Atlas, the long-horizon direction skill, belongs in Northstar. It is not
+  part of Nucleus.
+- Nucleus is a standalone project, not part of Northstar or the stack.
+- Paseo is a third-party tool and stays out of Northstar and the stack.
+- Effigy may fit as a general task runner, but no stack skill should
+  require it.
+- Language-quality packages are retired. Maintained language skills, such as
+  BeautifulRust for Rust, fill that role.
 
 ## Constraints
 

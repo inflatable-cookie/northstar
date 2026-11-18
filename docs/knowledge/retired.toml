@@ -5,9 +5,7 @@
 # frozen: immutable artefacts (released suites, vendored mirrors, fixtures,
 # receipts, applied migrations), exempt from every retirement and skipped by
 # check-links.
-frozen = [
-  "skills/northstar/assets/fixtures/**",
-]
+frozen = []
 
 # paths and allow: an entry is an exact file, or a directory when it ends in
 # "/". `*` matches within one path segment and `**` across segments. Keep
@@ -93,3 +91,13 @@ owner = "docs/knowledge/architecture.md"
 terms = ["Queue planning guidance", "Nucleus workflow charts", "Paseo sibling worktree helper", "papercut.add", "lead.add", "decision.add", "plan.get"]
 paths = ["skills/northstar/references/plan.md", "skills/northstar/references/brief.md", "skills/northstar/references/handover.md", "skills/northstar/references/atlas.md", "skills/northstar/scripts/paseo-worktree.rhai", "skills/northstar/workflows/"]
 allow = ["CHANGELOG.md", "changelog.d/"]
+
+[[retired]]
+id = "language-quality-packages"
+retired = "2026-11-18"
+replacement = "No Northstar language tooling. Use a maintained language skill instead, such as BeautifulRust for Rust."
+owner = "docs/knowledge/vision.md"
+terms = ["northstar:rust-quality", "northstar:typescript-quality", "northstar/language:route", "language-package-host", "@northstar/rust-quality", "@northstar/typescript-quality"]
+paths = ["skills/northstar/references/packages/", "skills/northstar/assets/fixtures/language-packages/", "skills/northstar/scripts/language-package-lifecycle.ts", "skills/northstar/scripts/language-package-host.py", "skills/northstar/scripts/check-language-packages.rhai", "docs/knowledge/contracts/language-quality-pack.md", "docs/knowledge/contracts/language-quality-activation.json", "docs/knowledge/contracts/rust-quality-profile.json", "docs/knowledge/contracts/rust-quality-deviations.json", "docs/knowledge/contracts/typescript-quality-profile.json", "docs/knowledge/contracts/typescript-quality-deviations.json"]
+config_keys = ["check:language-packages", "check:language-package-routes", "check:language-consumer-reruns"]
+allow = ["CHANGELOG.md", "changelog.d/", "docs/knowledge/retired.toml"]

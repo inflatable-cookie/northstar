@@ -1,0 +1,1 @@
+Language-quality packages (2026-11-18): the package host, lifecycle, registry, schemas, fixtures, route checks and the `language-quality-pack` contract. Consumer repositories drop their quality profiles and `northstar:*-quality` AGENTS.md blocks. Use a maintained language skill instead, such as BeautifulRust for Rust.
