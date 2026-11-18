@@ -50,15 +50,9 @@ mk docs/guides/anchors.md '## vst2_paths
 
 See [paths](#vst2_paths).'
 python3 "$here/cut.py" check-links --repo "$repo" > /dev/null && echo "ok check-links ignores links inside code spans and keeps underscores in anchors" || { echo "FAIL code spans"; exit 1; }
-mk docs/knowledge/retired.toml '# [[retired]]
-# id = "<slug>"
-
-frozen = ["tests/fixtures/"]
-
-[[retired]]
-id = "x"'
 mk tests/fixtures/corpus.md '[old](../../docs/roadmaps/g01/001-build-it.md)'
-python3 "$here/cut.py" check-links --repo "$repo" > /dev/null && echo "ok check-links skips frozen paths listed in retired.toml" || { echo "FAIL retired.toml frozen"; python3 "$here/cut.py" check-links --repo "$repo"; exit 1; }
+python3 "$here/cut.py" check-links --repo "$repo" --frozen '^tests/fixtures/' > /dev/null && echo "ok check-links skips --frozen paths" || { echo "FAIL --frozen"; python3 "$here/cut.py" check-links --repo "$repo" --frozen '^tests/fixtures/'; exit 1; }
+git -C "$repo" rm -rq --cached tests 2>/dev/null || true; rm -rf "$repo/tests"
 mk docs/guides/bad.md '[x](../knowledge/contracts/api.md#nope) [y](missing.md)'
 set +e; out=$(python3 "$here/cut.py" check-links --repo "$repo"); rc=$?; set -e
 [ "$rc" = 1 ] && echo "$out" | grep -q "missing anchor" && echo "$out" | grep -q "missing missing.md" && echo "ok check-links finds missing files and anchors, including untracked edits" || { echo "FAIL check-links negatives: $out"; exit 1; }

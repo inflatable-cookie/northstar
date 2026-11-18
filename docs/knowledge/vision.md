@@ -39,8 +39,8 @@ is removed.
 | `atlas` | Rewrite. Long-horizon direction with the operator. It writes to `northstar-docs` files when the repository has opted in, otherwise to the project's planning surface, or asks the operator where to store the result. |
 | `northstar-docs` | Rewrite, opt-in. Today's `skills/northstar/`. Static foundations: the "why" and depth behind a README, which is the pitch and getting-started guide. Rarely changed, easy to update, nothing that goes stale. |
 
-Order: `fleet-sweep` first, proved by removing retired concepts across the
-consuming repositories; then `hill-climb`; then `take-stock` and
+Order: `fleet-sweep` first (done: its first run removed retired concepts
+across the consuming repositories); then `hill-climb`; then `take-stock` and
 `prune-tests`; then `northstar-docs`, then `atlas`, since the docs skill
 defines the files Atlas writes to.
 
@@ -60,8 +60,7 @@ Operator rulings, 2026-11-18:
 - Removed: language-quality packages (maintained language skills, such as
   BeautifulRust, fill that role), the UI module (maintained design skills,
   such as Impeccable, fill it), retired concepts (agents reimplementing old
-  ideas is rare and didn't justify the ceremony; removal runs as the first
-  `fleet-sweep`) and `questions.md` (open questions belong in a
+  ideas is rare and didn't justify the ceremony) and `questions.md` (open questions belong in a
   planning system, where they don't go stale).
 - Nucleus is a standalone task system, not part of Northstar.
 - Third-party agent orchestration tools stay out.

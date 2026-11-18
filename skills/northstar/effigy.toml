@@ -5,7 +5,6 @@ minimum_effigy_version = "0.13.0"
 alias = "northstar"
 
 [tasks]
-"retired-concepts" = "python3 {skill}/scripts/retired-concepts.py {args}"
 "cut" = "python3 {skill}/scripts/cut.py {args}"
 "check-links" = "python3 {skill}/scripts/cut.py check-links {args}"
 "changelog" = "python3 {skill}/scripts/changelog.py {args}"
