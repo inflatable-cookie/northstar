@@ -1,12 +1,12 @@
 ---
 name: hill-climb
-description: Raise the quality of a defined scope one level at a time by rating every part out of 10, fixing what holds the lowest parts back, and re-rating. Use when the operator asks for a quality sweep, a hill-climb, a code-quality pass, or to get a codebase, crate or docs set "up to an 8".
+description: Raise the quality of a defined scope at least one level per run by rating every part out of 10, fixing what holds the lowest parts back, and re-rating. Use when the operator asks for a quality sweep, a hill-climb, a code-quality pass, or to get a codebase, crate or docs set "up to an 8".
 ---
 
 # Hill-climb
 
 Rate every part of a scope out of 10, lift the parts below the current level,
-re-rate, then raise the level by one. Sweeps alone don't hold the gains; the
+re-rate, then raise the level. Sweeps alone don't hold the gains; the
 rubric ends as a standing gate on every change.
 
 ## 1. Define the scope
@@ -38,9 +38,12 @@ rubric ends as a standing gate on every change.
 ## 3. Set the baseline
 
 The baseline is the first level every part must reach: the lowest level that
-most parts already sit at or near, usually 6 or 7. Don't aim at 8 from the
-start. Climb one level at a time: every part to the baseline, then baseline +
-1, and so on toward 10.
+most parts already sit at or near, usually 6 or 7.
+
+Each run must lift the whole scope at least one level: every part to the
+baseline, the next run to baseline + 1, and so on toward 10. One level is the
+minimum, not a cap. If a part can confidently reach a higher level in the same
+run, take it.
 
 ## 4. Verify before acting
 
@@ -62,7 +65,7 @@ the bug) before it becomes work. Drop what doesn't reproduce.
 ## 6. Re-read
 
 After each round, re-read with fresh readers (step 2). When every part meets
-the current level, raise it by one. Stop when the operator's target is met or
+the current level, raise it by at least one. Stop when the operator's target is met or
 a round moves nothing; report which parts are stuck and why.
 
 ## 7. Make it a standing gate

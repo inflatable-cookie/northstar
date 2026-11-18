@@ -32,7 +32,7 @@ is removed.
 
 | Skill | State |
 | --- | --- |
-| `hill-climb` | Shipped. Rate every part of a scope out of 10, plus integration; fix from the lowest level (the baseline, usually 6 or 7) up one level at a time; then keep the rubric as a standing gate on every change. |
+| `hill-climb` | Shipped. Rate every part of a scope out of 10, plus integration; fix from the lowest level (the baseline, usually 6 or 7) up at least one level per run, more when an agent can reach it; then keep the rubric as a standing gate on every change. |
 | `take-stock` | New. Audit what a repository holds, what's stale, and what depends on it. |
 | `fleet-sweep` | New. One change across many repositories, with rules that keep it on track. |
 | `prune-tests` | New. Keep only tests anchored to intended behaviour, with guardrails: the source of intended behaviour, which duplicate survives, a commit before deleting and a coverage comparison after. |
