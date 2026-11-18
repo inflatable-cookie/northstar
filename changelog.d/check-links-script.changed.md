@@ -1,0 +1,1 @@
+`check-links` is its own script, `scripts/check-links.py`, with its own self-test; the `cut` migration helper and the `cut` catalog task are removed, since no repository still has the layouts it migrated.

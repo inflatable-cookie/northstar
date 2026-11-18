@@ -8,7 +8,7 @@ until the operator is happy with the stack.
 
 Northstar records unreleased changes as changelog fragments; the convention
 and adoption steps are the skill's
-([references/adopt.md](../../../skills/northstar/references/adopt.md)). Each
+([references/adopt.md](../../../skills/northstar-docs/references/adopt.md)). Each
 change adds one file under `changelog.d/` and `[Unreleased]` stays empty.
 `effigy qa:docs` runs `check:changelog`, which fails on malformed fragments
 and on direct edits to `[Unreleased]`.
@@ -30,7 +30,7 @@ user-visible contracts are preserved by default.
 ## Verify
 
 - `effigy check:skill-install` reports exact parity for every skill.
-- `effigy skill run northstar/check-links` succeeds from a consumer
+- `effigy skill run northstar-docs/check-links` succeeds from a consumer
   repository.
 - `effigy check:changelog` passes on a fresh checkout.
 

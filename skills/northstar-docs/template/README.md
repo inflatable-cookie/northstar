@@ -1,4 +1,4 @@
-# Northstar template
+# Northstar docs template
 
 Copy this directory's contents into a repository root, then fill in `AGENTS.md`
 and `docs/knowledge/vision.md`. Keep every other file short until there is

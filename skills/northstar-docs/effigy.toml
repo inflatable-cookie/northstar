@@ -1,0 +1,9 @@
+[manifest]
+minimum_effigy_version = "0.13.0"
+
+[catalog]
+alias = "northstar-docs"
+
+[tasks]
+"check-links" = "python3 {skill}/scripts/check-links.py {args}"
+"changelog" = "python3 {skill}/scripts/changelog.py {args}"

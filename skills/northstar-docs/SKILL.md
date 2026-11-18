@@ -1,11 +1,11 @@
 ---
-name: northstar
-description: Keep a project's knowledge current and well organized. Use for establishing documentation structure, maintaining knowledge ownership, adopting the starter, or retiring concepts.
+name: northstar-docs
+description: Give a project's documentation a lightweight structure, with one owning file per fact, and keep it accurate. Use for adopting the starter, deciding where a fact belongs, reviewing knowledge changes, or checking links and changelog fragments.
 ---
 
-# Northstar
+# Northstar docs
 
-Northstar provides a lightweight structure for a project's current knowledge.
+An opt-in part of the Northstar stack. It provides a lightweight structure for a project's current knowledge.
 It helps readers find what is true and where each fact belongs.
 
 ## Repository shape
@@ -55,8 +55,8 @@ schema; adapt it to the project's needs.
 
 Python 3.8+ and Git, no other dependencies. Run them from the repository root.
 
-- `scripts/cut.py check-links` — broken Markdown links and anchors.
+- `scripts/check-links.py` — broken Markdown links and anchors.
 - `scripts/changelog.py check|fold` — changelog fragments.
 
 `effigy.toml` wraps the same scripts for projects that use Effigy
-(`effigy skill run northstar/<task>`).
+(`effigy skill run northstar-docs/<task>`).
