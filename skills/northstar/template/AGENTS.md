@@ -8,7 +8,6 @@ become.>
 - Current state: `docs/README.md`
 - Knowledge index: `docs/knowledge/README.md`
 - Retired concepts: `docs/knowledge/retired.toml`
-- Open questions: `docs/knowledge/questions.md`
 
 ## Commands
 

@@ -17,7 +17,6 @@ or rules have been retired.
 | `docs/README.md` | A short account of current state, with links by topic |
 | `docs/knowledge/` | Current truth, with one owning file per fact |
 | `docs/knowledge/retired.toml` | Concepts that no longer apply and their replacements |
-| `docs/knowledge/questions.md` | Open questions and pointers to their answers |
 | `changelog.d/` | Unreleased changes as fragments, one file per change, folded into `CHANGELOG.md` when a release is cut |
 | `docs/knowledge/contracts/release.md` | How the project releases, if applicable |
 
@@ -29,8 +28,8 @@ tracking in whichever system that project uses.
 
 Read `AGENTS.md`, then `docs/README.md`, then the knowledge files relevant to
 the work. Check `retired.toml` before relying on an older concept. Check
-`questions.md` and the owning knowledge file before raising a question already
-addressed by the project.
+the owning knowledge file before raising a question the project already
+answers.
 
 ## Keep knowledge current
 

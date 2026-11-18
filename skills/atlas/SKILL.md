@@ -18,8 +18,8 @@ evidence to test with them, never permission to extend the strategy yourself.
 
 1. **Name the question.** State the project and the horizon, then separate what
    the operator has said from what is unknown. Don't fill a missing destination.
-2. **Read for context.** Read `vision.md`, `architecture.md` and `questions.md`,
-   plus whatever plan or backlog the project keeps. Look for tensions and
+2. **Read for context.** Read `vision.md` and `architecture.md`, plus whatever
+   plan or backlog the project keeps. Look for tensions and
    vocabulary, not a prescription.
 3. **Ask, then stop.** End the first turn with a discovery checkpoint and
    nothing more:
@@ -47,7 +47,8 @@ Atlas is read-only until the operator asks to record the result. Then:
 - outcomes, constraints and non-goals go to `docs/knowledge/vision.md`;
 - system shape and invariants go to `docs/knowledge/architecture.md`, durable
   rules to `docs/knowledge/contracts/`;
-- decisions still open go to `questions.md`;
+- decisions still open go to the project's planning surface, or wherever the
+  operator says;
 - the outcomes being pursued, and their order, go to the project's own planning
   or task system.
 

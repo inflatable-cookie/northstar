@@ -13,7 +13,6 @@ docs/knowledge/
   contracts/       # durable rules and interfaces
   domain/          # domain concepts, vocabulary and rules
   retired.toml     # concepts that no longer apply
-  questions.md     # open questions and their answers
 ```
 
 Split a file when a topic outgrows it and update the index. Omit empty folders.
@@ -26,13 +25,6 @@ Split a file when a topic outgrows it and update the index. Omit empty folders.
 - When a change alters a durable fact, update its owner in the same change.
 - If two files disagree, the index identifies which file owns the fact; fix
   the other copy.
-
-## Open questions
-
-Use `questions.md` for questions whose answers matter to understanding or
-maintaining the project. When an answer is known, record it in the owning
-knowledge file and point to it from the question. Before raising a question,
-check the index and its likely owner.
 
 ## Retired concepts
 

@@ -11,7 +11,6 @@ Every topic has exactly one owning file. Link to it; don't restate it.
 | Runbooks, optional (add `operations/` when the project has them) | `operations/` |
 | Domain concepts and vocabulary | [domain/](domain/README.md) |
 | Retired concepts | [retired.toml](retired.toml) |
-| Open questions | [questions.md](questions.md) |
 
 Product documentation for users or consumers (guides, usage, API references)
 lives outside `docs/knowledge/`. List it here when the project has it:

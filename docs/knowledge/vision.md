@@ -1,48 +1,77 @@
 # Vision
 
-Northstar helps project teams and agents work from current, well-organized
-knowledge without reconstructing intent from conversation history.
+Northstar is Tom's stack: a small suite of agent skills that glue his workflow
+together, so agents behave the way he wants without hassle. Anyone can opt in
+to any piece.
 
-## What it is
+## Why it exists
 
-A small skill and a flexible repository structure for project knowledge. Each
-fact has one owner, useful detail stays available, and retired concepts are
-recorded so they are not mistaken for current truth.
+The operator's workflow comes first. Northstar exists to simplify day-to-day
+work by encoding a system that works for the operator, not to record his
+habits for their own sake.
 
-## Outcomes
+Publishing is a filter. If nobody else wants a piece, that questions its
+value, and possibly the workflow behind it. Designing for public use keeps the
+architecture clean even before anyone adopts it.
 
-- Readers can find the current facts relevant to their work.
-- Durable rules and operator rulings reach the files that own them.
-- The starter works in another project without Northstar-specific examples.
+## Who it serves
 
-## Direction
+The operator first. After a release, solo developers on any harness who find
+the repository and want to try it.
 
-Northstar becomes an opt-in stack: a small suite of skills that fit the
-operator's workflow and that others can adopt piece by piece (operator ruling,
-2026-11-18).
+## What belongs
 
-- The documentation structure stays, slimmed to what agents still need.
-- Atlas, the long-horizon direction skill, belongs in Northstar as its own
-  skill (`skills/atlas/`). It is not part of Nucleus.
-- Nucleus is a standalone project, not part of Northstar or the stack.
-- Third-party agent orchestration tools stay out of Northstar and the stack.
-- Effigy may fit as a general task runner, but no stack skill should
-  require it. Skill scripts run directly on Python 3.8+ with no
-  dependencies; Effigy catalogs are optional wrappers.
-- Language-quality packages are retired. Maintained language skills, such as
-  BeautifulRust for Rust, fill that role.
-- The UI module is retired (2026-11-18). Maintained design skills, such as
-  Impeccable, fill that role.
+A skill belongs when it fits the operator's overall workflow, he built it,
+and it provides real, significant value. Starting small is fine.
 
-## Constraints
+Skills here are experiments. Anything the operator explains to agents
+regularly qualifies for at least a spike; a skill that stops earning its place
+is removed.
 
-- Keep the skill focused on documentation structure and maintenance.
-- Make it useful across operators, repositories and harnesses.
-- Keep the starter human-readable and ready to copy.
-- Keep automation small and tied to a clear knowledge-maintenance need.
+## The stack
+
+| Skill | State |
+| --- | --- |
+| `hill-climb` | Proven by hand on several repositories; needs clear wording. Rate every unit of a defined scope out of 10, and how they integrate out of 10. The baseline is the first level to reach, usually 6 or 7; then climb one level at a time toward 8, 9 and 10. |
+| `take-stock` | New. Audit what a repository holds, what's stale, and what depends on it. |
+| `fleet-sweep` | New. One change across many repositories, with rules that keep it on track. |
+| `prune-tests` | New. Keep only tests anchored to intended behaviour, with guardrails: the source of intended behaviour, which duplicate survives, a commit before deleting and a coverage comparison after. |
+| `atlas` | Rewrite. Long-horizon direction with the operator. It writes to `northstar-docs` files when the repository has opted in, otherwise to the project's planning surface, or asks the operator where to store the result. |
+| `northstar-docs` | Rewrite, opt-in. Today's `skills/northstar/`. Static foundations: the "why" and depth behind a README, which is the pitch and getting-started guide. Rarely changed, easy to update, nothing that goes stale. |
+
+Order: `fleet-sweep` first, proved by removing retired concepts across the
+consuming repositories; then `hill-climb`; then `take-stock` and
+`prune-tests`; then `northstar-docs`, then `atlas`, since the docs skill
+defines the files Atlas writes to.
+
+### Harness snippet
+
+Writing style and work rhythm are not skills: agents need them in context
+from the start, not when a skill triggers. The stack ships them as an opt-in
+snippet for a harness's global instructions file (`CLAUDE.md`, `AGENTS.md`).
+The work-rhythm guidance needs reassessing across Claude and Codex first.
+
+## Rulings
+
+Operator rulings, 2026-11-18:
+
+- Northstar is the stack; the documentation structure is the opt-in
+  `northstar-docs` skill.
+- Removed: language-quality packages (maintained language skills, such as
+  BeautifulRust, fill that role), the UI module (maintained design skills,
+  such as Impeccable, fill it), retired concepts (agents reimplementing old
+  ideas is rare and didn't justify the ceremony; removal runs as the first
+  `fleet-sweep`) and `questions.md` (open questions belong in a
+  planning system, where they don't go stale).
+- Nucleus is a standalone task system, not part of Northstar.
+- Third-party agent orchestration tools stay out.
+- Effigy may fit as a general task runner, but no skill requires it. Skill
+  scripts run directly on Python 3.8+ with no dependencies.
+- A release waits until the operator is happy with the stack.
 
 ## Non-goals
 
+- A framework.
+- A task system; that is Nucleus.
+- A docs generator. `northstar-docs` is a structural template.
 - Recording work merely to show that a step happened.
-- Storing task status, handoffs or delivery logs in the knowledge base.
-- Replacing human judgment with automation.
