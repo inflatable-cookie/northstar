@@ -1,1 +1,0 @@
-`northstar-docs` treats docs as static foundations: `docs/README.md` is the entry point to the docs rather than a current-state page, and knowledge records durable facts and reasons, never status or lists that mirror the code. `references/knowledge.md` is folded into `SKILL.md`.

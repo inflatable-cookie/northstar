@@ -1,1 +1,0 @@
-`bundle-docs/`, `template-bundle/`, the router and modes, the command skills, the working-rules contract, roadmaps, logs, handoffs, lifecycle records, `PAPERCUTS.md`, and the checks that served them. Git keeps them.

@@ -41,8 +41,8 @@ is removed.
 
 Order: `repo-sweep`, `hill-climb`, `take-stock`, `prune-tests`,
 `northstar-docs` and `atlas` (all done; the first sweep removed retired
-concepts across the consuming repositories). The harness snippet carries writing style and work rhythm.
-Next: the release, when the operator is ready.
+concepts across the consuming repositories). The harness snippet carries
+writing style and work rhythm. 0.1.0 shipped the whole stack (2026-11-19).
 
 ### Harness snippet
 
@@ -67,7 +67,8 @@ Operator rulings, 2026-11-18:
 - Third-party agent orchestration tools stay out.
 - Effigy may fit as a general task runner, but no skill requires it. Skill
   scripts run directly on Python 3.8+ with no dependencies.
-- A release waits until the operator is happy with the stack.
+- A release is a Git tag on `main`, not Effigy's release pipeline: Northstar
+  has no CI or packages to publish (2026-11-19).
 - The writing style is clear and conversational, not blunt; the snippet's
   wording wins over older short versions (2026-11-19).
 - The writing style lives only in the harness snippet; no second copy in

@@ -1,1 +1,0 @@
-`prune-tests`, adapted from caldoai/skills (MIT): keep only tests anchored to intended behaviour, with guardrails for the source of intent, which duplicate survives, a commit before deleting, and a coverage comparison after.

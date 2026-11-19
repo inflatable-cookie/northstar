@@ -1,1 +1,0 @@
-Retired concepts: `docs/knowledge/retired.toml`, the `retired-concepts` check and its catalog task. Agents reimplementing retired ideas proved rare enough not to justify the check. `check-links` takes frozen paths from `--frozen` only.

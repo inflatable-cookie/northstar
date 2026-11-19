@@ -1,1 +1,0 @@
-`repo-sweep`, a skill for making one change across many repositories: scope from the fetched default branch, order so nothing breaks between merges, isolated worktrees, targeted checks, one PR per repository.
