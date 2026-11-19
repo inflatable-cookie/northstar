@@ -1,9 +1,9 @@
 ---
-name: fleet-sweep
+name: repo-sweep
 description: Make one change across many repositories, such as retiring a convention, renaming a shared surface, or updating a common config. Use when the operator asks to apply something "everywhere" or across every repository that uses X.
 ---
 
-# Fleet sweep
+# Repo sweep
 
 One change, many repositories, one PR each. The sweep stays mechanical:
 anything that needs a product decision in a repository is reported, not
@@ -50,7 +50,7 @@ Nothing may break between merges.
 
 - Run each repository's own targeted check for what changed (docs, lint,
   tests for touched code). Record which repositories have no such check.
-- Don't run full suites across the fleet; one round of targeted checks is
+- Don't run full suites across every repository; one round of targeted checks is
   enough for a mechanical change.
 
 ## 5. Land
