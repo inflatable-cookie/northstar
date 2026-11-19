@@ -30,8 +30,9 @@ Skill scripts are dependency-free Python 3.8+. A skill may carry an
 `effigy skill run <skill>/<task>`; nothing requires Effigy.
 
 `hill-climb` keeps its scorecard in the project's planning surface. `atlas`
-records direction into the knowledge files today; its planned rewrite makes
-`northstar-docs` optional (see [vision.md](vision.md)).
+records direction into the `northstar-docs` knowledge files when a project
+uses them, otherwise into its planning surface, and asks the operator when
+neither exists.
 
 ## Installed copies
 

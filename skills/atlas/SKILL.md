@@ -18,9 +18,10 @@ evidence to test with them, never permission to extend the strategy yourself.
 
 1. **Name the question.** State the project and the horizon, then separate what
    the operator has said from what is unknown. Don't fill a missing destination.
-2. **Read for context.** Read `vision.md` and `architecture.md`, plus whatever
-   plan or backlog the project keeps. Look for tensions and
-   vocabulary, not a prescription.
+2. **Read for context.** Read whatever states the project's purpose and shape:
+   the README, `docs/knowledge/vision.md` and `architecture.md` when the
+   project uses `northstar-docs`, and whatever plan or backlog it keeps. Look
+   for tensions and vocabulary, not a prescription.
 3. **Ask, then stop.** End the first turn with a discovery checkpoint and
    nothing more:
    - what you understand (target, horizon, the operator's stated direction);
@@ -42,15 +43,21 @@ evidence to test with them, never permission to extend the strategy yourself.
 
 ## Where it lands
 
-Atlas is read-only until the operator asks to record the result. Then:
+Atlas is read-only until the operator asks to record the result. Then use the
+first home that applies:
 
-- outcomes, constraints and non-goals go to `docs/knowledge/vision.md`;
-- system shape and invariants go to `docs/knowledge/architecture.md`, durable
-  rules to `docs/knowledge/contracts/`;
-- decisions still open go to the project's planning surface, or wherever the
-  operator says;
-- the outcomes being pursued, and their order, go to the project's own planning
-  or task system.
+1. **The project uses `northstar-docs`** (it has `docs/knowledge/` with a
+   `vision.md`): outcomes, constraints and non-goals go to `vision.md`; system
+   shape and invariants to `architecture.md`; durable rules to `contracts/`.
+2. **Otherwise, the project's planning surface:** its task system's plan or
+   lane documents, an issue tracker, or the planning document it already
+   keeps.
+3. **Neither:** ask the operator where the direction should live. Don't create
+   a docs structure or a new file unasked; adopting `northstar-docs` is an
+   option to offer, not a default.
 
-No roadmap, runway file, or Atlas-specific record. Atlas never plans tasks,
+Whatever the home, decisions still open and the outcomes being pursued, with
+their order, belong to the planning surface, not to static docs.
+
+No roadmap, runway file or Atlas-specific record. Atlas never plans tasks,
 dispatches or approves work; that follows through the project's normal flow.
