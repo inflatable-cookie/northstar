@@ -1,0 +1,1 @@
+The harness snippet gains a work-rhythm section (act rather than report, batch with targeted checks, step back from churn, name the next step or say the work is finished) and a writing rule to keep document and UI text short; it now explains importing it from Claude Code's `CLAUDE.md`.
