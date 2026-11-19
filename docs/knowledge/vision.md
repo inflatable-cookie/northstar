@@ -37,12 +37,12 @@ is removed.
 | `fleet-sweep` | Shipped. One change across many repositories, with rules that keep it on track. |
 | `prune-tests` | Shipped. Keep only tests anchored to intended behaviour, with guardrails: the source of intended behaviour, which duplicate survives, a commit before deleting and a coverage comparison after. |
 | `atlas` | Rewrite. Long-horizon direction with the operator. It writes to `northstar-docs` files when the repository has opted in, otherwise to the project's planning surface, or asks the operator where to store the result. |
-| `northstar-docs` | Renamed; rewrite pending. Opt-in. Static foundations: the "why" and depth behind a README, which is the pitch and getting-started guide. Rarely changed, easy to update, nothing that goes stale. |
+| `northstar-docs` | Shipped. Opt-in. Static foundations: the "why" and depth behind a README, which is the pitch and getting-started guide. Rarely changed, easy to update, nothing that goes stale. |
 
-Order: `fleet-sweep`, `hill-climb`, `take-stock` and `prune-tests` first
-(done; the first sweep removed retired concepts across the consuming
-repositories); then `northstar-docs`, then `atlas`, since the docs skill
-defines the files Atlas writes to.
+Order: `fleet-sweep`, `hill-climb`, `take-stock`, `prune-tests` and
+`northstar-docs` first (done; the first sweep removed retired concepts across
+the consuming repositories); then `atlas`, since the docs skill defines the
+files Atlas writes to.
 
 ### Harness snippet
 
@@ -70,6 +70,9 @@ Operator rulings, 2026-11-18:
 - A release waits until the operator is happy with the stack.
 - The writing style lives only in the harness snippet; no second copy in
   the repository's contracts.
+- `docs/README.md` is the entry point to a project's docs, not a
+  current-state page or a mirror of the code. Each project decides what it
+  points at, and it stays as static as the other docs (2026-11-19).
 - A skill is its `SKILL.md` and what it needs; no harness-specific metadata
   files such as `agents/openai.yaml`.
 

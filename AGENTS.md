@@ -6,7 +6,7 @@ system, not in Git.
 
 ## Where things live
 
-- Current state: `docs/README.md`
+- Docs entry point: `docs/README.md`
 - Knowledge index: `docs/knowledge/README.md`
 - Unreleased changes: `changelog.d/`, folded into `CHANGELOG.md` when a
   release is cut

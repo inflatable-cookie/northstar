@@ -8,8 +8,9 @@ conventions.
 3. Does the index point to each topic's owner without duplicating its content?
 4. Are removed concepts gone from live material?
 5. Are links and examples still valid?
-6. Did the change preserve useful detail and avoid adding stale status or
-   process narration to the knowledge base?
+6. Is it static? Flag status, progress, plans, and lists that mirror the code
+   (files, functions, counts, versions); they go stale.
+7. Did the change keep the useful detail and reasons?
 
 Report concrete issues with their location and an example of the resulting
 confusion or failure.

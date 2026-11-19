@@ -1,55 +1,61 @@
 ---
 name: northstar-docs
-description: Give a project's documentation a lightweight structure, with one owning file per fact, and keep it accurate. Use for adopting the starter, deciding where a fact belongs, reviewing knowledge changes, or checking links and changelog fragments.
+description: Give a project's documentation a lightweight, static structure, with one owning file per fact, that doesn't go stale. Use for adopting the starter, deciding where a fact belongs, reviewing documentation changes, or checking links and changelog fragments.
 ---
 
 # Northstar docs
 
-An opt-in part of the Northstar stack. It provides a lightweight structure for a project's current knowledge.
-It helps readers find what is true and where each fact belongs.
+An opt-in part of the Northstar stack. It gives a project's documentation a
+small, static foundation: the reasons and depth behind the code, written so
+that it stays true until a decision changes.
 
-## Repository shape
+## What goes where
 
 | Surface | Holds |
 | --- | --- |
-| `AGENTS.md` | Project orientation, documentation map, guardrails and validation command |
-| `docs/README.md` | A short account of current state, with links by topic |
-| `docs/knowledge/` | Current truth, with one owning file per fact |
-| `changelog.d/` | Unreleased changes as fragments, one file per change, folded into `CHANGELOG.md` when a release is cut |
-| `docs/knowledge/contracts/release.md` | How the project releases, if applicable |
+| `README.md` | The pitch and getting started: what the project is, how to install, build or use it |
+| `AGENTS.md` | Agent orientation: where things live, commands, product rules, guardrails, validation |
+| `docs/README.md` | The entry point to the full docs. Each project decides what it needs to point readers at |
+| `docs/knowledge/` | The why and the depth, with one owning file per topic, indexed in `docs/knowledge/README.md` |
+| `changelog.d/` | Unreleased changes as fragments, folded into `CHANGELOG.md` at release |
 
-The exact structure belongs to each project. Add sections and folders when
-they contain useful current information; omit empty ones. Keep project task
-tracking in whichever system that project uses.
+Typical knowledge files are `vision.md` (purpose and non-goals),
+`architecture.md` (system shape), `contracts/` (durable rules and interfaces,
+including `release.md`) and `domain/` (concepts and vocabulary). Add a file
+when it has something durable to say; omit empty ones. Split a file into a
+folder when it outgrows a page, and update the index.
 
-## Use the knowledge
+Product documentation for users (guides, API references) stays where its
+readers expect it and is listed in the knowledge index.
 
-Read `AGENTS.md`, then `docs/README.md`, then the knowledge files relevant to
-the work. Check the owning knowledge file before raising a question the
-project already answers.
+## Keep it static
 
-## Keep knowledge current
+Docs are foundations, like the code: they change when a decision changes,
+not as work progresses.
 
-- Give each fact one owning file. Link to it instead of copying it elsewhere.
-- Write what is true now; Git history records how it changed.
-- Keep detailed design where it helps people understand a complex system.
-- When work changes a durable fact, update its owner alongside the change.
-- When removing a concept, update or remove its live references in the same
-  change.
-- Keep the starter in `template/` generic and ready to copy into another
-  project.
+- Write durable facts and the reasons behind them: purpose, shape,
+  boundaries, rules, trade-offs.
+- Don't mirror the code. Lists of files, functions, flags, counts or versions
+  go stale; describe the shape and point at the code.
+- Don't record status, progress, plans or task lists. They belong to the
+  project's planning surface. Git holds the history.
+- Give each fact one owning file. Link to it rather than restating it; if two
+  files disagree, the index says which one owns the fact.
+- When a change alters a durable fact, update its owner in the same change.
+  When it removes a concept, remove its live references too.
 
-## Write clearly
+## Use the docs
 
-Keep orientation short and link to detailed knowledge. Prefer plain language,
-use the project's established terms, and include the reason behind a durable
-rule when it will help future readers.
+Read `AGENTS.md`, then `docs/README.md`, then the knowledge relevant to the
+work. Check the owning file before asking a question the project already
+answers.
 
-## Adopt the structure
+## Adopt and review
 
-Use [adopt](references/adopt.md) and the copy-ready starter in
-[template/](template/README.md). The starter is a starting point, not a fixed
-schema; adapt it to the project's needs.
+- Adopting or migrating a repository: [adopt](references/adopt.md), with the
+  copy-ready starter in [template/](template/README.md). The starter is a
+  minimum, not a schema.
+- Reviewing a documentation change: [review](references/review.md).
 
 ## Scripts
 
