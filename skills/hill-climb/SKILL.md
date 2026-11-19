@@ -27,8 +27,10 @@ holds the lowest parts back, re-rate, and record the achieved standard.
 
 ## 2. Read independently
 
-- Split the scope across several read-only readers, run in parallel if the
-  harness allows, otherwise as separate fresh-context passes.
+- Use one fresh read-only reader when it can assess the whole scope and
+  how the parts fit together. Split broader scopes across readers. Run
+  those reads in parallel when the harness allows, or as separate
+  fresh-context passes.
 - Never show a reader earlier scores or findings; a re-read must not be
   anchored.
 - Each reader returns scores by dimension and overall, plus concrete
@@ -60,7 +62,7 @@ If the operator asked for an assessment, report here.
 
 ## 5. Re-read
 
-After each round, re-read with fresh readers (step 2). Stop when every part
+After each round, repeat the independent read (step 2). Stop when every part
 and integration meet the target, or a round moves nothing. Explain any
 remaining shortfall, including integration.
 
