@@ -1,10 +1,9 @@
 # Release
 
-Northstar has no tagged releases yet. It ships by installing each skill under
-`skills/` from `main` onto the operator's machine. `VERSION` stays
-at `0.1.0` and unreleased changes wait as fragments in `changelog.d/` until
-the first tagged release. The first release, and its versioning scheme, wait
-until the operator is happy with the stack.
+A release is an annotated Git tag, `v<x.y.z>`, on a `main` commit whose
+`VERSION` and `CHANGELOG.md` name that version. Versions follow semantic
+versioning. Northstar has no CI and nothing to publish, so it doesn't use
+Effigy's release pipeline. Between releases, skills install from `main`.
 
 Northstar records unreleased changes as changelog fragments; the convention
 and adoption steps are the skill's
@@ -20,10 +19,14 @@ user-visible contracts are preserved by default.
 ## Steps
 
 1. Merge to `main` with `effigy qa` passing.
-2. Cut the changelog when a version ships:
-   `effigy changelog:fold --version <x.y.z> --date <YYYY-MM-DD>`, then commit
+2. In a release PR, set `VERSION` and fold the changelog:
+   `effigy changelog:fold --version <x.y.z> --date <YYYY-MM-DD>`, committing
    `CHANGELOG.md` together with the removed fragments.
-3. Sync the installed copies:
+3. After it merges, tag the merge commit and push the tag:
+   `git tag -a v<x.y.z> -m "Northstar <x.y.z>"`, then
+   `git push origin v<x.y.z>`. Create a GitHub release from the tag with the
+   version's changelog section as its notes.
+4. Sync the installed copies:
    `rsync -a --delete skills/<skill>/ ~/.agents/skills/<skill>/` for each
    skill. Other harness skill locations may link to them.
 
@@ -36,4 +39,5 @@ user-visible contracts are preserved by default.
 
 ## Roll back
 
-Check out the previous `main` commit's `skills/` and sync again.
+Check out the previous tag's `skills/` and sync again. Never move a
+published tag; a fix ships as the next patch.

@@ -1,1 +1,0 @@
-Northstar is a small knowledge-structure skill with a copy-ready `template/`, the link check and changelog fragments. Planning, briefs, papercuts and task state belong to each project's own task system.

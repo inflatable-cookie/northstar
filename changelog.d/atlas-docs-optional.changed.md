@@ -1,1 +1,0 @@
-`atlas` no longer assumes `northstar-docs`: it reads whatever states a project's purpose, and records direction into the knowledge files when the project uses them, otherwise into its planning surface, and asks the operator when neither exists.
