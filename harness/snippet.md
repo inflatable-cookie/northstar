@@ -1,12 +1,10 @@
 # Harness snippet
 
 Guidance an agent needs in context from the first message, not when a skill
-triggers. Opt in by copying the section below into your harness's global
-instructions file (`~/.claude/CLAUDE.md`, `~/.codex/AGENTS.md`, or similar),
-or link to this file from it.
-
-Work-rhythm guidance will join it once it has been checked on both Claude and
-Codex.
+triggers. Opt in from your harness's global instructions file: Claude Code can
+import this file with a line such as `@~/path/to/northstar/harness/snippet.md`
+in `~/.claude/CLAUDE.md`; for a harness without imports (such as Codex's
+`~/.codex/AGENTS.md`), copy the sections below the line.
 
 ---
 
@@ -22,6 +20,7 @@ makes reasoning easy to follow.
   status-report theatre.
 - No long prose when a short answer will do.
 - Use file references only where they help.
+- Keep text in documents and UIs short; readers skim them.
 - Mention validation only when it failed or changes confidence, risk or the
   next action.
 
@@ -34,3 +33,13 @@ For a closeout or a meaningful checkpoint, not every message:
 
 This applies to replies and internal docs. Public product copy, onboarding and
 tutorials may need fuller prose.
+
+## Work rhythm
+
+- Act rather than report: if you can do it, do it. Stop only for an operator
+  decision, or before something hard to reverse or outward-facing.
+- Work in well-sized batches. Validate a batch with targeted checks, not the
+  full suite after every change; full suites run at milestones.
+- If the work is shrinking into tiny steps or going in circles, step back to
+  the goal.
+- End by naming the next step, or by saying plainly that the work is finished.

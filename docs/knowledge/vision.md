@@ -41,16 +41,16 @@ is removed.
 
 Order: `repo-sweep`, `hill-climb`, `take-stock`, `prune-tests`,
 `northstar-docs` and `atlas` (all done; the first sweep removed retired
-concepts across the consuming repositories). Next: the harness snippet's
-work-rhythm guidance.
+concepts across the consuming repositories). The harness snippet carries writing style and work rhythm.
+Next: the release, when the operator is ready.
 
 ### Harness snippet
 
 Writing style and work rhythm are not skills: agents need them in context
 from the start, not when a skill triggers. The stack ships them as an opt-in
 snippet for a harness's global instructions file (`CLAUDE.md`, `AGENTS.md`):
-[`harness/snippet.md`](../../harness/snippet.md), which holds writing style
-today. Work rhythm joins it once reassessed across Claude and Codex.
+[`harness/snippet.md`](../../harness/snippet.md): writing style and work
+rhythm.
 
 ## Rulings
 
@@ -68,6 +68,8 @@ Operator rulings, 2026-11-18:
 - Effigy may fit as a general task runner, but no skill requires it. Skill
   scripts run directly on Python 3.8+ with no dependencies.
 - A release waits until the operator is happy with the stack.
+- The writing style is clear and conversational, not blunt; the snippet's
+  wording wins over older short versions (2026-11-19).
 - The writing style lives only in the harness snippet; no second copy in
   the repository's contracts.
 - `docs/README.md` is the entry point to a project's docs, not a
