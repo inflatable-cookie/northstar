@@ -59,6 +59,6 @@ Keep it short enough to decide from:
 - recommendations ranked by value, each with its blast radius;
 - the questions only the operator can answer.
 
-Then stop. Follow-up work belongs to the skill that fits it: `fleet-sweep`
+Then stop. Follow-up work belongs to the skill that fits it: `repo-sweep`
 for a change across repositories, `hill-climb` for quality, `atlas` for
 direction.

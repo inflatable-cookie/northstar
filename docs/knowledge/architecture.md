@@ -20,7 +20,7 @@ another.
 | --- | --- |
 | `hill-climb` | `SKILL.md` only |
 | `take-stock` | `SKILL.md` only; read-only |
-| `fleet-sweep` | `SKILL.md` only |
+| `repo-sweep` | `SKILL.md` only |
 | `prune-tests` | `SKILL.md` only |
 | `atlas` | `SKILL.md` only |
 | `northstar-docs` | `SKILL.md`, `references/` (adopt, review), `template/` (the copy-ready starter) and `scripts/` (`check-links.py`, `changelog.py`, each with a self-test) |

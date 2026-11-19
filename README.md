@@ -11,7 +11,7 @@ their scripts need only Python 3.8+ and Git.
   level per run with a rated rubric, then keep the rubric as a gate.
 - [`take-stock`](skills/take-stock/SKILL.md): audit what a project holds,
   what's stale and what depends on it.
-- [`fleet-sweep`](skills/fleet-sweep/SKILL.md): make one change across many
+- [`repo-sweep`](skills/repo-sweep/SKILL.md): make one change across many
   repositories, one PR each.
 - [`prune-tests`](skills/prune-tests/SKILL.md): keep only tests anchored to
   intended behaviour.
@@ -30,7 +30,7 @@ first message.
 Copy the skills you want into your harness's skill folder, for example:
 
 ```bash
-for s in hill-climb take-stock fleet-sweep prune-tests atlas northstar-docs; do
+for s in hill-climb take-stock repo-sweep prune-tests atlas northstar-docs; do
   rsync -a --delete "skills/$s/" "$HOME/.agents/skills/$s/"
 done
 ```
