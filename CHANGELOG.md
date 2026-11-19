@@ -5,6 +5,17 @@ fragments in `changelog.d/`, folded into this file when a release is cut.
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-11-19
+
+### Added
+- Add `red-pen` to review overbuilt products and tools and recommend what to keep, simplify, or remove.
+
+### Changed
+- Give `hill-climb` an assessment mode, a defined baseline, and a clear stopping point for improvement runs.
+
+### Fixed
+- Make cross-repository sweeps and docs adoption safer, and fix the link checker and changelog fold on common inputs.
+
 ## [0.1.0] - 2026-11-19
 
 ### Added
