@@ -27,9 +27,11 @@ Make the change in a deliberate pass:
    it from the knowledge index.
 3. Remove concepts that no longer apply, and update live references in the
    same change.
-4. Remove duplicate summaries, stale status, and process records that have a
-   better home in the project's own task or delivery system.
-5. Update the index and run the documentation checks listed by the project.
+4. Remove duplicate summaries, status, progress, and lists that mirror the
+   code. Status and process records belong in the project's own planning
+   system.
+5. Turn `docs/README.md` into an entry point to the docs, if it isn't one.
+6. Update the index and run the documentation checks listed by the project.
 
 Preserve detailed system design and evidence that current decisions rely on.
 Git history is the home for obsolete facts and completed work narratives.

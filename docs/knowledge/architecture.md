@@ -23,7 +23,7 @@ another.
 | `fleet-sweep` | `SKILL.md` only |
 | `prune-tests` | `SKILL.md` only |
 | `atlas` | `SKILL.md` only |
-| `northstar-docs` | `SKILL.md`, `references/` (adopt, knowledge, review), `template/` (the copy-ready starter) and `scripts/` (`check-links.py`, `changelog.py`, each with a self-test) |
+| `northstar-docs` | `SKILL.md`, `references/` (adopt, review), `template/` (the copy-ready starter) and `scripts/` (`check-links.py`, `changelog.py`, each with a self-test) |
 
 Skill scripts are dependency-free Python 3.8+. A skill may carry an
 `effigy.toml` catalog so Effigy users can run its scripts as

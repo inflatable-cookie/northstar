@@ -1,8 +1,7 @@
-# Northstar — current state
+# Northstar documentation
 
-Northstar is a stack of six opt-in agent skills and one harness snippet. The
-README is the pitch and the install guide; this folder holds the reasoning and
-the rules behind it.
+The README is the pitch and the install guide. This folder holds the
+reasoning and the rules behind the stack.
 
 ## By topic
 

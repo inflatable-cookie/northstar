@@ -1,13 +1,14 @@
-# <Project name> — current state
+# <Project name> documentation
 
-<A page at most: what works today, what is being built, and the constraints
-that matter right now. Link to knowledge by topic; don't restate it.>
+<The entry point to this project's docs. Say in a sentence or two what a
+reader will find here and where to start. Keep it static: no status, no
+progress, nothing that mirrors the code.>
 
-## By topic
+<Drop any line below that doesn't apply, and add the entry points this
+project needs.>
 
-<Drop any line below whose folder has nothing true to say yet.>
-
-- Vision: [knowledge/vision.md](knowledge/vision.md)
-- Architecture: [knowledge/architecture.md](knowledge/architecture.md)
-- Contracts: [knowledge/contracts/](knowledge/contracts/README.md)
-- Domain: [knowledge/domain/](knowledge/domain/README.md)
+- Why the project exists and what it is not: [knowledge/vision.md](knowledge/vision.md)
+- How the system is shaped: [knowledge/architecture.md](knowledge/architecture.md)
+- Durable rules and interfaces: [knowledge/contracts/](knowledge/contracts/README.md)
+- Domain concepts and vocabulary: [knowledge/domain/](knowledge/domain/README.md)
+- Everything, by topic: [knowledge/README.md](knowledge/README.md)

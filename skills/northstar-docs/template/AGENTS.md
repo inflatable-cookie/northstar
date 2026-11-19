@@ -5,7 +5,7 @@ become.>
 
 ## Where things live
 
-- Current state: `docs/README.md`
+- Docs entry point: `docs/README.md`
 - Knowledge index: `docs/knowledge/README.md`
 
 ## Commands
