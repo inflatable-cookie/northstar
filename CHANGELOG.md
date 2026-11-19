@@ -5,6 +5,11 @@ fragments in `changelog.d/`, folded into this file when a release is cut.
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-11-19
+
+### Changed
+- Use a single fresh reader for small hill-climb scopes and split broader reviews across readers.
+
 ## [0.2.0] - 2026-11-19
 
 ### Added
