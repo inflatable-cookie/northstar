@@ -1,9 +1,9 @@
 # Scripts
 
-Repository-owned checks for the skill's source. Run them through `effigy qa`.
+Run `effigy check:skill-install` to compare each skill under `skills/` with
+its installed copy. The underlying command is
+`python3 scripts/check-skill-install.py [<root>]`, which defaults to
+`~/.agents/skills`.
 
-- `check-skill-install.py [<root>]` — byte parity between each skill under
-  `skills/` and its installed copy (default root `~/.agents/skills`).
-
-The docs skill's own tests (`check-links`, `changelog`) live beside
-their scripts in `skills/northstar-docs/scripts/`.
+`effigy qa` runs the source checks, including the docs skill's self-tests
+in `skills/northstar-docs/scripts/`.

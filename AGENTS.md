@@ -1,8 +1,8 @@
 # Northstar
 
-Northstar is the operator's opt-in stack of agent skills. Direction, the
-skill list and its order are in `docs/knowledge/vision.md`. Task state belongs in each project's own task
-system, not in Git.
+Northstar is the operator's opt-in stack of agent skills. The vision explains
+what belongs, and the README lists the skills. Task state belongs in each
+project's own task system.
 
 ## Where things live
 
@@ -29,9 +29,9 @@ scripts must stay dependency-free Python 3.8+ so adopters need nothing else.
   examples.
 - Say a rule once, in the skill. Remove guidance a capable agent follows by
   default instead of repeating it.
-- Before 1.0, update callers and remove superseded surfaces together; no
-  shims. If a change breaks callers or documented behaviour, stop with a
-  short impact summary and options.
+- Follow the compatibility rules in `docs/knowledge/contracts/release.md`.
+  If a change breaks callers or documented behaviour, stop with a short
+  impact summary and options.
 - Write in the house style: the writing section of `harness/snippet.md`.
 
 ## Guardrails

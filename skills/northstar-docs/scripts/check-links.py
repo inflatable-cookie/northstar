@@ -4,13 +4,15 @@
 Usage:
   check-links.py [--repo <path>] [--frozen <regex>]...
 
-Checks every tracked or untracked (not ignored) Markdown file. Frozen paths are
-regular expressions for files to skip: released artefacts, vendored mirrors,
-fixtures. Links inside code spans and fenced blocks are ignored.
+Checks inline links and reference definitions in tracked or unignored UTF-8
+Markdown files up to 3 MB. It checks anchors against Markdown headings and
+explicit HTML anchors. It skips code spans and top-level code blocks. Use
+--frozen <regex> to exclude paths such as fixtures or released artefacts.
 Exit: 0 clean, 1 problems found, 2 usage error.
 Needs Python 3.8+ and Git; nothing else.
 """
-import os, re, subprocess, sys
+import os, re, string, subprocess, sys
+from urllib.parse import unquote
 
 
 def die(msg):
@@ -34,11 +36,61 @@ def parse_args(argv):
     return opts
 
 
-LINK = re.compile(r"(!?\[)((?:[^\[\]]|\[[^\]]*\])*)\]\(\s*(<[^>]+>|[^)\s]+)(\s+\"[^\"]*\")?\s*\)")
-# CommonMark: at most three spaces of indent. The target must look like a link,
-# so a list continuation such as "[0.05, 0.95]: the ..." isn't mistaken for one.
-REFDEF = re.compile(r"^( {0,3}\[[^\]]+\]:[ \t]*)((?:<[^>]+>)|(?:[^\s]*[/.#][^\s]*))(.*)$", re.M)
+BARE_TARGET = r"(?:\\[^\n]|[^()\s\\]|\((?:\\[^\n]|[^()\s\\])*\))+"
+TARGET = rf"(?P<target><[^>\n]+>|{BARE_TARGET})"
+TITLE = r"""(?:"[^"\n]*"|'[^'\n]*'|\([^()\n]*\))"""
+# An opening bracket is escaped when preceded by an odd number of backslashes.
+LINK_LABEL = r"(?<!\\)(?:\\\\)*\[(?P<label>(?:[^\[\]]|\[[^\]]*\])*)\]"
+LINK = re.compile(rf"{LINK_LABEL}\(\s*{TARGET}(?:\s+{TITLE})?\s*\)")
+REFLINK = re.compile(rf"{LINK_LABEL}\[(?P<ref>[^\]\n]*)\]")
+REFDEF = re.compile(rf"^ {{0,3}}\[(?P<label>[^\]\n]+)\]:[ \t]*(?:\n[ \t]*)?"
+                    rf"{TARGET}(?:[ \t]+{TITLE})?[ \t]*$", re.M)
+CODE_SPAN = re.compile(r"(?<!`)(`+)(?!`).*?(?<!`)\1(?!`)", re.S)
+ESCAPE = re.compile(rf"\\([{re.escape(string.punctuation)}])")
 EXTERNAL = re.compile(r"^[a-zA-Z][\w+.-]*:")
+FENCE = re.compile(r"^ {0,3}(`{3,}|~{3,})(.*)$")
+LIST_ITEM = re.compile(r"^ {0,3}(?:[-+*]|\d{1,9}[.)])[ \t]+")
+HEADING = re.compile(r"^ {0,3}(?:#{1,6}[ \t]+(.+?)[ \t]*#*[ \t]*$|"
+                     r"([^#\s][^\n]*?)\n {0,3}(?:=+|-+)[ \t]*$)", re.M)
+
+
+def without_code_blocks(text):
+    fence = ""
+    indented = in_list = False
+    after_blank = True
+    lines = []
+    for line in text.splitlines():
+        match = FENCE.match(line)
+        if fence:
+            if match and match[1].startswith(fence) and not match[2].strip():
+                fence = ""
+                lines.append("")
+                after_blank = True
+            continue
+        if not line.strip():
+            lines.append("")
+            after_blank = True
+            continue
+        has_indent = line.expandtabs(4).startswith("    ")
+        if has_indent and (indented or (after_blank and not in_list)):
+            indented = True
+            continue
+        indented = False
+        if not has_indent:
+            in_list = bool(LIST_ITEM.match(line))
+        if match and (match[1][0] == "~" or "`" not in match[2]):
+            fence = match[1]
+            continue
+        lines.append(line)
+        after_blank = False
+    return "\n".join(lines)
+
+
+def git(root, *args):
+    result = subprocess.run(["git", "-C", root, *args], capture_output=True)
+    if result.returncode != 0:
+        die(f"git {args[0]} failed: {os.fsdecode(result.stderr).strip()}")
+    return os.fsdecode(result.stdout)
 
 
 def read_text(path):
@@ -50,13 +102,16 @@ def read_text(path):
 
 
 def split_target(t):
-    t = t[1:-1] if t.startswith("<") else t
     path, _, frag = t.partition("#")
-    return path, (frag if "#" in t else None)
+    return unquote(path), unquote(frag)
 
 
 def slug(heading):
     return re.sub(r"[^\w\- ]", "", heading.strip().lower()).replace(" ", "-")
+
+
+def reference_key(label):
+    return " ".join(label.split()).casefold()
 
 
 _anchors = {}
@@ -64,11 +119,19 @@ _anchors = {}
 
 def anchors(path):
     if path not in _anchors:
-        text = read_text(path) or ""
+        text = without_code_blocks(read_text(path) or "")
+        references = {reference_key(match["label"]) for match in REFDEF.finditer(text)}
+
+        def reference_label(match):
+            label = match["label"]
+            return label if reference_key(match["ref"] or label) in references else match[0]
+
         seen, out = {}, set()
-        for h in re.findall(r"^#{1,6}\s+(.+?)\s*#*\s*$", text, re.M):
+        for atx, setext in HEADING.findall(text):
+            heading = LINK.sub(r"\g<label>", atx or setext)
+            heading = REFLINK.sub(reference_label, heading)
             # GitHub keeps underscores in anchors, so only markup is stripped.
-            base = slug(re.sub(r"`|\*|\[|\]\([^)]*\)", "", h))
+            base = slug(re.sub(r"`|\*|\[", "", heading))
             n = seen.get(base, 0)
             out.add(base if n == 0 else f"{base}-{n}")
             seen[base] = n + 1
@@ -80,19 +143,26 @@ def anchors(path):
 def main():
     opts = parse_args(sys.argv[1:])
     root = opts["repo"]
-    frozen = [re.compile(p) for p in opts["frozen"]]
-    r = subprocess.run(["git", "-C", root, "ls-files", "--cached", "--others", "--exclude-standard", "*.md"],
-                       capture_output=True, text=True)
-    if r.returncode != 0: die(f"git ls-files failed: {r.stderr.strip()}")
+    try:
+        frozen = [re.compile(p) for p in opts["frozen"]]
+        root = git(root, "rev-parse", "--show-toplevel")[:-1]
+        paths = git(root, "ls-files", "-z", "--cached", "--others",
+                    "--exclude-standard", "*.md")
+    except (OSError, re.error) as error:
+        die(str(error))
     problems = []
-    for f in r.stdout.splitlines():
+    for f in paths.split("\0"):
+        if not f: continue
         if any(p.search(f) for p in frozen): continue
         text = read_text(os.path.join(root, f))
         if text is None: continue
-        text = re.sub(r"```.*?```", "", text, flags=re.S)
-        text = re.sub(r"`[^`\n]*`", "", text)  # links shown inside code spans aren't links
+        text = without_code_blocks(text)
+        paragraphs = re.split(r"\n[ \t]*\n", text)
+        text = "\n\n".join(CODE_SPAN.sub("", paragraph) for paragraph in paragraphs)
         for m in list(LINK.finditer(text)) + list(REFDEF.finditer(text)):
-            target = m.group(3) if m.re is LINK else m.group(2)
+            target = m["target"]
+            if target.startswith("<"): target = target[1:-1]
+            target = ESCAPE.sub(r"\1", target)
             if EXTERNAL.match(target) or target.startswith("/"): continue
             path, frag = split_target(target)
             full = os.path.normpath(os.path.join(root, os.path.dirname(f), path)) if path else os.path.join(root, f)

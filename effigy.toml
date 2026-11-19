@@ -10,6 +10,7 @@ alias = "northstar"
 "check:changelog" = "python3 skills/northstar-docs/scripts/changelog.py check {args}"
 "test:check-links" = "bash skills/northstar-docs/scripts/check-links.test.sh"
 "test:changelog" = "bash skills/northstar-docs/scripts/changelog.test.sh"
+"test:check-skill-install" = "bash scripts/check-skill-install.test.sh"
 "changelog:fold" = "python3 skills/northstar-docs/scripts/changelog.py fold {args}"
 "qa:docs" = [{ task = "check:links" }, { task = "check:changelog" }]
-qa = [{ task = "test:check-links" }, { task = "test:changelog" }, { task = "qa:docs" }]
+qa = [{ task = "test:check-links" }, { task = "test:changelog" }, { task = "test:check-skill-install" }, { task = "qa:docs" }]

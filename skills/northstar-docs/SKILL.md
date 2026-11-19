@@ -59,10 +59,13 @@ answers.
 
 ## Scripts
 
-Python 3.8+ and Git, no other dependencies. Run them from the repository root.
+Python 3.8+ and Git, no other dependencies. From the project root, use the
+path to your copy of the skill:
 
-- `scripts/check-links.py` — broken Markdown links and anchors.
-- `scripts/changelog.py check|fold` — changelog fragments.
+```bash
+python3 "<skill-dir>/scripts/check-links.py"
+python3 "<skill-dir>/scripts/changelog.py" check
+```
 
 `effigy.toml` wraps the same scripts for projects that use Effigy
 (`effigy skill run northstar-docs/<task>`).

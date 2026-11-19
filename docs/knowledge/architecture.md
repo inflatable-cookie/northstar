@@ -16,23 +16,12 @@ another.
 
 ## The skills
 
-| Skill | Shape |
-| --- | --- |
-| `hill-climb` | `SKILL.md` only |
-| `take-stock` | `SKILL.md` only; read-only |
-| `repo-sweep` | `SKILL.md` only |
-| `prune-tests` | `SKILL.md` only |
-| `atlas` | `SKILL.md` only |
-| `northstar-docs` | `SKILL.md`, `references/` (adopt, review), `template/` (the copy-ready starter) and `scripts/` (`check-links.py`, `changelog.py`, each with a self-test) |
+Workflow skills are self-contained `SKILL.md` files. The docs skill also
+ships references, a copy-ready starter and scripts with self-tests.
 
 Skill scripts are dependency-free Python 3.8+. A skill may carry an
 `effigy.toml` catalog so Effigy users can run its scripts as
 `effigy skill run <skill>/<task>`; nothing requires Effigy.
-
-`hill-climb` keeps its scorecard in the project's planning surface. `atlas`
-records direction into the `northstar-docs` knowledge files when a project
-uses them, otherwise into its planning surface, and asks the operator when
-neither exists.
 
 ## Installed copies
 

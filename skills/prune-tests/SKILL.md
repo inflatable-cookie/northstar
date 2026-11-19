@@ -40,9 +40,8 @@ Always keep:
 ## 3. Classify each test
 
 - **Anchored:** fails only when intended behaviour regresses. Keep.
-- **Guards the past:** asserts removed code stays gone, or a moved module is
-  absent from its old path. Bringing it back would be a decision, not a
-  regression. Delete.
+- **Guards the past:** asserts that retired code stays gone without a current
+  guarantee that it must stay absent. Delete.
 - **Guards nothing:** no change to the code can make it fail: it tests the
   framework or browser, asserts what a mock returns after mocking the unit
   under test, or checks what the type system already guarantees. Delete.
@@ -51,8 +50,8 @@ Always keep:
   ran, or derives its expected value with the same logic as the code. Rewrite
   it against observable behaviour if it covers something callers rely on;
   otherwise delete.
-- **Duplicate:** guards the same behaviour as another test. Keep the one at
-  the most stable boundary (public surface over internals) that is fast and
+- **Duplicate:** guards the same behaviour and failure mode as another
+  test. Keep the one at the most stable boundary that is fast and
   deterministic; on a tie, keep the clearer one. Delete the rest.
 
 Flaky tests aren't a category: fix or report them, don't prune them for being
@@ -62,19 +61,18 @@ flaky.
 
 - Work one category at a time, one commit each, so a reviewer can follow the
   reasoning and revert a batch.
-- Delete production code that existed only for the removed tests (test-only
-  hooks, reset helpers, exported internals).
-- Run the suite after each batch.
-- Compare coverage with step 1. Every production line or branch that lost
+- Delete support code after checking that no retained tests, runtime paths,
+  or downstream callers use it.
+- Run targeted checks after each batch. Run the full suite at the end, or
+  earlier if the project requires it or a batch changes shared code.
+- Compare final coverage with step 1. Every production line or branch that lost
   coverage needs a reason: its behaviour is guarded elsewhere, or the code
   itself was deleted. Restore or rewrite a test for anything else.
 
 ## Done
 
-- Every remaining test is anchored to a stated source of intended behaviour.
-- Each would fail on a regression, and only on a regression.
-- No two tests guard the same behaviour.
-- No production code exists only for tests.
+- Classified tests guard stated behaviour. Unresolved tests stay as questions.
+- Redundant tests and their private support code are gone.
 - Coverage of behaviour callers rely on is unchanged.
 
 ## Report

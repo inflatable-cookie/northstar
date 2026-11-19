@@ -20,24 +20,31 @@ user-visible contracts are preserved by default.
 
 1. Merge to `main` with `effigy qa` passing.
 2. In a release PR, set `VERSION` and fold the changelog:
-   `effigy changelog:fold --version <x.y.z> --date <YYYY-MM-DD>`, committing
-   `CHANGELOG.md` together with the removed fragments.
-3. After it merges, tag the merge commit and push the tag:
-   `git tag -a v<x.y.z> -m "Northstar <x.y.z>"`, then
+   `effigy changelog:fold --version <x.y.z> --date <YYYY-MM-DD>`. Commit
+   `VERSION`, `CHANGELOG.md` and the removed fragments together.
+3. On the merged `main` commit, verify that `VERSION` and the new changelog
+   heading agree. Tag that commit and push the tag:
+   `git tag -a v<x.y.z> <verified-commit> -m "Northstar <x.y.z>"`, then
    `git push origin v<x.y.z>`. Create a GitHub release from the tag with the
    version's changelog section as its notes.
-4. Sync the installed copies:
-   `rsync -a --delete skills/<skill>/ ~/.agents/skills/<skill>/` for each
-   skill. Other harness skill locations may link to them.
+4. From a checkout of the new tag, sync the skills you use with the
+   [guarded install procedure](../../../README.md#install). Remove Northstar
+   copies and harness links for skills retired by the release. Preserve
+   unrelated installs.
 
 ## Verify
 
-- `effigy check:skill-install` reports exact parity for every skill.
+- For an installation of the full stack, `effigy check:skill-install`
+  verifies shared-copy file contents, executable bits and symlinks within
+  each skill. It skips `.effigy/` scratch directories. Check separately
+  that any harness links resolve to the intended copies.
 - `effigy skill run northstar-docs/check-links` succeeds from a consumer
   repository.
 - `effigy check:changelog` passes on a fresh checkout.
 
 ## Roll back
 
-Check out the previous tag's `skills/` and sync again. Never move a
-published tag; a fix ships as the next patch.
+From a checkout of the previous tag, use the same guarded install procedure.
+Remove copies and harness links for Northstar skills introduced after that
+tag, and restore any retired skills you still use. Never move a published
+tag. A fix ships as the next patch.
