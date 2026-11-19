@@ -1,13 +1,13 @@
 ---
 name: hill-climb
-description: Raise the quality of a defined scope at least one level per run by rating every part out of 10, fixing what holds the lowest parts back, and re-rating. Use when the operator asks for a quality sweep, a hill-climb, a code-quality pass, or to get a codebase, crate or docs set "up to an 8".
+description: Assess or raise the quality of a defined scope by rating each part out of 10, then fixing and re-rating when asked. Use for a quality sweep, a hill-climb, or a request to bring a codebase, crate, or docs set up to a target score.
 ---
 
 # Hill-climb
 
-Rate every part of a scope out of 10, lift the parts below the current level,
-re-rate, then raise the level. Sweeps alone don't hold the gains; the
-rubric ends as a standing gate on every change.
+Rate each part of the scope out of 10. For an assessment, report the
+verified findings and recommended target. For an improvement run, fix what
+holds the lowest parts back, re-rate, and record the achieved standard.
 
 ## 1. Define the scope
 
@@ -31,58 +31,54 @@ rubric ends as a standing gate on every change.
   harness allows, otherwise as separate fresh-context passes.
 - Never show a reader earlier scores or findings; a re-read must not be
   anchored.
-- Each reader returns a table (part, score per dimension, overall) and
-  `file:line` findings only for parts below the current target, bugs first.
-  Above the target it says nothing unless there is a bug.
+- Each reader returns scores by dimension and overall, plus concrete
+  `file:line` findings, bugs first. Once a target is set, limit other
+  findings to parts below it.
 
-## 3. Set the baseline
+## 3. Verify and set the target
 
-The baseline is the first level every part must reach: the lowest level that
-most parts already sit at or near, usually 6 or 7.
+Check surprising claims yourself before they become work. Drop findings
+that don't hold up and correct the scores they affected.
 
-Each run must lift the whole scope at least one level: every part to the
-baseline, the next run to baseline + 1, and so on toward 10. One level is the
-minimum, not a cap. If a part can confidently reach a higher level in the same
-run, take it.
+The baseline is the lowest verified overall score among the parts and
+integration. Use the operator's target when given. Otherwise aim one level
+above the baseline, up to 10. The target applies to every part and integration. If a fix can
+confidently reach a higher level in the same run, take it.
 
-## 4. Verify before acting
+If the operator asked for an assessment, report here.
 
-Readers produce false positives and true positives that look alike. Check
-every surprising claim yourself (run the formatter, call the API, reproduce
-the bug) before it becomes work. Drop what doesn't reproduce.
-
-## 5. Fix in batches
+## 4. Fix in batches
 
 - Turn verified findings into tasks grouped by area. Real bugs go in their
   own correctness batch, first. Structure, contracts and docs follow.
 - Never run two batches that touch the same files at once, and wait for
   in-flight feature work in those areas.
-- When downstream projects pin the code, list public API removals in each
-  batch's PR.
-- Keep the scorecard (scores per part per read, and the current level) in the
-  project's planning surface, not in the repository.
+- Check downstream callers before changing public behaviour. Agree on a
+  compatibility plan before making a breaking change, and describe it in the PR.
+- Keep the scorecard in the project's planning surface when one is
+  available. Otherwise include it in the report.
 
-## 6. Re-read
+## 5. Re-read
 
-After each round, re-read with fresh readers (step 2). When every part meets
-the current level, raise it by at least one. Stop when the operator's target is met or
-a round moves nothing; report which parts are stuck and why.
+After each round, re-read with fresh readers (step 2). Stop when every part
+and integration meet the target, or a round moves nothing. Explain any
+remaining shortfall, including integration.
 
-## 7. Make it a standing gate
+## 6. Make it a standing gate
 
-New work lands below the level and drags the average back, so a sweep alone
-won't converge. Once the sweep ends, write the rubric and current level into
-the project's agent instructions:
+When the operator wants a standing standard, record the rubric and the
+verified floor in the project's agent instructions:
 
-- A worker rates the parts it touched before marking work ready.
-- A reviewer rates them at the exact head under review, lists the scores, and
-  sends back any change that lowers a part, or adds a new part below the
-  current level.
+- A worker rates the parts it touched and, if the change affects how parts fit
+  together, integration.
+- A reviewer checks the same scores at the revision under review. Send back
+  a change that lowers an existing score or adds a part below the floor.
 
 After that, sweeps are occasional checks at milestones or when scores drift.
 
 ## Report
 
-Give the operator the scorecard (each part and integration, per read), the
-current level, the bugs fixed, the parts stuck below the level with the
-reason, and where the standing gate now lives.
+Give the operator the scorecard (each part and integration, per read) and
+the verified floor. For an assessment, include the recommended target and
+next fixes. For an improvement run, include what changed, any parts short
+of the target, and any standing gate recorded.

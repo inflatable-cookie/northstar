@@ -17,8 +17,10 @@ publish. The question decides what counts as stale.
 
 ## 2. Inventory
 
-Read from the fetched default branch, not a local checkout that may be stale
-or mid-task.
+Use the fetched default branch for merged state, the local default branch
+for a local-only repository, or the revision the operator named. For shipped
+or deployed state, check the release or deployment itself. Report the
+revision and evidence you used.
 
 - **Surfaces:** what the project ships or exposes: packages, binaries, skills,
   scripts, task-runner selectors, CI, config, docs. One line each on what it

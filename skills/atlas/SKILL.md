@@ -22,15 +22,9 @@ evidence to test with them, never permission to extend the strategy yourself.
    the README, `docs/knowledge/vision.md` and `architecture.md` when the
    project uses `northstar-docs`, and whatever plan or backlog it keeps. Look
    for tensions and vocabulary, not a prescription.
-3. **Ask, then stop.** End the first turn with a discovery checkpoint and
-   nothing more:
-   - what you understand (target, horizon, the operator's stated direction);
-   - what the evidence says, including contradictions;
-   - what is unknown;
-   - a few high-leverage questions: why this exists, who it serves, the future
-     state that would make it worthwhile, the hard constraints, and what it is
-     explicitly not.
-   Don't offer a horizon model, options or a recommended direction yet.
+3. **Resolve gaps.** When a material question remains, summarise the direction
+   so far and ask what would settle it. Check purpose, audience, desired
+   outcome, constraints and non-goals. Pause where an answer is needed.
 4. **Guide if they don't know.** If the operator isn't sure, offer
    first-principles prompts. If the aim still isn't ready, say Atlas is
    premature and stop; never make a strategy up to fill the gap.

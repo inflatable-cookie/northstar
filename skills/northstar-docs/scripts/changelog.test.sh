@@ -21,15 +21,20 @@ mk CHANGELOG.md '# Changelog
 ## [0.9.0] - 2026-01-01
 
 ### Added
-- Initial entries.'
+- Initial entries.
+
+```md
+## [Unreleased]
+## [0.9.1] - 2026-02-03
+```'
 mk changelog.d/999-wrap-me.added.md 'Added CSV export.
-The header row is optional.'
+The header row is optional. Preserve `a  b`.'
 mk changelog.d/031-add-import.added.md 'Added CSV import.'
 mk changelog.d/120-tidy-readme.changed.md 'Reworded the README intro.'
 mk changelog.d/030-fix-rollback.fixed.md 'Restored the rollback path.'
 py fold --version 0.9.1 --date 2026-02-03 --repo "$repo" > /dev/null
 order CHANGELOG.md '## [Unreleased]' '## [0.9.1] - 2026-02-03' \
-  '### Added' '- Added CSV import.' '- Added CSV export. The header row is optional.' \
+  '### Added' '- Added CSV import.' '- Added CSV export. The header row is optional. Preserve `a  b`.' \
   '### Changed' '- Reworded the README intro.' \
   '### Fixed' '- Restored the rollback path.' '## [0.9.0] - 2026-01-01'
 check CHANGELOG.md '- Initial entries.' "earlier release untouched"
@@ -67,6 +72,31 @@ set +e; msg=$(py fold --version 0.9.1 --repo "$repo" 2>&1); rc=$?; set -e
 [ -f "$repo/changelog.d/030-fix-rollback.fixed.md" ] && echo "ok refusal leaves good fragments untouched" \
   || { echo "FAIL: refusal deleted good fragments"; exit 1; }
 check CHANGELOG.md '## [Unreleased]' "refusal leaves CHANGELOG.md untouched"
+refuses_fold() {
+  local expected=$1 status=$2 msg rc=0 before
+  shift 2
+  before=$(cat "$repo/CHANGELOG.md")
+  msg=$(py fold --repo "$repo" "$@" 2>&1) || rc=$?
+  [ "$rc" = "$status" ] && printf '%s\n' "$msg" | grep -qF -- "$expected" \
+    && [ "$(cat "$repo/CHANGELOG.md")" = "$before" ] \
+    && [ -f "$repo/changelog.d/030-fix-rollback.fixed.md" ] \
+    && echo "ok fold refuses $expected without writing" \
+    || { echo "FAIL: expected $expected (exit $status), got $rc: $msg"; exit 1; }
+}
+rm "$repo/changelog.d/bad.wibble.md"
+refuses_fold 'already exists' 1 --version 0.9.0
+refuses_fold 'without brackets' 2 --version '0.9.1]'
+refuses_fold 'valid YYYY-MM-DD' 2 --version 0.9.1 --date 2026-02-31
+refuses_fold '--date requires a value' 2 --version 0.9.1 --date
+mk changelog.d/045-list.added.md '- First fix.
+- Second fix.'
+refuses_fold 'without list markers' 1 --version 0.9.1
+rc=0
+msg=$(py check --repo "$repo" 2>&1) || rc=$?
+[ "$rc" = 1 ] && printf '%s\n' "$msg" | grep -qF '045-list.added.md: one entry per fragment without list markers' \
+  || { echo "FAIL: check accepted a list fragment: $msg"; exit 1; }
+[ -f "$repo/changelog.d/045-list.added.md" ] || { echo "FAIL: fold deleted the list fragment"; exit 1; }
+rm "$repo/changelog.d/045-list.added.md"
 mk changelog.d/split.added.md 'First entry.
 
 Second entry.'
@@ -95,6 +125,24 @@ mk CHANGELOG.md '# Changelog
 set +e; msg=$(py check --repo "$repo" 2>&1); rc=$?; set -e
 [ "$rc" = 1 ] && printf '%s\n' "$msg" | grep -q 'direct content' \
   && echo "ok check fails on direct [Unreleased] edits" || { echo "FAIL: $msg"; exit 1; }
+refuses_fold 'direct content' 1 --version 0.9.1
+mk CHANGELOG.md '# Changelog
+
+## [Unreleased]
+
+## [Unreleased]
+
+- Hand-written entry.'
+refuses_fold 'more than one' 1 --version 0.9.1
+set +e; msg=$(py check --repo "$repo" 2>&1); rc=$?; set -e
+[ "$rc" = 1 ] && printf '%s\n' "$msg" | grep -q 'more than one' \
+  || { echo "FAIL: duplicate Unreleased heading: $msg"; exit 1; }
+if [ "$(id -u)" != 0 ]; then
+  chmod a-w "$repo/changelog.d"
+  mk CHANGELOG.md '## [Unreleased]'
+  refuses_fold 'needs write and search permission' 1 --version 0.9.1
+  chmod u+w "$repo/changelog.d"
+fi
 mv "$repo/CHANGELOG.md" "$repo/KEEP"
 set +e; msg=$(py check --repo "$repo" 2>&1); rc=$?; set -e
 [ "$rc" = 1 ] && printf '%s\n' "$msg" | grep -q 'CHANGELOG.md: missing' \

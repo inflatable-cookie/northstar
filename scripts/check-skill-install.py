@@ -1,24 +1,37 @@
 #!/usr/bin/env python3
-"""Byte parity between each skill under skills/ and its installed copy.
+"""Compare skill file contents, executable bits and symlink targets.
 
 Usage: check-skill-install.py [<installed-skills-root>]   (default ~/.agents/skills)
 Exit: 0 every skill matches, 1 a skill differs or is missing, 2 usage error.
 """
 import hashlib, os, sys
+import stat
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SKIP = (".effigy/",)
+
+
+def raise_walk_error(error):
+    raise error
 
 
 def files(base):
     out = {}
-    for dirpath, _, names in os.walk(base):
-        for name in names:
+    for dirpath, dirs, names in os.walk(base, onerror=raise_walk_error):
+        if dirpath == base:
+            dirs[:] = [name for name in dirs if name != ".effigy"]
+            names = [name for name in names if name != ".effigy"]
+        links = [name for name in dirs if os.path.islink(os.path.join(dirpath, name))]
+        for name in names + links:
             path = os.path.join(dirpath, name)
             rel = os.path.relpath(path, base).replace(os.sep, "/")
-            if not rel.startswith(SKIP):
+            if os.path.islink(path):
+                out[rel] = ("symlink", os.readlink(path))
+            elif os.path.isfile(path):
                 with open(path, "rb") as f:
-                    out[rel] = hashlib.sha256(f.read()).hexdigest()
+                    executable = os.fstat(f.fileno()).st_mode & (stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+                    out[rel] = ("file", executable, hashlib.sha256(f.read()).hexdigest())
+            else:
+                raise OSError(f"{path}: expected a regular file or symlink")
     return out
 
 
@@ -38,7 +51,12 @@ def main(argv):
             print(f"{skill}: not installed at {target}")
             failed = True
             continue
-        a, b = files(source), files(target)
+        try:
+            a, b = files(source), files(target)
+        except OSError as error:
+            print(f"{skill}: {error}")
+            failed = True
+            continue
         problems = [f"missing: {p}" for p in sorted(a) if p not in b]
         problems += [f"differing: {p}" for p in sorted(a) if p in b and a[p] != b[p]]
         problems += [f"unexpected: {p}" for p in sorted(b) if p not in a]

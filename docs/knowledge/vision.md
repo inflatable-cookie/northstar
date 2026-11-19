@@ -30,19 +30,7 @@ is removed.
 
 ## The stack
 
-| Skill | State |
-| --- | --- |
-| `hill-climb` | Shipped. Rate every part of a scope out of 10, plus integration; fix from the lowest level (the baseline, usually 6 or 7) up at least one level per run, more when an agent can reach it; then keep the rubric as a standing gate on every change. |
-| `take-stock` | Shipped. Read-only audit of what a repository holds, what's stale, and what depends on it, ending in a report the operator decides from. |
-| `repo-sweep` | Shipped. One change across many repositories, with rules that keep it on track. |
-| `prune-tests` | Shipped. Keep only tests anchored to intended behaviour, with guardrails: the source of intended behaviour, which duplicate survives, a commit before deleting and a coverage comparison after. |
-| `atlas` | Shipped. Long-horizon direction with the operator. It writes to `northstar-docs` files when the repository has opted in, otherwise to the project's planning surface, or asks the operator where to store the result. |
-| `northstar-docs` | Shipped. Opt-in. Static foundations: the "why" and depth behind a README, which is the pitch and getting-started guide. Rarely changed, easy to update, nothing that goes stale. |
-
-Order: `repo-sweep`, `hill-climb`, `take-stock`, `prune-tests`,
-`northstar-docs` and `atlas` (all done; the first sweep removed retired
-concepts across the consuming repositories). The harness snippet carries
-writing style and work rhythm. 0.1.0 shipped the whole stack (2026-11-19).
+Pick the skills that fit your workflow from the [skill list](../../README.md#the-skills).
 
 ### Harness snippet
 
@@ -67,8 +55,6 @@ Operator rulings, 2026-11-18:
 - Third-party agent orchestration tools stay out.
 - Effigy may fit as a general task runner, but no skill requires it. Skill
   scripts run directly on Python 3.8+ with no dependencies.
-- A release is a Git tag on `main`, not Effigy's release pipeline: Northstar
-  has no CI or packages to publish (2026-11-19).
 - The writing style is clear and conversational, not blunt; the snippet's
   wording wins over older short versions (2026-11-19).
 - The writing style lives only in the harness snippet; no second copy in

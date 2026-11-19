@@ -12,13 +12,12 @@ decided.
 ## 1. Scope
 
 - Say the change in one sentence, plus what "done" means for each repository.
-- Find every candidate from the fetched default branch (`git grep` against
-  `origin/<default>`), not from local checkouts, which may be stale or
-  mid-task. Search file names as well as content.
-- Classify each hit as **live** (code, config, current docs, agent
-  instructions) or **history** (changelogs, fixtures, research notes,
-  released or frozen artefacts). Change live hits only; list history hits as
-  left alone, with the reason.
+- Name the repository inventory you searched and its limits. Record any
+  exclusions or repositories you couldn't inspect.
+- Find candidates on the fetched default branch, or the local default branch
+  for a repository without a remote. Search file names and content.
+- Change live references, including fixtures that exercise the current
+  contract. Leave history and frozen artefacts intact and report them.
 - Find who calls the thing being changed: task runner selectors, CI, vendored
   copies, other repositories' instructions. A caller you miss breaks after
   merge.
@@ -30,19 +29,20 @@ Nothing may break between merges.
 
 - **Removing** something: consumers drop their use first, the source removes
   it last.
-- **Adding or changing** something: the source ships first, then consumers
+- **Adding or changing compatibly**: the source ships first, then consumers
   adopt it.
-- If one side can't land without the other, say so before starting.
+- **Changing incompatibly**: plan a transition allowed by the source's
+  compatibility rules, or a cutover that cannot expose a mixed state to
+  callers. If neither is available, report the blocker before making changes.
 
 ## 3. Apply
 
-- Work in a fresh worktree per repository, branched from the fetched default
-  branch, under a scratch directory. Never edit the operator's checkouts.
-- Run multi-repository loops in `bash`, not `zsh`: `zsh` doesn't split an
-  unquoted list into words, so a loop runs once over the whole string.
-- Do the mechanical part with one script across every worktree, then the
-  hand edits each repository needs. Read the context before each hand edit.
-- Re-run the discovery search in every worktree until no live hit is left.
+- Work in a fresh worktree per repository, branched from the revision you
+  searched, under a scratch directory.
+- Where a script helps, pass repository paths as quoted arguments or an
+  array. Read the local context before hand edits.
+- Re-run discovery and check each worktree against its completion criteria.
+  For a retirement or rename, check that no obsolete live references remain.
 - Keep each repository's conventions: its changelog fragment naming, commit
   style and validation selectors.
 
@@ -50,21 +50,20 @@ Nothing may break between merges.
 
 - Run each repository's own targeted check for what changed (docs, lint,
   tests for touched code). Record which repositories have no such check.
-- Don't run full suites across every repository; one round of targeted checks is
-  enough for a mechanical change.
+- Run broader checks where the project's requirements or impact call for them.
 
 ## 5. Land
 
-- One PR per repository, with the same title. The body says what changed,
-  why, links the source PR, and lists the validation that ran.
-- Follow the operator's merge policy. Without one, merge once checks pass;
-  wait for pending CI instead of merging over it.
+- When authorised to open PRs, use one per repository with the same title.
+  Explain the change, link the source PR and list the validation.
+- Merge when authorised by the operator or their standing policy, after
+  required checks and reviews pass.
 - Hand a PR to the repository's owner only when the change touches that
   project's product direction.
 - Remove the worktrees and delete merged local branches afterwards.
 
 ## Report
 
-Give the operator a table of repository, PR and state; the history hits left
-alone; repositories without a check; and anything that still needs a
-decision.
+Give the operator a table of repository, PR and state. Include search
+coverage and exclusions, history hits left alone, missing checks and open
+decisions.
