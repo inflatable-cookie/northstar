@@ -46,7 +46,7 @@ def diff_kind(source_entry, target_entry):
 
 
 def main(argv):
-    if len(argv) > 1:
+    if len(argv) > 1 or (argv and argv[0].startswith("-")):
         print(__doc__.strip(), file=sys.stderr)
         return 2
     target_root = os.path.expanduser(argv[0] if argv else "~/.agents/skills")
@@ -69,7 +69,7 @@ def main(argv):
         try:
             a, b = files(source), files(target)
         except OSError as error:
-            print(f"{skill}: {error}")
+            print(f"{skill}: {error}", file=sys.stderr)
             failed = True
             continue
         problems = [f"missing: {p}" for p in sorted(a) if p not in b]

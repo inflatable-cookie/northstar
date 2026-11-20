@@ -18,6 +18,8 @@ check
 chmod a-x "$repo/installed/sample/run.sh"
 printf '# Changed\n' > "$repo/installed/sample/SKILL.md"
 ln -sf run.sh "$repo/installed/sample/alias.md"
+printf 'regular\n' > "$repo/skills/sample/type-check.txt"
+ln -s SKILL.md "$repo/installed/sample/type-check.txt"
 ln -s "$repo/skills/sample" "$repo/installed/sample/extra-dir"
 ln -s absent "$repo/installed/sample/dangling"
 mkdir -p "$repo/skills/uninstalled"
@@ -30,6 +32,7 @@ out=$(check) || rc=$?
   && printf '%s\n' "$out" | grep -qF 'differing (content): SKILL.md' \
   && printf '%s\n' "$out" | grep -qF 'differing (mode): run.sh' \
   && printf '%s\n' "$out" | grep -qF 'differing (symlink): alias.md' \
+  && printf '%s\n' "$out" | grep -qF 'differing (type): type-check.txt' \
   && printf '%s\n' "$out" | grep -qF 'unexpected: dangling' \
   && printf '%s\n' "$out" | grep -qF 'unexpected: extra-dir' \
   && printf '%s\n' "$out" | grep -qF 'uninstalled: not installed' \
@@ -38,4 +41,7 @@ out=$(check) || rc=$?
 rc=0
 python3 "$repo/scripts/check-skill-install.py" a b > /dev/null 2>&1 || rc=$?
 [ "$rc" = 2 ] || { echo "FAIL usage exit $rc"; exit 1; }
+rc=0
+python3 "$repo/scripts/check-skill-install.py" --help > /dev/null 2>&1 || rc=$?
+[ "$rc" = 2 ] || { echo "FAIL flag usage exit $rc"; exit 1; }
 echo "check-skill-install self-test: OK"

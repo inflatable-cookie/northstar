@@ -11,9 +11,9 @@ the verified quality floor by one level without wasting polish on features,
 tests, or stacked band-aids that should be cut or simplified first.
 
 `level-up` orchestrates the standalone skills rather than repeating their
-rules. `hill-climb` is required for the baseline, target, and re-read loop;
-if `red-pen`, `prune-tests`, or `zoom-out` is not installed, name the missing
-skill and ask the operator whether to skip that phase or stop.
+rules. `hill-climb` is required for the baseline, target, and re-read loop —
+stop if it is not installed. If `red-pen`, `prune-tests`, or `zoom-out` is
+missing, name it and ask the operator whether to skip that phase or stop.
 
 ## 1. Scope and discover skills
 

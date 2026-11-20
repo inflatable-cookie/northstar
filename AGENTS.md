@@ -20,8 +20,9 @@ project's own task system.
   fragments.
 - `effigy check:skill-install` — installed skills match source.
 
-Effigy wraps the scripts here; each also runs directly with `python3`. Skill
-scripts must stay dependency-free Python 3.8+ so adopters need nothing else.
+Effigy wraps the Python scripts and bash self-tests here; each script also
+runs directly with `python3`. Skill scripts must stay dependency-free Python
+3.8+ so adopters need nothing else.
 
 ## Product rules
 

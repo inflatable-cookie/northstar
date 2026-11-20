@@ -78,5 +78,5 @@ flaky.
 ## Report
 
 Give the operator counts per category (kept, deleted, rewritten), the
-coverage before and after with the reason for each loss, production code
-removed, and the tests kept as questions.
+coverage before and after with the reason for each loss, support or
+production code removed, and the tests kept as questions.
