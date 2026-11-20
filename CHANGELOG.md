@@ -5,6 +5,17 @@ fragments in `changelog.d/`, folded into this file when a release is cut.
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-11-20
+
+### Added
+- Add `milestone-qa` to run and qualify milestone QA against a pinned `main` SHA from an isolated checkout using repository-declared selectors.
+
+### Changed
+- Make `hill-climb` scoring consistent across rounds by defining every top-end anchor (7–10), binding scores to verified finding severity, and scoping re-reads to modified or below-target parts.
+
+### Fixed
+- Harden `OSError` and flag handling in `check-links.py`, `changelog.py`, and `check-skill-install.py`, strip inline code spans before HTML anchor extraction, and tighten wording in `architecture.md`, `atlas`, and `prune-tests`.
+
 ## [0.4.0] - 2026-11-20
 
 ### Added
