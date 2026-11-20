@@ -5,8 +5,10 @@ reasoning and the rules behind the stack.
 
 ## By topic
 
-- Knowledge owners: [knowledge index](knowledge/README.md)
-- Vision and what belongs in the stack: [knowledge/vision.md](knowledge/vision.md)
-- Repository and skill shape: [knowledge/architecture.md](knowledge/architecture.md)
-- Contracts: [knowledge/contracts/](knowledge/contracts/README.md)
-- House writing style: [../harness/snippet.md](../harness/snippet.md)
+- [Knowledge index](knowledge/README.md) — topic-to-owner map
+- [Vision](knowledge/vision.md) — why Northstar exists and what belongs
+- [Architecture](knowledge/architecture.md) — repository and skill shape
+- [Contracts](knowledge/contracts/README.md) — release process and
+  compatibility rules
+- [Harness snippet](../harness/snippet.md) — house writing style and work
+  rhythm

@@ -2,4 +2,4 @@
 
 | Contract | Owns |
 | --- | --- |
-| [release.md](release.md) | How Northstar ships: the installed skill, `VERSION`, changelog fragments and `CHANGELOG.md` |
+| [release.md](release.md) | How Northstar ships: installed skills, `VERSION`, changelog fragments and `CHANGELOG.md` |
