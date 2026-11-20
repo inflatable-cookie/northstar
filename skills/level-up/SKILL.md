@@ -28,6 +28,10 @@ missing, name it and ask the operator whether to skip that phase or stop.
   unrelated skills.
 - Show the proposed third-party skills (or note that none matched) and confirm
   the list with the operator before running them.
+- Check whether the scope already has strict static quality gates for its
+  languages (compiler strictness, linter, formatter) matching any confirmed
+  language skills or repo conventions. If gates are missing or loose, note
+  them and confirm with the operator before adding dependencies or config.
 
 ## 2. Baseline (`hill-climb`)
 
@@ -67,10 +71,12 @@ missing, name it and ask the operator whether to skip that phase or stop.
 
 ## 7. Language and domain quality pass
 
+- If the operator approved adding or tightening static quality gates in step 1,
+  wire them up first so the pass runs against real mechanical checks.
 - Run each confirmed third-party quality skill from step 1 against the
   matching parts of the scope.
 - Apply fixes in focused batches and run targeted checks after each batch.
-  Skip this step if no third-party skills were selected.
+  Skip this step if no static gate updates or third-party skills were selected.
 
 ## 8. Close the gap and re-rate (`hill-climb`)
 
