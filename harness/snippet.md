@@ -1,10 +1,10 @@
 # Harness snippet
 
 Guidance an agent needs in context from the first message, not when a skill
-triggers. Opt in from your harness's global instructions file: Claude Code can
-import this file with a line such as `@~/path/to/northstar/harness/snippet.md`
-in `~/.claude/CLAUDE.md`; for a harness without imports (such as Codex's
-`~/.codex/AGENTS.md`), copy the sections below the line.
+triggers. Copy the sections below the line into your harness's global
+instructions file (such as `~/.claude/CLAUDE.md` or `~/.codex/AGENTS.md`).
+If you keep a local checkout of Northstar and use Claude Code, you can import
+it instead with `@~/path/to/northstar/harness/snippet.md`.
 
 ---
 

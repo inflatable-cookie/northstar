@@ -16,8 +16,8 @@ architecture clean even before anyone adopts it.
 
 ## Who it serves
 
-The operator first. After a release, solo developers on any harness who find
-the repository and want to try it.
+The operator first, then solo developers on any harness who find the
+repository and want to adopt pieces of it.
 
 ## What belongs
 
@@ -36,9 +36,8 @@ Pick the skills that fit your workflow from the [skill list](../../README.md#the
 
 Writing style and work rhythm are not skills: agents need them in context
 from the start, not when a skill triggers. The stack ships them as an opt-in
-snippet for a harness's global instructions file (`CLAUDE.md`, `AGENTS.md`):
-[`harness/snippet.md`](../../harness/snippet.md): writing style and work
-rhythm.
+snippet in [`harness/snippet.md`](../../harness/snippet.md) for a harness's
+global instructions file (`CLAUDE.md`, `AGENTS.md`).
 
 ## Rulings
 

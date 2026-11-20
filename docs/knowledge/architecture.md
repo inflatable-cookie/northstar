@@ -25,5 +25,6 @@ Skill scripts are dependency-free Python 3.8+. A skill may carry an
 
 ## Installed copies
 
-Installed copies live under `~/.agents/skills/<skill>`, and harness skill
-folders link to them. See [contracts/release.md](contracts/release.md).
+Global installs via `npx skills add -g` place copies under
+`~/.agents/skills/<skill>` and link each harness's skill folder to them. See
+[contracts/release.md](contracts/release.md).

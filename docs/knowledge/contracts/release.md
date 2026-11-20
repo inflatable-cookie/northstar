@@ -27,10 +27,9 @@ user-visible contracts are preserved by default.
    `git tag -a v<x.y.z> <verified-commit> -m "Northstar <x.y.z>"`, then
    `git push origin v<x.y.z>`. Create a GitHub release from the tag with the
    version's changelog section as its notes.
-4. From a checkout of the new tag, sync the skills you use with the
-   [guarded install procedure](../../../README.md#install). Remove Northstar
-   copies and harness links for skills retired by the release. Preserve
-   unrelated installs.
+4. From a checkout of the new tag, update the skills you use with
+   `npx skills add . -g` (see [README.md](../../../README.md#install)).
+   Remove any skills retired by the release with `npx skills remove <skill>`.
 
 ## Verify
 
@@ -44,7 +43,7 @@ user-visible contracts are preserved by default.
 
 ## Roll back
 
-From a checkout of the previous tag, use the same guarded install procedure.
-Remove copies and harness links for Northstar skills introduced after that
-tag, and restore any retired skills you still use. Never move a published
-tag. A fix ships as the next patch.
+From a checkout of the previous tag, run `npx skills add . -g` for the skills
+you use. Remove skills introduced after that tag with
+`npx skills remove <skill>`, and restore any retired skills you still use.
+Never move a published tag. A fix ships as the next patch.
