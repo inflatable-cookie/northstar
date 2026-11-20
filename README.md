@@ -22,7 +22,7 @@ need only Python 3.8+ and Git.
 - [`repo-sweep`](skills/repo-sweep/SKILL.md) — make one mechanical change
   across many repositories, one PR each.
 - [`milestone-qa`](skills/milestone-qa/SKILL.md) — run and qualify
-  milestone QA against a pinned `main` SHA from an isolated checkout.
+  milestone QA against a pinned default-branch SHA from an isolated checkout.
 - [`prune-tests`](skills/prune-tests/SKILL.md) — keep only tests anchored to
   intended behaviour.
 - [`atlas`](skills/atlas/SKILL.md) — step back and shape a project's

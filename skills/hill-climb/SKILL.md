@@ -18,8 +18,11 @@ holds the lowest parts back, re-rate, and record the achieved standard.
   correctness and safety, clarity, structure, error handling, tests, idiom
   and simplicity. Adapt the dimensions for docs or design, and keep
   correctness first.
-- Anchors: 10 exemplary; 8 solid, nits only; 7 good, with clear improvements
-  due; 5–6 real debt; below 5 risky.
+- Anchors: **10** exemplary, nothing worth changing; **9** strong, clean and
+  well-tested with at most trivial polish nits not worth a dedicated pass;
+  **8** solid, no bugs or structural debt but minor real gaps or edge cases
+  worth a cleanup batch; **7** good, with clear bugs, error-handling or test
+  gaps, or structural friction to fix; **5–6** real debt; **below 5** risky.
 - Rate integration as one extra score out of 10: how the parts fit together,
   with seams, duplication and contracts between parts.
 - Name the spec documents (architecture, safety model, contracts) readers
@@ -34,13 +37,16 @@ holds the lowest parts back, re-rate, and record the achieved standard.
 - Never show a reader earlier scores or findings; a re-read must not be
   anchored.
 - Each reader returns scores by dimension and overall, plus concrete
-  `file:line` findings, bugs first. Once a target is set, limit other
-  findings to parts below it.
+  `file:line` findings, bugs first. Every score below 9 must cite the
+  actionable findings holding it at that anchor. Once a target is set, limit
+  other findings to parts below it.
 
 ## 3. Verify and set the target
 
 Check surprising claims yourself before they become work. Drop findings
-that don't hold up and correct the scores they affected.
+that don't hold up, and align each score with the severity of its verified
+findings using the rubric anchors so reader calibration stays consistent
+across rounds.
 
 The baseline is the lowest verified overall score among the parts and
 integration. Use the operator's target when given. Otherwise aim one level
@@ -62,9 +68,12 @@ If the operator asked for an assessment, report here.
 
 ## 5. Re-read
 
-After each round, repeat the independent read (step 2). Stop when every part
-and integration meet the target, or a round moves nothing. Explain any
-remaining shortfall, including integration.
+After each round, repeat the independent read (step 2) for every part that
+was below target or modified in the round, plus integration whenever changes
+touched seams or shared contracts. Untouched parts that already met the
+target keep their verified score. Stop when every part and integration meet
+the target, or a round moves nothing. Explain any remaining shortfall,
+including integration.
 
 ## 6. Make it a standing gate
 
