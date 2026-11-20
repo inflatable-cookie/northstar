@@ -5,6 +5,14 @@ fragments in `changelog.d/`, folded into this file when a release is cut.
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-11-20
+
+### Added
+- Add `zoom-out` to identify and replace stacked symptom fixes with lower-level solutions (and catch narrow fixes during triage), and integrate it into `level-up`.
+
+### Fixed
+- Fix edge cases in `check-links.py`, `changelog.py`, and `check-skill-install.py`, expand their self-tests, and tighten skill and guardrail wording across the repository.
+
 ## [0.3.0] - 2026-11-20
 
 ### Added
