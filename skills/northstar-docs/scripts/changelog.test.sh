@@ -2,7 +2,8 @@
 # Self-test for changelog.py against a scratch repository.
 set -euo pipefail
 here=$(cd "$(dirname "$0")" && pwd)
-repo=$(mktemp -d); trap 'rm -rf "$repo"' EXIT
+repo=$(mktemp -d); repo2=$(mktemp -d)
+trap 'rm -rf "$repo" "$repo2"' EXIT
 py() { python3 "$here/changelog.py" "$@"; }
 mk() { mkdir -p "$(dirname "$repo/$1")"; printf '%s\n' "$2" > "$repo/$1"; }
 check() { grep -qF -- "$2" "$repo/$1" || { echo "FAIL: $1 lacks: $2"; cat "$repo/$1"; exit 1; }; echo "ok $3"; }
@@ -156,11 +157,33 @@ set +e; msg=$(py check --repo "$repo" 2>&1); rc=$?; set -e
   && echo "ok check fails when the [Unreleased] heading is gone" || { echo "FAIL: $msg"; exit 1; }
 
 # ------------------------------------------------------- not yet adopted
-repo2=$(mktemp -d)
 py check --repo "$repo2" | grep -q 'not adopted' && echo "ok check passes before adoption" \
   || { echo "FAIL: unadopted check"; py check --repo "$repo2"; exit 1; }
 printf '# Changelog\n\n## [Unreleased]\n\n- Free-form entries are fine before adoption.\n' > "$repo2/CHANGELOG.md"
 py check --repo "$repo2" | grep -q 'not adopted' && echo "ok check ignores [Unreleased] content before adoption" \
   || { echo "FAIL: unadopted check with content"; exit 1; }
-rm -rf "$repo2"
+
+# ------------------------------------------------------- extra edge cases
+set +e; msg=$(py check --repo "$repo" --dry-run 2>&1); rc=$?; set -e
+[ "$rc" = 2 ] && printf '%s\n' "$msg" | grep -qF 'unexpected argument --dry-run' \
+  && echo "ok check rejects --dry-run" || { echo "FAIL check --dry-run ($rc): $msg"; exit 1; }
+set +e; msg=$(py check --repo "$repo" --version 2>&1); rc=$?; set -e
+[ "$rc" = 2 ] && printf '%s\n' "$msg" | grep -qF 'unexpected argument --version' \
+  && echo "ok check rejects --version as unexpected" || { echo "FAIL check --version ($rc): $msg"; exit 1; }
+
+mk CHANGELOG.md '# Changelog
+
+## [Unreleased]'
+rm -f "$repo"/changelog.d/* "$repo"/changelog.d/.*.md 2>/dev/null || true
+mk changelog.d/stray-file.added 'Missing .md extension.'
+set +e; msg=$(py check --repo "$repo" 2>&1); rc=$?; set -e
+[ "$rc" = 1 ] && printf '%s\n' "$msg" | grep -qF 'stray-file.added' && printf '%s\n' "$msg" | grep -qF '.md extension' \
+  && echo "ok check rejects stray non-.md file" || { echo "FAIL stray file ($rc): $msg"; exit 1; }
+rm "$repo/changelog.d/stray-file.added"
+
+mk changelog.d/001-first.added.md 'First release entry.'
+py fold --version 0.1.0 --date 2026-01-01 --repo "$repo" > /dev/null
+[ "$(tail -n 1 "$repo/CHANGELOG.md")" = "- First release entry." ] \
+  && echo "ok folding into empty changelog leaves no trailing blank line" \
+  || { echo "FAIL trailing blank line"; cat -A "$repo/CHANGELOG.md"; exit 1; }
 echo "changelog self-test: OK"

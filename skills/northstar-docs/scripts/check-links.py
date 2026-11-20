@@ -25,7 +25,9 @@ def parse_args(argv):
     i = 0
     while i < len(argv):
         a = argv[i]
-        if a in ("--repo", "--frozen") and i + 1 < len(argv):
+        if a in ("--repo", "--frozen"):
+            if i + 1 == len(argv) or argv[i + 1].startswith("--"):
+                die(f"{a} requires a value")
             i += 1
             if a == "--repo": opts["repo"] = argv[i]
             else: opts["frozen"].append(argv[i])
@@ -77,7 +79,10 @@ def without_code_blocks(text):
             continue
         indented = False
         if not has_indent:
-            in_list = bool(LIST_ITEM.match(line))
+            if LIST_ITEM.match(line):
+                in_list = True
+            elif not line[0].isspace():
+                in_list = False
         if match and (match[1][0] == "~" or "`" not in match[2]):
             fence = match[1]
             continue
@@ -130,8 +135,7 @@ def anchors(path):
         for atx, setext in HEADING.findall(text):
             heading = LINK.sub(r"\g<label>", atx or setext)
             heading = REFLINK.sub(reference_label, heading)
-            # GitHub keeps underscores in anchors, so only markup is stripped.
-            base = slug(re.sub(r"`|\*|\[", "", heading))
+            base = slug(heading)
             n = seen.get(base, 0)
             out.add(base if n == 0 else f"{base}-{n}")
             seen[base] = n + 1
@@ -145,7 +149,7 @@ def main():
     root = opts["repo"]
     try:
         frozen = [re.compile(p) for p in opts["frozen"]]
-        root = git(root, "rev-parse", "--show-toplevel")[:-1]
+        root = git(root, "rev-parse", "--show-toplevel").rstrip("\r\n")
         paths = git(root, "ls-files", "-z", "--cached", "--others",
                     "--exclude-standard", "*.md")
     except (OSError, re.error) as error:
@@ -158,7 +162,10 @@ def main():
         if text is None: continue
         text = without_code_blocks(text)
         paragraphs = re.split(r"\n[ \t]*\n", text)
-        text = "\n\n".join(CODE_SPAN.sub("", paragraph) for paragraph in paragraphs)
+        text = "\n\n".join(
+            CODE_SPAN.sub(lambda m: re.sub(r"[^\n]", " ", m[0]), paragraph)
+            for paragraph in paragraphs
+        )
         for m in list(LINK.finditer(text)) + list(REFDEF.finditer(text)):
             target = m["target"]
             if target.startswith("<"): target = target[1:-1]

@@ -62,5 +62,6 @@ Keep it short enough to decide from:
 - the questions only the operator can answer.
 
 Then stop. Follow-up work belongs to the skill that fits it: `repo-sweep`
-for a change across repositories, `hill-climb` for quality, `atlas` for
-direction.
+for a change across repositories, `red-pen` to cut overbuilt features,
+`zoom-out` to replace stacked workarounds, `hill-climb` or `level-up` for
+quality, and `atlas` for direction.

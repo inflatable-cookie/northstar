@@ -61,10 +61,13 @@ mk docs/paragraphs.md 'A literal backtick `
 [real link](paragraph-target.md)
 
 Another literal backtick `'
-mk docs/list.md '-   Item
+mk docs/list.md '- Item
+  wrapped continuation
 
     [broken continuation](list-target.md)'
 mk README.md '[ref]: ABSENT
+
+[`code-label`]: code-label-missing.md
 
 [multiline]:
     other-missing.md'
@@ -75,6 +78,7 @@ set +e; out=$(run); rc=$?; set -e
   && echo "$out" | grep -q "missing anchor targets.md#example-only" \
   && echo "$out" | grep -q "docs/café.md: missing absent.md" \
   && echo "$out" | grep -q "README.md: missing ABSENT" \
+  && echo "$out" | grep -q "README.md: missing code-label-missing.md" \
   && echo "$out" | grep -q "README.md: missing other-missing.md" \
   && echo "$out" | grep -q "docs/list.md: missing list-target.md" \
   && echo "$out" | grep -q "docs/paragraphs.md: missing paragraph-target.md" \
@@ -88,4 +92,7 @@ out=$(cd "$repo/docs" && python3 "$here/check-links.py") || rc=$?
 
 set +e; python3 "$here/check-links.py" --bogus > /dev/null 2>&1; rc=$?; set -e
 [ "$rc" = 2 ] && echo "ok usage error exits 2" || { echo "FAIL usage exit $rc"; exit 1; }
+set +e; msg=$(python3 "$here/check-links.py" --repo 2>&1); rc=$?; set -e
+[ "$rc" = 2 ] && printf '%s\n' "$msg" | grep -qF -- '--repo requires a value' \
+  && echo "ok missing option value exits 2" || { echo "FAIL missing value ($rc): $msg"; exit 1; }
 echo "check-links self-test: OK"

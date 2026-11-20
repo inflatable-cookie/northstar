@@ -28,11 +28,21 @@ def files(base):
                 out[rel] = ("symlink", os.readlink(path))
             elif os.path.isfile(path):
                 with open(path, "rb") as f:
-                    executable = os.fstat(f.fileno()).st_mode & (stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+                    executable = bool(os.fstat(f.fileno()).st_mode & stat.S_IXUSR)
                     out[rel] = ("file", executable, hashlib.sha256(f.read()).hexdigest())
             else:
                 raise OSError(f"{path}: expected a regular file or symlink")
     return out
+
+
+def diff_kind(source_entry, target_entry):
+    if source_entry[0] != target_entry[0]:
+        return "type"
+    if source_entry[0] == "symlink":
+        return "symlink"
+    if source_entry[2] != target_entry[2]:
+        return "content"
+    return "mode"
 
 
 def main(argv):
@@ -41,8 +51,13 @@ def main(argv):
         return 2
     target_root = os.path.expanduser(argv[0] if argv else "~/.agents/skills")
     source_root = os.path.join(ROOT, "skills")
+    try:
+        skills = sorted(os.listdir(source_root))
+    except OSError as error:
+        print(f"check-skill-install: {error}", file=sys.stderr)
+        return 1
     failed = False
-    for skill in sorted(os.listdir(source_root)):
+    for skill in skills:
         source = os.path.join(source_root, skill)
         if not os.path.isdir(source):
             continue
@@ -58,7 +73,7 @@ def main(argv):
             failed = True
             continue
         problems = [f"missing: {p}" for p in sorted(a) if p not in b]
-        problems += [f"differing: {p}" for p in sorted(a) if p in b and a[p] != b[p]]
+        problems += [f"differing ({diff_kind(a[p], b[p])}): {p}" for p in sorted(a) if p in b and a[p] != b[p]]
         problems += [f"unexpected: {p}" for p in sorted(b) if p not in a]
         if problems:
             failed = True

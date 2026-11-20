@@ -42,21 +42,23 @@ def parse_args(argv):
     if not argv or argv[0] not in ("check", "fold"):
         die("usage: changelog.py check [--repo <path>] | changelog.py fold "
             "--version <version> [--date YYYY-MM-DD] [--repo <path>] [--dry-run]")
-    o = {"mode": argv[0], "repo": os.getcwd(), "dry": False, "version": None, "date": None}
+    mode = argv[0]
+    o = {"mode": mode, "repo": os.getcwd(), "dry": False, "version": None, "date": None}
+    value_flags = ("--repo",) if mode == "check" else ("--repo", "--version", "--date")
     rest, i = argv[1:], 0
     while i < len(rest):
         a = rest[i]
-        if a in ("--repo", "--version", "--date") and (
-            i + 1 == len(rest) or rest[i + 1].startswith("--")
-        ):
-            die(f"{a} requires a value")
-        if a == "--repo": i += 1; o["repo"] = rest[i]
-        elif a == "--dry-run": o["dry"] = True
-        elif a == "--version" and o["mode"] == "fold": i += 1; o["version"] = rest[i]
-        elif a == "--date" and o["mode"] == "fold": i += 1; o["date"] = rest[i]
-        else: die(f"unexpected argument {a}")
+        if a in value_flags:
+            if i + 1 == len(rest) or rest[i + 1].startswith("--"):
+                die(f"{a} requires a value")
+            i += 1
+            o[a[2:]] = rest[i]
+        elif a == "--dry-run" and mode == "fold":
+            o["dry"] = True
+        else:
+            die(f"unexpected argument {a}")
         i += 1
-    if o["mode"] == "fold":
+    if mode == "fold":
         if not o["version"]: die("fold needs --version")
         if re.search(r"[\s\[\]\\]", o["version"]):
             die("--version takes one word without brackets or backslashes")
@@ -70,21 +72,22 @@ def parse_args(argv):
     o["repo"] = os.path.abspath(o["repo"])
     return o
 
-OPTS = parse_args(sys.argv[1:])
-CHANGELOG = os.path.join(OPTS["repo"], "CHANGELOG.md")
-FRAGDIR = os.path.join(OPTS["repo"], DIR)
 
 def refuse(messages):
     for m in messages: print(m)
     print("changelog: nothing written")
     sys.exit(1)
 
-def fragment_files():
-    if not os.path.isdir(FRAGDIR): return []
-    return sorted(f for f in os.listdir(FRAGDIR) if f.endswith(".md"))
 
-def parse_fragment(fname):
+def fragment_files(fragdir):
+    if not os.path.isdir(fragdir): return []
+    return sorted(f for f in os.listdir(fragdir) if f != ".gitkeep")
+
+
+def parse_fragment(fragdir, fname):
     """Return (type, entry), or (None, reason) when the fragment is malformed."""
+    if not fname.endswith(".md"):
+        return None, "expected .md extension (<name>.<type>.md)"
     stem = fname[:-3]
     name, _, ftype = stem.rpartition(".")
     if not name: return None, "missing <name> before the type (expected <name>.<type>.md)"
@@ -93,7 +96,7 @@ def parse_fragment(fname):
     if not NAME.fullmatch(name):
         return None, f"invalid name '{name}'; use a task or PR reference plus a short slug"
     try:
-        with open(os.path.join(FRAGDIR, fname), encoding="utf-8") as fh:
+        with open(os.path.join(fragdir, fname), encoding="utf-8") as fh:
             body = fh.read().strip()
     except (OSError, UnicodeDecodeError) as e:
         return None, f"unreadable ({e})"
@@ -104,19 +107,21 @@ def parse_fragment(fname):
         return None, "one entry per fragment without list markers; split lists into separate files"
     return ftype, " ".join(line.strip() for line in body.splitlines())
 
-def read_fragments():
+
+def read_fragments(fragdir):
     parsed, problems = [], []
-    for fname in fragment_files():
-        ftype, entry = parse_fragment(fname)
+    for fname in fragment_files(fragdir):
+        ftype, entry = parse_fragment(fragdir, fname)
         if ftype is None:
             problems.append(f"{DIR}/{fname}: {entry}")
         else:
             parsed.append((ftype, fname, entry))
     return parsed, problems
 
-def changelog_lines():
+
+def changelog_lines(changelog):
     try:
-        with open(CHANGELOG, encoding="utf-8") as fh:
+        with open(changelog, encoding="utf-8") as fh:
             return fh.read().splitlines()
     except (OSError, UnicodeDecodeError):
         return None
@@ -157,8 +162,8 @@ def validate_changelog(lines, sections):
     return heading, None
 
 
-def write_changelog(lines):
-    path = os.path.realpath(CHANGELOG)
+def write_changelog(changelog, lines):
+    path = os.path.realpath(changelog)
     mode = stat.S_IMODE(os.stat(path).st_mode)
     output = tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", delete=False,
                                          dir=os.path.dirname(path))
@@ -172,12 +177,12 @@ def write_changelog(lines):
             os.unlink(output.name)
 
 # ---------------------------------------------------------------------- check
-def check():
-    if not os.path.isdir(FRAGDIR):
+def check(changelog, fragdir):
+    if not os.path.isdir(fragdir):
         print("changelog: OK (no changelog.d/; fragments not adopted)")
         return
-    parsed, problems = read_fragments()
-    lines = changelog_lines()
+    parsed, problems = read_fragments(fragdir)
+    lines = changelog_lines(changelog)
     _, problem = validate_changelog(lines, section_headings(lines))
     if problem:
         problems.append(problem)
@@ -188,25 +193,25 @@ def check():
     print(f"changelog: OK ({len(parsed)} fragment(s) well formed, [Unreleased] clean)")
 
 # ----------------------------------------------------------------------- fold
-def fold():
-    parsed, problems = read_fragments()
+def fold(opts, changelog, fragdir):
+    parsed, problems = read_fragments(fragdir)
     if problems:
         refuse(problems + [f"changelog fold: {len(problems)} malformed fragment(s)"])
     if not parsed:
         refuse([f"{DIR}/: no fragments to fold"])
-    lines = changelog_lines()
+    lines = changelog_lines(changelog)
     sections = list(section_headings(lines))
     h, problem = validate_changelog(lines, sections)
     if problem:
         refuse([problem])
-    version = re.escape(OPTS["version"])
+    version = re.escape(opts["version"])
     release_heading = re.compile(SECTION + rf"\[{version}\](?:\s|$)")
     if any(release_heading.match(line) for _, line in sections):
-        refuse([f"CHANGELOG.md: version {OPTS['version']} already exists"])
+        refuse([f"CHANGELOG.md: version {opts['version']} already exists"])
 
     frags = [fname for _, fname, _ in parsed]
-    date = OPTS["date"] or time.strftime("%Y-%m-%d", time.gmtime())
-    block = [f"## [{OPTS['version']}] - {date}", ""]
+    release_date = opts["date"] or time.strftime("%Y-%m-%d", time.gmtime())
+    block = [f"## [{opts['version']}] - {release_date}", ""]
     for t in TYPES:
         entries = [e for ft, _, e in parsed if ft == t]
         if entries:
@@ -216,32 +221,45 @@ def fold():
     j = h + 1  # below the heading and any blank lines that follow it
     while j < len(lines) and not lines[j].strip(): j += 1
     if j == h + 1: block.insert(0, "")  # keep a blank line below the heading
+    if not lines[j:] and block and block[-1] == "":
+        block.pop()
     new = lines[:j] + block + lines[j:]
 
-    if OPTS["dry"]:
+    if opts["dry"]:
         print("\n".join(new))
         print(f"changelog: dry run; {len(frags)} fragment(s) would fold into "
-              f"[{OPTS['version']}] - {date}", file=sys.stderr)
+              f"[{opts['version']}] - {release_date}", file=sys.stderr)
         return
-    if not os.access(FRAGDIR, os.W_OK | os.X_OK):
+    if not os.access(fragdir, os.W_OK | os.X_OK):
         refuse([f"{DIR}/: needs write and search permission to remove folded fragments"])
     try:
-        write_changelog(new)
+        write_changelog(changelog, new)
     except OSError as error:
         refuse([f"CHANGELOG.md: could not write release: {error}"])
     try:
         for fname in frags:
-            os.remove(os.path.join(FRAGDIR, fname))
-        keep = os.path.join(FRAGDIR, ".gitkeep")
+            os.remove(os.path.join(fragdir, fname))
+        keep = os.path.join(fragdir, ".gitkeep")
         if not os.path.exists(keep): open(keep, "w").close()
     except OSError as error:
         print(f"changelog: release written; fragment cleanup failed: {error}", file=sys.stderr)
         print("Compare remaining fragments with the release before folding again.", file=sys.stderr)
         sys.exit(1)
-    print(f"changelog: folded {len(frags)} fragment(s) into [{OPTS['version']}] - {date}")
+    print(f"changelog: folded {len(frags)} fragment(s) into [{opts['version']}] - {release_date}")
     for fname in frags:
         print(f"changelog: removed {DIR}/{fname}")
     print(f"changelog: left {DIR}/.gitkeep; commit CHANGELOG.md with the removals")
 
-if OPTS["mode"] == "check": check()
-else: fold()
+
+def main(argv=None):
+    opts = parse_args(sys.argv[1:] if argv is None else argv)
+    changelog = os.path.join(opts["repo"], "CHANGELOG.md")
+    fragdir = os.path.join(opts["repo"], DIR)
+    if opts["mode"] == "check":
+        check(changelog, fragdir)
+    else:
+        fold(opts, changelog, fragdir)
+
+
+if __name__ == "__main__":
+    main()

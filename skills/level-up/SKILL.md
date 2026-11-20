@@ -1,18 +1,19 @@
 ---
 name: level-up
-description: Raise the quality of a repository or scope in repeatable rounds by chaining hill-climb, red-pen, prune-tests, and relevant installed language or domain quality skills. Use when the operator wants a full quality pass, wants to level up a codebase step by step, or wants to run the improvement skills together.
+description: Raise the quality of a repository or scope in repeatable rounds by chaining hill-climb, red-pen, prune-tests, zoom-out, and relevant installed language or domain quality skills. Use when the operator wants a full quality pass, wants to level up a codebase step by step, or wants to run the improvement skills together.
 ---
 
 # Level up
 
-Chain `hill-climb`, `red-pen`, `prune-tests`, and relevant installed
-third-party quality skills into repeatable rounds. Each round raises the
-verified quality floor by one level without wasting polish on features or
-tests that should be cut first.
+Chain `hill-climb`, `red-pen`, `prune-tests`, `zoom-out`, and relevant
+installed third-party quality skills into repeatable rounds. Each round raises
+the verified quality floor by one level without wasting polish on features,
+tests, or stacked band-aids that should be cut or simplified first.
 
 `level-up` orchestrates the standalone skills rather than repeating their
-rules. If `hill-climb`, `red-pen`, or `prune-tests` is not installed, name the
-missing skill and ask the operator whether to skip that phase or stop.
+rules. `hill-climb` is required for the baseline, target, and re-read loop;
+if `red-pen`, `prune-tests`, or `zoom-out` is not installed, name the missing
+skill and ask the operator whether to skip that phase or stop.
 
 ## 1. Scope and discover skills
 
@@ -55,27 +56,39 @@ missing skill and ask the operator whether to skip that phase or stop.
 - Run `prune-tests` on the surviving code so dead or implementation-coupled
   tests are removed before deeper quality edits.
 
-## 6. Language and domain quality pass
+## 6. Replace stacked band-aids (`zoom-out`)
+
+- Run `zoom-out` in audit / refactor mode on the scope to find accumulated
+  symptom fixes and replace them with cleaner lower-level invariants before
+  idiomatic polishing.
+- Pause for operator approval on proposals that change shared models or public
+  behaviour, and land approved replacements with their superseded workarounds
+  deleted.
+
+## 7. Language and domain quality pass
 
 - Run each confirmed third-party quality skill from step 1 against the
   matching parts of the scope.
 - Apply fixes in focused batches and run targeted checks after each batch.
   Skip this step if no third-party skills were selected.
 
-## 7. Close the gap and re-rate (`hill-climb`)
+## 8. Close the gap and re-rate (`hill-climb`)
 
 - Re-check which verified findings from the baseline still apply after steps
-  3–6, and fix what still holds any part or integration below the round
+  3–7, and fix what still holds any part or integration below the round
   target.
 - Run a fresh, unanchored `hill-climb` re-read to verify the new floor.
 
-## 8. Repeat or finish
+## 9. Repeat or finish
 
 - If the verified floor is below the operator's target (or they ask for
-  another step up), start the next round using step 7's fresh re-read as its
-  baseline — don't run a second baseline assessment.
-  - On follow-up rounds, skip `red-pen` and `prune-tests` unless the higher
-    target or recent changes warrant re-running them; ask if unsure.
+  another step up), start the next round using step 8's fresh re-read as its
+  baseline — don't run a second baseline assessment — and set the new round
+  target to one level above the new floor (capped at the operator's target,
+  or 10).
+  - On follow-up rounds, skip `red-pen`, `prune-tests`, and `zoom-out` unless
+    the higher target or recent changes warrant re-running them; ask if
+    unsure.
   - Reuse the confirmed third-party skill list unless the scope changed.
 - Stop when every part and integration meet the target, the operator stops, or
   a round does not raise the floor.
@@ -88,5 +101,6 @@ Give the operator:
 - the scorecard per round (each part, integration, and how the verified floor
   moved);
 - cuts and simplifications landed (`red-pen`), test counts and coverage delta
-  (`prune-tests`), and which third-party skills ran and what they changed;
+  (`prune-tests`), band-aid clusters replaced (`zoom-out`), and which
+  third-party skills ran and what they changed;
 - any remaining shortfalls and whether a standing gate was recorded.

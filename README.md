@@ -8,12 +8,15 @@ need only Python 3.8+ and Git.
 ## The skills
 
 - [`level-up`](skills/level-up/SKILL.md) — chain `hill-climb`, `red-pen`,
-  `prune-tests`, and installed language/domain quality skills into repeatable
-  level-up rounds.
+  `prune-tests`, `zoom-out`, and installed language/domain quality skills into
+  repeatable level-up rounds.
 - [`hill-climb`](skills/hill-climb/SKILL.md) — assess quality or improve a
   codebase, crate, or docs set to a target score.
 - [`red-pen`](skills/red-pen/SKILL.md) — review a product or tool for
   overbuilding and recommend what to keep, simplify, or remove.
+- [`zoom-out`](skills/zoom-out/SKILL.md) — identify and replace stacked narrow
+  symptom fixes with cleaner lower-level solutions, and stop new ones during
+  triage.
 - [`take-stock`](skills/take-stock/SKILL.md) — audit what a project holds,
   what's stale, and what depends on it before deciding what to change.
 - [`repo-sweep`](skills/repo-sweep/SKILL.md) — make one mechanical change
