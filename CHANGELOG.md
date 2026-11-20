@@ -5,6 +5,14 @@ fragments in `changelog.d/`, folded into this file when a release is cut.
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-20
+
+### Added
+- Add `level-up` to chain `hill-climb`, `red-pen`, `prune-tests`, and relevant installed third-party quality skills into repeatable improvement rounds.
+
+### Changed
+- Replace the manual bash install script in README with `npx skills add` and tighten the repository docs.
+
 ## [0.2.1] - 2026-11-19
 
 ### Changed
