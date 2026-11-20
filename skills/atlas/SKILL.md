@@ -41,7 +41,7 @@ Atlas is read-only until the operator asks to record the result. Then use the
 first home that applies:
 
 1. **The project uses `northstar-docs`** (it has `docs/knowledge/` with a
-   `vision.md`): outcomes, constraints and non-goals go to `vision.md`; system
+   `vision.md`): purpose, constraints and non-goals go to `vision.md`; system
    shape and invariants to `architecture.md`; durable rules to `contracts/`.
 2. **Otherwise, the project's planning surface:** its task system's plan or
    lane documents, an issue tracker, or the planning document it already

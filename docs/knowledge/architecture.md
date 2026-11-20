@@ -2,7 +2,7 @@
 
 Northstar is a repository of skills plus one harness snippet. Each skill is a
 folder under `skills/` with a `SKILL.md`. Standalone skills do not depend on
-one another; workflow skills such as `level-up` compose standalone skills when
+one another; composite skills such as `level-up` compose standalone skills when
 installed.
 
 ## Repository shape

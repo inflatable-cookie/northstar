@@ -1,0 +1,1 @@
+Harden `OSError` and flag handling in `check-links.py`, `changelog.py`, and `check-skill-install.py`, strip inline code spans before HTML anchor extraction, and tighten wording in `architecture.md`, `atlas`, and `prune-tests`.

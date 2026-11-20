@@ -1,25 +1,26 @@
 ---
 name: milestone-qa
-description: Run and qualify milestone QA against a pinned commit on main from an isolated checkout using repository-declared selectors, then hand a structured verdict to the planner. Use when a coherent batch on main merits full verification, or when qualifying a milestone pass, filing repair work from a QA failure, or handling an incomplete QA run.
+description: Run and qualify milestone QA against a pinned commit on the default branch from an isolated checkout using repository-declared selectors, then hand a structured result to the operator or planner. Use when a coherent batch merits full verification, or when qualifying a pass, filing repair work from a failure, or handling an incomplete run.
 ---
 
 # Milestone QA
 
 Verify a coherent batch on the default branch against the repository's own
 milestone QA scope, from an isolated checkout, and turn the result into a
-clear planner decision.
+clear decision.
 
-This skill stays runner-neutral: it works with Effigy named runs (which handle
+This skill is runner-neutral: it works with Effigy named runs (which handle
 status, logs, and stop) or any repository-declared command runner. Project
-selectors live in their own repository; scheduling and capacity leasing live
+selectors live in their own repository; scheduling and host capacity live
 outside this skill.
 
 ## 1. Decide when a batch merits QA
 
-Run milestone QA when a coherent batch has landed on `main` — a completed
-feature, milestone, cross-cutting refactor, or release candidate — rather than
-after every small commit. Skip docs-only batches or changes already covered by
-fast per-PR checks unless the repository's QA contract says otherwise.
+Run milestone QA when a coherent batch has landed on the default branch — a
+completed feature, milestone, cross-cutting refactor, or release candidate —
+rather than after every small commit. Follow the repository's milestone policy
+and declared coverage to decide whether a batch merits a run; don't apply a
+blanket skip.
 
 ## 2. Pin the revision and scope
 
@@ -37,37 +38,45 @@ fast per-PR checks unless the repository's QA contract says otherwise.
   concurrent work cannot contaminate the run.
 - Run the declared selectors via the repository's runner (for example, an
   Effigy named run when available, so status, logs, and stop stay managed).
-- Preserve logs and artefacts before removing the isolated checkout. Record
-  any teardown or cleanup failure separately from the workload verdict.
+- Capture a durable run handle and export any required evidence **before**
+  removing the isolated checkout, so another session or planner can recover
+  it. Record any teardown or cleanup fault separately from the test result.
 
 ## 4. Record the run
 
-Hand the planner (or record in the project's planning surface) a compact run
-record:
+Hand the operator or planner (or record in the project's planning surface) a
+compact summary:
 
 - **Revision and scope:** exact SHA, ref, and repository-declared milestone
   scope.
-- **Selectors and toolchain:** exact selectors/commands executed and the
-  relevant toolchain or runtime versions.
-- **Workload verdict:** `pass`, `fail`, or `incomplete`, with failing
-  selectors and minimal reproduction evidence.
-- **Execution and cleanup faults:** runner crashes, lost sessions, setup
-  errors, or teardown failures — kept distinct from product failures.
-- **Logs and artefacts:** retained file paths or runner handles for full
-  output.
+- **Selectors and coverage:** exact selectors or commands run, toolchain or
+  runtime versions, and — for a named subset or fail-fast run — every
+  declared selector that was skipped or not reached.
+- **Test result:** `pass`, `fail`, or `incomplete`, keeping the runner's
+  actual exit status and test counts even if a later infrastructure or
+  teardown fault happens.
+- **Execution and cleanup faults:** runner crashes, dropped sessions,
+  log-close errors, setup errors, or teardown failures — kept separate from
+  the test result.
+- **Logs and durable handle:** retained artefact paths and durable runner
+  handle for full output.
 
 ## 5. Act on the outcome
 
-- **Qualifying a pass:** A run qualifies the pinned SHA only when every
-  declared selector for the scope ran to completion with no execution fault.
-  A qualified pass advances the verified-good baseline to that SHA.
-- **Turning reproducible failures into repair work:** Confirm the failure is a
-  product or test regression at the pinned SHA (not an environment fault),
-  then open focused repair work referencing the pinned SHA, failing selector,
-  and log location. Re-run milestone QA on the repaired `main` SHA rather than
-  treating a local fix as a milestone pass.
-- **Handling incomplete runs:** Treat runner crashes, dropped sessions,
-  timeouts, missing logs, or setup/cleanup faults as **incomplete** — never as
-  a pass, and not automatically as a product defect. Fix or report the
-  execution fault first, then re-run against the same pinned SHA (or a newer
-  `main` SHA if further work has landed).
+- **Qualifying a pass:** Advancing the verified-good baseline applies only to
+  the declared scope at that pinned SHA. Full milestone qualification requires
+  every required selector for the scope at one SHA to finish with its
+  required evidence intact. An infrastructure, log, or teardown fault does not
+  overwrite a recorded test pass; it blocks qualification only if it leaves
+  required evidence or scope unproved.
+- **Filing repair work:** Confirm the failure is a product or test regression
+  at the pinned SHA (not an environment fault), then open focused repair work
+  naming the pinned SHA, failing selector, and log location. Re-run milestone
+  QA on the repaired default-branch SHA rather than treating a local fix as a
+  milestone pass.
+- **Handling incomplete runs:** Unknown or unfinished selectors leave the
+  scope unqualified — never treat an incomplete run as a qualified pass, and
+  don't file runner crashes, dropped sessions, timeouts, or setup faults as
+  product defects. Fix or report the execution fault first, then re-run
+  against the same pinned SHA (or a newer default-branch SHA if further work
+  has landed).

@@ -109,8 +109,12 @@ def parse_fragment(fragdir, fname):
 
 
 def read_fragments(fragdir):
+    try:
+        names = fragment_files(fragdir)
+    except OSError as error:
+        return [], [f"{DIR}/: unreadable ({error})"]
     parsed, problems = [], []
-    for fname in fragment_files(fragdir):
+    for fname in names:
         ftype, entry = parse_fragment(fragdir, fname)
         if ftype is None:
             problems.append(f"{DIR}/{fname}: {entry}")

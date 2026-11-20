@@ -51,6 +51,7 @@ CODE_SPAN = re.compile(r"(?<!`)(`+)(?!`).*?(?<!`)\1(?!`)", re.S)
 ESCAPE = re.compile(rf"\\([{re.escape(string.punctuation)}])")
 EXTERNAL = re.compile(r"^[a-zA-Z][\w+.-]*:")
 FENCE = re.compile(r"^ {0,3}(`{3,}|~{3,})(.*)$")
+FRONTMATTER = re.compile(r"\A---[ \t]*\r?\n.*?\r?\n---[ \t]*(?:\r?\n|\Z)", re.S)
 LIST_ITEM = re.compile(r"^ {0,3}(?:[-+*]|\d{1,9}[.)])[ \t]+")
 HEADING = re.compile(r"^ {0,3}(?:#{1,6}[ \t]+(.+?)[ \t]*#*[ \t]*$|"
                      r"([^#\s][^\n]*?)\n {0,3}(?:=+|-+)[ \t]*$)", re.M)
@@ -102,13 +103,26 @@ def read_text(path):
     try:
         if os.path.getsize(path) > 3_000_000: return None
         with open(path, encoding="utf-8") as f: return f.read()
-    except (UnicodeDecodeError, FileNotFoundError, IsADirectoryError):
+    except (UnicodeDecodeError, OSError):
         return None
 
 
+def strip_code_spans(text):
+    paragraphs = re.split(r"\n[ \t]*\n", text)
+    return "\n\n".join(
+        CODE_SPAN.sub(lambda m: re.sub(r"[^\n]", " ", m[0]), paragraph)
+        for paragraph in paragraphs
+    )
+
+
 def split_target(t):
-    path, _, frag = t.partition("#")
-    return unquote(path), unquote(frag)
+    match = re.search(r"(?<!\\)(?:\\\\)*#", t)
+    if match:
+        idx = match.end() - 1
+        path, frag = t[:idx], t[idx + 1:]
+    else:
+        path, frag = t, ""
+    return unquote(ESCAPE.sub(r"\1", path)), unquote(ESCAPE.sub(r"\1", frag))
 
 
 def slug(heading):
@@ -124,7 +138,8 @@ _anchors = {}
 
 def anchors(path):
     if path not in _anchors:
-        text = without_code_blocks(read_text(path) or "")
+        raw = FRONTMATTER.sub("", read_text(path) or "")
+        text = without_code_blocks(raw)
         references = {reference_key(match["label"]) for match in REFDEF.finditer(text)}
 
         def reference_label(match):
@@ -139,7 +154,7 @@ def anchors(path):
             n = seen.get(base, 0)
             out.add(base if n == 0 else f"{base}-{n}")
             seen[base] = n + 1
-        out |= set(re.findall(r'<a\s+(?:name|id)="([^"]+)"', text))
+        out |= set(re.findall(r'<a\s+(?:name|id)="([^"]+)"', strip_code_spans(text)))
         _anchors[path] = out
     return _anchors[path]
 
@@ -160,16 +175,10 @@ def main():
         if any(p.search(f) for p in frozen): continue
         text = read_text(os.path.join(root, f))
         if text is None: continue
-        text = without_code_blocks(text)
-        paragraphs = re.split(r"\n[ \t]*\n", text)
-        text = "\n\n".join(
-            CODE_SPAN.sub(lambda m: re.sub(r"[^\n]", " ", m[0]), paragraph)
-            for paragraph in paragraphs
-        )
+        text = strip_code_spans(without_code_blocks(text))
         for m in list(LINK.finditer(text)) + list(REFDEF.finditer(text)):
             target = m["target"]
             if target.startswith("<"): target = target[1:-1]
-            target = ESCAPE.sub(r"\1", target)
             if EXTERNAL.match(target) or target.startswith("/"): continue
             path, frag = split_target(target)
             full = os.path.normpath(os.path.join(root, os.path.dirname(f), path)) if path else os.path.join(root, f)
