@@ -12,8 +12,8 @@ deleted or rewritten. Adapted from the `prune-tests` skill in
 
 ## 1. Set up safely
 
-- Start from a clean tree on its own branch, and commit before deleting
-  anything, so every removal can be reverted on its own.
+- Start from a clean tree on its own branch — commit any pending work first,
+  so every removal can be reverted on its own.
 - Run the suite and record the result. Don't prune a red suite; failing tests
   are a separate job.
 - Record coverage for the scope (line and branch) if the project can produce

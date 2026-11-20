@@ -11,9 +11,9 @@ the verified quality floor by one level without wasting polish on features,
 tests, or stacked band-aids that should be cut or simplified first.
 
 `level-up` orchestrates the standalone skills rather than repeating their
-rules. If `hill-climb`, `red-pen`, `prune-tests`, or `zoom-out` is not
-installed, name the missing skill and ask the operator whether to skip that
-phase or stop.
+rules. `hill-climb` is required for the baseline, target, and re-read loop;
+if `red-pen`, `prune-tests`, or `zoom-out` is not installed, name the missing
+skill and ask the operator whether to skip that phase or stop.
 
 ## 1. Scope and discover skills
 
@@ -58,9 +58,9 @@ phase or stop.
 
 ## 6. Replace stacked band-aids (`zoom-out`)
 
-- Run `zoom-out` in audit mode on the scope to find accumulated symptom fixes
-  and replace them with cleaner lower-level invariants before idiomatic
-  polishing.
+- Run `zoom-out` in audit / refactor mode on the scope to find accumulated
+  symptom fixes and replace them with cleaner lower-level invariants before
+  idiomatic polishing.
 - Pause for operator approval on proposals that change shared models or public
   behaviour, and land approved replacements with their superseded workarounds
   deleted.
@@ -83,7 +83,9 @@ phase or stop.
 
 - If the verified floor is below the operator's target (or they ask for
   another step up), start the next round using step 8's fresh re-read as its
-  baseline — don't run a second baseline assessment.
+  baseline — don't run a second baseline assessment — and set the new round
+  target to one level above the new floor (capped at the operator's target,
+  or 10).
   - On follow-up rounds, skip `red-pen`, `prune-tests`, and `zoom-out` unless
     the higher target or recent changes warrant re-running them; ask if
     unsure.

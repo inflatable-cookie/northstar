@@ -44,8 +44,8 @@ A repository that keeps a `CHANGELOG.md` records unreleased changes as
 fragments: one small file under `changelog.d/` per change, named
 `<task-or-pr-reference>-<short-slug>.<type>.md` so parallel branches never
 collide. The type is one of `added`, `changed`, `fixed`, `removed`,
-`security`. Write one entry per fragment without a list marker. Add the
-fragment with the change and leave `[Unreleased]` empty.
+`security`. Write one entry per fragment without list markers or blank lines.
+Add the fragment with the change and leave `[Unreleased]` empty.
 
 To adopt, create `changelog.d/` and track an empty `.gitkeep` in it. Ensure
 `CHANGELOG.md` has a literal `## [Unreleased]` heading. Move its current
@@ -59,4 +59,4 @@ When a release is cut, run
 repository root or use the project's equivalent task. The command inserts a
 `## [version] - date` heading in a stable order (by type, then name), deletes
 the folded fragments, and refuses malformed ones. The skill catalog exposes
-it as `changelog`.
+the script as `changelog` (pass `check` or `fold` as arguments).

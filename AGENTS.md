@@ -36,8 +36,8 @@ scripts must stay dependency-free Python 3.8+ so adopters need nothing else.
 
 ## Guardrails
 
-- Don't edit `.github/workflows/` or sync the installed skill without an
-  explicit operator request; both affect every project on the machine.
+- Don't sync the installed skills without an explicit operator request; it
+  affects every project on the machine.
 - When a change alters what is true, update the owning knowledge file in the
   same PR.
 - An operator ruling given in conversation goes into its owning file before

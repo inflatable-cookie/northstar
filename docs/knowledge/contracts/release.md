@@ -29,7 +29,7 @@ user-visible contracts are preserved by default.
    version's changelog section as its notes.
 4. From a checkout of the new tag, update the skills you use with
    `npx skills add . -g` (see [README.md](../../../README.md#install)).
-   Remove any skills retired by the release with `npx skills remove <skill>`.
+   Remove any skills retired by the release with `npx skills remove <skill> -g`.
 
 ## Verify
 
@@ -45,5 +45,5 @@ user-visible contracts are preserved by default.
 
 From a checkout of the previous tag, run `npx skills add . -g` for the skills
 you use. Remove skills introduced after that tag with
-`npx skills remove <skill>`, and restore any retired skills you still use.
+`npx skills remove <skill> -g`, and restore any retired skills you still use.
 Never move a published tag. A fix ships as the next patch.
