@@ -89,7 +89,8 @@ def parse_fragment(fragdir, fname):
     if not fname.endswith(".md"):
         return None, "expected .md extension (<name>.<type>.md)"
     stem = fname[:-3]
-    name, _, ftype = stem.rpartition(".")
+    name, sep, ftype = stem.rpartition(".")
+    if not sep: return None, "missing .<type> before .md (expected <name>.<type>.md)"
     if not name: return None, "missing <name> before the type (expected <name>.<type>.md)"
     if ftype not in TYPES:
         return None, f"unknown type '{ftype}'; use one of {', '.join(TYPES)}"

@@ -68,7 +68,7 @@ mk tests/fixtures/corpus.md '[old](../../gone.md)'
 run --frozen '^tests/fixtures/' > /dev/null && echo "ok --frozen paths are skipped" || { echo "FAIL --frozen"; exit 1; }
 rm -rf "$repo/tests"
 
-mk docs/bad.md '[x](b.md#nope) [y](missing.md) [z](targets.md#example-only) [fake](anchors.md#code-span-anchor)'
+mk docs/bad.md '[x](b.md#nope) [y](missing.md) [z](targets.md#example-only) [fake](anchors.md#code-span-anchor) [escape](../../..)'
 mk docs/escaped.md 'A literal backslash followed by a \\[real link](after-backslash.md).'
 mk docs/paragraphs.md 'A literal backtick `
 
@@ -91,6 +91,7 @@ set +e; out=$(run); rc=$?; set -e
 [ "$rc" = 1 ] && echo "$out" | grep -q "missing anchor b.md#nope" && echo "$out" | grep -q "missing missing.md" \
   && echo "$out" | grep -q "missing anchor targets.md#example-only" \
   && echo "$out" | grep -q "missing anchor anchors.md#code-span-anchor" \
+  && echo "$out" | grep -q "docs/bad.md: escapes repo ../../.." \
   && echo "$out" | grep -q "docs/café.md: missing absent.md" \
   && echo "$out" | grep -q "README.md: missing ABSENT" \
   && echo "$out" | grep -q "README.md: missing code-label-missing.md" \

@@ -26,7 +26,7 @@ def parse_args(argv):
     while i < len(argv):
         a = argv[i]
         if a in ("--repo", "--frozen"):
-            if i + 1 == len(argv) or argv[i + 1].startswith("--"):
+            if i + 1 == len(argv) or argv[i + 1] in ("--repo", "--frozen"):
                 die(f"{a} requires a value")
             i += 1
             if a == "--repo": opts["repo"] = argv[i]
@@ -182,9 +182,17 @@ def main():
             if EXTERNAL.match(target) or target.startswith("/"): continue
             path, frag = split_target(target)
             full = os.path.normpath(os.path.join(root, os.path.dirname(f), path)) if path else os.path.join(root, f)
-            if path and not os.path.exists(full):
-                problems.append(f"{f}: missing {target}")
-                continue
+            if path:
+                try:
+                    in_repo = os.path.commonpath([root, full]) == root
+                except ValueError:
+                    in_repo = False
+                if not in_repo:
+                    problems.append(f"{f}: escapes repo {target}")
+                    continue
+                if not os.path.exists(full):
+                    problems.append(f"{f}: missing {target}")
+                    continue
             if frag and full.endswith(".md") and os.path.isfile(full) and frag not in anchors(full):
                 problems.append(f"{f}: missing anchor {target}")
     for p in problems: print(p)

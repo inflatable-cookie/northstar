@@ -180,6 +180,11 @@ set +e; msg=$(py check --repo "$repo" 2>&1); rc=$?; set -e
 [ "$rc" = 1 ] && printf '%s\n' "$msg" | grep -qF 'stray-file.added' && printf '%s\n' "$msg" | grep -qF '.md extension' \
   && echo "ok check rejects stray non-.md file" || { echo "FAIL stray file ($rc): $msg"; exit 1; }
 rm "$repo/changelog.d/stray-file.added"
+mk changelog.d/no-type.md 'Missing type segment.'
+set +e; msg=$(py check --repo "$repo" 2>&1); rc=$?; set -e
+[ "$rc" = 1 ] && printf '%s\n' "$msg" | grep -qF 'no-type.md' && printf '%s\n' "$msg" | grep -qF 'missing .<type>' \
+  && echo "ok check reports missing type segment" || { echo "FAIL missing type ($rc): $msg"; exit 1; }
+rm "$repo/changelog.d/no-type.md"
 
 mk changelog.d/001-first.added.md 'First release entry.'
 py fold --version 0.1.0 --date 2026-01-01 --repo "$repo" > /dev/null
