@@ -44,7 +44,8 @@ missing, name it and ask the operator whether to skip that phase or stop.
 ## 3. Cut scope (`red-pen`)
 
 - Run `red-pen` on the scope so overbuilt features and dead options are cut
-  before refactoring or pruning tests.
+  before refactoring or pruning tests. Follow its retained-surface rule, and
+  record keep verdicts in the project's register.
 - Pause for operator verdicts on Simplify and Remove recommendations before
   changing behaviour, and land approved cuts in their own commits.
 
