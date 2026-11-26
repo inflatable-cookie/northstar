@@ -21,6 +21,9 @@ need only Python 3.8+ and Git.
   reviews and replies with less agent noise, scored out of 10.
 - [`take-stock`](skills/take-stock/SKILL.md) — audit what a project holds,
   what's stale, and what depends on it before deciding what to change.
+- [`tidy-up`](skills/tidy-up/SKILL.md) — clean up agent litter: merged
+  branches, worktrees, orphaned PRs and stray files, without touching work in
+  flight.
 - [`repo-sweep`](skills/repo-sweep/SKILL.md) — make one mechanical change
   across many repositories, one PR each.
 - [`milestone-qa`](skills/milestone-qa/SKILL.md) — run and qualify
@@ -63,9 +66,9 @@ your harness's skills directory).
 ## Harness snippet
 
 [`harness/snippet.md`](harness/snippet.md) is opt-in guidance on writing
-style and work rhythm. It's a global instructions snippet rather than a skill
-because agents need it in context from the first message — copy it into your
-harness's global instructions file (`~/.claude/CLAUDE.md`,
+style, work rhythm and repo hygiene. It's a global instructions snippet rather
+than a skill because agents need it in context from the first message — copy
+it into your harness's global instructions file (`~/.claude/CLAUDE.md`,
 `~/.codex/AGENTS.md`, or equivalent).
 
 ## More
