@@ -1,9 +1,9 @@
 ---
-name: tidy-up
+name: housekeeping
 description: Clean up repository litter — merged or abandoned local and remote branches, worktrees, stashes, orphaned PRs, and stray scratch, summary or backup files — removing what is proven safe without touching work in flight. Use when asked to tidy, clean up or declutter repositories, prune branches, worktrees or PRs, or run scheduled hygiene.
 ---
 
-# Tidy up
+# Housekeeping
 
 Parallel agents leave branches, worktrees, PRs and stray files behind. Clean on
 evidence, never age or appearance: a wrong keep costs a glance, while a wrong

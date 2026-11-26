@@ -1,19 +1,20 @@
 ---
 name: level-up
-description: Raise the quality of a codebase in repeatable multi-skill rounds by chaining hill-climb, red-pen, prune-tests, zoom-out, and relevant installed language or domain quality skills. Use when the operator wants a full quality pass on a codebase, wants to level it up step by step, or wants to run the improvement skills together.
+description: Raise the quality of a codebase in repeatable multi-skill rounds by chaining hill-climb, housekeeping, red-pen, prune-tests, zoom-out, and relevant installed language or domain quality skills. Use when the operator wants a full quality pass on a codebase, wants to level it up step by step, or wants to run the improvement skills together.
 ---
 
 # Level up
 
-Chain `hill-climb`, `red-pen`, `prune-tests`, `zoom-out`, and relevant
-installed third-party quality skills into repeatable rounds. Each round raises
-the verified quality floor by one level without wasting polish on features,
-tests, or workarounds that should be cut or simplified first.
+Chain `hill-climb`, `housekeeping`, `red-pen`, `prune-tests`, `zoom-out`,
+and relevant installed third-party quality skills into repeatable rounds. Each
+round raises the verified quality floor by one level without wasting polish on
+litter, features, tests, or workarounds that should be cut or simplified
+first.
 
 `level-up` orchestrates the standalone skills rather than repeating their
 rules. `hill-climb` is required for the baseline, target, and re-read loop —
-stop if it is not installed. If `red-pen`, `prune-tests`, or `zoom-out` is
-missing, name it and ask the operator whether to skip that phase or stop. Skip
+stop if it is not installed. If `housekeeping`, `red-pen`, `prune-tests`, or
+`zoom-out` is missing, name it and ask the operator whether to skip that phase or stop. Skip
 a phase that doesn't apply to the scope, such as `prune-tests` where there
 are no tests, and say so.
 
@@ -34,17 +35,25 @@ next step starts, so every phase can be reviewed and reverted on its own.
 - Check whether the scope already has strict static quality gates for its
   languages (compiler strictness, linter, formatter) matching any confirmed
   language skills or repo conventions.
+- Run the `housekeeping` inventory on the scope, so its items that need a
+  name can join the confirmation below.
 - Confirm the scope, target, proposed third-party skills (or that none
-  matched) and any missing or loose gates with the operator in one message
-  before the baseline.
+  matched), any missing or loose gates, and the housekeeping picks with the
+  operator in one message before the baseline.
 
-## 2. Baseline (`hill-climb`)
+## 2. Clear litter (`housekeeping`)
+
+- Remove the proven-safe and selected items before the baseline, so stray
+  files, backups and dead branches aren't scored or reviewed as part of the
+  scope.
+
+## 3. Baseline (`hill-climb`)
 
 - Run `hill-climb` in assessment mode to define the parts and rubric and get
   the verified baseline floor and round target. If every part and integration
   already meet the target, report and stop.
 
-## 3. Cut scope (`red-pen`)
+## 4. Cut scope (`red-pen`)
 
 - Run `red-pen` on the scope so overbuilt features and dead options are cut
   before refactoring or pruning tests.
@@ -53,50 +62,50 @@ next step starts, so every phase can be reviewed and reverted on its own.
 - If the cuts remove or gut the parts that set the floor, recompute the floor
   and round target from the surviving parts' baseline scores.
 
-## 4. Fix correctness bugs first
+## 5. Fix correctness bugs first
 
 - If the baseline surfaced verified correctness or safety bugs that still
-  exist after step 3, or if the test suite is red, fix those in their own
+  exist after step 4, or if the test suite is red, fix those in their own
   correctness batch before pruning tests or refactoring. Skip if the suite is
   green and no verified bugs remain.
 
-## 5. Clean the suite (`prune-tests`)
+## 6. Clean the suite (`prune-tests`)
 
 - Run `prune-tests` on the surviving code so dead or implementation-coupled
   tests are removed before deeper quality edits.
 
-## 6. Replace band-aids and workarounds (`zoom-out`)
+## 7. Replace band-aids and workarounds (`zoom-out`)
 
 - Run `zoom-out` in audit mode with fixes on the scope, so workarounds are
   fixed at the owning constraint before idiomatic polishing.
 - Pause for operator approval on its Propose items.
 
-## 7. Language and domain quality pass
+## 8. Language and domain quality pass
 
 - If the operator approved adding or tightening static quality gates in step
   1, wire them up first. They wait until now so lint churn isn't spent on code
-  that steps 3–6 cut or restructure.
+  that steps 4–7 cut or restructure.
 - Run each confirmed third-party quality skill from step 1 against the
   matching parts of the scope.
 - Apply fixes in focused batches and run targeted checks after each batch.
   Skip this step if no static gate updates or third-party skills were selected.
 
-## 8. Close the gap and re-rate (`hill-climb`)
+## 9. Close the gap and re-rate (`hill-climb`)
 
 - Re-check which verified findings from the baseline still apply after steps
-  3–7, and fix what still holds any part or integration below the round
+  4–8, and fix what still holds any part or integration below the round
   target.
 - If earlier steps removed, split or merged parts, update the part map first.
 - Run a fresh, unanchored `hill-climb` re-read to verify the new floor.
 
-## 9. Repeat or finish
+## 10. Repeat or finish
 
 - If the verified floor is below the operator's target (or they ask for
-  another step up), start the next round using step 8's fresh re-read as its
+  another step up), start the next round using step 9's fresh re-read as its
   baseline — don't run a second baseline assessment.
-  - On follow-up rounds, skip `red-pen`, `prune-tests`, and `zoom-out` unless
-    the higher target or recent changes warrant re-running them; ask if
-    unsure.
+  - On follow-up rounds, skip `housekeeping`, `red-pen`, `prune-tests`, and
+    `zoom-out` unless the higher target or recent changes warrant re-running
+    them; ask if unsure.
   - Reuse the confirmed third-party skill list unless the scope changed.
 - Stop when every part and integration meet the target, the operator stops, or
   a round does not raise the floor.
@@ -108,7 +117,8 @@ Give the operator:
 
 - the scorecard per round (each part, integration, and how the verified floor
   moved);
-- cuts and simplifications landed (`red-pen`), test counts and coverage delta
-  (`prune-tests`), workarounds fixed, contained or deferred (`zoom-out`), and
-  which third-party skills ran and what they changed;
+- litter removed (`housekeeping`), cuts and simplifications landed
+  (`red-pen`), test counts and coverage delta (`prune-tests`), workarounds
+  fixed, contained or deferred (`zoom-out`), and which third-party skills ran
+  and what they changed;
 - any remaining shortfalls and whether a standing gate was recorded.

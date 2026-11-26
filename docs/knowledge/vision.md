@@ -66,7 +66,7 @@ Operator rulings, 2026-11-18:
 - Agent PRs, descriptions and comments are always written for a human reader;
   there is no machine-only format (2026-11-26).
 - Repo hygiene splits in two: prevention rules live in the harness snippet,
-  and cleanup is the `tidy-up` skill, which removes proven-safe litter
+  and cleanup is the `housekeeping` skill, which removes proven-safe litter
   without asking (2026-11-26).
 
 ## Non-goals

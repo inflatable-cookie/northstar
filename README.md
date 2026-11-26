@@ -8,8 +8,8 @@ need only Python 3.8+ and Git.
 ## The skills
 
 - [`level-up`](skills/level-up/SKILL.md) — chain `hill-climb`, `red-pen`,
-  `prune-tests`, `zoom-out`, and installed language/domain quality skills into
-  repeatable level-up rounds.
+  `prune-tests`, `zoom-out`, `housekeeping`, and installed language/domain
+  quality skills into repeatable level-up rounds.
 - [`hill-climb`](skills/hill-climb/SKILL.md) — assess quality or improve a
   codebase, crate, or docs set to a target score.
 - [`red-pen`](skills/red-pen/SKILL.md) — review a product or tool for
@@ -21,9 +21,9 @@ need only Python 3.8+ and Git.
   reviews and replies with less agent noise, scored out of 10.
 - [`take-stock`](skills/take-stock/SKILL.md) — audit what a project holds,
   what's stale, and what depends on it before deciding what to change.
-- [`tidy-up`](skills/tidy-up/SKILL.md) — clean up agent litter: merged
-  branches, worktrees, orphaned PRs and stray files, without touching work in
-  flight.
+- [`housekeeping`](skills/housekeeping/SKILL.md) — clean up agent litter:
+  merged branches, worktrees, orphaned PRs and stray files, without touching
+  work in flight.
 - [`repo-sweep`](skills/repo-sweep/SKILL.md) — make one mechanical change
   across many repositories, one PR each.
 - [`milestone-qa`](skills/milestone-qa/SKILL.md) — run and qualify
