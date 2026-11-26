@@ -17,6 +17,8 @@ need only Python 3.8+ and Git.
 - [`zoom-out`](skills/zoom-out/SKILL.md) — find and fix narrow fixes and
   workarounds at the constraint they bend around, in triage, change review,
   or an audit.
+- [`pr-etiquette`](skills/pr-etiquette/SKILL.md) — human-readable PRs,
+  reviews and replies with less agent noise, scored out of 10.
 - [`take-stock`](skills/take-stock/SKILL.md) — audit what a project holds,
   what's stale, and what depends on it before deciding what to change.
 - [`repo-sweep`](skills/repo-sweep/SKILL.md) — make one mechanical change
