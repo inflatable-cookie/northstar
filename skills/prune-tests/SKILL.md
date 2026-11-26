@@ -12,8 +12,9 @@ deleted or rewritten. Adapted from the `prune-tests` skill in
 
 ## 1. Set up safely
 
-- Start from a clean tree on its own branch — commit any pending work first,
-  so every removal can be reverted on its own.
+- Start from a clean tree so every removal can be reverted on its own. If
+  unrelated uncommitted work is present, ask rather than committing it. Run on
+  a dedicated branch unless a calling workflow already provides one.
 - Run the suite and record the result. Don't prune a red suite; failing tests
   are a separate job.
 - Record coverage for the scope (line and branch) if the project can produce
@@ -61,22 +62,22 @@ flaky.
 
 - Work one category at a time, one commit each, so a reviewer can follow the
   reasoning and revert a batch.
-- Delete support code after checking that no retained tests, runtime paths,
-  or downstream callers use it.
+- Delete test-only support code (helpers, fixtures, test hooks) after
+  checking that no retained tests, runtime paths, or downstream callers use
+  it. Report production code that pruning shows to be dead; don't delete it
+  here.
+- Check that each rewritten test fails when the behaviour it guards breaks,
+  not just that it passes now.
 - Run targeted checks after each batch. Run the full suite at the end, or
   earlier if the project requires it or a batch changes shared code.
-- Compare final coverage with step 1. Every production line or branch that lost
-  coverage needs a reason: its behaviour is guarded elsewhere, or the code
-  itself was deleted. Restore or rewrite a test for anything else.
-
-## Done
-
-- Classified tests guard stated behaviour. Unresolved tests stay as questions.
-- Redundant tests and their private support code are gone.
-- Coverage of behaviour callers rely on is unchanged.
+- Compare final coverage with step 1. Every production line or branch that
+  lost coverage needs a reason: its behaviour is guarded elsewhere, or the
+  code is dead and reported. Restore or rewrite a test for anything else.
+  Without coverage data, map each deleted or rewritten test's behaviour to a
+  retained test before deleting it.
 
 ## Report
 
 Give the operator counts per category (kept, deleted, rewritten), the
-coverage before and after with the reason for each loss, support or
-production code removed, and the tests kept as questions.
+coverage before and after with the reason for each loss, support code
+removed, production code found dead, and the tests kept as questions.

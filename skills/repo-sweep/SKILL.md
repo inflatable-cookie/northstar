@@ -21,7 +21,9 @@ decided.
 - Find who calls the thing being changed: task runner selectors, CI, vendored
   copies, other repositories' instructions. A caller you miss breaks after
   merge.
-- On a loaded machine, check the load first and sweep in smaller batches.
+- Check for an open PR that already makes this change before starting one.
+- Unless the operator already authorised the sweep, show the candidate
+  repositories, exclusions and merge order before editing.
 
 ## 2. Order
 
@@ -39,8 +41,6 @@ Nothing may break between merges.
 
 - Work in a fresh worktree per repository, branched from the revision you
   searched, under a scratch directory.
-- Where a script helps, pass repository paths as quoted arguments or an
-  array. Read the local context before hand edits.
 - Re-run discovery and check each worktree against its completion criteria.
   For a retirement or rename, check that no obsolete live references remain.
 - Keep each repository's conventions: its changelog fragment naming, commit
@@ -51,6 +51,7 @@ Nothing may break between merges.
 - Run each repository's own targeted check for what changed (docs, lint,
   tests for touched code). Record which repositories have no such check.
 - Run broader checks where the project's requirements or impact call for them.
+  Limit concurrent builds and tests when validating many repositories.
 
 ## 5. Land
 
@@ -60,7 +61,8 @@ Nothing may break between merges.
   required checks and reviews pass.
 - Hand a PR to the repository's owner only when the change touches that
   project's product direction.
-- Remove the worktrees and delete merged local branches afterwards.
+- Remove each worktree once its branch is pushed, and delete local branches
+  after merge.
 
 ## Report
 

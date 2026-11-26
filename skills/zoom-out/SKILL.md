@@ -1,6 +1,6 @@
 ---
 name: zoom-out
-description: Find and fix narrow fixes and workarounds that bend around a constraint the project owns — stacked special cases, shims, near-copies, type or lint escapes, post-hoc fixups, timing hacks, wrong-layer logic — by changing the owning invariant, type, interface, or boundary instead. Use when triaging a bug or blocker before a fix is written, reviewing a diff for local shortcuts before it lands, or auditing a scope for accumulated band-aids and awkward compromises left by a zoomed-in implementer.
+description: Find and fix workarounds and stacked narrow fixes that bend around a constraint the project owns, by changing that constraint instead. Use when a fix would patch a repeatedly patched flow or feels like a workaround, when reviewing a diff specifically for local shortcuts, or when auditing a scope for accumulated band-aids.
 ---
 
 # Zoom out
@@ -24,50 +24,40 @@ start.
   approves with the real fix recorded alongside it. Otherwise scope the task
   at the owning constraint, including the band-aids it supersedes.
 - **Review a change**, before a diff lands. Check it for the signals below and
-  notice what it avoided touching to stay small. Ask whether the implementer
-  changed the right side of the boundary. Ask for a contained straight fix
-  now, before other code depends on the bend; for a wider or contract-touching
-  fix, require an approved proposal or tracked follow-up; for an external
-  constraint, require it to be contained and documented.
-- **Audit**, across a repository, module, or workflow. Find candidates, judge
-  them, and fix or propose as below.
+  notice what it avoided touching to stay small. Judge each lead as below; ask
+  for Fix verdicts now, before other code depends on the bend, and a proposal
+  or tracked follow-up for the rest.
+- **Audit**, across a repository, module, or workflow. Find candidates and
+  judge them. The audit is a report unless the operator, or a calling
+  workflow, asks for fixes.
 
 ## Find candidates
 
 Read the seams and call sites across the scope, not just keyword matches. Each
 signal is a lead, not a verdict:
 
-- **Stacked special cases:** conditionals, flags, retries, or fallback branches
-  piled around the same concept or state transition, especially competing or
-  order-dependent guards.
-- **History hotspots:** repeated "fix X when Y" or "handle Z edge case"
+- **Stacked special cases:** conditionals, flags, retries, or fallback
+  branches piled around one concept or state transition, especially competing
+  or order-dependent guards, and history hotspots of repeated "fix X when Y"
   commits on the same flow.
-- **Escapes:** casts, `any`, `unwrap`, non-null assertions, lint or type
-  suppressions, and swallowed errors or fallback defaults hiding a mismatch
-  between two parts of the project.
-- **Near-copies:** a second version of a function, type, or component with a
-  small tweak, written to avoid updating the original and its callers.
-- **Internal shims and translation:** forwarding aliases, wrappers, or mappers
-  between two internal representations of the same concept, especially
-  round-trips or old signatures no external caller needs.
-- **Post-hoc fixups:** calling a function or query and then filtering,
-  mutating, or undoing its result because the producer returned the wrong
-  shape.
-- **Lost information:** parsing strings or error messages the project produced
-  itself, re-deriving data an upstream layer threw away, or sniffing types at
-  runtime.
-- **Smuggled context and shadow state:** globals, singletons, side-channel
-  caches, ad-hoc optional parameters, or parallel lookup structures holding
-  state the primary model or interface should carry.
-- **Steering flags:** boolean or mode parameters added so one caller can
-  bypass or alter a shared function's behaviour.
+- **Escapes:** casts, type or lint suppressions, swallowed errors, or fallback
+  defaults hiding a mismatch between two parts of the project.
+- **Near-copies and shims:** a tweaked second version of a function, type, or
+  component, or wrappers and mappers between two internal representations of
+  the same concept, written to avoid changing the original and its callers.
+- **Fixups and lost information:** patching or filtering a producer's result
+  after the fact, parsing strings or errors the project produced itself, or
+  re-deriving data an upstream layer threw away.
+- **Smuggled state and steering flags:** globals, side-channel caches, or
+  parallel lookups carrying state an interface should carry, and mode
+  parameters added so one caller can alter a shared function.
 - **Timing hacks:** sleeps, polling, deferred ticks, or call-order
   dependencies covering a missing event, lock, or lifecycle.
-- **Wrong layer:** callers enforcing rules or duplicating values a lower layer
-  should own, UI computing domain logic, or tests and test-only branches
-  reaching into internals for lack of a clean seam.
-- **Admissions:** `HACK`, `XXX`, `TODO`, "workaround", "for now", "temporary",
-  or "avoid touching" in comments and commit messages.
+- **Wrong layer:** callers enforcing rules a lower layer should own, UI
+  computing domain logic, or tests reaching into internals for lack of a clean
+  seam.
+- **Admissions:** "workaround", "for now", "temporary", or "avoid touching"
+  in comments and commit messages.
 
 ## Judge each candidate
 
@@ -90,7 +80,9 @@ rest:
 
 Give one verdict per constraint:
 
-- **Fix** when the constraint is internal and the straight fix is contained.
+- **Fix** when the constraint is internal and the straight fix is contained:
+  it stays within the owning module and its direct internal callers, without
+  changing public APIs, persisted data, or shared state models.
 - **Propose** when the straight fix has a wide blast radius or changes a
   shared model, state transition, public behaviour, or an owned contract.
   Pause for operator approval.
@@ -98,10 +90,11 @@ Give one verdict per constraint:
   Keep the workaround in one place with why it exists, an upstream link if
   any, and when it can go; leave it alone if already contained.
 - **Leave** when the straight fix costs more than the bends. Explain why in
-  the report, and add a brief code comment only if the bend would otherwise
-  look accidental.
+  the report.
 
 ## Fix
+
+When implementing:
 
 - Change the owning side, update every caller, and delete every superseded
   workaround in the same change, so old band-aids cannot coexist with and
@@ -109,6 +102,8 @@ Give one verdict per constraint:
   compatibility rules require one.
 - Consolidate scattered **Contain** workarounds into one documented home.
 - Pin uncovered behaviour with a test before refactoring across a boundary.
+- For a Leave verdict, add a brief code comment only if the bend would
+  otherwise look accidental.
 - Land each constraint's fix in its own commit or batch, and run targeted
   checks after each.
 

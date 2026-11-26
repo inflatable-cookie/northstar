@@ -7,7 +7,8 @@ conventions.
 2. Are the current facts accurate and in the right owning file?
 3. Does the index point to each topic's owner without duplicating its content?
 4. Are removed concepts gone from live material?
-5. Are links and examples still valid?
+5. Are links and examples still valid? Run `check-links.py` and
+   `changelog.py check`, or the project's docs check.
 6. Is it static? Flag status, progress, plans, and lists that mirror the code
    (files, functions, counts, versions); they go stale.
 7. Did the change keep the useful detail and reasons?
