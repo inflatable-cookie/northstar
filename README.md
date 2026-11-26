@@ -14,9 +14,9 @@ need only Python 3.8+ and Git.
   codebase, crate, or docs set to a target score.
 - [`red-pen`](skills/red-pen/SKILL.md) — review a product or tool for
   overbuilding and recommend what to keep, simplify, or remove.
-- [`zoom-out`](skills/zoom-out/SKILL.md) — identify and replace stacked narrow
-  symptom fixes with cleaner lower-level solutions, and stop new ones during
-  triage.
+- [`zoom-out`](skills/zoom-out/SKILL.md) — find and fix narrow fixes and
+  workarounds at the constraint they bend around, in triage, change review,
+  or an audit.
 - [`take-stock`](skills/take-stock/SKILL.md) — audit what a project holds,
   what's stale, and what depends on it before deciding what to change.
 - [`repo-sweep`](skills/repo-sweep/SKILL.md) — make one mechanical change

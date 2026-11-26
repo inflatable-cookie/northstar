@@ -8,7 +8,7 @@ description: Raise the quality of a repository or scope in repeatable rounds by 
 Chain `hill-climb`, `red-pen`, `prune-tests`, `zoom-out`, and relevant
 installed third-party quality skills into repeatable rounds. Each round raises
 the verified quality floor by one level without wasting polish on features,
-tests, or stacked band-aids that should be cut or simplified first.
+tests, or workarounds that should be cut or simplified first.
 
 `level-up` orchestrates the standalone skills rather than repeating their
 rules. `hill-climb` is required for the baseline, target, and re-read loop —
@@ -61,11 +61,11 @@ missing, name it and ask the operator whether to skip that phase or stop.
 - Run `prune-tests` on the surviving code so dead or implementation-coupled
   tests are removed before deeper quality edits.
 
-## 6. Replace stacked band-aids (`zoom-out`)
+## 6. Replace band-aids and workarounds (`zoom-out`)
 
-- Run `zoom-out` in audit / refactor mode on the scope to find accumulated
-  symptom fixes and replace them with cleaner lower-level invariants before
-  idiomatic polishing.
+- Run `zoom-out` in audit mode on the scope to find stacked symptom fixes and
+  workarounds that bend around owned constraints, and fix them at the owning
+  level before idiomatic polishing.
 - Pause for operator approval on proposals that change shared models or public
   behaviour, and land approved replacements with their superseded workarounds
   deleted.
@@ -108,6 +108,6 @@ Give the operator:
 - the scorecard per round (each part, integration, and how the verified floor
   moved);
 - cuts and simplifications landed (`red-pen`), test counts and coverage delta
-  (`prune-tests`), band-aid clusters replaced (`zoom-out`), and which
+  (`prune-tests`), band-aids and workarounds replaced (`zoom-out`), and which
   third-party skills ran and what they changed;
 - any remaining shortfalls and whether a standing gate was recorded.
