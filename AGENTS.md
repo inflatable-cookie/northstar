@@ -16,8 +16,8 @@ project's own task system.
 
 ## Commands
 
-- `effigy qa` — full validation: script self-tests, links and changelog
-  fragments.
+- `effigy qa` — full validation: script self-tests, shellcheck, links and
+  changelog fragments.
 - `effigy check:skill-install` — installed skills match source.
 
 Effigy wraps the Python scripts and bash self-tests here; each script also

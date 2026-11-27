@@ -1,0 +1,1 @@
+`check-links.py` handles far more real-world Markdown without false alarms or missed links: frontmatter variants, escaped characters, fenced code inside list items, footnotes, nested badge links, stray backticks in tables and lists, `?query` targets, and GitHub's heading and HTML anchor rules. The script's docstring now states what it supports and its known limits.

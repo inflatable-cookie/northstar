@@ -48,8 +48,10 @@ Before posting, check every claim against the actual diff (not memory) and
 score the description out of 10: **10** opening gives what and why, every
 sentence says what the diff can't, every claim matches; **9** clear,
 accurate, and tight, minor polish at most; **8** accurate, but padded,
-restates part of the diff, or leaves a reviewer question open; **6 or
-below** misses the why, buries the point, or lists files. Any unsupported
+restates part of the diff, or leaves a reviewer question open; **7** states
+what changed, but is thin on the why, omits important risk or context, or
+mixes in diff narration; **6 or below** misses the why, buries the point, or
+lists files. Any unsupported
 claim caps the score at 3. Rewrite until it scores 9+, and keep the score
 private. When the diff changes during review, edit the description to match
 instead of commenting about what moved.
@@ -62,10 +64,12 @@ Skip drafts, closed PRs, and PRs you have already reviewed at this head.
    the covering checks if available (otherwise inspect CI results).
 2. Draft findings privately and rate confidence out of 10: **9–10** proven
    in code or a run; **8** verified against surrounding code or rules as a
-   real bug, risk, missing failure-path test, or misleading description;
-   **7 or below** unverified hunch, preference, or nit. Verify candidates
-   at 7+ against surrounding code, callers, or a test run, then post only
-   those holding at 8+. Drop nits.
+   real bug, risk, missing failure-path test, real gap, or misleading
+   description; **7 or below** unverified hunch, preference, or nit. Verify
+   candidates at 7+ against surrounding code, callers, or a test run, then
+   post only those holding at 8+ — as blocking issues when they must be fixed
+   before merge, or non-blocking suggestions when they are verified real gaps
+   that don't block. Drop nits.
 3. Don't flag issues outside the diff, anything a linter or compiler catches,
    style preferences, speculation, or anything deliberately silenced in code.
 4. Score the PR out of 10 (change and description together): **10** nothing
@@ -82,8 +86,9 @@ Skip drafts, closed PRs, and PRs you have already reviewed at this head.
    what stands between them, such as `7/10, target 9: one blocking bug in
    retry handling.` A clean PR gets that line alone.
 
-Label inline comments `issue (blocking):`, `suggestion (non-blocking):`, or
-`question:` (only when ambiguity could hide a real problem). Each blocking
+Label inline comments `issue (blocking):`, `suggestion (non-blocking):`
+(verified 8+ gaps worth improving that don't block merge), or `question:`
+(only when ambiguity could hide a real problem). Each blocking
 comment says why it matters and what resolves it. Post one comment per issue,
 listing all locations for a repeated pattern. Offer a suggestion block only
 when committing it fixes the problem completely. Link code by full commit

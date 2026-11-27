@@ -68,6 +68,10 @@ Operator rulings, 2026-11-18:
 - Repo hygiene splits in two: prevention rules live in the harness snippet,
   and cleanup is the `housekeeping` skill, which removes proven-safe litter
   without asking (2026-11-26).
+- `pr-etiquette` uses scores out of 10 deliberately — a public PR score in
+  the review plus private self-scores for the description and finding
+  confidence — because rating makes agents attend to detail and gives the
+  recipient a target (2026-11-27).
 
 ## Non-goals
 

@@ -119,6 +119,6 @@ Give the operator:
   moved);
 - litter removed (`housekeeping`), cuts and simplifications landed
   (`red-pen`), test counts and coverage delta (`prune-tests`), workarounds
-  fixed, contained or deferred (`zoom-out`), and which third-party skills ran
-  and what they changed;
+  fixed, contained or deferred (`zoom-out`), static quality gates added or
+  tightened, and which third-party skills ran and what they changed;
 - any remaining shortfalls and whether a standing gate was recorded.

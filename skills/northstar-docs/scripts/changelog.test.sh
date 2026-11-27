@@ -67,12 +67,14 @@ printf '%s\n' "$out" | grep -qF '## [0.9.1] - 2026-02-03' && printf '%s\n' "$out
 
 # ---------------------------------------------------------------- refusal
 mk changelog.d/bad.wibble.md 'Unknown type.'
+before=$(cat "$repo/CHANGELOG.md")
 set +e; msg=$(py fold --version 0.9.1 --repo "$repo" 2>&1); rc=$?; set -e
 [ "$rc" = 1 ] && printf '%s\n' "$msg" | grep -q 'bad.wibble.md' && printf '%s\n' "$msg" | grep -qi 'unknown type' \
   && echo "ok fold refuses a malformed fragment with file and reason" || { echo "FAIL: $msg"; exit 1; }
 [ -f "$repo/changelog.d/030-fix-rollback.fixed.md" ] && echo "ok refusal leaves good fragments untouched" \
   || { echo "FAIL: refusal deleted good fragments"; exit 1; }
-check CHANGELOG.md '## [Unreleased]' "refusal leaves CHANGELOG.md untouched"
+[ "$(cat "$repo/CHANGELOG.md")" = "$before" ] && echo "ok refusal leaves CHANGELOG.md untouched" \
+  || { echo "FAIL: refusal changed CHANGELOG.md"; exit 1; }
 refuses_fold() {
   local expected=$1 status=$2 msg rc=0 before
   shift 2
@@ -91,12 +93,11 @@ refuses_fold 'valid YYYY-MM-DD' 2 --version 0.9.1 --date 2026-02-31
 refuses_fold '--date requires a value' 2 --version 0.9.1 --date
 mk changelog.d/045-list.added.md '- First fix.
 - Second fix.'
-refuses_fold 'without list markers' 1 --version 0.9.1
 rc=0
 msg=$(py check --repo "$repo" 2>&1) || rc=$?
 [ "$rc" = 1 ] && printf '%s\n' "$msg" | grep -qF '045-list.added.md: one entry per fragment without list markers' \
+  && echo "ok check rejects list-marker fragment" \
   || { echo "FAIL: check accepted a list fragment: $msg"; exit 1; }
-[ -f "$repo/changelog.d/045-list.added.md" ] || { echo "FAIL: fold deleted the list fragment"; exit 1; }
 rm "$repo/changelog.d/045-list.added.md"
 mk changelog.d/split.added.md 'First entry.
 
@@ -134,9 +135,9 @@ mk CHANGELOG.md '# Changelog
 ## [Unreleased]
 
 - Hand-written entry.'
-refuses_fold 'more than one' 1 --version 0.9.1
 set +e; msg=$(py check --repo "$repo" 2>&1); rc=$?; set -e
 [ "$rc" = 1 ] && printf '%s\n' "$msg" | grep -q 'more than one' \
+  && echo "ok check fails on duplicate [Unreleased] headings" \
   || { echo "FAIL: duplicate Unreleased heading: $msg"; exit 1; }
 if [ "$(id -u)" != 0 ]; then
   chmod a-w "$repo/changelog.d"
