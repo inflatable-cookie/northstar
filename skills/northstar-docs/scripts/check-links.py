@@ -4,10 +4,24 @@
 Usage:
   check-links.py [--repo <path>] [--frozen <regex>]...
 
-Checks inline links and reference definitions in tracked or unignored UTF-8
-Markdown files up to 3 MB. It checks anchors against Markdown headings and
-explicit HTML anchors. It skips code spans and top-level code blocks. Use
---frozen <regex> to exclude paths such as fixtures or released artefacts.
+Scope:
+  Checks relative inline links/images and block-start reference definitions in
+  tracked or unignored UTF-8 (with optional BOM) Markdown files up to 3 MB,
+  after stripping YAML frontmatter, top-level fenced/indented code blocks, and
+  code spans. Checks fragments against GitHub-style heading slugs and explicit
+  HTML id (or <a name>) anchors. Skips external URLs, root-relative paths, and
+  --frozen <regex> matches.
+
+  Known limits (regex subset, not a full CommonMark parser):
+  - Indented code blocks inside list items and fenced blocks in blockquotes
+    are not recognised.
+  - HTML comments, raw HTML blocks, multi-line HTML tags, and unquoted HTML
+    anchor attributes are not parsed.
+  - Reference links are validated via their definitions; shortcut reference
+    links ([ref]) are not stripped when slugging headings.
+  - Multi-line setext headings, multi-line list continuations before ---, and
+    deeply nested brackets in link labels are not handled.
+
 Exit: 0 clean, 1 problems found, 2 usage error.
 Needs Python 3.8+ and Git; nothing else.
 """
