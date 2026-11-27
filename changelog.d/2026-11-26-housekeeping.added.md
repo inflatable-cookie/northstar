@@ -1,1 +1,0 @@
-Add `housekeeping`, a skill that removes proven-safe merged branches, stale tracking refs and clean agent worktrees, and lists remaining litter (unmerged branches, stale PRs, stashes, stray files) for explicit selection, plus repo hygiene rules in the harness snippet. `level-up` runs it before the baseline.

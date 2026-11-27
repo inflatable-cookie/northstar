@@ -1,1 +1,0 @@
-Broaden `zoom-out` to catch single-site workarounds that bend around constraints the project owns (escapes, near-copies, post-hoc fixups, shadow state and similar), add a change-review mode and a shared Fix / Propose / Contain / Leave verdict, and update `level-up` step 7 to match.
