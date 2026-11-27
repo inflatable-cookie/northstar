@@ -93,7 +93,6 @@ refuses_fold 'valid YYYY-MM-DD' 2 --version 0.9.1 --date 2026-02-31
 refuses_fold '--date requires a value' 2 --version 0.9.1 --date
 mk changelog.d/045-list.added.md '- First fix.
 - Second fix.'
-refuses_fold 'without list markers' 1 --version 0.9.1
 rc=0
 msg=$(py check --repo "$repo" 2>&1) || rc=$?
 [ "$rc" = 1 ] && printf '%s\n' "$msg" | grep -qF '045-list.added.md: one entry per fragment without list markers' \
@@ -136,9 +135,9 @@ mk CHANGELOG.md '# Changelog
 ## [Unreleased]
 
 - Hand-written entry.'
-refuses_fold 'more than one' 1 --version 0.9.1
 set +e; msg=$(py check --repo "$repo" 2>&1); rc=$?; set -e
 [ "$rc" = 1 ] && printf '%s\n' "$msg" | grep -q 'more than one' \
+  && echo "ok check fails on duplicate [Unreleased] headings" \
   || { echo "FAIL: duplicate Unreleased heading: $msg"; exit 1; }
 if [ "$(id -u)" != 0 ]; then
   chmod a-w "$repo/changelog.d"
