@@ -57,7 +57,7 @@ description: C# guide with [yaml](not-a-link.md)
 
 # Real heading'
 mk docs/badge.svg '<svg/>'
-mk docs/targets.md 'See [guide](guide%20file.md#caf%C3%A9), [v2](guide(v2).md), [escaped](guide\(v2\).md#guide-v2), [hash](c\#guide.md#real-heading), [![badge](badge.svg)](b.md), and [ext](<https://example.com>).
+mk docs/targets.md 'See [guide](guide%20file.md#caf%C3%A9), [v2](guide(v2).md), [escaped](guide\(v2\).md#guide-v2), [hash](c\#guide.md#real-heading), [plain](b.md?plain=1), [plain-anchor](b.md?plain=1#rules), [![badge](badge.svg)](b.md), and [ext](<https://example.com>).
 
 Literal: ``[example](nowhere.md)``.
 Also literal: \[escaped](nowhere.md).
@@ -75,7 +75,7 @@ mk tests/fixtures/corpus.md '[old](../../gone.md)'
 run --frozen '^tests/fixtures/' > /dev/null && echo "ok --frozen paths are skipped" || { echo "FAIL --frozen"; exit 1; }
 rm -rf "$repo/tests"
 
-mk docs/bad.md '[x](b.md#nope) [y](missing.md) [z](targets.md#example-only) [fake](anchors.md#code-span-anchor) [wrong-slug](anchors.md#check-a) [escape](../../..)'
+mk docs/bad.md '[x](b.md#nope) [y](missing.md) [z](targets.md#example-only) [fake](anchors.md#code-span-anchor) [wrong-slug](anchors.md#check-a) [bad-query](b.md?plain=1#nope) [escape](../../..)'
 mk docs/escaped.md 'A literal backslash followed by a \\[real link](after-backslash.md).'
 mk docs/paragraphs.md 'A literal backtick `
 
@@ -105,6 +105,7 @@ set +e; out=$(run); rc=$?; set -e
   && echo "$out" | grep -q "missing anchor targets.md#example-only" \
   && echo "$out" | grep -q "missing anchor anchors.md#code-span-anchor" \
   && echo "$out" | grep -q "missing anchor anchors.md#check-a" \
+  && echo "$out" | grep -q "missing anchor b.md?plain=1#nope" \
   && echo "$out" | grep -q "docs/bad.md: escapes repo ../../.." \
   && echo "$out" | grep -q "docs/café.md: missing absent.md" \
   && echo "$out" | grep -q "README.md: missing ABSENT" \

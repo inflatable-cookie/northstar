@@ -122,6 +122,9 @@ def split_target(t):
         path, frag = t[:idx], t[idx + 1:]
     else:
         path, frag = t, ""
+    query = re.search(r"(?<!\\)(?:\\\\)*\?", path)
+    if query:
+        path = path[:query.end() - 1]
     return unquote(ESCAPE.sub(r"\1", path)), unquote(ESCAPE.sub(r"\1", frag))
 
 
