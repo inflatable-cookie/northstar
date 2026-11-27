@@ -56,7 +56,8 @@ description: C# guide with [yaml](not-a-link.md)
 ---
 
 # Real heading'
-mk docs/targets.md 'See [guide](guide%20file.md#caf%C3%A9), [v2](guide(v2).md), [escaped](guide\(v2\).md#guide-v2), [hash](c\#guide.md#real-heading), and [ext](<https://example.com>).
+mk docs/badge.svg '<svg/>'
+mk docs/targets.md 'See [guide](guide%20file.md#caf%C3%A9), [v2](guide(v2).md), [escaped](guide\(v2\).md#guide-v2), [hash](c\#guide.md#real-heading), [![badge](badge.svg)](b.md), and [ext](<https://example.com>).
 
 Literal: ``[example](nowhere.md)``.
 Also literal: \[escaped](nowhere.md).
@@ -96,6 +97,7 @@ mk docs/empty-frontmatter.md '---
 See [broken](after-empty-fm.md)
 
 ---'
+mk docs/nested.md '[![badge](missing-badge.svg)](b.md) [![ext-badge](missing-ext-badge.svg)](https://example.com)'
 mk docs/café.md '[broken](absent.md)'
 git -C "$repo" add docs/café.md
 set +e; out=$(run); rc=$?; set -e
@@ -112,6 +114,8 @@ set +e; out=$(run); rc=$?; set -e
   && echo "$out" | grep -q "docs/paragraphs.md: missing paragraph-target.md" \
   && echo "$out" | grep -q "docs/escaped.md: missing after-backslash.md" \
   && echo "$out" | grep -q "docs/empty-frontmatter.md: missing after-empty-fm.md" \
+  && echo "$out" | grep -q "docs/nested.md: missing missing-badge.svg" \
+  && echo "$out" | grep -q "docs/nested.md: missing missing-ext-badge.svg" \
   && echo "ok broken links in tracked Unicode and untracked files, including anchors in examples" \
   || { echo "FAIL negatives: $out"; exit 1; }
 rc=0

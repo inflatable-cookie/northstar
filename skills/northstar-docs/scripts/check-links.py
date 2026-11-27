@@ -183,6 +183,12 @@ def anchors(path, cache):
     return cache[path]
 
 
+def inline_targets(text):
+    for match in LINK.finditer(text):
+        yield match["target"]
+        yield from inline_targets(match["label"])
+
+
 def main():
     opts = parse_args(sys.argv[1:])
     root = opts["repo"]
@@ -201,8 +207,8 @@ def main():
         text = read_text(os.path.join(root, f))
         if text is None: continue
         text = strip_code_spans(strip_body(text))
-        for m in list(LINK.finditer(text)) + list(REFDEF.finditer(text)):
-            target = m["target"]
+        targets = list(inline_targets(text)) + [m["target"] for m in REFDEF.finditer(text)]
+        for target in targets:
             if target.startswith("<"): target = target[1:-1]
             if EXTERNAL.match(target) or target.startswith("/"): continue
             path, frag = split_target(target)
