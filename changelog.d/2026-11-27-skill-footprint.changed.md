@@ -1,1 +1,0 @@
-Shrink the stack's context footprint: shorter skill descriptions (about 30% smaller, and these load in every session), `pr-etiquette` review and reply guidance moved into `references/` so opening a PR loads half as much, and the harness snippet's copy instructions moved to the README so importing it loads only the guidance.
