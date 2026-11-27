@@ -1,6 +1,6 @@
 ---
 name: level-up
-description: Raise the quality of a codebase in repeatable multi-skill rounds by chaining hill-climb, housekeeping, red-pen, a dependency bump, prune-tests, zoom-out, and relevant installed language or domain quality skills. Use when the operator wants a full quality pass on a codebase, wants to level it up step by step, or wants to run the improvement skills together.
+description: Raise a codebase's quality in repeatable rounds that chain hill-climb, housekeeping, red-pen, dependency bumps, prune-tests, zoom-out and installed language quality skills. Use when the operator wants a full quality pass or to level up a codebase.
 ---
 
 # Level up

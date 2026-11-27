@@ -1,6 +1,6 @@
 ---
 name: repo-sweep
-description: Make one change across many repositories, such as retiring a convention, renaming a shared surface, or updating a common config. Use when the operator asks to apply something "everywhere" or across every repository that uses X.
+description: Make one change across many repositories, such as retiring a convention or updating a shared config. Use when the operator asks to apply something everywhere, or in every repository that uses X.
 ---
 
 # Repo sweep

@@ -69,7 +69,12 @@ your harness's skills directory).
 style, work rhythm and repo hygiene. It's a global instructions snippet rather
 than a skill because agents need it in context from the first message — copy
 it into your harness's global instructions file (`~/.claude/CLAUDE.md`,
-`~/.codex/AGENTS.md`, or equivalent).
+`~/.codex/AGENTS.md`, or equivalent). With a local checkout and Claude Code,
+import it instead with `@~/path/to/northstar/harness/snippet.md`.
+
+Everything in the snippet loads in every session, so it stays short. Skills
+cost little until used: harnesses load only each skill's name and
+description up front, and the full `SKILL.md` when it triggers.
 
 ## More
 

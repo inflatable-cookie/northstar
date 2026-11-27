@@ -1,6 +1,6 @@
 ---
 name: zoom-out
-description: Find and fix workarounds and stacked narrow fixes that bend around a constraint the project owns, by changing that constraint instead. Use when a fix would patch a repeatedly patched flow or feels like a workaround, when reviewing a diff specifically for local shortcuts, or when auditing a scope for accumulated band-aids.
+description: Fix workarounds at the constraint they bend around, when the project owns it. Use before patching a repeatedly patched flow, when a fix feels like a workaround, or to review a diff or audit a scope for band-aids.
 ---
 
 # Zoom out

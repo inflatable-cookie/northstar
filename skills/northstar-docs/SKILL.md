@@ -1,6 +1,6 @@
 ---
 name: northstar-docs
-description: Give a project's documentation a lightweight, static structure, with one owning file per fact, that doesn't go stale. Use when adopting this structure, or, in a repository that uses it, when deciding where a fact belongs, reviewing documentation changes, or checking links and changelog fragments.
+description: Give a project's docs a static structure with one owning file per fact. Use when adopting it, or in a repository that uses it, to place a fact, review doc changes, or check links and changelog fragments.
 ---
 
 # Northstar docs

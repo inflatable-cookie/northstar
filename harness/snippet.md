@@ -1,13 +1,3 @@
-# Harness snippet
-
-Guidance an agent needs in context from the first message, not when a skill
-triggers. Copy the sections below the line into your harness's global
-instructions file (such as `~/.claude/CLAUDE.md` or `~/.codex/AGENTS.md`).
-If you keep a local checkout of Northstar and use Claude Code, you can import
-it instead with `@~/path/to/northstar/harness/snippet.md`.
-
----
-
 ## Writing style
 
 Use a clear, natural, conversational voice. Keep it concise and high-signal,

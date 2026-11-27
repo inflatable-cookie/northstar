@@ -17,8 +17,13 @@ installed.
 
 ## The skills
 
-Workflow skills are self-contained `SKILL.md` files. The docs skill also
+Workflow skills are self-contained `SKILL.md` files, except where one has
+separate modes: `pr-etiquette` keeps its review and reply guidance in
+`references/`, so each job loads only its own part. The docs skill also
 ships references, a copy-ready starter and scripts with self-tests.
+
+A skill's description loads in every session, so it stays short and names
+only what triggers the skill.
 
 Skill scripts are dependency-free Python 3.8+. A skill may carry an
 `effigy.toml` catalog so Effigy users can run its scripts as

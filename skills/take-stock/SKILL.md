@@ -1,6 +1,6 @@
 ---
 name: take-stock
-description: Audit what a repository or set of repositories holds now, what's stale, and what depends on it, before deciding what to change. Use when the operator has lost track of a project, asks "what's there now" or for an inventory of a repository's surfaces, or wants to see what's stale and who depends on it before tidying up or changing direction.
+description: Inventory what a repository or set of repositories holds, what's stale and what depends on it, before tidying or changing direction. Use when the operator has lost track of a project or asks what's there now.
 ---
 
 # Take stock
