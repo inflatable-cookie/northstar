@@ -1,15 +1,15 @@
 ---
 name: level-up
-description: Raise the quality of a codebase in repeatable multi-skill rounds by chaining hill-climb, housekeeping, red-pen, prune-tests, zoom-out, and relevant installed language or domain quality skills. Use when the operator wants a full quality pass on a codebase, wants to level it up step by step, or wants to run the improvement skills together.
+description: Raise the quality of a codebase in repeatable multi-skill rounds by chaining hill-climb, housekeeping, red-pen, a dependency bump, prune-tests, zoom-out, and relevant installed language or domain quality skills. Use when the operator wants a full quality pass on a codebase, wants to level it up step by step, or wants to run the improvement skills together.
 ---
 
 # Level up
 
-Chain `hill-climb`, `housekeeping`, `red-pen`, `prune-tests`, `zoom-out`,
-and relevant installed third-party quality skills into repeatable rounds. Each
-round raises the verified quality floor by one level without wasting polish on
-litter, features, tests, or workarounds that should be cut or simplified
-first.
+Chain `hill-climb`, `housekeeping`, `red-pen`, a dependency bump,
+`prune-tests`, `zoom-out`, and relevant installed third-party quality skills
+into repeatable rounds. Each round raises the verified quality floor by one
+level without wasting polish on litter, features, tests, or workarounds that
+should be cut or simplified first.
 
 `level-up` orchestrates the standalone skills rather than repeating their
 rules. `hill-climb` is required for the baseline, target, and re-read loop —
@@ -69,43 +69,57 @@ next step starts, so every phase can be reviewed and reverted on its own.
   correctness batch before pruning tests or refactoring. Skip if the suite is
   green and no verified bugs remain.
 
-## 6. Clean the suite (`prune-tests`)
+## 6. Bump dependencies
+
+- Upgrade every dependency, dev tool and lockfile in scope to its latest safe
+  version: a stable release at least two weeks old with no open advisory.
+  Keep a pin whose reason is recorded, and name it in the report.
+- Land patch and minor bumps as one batch, then each major bump as its own,
+  fixing what it breaks. Run the suite after each batch. This comes after the
+  suite is green and before pruning, so breakage shows against the full
+  suite, and later steps run on current tools.
+- Ask before a major bump that needs a migration outside the scope, raises
+  the toolchain or runtime requirement, or raises the dependency floor that a
+  published package's callers must meet.
+- Hand any workaround an upgrade made unnecessary to step 8.
+
+## 7. Clean the suite (`prune-tests`)
 
 - Run `prune-tests` on the surviving code so dead or implementation-coupled
   tests are removed before deeper quality edits.
 
-## 7. Replace band-aids and workarounds (`zoom-out`)
+## 8. Replace band-aids and workarounds (`zoom-out`)
 
 - Run `zoom-out` in audit mode with fixes on the scope, so workarounds are
   fixed at the owning constraint before idiomatic polishing.
 - Pause for operator approval on its Propose items.
 
-## 8. Language and domain quality pass
+## 9. Language and domain quality pass
 
 - If the operator approved adding or tightening static quality gates in step
   1, wire them up first. They wait until now so lint churn isn't spent on code
-  that steps 4–7 cut or restructure.
+  that steps 4–8 cut or restructure.
 - Run each confirmed third-party quality skill from step 1 against the
   matching parts of the scope.
 - Apply fixes in focused batches and run targeted checks after each batch.
   Skip this step if no static gate updates or third-party skills were selected.
 
-## 9. Close the gap and re-rate (`hill-climb`)
+## 10. Close the gap and re-rate (`hill-climb`)
 
 - Re-check which verified findings from the baseline still apply after steps
-  4–8, and fix what still holds any part or integration below the round
+  4–9, and fix what still holds any part or integration below the round
   target.
 - If earlier steps removed, split or merged parts, update the part map first.
 - Run a fresh, unanchored `hill-climb` re-read to verify the new floor.
 
-## 10. Repeat or finish
+## 11. Repeat or finish
 
 - If the verified floor is below the operator's target (or they ask for
-  another step up), start the next round using step 9's fresh re-read as its
+  another step up), start the next round using step 10's fresh re-read as its
   baseline — don't run a second baseline assessment.
-  - On follow-up rounds, skip `housekeeping`, `red-pen`, `prune-tests`, and
-    `zoom-out` unless the higher target or recent changes warrant re-running
-    them; ask if unsure.
+  - On follow-up rounds, skip `housekeeping`, `red-pen`, the dependency
+    bump, `prune-tests`, and `zoom-out` unless the higher target or recent
+    changes warrant re-running them; ask if unsure.
   - Reuse the confirmed third-party skill list unless the scope changed.
 - Stop when every part and integration meet the target, the operator stops, or
   a round does not raise the floor.
@@ -118,7 +132,8 @@ Give the operator:
 - the scorecard per round (each part, integration, and how the verified floor
   moved);
 - litter removed (`housekeeping`), cuts and simplifications landed
-  (`red-pen`), test counts and coverage delta (`prune-tests`), workarounds
-  fixed, contained or deferred (`zoom-out`), static quality gates added or
+  (`red-pen`), dependencies bumped and pins held back with their reasons,
+  test counts and coverage delta (`prune-tests`), workarounds fixed,
+  contained or deferred (`zoom-out`), static quality gates added or
   tightened, and which third-party skills ran and what they changed;
 - any remaining shortfalls and whether a standing gate was recorded.

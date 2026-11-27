@@ -1,0 +1,1 @@
+Add a dependency bump step to `level-up`: once the suite is green, upgrade every dependency to its latest safe version (stable, at least two weeks old, no open advisory), with majors in their own batches and operator approval for bumps that reach outside the scope or raise callers' requirements.
