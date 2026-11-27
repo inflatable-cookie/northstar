@@ -175,7 +175,7 @@ def main():
         if any(p.search(f) for p in frozen): continue
         text = read_text(os.path.join(root, f))
         if text is None: continue
-        text = strip_code_spans(without_code_blocks(text))
+        text = strip_code_spans(without_code_blocks(FRONTMATTER.sub("", text)))
         for m in list(LINK.finditer(text)) + list(REFDEF.finditer(text)):
             target = m["target"]
             if target.startswith("<"): target = target[1:-1]

@@ -14,9 +14,9 @@ evidence to test with them, never permission to extend the strategy yourself.
 ## Order
 
 1. **Read for context.** Read whatever states the project's purpose and shape:
-   the README, `docs/knowledge/vision.md` and `architecture.md` when the
-   project uses `northstar-docs`, and whatever plan or backlog it keeps. Look
-   for tensions and vocabulary, not a prescription.
+   the README, existing vision and architecture docs (such as
+   `docs/knowledge/vision.md` and `architecture.md`), and whatever plan or
+   backlog it keeps. Look for tensions and vocabulary, not a prescription.
 2. **Name the question.** State the project and the horizon, then separate what
    the operator has said and the project already settles from what is
    unknown. Don't fill a missing destination.
@@ -39,15 +39,15 @@ Atlas is read-only until the operator asks to record the result. Then split
 it by how long it stays true:
 
 - **Durable direction** (purpose, constraints, non-goals, system invariants)
-  goes to the project's static docs. With `northstar-docs`, that's
-  `vision.md`, `architecture.md` and `contracts/`.
+  goes to the project's static docs (for example `vision.md`,
+  `architecture.md` and `contracts/`).
 - **Ordered outcomes and open decisions** go to the project's planning
   surface: its task system, issue tracker, or the planning document it
   already keeps.
 
 If the project has no home for either, ask the operator where it should live.
-Don't create a docs structure or a new file unasked; adopting `northstar-docs`
-is an option to offer, not a default.
+Don't create a new docs structure or file unasked; offer options rather than
+assuming one.
 
 No roadmap or Atlas-specific record. Atlas never plans tasks,
 dispatches or approves work; that follows through the project's normal flow.

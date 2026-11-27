@@ -10,5 +10,5 @@ reasoning and the rules behind the stack.
 - [Architecture](knowledge/architecture.md) — repository and skill shape
 - [Contracts](knowledge/contracts/README.md) — release process and
   compatibility rules
-- [Harness snippet](../harness/snippet.md) — house writing style and work
-  rhythm
+- [Harness snippet](../harness/snippet.md) — house writing style, work rhythm
+  and repo hygiene

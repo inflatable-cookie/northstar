@@ -46,7 +46,7 @@ mk 'docs/guide(v2).md' 'Guide v2
 --------'
 mk 'docs/c#guide.md' '---
 name: csharp
-description: C# guide
+description: C# guide with [yaml](not-a-link.md)
 ---
 
 # Real heading'

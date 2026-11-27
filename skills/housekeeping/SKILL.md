@@ -103,9 +103,9 @@ their upstream). Only these three prove it:
   in parallel.
 - Remove worktrees before branches, one item per command, quoting refnames
   after `--` so one failure won't halt the rest or parse as a flag.
-- Prune missing-directory worktrees with `git worktree prune` (never `--force`,
-  which drops locked ones); use `git worktree remove --force` only on a named
-  dirty worktree.
+- Prune missing-directory worktrees with `git worktree prune` (locked records
+  are kept); use `git worktree remove --force` only on a named dirty worktree,
+  and never `--force --force` (which drops locked ones).
 - Delete live remote branches atomically with
   `git push --force-with-lease="refs/heads/<branch>:<sha>" --delete "<remote>" "refs/heads/<branch>"`
   so late pushes abort and tags aren't hit.
