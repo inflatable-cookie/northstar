@@ -1,6 +1,6 @@
 ---
 name: prune-tests
-description: Remove tests that guard no intended behaviour, and rewrite ones that test the implementation, without losing coverage of anything callers rely on. Use when the operator asks to prune, clean up or slim a test suite, or when tests break on every refactor.
+description: Remove tests that guard no intended behaviour and rewrite ones coupled to the implementation, without losing coverage callers rely on. Use when asked to prune or slim a test suite, or when tests break on every refactor.
 ---
 
 # Prune tests

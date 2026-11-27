@@ -1,6 +1,6 @@
 ---
 name: hill-climb
-description: Assess or raise the quality of a defined scope by rating each part out of 10, then fixing and re-rating when asked. Use for a quality assessment or scorecard, a hill-climb, or a direct score-fix-rerate loop on a codebase, crate, or docs set.
+description: Rate each part of a scope out of 10, then fix and re-rate when asked. Use for a quality assessment, scorecard or hill-climb on a codebase, crate or docs set.
 ---
 
 # Hill-climb

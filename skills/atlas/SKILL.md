@@ -1,6 +1,6 @@
 ---
 name: atlas
-description: Shape a project's long-horizon direction with the operator. Use when settled direction has run out, a strategic or product choice will outlast the current plan, or the operator asks to step back and decide where the project is going.
+description: Shape a project's long-horizon direction with the operator. Use when settled direction has run out, a strategic choice will outlast the current plan, or the operator asks where the project is going.
 ---
 
 # Atlas

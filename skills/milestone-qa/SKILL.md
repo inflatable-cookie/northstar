@@ -1,6 +1,6 @@
 ---
 name: milestone-qa
-description: Run and qualify milestone QA against a pinned commit on the default branch from an isolated checkout using repository-declared selectors, then hand a structured result to the operator. Use when a coherent batch merits full verification, or when qualifying a milestone QA pass, filing repair work from a milestone failure, or handling an incomplete milestone run.
+description: Run full QA on a pinned default-branch commit from an isolated checkout and hand the operator a structured result. Use when a batch of work merits milestone verification, or to file repair work from a failed or incomplete run.
 ---
 
 # Milestone QA

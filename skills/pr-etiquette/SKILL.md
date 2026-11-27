@@ -1,6 +1,6 @@
 ---
 name: pr-etiquette
-description: Write pull requests, reviews, and replies that a human can read quickly, keep agent PR noise down, and score PRs out of 10. Use when opening or updating a PR, writing its description, reviewing or re-reviewing a PR, addressing review feedback, or posting any comment on a PR, especially when several agents work on the same PRs.
+description: Write PRs, reviews and replies a human can read quickly, and score PRs out of 10. Use when opening or updating a PR, reviewing one, addressing review feedback, or commenting on a PR.
 ---
 
 # PR etiquette
@@ -10,6 +10,11 @@ The diff is already on the page, so text earns its place only by saying what
 the diff can't. Three 1–10 scores set the bar: a private check on the
 description before posting, a confidence filter on review findings, and a
 public PR score against a target.
+
+Read the part for the job: opening or updating a PR is below; for a review,
+read [references/review.md](references/review.md); for replying to review
+feedback, read [references/reply.md](references/reply.md). The noise rules at
+the end apply to all three.
 
 ## Open or update a PR
 
@@ -55,73 +60,6 @@ lists files. Any unsupported
 claim caps the score at 3. Rewrite until it scores 9+, and keep the score
 private. When the diff changes during review, edit the description to match
 instead of commenting about what moved.
-
-## Review a PR
-
-Skip drafts, closed PRs, and PRs you have already reviewed at this head.
-
-1. Read the description, linked issue, project rules, and the diff, and run
-   the covering checks if available (otherwise inspect CI results).
-2. Draft findings privately and rate confidence out of 10: **9–10** proven
-   in code or a run; **8** verified against surrounding code or rules as a
-   real bug, risk, missing failure-path test, real gap, or misleading
-   description; **7 or below** unverified hunch, preference, or nit. Verify
-   candidates at 7+ against surrounding code, callers, or a test run, then
-   post only those holding at 8+ — as blocking issues when they must be fixed
-   before merge, or non-blocking suggestions when they are verified real gaps
-   that don't block. Drop nits.
-3. Don't flag issues outside the diff, anything a linter or compiler catches,
-   style preferences, speculation, or anything deliberately silenced in code.
-4. Score the PR out of 10 (change and description together): **10** nothing
-   worth changing; **9** ready to merge, minor polish at most; **8** sound,
-   no bugs, minor real gaps; **7** a bug, a missing failure-path test, or a
-   misleading description; **5–6** structural problems, several bugs, or an
-   oversized PR to split; **below 5** wrong approach or unsafe.
-   **Target is 8**: approve sound PRs and leave minor gaps as non-blocking
-   suggestions, since each round of requested changes costs a full author
-   run and re-review. A task brief or the project's agent instructions can
-   set another with a line such as `PR review target: 9`; the most specific
-   wins.
-5. Keep score and action honest: a score below target needs a blocking
-   finding to explain it, and a finding caps the score at its anchor (a bug
-   caps it at 7). Approve at or above target; request changes (or comment,
-   if you can't) below it.
-6. Post one review opening with a single line giving the score, target, and
-   what stands between them, such as `7/10, target 8: one blocking bug in
-   retry handling.` A clean PR gets that line alone. If a task system
-   publishes reviews (you report a verdict and it posts), report through its
-   protocol instead of posting your own review, keeping the score line and
-   labels in the report where its format allows.
-
-Label inline comments `issue (blocking):`, `suggestion (non-blocking):`,
-or `question:` (only when ambiguity could hide a real problem). Each blocking
-comment says why it matters and what resolves it. Post one comment per issue,
-listing all locations for a repeated pattern. Offer a suggestion block only
-when committing it fixes the problem completely. Link code by full commit
-SHA. No opening praise and no diff summary.
-
-On re-review after new commits, check prior blockers and regressions in the
-new diff without inventing fresh minor issues on untouched code, then
-re-score.
-
-## Reply to review feedback
-
-- Fetch every unresolved thread before starting. GitHub returns threads
-  oldest first, so page through all of them.
-- Work through actionable threads in one batch: verify each point against the
-  code, fix and commit cleanly (never push empty commits to re-run checks),
-  run checks, push once, then reply inline in each thread with the commit
-  SHA and a sentence on what changed.
-- Resolve threads opened by agents once fixed. Leave a human's thread for
-  them to resolve unless they asked otherwise.
-- Disagree inline with a technical reason. No performed agreement or thanks.
-- Never reply "Acknowledged", "Done" without a SHA, or "tracked as follow-up"
-  without a link to the tracked item.
-- Leave threads needing a human decision open, stating the question once.
-- Skip non-actionable comments silently: bot summaries, CI notices,
-  approvals, and threads you have already answered.
-- Before asking for re-review, score the PR yourself against the reviewer's
-  rubric and target, and sync the description if the diff moved.
 
 ## Keep the noise down
 

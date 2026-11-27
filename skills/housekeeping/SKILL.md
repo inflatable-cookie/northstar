@@ -1,6 +1,6 @@
 ---
 name: housekeeping
-description: Clean up repository litter — merged or abandoned local and remote branches, worktrees, stashes, orphaned PRs, and stray scratch, summary or backup files — removing what is proven safe without touching work in flight. Use when asked to tidy, clean up or declutter repositories, prune branches, worktrees or PRs, or run scheduled hygiene.
+description: Remove proven-safe repository litter (merged branches, stale worktrees, stashes, orphaned PRs, stray scratch or backup files) without touching work in flight. Use when asked to tidy or clean up repositories, or for scheduled hygiene.
 ---
 
 # Housekeeping

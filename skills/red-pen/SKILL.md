@@ -1,6 +1,6 @@
 ---
 name: red-pen
-description: Review a product or tool for overbuilding and recommend what to keep, simplify, or remove. Use when the operator asks which features earn their place, where a product surface or feature set is too complicated, or what they can cut.
+description: Review a product or tool for overbuilding and recommend what to keep, simplify or remove. Use when the operator asks which features earn their place or what they can cut.
 ---
 
 # Red pen
