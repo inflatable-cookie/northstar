@@ -71,6 +71,12 @@ next step starts, so every phase can be reviewed and reverted on its own.
 
 ## 6. Bump dependencies
 
+- Audit the dependency tree first with the ecosystem's advisory tooling, such
+  as `cargo deny`, `npm audit` or `pip-audit`. Look for vulnerabilities and
+  for dependencies that are deprecated, unmaintained or yanked. Fix what a
+  bump resolves. Report the rest to the operator, each with its advisory and
+  a recommended replacement or mitigation. Replacing a crate or package is a
+  migration, so wait for the operator's verdict before doing it.
 - Upgrade every dependency, dev tool and lockfile in scope to its latest safe
   version: a stable release at least two weeks old with no open advisory.
   Keep a pin whose reason is recorded, and name it in the report.
@@ -132,7 +138,8 @@ Give the operator:
 - the scorecard per round (each part, integration, and how the verified floor
   moved);
 - litter removed (`housekeeping`), cuts and simplifications landed
-  (`red-pen`), dependencies bumped and pins held back with their reasons,
+  (`red-pen`), dependencies bumped, pins held back with their reasons, and
+  advisories resolved or still open,
   test counts and coverage delta (`prune-tests`), workarounds fixed,
   contained or deferred (`zoom-out`), static quality gates added or
   tightened, and which third-party skills ran and what they changed;
