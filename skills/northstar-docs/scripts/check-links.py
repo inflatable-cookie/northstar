@@ -133,13 +133,13 @@ def reference_key(label):
     return " ".join(label.split()).casefold()
 
 
-_anchors = {}
+def strip_body(text):
+    return without_code_blocks(FRONTMATTER.sub("", text))
 
 
-def anchors(path):
-    if path not in _anchors:
-        raw = FRONTMATTER.sub("", read_text(path) or "")
-        text = without_code_blocks(raw)
+def anchors(path, cache):
+    if path not in cache:
+        text = strip_body(read_text(path) or "")
         references = {reference_key(match["label"]) for match in REFDEF.finditer(text)}
 
         def reference_label(match):
@@ -155,8 +155,8 @@ def anchors(path):
             out.add(base if n == 0 else f"{base}-{n}")
             seen[base] = n + 1
         out |= set(re.findall(r'<a\s+(?:name|id)="([^"]+)"', strip_code_spans(text)))
-        _anchors[path] = out
-    return _anchors[path]
+        cache[path] = out
+    return cache[path]
 
 
 def main():
@@ -170,12 +170,13 @@ def main():
     except (OSError, re.error) as error:
         die(str(error))
     problems = []
+    anchor_cache = {}
     for f in paths.split("\0"):
         if not f: continue
         if any(p.search(f) for p in frozen): continue
         text = read_text(os.path.join(root, f))
         if text is None: continue
-        text = strip_code_spans(without_code_blocks(FRONTMATTER.sub("", text)))
+        text = strip_code_spans(strip_body(text))
         for m in list(LINK.finditer(text)) + list(REFDEF.finditer(text)):
             target = m["target"]
             if target.startswith("<"): target = target[1:-1]
@@ -193,7 +194,7 @@ def main():
                 if not os.path.exists(full):
                     problems.append(f"{f}: missing {target}")
                     continue
-            if frag and full.endswith(".md") and os.path.isfile(full) and frag not in anchors(full):
+            if frag and full.endswith(".md") and os.path.isfile(full) and frag not in anchors(full, anchor_cache):
                 problems.append(f"{f}: missing anchor {target}")
     for p in problems: print(p)
     print(f"check-links: {'OK' if not problems else str(len(problems)) + ' problem(s)'}")
