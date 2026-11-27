@@ -1,1 +1,0 @@
-Lower the default `pr-etiquette` review target from 9 to 8, so sound PRs with minor gaps are approved with non-blocking suggestions; let a task brief or the project's agent instructions set the target with a `PR review target: N` line; and have reviewers report through a task system's protocol when it publishes reviews, instead of posting their own.

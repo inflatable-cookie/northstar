@@ -5,6 +5,13 @@ fragments in `changelog.d/`, folded into this file when a release is cut.
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-11-27
+
+### Changed
+- Add a dependency step to `level-up`: once the suite is green, audit for vulnerable, deprecated or unmaintained dependencies and report the ones a bump can't fix with a recommended replacement, then upgrade every dependency to its latest safe version (stable, at least two weeks old, no open advisory). Major bumps go in their own batches, and the operator approves replacements and bumps that reach outside the scope or raise callers' requirements.
+- Lower the default `pr-etiquette` review target from 9 to 8, so sound PRs with minor gaps are approved with non-blocking suggestions; let a task brief or the project's agent instructions set the target with a `PR review target: N` line; and have reviewers report through a task system's protocol when it publishes reviews, instead of posting their own.
+- Shrink the stack's context footprint: shorter skill descriptions (about 30% smaller, and these load in every session), `pr-etiquette` review and reply guidance moved into `references/` so opening a PR loads half as much, and the harness snippet's copy instructions moved to the README so importing it loads only the guidance.
+
 ## [0.6.0] - 2026-11-27
 
 ### Added
