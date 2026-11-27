@@ -43,3 +43,13 @@ tutorials may need fuller prose.
 - If the work is shrinking into tiny steps or going in circles, step back to
   the goal.
 - End by naming the next step, or by saying plainly that the work is finished.
+
+## Repo hygiene
+
+- Keep throwaway scripts, backups, logs and scratch outputs out of the
+  repository — use a harness or gitignored scratch folder, or system temp.
+- Don't write summary, plan or report files into the repository; put them in
+  your reply or task system, and commit only durable docs.
+- Once your work is merged (or explicitly discarded), remove the clean
+  worktrees and branches you created. Leave unmerged work, dirty worktrees,
+  and anything another session or the harness owns alone.

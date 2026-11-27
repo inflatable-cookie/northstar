@@ -1,6 +1,6 @@
 ---
 name: hill-climb
-description: Assess or raise the quality of a defined scope by rating each part out of 10, then fixing and re-rating when asked. Use for a quality sweep, a hill-climb, or a request to bring a codebase, crate, or docs set up to a target score.
+description: Assess or raise the quality of a defined scope by rating each part out of 10, then fixing and re-rating when asked. Use for a quality assessment or scorecard, a hill-climb, or a direct score-fix-rerate loop on a codebase, crate, or docs set; for a multi-skill codebase pass, use level-up if installed.
 ---
 
 # Hill-climb
@@ -38,8 +38,10 @@ holds the lowest parts back, re-rate, and record the achieved standard.
   anchored.
 - Each reader returns scores by dimension and overall, plus concrete
   `file:line` findings, bugs first. Every score below 9 must cite the
-  actionable findings holding it at that anchor. Once a target is set, limit
-  other findings to parts below it.
+  actionable findings holding it at that anchor. Readers never see the
+  target; the coordinator filters findings to parts below it in steps 3–4.
+- If the harness can't give a reader fresh context, tell the operator the
+  read wasn't independent, or ask them to run it in a fresh session.
 
 ## 3. Verify and set the target
 
@@ -59,8 +61,8 @@ If the operator asked for an assessment, report here.
 
 - Turn verified findings into tasks grouped by area. Real bugs go in their
   own correctness batch, first. Structure, contracts and docs follow.
-- Never run two batches that touch the same files at once, and wait for
-  in-flight feature work in those areas.
+- Never run two batches that touch the same files at once. Check open PRs,
+  branches and worktrees for in-flight work in those areas, and wait for it.
 - Check downstream callers before changing public behaviour. Agree on a
   compatibility plan before making a breaking change, and describe it in the PR.
 - Keep the scorecard in the project's planning surface when one is
@@ -71,19 +73,23 @@ If the operator asked for an assessment, report here.
 After each round, repeat the independent read (step 2) for every part that
 was below target or modified in the round, plus integration whenever changes
 touched seams or shared contracts. Untouched parts that already met the
-target keep their verified score. Stop when every part and integration meet
-the target, or a round moves nothing. Explain any remaining shortfall,
+target keep their verified score. When fixes remove, split or merge parts,
+update the scorecard and re-read the affected parts and integration. Stop
+when every part and integration meet the target, or a round does not raise
+the verified floor. Explain any remaining shortfall,
 including integration.
 
 ## 6. Make it a standing gate
 
-When the operator wants a standing standard, record the rubric and the
-verified floor in the project's agent instructions:
+Only when the operator asks for a standing standard, record the rubric and
+the verified floor in the project's agent instructions:
 
 - A worker rates the parts it touched and, if the change affects how parts fit
   together, integration.
 - A reviewer checks the same scores at the revision under review. Send back
-  a change that lowers an existing score or adds a part below the floor.
+  a change that drops a part across a rubric anchor (a new bug, unhandled
+  error path or test gap) or adds a part below the floor. Score jitter of a
+  point with no such finding is not a regression.
 
 After that, sweeps are occasional checks at milestones or when scores drift.
 

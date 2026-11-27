@@ -34,8 +34,8 @@ Pick the skills that fit your workflow from the [skill list](../../README.md#the
 
 ### Harness snippet
 
-Writing style and work rhythm are not skills: agents need them in context
-from the start, not when a skill triggers. The stack ships them as an opt-in
+Writing style, work rhythm and repo hygiene are not skills: agents need them
+in context from the start, not when a skill triggers. The stack ships them as an opt-in
 snippet in [`harness/snippet.md`](../../harness/snippet.md) for a harness's
 global instructions file (`CLAUDE.md`, `AGENTS.md`).
 
@@ -63,6 +63,11 @@ Operator rulings, 2026-11-18:
   points at, and it stays as static as the other docs (2026-11-19).
 - A skill is its `SKILL.md` and what it needs; no harness-specific metadata
   files such as `agents/openai.yaml`.
+- Agent PRs, descriptions and comments are always written for a human reader;
+  there is no machine-only format (2026-11-26).
+- Repo hygiene splits in two: prevention rules live in the harness snippet,
+  and cleanup is the `housekeeping` skill, which removes proven-safe litter
+  without asking (2026-11-26).
 
 ## Non-goals
 

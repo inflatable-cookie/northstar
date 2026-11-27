@@ -1,6 +1,6 @@
 ---
 name: northstar-docs
-description: Give a project's documentation a lightweight, static structure, with one owning file per fact, that doesn't go stale. Use for adopting the starter, deciding where a fact belongs, reviewing documentation changes, or checking links and changelog fragments.
+description: Give a project's documentation a lightweight, static structure, with one owning file per fact, that doesn't go stale. Use when adopting this structure, or, in a repository that uses it, when deciding where a fact belongs, reviewing documentation changes, or checking links and changelog fragments.
 ---
 
 # Northstar docs
@@ -53,7 +53,7 @@ answers.
 ## Adopt and review
 
 - Adopting or migrating a repository: [adopt](references/adopt.md), with the
-  copy-ready starter in [template/](template/README.md). The starter is a
+  copy-ready starter in [template/](template/). The starter is a
   minimum, not a schema.
 - Reviewing a documentation change: [review](references/review.md).
 
@@ -65,7 +65,13 @@ path to your copy of the skill:
 ```bash
 python3 "<skill-dir>/scripts/check-links.py"
 python3 "<skill-dir>/scripts/changelog.py" check
+python3 "<skill-dir>/scripts/changelog.py" fold --version <x.y.z>
 ```
+
+A changelog fragment is one file per change under `changelog.d/`, named
+`<task-or-pr-reference>-<short-slug>.<type>.md`; the
+[adoption guide](references/adopt.md#record-unreleased-changes-as-fragments)
+has the full rules.
 
 `effigy.toml` wraps the same scripts for projects that use Effigy
 (`effigy skill run northstar-docs/<task>`).

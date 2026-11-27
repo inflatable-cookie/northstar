@@ -1,6 +1,6 @@
 ---
 name: take-stock
-description: Audit what a repository or set of repositories holds now, what's stale, and what depends on it, before deciding what to change. Use when the operator has lost track of a project, asks for an audit or "what's there now", or wants to tidy something up.
+description: Audit what a repository or set of repositories holds now, what's stale, and what depends on it, before deciding what to change. Use when the operator has lost track of a project, asks "what's there now" or for an inventory of a repository's surfaces, or wants to see what's stale and who depends on it before tidying up or changing direction.
 ---
 
 # Take stock
@@ -17,14 +17,16 @@ publish. The question decides what counts as stale.
 
 ## 2. Inventory
 
-Use the fetched default branch for merged state, the local default branch
-for a local-only repository, or the revision the operator named. For shipped
+Use the fetched default branch for merged state (if you can't fetch, use
+the local tracking ref and note its age), the local default branch for a
+local-only repository, or the revision the operator named. For shipped
 or deployed state, check the release or deployment itself. Report the
 revision and evidence you used.
 
 - **Surfaces:** what the project ships or exposes: packages, binaries, skills,
   scripts, task-runner selectors, CI, config, docs. One line each on what it
-  does.
+  does; group minor scripts and config by surface so the list stays
+  scannable.
 - **Stated intent:** what the README, vision or agent instructions say the
   project is. Note where it disagrees with the surfaces.
 - **In flight:** open PRs, unmerged branches, worktrees, stashes, and the
@@ -48,8 +50,8 @@ Unknown is a valid answer. Don't guess a surface dead because it's quiet.
 
 For each surface worth changing, find who relies on it: other repositories
 (search sibling checkouts and the code host), installed copies, CI in other
-projects, agent instructions that name it, published consumers. A dependent
-you miss breaks later.
+projects, agent instructions that name it, published consumers. Say what
+you could and couldn't search; a dependent you miss breaks later.
 
 ## 5. Report
 
@@ -61,7 +63,5 @@ Keep it short enough to decide from:
 - recommendations ranked by value, each with its blast radius;
 - the questions only the operator can answer.
 
-Then stop. Follow-up work belongs to the skill that fits it: `repo-sweep`
-for a change across repositories, `red-pen` to cut overbuilt features,
-`zoom-out` to replace stacked workarounds, `hill-climb` or `level-up` for
-quality, and `atlas` for direction.
+Then stop. Cuts, refactors, quality passes and changes of direction wait
+for the operator's ruling.

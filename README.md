@@ -8,17 +8,22 @@ need only Python 3.8+ and Git.
 ## The skills
 
 - [`level-up`](skills/level-up/SKILL.md) — chain `hill-climb`, `red-pen`,
-  `prune-tests`, `zoom-out`, and installed language/domain quality skills into
-  repeatable level-up rounds.
+  `prune-tests`, `zoom-out`, `housekeeping`, and installed language/domain
+  quality skills into repeatable level-up rounds.
 - [`hill-climb`](skills/hill-climb/SKILL.md) — assess quality or improve a
   codebase, crate, or docs set to a target score.
 - [`red-pen`](skills/red-pen/SKILL.md) — review a product or tool for
   overbuilding and recommend what to keep, simplify, or remove.
-- [`zoom-out`](skills/zoom-out/SKILL.md) — identify and replace stacked narrow
-  symptom fixes with cleaner lower-level solutions, and stop new ones during
-  triage.
+- [`zoom-out`](skills/zoom-out/SKILL.md) — find and fix narrow fixes and
+  workarounds at the constraint they bend around, in triage, change review,
+  or an audit.
+- [`pr-etiquette`](skills/pr-etiquette/SKILL.md) — human-readable PRs,
+  reviews and replies with less agent noise, scored out of 10.
 - [`take-stock`](skills/take-stock/SKILL.md) — audit what a project holds,
   what's stale, and what depends on it before deciding what to change.
+- [`housekeeping`](skills/housekeeping/SKILL.md) — clean up agent litter:
+  merged branches, worktrees, orphaned PRs and stray files, without touching
+  work in flight.
 - [`repo-sweep`](skills/repo-sweep/SKILL.md) — make one mechanical change
   across many repositories, one PR each.
 - [`milestone-qa`](skills/milestone-qa/SKILL.md) — run and qualify
@@ -61,9 +66,9 @@ your harness's skills directory).
 ## Harness snippet
 
 [`harness/snippet.md`](harness/snippet.md) is opt-in guidance on writing
-style and work rhythm. It's a global instructions snippet rather than a skill
-because agents need it in context from the first message — copy it into your
-harness's global instructions file (`~/.claude/CLAUDE.md`,
+style, work rhythm and repo hygiene. It's a global instructions snippet rather
+than a skill because agents need it in context from the first message — copy
+it into your harness's global instructions file (`~/.claude/CLAUDE.md`,
 `~/.codex/AGENTS.md`, or equivalent).
 
 ## More
