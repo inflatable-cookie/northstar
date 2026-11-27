@@ -71,7 +71,11 @@ Operator rulings, 2026-11-18:
 - `pr-etiquette` uses scores out of 10 deliberately — a public PR score in
   the review plus private self-scores for the description and finding
   confidence — because rating makes agents attend to detail and gives the
-  recipient a target (2026-11-27).
+  recipient a target (2026-11-27). Reviews approve at 8 (sound, no bugs)
+  by default, with minor gaps as non-blocking suggestions, because each
+  changes-requested round costs a full author run and re-review; a task
+  brief or project can raise the target, and a task system that publishes
+  reviews owns the review channel (2026-11-27).
 
 ## Non-goals
 
