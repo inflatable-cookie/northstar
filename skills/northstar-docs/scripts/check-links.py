@@ -62,9 +62,13 @@ ESCAPE = re.compile(rf"\\([{re.escape(string.punctuation)}])")
 EXTERNAL = re.compile(r"^[a-zA-Z][\w+.-]*:")
 FENCE = re.compile(r"^ {0,3}(`{3,}|~{3,})(.*)$")
 FRONTMATTER = re.compile(r"\A---[ \t]*\r?\n(?:.*?\r?\n)??(?:---|\.\.\.)[ \t]*(?:\r?\n|\Z)", re.S)
-LIST_ITEM = re.compile(r"^ {0,3}(?:[-+*]|\d{1,9}[.)])[ \t]+")
-HEADING = re.compile(r"^ {0,3}(?:#{1,6}[ \t]+(.+?)[ \t]*#*[ \t]*$|"
-                     r"([^#\s][^\n]*?)\n {0,3}(?:=+|-+)[ \t]*$)", re.M)
+LIST_MARKER = r"(?:[-+*]|\d{1,9}[.)])[ \t]+"
+LIST_ITEM = re.compile(rf"^ {{0,3}}{LIST_MARKER}")
+HEADING = re.compile(
+    rf"^ {{0,3}}(?:#{{1,6}}[ \t]+(.+?)[ \t]*#*[ \t]*$|"
+    rf"(?!{LIST_MARKER}|>[ \t]?|[-_*]{{3,}}[ \t]*$)([^#\s][^\n]*?)\n {{0,3}}(?:=+|-+)[ \t]*$)",
+    re.M,
+)
 
 
 def without_code_blocks(text):
@@ -275,7 +279,7 @@ def main():
                 if not in_repo:
                     problems.append(f"{f}: escapes repo {target}")
                     continue
-                if not os.path.exists(full):
+                if not os.path.exists(full) or (path.endswith("/") and not os.path.isdir(full)):
                     problems.append(f"{f}: missing {target}")
                     continue
             if frag and full.endswith(".md") and os.path.isfile(full) and frag not in anchors(full, anchor_cache):

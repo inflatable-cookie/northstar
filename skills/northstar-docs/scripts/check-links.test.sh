@@ -77,6 +77,11 @@ See [paths](#vst2_paths), [setup](#setup), [code-link](#check-ab), [code-ref](#c
 
 ## Bar
 
+- list item
+---
+1. ordered item
+===
+
 <a name="explicit-name"></a>
 <a id="explicit-id"></a>
 <a id='\''single-id'\''></a>
@@ -113,7 +118,8 @@ note: [yaml](not-a-link.md)
 # BOM heading
 
 See [self](#bom-heading).' > "$repo/docs/bom-fm.md"
-mk docs/targets.md 'See [guide](guide%20file.md#caf%C3%A9), [v2](guide(v2).md), [escaped](guide\(v2\).md#guide-v2), [hash](c\#guide.md#real-heading), [plain](b.md?plain=1), [plain-anchor](b.md?plain=1#rules), [![badge](badge.svg)](b.md), and [ext](<https://example.com>).
+mk docs/sub/note.md '# Sub'
+mk docs/targets.md 'See [guide](guide%20file.md#caf%C3%A9), [v2](guide(v2).md), [escaped](guide\(v2\).md#guide-v2), [hash](c\#guide.md#real-heading), [plain](b.md?plain=1), [plain-anchor](b.md?plain=1#rules), [dir](sub/), [![badge](badge.svg)](b.md), and [ext](<https://example.com>).
 
 Literal: ``[example](nowhere.md)``.
 Also literal: \[escaped](nowhere.md).
@@ -131,7 +137,7 @@ mk tests/fixtures/corpus.md '[old](../../gone.md)'
 run --frozen '^tests/fixtures/' > /dev/null && echo "ok --frozen paths are skipped" || { echo "FAIL --frozen"; exit 1; }
 rm -rf "$repo/tests"
 
-mk docs/bad.md '[x](b.md#nope) [y](missing.md) [z](targets.md#example-only) [fake](anchors.md#code-span-anchor) [wrong-slug](anchors.md#check-a) [bad-data-id](anchors.md#not-an-anchor) [bad-input-name](anchors.md#input-name) [bad-img-alt](anchors.md#badge-status) [bad-query](b.md?plain=1#nope) [escape](../../..)'
+mk docs/bad.md '[x](b.md#nope) [y](missing.md) [z](targets.md#example-only) [fake](anchors.md#code-span-anchor) [wrong-slug](anchors.md#check-a) [bad-data-id](anchors.md#not-an-anchor) [bad-input-name](anchors.md#input-name) [bad-img-alt](anchors.md#badge-status) [list-hr](anchors.md#--list-item) [ord-hr](anchors.md#1-ordered-item) [file-slash](b.md/) [file-slash-anchor](b.md/#rules) [bad-query](b.md?plain=1#nope) [escape](../../..)'
 mk docs/escaped.md 'A literal backslash followed by a \\[real link](after-backslash.md).
 Escape with \`. See [broken](escaped-backtick.md) and \`code\`.
 Three \\\` and [broken2](three-backslashes.md) and \`end\`.'
@@ -183,6 +189,10 @@ set +e; out=$(run); rc=$?; set -e
   && echo "$out" | grep -q "missing anchor anchors.md#not-an-anchor" \
   && echo "$out" | grep -q "missing anchor anchors.md#input-name" \
   && echo "$out" | grep -q "missing anchor anchors.md#badge-status" \
+  && echo "$out" | grep -q "missing anchor anchors.md#--list-item" \
+  && echo "$out" | grep -q "missing anchor anchors.md#1-ordered-item" \
+  && echo "$out" | grep -q "docs/bad.md: missing b.md/" \
+  && echo "$out" | grep -q "docs/bad.md: missing b.md/#rules" \
   && echo "$out" | grep -q "missing anchor b.md?plain=1#nope" \
   && echo "$out" | grep -q "docs/bad.md: escapes repo ../../.." \
   && echo "$out" | grep -q "docs/café.md: missing absent.md" \
