@@ -74,21 +74,27 @@ Skip drafts, closed PRs, and PRs you have already reviewed at this head.
    style preferences, speculation, or anything deliberately silenced in code.
 4. Score the PR out of 10 (change and description together): **10** nothing
    worth changing; **9** ready to merge, minor polish at most; **8** sound,
-   no bugs, minor real gaps worth fixing first; **7** a bug, a missing
-   failure-path test, or a misleading description; **5–6** structural
-   problems, several bugs, or an oversized PR to split; **below 5** wrong
-   approach or unsafe. Target is 9 unless the project sets one.
+   no bugs, minor real gaps; **7** a bug, a missing failure-path test, or a
+   misleading description; **5–6** structural problems, several bugs, or an
+   oversized PR to split; **below 5** wrong approach or unsafe.
+   **Target is 8**: approve sound PRs and leave minor gaps as non-blocking
+   suggestions, since each round of requested changes costs a full author
+   run and re-review. A task brief or the project's agent instructions can
+   set another with a line such as `PR review target: 9`; the most specific
+   wins.
 5. Keep score and action honest: a score below target needs a blocking
    finding to explain it, and a finding caps the score at its anchor (a bug
    caps it at 7). Approve at or above target; request changes (or comment,
    if you can't) below it.
 6. Post one review opening with a single line giving the score, target, and
-   what stands between them, such as `7/10, target 9: one blocking bug in
-   retry handling.` A clean PR gets that line alone.
+   what stands between them, such as `7/10, target 8: one blocking bug in
+   retry handling.` A clean PR gets that line alone. If a task system
+   publishes reviews (you report a verdict and it posts), report through its
+   protocol instead of posting your own review, keeping the score line and
+   labels in the report where its format allows.
 
-Label inline comments `issue (blocking):`, `suggestion (non-blocking):`
-(verified 8+ gaps worth improving that don't block merge), or `question:`
-(only when ambiguity could hide a real problem). Each blocking
+Label inline comments `issue (blocking):`, `suggestion (non-blocking):`,
+or `question:` (only when ambiguity could hide a real problem). Each blocking
 comment says why it matters and what resolves it. Post one comment per issue,
 listing all locations for a repeated pattern. Offer a suggestion block only
 when committing it fixes the problem completely. Link code by full commit
@@ -121,7 +127,7 @@ re-score.
 
 - The author owns the PR description. Others propose edits in review rather
   than editing it.
-- Use GitHub reviews for code review. For recurring non-review notes (such as
+- Keep code review in reviews. For recurring non-review notes (such as
   a QA or triage report), keep at most one top-level comment per role, tagged
   with a hidden marker like `<!-- agent:qa -->`, and edit it in place.
 - Hide your own superseded comments as outdated.
