@@ -95,7 +95,7 @@ their upstream). Only these three prove it:
   detached or human worktrees, idle dirty worktrees (with change summary), and
   agent worktrees on unmerged branches.
 - Tracked and untracked litter (including stale scratch files — git holds no
-  copy) and attributable idle scratch DBs or containers.
+  copy).
 
 ## 3. Remove
 
@@ -124,8 +124,7 @@ their upstream). Only these three prove it:
   selected (archive-tagging if unmerged) or proven safe.
 - Remove tracked litter via a commit or PR; move anything worth keeping into
   `docs/` with history and fix inbound links.
-- Stop orphaned processes pointing at a deleted worktree; drop scratch DBs or
-  containers only when named.
+- Stop orphaned processes pointing at a deleted worktree.
 
 ## 4. Prevent recurrence
 
