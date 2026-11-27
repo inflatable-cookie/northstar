@@ -5,6 +5,21 @@ fragments in `changelog.d/`, folded into this file when a release is cut.
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-11-27
+
+### Added
+- Add `housekeeping`, a skill that removes proven-safe merged branches, stale tracking refs and clean agent worktrees, and lists remaining litter (unmerged branches, stale PRs, stashes, stray files) for explicit selection, plus repo hygiene rules in the harness snippet. `level-up` runs it before the baseline.
+- Add `pr-etiquette`, a skill for human-readable pull requests, review comments and replies that cuts agent PR noise and uses scores out of 10 for descriptions, review findings and approval.
+
+### Changed
+- Teach `red-pen` to respect retained-surface registers and avoid recommending cuts based only on missing callers.
+- Extend `level-up` to check for missing or loose language static quality gates (compiler strictness, linters, formatters) and wire up operator-approved gates before the quality pass.
+- Apply a review pass across the skills: tighter triggers for `zoom-out`, `take-stock`, `hill-climb`, `red-pen`, `atlas`, `milestone-qa` and `northstar-docs`; a read-only default for `zoom-out` audits; safer setup and production-code handling in `prune-tests`; unanchored readers and floor-based stopping in `hill-climb`; clearer orchestration in `level-up`; and removal of the Northstar-specific `template/README.md` from the docs starter.
+- Broaden `zoom-out` to catch single-site workarounds that bend around constraints the project owns (escapes, near-copies, post-hoc fixups, shadow state and similar), add a change-review mode and a shared Fix / Propose / Contain / Leave verdict, and update `level-up` step 7 to match.
+
+### Fixed
+- `check-links.py` handles far more real-world Markdown without false alarms or missed links: frontmatter variants, escaped characters, fenced code inside list items, footnotes, nested badge links, stray backticks in tables and lists, `?query` targets, and GitHub's heading and HTML anchor rules. The script's docstring now states what it supports and its known limits.
+
 ## [0.5.0] - 2026-11-20
 
 ### Added
