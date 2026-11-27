@@ -38,16 +38,17 @@ def parse_args(argv):
     return opts
 
 
+# Even number of backslashes: the following delimiter is unescaped.
+EVEN_BS = r"(?<!\\)(?:\\\\)*"
 BARE_TARGET = r"(?:\\[^\n]|[^()\s\\]|\((?:\\[^\n]|[^()\s\\])*\))+"
 TARGET = rf"(?P<target><[^>\n]+>|{BARE_TARGET})"
 TITLE = r"""(?:"[^"\n]*"|'[^'\n]*'|\([^()\n]*\))"""
-# An opening bracket is escaped when preceded by an odd number of backslashes.
-LINK_LABEL = r"(?<!\\)(?:\\\\)*\[(?P<label>(?:[^\[\]]|\[[^\]]*\])*)\]"
+LINK_LABEL = rf"{EVEN_BS}\[(?P<label>(?:[^\[\]]|\[[^\]]*\])*)\]"
 LINK = re.compile(rf"{LINK_LABEL}\(\s*{TARGET}(?:\s+{TITLE})?\s*\)")
 REFLINK = re.compile(rf"{LINK_LABEL}\[(?P<ref>[^\]\n]*)\]")
 REFDEF = re.compile(rf"^ {{0,3}}\[(?P<label>[^\]\n]+)\]:[ \t]*(?:\n[ \t]*)?"
                     rf"{TARGET}(?:[ \t]+{TITLE})?[ \t]*$", re.M)
-CODE_SPAN = re.compile(r"(?<!`)(`+)(?!`).*?(?<!`)\1(?!`)", re.S)
+CODE_SPAN = re.compile(rf"(?P<esc>{EVEN_BS})(?<!`)(?P<ticks>`+)(?!`).*?(?<!`)(?P=ticks)(?!`)", re.S)
 ESCAPE = re.compile(rf"\\([{re.escape(string.punctuation)}])")
 EXTERNAL = re.compile(r"^[a-zA-Z][\w+.-]*:")
 FENCE = re.compile(r"^ {0,3}(`{3,}|~{3,})(.*)$")
@@ -110,19 +111,22 @@ def read_text(path):
 def strip_code_spans(text):
     paragraphs = re.split(r"\n[ \t]*\n", text)
     return "\n\n".join(
-        CODE_SPAN.sub(lambda m: re.sub(r"[^\n]", " ", m[0]), paragraph)
+        CODE_SPAN.sub(
+            lambda m: m["esc"] + re.sub(r"[^\n]", " ", m[0][len(m["esc"]):]),
+            paragraph,
+        )
         for paragraph in paragraphs
     )
 
 
 def split_target(t):
-    match = re.search(r"(?<!\\)(?:\\\\)*#", t)
+    match = re.search(rf"{EVEN_BS}#", t)
     if match:
         idx = match.end() - 1
         path, frag = t[:idx], t[idx + 1:]
     else:
         path, frag = t, ""
-    query = re.search(r"(?<!\\)(?:\\\\)*\?", path)
+    query = re.search(rf"{EVEN_BS}\?", path)
     if query:
         path = path[:query.end() - 1]
     return unquote(ESCAPE.sub(r"\1", path)), unquote(ESCAPE.sub(r"\1", frag))
@@ -147,8 +151,9 @@ def strip_heading_links(heading, references):
         sentinel += "\x00"
 
     def save_span(match):
-        spans.append(match[0])
-        return f"{sentinel}{len(spans) - 1}{sentinel}"
+        esc = match["esc"]
+        spans.append(match[0][len(esc):])
+        return f"{esc}{sentinel}{len(spans) - 1}{sentinel}"
 
     def restore(text):
         if not spans:

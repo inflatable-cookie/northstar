@@ -18,6 +18,8 @@ mk docs/b.md '# B
 run > /dev/null && echo "ok valid links, anchors and external links pass" || { run; echo "FAIL clean repo"; exit 1; }
 
 mk docs/spans.md 'Cite like `[[1]](https://example.com)` or `[x](nowhere.md)`.
+Escape with \` then `[not-a-link](nowhere.md)` and \\`[after-even-bs](nowhere.md)`.
+Trailing backslash inside span `foo\` then `[still-code](nowhere.md)`.
 
 ```md
 [y](also-nowhere.md)
@@ -76,7 +78,9 @@ run --frozen '^tests/fixtures/' > /dev/null && echo "ok --frozen paths are skipp
 rm -rf "$repo/tests"
 
 mk docs/bad.md '[x](b.md#nope) [y](missing.md) [z](targets.md#example-only) [fake](anchors.md#code-span-anchor) [wrong-slug](anchors.md#check-a) [bad-query](b.md?plain=1#nope) [escape](../../..)'
-mk docs/escaped.md 'A literal backslash followed by a \\[real link](after-backslash.md).'
+mk docs/escaped.md 'A literal backslash followed by a \\[real link](after-backslash.md).
+Escape with \`. See [broken](escaped-backtick.md) and \`code\`.
+Three \\\` and [broken2](three-backslashes.md) and \`end\`.'
 mk docs/paragraphs.md 'A literal backtick `
 
 [real link](paragraph-target.md)
@@ -114,6 +118,8 @@ set +e; out=$(run); rc=$?; set -e
   && echo "$out" | grep -q "docs/list.md: missing list-target.md" \
   && echo "$out" | grep -q "docs/paragraphs.md: missing paragraph-target.md" \
   && echo "$out" | grep -q "docs/escaped.md: missing after-backslash.md" \
+  && echo "$out" | grep -q "docs/escaped.md: missing escaped-backtick.md" \
+  && echo "$out" | grep -q "docs/escaped.md: missing three-backslashes.md" \
   && echo "$out" | grep -q "docs/empty-frontmatter.md: missing after-empty-fm.md" \
   && echo "$out" | grep -q "docs/nested.md: missing missing-badge.svg" \
   && echo "$out" | grep -q "docs/nested.md: missing missing-ext-badge.svg" \
