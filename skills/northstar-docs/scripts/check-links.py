@@ -7,14 +7,15 @@ Usage:
 Scope:
   Checks relative inline links/images and block-start reference definitions in
   tracked or unignored UTF-8 (with optional BOM) Markdown files up to 3 MB,
-  after stripping YAML frontmatter, top-level fenced/indented code blocks, and
-  code spans. Checks fragments against GitHub-style heading slugs and explicit
+  after stripping YAML frontmatter, fenced code blocks (also in list items),
+  top-level indented code blocks, and code spans. GFM footnote definitions
+  ([^1]: ...) are not treated as links. Checks fragments against GitHub-style heading slugs and explicit
   HTML id (or <a name>) anchors. Skips external URLs, root-relative paths, and
   --frozen <regex> matches.
 
   Known limits (regex subset, not a full CommonMark parser):
-  - Indented code blocks inside list items and fenced blocks in blockquotes
-    are not recognised.
+  - Indented (non-fenced) code blocks inside list items and fenced blocks in
+    blockquotes are not recognised.
   - HTML comments, raw HTML blocks, multi-line HTML tags, and unquoted HTML
     anchor attributes are not parsed.
   - Reference links are validated via their definitions; shortcut reference
@@ -75,6 +76,8 @@ UNDERSCORE_EM = re.compile(r"(?<![\w\\])(_{1,3})(?=\S)(.+?)(?<=\S)(?<!\\)\1(?!\w
 ESCAPE = re.compile(rf"\\([{re.escape(string.punctuation)}])")
 EXTERNAL = re.compile(r"^[a-zA-Z][\w+.-]*:")
 FENCE = re.compile(r"^ {0,3}(`{3,}|~{3,})(.*)$")
+LIST_FENCE = re.compile(r"^[ \t]*(`{3,}|~{3,})(.*)$")
+TABLE_DELIMITER = re.compile(r"^[ \t]*\|?[ \t]*:?-+:?[ \t]*(?:\|[ \t]*:?-+:?[ \t]*)+\|?[ \t]*$", re.M)
 FRONTMATTER = re.compile(r"\A---[ \t]*\r?\n(?:.*?\r?\n)??(?:---|\.\.\.)[ \t]*(?:\r?\n|\Z)", re.S)
 LIST_MARKER = r"(?:[-+*]|\d{1,9}[.)])[ \t]+"
 LIST_ITEM = re.compile(rf"^ {{0,3}}{LIST_MARKER}")
@@ -91,7 +94,7 @@ def without_code_blocks(text):
     after_blank = True
     lines = []
     for line in text.splitlines():
-        match = FENCE.match(line)
+        match = (LIST_FENCE if in_list else FENCE).match(line)
         if fence:
             if match and match[1].startswith(fence) and not match[2].strip():
                 fence = ""
@@ -135,14 +138,24 @@ def read_text(path):
         return None
 
 
+def inline_blocks(paragraph):
+    """Split a paragraph where a code span can't continue: table rows, list items, headings."""
+    if TABLE_DELIMITER.search(paragraph):
+        return paragraph.split("\n")
+    blocks = []
+    for line in paragraph.split("\n"):
+        if blocks and not LIST_ITEM.match(line) and not re.match(r" {0,3}#", line):
+            blocks[-1] += "\n" + line
+        else:
+            blocks.append(line)
+    return blocks
+
+
 def strip_code_spans(text):
-    paragraphs = re.split(r"\n[ \t]*\n", text)
+    blank = lambda m: m["esc"] + re.sub(r"[^\n]", " ", m[0][len(m["esc"]):])
     return "\n\n".join(
-        CODE_SPAN.sub(
-            lambda m: m["esc"] + re.sub(r"[^\n]", " ", m[0][len(m["esc"]):]),
-            paragraph,
-        )
-        for paragraph in paragraphs
+        "\n".join(CODE_SPAN.sub(blank, block) for block in inline_blocks(paragraph))
+        for paragraph in re.split(r"\n[ \t]*\n", text)
     )
 
 
@@ -215,7 +228,8 @@ def refdefs(text):
     while pos < len(text):
         if at_start:
             match = REFDEF.match(text, pos)
-            if match and match["label"].strip():
+            # [^label]: is a GFM footnote, not a link definition.
+            if match and match["label"].strip() and not match["label"].startswith("^"):
                 yield match
                 pos = match.end()
                 if pos < len(text) and text[pos] == "\n":

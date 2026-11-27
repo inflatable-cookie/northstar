@@ -133,6 +133,29 @@ Also literal: \[escaped](nowhere.md).
 ~~~~'
 run > /dev/null && echo "ok encoded paths and anchors, angle destinations and tilde fences" || { run; exit 1; }
 
+mk docs/list-fences.md '1. First step:
+
+    ```md
+    # Example
+
+    See [example](nowhere.md)
+    ```
+
+- outer
+  - inner
+
+      ~~~
+      [tilde example](nowhere.md)
+
+      ~~~
+
+Footnotes[^1] and more[^2][^3].
+
+[^1]: TODO
+[^2]: See (optional)
+[^3]: See "note"'
+run > /dev/null && echo "ok fences inside list items and footnote definitions" || { run; echo "FAIL list fences or footnotes"; exit 1; }
+
 mk tests/fixtures/corpus.md '[old](../../gone.md)'
 run --frozen '^tests/fixtures/' > /dev/null && echo "ok --frozen paths are skipped" || { echo "FAIL --frozen"; exit 1; }
 rm -rf "$repo/tests"
@@ -179,6 +202,15 @@ mk docs/escapes-in-links.md '[g](missing-dq.md "the \"real\" guide")
 [ref-sq]: missing-ref-sq.md '\''it\'\''s'\''
 [ref-paren]: missing-ref-paren.md (escaped \) paren)
 [ref-array\]]: missing-ref-bracket.md'
+mk docs/stray-ticks.md '| Syntax | Note |
+| ------ | ---- |
+| `     | opens a span |
+| [row](missing-row.md) | real link |
+| `     | closes nothing |
+
+- a literal `
+- [item](missing-item.md)
+- another literal `'
 mk docs/café.md '[broken](absent.md)'
 git -C "$repo" add docs/café.md
 set +e; out=$(run); rc=$?; set -e
@@ -220,6 +252,8 @@ set +e; out=$(run); rc=$?; set -e
   && echo "$out" | grep -q "docs/escapes-in-links.md: missing missing-ref-sq.md" \
   && echo "$out" | grep -q "docs/escapes-in-links.md: missing missing-ref-paren.md" \
   && echo "$out" | grep -q "docs/escapes-in-links.md: missing missing-ref-bracket.md" \
+  && echo "$out" | grep -q "docs/stray-ticks.md: missing missing-row.md" \
+  && echo "$out" | grep -q "docs/stray-ticks.md: missing missing-item.md" \
   && echo "ok broken links in tracked Unicode and untracked files, including anchors in examples" \
   || { echo "FAIL negatives: $out"; exit 1; }
 rc=0
