@@ -42,11 +42,13 @@ def parse_args(argv):
 EVEN_BS = r"(?<!\\)(?:\\\\)*"
 BARE_TARGET = r"(?:\\[^\n]|[^()\s\\]|\((?:\\[^\n]|[^()\s\\])*\))+"
 TARGET = rf"(?P<target><[^>\n]+>|{BARE_TARGET})"
-TITLE = r"""(?:"[^"\n]*"|'[^'\n]*'|\([^()\n]*\))"""
-LINK_LABEL = rf"{EVEN_BS}\[(?P<label>(?:[^\[\]]|\[[^\]]*\])*)\]"
+TITLE = r"""(?:"(?:\\[^\n]|[^"\\\n])*"|'(?:\\[^\n]|[^'\\\n])*'|\((?:\\[^\n]|[^()\\\n])*\))"""
+LABEL_CHAR = r"(?:\\[^\n]|[^\[\]\\])"
+REF_CHAR = r"(?:\\[^\n]|[^\[\]\\\n])"
+LINK_LABEL = rf"{EVEN_BS}\[(?P<label>(?:{LABEL_CHAR}|\[{LABEL_CHAR}*\])*)\]"
 LINK = re.compile(rf"{LINK_LABEL}\(\s*{TARGET}(?:\s+{TITLE})?\s*\)")
-REFLINK = re.compile(rf"{LINK_LABEL}\[(?P<ref>[^\]\n]*)\]")
-REFDEF = re.compile(rf" {{0,3}}\[(?P<label>[^\]\n]+)\]:[ \t]*(?:\n[ \t]*)?"
+REFLINK = re.compile(rf"{LINK_LABEL}\[(?P<ref>{REF_CHAR}*)\]")
+REFDEF = re.compile(rf" {{0,3}}\[(?P<label>{REF_CHAR}+)\]:[ \t]*(?:\n[ \t]*)?"
                     rf"{TARGET}(?:[ \t]+{TITLE})?[ \t]*(?=\n|\Z)")
 CODE_SPAN = re.compile(rf"(?P<esc>{EVEN_BS})(?<!`)(?P<ticks>`+)(?!`).*?(?<!`)(?P=ticks)(?!`)", re.S)
 ESCAPE = re.compile(rf"\\([{re.escape(string.punctuation)}])")

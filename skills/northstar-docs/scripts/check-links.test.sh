@@ -112,6 +112,16 @@ See [broken](after-empty-fm.md)
 
 ---'
 mk docs/nested.md '[![badge](missing-badge.svg)](b.md) [![ext-badge](missing-ext-badge.svg)](https://example.com)'
+mk docs/escapes-in-links.md '[g](missing-dq.md "the \"real\" guide")
+[s](missing-sq.md '\''it\'\''s'\'')
+[p](missing-paren.md (escaped \) paren))
+[array\]](missing-bracket.md)
+[![badge \[1\]](missing-nested-bracket.svg)](missing-outer-bracket.md)
+
+[ref-dq]: missing-ref-dq.md "the \"real\" guide"
+[ref-sq]: missing-ref-sq.md '\''it\'\''s'\''
+[ref-paren]: missing-ref-paren.md (escaped \) paren)
+[ref-array\]]: missing-ref-bracket.md'
 mk docs/café.md '[broken](absent.md)'
 git -C "$repo" add docs/café.md
 set +e; out=$(run); rc=$?; set -e
@@ -135,6 +145,16 @@ set +e; out=$(run); rc=$?; set -e
   && echo "$out" | grep -q "docs/empty-frontmatter.md: missing after-empty-fm.md" \
   && echo "$out" | grep -q "docs/nested.md: missing missing-badge.svg" \
   && echo "$out" | grep -q "docs/nested.md: missing missing-ext-badge.svg" \
+  && echo "$out" | grep -q "docs/escapes-in-links.md: missing missing-dq.md" \
+  && echo "$out" | grep -q "docs/escapes-in-links.md: missing missing-sq.md" \
+  && echo "$out" | grep -q "docs/escapes-in-links.md: missing missing-paren.md" \
+  && echo "$out" | grep -q "docs/escapes-in-links.md: missing missing-bracket.md" \
+  && echo "$out" | grep -q "docs/escapes-in-links.md: missing missing-nested-bracket.svg" \
+  && echo "$out" | grep -q "docs/escapes-in-links.md: missing missing-outer-bracket.md" \
+  && echo "$out" | grep -q "docs/escapes-in-links.md: missing missing-ref-dq.md" \
+  && echo "$out" | grep -q "docs/escapes-in-links.md: missing missing-ref-sq.md" \
+  && echo "$out" | grep -q "docs/escapes-in-links.md: missing missing-ref-paren.md" \
+  && echo "$out" | grep -q "docs/escapes-in-links.md: missing missing-ref-bracket.md" \
   && echo "ok broken links in tracked Unicode and untracked files, including anchors in examples" \
   || { echo "FAIL negatives: $out"; exit 1; }
 rc=0
