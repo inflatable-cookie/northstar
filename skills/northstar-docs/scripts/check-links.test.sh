@@ -26,9 +26,15 @@ mk docs/listcont.md '- Ranges
    [0.05, 0.95]: the useful band.'
 mk docs/anchors.md '## vst2_paths
 
-See [paths](#vst2_paths), [setup](#setup), [dup](#dup), [dup1](#dup-1), [named](#explicit-name), and [id](#explicit-id).
+See [paths](#vst2_paths), [setup](#setup), [code-link](#check-ab), [code-ref](#check-setupinstall), [code-in-link](#code-label), [dup](#dup), [dup1](#dup-1), [named](#explicit-name), and [id](#explicit-id).
 
 ## [Setup][INSTALL]
+
+## Check `[a](b)`
+
+## Check `[Setup][INSTALL]`
+
+## [`code-label`](b.md)
 
 ## Dup
 
@@ -68,7 +74,7 @@ mk tests/fixtures/corpus.md '[old](../../gone.md)'
 run --frozen '^tests/fixtures/' > /dev/null && echo "ok --frozen paths are skipped" || { echo "FAIL --frozen"; exit 1; }
 rm -rf "$repo/tests"
 
-mk docs/bad.md '[x](b.md#nope) [y](missing.md) [z](targets.md#example-only) [fake](anchors.md#code-span-anchor) [escape](../../..)'
+mk docs/bad.md '[x](b.md#nope) [y](missing.md) [z](targets.md#example-only) [fake](anchors.md#code-span-anchor) [wrong-slug](anchors.md#check-a) [escape](../../..)'
 mk docs/escaped.md 'A literal backslash followed by a \\[real link](after-backslash.md).'
 mk docs/paragraphs.md 'A literal backtick `
 
@@ -96,6 +102,7 @@ set +e; out=$(run); rc=$?; set -e
 [ "$rc" = 1 ] && echo "$out" | grep -q "missing anchor b.md#nope" && echo "$out" | grep -q "missing missing.md" \
   && echo "$out" | grep -q "missing anchor targets.md#example-only" \
   && echo "$out" | grep -q "missing anchor anchors.md#code-span-anchor" \
+  && echo "$out" | grep -q "missing anchor anchors.md#check-a" \
   && echo "$out" | grep -q "docs/bad.md: escapes repo ../../.." \
   && echo "$out" | grep -q "docs/café.md: missing absent.md" \
   && echo "$out" | grep -q "README.md: missing ABSENT" \

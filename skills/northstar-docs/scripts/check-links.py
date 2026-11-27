@@ -137,20 +137,44 @@ def strip_body(text):
     return without_code_blocks(FRONTMATTER.sub("", text))
 
 
+def strip_heading_links(heading, references):
+    spans = []
+    sentinel = "\x00"
+    while sentinel in heading:
+        sentinel += "\x00"
+
+    def save_span(match):
+        spans.append(match[0])
+        return f"{sentinel}{len(spans) - 1}{sentinel}"
+
+    def restore(text):
+        if not spans:
+            return text
+        return re.sub(rf"{sentinel}(\d+){sentinel}", lambda m: spans[int(m[1])], text)
+
+    def reference_label(match):
+        label = match["label"]
+        key = reference_key(restore(match["ref"] or label))
+        return label if key in references else match[0]
+
+    masked = CODE_SPAN.sub(save_span, heading)
+    while True:
+        updated = LINK.sub(r"\g<label>", masked)
+        if updated == masked:
+            break
+        masked = updated
+    masked = REFLINK.sub(reference_label, masked)
+    return restore(masked)
+
+
 def anchors(path, cache):
     if path not in cache:
         text = strip_body(read_text(path) or "")
         references = {reference_key(match["label"]) for match in REFDEF.finditer(text)}
 
-        def reference_label(match):
-            label = match["label"]
-            return label if reference_key(match["ref"] or label) in references else match[0]
-
         seen, out = {}, set()
         for atx, setext in HEADING.findall(text):
-            heading = LINK.sub(r"\g<label>", atx or setext)
-            heading = REFLINK.sub(reference_label, heading)
-            base = slug(heading)
+            base = slug(strip_heading_links(atx or setext, references))
             n = seen.get(base, 0)
             out.add(base if n == 0 else f"{base}-{n}")
             seen[base] = n + 1
