@@ -25,7 +25,15 @@ Trailing backslash inside span `foo\` then `[still-code](nowhere.md)`.
 [y](also-nowhere.md)
 ```'
 mk docs/listcont.md '- Ranges
-   [0.05, 0.95]: the useful band.'
+   [0.05, 0.95]: the useful band.
+- Single-word continuation
+  [0.05, 0.95]: narrow
+
+Some prose line
+[Note]: important
+
+`code`
+[AfterCode]: also-prose'
 mk docs/anchors.md '## vst2_paths
 
 See [paths](#vst2_paths), [setup](#setup), [code-link](#check-ab), [code-ref](#check-setupinstall), [code-in-link](#code-label), [dup](#dup), [dup1](#dup-1), [named](#explicit-name), and [id](#explicit-id).
@@ -91,11 +99,13 @@ mk docs/list.md '- Item
 
     [broken continuation](list-target.md)'
 mk README.md '[ref]: ABSENT
+[adjacent]: adjacent-missing.md
 
 [`code-label`]: code-label-missing.md
 
 [multiline]:
-    other-missing.md'
+    other-missing.md
+[after-multiline]: after-multiline-missing.md'
 mk docs/empty-frontmatter.md '---
 ---
 See [broken](after-empty-fm.md)
@@ -113,8 +123,10 @@ set +e; out=$(run); rc=$?; set -e
   && echo "$out" | grep -q "docs/bad.md: escapes repo ../../.." \
   && echo "$out" | grep -q "docs/café.md: missing absent.md" \
   && echo "$out" | grep -q "README.md: missing ABSENT" \
+  && echo "$out" | grep -q "README.md: missing adjacent-missing.md" \
   && echo "$out" | grep -q "README.md: missing code-label-missing.md" \
   && echo "$out" | grep -q "README.md: missing other-missing.md" \
+  && echo "$out" | grep -q "README.md: missing after-multiline-missing.md" \
   && echo "$out" | grep -q "docs/list.md: missing list-target.md" \
   && echo "$out" | grep -q "docs/paragraphs.md: missing paragraph-target.md" \
   && echo "$out" | grep -q "docs/escaped.md: missing after-backslash.md" \

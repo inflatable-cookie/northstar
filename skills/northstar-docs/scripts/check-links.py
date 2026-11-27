@@ -46,8 +46,8 @@ TITLE = r"""(?:"[^"\n]*"|'[^'\n]*'|\([^()\n]*\))"""
 LINK_LABEL = rf"{EVEN_BS}\[(?P<label>(?:[^\[\]]|\[[^\]]*\])*)\]"
 LINK = re.compile(rf"{LINK_LABEL}\(\s*{TARGET}(?:\s+{TITLE})?\s*\)")
 REFLINK = re.compile(rf"{LINK_LABEL}\[(?P<ref>[^\]\n]*)\]")
-REFDEF = re.compile(rf"^ {{0,3}}\[(?P<label>[^\]\n]+)\]:[ \t]*(?:\n[ \t]*)?"
-                    rf"{TARGET}(?:[ \t]+{TITLE})?[ \t]*$", re.M)
+REFDEF = re.compile(rf" {{0,3}}\[(?P<label>[^\]\n]+)\]:[ \t]*(?:\n[ \t]*)?"
+                    rf"{TARGET}(?:[ \t]+{TITLE})?[ \t]*(?=\n|\Z)")
 CODE_SPAN = re.compile(rf"(?P<esc>{EVEN_BS})(?<!`)(?P<ticks>`+)(?!`).*?(?<!`)(?P=ticks)(?!`)", re.S)
 ESCAPE = re.compile(rf"\\([{re.escape(string.punctuation)}])")
 EXTERNAL = re.compile(r"^[a-zA-Z][\w+.-]*:")
@@ -175,10 +175,28 @@ def strip_heading_links(heading, references):
     return restore(masked)
 
 
+def refdefs(text):
+    at_start = True
+    pos = 0
+    while pos < len(text):
+        if at_start:
+            match = REFDEF.match(text, pos)
+            if match and match["label"].strip():
+                yield match
+                pos = match.end()
+                if pos < len(text) and text[pos] == "\n":
+                    pos += 1
+                continue
+        nl = text.find("\n", pos)
+        end = len(text) if nl == -1 else nl
+        at_start = not text[pos:end].strip()
+        pos = end + 1 if nl != -1 else len(text)
+
+
 def anchors(path, cache):
     if path not in cache:
         text = strip_body(read_text(path) or "")
-        references = {reference_key(match["label"]) for match in REFDEF.finditer(text)}
+        references = {reference_key(match["label"]) for match in refdefs(text)}
 
         seen, out = {}, set()
         for atx, setext in HEADING.findall(text):
@@ -214,8 +232,8 @@ def main():
         if any(p.search(f) for p in frozen): continue
         text = read_text(os.path.join(root, f))
         if text is None: continue
-        text = strip_code_spans(strip_body(text))
-        targets = list(inline_targets(text)) + [m["target"] for m in REFDEF.finditer(text)]
+        body = strip_body(text)
+        targets = list(inline_targets(strip_code_spans(body))) + [m["target"] for m in refdefs(body)]
         for target in targets:
             if target.startswith("<"): target = target[1:-1]
             if EXTERNAL.match(target) or target.startswith("/"): continue
