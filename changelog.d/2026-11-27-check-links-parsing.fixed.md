@@ -1,0 +1,1 @@
+Fix Markdown link and anchor parsing in `check-links.py`: strip YAML frontmatter (including empty blocks) before scanning links, keep code-span text intact when slugging headings, check link targets nested inside link labels (such as linked badges), and ignore `?query` strings on relative targets.
