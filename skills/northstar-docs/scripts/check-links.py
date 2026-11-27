@@ -45,12 +45,19 @@ TARGET = rf"(?P<target><[^>\n]+>|{BARE_TARGET})"
 TITLE = r"""(?:"(?:\\[^\n]|[^"\\\n])*"|'(?:\\[^\n]|[^'\\\n])*'|\((?:\\[^\n]|[^()\\\n])*\))"""
 LABEL_CHAR = r"(?:\\[^\n]|[^\[\]\\])"
 REF_CHAR = r"(?:\\[^\n]|[^\[\]\\\n])"
-LINK_LABEL = rf"{EVEN_BS}\[(?P<label>(?:{LABEL_CHAR}|\[{LABEL_CHAR}*\])*)\]"
-LINK = re.compile(rf"{LINK_LABEL}\(\s*{TARGET}(?:\s+{TITLE})?\s*\)")
-REFLINK = re.compile(rf"{LINK_LABEL}\[(?P<ref>{REF_CHAR}*)\]")
+LABEL = rf"\[(?P<label>(?:{LABEL_CHAR}|\[{LABEL_CHAR}*\])*)\]"
+INLINE_DEST = rf"\(\s*{TARGET}(?:\s+{TITLE})?\s*\)"
+LINK = re.compile(rf"{EVEN_BS}{LABEL}{INLINE_DEST}")
+IMAGE = re.compile(rf"{EVEN_BS}!{LABEL}{INLINE_DEST}")
+REFLINK = re.compile(rf"{EVEN_BS}(?P<bang>!)?{LABEL}\[(?P<ref>{REF_CHAR}*)\]")
 REFDEF = re.compile(rf" {{0,3}}\[(?P<label>{REF_CHAR}+)\]:[ \t]*(?:\n[ \t]*)?"
                     rf"{TARGET}(?:[ \t]+{TITLE})?[ \t]*(?=\n|\Z)")
 CODE_SPAN = re.compile(rf"(?P<esc>{EVEN_BS})(?<!`)(?P<ticks>`+)(?!`).*?(?<!`)(?P=ticks)(?!`)", re.S)
+HTML_ATTRS = r"""(?:\s(?:[^"'>\n]|"[^"\n]*"|'[^'\n]*')*)?"""
+HTML_TAG = re.compile(rf"</?[a-zA-Z][a-zA-Z0-9-]*{HTML_ATTRS}/?>|<!--.*?-->")
+OPEN_TAG = re.compile(rf"<(?P<tag>[a-zA-Z][a-zA-Z0-9-]*)(?P<attrs>{HTML_ATTRS})/?>")
+HTML_ATTR = re.compile(r"""([a-zA-Z_:][\w:.-]*)\s*=\s*(?:"([^"\n]+)"|'([^'\n]+)')""")
+UNDERSCORE_EM = re.compile(r"(?<![\w\\])(_{1,3})(?=\S)(.+?)(?<=\S)(?<!\\)\1(?!\w)")
 ESCAPE = re.compile(rf"\\([{re.escape(string.punctuation)}])")
 EXTERNAL = re.compile(r"^[a-zA-Z][\w+.-]*:")
 FENCE = re.compile(r"^ {0,3}(`{3,}|~{3,})(.*)$")
@@ -146,7 +153,7 @@ def strip_body(text):
     return without_code_blocks(FRONTMATTER.sub("", text))
 
 
-def strip_heading_links(heading, references):
+def strip_heading_markup(heading, references):
     spans = []
     sentinel = "\x00"
     while sentinel in heading:
@@ -165,15 +172,22 @@ def strip_heading_links(heading, references):
     def reference_label(match):
         label = match["label"]
         key = reference_key(restore(match["ref"] or label))
-        return label if key in references else match[0]
+        if key not in references:
+            return match[0]
+        return "" if match["bang"] else label
 
     masked = CODE_SPAN.sub(save_span, heading)
     while True:
-        updated = LINK.sub(r"\g<label>", masked)
+        updated = REFLINK.sub(reference_label, LINK.sub(r"\g<label>", IMAGE.sub("", masked)))
         if updated == masked:
             break
         masked = updated
-    masked = REFLINK.sub(reference_label, masked)
+    masked = HTML_TAG.sub("", masked)
+    while True:
+        updated = UNDERSCORE_EM.sub(r"\2", masked)
+        if updated == masked:
+            break
+        masked = updated
     return restore(masked)
 
 
@@ -202,11 +216,23 @@ def anchors(path, cache):
 
         seen, out = {}, set()
         for atx, setext in HEADING.findall(text):
-            base = slug(strip_heading_links(atx or setext, references))
+            base = slug(strip_heading_markup(atx or setext, references))
+            candidate = base
             n = seen.get(base, 0)
-            out.add(base if n == 0 else f"{base}-{n}")
-            seen[base] = n + 1
-        out |= set(re.findall(r'<a\s+(?:name|id)="([^"]+)"', strip_code_spans(text)))
+            while candidate in out:
+                n += 1
+                candidate = f"{base}-{n}"
+            seen[base] = n
+            out.add(candidate)
+        for tag_match in OPEN_TAG.finditer(strip_code_spans(text)):
+            attrs = tag_match["attrs"]
+            if not attrs:
+                continue
+            tag = tag_match["tag"].lower()
+            for name, dq, sq in HTML_ATTR.findall(attrs):
+                attr = name.lower()
+                if attr == "id" or (tag == "a" and attr == "name"):
+                    out.add(dq or sq)
         cache[path] = out
     return cache[path]
 

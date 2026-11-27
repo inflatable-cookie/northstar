@@ -34,9 +34,10 @@ Some prose line
 
 `code`
 [AfterCode]: also-prose'
+mk docs/badge.svg '<svg/>'
 mk docs/anchors.md '## vst2_paths
 
-See [paths](#vst2_paths), [setup](#setup), [code-link](#check-ab), [code-ref](#check-setupinstall), [code-in-link](#code-label), [dup](#dup), [dup1](#dup-1), [named](#explicit-name), and [id](#explicit-id).
+See [paths](#vst2_paths), [setup](#setup), [code-link](#check-ab), [code-ref](#check-setupinstall), [code-in-link](#code-label), [code-emph](#_code_emph_), [emph](#italic-and-bold), [kbd](#press-ctrl), [code-tag](#use-div-here), [img](#status), [linked-img](#linked), [ref-img](#refimg), [dup](#dup), [dup1](#dup-1), [foo](#foo), [foo1](#foo-1), [foo11](#foo-1-1), [bar](#bar), [bar1](#bar-1), [bar2](#bar-2), [named](#explicit-name), [id](#explicit-id), [sq-id](#single-id), [sq-name](#single-name), [any-el](#any-element-id), and [div](#div-id).
 
 ## [Setup][INSTALL]
 
@@ -46,15 +47,47 @@ See [paths](#vst2_paths), [setup](#setup), [code-link](#check-ab), [code-ref](#c
 
 ## [`code-label`](b.md)
 
+## `_code_emph_`
+
+## _italic_ and __bold__
+
+## Press <kbd>Ctrl</kbd>
+
+## Use `<div>` here
+
+## ![badge](badge.svg) Status
+
+## [![badge](badge.svg)](b.md) Linked
+
+## ![badge][IMG] RefImg
+
 ## Dup
 
 ## Dup
+
+## Foo
+
+## Foo
+
+## Foo 1
+
+## Bar
+
+## Bar 1
+
+## Bar
 
 <a name="explicit-name"></a>
 <a id="explicit-id"></a>
+<a id='\''single-id'\''></a>
+<a class="anchor" name='\''single-name'\'' href="#vst2_paths"></a>
+<h2 class="sec" id="any-element-id">Custom</h2>
+<div data-id="not-an-anchor" id="div-id"></div>
+<input name="input-name">
 Inline example: `<a id="code-span-anchor"></a>`
 
-[Install]: b.md'
+[Install]: b.md
+[IMG]: badge.svg'
 run > /dev/null && echo "ok code spans, fenced blocks, list continuations and underscore anchors" || { run; echo "FAIL false positives"; exit 1; }
 
 mk 'docs/guide file.md' '## Café'
@@ -66,7 +99,6 @@ description: C# guide with [yaml](not-a-link.md)
 ---
 
 # Real heading'
-mk docs/badge.svg '<svg/>'
 mk docs/targets.md 'See [guide](guide%20file.md#caf%C3%A9), [v2](guide(v2).md), [escaped](guide\(v2\).md#guide-v2), [hash](c\#guide.md#real-heading), [plain](b.md?plain=1), [plain-anchor](b.md?plain=1#rules), [![badge](badge.svg)](b.md), and [ext](<https://example.com>).
 
 Literal: ``[example](nowhere.md)``.
@@ -85,7 +117,7 @@ mk tests/fixtures/corpus.md '[old](../../gone.md)'
 run --frozen '^tests/fixtures/' > /dev/null && echo "ok --frozen paths are skipped" || { echo "FAIL --frozen"; exit 1; }
 rm -rf "$repo/tests"
 
-mk docs/bad.md '[x](b.md#nope) [y](missing.md) [z](targets.md#example-only) [fake](anchors.md#code-span-anchor) [wrong-slug](anchors.md#check-a) [bad-query](b.md?plain=1#nope) [escape](../../..)'
+mk docs/bad.md '[x](b.md#nope) [y](missing.md) [z](targets.md#example-only) [fake](anchors.md#code-span-anchor) [wrong-slug](anchors.md#check-a) [bad-data-id](anchors.md#not-an-anchor) [bad-input-name](anchors.md#input-name) [bad-img-alt](anchors.md#badge-status) [bad-query](b.md?plain=1#nope) [escape](../../..)'
 mk docs/escaped.md 'A literal backslash followed by a \\[real link](after-backslash.md).
 Escape with \`. See [broken](escaped-backtick.md) and \`code\`.
 Three \\\` and [broken2](three-backslashes.md) and \`end\`.'
@@ -129,6 +161,9 @@ set +e; out=$(run); rc=$?; set -e
   && echo "$out" | grep -q "missing anchor targets.md#example-only" \
   && echo "$out" | grep -q "missing anchor anchors.md#code-span-anchor" \
   && echo "$out" | grep -q "missing anchor anchors.md#check-a" \
+  && echo "$out" | grep -q "missing anchor anchors.md#not-an-anchor" \
+  && echo "$out" | grep -q "missing anchor anchors.md#input-name" \
+  && echo "$out" | grep -q "missing anchor anchors.md#badge-status" \
   && echo "$out" | grep -q "missing anchor b.md?plain=1#nope" \
   && echo "$out" | grep -q "docs/bad.md: escapes repo ../../.." \
   && echo "$out" | grep -q "docs/café.md: missing absent.md" \
