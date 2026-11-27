@@ -66,28 +66,30 @@ next step starts, so every phase can be reviewed and reverted on its own.
 
 - If the baseline surfaced verified correctness or safety bugs that still
   exist after step 4, or if the test suite is red, fix those in their own
-  correctness batch before pruning tests or refactoring. Skip if the suite is
+  correctness batch before later steps change the code. Skip if the suite is
   green and no verified bugs remain.
 
 ## 6. Bump dependencies
 
-- Audit the dependency tree first with the ecosystem's advisory tooling, such
-  as `cargo deny`, `npm audit` or `pip-audit`. Look for vulnerabilities and
-  for dependencies that are deprecated, unmaintained or yanked. Fix what a
-  bump resolves. Report the rest to the operator, each with its advisory and
-  a recommended replacement or mitigation. Replacing a crate or package is a
-  migration, so wait for the operator's verdict before doing it.
-- Upgrade every dependency, dev tool and lockfile in scope to its latest safe
-  version: a stable release at least two weeks old with no open advisory.
-  Keep a pin whose reason is recorded, and name it in the report.
-- Land patch and minor bumps as one batch, then each major bump as its own,
-  fixing what it breaks. Run the suite after each batch. This comes after the
-  suite is green and before pruning, so breakage shows against the full
-  suite, and later steps run on current tools.
-- Ask before a major bump that needs a migration outside the scope, raises
-  the toolchain or runtime requirement, or raises the dependency floor that a
-  published package's callers must meet.
-- Hand any workaround an upgrade made unnecessary to step 8.
+- Work on the manifests and lockfiles the scope owns, and skip this step if
+  it owns none. In a workspace, bump only the scope's dependencies and test
+  every member a shared lockfile change touches.
+- Audit with the ecosystem's advisory tooling, such as `cargo deny`,
+  `npm audit` or `pip-audit`, for vulnerable, deprecated, unmaintained or
+  yanked dependencies. Where the tool reports only vulnerabilities, check
+  registry metadata for the rest.
+- Upgrade each dependency, including dev dependencies, to its latest safe
+  version: a non-prerelease at least two weeks old with no open advisory. A
+  fix for an open vulnerability or yanked release may be newer; say so in
+  the report. Keep a pin whose reason is recorded.
+- In one message, ask the operator about advisories a bump can't fix (each
+  with a recommended replacement or mitigation) and any bump that needs a
+  migration outside the scope, raises the toolchain or runtime requirement,
+  or raises the floor that a published package's callers must meet.
+- Land compatible bumps as one batch, then each breaking bump (including a
+  `0.x` minor) as its own, fixing what it breaks and removing workarounds it
+  made unnecessary. Leave fixes for new lint rules to step 9. Run the suite
+  after each batch and re-run the audit after the last.
 
 ## 7. Clean the suite (`prune-tests`)
 
@@ -138,9 +140,9 @@ Give the operator:
 - the scorecard per round (each part, integration, and how the verified floor
   moved);
 - litter removed (`housekeeping`), cuts and simplifications landed
-  (`red-pen`), dependencies bumped, pins held back with their reasons, and
-  advisories resolved or still open,
-  test counts and coverage delta (`prune-tests`), workarounds fixed,
-  contained or deferred (`zoom-out`), static quality gates added or
+  (`red-pen`), test counts and coverage delta (`prune-tests`), workarounds
+  fixed, contained or deferred (`zoom-out`), static quality gates added or
   tightened, and which third-party skills ran and what they changed;
+- dependencies bumped, pins kept with their reasons, and advisories resolved
+  or still open;
 - any remaining shortfalls and whether a standing gate was recorded.
