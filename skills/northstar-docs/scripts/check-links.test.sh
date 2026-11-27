@@ -85,6 +85,11 @@ mk README.md '[ref]: ABSENT
 
 [multiline]:
     other-missing.md'
+mk docs/empty-frontmatter.md '---
+---
+See [broken](after-empty-fm.md)
+
+---'
 mk docs/café.md '[broken](absent.md)'
 git -C "$repo" add docs/café.md
 set +e; out=$(run); rc=$?; set -e
@@ -99,6 +104,7 @@ set +e; out=$(run); rc=$?; set -e
   && echo "$out" | grep -q "docs/list.md: missing list-target.md" \
   && echo "$out" | grep -q "docs/paragraphs.md: missing paragraph-target.md" \
   && echo "$out" | grep -q "docs/escaped.md: missing after-backslash.md" \
+  && echo "$out" | grep -q "docs/empty-frontmatter.md: missing after-empty-fm.md" \
   && echo "ok broken links in tracked Unicode and untracked files, including anchors in examples" \
   || { echo "FAIL negatives: $out"; exit 1; }
 rc=0
