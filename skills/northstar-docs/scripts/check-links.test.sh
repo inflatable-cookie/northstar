@@ -99,6 +99,20 @@ description: C# guide with [yaml](not-a-link.md)
 ---
 
 # Real heading'
+mk docs/dot-fm.md '---
+title: Dots
+note: [yaml](not-a-link.md)
+...
+
+See [b](b.md).'
+printf '\xef\xbb\xbf%s\n' '---
+title: BOM
+note: [yaml](not-a-link.md)
+---
+
+# BOM heading
+
+See [self](#bom-heading).' > "$repo/docs/bom-fm.md"
 mk docs/targets.md 'See [guide](guide%20file.md#caf%C3%A9), [v2](guide(v2).md), [escaped](guide\(v2\).md#guide-v2), [hash](c\#guide.md#real-heading), [plain](b.md?plain=1), [plain-anchor](b.md?plain=1#rules), [![badge](badge.svg)](b.md), and [ext](<https://example.com>).
 
 Literal: ``[example](nowhere.md)``.
@@ -143,6 +157,11 @@ mk docs/empty-frontmatter.md '---
 See [broken](after-empty-fm.md)
 
 ---'
+mk docs/empty-dot-fm.md '---
+...
+See [broken](after-dot-fm.md)
+
+...'
 mk docs/nested.md '[![badge](missing-badge.svg)](b.md) [![ext-badge](missing-ext-badge.svg)](https://example.com)'
 mk docs/escapes-in-links.md '[g](missing-dq.md "the \"real\" guide")
 [s](missing-sq.md '\''it\'\''s'\'')
@@ -178,6 +197,7 @@ set +e; out=$(run); rc=$?; set -e
   && echo "$out" | grep -q "docs/escaped.md: missing escaped-backtick.md" \
   && echo "$out" | grep -q "docs/escaped.md: missing three-backslashes.md" \
   && echo "$out" | grep -q "docs/empty-frontmatter.md: missing after-empty-fm.md" \
+  && echo "$out" | grep -q "docs/empty-dot-fm.md: missing after-dot-fm.md" \
   && echo "$out" | grep -q "docs/nested.md: missing missing-badge.svg" \
   && echo "$out" | grep -q "docs/nested.md: missing missing-ext-badge.svg" \
   && echo "$out" | grep -q "docs/escapes-in-links.md: missing missing-dq.md" \

@@ -61,7 +61,7 @@ UNDERSCORE_EM = re.compile(r"(?<![\w\\])(_{1,3})(?=\S)(.+?)(?<=\S)(?<!\\)\1(?!\w
 ESCAPE = re.compile(rf"\\([{re.escape(string.punctuation)}])")
 EXTERNAL = re.compile(r"^[a-zA-Z][\w+.-]*:")
 FENCE = re.compile(r"^ {0,3}(`{3,}|~{3,})(.*)$")
-FRONTMATTER = re.compile(r"\A---[ \t]*\r?\n(?:.*?\r?\n)??---[ \t]*(?:\r?\n|\Z)", re.S)
+FRONTMATTER = re.compile(r"\A---[ \t]*\r?\n(?:.*?\r?\n)??(?:---|\.\.\.)[ \t]*(?:\r?\n|\Z)", re.S)
 LIST_ITEM = re.compile(r"^ {0,3}(?:[-+*]|\d{1,9}[.)])[ \t]+")
 HEADING = re.compile(r"^ {0,3}(?:#{1,6}[ \t]+(.+?)[ \t]*#*[ \t]*$|"
                      r"([^#\s][^\n]*?)\n {0,3}(?:=+|-+)[ \t]*$)", re.M)
@@ -112,7 +112,7 @@ def git(root, *args):
 def read_text(path):
     try:
         if os.path.getsize(path) > 3_000_000: return None
-        with open(path, encoding="utf-8") as f: return f.read()
+        with open(path, encoding="utf-8-sig") as f: return f.read()
     except (UnicodeDecodeError, OSError):
         return None
 
