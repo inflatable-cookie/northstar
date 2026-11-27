@@ -8,8 +8,8 @@ need only Python 3.8+ and Git.
 ## The skills
 
 - [`level-up`](skills/level-up/SKILL.md) — chain `hill-climb`, `red-pen`,
-  `prune-tests`, `zoom-out`, `housekeeping`, and installed language/domain
-  quality skills into repeatable level-up rounds.
+  `prune-tests`, `zoom-out`, `housekeeping`, a dependency bump, and installed
+  language/domain quality skills into repeatable level-up rounds.
 - [`hill-climb`](skills/hill-climb/SKILL.md) — assess quality or improve a
   codebase, crate, or docs set to a target score.
 - [`red-pen`](skills/red-pen/SKILL.md) — review a product or tool for
